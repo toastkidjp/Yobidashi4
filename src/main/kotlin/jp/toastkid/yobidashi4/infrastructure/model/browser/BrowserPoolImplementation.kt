@@ -6,7 +6,6 @@ import java.awt.Point
 import java.awt.Robot
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
-import java.awt.event.MouseWheelEvent
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -419,10 +418,6 @@ class BrowserPoolImplementation : BrowserPool {
     }
 
     private fun latestBrowser(): CefBrowser? = browsers.get(lastId)
-
-    fun onMouseEvent(event: MouseEvent) {
-        //latestBrowser()?.uiComponent?.onMouseEvent(event)
-    }
 
     private val browsers = mutableMapOf<String, CefBrowser>()
 
