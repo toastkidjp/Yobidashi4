@@ -428,12 +428,6 @@ class BrowserPoolImplementation : BrowserPool {
         //latestBrowser()?.uiComponent?.onMouseScrollEvent(event)
     }
 
-    fun onKeyEvent(event: KeyEvent) {
-        /*if (cefFocus) {
-            browser.onKeyEvent(event)
-        }*/
-    }
-
     private val browsers = mutableMapOf<String, CefBrowser>()
 
     override fun component(id: String, initialUrl: String): Component {
