@@ -424,10 +424,6 @@ class BrowserPoolImplementation : BrowserPool {
         //latestBrowser()?.uiComponent?.onMouseEvent(event)
     }
 
-    fun onMouseScrollEvent(event: MouseWheelEvent) {
-        //latestBrowser()?.uiComponent?.onMouseScrollEvent(event)
-    }
-
     private val browsers = mutableMapOf<String, CefBrowser>()
 
     override fun component(id: String, initialUrl: String): Component {
