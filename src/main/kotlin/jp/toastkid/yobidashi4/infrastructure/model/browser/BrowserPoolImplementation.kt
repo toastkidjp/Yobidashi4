@@ -82,9 +82,11 @@ class BrowserPoolImplementation : BrowserPool {
         settings.user_agent = UserAgent.findByName(appSetting.userAgentName()).text()
         settings.locale = Locale.getDefault().language
 
-        val adHosts = BufferedReader(InputStreamReader(javaClass.classLoader.getResourceAsStream("web/ad_hosts.txt"))).use {
-            it.lines().toList()
-        }
+        val adHosts = javaClass.classLoader.getResourceAsStream("web/ad_hosts.txt")?.use { stream ->
+            return@use BufferedReader(InputStreamReader(stream)).use { reader ->
+                reader.lines().toList()
+            }
+        } ?: emptyList()
 
         var selectedText = ""
 
