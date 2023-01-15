@@ -89,8 +89,7 @@ fun MultiTabContent() {
 
     LaunchedEffect(viewModel) {
         withContext(Dispatchers.IO) {
-            //TODO viewModel.reloadAllArticle()
-            viewModel.openUrl("http://2ch大相撲.xyz/", false)
+            viewModel.reloadAllArticle()
         }
     }
 }
