@@ -154,10 +154,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun addNewArticle(path: Path) {
-        val items = tabs.filterIsInstance(FileTab::class.java).firstOrNull { it.title() == "Articles" }?.items?.take(500) ?: return
-        val newItems = mutableListOf(path)
-        newItems.addAll(items)
-        _tabs.set(0, FileTab("Articles", newItems, false))
+        _articles.add(0, path)
     }
 
     override fun updateEditorContent(path: Path, text: String, caretPosition: Int, resetEditing: Boolean) {
@@ -243,7 +240,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _openArticleList.value = _openArticleList.value.not()
     }
 
-    private val _articles = mutableStateListOf<Path>()
+    private val _articles = mutableListOf<Path>()
 
     override fun articles(): List<Path> {
         return _articles
