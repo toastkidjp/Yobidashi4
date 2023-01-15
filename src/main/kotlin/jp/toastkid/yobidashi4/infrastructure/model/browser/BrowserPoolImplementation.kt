@@ -76,7 +76,7 @@ class BrowserPoolImplementation : BrowserPool {
         CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf(
             "--disable-gpu", "--force-fieldtrial-params", "--enable-features=WebContentsForceDark")) {})
 
-        val settings = builder.getCefSettings()
+        val settings = builder.cefSettings
         settings.windowless_rendering_enabled = false //Default - select OSR mode
         settings.background_color = settings.ColorType(80, 0, 0, 0)
         settings.user_agent = UserAgent.findByName(appSetting.userAgentName()).text()
