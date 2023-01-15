@@ -42,6 +42,7 @@ import java.util.Locale
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
+import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -49,7 +50,7 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CalendarView() {
-    val localDateState = remember { mutableStateOf(LocalDate.now()) }
+    val calendarViewModel = object : KoinComponent { val vm: CalendarViewModel by inject() }.vm
 
     val week = arrayOf(
         DayOfWeek.SUNDAY,
@@ -68,7 +69,7 @@ fun CalendarView() {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(8.dp)) {
                 Button(onClick = {
-                    localDateState.value = localDateState.value.plusMonths(-1)
+                    calendarViewModel.plusMonths(-1)
                 }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionLeft }) {
                     Text("<", modifier = Modifier.padding(8.dp))
                 }
@@ -76,17 +77,17 @@ fun CalendarView() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openYearChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text("${localDateState.value.year}", fontSize = 16.sp)
+                        Text("${calendarViewModel.localDate().year}", fontSize = 16.sp)
                         DropdownMenu(
                             expanded = openYearChooser.value,
                             onDismissRequest = { openYearChooser.value = false }) {
                             val years = (1900..2200).toList()
                             Box {
-                                val state = rememberLazyListState(years.indexOf(localDateState.value.year))
+                                val state = rememberLazyListState(years.indexOf(calendarViewModel.localDate().year))
                                 LazyColumn(state = state, modifier = Modifier.size(200.dp, 500.dp)) {
                                     items(years) {
                                         Text("${it}", fontSize = 16.sp, modifier = Modifier.padding(8.dp).clickable {
-                                            localDateState.value = localDateState.value.withYear(it)
+                                            calendarViewModel.setYear(it)
                                             openYearChooser.value = false
                                         })
                                     }
@@ -102,11 +103,11 @@ fun CalendarView() {
                 Surface(modifier = Modifier.padding(8.dp)) {
                     val openMonthChooser = remember { mutableStateOf(false) }
                     Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text("${localDateState.value.month.value}", fontSize = 16.sp)
+                        Text("${calendarViewModel.localDate().month.value}", fontSize = 16.sp)
                         DropdownMenu(expanded = openMonthChooser.value, onDismissRequest = { openMonthChooser.value = false }) {
                             Month.values().forEach {
                                 DropdownMenuItem(onClick = {
-                                    localDateState.value = localDateState.value.withMonth(it.value)
+                                    calendarViewModel.moveMonth(it.value)
                                     openMonthChooser.value = false
                                 }) {
                                     Text("${it.value}")
@@ -117,7 +118,7 @@ fun CalendarView() {
                 }
 
                 Button(onClick = {
-                    localDateState.value = localDateState.value.plusMonths(1)
+                    calendarViewModel.plusMonths(1)
                 }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionRight }) {
                     Text(">", modifier = Modifier.padding(8.dp))
                 }
@@ -141,7 +142,7 @@ fun CalendarView() {
                 }
             }
 
-            val firstDay = localDateState.value.withDayOfMonth(1)
+            val firstDay = calendarViewModel.getFirstDay()
 
             val weeks = makeMonth(week, firstDay)
 
@@ -149,7 +150,7 @@ fun CalendarView() {
                 Row {
                     w.days().forEach { day ->
                         DayLabelView(day.date, day.dayOfWeek, day.offDay,
-                            isToday(localDateState.value, day.date),
+                            isToday(calendarViewModel.localDate(), day.date),
                             modifier = Modifier.weight(1f)
                                 .combinedClickable(
                                     enabled = day.date != -1,
@@ -157,13 +158,13 @@ fun CalendarView() {
                                         if (day.date == -1) {
                                             return@combinedClickable
                                         }
-                                        openDateArticle(localDateState.value.withDayOfMonth(day.date))
+                                        openDateArticle(calendarViewModel.localDate().withDayOfMonth(day.date))
                                     },
                                     onLongClick = {
                                         if (day.date == -1) {
                                             return@combinedClickable
                                         }
-                                        openDateArticle(localDateState.value.withDayOfMonth(day.date), true)
+                                        openDateArticle(calendarViewModel.localDate().withDayOfMonth(day.date), true)
                                     }
                                 )
                         )
