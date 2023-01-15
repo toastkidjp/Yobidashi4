@@ -75,7 +75,6 @@ class BrowserPoolImplementation : BrowserPool {
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
         CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf(
             "--disable-gpu", "--force-fieldtrial-params", "--enable-features=WebContentsForceDark")) {})
-        //builder.addJcefArgs("--disable-gpu", "--enable-features=WebContentsForceDark", "--force-dark-mode")
 
         val settings = builder.getCefSettings()
         settings.windowless_rendering_enabled = false //Default - select OSR mode
