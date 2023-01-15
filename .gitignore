@@ -1,5 +1,6 @@
 *.iml
-.idea/
+.idea/*
+!.idea/icon.png
 *.pdf
 *.lnk
 *.jar
