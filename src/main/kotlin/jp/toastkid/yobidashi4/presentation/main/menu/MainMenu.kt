@@ -211,22 +211,24 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
 
-            Item("Move previous tab", shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
-                if (viewModel.tabs.isEmpty()) {
-                    return@Item
+            if (viewModel.tabs.size > 1) {
+                Item("Move previous tab", shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
+                    if (viewModel.tabs.isEmpty()) {
+                        return@Item
+                    }
+
+                    val nextIndex = if (viewModel.selected.value == 0) viewModel.tabs.size - 1 else viewModel.selected.value - 1
+                    viewModel.setSelectedIndex(nextIndex)
                 }
 
-                val nextIndex = if (viewModel.selected.value == 0) viewModel.tabs.size - 1 else viewModel.selected.value - 1
-                viewModel.setSelectedIndex(nextIndex)
-            }
+                Item("Move next tab", shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
+                    if (viewModel.tabs.isEmpty()) {
+                        return@Item
+                    }
 
-            Item("Move next tab", shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
-                if (viewModel.tabs.isEmpty()) {
-                    return@Item
+                    val nextIndex = if (viewModel.selected.value == viewModel.tabs.size - 1) 0 else viewModel.selected.value + 1
+                    viewModel.setSelectedIndex(nextIndex)
                 }
-
-                val nextIndex = if (viewModel.selected.value == viewModel.tabs.size - 1) 0 else viewModel.selected.value + 1
-                viewModel.setSelectedIndex(nextIndex)
             }
 
             (1 .. min(10, viewModel.tabs.size)).forEach {
