@@ -1,0 +1,224 @@
+package jp.toastkid.yobidashi4.presentation.loan
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import java.text.DecimalFormat
+import jp.toastkid.yobidashi4.domain.model.loan.Factor
+import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun LoanCalculatorView() {
+    var result by rememberSaveable {
+        mutableStateOf("")
+    }
+    var loanAmount by remember {
+        mutableStateOf("35,000,000")
+    }
+    var loanTerm by remember {
+        mutableStateOf("35")
+    }
+    var interestRate by remember {
+        mutableStateOf("1.0")
+    }
+    var downPayment by remember {
+        mutableStateOf("1,000,000")
+    }
+    var managementFee by remember {
+        mutableStateOf("10,000")
+    }
+    var renovationReserves by remember {
+        mutableStateOf("10,000")
+    }
+
+    val inputChannel: Channel<String> = Channel()
+
+    Surface(elevation = 4.dp, color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
+        Column(
+            Modifier
+                .padding(8.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            SelectionContainer {
+                Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+            }
+            OutlinedTextField(
+                value = loanAmount,
+                onValueChange = {
+                    loanAmount = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "ローン総額") },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = loanTerm,
+                onValueChange = {
+                    loanTerm = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Loan term") },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = interestRate,
+                onValueChange = {
+                    interestRate = it
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Interest rate") },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = downPayment,
+                onValueChange = {
+                    downPayment = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Down payment") },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = managementFee,
+                onValueChange = {
+                    managementFee = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Management fee (Monthly)") },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = renovationReserves,
+                onValueChange = {
+                    renovationReserves = format(it)
+                    onChange(inputChannel, it)
+                },
+                label = { Text(text = "Renovation reserves (Monthly)") },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colors.onSurface,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.onSurface
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+
+
+    LaunchedEffect(Unit) {
+        DebouncedCalculatorService(
+            inputChannel,
+            {
+                Factor(
+                    extractLong(loanAmount),
+                    extractInt(loanTerm),
+                    extractDouble(interestRate),
+                    extractInt(downPayment),
+                    extractInt(managementFee),
+                    extractInt(renovationReserves)
+                )
+            },
+            {
+                result = String.format("月々の支払額: %,d", it)
+            }
+        ).invoke()
+    }
+}
+
+private fun onChange(inputChannel: Channel<String>, text: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+        inputChannel.send(text ?: "")
+    }
+}
+
+private val formatter = DecimalFormat("#,###.##")
+
+private fun format(input: String?): String {
+    if (input.isNullOrBlank()) {
+        return "0"
+    }
+
+    val formatted = try {
+        formatter.format(
+            input.filter { it.isDigit() || it == '.' }.trim()?.toBigDecimalOrNull()
+        )
+    } catch (e: IllegalArgumentException) {
+        LoggerFactory.getLogger("LoanCalculator").debug("Illegal input", e)
+        input
+    }
+    return formatted
+}
+
+private fun extractLong(editText: String) =
+    editText.replace(",", "")?.toLongOrNull() ?: 0
+
+private fun extractInt(editText: String) =
+    editText.replace(",", "")?.toIntOrNull() ?: 0
+
+private fun extractDouble(editText: String) =
+    editText.replace(",", "")?.toDoubleOrNull() ?: 0.0

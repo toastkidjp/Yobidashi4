@@ -15,10 +15,8 @@ build/
 .class
 *.bin
 *.log
-setting.properties
 jcef-bundle/
 logs/
 
 !gradle/wrapper/gradle-wrapper.properties
-main/
 cache/
