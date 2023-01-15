@@ -5,7 +5,6 @@ import java.awt.Desktop
 import java.awt.Point
 import java.awt.Robot
 import java.awt.event.KeyEvent
-import java.awt.event.MouseEvent
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
