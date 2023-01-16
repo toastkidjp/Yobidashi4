@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -111,7 +111,7 @@ fun FileList(paths: List<Path>) {
                         false
                     }
             ) {
-                items(articleStates) { fileListItem ->
+                itemsIndexed(articleStates) { index, fileListItem ->
                     val openOption = remember { mutableStateOf(false) }
                     Box {
                         Column(modifier = Modifier
@@ -160,7 +160,7 @@ fun FileList(paths: List<Path>) {
                                     viewModel.openFile(fileListItem.path)
                                 }
                             )
-                            .background(if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else Color.Transparent)
+                            .background(if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f) else Color.Transparent)
                             .padding(horizontal = 16.dp)
                             .animateItemPlacement()
                         ) {
