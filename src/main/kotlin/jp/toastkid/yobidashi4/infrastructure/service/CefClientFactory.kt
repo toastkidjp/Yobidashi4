@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
+import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchLauncher
 import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -290,6 +291,7 @@ class CefClientFactory(
                 if (params?.sourceUrl.isNullOrBlank().not()) {
                     model?.addItem(407, "ダウンロード")
                     model?.addItem(409, "コピー")
+                    model?.addItem(415, "この画像を検索")
                 }
                 if (params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()) {
                     model?.addItem(410, "ページのリンクをコピー")
@@ -374,6 +376,12 @@ class CefClientFactory(
                     }
                     414 -> {
                         browsePage(params?.linkUrl ?: params?.sourceUrl ?: selectedText)
+                        return true
+                    }
+                    415 -> {
+                        params?.sourceUrl?.let {
+                            PrivateImageSearchLauncher().invoke(it)
+                        }
                         return true
                     }
                     else -> super.onContextMenuCommand(browser, frame, params, commandId, eventFlags)
