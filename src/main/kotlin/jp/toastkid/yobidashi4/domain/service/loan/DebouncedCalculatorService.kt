@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.loan
 
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
+import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 class DebouncedCalculatorService(
     private val inputChannel: Channel<String>,
     private val currentFactorProvider: () -> Factor,
-    private val onResult: (Long) -> Unit,
+    private val onResult: (LoanPayment) -> Unit,
     private val calculator: LoanCalculator = LoanCalculator(),
     private val debounceMillis: Long = 1000,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
