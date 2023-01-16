@@ -431,7 +431,7 @@ class CefClientFactory(
         return Bookmark(url, url = url)
     }
 
-    fun printPdf() = latestBrowser()?.let {
+    private fun printPdf() = latestBrowser()?.let {
         it.printToPDF("${it.identifier}.pdf", null, null)
     }
 
