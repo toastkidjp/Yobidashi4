@@ -17,7 +17,7 @@ class BrowserPoolImplementation : BrowserPool {
     private var lastId: String? = null
 
     init {
-        client = CefClientFactory({ latestBrowser() }, { browsers.entries.firstOrNull { it.value == it }?.key }).invoke()
+        client = CefClientFactory({ latestBrowser() }, { id -> browsers.entries.firstOrNull { it.value == id }?.key }).invoke()
     }
 
     override fun onLayout(x: Int, y: Int, width: Int, height: Int) {
