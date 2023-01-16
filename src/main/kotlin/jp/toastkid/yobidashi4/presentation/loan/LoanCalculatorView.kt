@@ -1,9 +1,17 @@
 package jp.toastkid.yobidashi4.presentation.loan
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -16,10 +24,12 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,7 +44,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorView() {
     var result by rememberSaveable {
@@ -59,113 +69,138 @@ fun LoanCalculatorView() {
         mutableStateOf("10,000")
     }
 
+    val scheduleState = remember { mutableStateListOf<Pair<Double, Double>>() }
+
     val inputChannel: Channel<String> = Channel()
 
     Surface(elevation = 4.dp, color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
-        Column(
-            Modifier
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            SelectionContainer {
-                Text(text = result, fontSize = 18.sp, modifier = Modifier.fillMaxWidth())
+        Row {
+            Column(
+                Modifier
+                    .padding(8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                SelectionContainer {
+                    Text(text = result, fontSize = 18.sp)
+                }
+                OutlinedTextField(
+                    value = loanAmount,
+                    onValueChange = {
+                        loanAmount = format(it)
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = "ローン総額") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = loanTerm,
+                    onValueChange = {
+                        loanTerm = format(it)
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = "Loan term") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = interestRate,
+                    onValueChange = {
+                        interestRate = it
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = "Interest rate") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = downPayment,
+                    onValueChange = {
+                        downPayment = format(it)
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = "Down payment") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = managementFee,
+                    onValueChange = {
+                        managementFee = format(it)
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = "Management fee (Monthly)") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = renovationReserves,
+                    onValueChange = {
+                        renovationReserves = format(it)
+                        onChange(inputChannel, it)
+                    },
+                    label = { Text(text = "Renovation reserves (Monthly)") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = MaterialTheme.colors.onSurface,
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.onSurface
+                    ),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
             }
-            OutlinedTextField(
-                value = loanAmount,
-                onValueChange = {
-                    loanAmount = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = "ローン総額") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = loanTerm,
-                onValueChange = {
-                    loanTerm = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = "Loan term") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = interestRate,
-                onValueChange = {
-                    interestRate = it
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = "Interest rate") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = downPayment,
-                onValueChange = {
-                    downPayment = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = "Down payment") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = managementFee,
-                onValueChange = {
-                    managementFee = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = "Management fee (Monthly)") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = renovationReserves,
-                onValueChange = {
-                    renovationReserves = format(it)
-                    onChange(inputChannel, it)
-                },
-                label = { Text(text = "Renovation reserves (Monthly)") },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colors.onSurface,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.onSurface
-                ),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
+
+            if (scheduleState.isNotEmpty()) {
+                Box (modifier = Modifier.weight(0.5f)) {
+                    val scrollState = rememberLazyListState()
+                    LazyColumn(state = scrollState) {
+                        item {
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
+                                /*Text(index.toString(),
+                                    //modifier = Modifier.weight(1f)
+                                )*/
+                                Text("元本", modifier = Modifier.weight(1f))
+                                Text("利息", modifier = Modifier.weight(1f))
+                            }
+                        }
+                        itemsIndexed(scheduleState) { index, it ->
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
+                                /*Text(index.toString(),
+                                    //modifier = Modifier.weight(1f)
+                                )*/
+                                Text(it.first.toString(), modifier = Modifier.weight(1f))
+                                Text(it.second.toString(), modifier = Modifier.weight(1f))
+                            }
+                        }
+                    }
+                    VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+                }
+            }
         }
     }
 
@@ -184,7 +219,9 @@ fun LoanCalculatorView() {
                 )
             },
             {
-                result = String.format("月々の支払額: %,d", it)
+                result = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment, it.paymentSchedule.map { it.second }.sum().toLong())
+                scheduleState.clear()
+                scheduleState.addAll(it.paymentSchedule)
             }
         ).invoke()
     }
