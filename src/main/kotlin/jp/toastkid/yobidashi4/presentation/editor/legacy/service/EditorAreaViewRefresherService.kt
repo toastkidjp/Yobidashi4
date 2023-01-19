@@ -12,7 +12,9 @@ class EditorAreaViewRefresherService : KoinComponent {
     private val setting: Setting by inject()
 
     operator fun invoke(editorArea: RSyntaxTextArea) {
-        editorArea.lineWrap = setting.wrapLine()
+        if (editorArea.text.isNullOrEmpty().not()) {
+            editorArea.lineWrap = setting.wrapLine()
+        }
         editorArea.foreground = setting.editorForegroundColor()
         editorArea.background = setting.editorBackgroundColor()
         val editorFontFamily = setting.editorFontFamily() ?: return
