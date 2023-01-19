@@ -18,6 +18,7 @@ import androidx.compose.ui.window.WindowState
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
@@ -67,7 +68,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        val images = Files.list(imageFolder).toList()
+        val images = Files.list(imageFolder).collect(Collectors.toList())
         if (images.isNotEmpty()) {
             backgroundImage.value = images[((images.size - 1) * Math.random()).roundToInt()].inputStream().use {
                 ImageIO.read(it).toComposeImageBitmap()
