@@ -157,7 +157,8 @@ class EditorAreaView(
     }
 
     fun count(): Long {
-        return editorArea.selectedText.trim().codePoints().count()
+        val selectedText = editorArea.selectedText ?: editorArea.text
+        return selectedText.trim().codePoints().count()
     }
 
     fun selectedText(): String {
