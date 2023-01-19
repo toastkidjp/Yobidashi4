@@ -14,6 +14,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.Locale
 import java.util.UUID
+import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import javax.swing.JDialog
 import javax.swing.SwingUtilities
@@ -66,8 +67,7 @@ class CefClientFactory(
         val builder = CefAppBuilder()
         builder.setInstallDir(File("jcef-bundle")) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
-        CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf(
-            "--disable-gpu", "--force-fieldtrial-params", "--enable-features=WebContentsForceDark")) {})
+        CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {})
 
         val settings = builder.cefSettings
         settings.windowless_rendering_enabled = false //Default - select OSR mode
@@ -77,7 +77,7 @@ class CefClientFactory(
 
         val adHosts = javaClass.classLoader.getResourceAsStream("web/ad_hosts.txt")?.use { stream ->
             return@use BufferedReader(InputStreamReader(stream)).use { reader ->
-                reader.lines().toList()
+                reader.lines().collect(Collectors.toList())
             }
         } ?: emptyList()
 
