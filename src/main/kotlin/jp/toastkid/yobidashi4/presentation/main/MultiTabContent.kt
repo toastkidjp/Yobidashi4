@@ -75,7 +75,6 @@ fun MultiTabContent() {
                     ArticleListView(viewModel)
                     Text("x",
                         modifier = Modifier
-                           // .padding(start = 4.dp)
                             .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
                             .clickable { viewModel.switchArticleList() }
                             .padding(16.dp)
