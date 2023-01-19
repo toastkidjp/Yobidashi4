@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import java.text.DecimalFormat
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -193,8 +194,8 @@ fun LoanCalculatorView() {
                                 /*Text(index.toString(),
                                     //modifier = Modifier.weight(1f)
                                 )*/
-                                Text(it.first.toString(), modifier = Modifier.weight(1f))
-                                Text(it.second.toString(), modifier = Modifier.weight(1f))
+                                Text(it.first.roundToInt().toString(), modifier = Modifier.weight(1f))
+                                Text(it.second.roundToInt().toString(), modifier = Modifier.weight(1f))
                             }
                         }
                     }
