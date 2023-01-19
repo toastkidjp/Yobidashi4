@@ -36,6 +36,7 @@ import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.cef.browser.CefFrame
 import org.cef.callback.CefBeforeDownloadCallback
+import org.cef.callback.CefCommandLine
 import org.cef.callback.CefContextMenuParams
 import org.cef.callback.CefDownloadItem
 import org.cef.callback.CefMenuModel
@@ -67,7 +68,16 @@ class CefClientFactory(
         val builder = CefAppBuilder()
         builder.setInstallDir(File("jcef-bundle")) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
-        CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {})
+        CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {
+            override fun onBeforeCommandLineProcessing(process_type: String?, command_line: CefCommandLine?) {
+                if (process_type.isNullOrEmpty()) {
+                    command_line?.appendSwitch("--force-fieldtrial-params")
+                    command_line?.appendSwitchWithValue("--enable-media-stream", "true")
+                    command_line?.appendSwitchWithValue("--enable-features", "WebContentsForceDark")
+                }
+                super.onBeforeCommandLineProcessing(process_type, command_line)
+            }
+        })
 
         val settings = builder.cefSettings
         settings.windowless_rendering_enabled = false //Default - select OSR mode
