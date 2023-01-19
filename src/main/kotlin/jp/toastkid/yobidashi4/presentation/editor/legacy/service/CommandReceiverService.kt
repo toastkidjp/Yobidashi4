@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.swing.JOptionPane
+import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
@@ -136,10 +137,12 @@ class CommandReceiverService(
                     editorAreaView.switchEditable()
                 }
                 MenuCommand.COUNT -> {
-                    JOptionPane.showMessageDialog(
+                    SwingUtilities.invokeLater {
+                        JOptionPane.showMessageDialog(
                             null,
                             "Count: ${editorAreaView.count()}"
-                    )
+                        )
+                    }
                 }
                 MenuCommand.WEB_SEARCH -> {
                     val selectedText = editorAreaView.selectedText()
