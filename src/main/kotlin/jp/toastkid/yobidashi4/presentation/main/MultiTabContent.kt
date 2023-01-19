@@ -209,9 +209,7 @@ private fun WebSearchBox(viewModel: MainViewModel) {
                                 urlOpenerService.invoke(query.value.text)
                                 return@onKeyEvent true
                             }
-                            selectedSite.value.make(query.value.text).let {
-                                urlOpenerService.invoke(it)
-                            }
+                            selectedSite.value.make(query.value.text).let(urlOpenerService::invoke)
                             viewModel.setShowWebSearch(false)
                         }
                         true
