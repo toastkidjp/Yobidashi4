@@ -71,7 +71,7 @@ fun MultiTabContent() {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (viewModel.openArticleList()) {
-                Box(modifier = Modifier.weight(0.3f, fill = false).widthIn(max = 330.dp).wrapContentWidth(Alignment.Start)) {
+                Box(modifier = Modifier.widthIn(max = 330.dp).wrapContentWidth(Alignment.Start)) {
                     ArticleListView(viewModel)
                     Text("x",
                         modifier = Modifier
@@ -83,7 +83,7 @@ fun MultiTabContent() {
                     )
                 }
             }
-            TabsView(modifier = Modifier.fillMaxHeight().weight(0.7f))
+            TabsView(modifier = Modifier.fillMaxHeight().weight(1f))
         }
     }
 
