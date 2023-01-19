@@ -185,7 +185,12 @@ class CommandReceiverService(
                 }
                 MenuCommand.SWITCH_WRAP_LINE -> {
                     setting.switchWrapLine()
-                    editorAreaView.refresh()
+                    // Avoiding for java.lang.NullPointerException: Cannot load from char array because "this.text" is null.
+                    try {
+                        editorAreaView.refresh()
+                    } catch (e: NullPointerException) {
+                        LoggerFactory.getLogger(javaClass).warn("wrap error", e)
+                    }
                 }
                 MenuCommand.EDITOR_TO_TOP -> {
                     editorAreaView.toTop()
