@@ -188,7 +188,7 @@ class CommandReceiverService(
                     // Avoiding for java.lang.NullPointerException: Cannot load from char array because "this.text" is null.
                     try {
                         editorAreaView.refresh()
-                    } catch (e: NullPointerException) {
+                    } catch (e: RuntimeException) {
                         LoggerFactory.getLogger(javaClass).warn("wrap error", e)
                     }
                 }
