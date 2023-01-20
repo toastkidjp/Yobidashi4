@@ -20,3 +20,4 @@ logs/
 
 !gradle/wrapper/gradle-wrapper.properties
 cache/
+Web Data*
