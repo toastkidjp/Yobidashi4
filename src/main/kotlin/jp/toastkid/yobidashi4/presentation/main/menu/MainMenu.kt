@@ -193,7 +193,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Number place", shortcut = KeyShortcut(Key.N, alt = true)) {
                 viewModel.openTab(NumberPlaceGameTab())
             }
-            Item("Music player", shortcut = KeyShortcut(Key.M, alt = true)) {
+            Item("Music player", shortcut = KeyShortcut(Key.M, alt = true), icon = painterResource("images/icon/ic_music.xml")) {
                 val mediaFileFolderPath = setting.mediaFolderPath() ?: return@Item
                 viewModel.openFileListTab(
                     "Music",
