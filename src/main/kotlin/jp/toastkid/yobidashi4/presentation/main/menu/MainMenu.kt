@@ -157,7 +157,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
         }
         Menu("Tool") {
-            Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true)) {
+            Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
                 viewModel.openTab(WebBookmarkTab())
             }
             Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true)) {
