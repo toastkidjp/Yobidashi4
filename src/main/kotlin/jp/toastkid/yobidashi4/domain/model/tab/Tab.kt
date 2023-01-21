@@ -6,4 +6,8 @@ interface Tab {
 
     fun closeable(): Boolean
 
+    fun iconPath(): String? = null
+
+    fun useIconTint(): Boolean = true
+
 }
