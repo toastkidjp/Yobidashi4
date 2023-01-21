@@ -18,6 +18,10 @@ data class EditorTab(
 
     override fun closeable(): Boolean = editing.shouldShowIndicator().not()
 
+    override fun iconPath(): String? {
+        return "images/icon/ic_edit.xml"
+    }
+
     private var caretPosition = 0
 
     fun caretPosition() = caretPosition
