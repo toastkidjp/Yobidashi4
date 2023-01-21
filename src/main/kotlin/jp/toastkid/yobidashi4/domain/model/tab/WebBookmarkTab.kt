@@ -6,4 +6,7 @@ class WebBookmarkTab : Tab {
 
     override fun closeable(): Boolean = true
 
+    override fun iconPath(): String? {
+        return "images/icon/ic_bookmark.xml"
+    }
 }
