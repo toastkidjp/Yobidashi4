@@ -88,7 +88,7 @@ fun TabsView(modifier: Modifier) {
                                 Icon(
                                     painterResource(it),
                                     contentDescription = "Tab's icon",
-                                    tint = if (tab.useIconTint()) MaterialTheme.colors.onSurface else Color.Transparent
+                                    tint = if (tab.useIconTint()) MaterialTheme.colors.onPrimary else Color.Transparent
                                 )
                             }
 
