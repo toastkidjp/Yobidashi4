@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -20,9 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -81,6 +84,14 @@ fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            tab.iconPath()?.let {
+                                Icon(
+                                    painterResource(it),
+                                    contentDescription = "Tab's icon",
+                                    tint = if (tab.useIconTint()) MaterialTheme.colors.onSurface else Color.Transparent
+                                )
+                            }
+
                             Text(tab.title(),
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
