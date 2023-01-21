@@ -8,4 +8,9 @@ class CalendarTab(): Tab {
     override fun closeable(): Boolean {
         return true
     }
+
+    override fun iconPath(): String {
+        return "images/icon/ic_calendar.xml"
+    }
+
 }
