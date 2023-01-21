@@ -91,9 +91,9 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override val tabs: SnapshotStateList<Tab> = _tabs
 
-    override fun openFileListTab(title: String, items: Collection<Path>, closeable: Boolean) {
+    override fun openFileListTab(title: String, items: Collection<Path>, closeable: Boolean, type: FileTab.Type) {
         val addingIndex = if (closeable) tabs.size else 0
-        _tabs.add(addingIndex, FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, closeable))
+        _tabs.add(addingIndex, FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, closeable, type))
         _selected.value = _tabs.size - 1
     }
 

@@ -18,6 +18,7 @@ import javax.swing.JOptionPane
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
@@ -77,7 +78,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item("Find", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, alt = true)) {
                 ArticleFinderService().invoke { title, articles ->
-                    viewModel.openFileListTab(title, articles, true)
+                    viewModel.openFileListTab(title, articles, true, FileTab.Type.FIND)
                 }
             }
             Item("Dump all") {
@@ -198,7 +199,8 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.openFileListTab(
                     "Music",
                     MediaFileFinder().invoke(mediaFileFolderPath),
-                    true
+                    true,
+                    FileTab.Type.MUSIC
                 )
             }
         }
