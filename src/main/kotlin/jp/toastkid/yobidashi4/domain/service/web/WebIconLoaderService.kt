@@ -9,7 +9,9 @@ import org.jsoup.Jsoup
 class WebIconLoaderService {
 
     operator fun invoke(htmlSource: String, browserUrl: String?) {
-        val iconUrls = Jsoup.parse(htmlSource).select("link").filter { elem -> elem.attr("rel").contains("icon") }.map { it.attr("href") }
+        val iconUrls = Jsoup.parse(htmlSource).select("link")
+            .filter { elem -> elem.attr("rel").contains("icon") }
+            .map { it.attr("href") }
         val faviconFolder = Paths.get("data/web/icon")
         if (Files.exists(faviconFolder).not()) {
             Files.createDirectories(faviconFolder)
