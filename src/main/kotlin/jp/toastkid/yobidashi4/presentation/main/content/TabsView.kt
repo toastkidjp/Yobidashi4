@@ -169,21 +169,21 @@ fun TabsView(modifier: Modifier) {
 
 @Composable
 private fun TabIcon(tab: Tab) {
-    tab.iconPath()?.let { iconPath ->
-        if (iconPath.contains("data")) {
-            Paths.get(iconPath).inputStream().use { inputStream ->
-                Image(
-                    loadImageBitmap(inputStream),
-                    contentDescription = "Tab's icon",
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        } else {
-            Icon(
-                painterResource(iconPath),
+    val iconPath = tab.iconPath() ?: return
+    if (iconPath.contains("data")) {
+        Paths.get(iconPath).inputStream().use { inputStream ->
+            Image(
+                loadImageBitmap(inputStream),
                 contentDescription = "Tab's icon",
-                tint = if (tab.useIconTint()) MaterialTheme.colors.onPrimary else Color.Transparent
+                modifier = Modifier.size(24.dp)
             )
         }
+        return
     }
+
+    Icon(
+        painterResource(iconPath),
+        contentDescription = "Tab's icon",
+        tint = if (tab.useIconTint()) MaterialTheme.colors.onPrimary else Color.Transparent
+    )
 }
