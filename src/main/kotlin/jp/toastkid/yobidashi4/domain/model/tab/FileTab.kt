@@ -6,7 +6,7 @@ data class FileTab(
     private val title: String,
     val items: List<Path>,
     private val closeable: Boolean = true,
-    private val type: Type = Type.ARTICLE
+    private val type: Type = Type.FIND
 ): Tab {
 
     override fun title(): String = title
@@ -18,7 +18,7 @@ data class FileTab(
     }
 
     enum class Type(private val iconPath: String) {
-        ARTICLE("images/icon/ic_edit.xml"), MUSIC("images/icon/ic_music.xml"), FIND("images/icon/ic_search.xml");
+        MUSIC("images/icon/ic_music.xml"), FIND("images/icon/ic_search.xml");
 
         fun iconPath() = iconPath
     }
