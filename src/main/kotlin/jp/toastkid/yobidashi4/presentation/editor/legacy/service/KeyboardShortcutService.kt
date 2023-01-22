@@ -69,6 +69,7 @@ class KeyboardShortcutService(private val channel: Channel<MenuCommand>) {
                 KeyEvent.VK_Q -> MenuCommand.PASTE_AS_QUOTATION
                 KeyEvent.VK_F -> MenuCommand.FIND
                 KeyEvent.VK_S -> MenuCommand.SAVE
+                KeyEvent.VK_L -> MenuCommand.TO_HYPERLINK
                 KeyEvent.VK_PERIOD -> MenuCommand.BLOCKQUOTE
                 KeyEvent.VK_CIRCUMFLEX -> MenuCommand.STRIKETHROUGH
                 KeyEvent.VK_1 -> MenuCommand.ORDERED_LIST
