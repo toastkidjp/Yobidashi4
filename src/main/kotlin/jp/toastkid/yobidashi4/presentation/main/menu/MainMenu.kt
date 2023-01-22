@@ -13,6 +13,7 @@ import java.awt.Desktop
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.stream.Collectors
 import javax.swing.JOptionPane
 import jp.toastkid.yobidashi4.domain.model.article.Article
@@ -273,6 +274,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item("Editor's Color & Font") {
                 AppearanceSettingService().invoke()
+            }
+            Item("Show log") {
+                Desktop.getDesktop().open(Paths.get("data/logs/app.log").toFile())
             }
         }
     }
