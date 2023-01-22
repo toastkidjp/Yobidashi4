@@ -1,17 +1,21 @@
 package jp.toastkid.yobidashi4.presentation.web.bookmark
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -20,11 +24,19 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.net.URL
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.inputStream
+import kotlin.io.path.pathString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -56,7 +68,28 @@ fun WebBookmarkTabView() {
                 userScrollEnabled = true
             ) {
                 items(bookmarks) { bookmark ->
-                    Box {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        val faviconFolder = Paths.get("data/web/icon")
+                        val iconPath = Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
+                            val startsWith = it.fileName.pathString.startsWith(URL(bookmark.url).host.trim())
+                            startsWith
+                        }
+                        if (iconPath != null && Files.exists(iconPath)) {
+                            iconPath.inputStream().use { inputStream ->
+                                Image(
+                                    loadImageBitmap(inputStream),
+                                    contentDescription = "Tab's icon",
+                                    modifier = Modifier.size(32.dp).padding(horizontal = 4.dp)
+                                )
+                            }
+                        } else {
+                            Icon(
+                                painterResource("images/icon/ic_bookmark.xml"),
+                                "Icon",
+                                tint = MaterialTheme.colors.secondary,
+                                modifier = Modifier.padding(horizontal = 4.dp)
+                            )
+                        }
                         Column(modifier = Modifier
                             .combinedClickable(
                                 enabled = true,
