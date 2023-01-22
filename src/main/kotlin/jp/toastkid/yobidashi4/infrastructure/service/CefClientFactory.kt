@@ -8,7 +8,6 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.net.URI
-import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -26,6 +25,7 @@ import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchLauncher
 import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
+import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -55,7 +55,6 @@ import org.cef.handler.CefResourceRequestHandlerAdapter
 import org.cef.misc.BoolRef
 import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
-import org.jsoup.Jsoup
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -109,22 +108,7 @@ class CefClientFactory(
                 super.onLoadingStateChange(browser, isLoading, canGoBack, canGoForward)
                 if (isLoading.not()) {
                     browser?.getSource {
-                        val iconUrls = Jsoup.parse(it).select("link").filter { elem -> elem.attr("rel").contains("icon") }.map { it.attr("href") }
-                        val faviconFolder = Paths.get("data/web/icon")
-                        if (Files.exists(faviconFolder).not()) {
-                            Files.createDirectories(faviconFolder)
-                        }
-                        iconUrls.forEach {
-                            val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
-                            val iconPath = faviconFolder.resolve("${URL(browser?.url).host}.$fileExtension")
-                            if (Files.exists(iconPath)) {
-                                return@forEach
-                            }
-                            val urlConnection = URI(it).toURL().openConnection()
-                            urlConnection.getInputStream().use {
-                                Files.write(iconPath, it.readAllBytes())
-                            }
-                        }
+                        WebIconLoaderService().invoke(it, browser.url)
                     }
                 }
             }
