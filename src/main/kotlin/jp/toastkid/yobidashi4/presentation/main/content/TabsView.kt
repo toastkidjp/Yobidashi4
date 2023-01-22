@@ -37,6 +37,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -89,23 +90,7 @@ fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            tab.iconPath()?.let { iconPath ->
-                                if (iconPath.contains("data")) {
-                                    Paths.get(iconPath).inputStream().use { inputStream ->
-                                        Image(
-                                            loadImageBitmap(inputStream),
-                                            contentDescription = "Tab's icon",
-                                            modifier = Modifier.size(24.dp)
-                                        )
-                                    }
-                                } else {
-                                    Icon(
-                                        painterResource(iconPath),
-                                        contentDescription = "Tab's icon",
-                                        tint = if (tab.useIconTint()) MaterialTheme.colors.onPrimary else Color.Transparent
-                                    )
-                                }
-                            }
+                            TabIcon(tab)
 
                             Text(tab.title(),
                                 overflow = TextOverflow.Ellipsis,
@@ -178,6 +163,27 @@ fun TabsView(modifier: Modifier) {
             is NumberPlaceGameTab -> NumberPlaceView()
             is LoanCalculatorTab -> LoanCalculatorView()
             else -> Unit
+        }
+    }
+}
+
+@Composable
+private fun TabIcon(tab: Tab) {
+    tab.iconPath()?.let { iconPath ->
+        if (iconPath.contains("data")) {
+            Paths.get(iconPath).inputStream().use { inputStream ->
+                Image(
+                    loadImageBitmap(inputStream),
+                    contentDescription = "Tab's icon",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        } else {
+            Icon(
+                painterResource(iconPath),
+                contentDescription = "Tab's icon",
+                tint = if (tab.useIconTint()) MaterialTheme.colors.onPrimary else Color.Transparent
+            )
         }
     }
 }
