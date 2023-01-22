@@ -8,6 +8,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.net.URI
+import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -54,6 +55,7 @@ import org.cef.handler.CefResourceRequestHandlerAdapter
 import org.cef.misc.BoolRef
 import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
+import org.jsoup.Jsoup
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -97,6 +99,35 @@ class CefClientFactory(
         val client = cefApp.createClient()
         client.addLoadHandler(object : CefLoadHandlerAdapter() {
             // TODO Impl load action
+
+            override fun onLoadingStateChange(
+                browser: CefBrowser?,
+                isLoading: Boolean,
+                canGoBack: Boolean,
+                canGoForward: Boolean
+            ) {
+                super.onLoadingStateChange(browser, isLoading, canGoBack, canGoForward)
+                if (isLoading.not()) {
+                    browser?.getSource {
+                        val iconUrls = Jsoup.parse(it).select("link").filter { elem -> elem.attr("rel").contains("icon") }.map { it.attr("href") }
+                        val faviconFolder = Paths.get("data/web/icon")
+                        if (Files.exists(faviconFolder).not()) {
+                            Files.createDirectories(faviconFolder)
+                        }
+                        iconUrls.forEach {
+                            val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
+                            val iconPath = faviconFolder.resolve("${URL(browser?.url).host}.$fileExtension")
+                            if (Files.exists(iconPath)) {
+                                return@forEach
+                            }
+                            val urlConnection = URI(it).toURL().openConnection()
+                            urlConnection.getInputStream().use {
+                                Files.write(iconPath, it.readAllBytes())
+                            }
+                        }
+                    }
+                }
+            }
         })
 
         client.addLifeSpanHandler(object : CefLifeSpanHandlerAdapter() {
