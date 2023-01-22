@@ -24,6 +24,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,8 +65,12 @@ import kotlinx.coroutines.launch
 fun FileList(paths: List<Path>) {
     val articleStates = remember {
         val list = mutableStateListOf<FileListItem>()
-        paths.map { FileListItem(it) }.forEach { list.add(it) }
         list
+    }
+
+    LaunchedEffect(paths) {
+        articleStates.clear()
+        paths.map { FileListItem(it) }.forEach { articleStates.add(it) }
     }
 
     val dateTimeFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH) }
