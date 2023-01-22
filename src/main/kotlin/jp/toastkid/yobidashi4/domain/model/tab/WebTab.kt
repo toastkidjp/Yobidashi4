@@ -27,7 +27,7 @@ class WebTab(
 
         val faviconFolder = Paths.get("data/web/icon")
         val iconPath = Files.list(faviconFolder).filter {
-            val startsWith = it.fileName.startsWith(URL(url).host)
+            val startsWith = it.fileName.pathString.startsWith(URL(url).host)
             startsWith
         }.collect(Collectors.toList()).firstOrNull() ?: return "images/icon/ic_web.xml"
         if (Files.exists(iconPath)) {
