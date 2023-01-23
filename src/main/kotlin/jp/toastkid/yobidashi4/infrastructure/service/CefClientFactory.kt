@@ -98,6 +98,7 @@ class CefClientFactory(
         val client = cefApp.createClient()
         client.addLoadHandler(object : CefLoadHandlerAdapter() {
             // TODO Impl load action
+            private val webIconLoaderService = WebIconLoaderService()
 
             override fun onLoadingStateChange(
                 browser: CefBrowser?,
@@ -108,7 +109,7 @@ class CefClientFactory(
                 super.onLoadingStateChange(browser, isLoading, canGoBack, canGoForward)
                 if (isLoading.not()) {
                     browser?.getSource {
-                        WebIconLoaderService().invoke(it, browser.url)
+                        webIconLoaderService.invoke(it, browser.url)
                     }
                 }
             }
