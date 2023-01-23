@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.forEachGesture
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -26,17 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.loadImageBitmap
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
-import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -51,7 +45,6 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
-import kotlin.io.path.inputStream
 import kotlin.io.path.name
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -165,25 +158,4 @@ fun TabsView(modifier: Modifier) {
             else -> Unit
         }
     }
-}
-
-@Composable
-private fun TabIcon(tab: Tab) {
-    val iconPath = tab.iconPath() ?: return
-    if (iconPath.contains("data")) {
-        Paths.get(iconPath).inputStream().use { inputStream ->
-            Image(
-                loadImageBitmap(inputStream),
-                contentDescription = "Tab's icon",
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        return
-    }
-
-    Icon(
-        painterResource(iconPath),
-        contentDescription = "Tab's icon",
-        tint = MaterialTheme.colors.onPrimary
-    )
 }
