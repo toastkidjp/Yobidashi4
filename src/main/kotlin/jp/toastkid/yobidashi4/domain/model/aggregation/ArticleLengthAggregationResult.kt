@@ -17,7 +17,7 @@ class ArticleLengthAggregationResult : AggregationResult {
             map.entries.map { arrayOf(it.key, it.value) }
 
     override fun resultTitleSuffix(): String {
-        return "Total: ${sum()}"
+        return String.format("Total: %,d", sum())
     }
 
     override fun columnClass(columnIndex: Int): Class<out Any> {
