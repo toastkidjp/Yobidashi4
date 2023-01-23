@@ -65,18 +65,16 @@ fun TableView(aggregationResult: AggregationResult) {
                                         lastSorted = index to lastSortOrder.not()
 
                                         val swap = if (lastSortOrder)
-                                            articleStates.sortedBy {
-                                                when (aggregationResult.columnClass(index)) {
-                                                    Integer::class.java -> it[index].toString().toIntOrNull() ?: 0
-                                                    else -> it[index].toString().hashCode()
-                                                }
+                                            if (aggregationResult.columnClass(index) == Integer::class.java) {
+                                                articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
+                                            } else {
+                                                articleStates.sortedBy { return@sortedBy it[index].toString() }
                                             }
                                         else
-                                            articleStates.sortedByDescending {
-                                                when (aggregationResult.columnClass(index)) {
-                                                    Integer::class.java -> it[index].toString().toIntOrNull() ?: 0
-                                                    else -> it[index].toString().hashCode()
-                                                }
+                                            if (aggregationResult.columnClass(index) == Integer::class.java) {
+                                                articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
+                                            } else {
+                                                articleStates.sortedByDescending { it[index].toString() }
                                             }
 
                                         articleStates.clear()
