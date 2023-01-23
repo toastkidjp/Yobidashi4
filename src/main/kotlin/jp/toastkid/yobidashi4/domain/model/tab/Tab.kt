@@ -8,6 +8,4 @@ interface Tab {
 
     fun iconPath(): String? = null
 
-    fun useIconTint(): Boolean = true
-
 }
