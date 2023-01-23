@@ -41,6 +41,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
+import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.LegacyEditorView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
@@ -89,7 +90,7 @@ fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            TabIcon(tab)
+                            LoadIcon(tab.iconPath(), Modifier.size(24.dp))
 
                             Text(tab.title(),
                                 overflow = TextOverflow.Ellipsis,
