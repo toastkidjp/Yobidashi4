@@ -25,6 +25,10 @@ class WebIconLoaderService {
             iconUrls.add("${targetUrl.protocol}://${targetUrl.host}/favicon.ico")
         }
 
+        if (iconUrls.size > 1) {
+            iconUrls.removeIf { it.endsWith(".ico") }
+        }
+
         iconUrls.forEach {
             val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
             val iconPath = faviconFolder.resolve("${targetUrl.host}.$fileExtension")
