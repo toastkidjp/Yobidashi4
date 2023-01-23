@@ -276,7 +276,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 AppearanceSettingService().invoke()
             }
             Item("Show log") {
-                Desktop.getDesktop().open(Paths.get("data/logs/app.log").toFile())
+                val logFilePath = Paths.get("data/logs/app.log")
+                if (Files.exists(logFilePath)) {
+                    Desktop.getDesktop().open(logFilePath.toFile())
+                }
             }
         }
     }
