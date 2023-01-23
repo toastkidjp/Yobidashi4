@@ -65,9 +65,19 @@ fun TableView(aggregationResult: AggregationResult) {
                                         lastSorted = index to lastSortOrder.not()
 
                                         val swap = if (lastSortOrder)
-                                            articleStates.sortedBy { it[index].toString() }
+                                            articleStates.sortedBy {
+                                                when (aggregationResult.columnClass(index)) {
+                                                    Integer::class.java -> it[index].toString().toIntOrNull() ?: 0
+                                                    else -> it[index].toString().hashCode()
+                                                }
+                                            }
                                         else
-                                            articleStates.sortedByDescending { it[index].toString() }
+                                            articleStates.sortedByDescending {
+                                                when (aggregationResult.columnClass(index)) {
+                                                    Integer::class.java -> it[index].toString().toIntOrNull() ?: 0
+                                                    else -> it[index].toString().hashCode()
+                                                }
+                                            }
 
                                         articleStates.clear()
                                         articleStates.addAll(swap)
