@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -184,6 +183,6 @@ private fun TabIcon(tab: Tab) {
     Icon(
         painterResource(iconPath),
         contentDescription = "Tab's icon",
-        tint = if (tab.useIconTint()) MaterialTheme.colors.onPrimary else Color.Transparent
+        tint = MaterialTheme.colors.onPrimary
     )
 }
