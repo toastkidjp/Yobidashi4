@@ -36,10 +36,6 @@ class WebTab(
         return "images/icon/ic_web.xml"
     }
 
-    override fun useIconTint(): Boolean {
-        return Files.exists(Paths.get("data/web/icon").resolve(URL(url).host))
-    }
-
     fun isReadableUrl() =
         url.startsWith("https://") || url.startsWith("http://")
 
