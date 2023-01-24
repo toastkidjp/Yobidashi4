@@ -63,10 +63,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun FileList(paths: List<Path>) {
-    val articleStates = remember {
-        val list = mutableStateListOf<FileListItem>()
-        list
-    }
+    val articleStates = remember { mutableStateListOf<FileListItem>() }
 
     LaunchedEffect(paths) {
         articleStates.clear()
