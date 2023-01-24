@@ -45,6 +45,7 @@ interface MainViewModel {
     fun reloadAllArticle()
     fun openArticleList(): Boolean
     fun switchArticleList()
+    fun openTextFile(path: Path)
 
     /**
      * Temporary implementation.
