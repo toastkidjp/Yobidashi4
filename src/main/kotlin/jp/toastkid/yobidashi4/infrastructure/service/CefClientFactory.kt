@@ -72,9 +72,10 @@ class CefClientFactory(
         CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {
             override fun onBeforeCommandLineProcessing(process_type: String?, command_line: CefCommandLine?) {
                 if (process_type.isNullOrEmpty()) {
-                    command_line?.appendSwitch("--force-fieldtrial-params")
-                    command_line?.appendSwitchWithValue("--enable-media-stream", "true")
-                    command_line?.appendSwitchWithValue("--enable-features", "WebContentsForceDark")
+                    command_line?.appendSwitchWithValue("enable-media-stream", "true")
+                    if (appSetting.darkMode()) {
+                        command_line?.appendSwitchWithValue("blink-settings", "forceDarkModeInversionAlgorithm=1,forceDarkModeEnabled=true")
+                    }
                 }
                 super.onBeforeCommandLineProcessing(process_type, command_line)
             }
@@ -294,6 +295,7 @@ class CefClientFactory(
                     }
                     return true
                 }
+
                 return super.onKeyEvent(browser, event)
             }
         })
