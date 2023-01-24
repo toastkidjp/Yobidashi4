@@ -27,6 +27,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
+import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.media.MediaPlayerInvoker
@@ -135,6 +136,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         if (targetTab is WebTab) {
             object : KoinComponent { val browserPool: BrowserPool by inject() }.browserPool.dispose(targetTab.id())
         }
+    }
+
+    override fun openTextFile(path: Path) {
+        openTab(TextFileViewerTab(path))
     }
 
     override fun openUrl(url: String, background: Boolean) {
