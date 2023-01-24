@@ -277,9 +277,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item("Show log") {
                 val logFilePath = Paths.get("data/logs/app.log")
-                if (Files.exists(logFilePath)) {
-                    Desktop.getDesktop().open(logFilePath.toFile())
-                }
+                viewModel.openTextFile(logFilePath)
             }
         }
     }
