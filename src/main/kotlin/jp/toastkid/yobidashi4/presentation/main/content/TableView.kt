@@ -24,6 +24,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -64,21 +65,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                         val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
                                         lastSorted = index to lastSortOrder.not()
 
-                                        val swap = if (lastSortOrder)
-                                            if (aggregationResult.columnClass(index) == Integer::class.java) {
-                                                articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
-                                            } else {
-                                                articleStates.sortedBy { return@sortedBy it[index].toString() }
-                                            }
-                                        else
-                                            if (aggregationResult.columnClass(index) == Integer::class.java) {
-                                                articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
-                                            } else {
-                                                articleStates.sortedByDescending { it[index].toString() }
-                                            }
-
-                                        articleStates.clear()
-                                        articleStates.addAll(swap)
+                                        sort(lastSortOrder, aggregationResult, index, articleStates)
                                     }
                                     .weight(if (index == 0) 0.4f else 1f)
                                     .padding(horizontal = 16.dp)
@@ -119,4 +106,27 @@ fun TableView(aggregationResult: AggregationResult) {
                 Alignment.BottomCenter))
         }
     }
+}
+
+private fun sort(
+    lastSortOrder: Boolean,
+    aggregationResult: AggregationResult,
+    index: Int,
+    articleStates: SnapshotStateList<Array<Any>>
+) {
+    val swap = if (lastSortOrder)
+        if (aggregationResult.columnClass(index) == Integer::class.java) {
+            articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
+        } else {
+            articleStates.sortedBy { return@sortedBy it[index].toString() }
+        }
+    else
+        if (aggregationResult.columnClass(index) == Integer::class.java) {
+            articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
+        } else {
+            articleStates.sortedByDescending { it[index].toString() }
+        }
+
+    articleStates.clear()
+    articleStates.addAll(swap)
 }
