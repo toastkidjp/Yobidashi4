@@ -133,7 +133,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     { title, result -> viewModel.openAggregationResultTab(title, result) }
                 )
             }
-            Item("Article length", shortcut = KeyShortcut(Key.L, ctrl = true)) {
+            Item("Article length", shortcut = KeyShortcut(Key.L, alt = true)) {
                 AggregationMenuItemGeneratorService().invoke(
                     "Article length",
                     "Please input year and month you want aggregate article length?",
