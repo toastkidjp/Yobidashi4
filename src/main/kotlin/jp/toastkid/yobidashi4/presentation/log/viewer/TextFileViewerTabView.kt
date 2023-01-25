@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -42,10 +43,12 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
         elevation = 4.dp
     ) {
         Box() {
-            Text(
-                textState.value,
-                modifier = Modifier.padding(8.dp).verticalScroll(scrollState)
-            )
+            SelectionContainer {
+                Text(
+                    textState.value,
+                    modifier = Modifier.padding(8.dp).verticalScroll(scrollState)
+                )
+            }
             VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
                 Alignment.CenterEnd))
         }
