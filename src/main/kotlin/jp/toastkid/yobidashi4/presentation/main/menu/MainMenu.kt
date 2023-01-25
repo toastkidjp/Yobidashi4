@@ -189,7 +189,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     resultConsumer = { title, result -> viewModel.openAggregationResultTab(title, result) }
                 ).invoke()
             }
-            Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true)) {
+            Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
                 viewModel.openTab(LoanCalculatorTab())
             }
             Item("Number place", shortcut = KeyShortcut(Key.N, alt = true)) {
