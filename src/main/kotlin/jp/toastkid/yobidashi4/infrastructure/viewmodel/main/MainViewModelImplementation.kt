@@ -143,11 +143,13 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openUrl(url: String, background: Boolean) {
-        _tabs.add(WebTab(title = mutableStateOf(url), url = url))
+        val newTab = WebTab(title = mutableStateOf(url), url = url)
         if (background) {
+            _tabs.add(newTab)
             return
         }
-        _selected.value = _tabs.size - 1
+
+        openTab(newTab)
     }
 
     override fun updateWebTab(id: String, title: String) {
