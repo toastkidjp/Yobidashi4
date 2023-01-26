@@ -114,11 +114,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        _tabs.add(EditorTab(path))
+        val tab = EditorTab(path)
         if (onBackground) {
+            _tabs.add(tab)
             return
         }
-        _selected.value = _tabs.size - 1
+        openTab(tab)
     }
 
     override fun removeTabAt(index: Int) {
