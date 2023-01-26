@@ -97,8 +97,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openAggregationResultTab(title: String, result: AggregationResult) {
-        _tabs.add(TableTab(title, result, true))
-        _selected.value = _tabs.size - 1
+        openTab(TableTab(title, result, true))
     }
 
     override fun openFile(path: Path, onBackground: Boolean) {
