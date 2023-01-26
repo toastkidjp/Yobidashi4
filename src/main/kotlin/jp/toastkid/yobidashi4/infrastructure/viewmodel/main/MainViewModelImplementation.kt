@@ -203,8 +203,9 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openTab(tab: Tab) {
-        _tabs.add(tab)
-        _selected.value = _tabs.size - 1
+        val newIndex = if (_tabs.isEmpty()) 0 else _selected.value + 1
+        _tabs.add(newIndex, tab)
+        _selected.value = newIndex
     }
 
     private val _snackbarHostState = SnackbarHostState()
