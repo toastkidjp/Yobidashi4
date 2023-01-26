@@ -38,7 +38,7 @@ class BrowserView : KoinComponent {
     @Composable
     fun view(id: String, initialUrl: String) {
         val component = browserPool.component(id, initialUrl)
-
+        component.isVisible = true
         val focusRequester = remember { FocusRequester() }
 
         Box (
@@ -63,7 +63,6 @@ class BrowserView : KoinComponent {
         ) {
             SwingPanel(
                 factory = {
-                    component.isVisible = true
                     component
                 }
             )
@@ -77,7 +76,6 @@ class BrowserView : KoinComponent {
                 )
             }
         }
-
         DisposableEffect(component) {
             onDispose {
                 component.isVisible = false
