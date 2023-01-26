@@ -29,7 +29,9 @@ class BrowserPoolImplementation : BrowserPool {
     private val browsers = mutableMapOf<String, CefBrowser>()
 
     override fun component(id: String, initialUrl: String): Component {
-        return getBrowser(id, initialUrl).uiComponent
+        val browser = getBrowser(id, initialUrl)
+        lastId = id
+        return browser.uiComponent
     }
 
     override fun devTools(id: String): Component {
@@ -43,7 +45,6 @@ class BrowserPoolImplementation : BrowserPool {
     private fun getBrowser(id: String, initialUrl: String): CefBrowser {
         val browser = browsers.getOrElse(id) { client.createBrowser(initialUrl, false, false) }
         browsers.put(id, browser)
-        lastId = id
         return browser
     }
 
