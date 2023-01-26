@@ -17,7 +17,7 @@ internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
         Paths.get(iconPath).inputStream().use { inputStream ->
             Image(
                 loadImageBitmap(inputStream),
-                contentDescription = "Tab's icon",
+                contentDescription = "Icon",
                 modifier = modifier
             )
         }
@@ -26,7 +26,7 @@ internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
 
     Icon(
         painterResource(iconPath),
-        contentDescription = "Tab's icon",
+        contentDescription = "Icon",
         tint = MaterialTheme.colors.onPrimary,
         modifier = modifier
     )
