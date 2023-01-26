@@ -2,18 +2,21 @@ package jp.toastkid.yobidashi4.presentation.log.viewer
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +28,8 @@ import kotlinx.coroutines.withContext
 
 @Composable
 internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
-    val scrollState = rememberScrollState()
-    val textState = remember { mutableStateOf("") }
+    val scrollState = rememberLazyListState()
+    val textState = remember { mutableStateListOf<String>() }
 
     LaunchedEffect(tab.path()) {
         if (Files.exists(tab.path()).not()) {
@@ -34,7 +37,7 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
         }
 
         withContext(Dispatchers.IO) {
-            textState.value = Files.readAllLines(tab.path()).joinToString("\n")
+            Files.readAllLines(tab.path()).forEach { textState.add(it) }
         }
     }
 
@@ -44,10 +47,31 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
     ) {
         Box() {
             SelectionContainer {
-                Text(
-                    textState.value,
-                    modifier = Modifier.padding(8.dp).verticalScroll(scrollState)
-                )
+                LazyColumn(state = scrollState) {
+                    itemsIndexed(textState) { index, line ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            DisableSelection {
+                                val length = textState.size.toString().length
+                                val lineNumberCount = index + 1
+                                val fillCount = length - lineNumberCount.toString().length
+                                val lineNumberText = with(StringBuilder()) {
+                                    repeat(fillCount) {
+                                        append(" ")
+                                    }
+                                    append(lineNumberCount)
+                                }.toString()
+                                Text(
+                                    "$lineNumberText",
+                                    modifier = Modifier.padding(horizontal = 8.dp)
+                                )
+                            }
+                            Text(
+                                line,
+                                modifier = Modifier.padding(end = 8.dp).weight(1f)
+                            )
+                        }
+                    }
+                }
             }
             VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
                 Alignment.CenterEnd))
