@@ -205,53 +205,50 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 )
             }
         }
+        Menu("Tab") {
+            Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true)) {
+                if (viewModel.tabs.size != 0) {
+                    viewModel.closeCurrent()
+                    return@Item
+                }
+                exitApplication()
+            }
 
-        if (viewModel.tabs.isNotEmpty()) {
-            Menu("Tab") {
-                Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true)) {
-                    if (viewModel.tabs.size != 0) {
-                        viewModel.closeCurrent()
+            if (viewModel.tabs.size > 1) {
+                Item("Move previous tab", shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
+                    if (viewModel.tabs.isEmpty()) {
                         return@Item
                     }
-                    exitApplication()
+
+                    val nextIndex = if (viewModel.selected.value == 0) viewModel.tabs.size - 1 else viewModel.selected.value - 1
+                    viewModel.setSelectedIndex(nextIndex)
                 }
 
-                if (viewModel.tabs.size > 1) {
-                    Item("Move previous tab", shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
-                        if (viewModel.tabs.isEmpty()) {
-                            return@Item
-                        }
-
-                        val nextIndex = if (viewModel.selected.value == 0) viewModel.tabs.size - 1 else viewModel.selected.value - 1
-                        viewModel.setSelectedIndex(nextIndex)
+                Item("Move next tab", shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
+                    if (viewModel.tabs.isEmpty()) {
+                        return@Item
                     }
 
-                    Item("Move next tab", shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
-                        if (viewModel.tabs.isEmpty()) {
-                            return@Item
-                        }
-
-                        val nextIndex = if (viewModel.selected.value == viewModel.tabs.size - 1) 0 else viewModel.selected.value + 1
-                        viewModel.setSelectedIndex(nextIndex)
-                    }
+                    val nextIndex = if (viewModel.selected.value == viewModel.tabs.size - 1) 0 else viewModel.selected.value + 1
+                    viewModel.setSelectedIndex(nextIndex)
                 }
+            }
 
-                (1 .. min(10, viewModel.tabs.size)).forEach {
-                    Item("Tab $it", shortcut = KeyShortcut(when (it) {
-                        1 -> Key.One
-                        2 -> Key.Two
-                        3 -> Key.Three
-                        4 -> Key.Four
-                        5 -> Key.Five
-                        6 -> Key.Six
-                        7 -> Key.Seven
-                        8 -> Key.Eight
-                        9 -> Key.Nine
-                        10 -> Key.Zero
-                        else -> Key.One
-                    }, alt = true)) {
-                        viewModel.setSelectedIndex(it - 1)
-                    }
+            (1 .. min(10, viewModel.tabs.size)).forEach {
+                Item("Tab $it", shortcut = KeyShortcut(when (it) {
+                    1 -> Key.One
+                    2 -> Key.Two
+                    3 -> Key.Three
+                    4 -> Key.Four
+                    5 -> Key.Five
+                    6 -> Key.Six
+                    7 -> Key.Seven
+                    8 -> Key.Eight
+                    9 -> Key.Nine
+                    10 -> Key.Zero
+                    else -> Key.One
+                }, alt = true)) {
+                    viewModel.setSelectedIndex(it - 1)
                 }
             }
         }
