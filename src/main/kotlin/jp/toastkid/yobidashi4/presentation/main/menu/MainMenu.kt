@@ -48,7 +48,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Composable()
+@Composable
 fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     val koin = object: KoinComponent {
         val viewModel: MainViewModel by inject()
