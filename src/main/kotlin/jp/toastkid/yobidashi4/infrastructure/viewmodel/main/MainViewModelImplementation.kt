@@ -106,8 +106,9 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        if (tabs.filterIsInstance(EditorTab::class.java).any { it.path == path }
-            || Files.exists(path).not()) {
+        val indexOfFirst = tabs.filterIsInstance(EditorTab::class.java).indexOfFirst { it.path == path }
+        if (indexOfFirst != -1 || Files.exists(path).not()) {
+            _selected.value = indexOfFirst
             return
         }
 
