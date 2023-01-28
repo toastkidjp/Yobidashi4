@@ -19,7 +19,9 @@ import javax.imageio.ImageIO
 import javax.swing.JDialog
 import javax.swing.SwingUtilities
 import javax.swing.WindowConstants
+import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
@@ -354,8 +356,15 @@ class CefClientFactory(
                     }
                     403 -> {
                         params?.linkUrl?.let {
-                            object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
-                                .openUrl(it, true)
+                            val mainViewModel = object : KoinComponent {
+                                val viewModel: MainViewModel by inject()
+                            }.viewModel
+                            // TODO
+                            mainViewModel.openUrl(it, true)
+                            val webTab = mainViewModel.tabs.last() as? WebTab ?: return true
+                            object : KoinComponent { val browserPool: BrowserPool by inject() }.browserPool.component(
+                                webTab.id(), webTab.url()
+                            )
                         }
                         return true
                     }
