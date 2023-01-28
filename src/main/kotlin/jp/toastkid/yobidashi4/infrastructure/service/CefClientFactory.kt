@@ -394,7 +394,6 @@ class CefClientFactory(
                         return true
                     }
                     409 -> {
-                        // TODO
                         val read = ImageIO.read(URL(params?.sourceUrl))
                         println("read ${read} ${params?.sourceUrl}")
                         val image = read ?: return true
