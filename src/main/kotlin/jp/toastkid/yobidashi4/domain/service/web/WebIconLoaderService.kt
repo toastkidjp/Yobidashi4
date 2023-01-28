@@ -4,6 +4,7 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import org.jsoup.Jsoup
 
@@ -37,18 +38,26 @@ class WebIconLoaderService {
             }
         }
             .forEach {
-            val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
-            val iconPath = faviconFolder.resolve("${targetUrl.host}.$fileExtension")
-            if (Files.exists(iconPath)) {
-                return@forEach
-            }
-            val urlConnection = URI(it).toURL().openConnection() as? HttpURLConnection ?: return
-            if (urlConnection.responseCode != 200) {
-                return@forEach
-            }
-            urlConnection.getInputStream().use {
-                Files.write(iconPath, it.readAllBytes())
-            }
+            download(it, faviconFolder, targetUrl)
+        }
+    }
+
+    private fun download(
+        it: String,
+        faviconFolder: Path,
+        targetUrl: URL
+    ) {
+        val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
+        val iconPath = faviconFolder.resolve("${targetUrl.host}.$fileExtension")
+        if (Files.exists(iconPath)) {
+            return
+        }
+        val urlConnection = URI(it).toURL().openConnection() as? HttpURLConnection ?: return
+        if (urlConnection.responseCode != 200) {
+            return
+        }
+        urlConnection.getInputStream().use {
+            Files.write(iconPath, it.readAllBytes())
         }
     }
 
