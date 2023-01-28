@@ -400,7 +400,7 @@ class CefClientFactory(
                         return true
                     }
                     410 -> {
-                        ClipboardPutterService().invoke(params?.pageUrl)
+                        ClipboardPutterService().invoke(params?.linkUrl ?: params?.sourceUrl ?: para)
                         return true
                     }
                     411 -> {
