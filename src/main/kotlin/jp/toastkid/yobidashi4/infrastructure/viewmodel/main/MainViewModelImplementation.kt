@@ -228,7 +228,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             _snackbarHostState.currentSnackbarData?.dismiss()
             val snackbarResult = _snackbarHostState.showSnackbar(
                 message,
-                actionLabel ?: "",
+                actionLabel,
                 SnackbarDuration.Long
             )
             when (snackbarResult) {
