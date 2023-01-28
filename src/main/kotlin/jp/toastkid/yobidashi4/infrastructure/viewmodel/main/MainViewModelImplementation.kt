@@ -151,9 +151,9 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(newTab)
     }
 
-    override fun updateWebTab(id: String, title: String) {
+    override fun updateWebTab(id: String, title: String, url: String?) {
         val webTab = _tabs.filterIsInstance<WebTab>().firstOrNull { it.id() == id } ?: return
-        webTab.updateTitle(title)
+        webTab.update(title, url)
     }
 
     override fun closeCurrent() {

@@ -16,11 +16,17 @@ class WebTab(
 
     private val id = UUID.randomUUID().toString()
 
+    private val iconPathState = mutableStateOf(makeIconPath())
+
     override fun title(): String = title.value
 
     override fun closeable(): Boolean = true
 
     override fun iconPath(): String? {
+        return iconPathState.value
+    }
+
+    private fun makeIconPath(): String? {
         if (url.isNullOrEmpty()) {
             return "images/icon/ic_web.xml"
         }
@@ -43,9 +49,13 @@ class WebTab(
 
     fun id() = id
 
-    fun updateTitle(newTitle: String) {
+    fun update(newTitle: String, newUrl: String?) {
         if (title.value != newTitle) {
             this.title.value = newTitle
+        }
+        if (newUrl != null && url != newUrl) {
+            this.url = newUrl
+            iconPathState.value = makeIconPath()
         }
     }
 

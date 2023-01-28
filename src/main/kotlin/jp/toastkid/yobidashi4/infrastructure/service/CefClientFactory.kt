@@ -172,7 +172,7 @@ class CefClientFactory(
             override fun onTitleChange(browser: CefBrowser?, title: String?) {
                 title ?: return
                 val id = findId(browser) ?: return
-                MainViewModel.get().updateWebTab(id, title)
+                MainViewModel.get().updateWebTab(id, title, browser?.url)
             }
         })
         client.addDownloadHandler(object : CefDownloadHandlerAdapter() {
