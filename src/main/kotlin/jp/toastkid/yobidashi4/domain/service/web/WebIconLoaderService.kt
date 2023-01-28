@@ -37,9 +37,7 @@ class WebIconLoaderService {
                 it
             }
         }
-            .forEach {
-            download(it, faviconFolder, targetUrl)
-        }
+            .forEach { download(it, faviconFolder, targetUrl) }
     }
 
     private fun download(
