@@ -321,7 +321,7 @@ class CefClientFactory(
                 }
                 if (params?.sourceUrl.isNullOrBlank().not()) {
                     model?.addItem(407, "ダウンロード")
-                    model?.addItem(409, "コピー")
+                    model?.addItem(409, "画像をコピー")
                     model?.addItem(415, "この画像を検索")
                 }
                 if (params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()) {
