@@ -8,6 +8,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.net.URI
+import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -394,6 +395,10 @@ class CefClientFactory(
                     }
                     409 -> {
                         // TODO
+                        val read = ImageIO.read(URL(params?.sourceUrl))
+                        println("read ${read} ${params?.sourceUrl}")
+                        val image = read ?: return true
+                        ClipboardPutterService().invoke(image)
                         return true
                     }
                     410 -> {
