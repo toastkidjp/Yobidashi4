@@ -329,6 +329,7 @@ class CefClientFactory(
                     model?.addItem(411, "Markdown のリンクをコピー")
                 }
                 if (selectedText.isNotBlank()) {
+                    model?.addItem(416, "テキストをコピー")
                     model?.addItem(405, "選択したテキストを検索")
                 }
                 model?.addItem(414, "ブラウザーで開く")
@@ -420,6 +421,12 @@ class CefClientFactory(
                     415 -> {
                         params?.sourceUrl?.let {
                             PrivateImageSearchLauncher().invoke(it)
+                        }
+                        return true
+                    }
+                    416 -> {
+                        params?.selectionText?.let {
+                            ClipboardPutterService().invoke(it)
                         }
                         return true
                     }
