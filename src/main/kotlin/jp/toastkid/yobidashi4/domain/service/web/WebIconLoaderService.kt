@@ -29,7 +29,14 @@ class WebIconLoaderService {
             iconUrls.removeIf { it.endsWith(".ico") }
         }
 
-        iconUrls.forEach {
+        iconUrls.map {
+            if (it.startsWith("/")) {
+                "${targetUrl.protocol}://${targetUrl.host}$it"
+            } else {
+                it
+            }
+        }
+            .forEach {
             val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
             val iconPath = faviconFolder.resolve("${targetUrl.host}.$fileExtension")
             if (Files.exists(iconPath)) {
