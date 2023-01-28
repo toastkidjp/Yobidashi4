@@ -394,8 +394,7 @@ class CefClientFactory(
                         return true
                     }
                     409 -> {
-                        val read = ImageIO.read(URL(params?.sourceUrl))
-                        val image = read ?: return true
+                        val image = ImageIO.read(URL(params?.sourceUrl)) ?: return true
                         ClipboardPutterService().invoke(image)
                         return true
                     }
