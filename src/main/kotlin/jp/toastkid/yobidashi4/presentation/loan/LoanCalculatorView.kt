@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.text.DecimalFormat
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
+import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +71,7 @@ fun LoanCalculatorView() {
         mutableStateOf("10,000")
     }
 
-    val scheduleState = remember { mutableStateListOf<Pair<Double, Double>>() }
+    val scheduleState = remember { mutableStateListOf<PaymentDetail>() }
 
     val inputChannel: Channel<String> = Channel()
 
@@ -182,20 +183,24 @@ fun LoanCalculatorView() {
                     LazyColumn(state = scrollState) {
                         item {
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
-                                /*Text(index.toString(),
-                                    //modifier = Modifier.weight(1f)
-                                )*/
+                                Text(
+                                    "回数",
+                                    modifier = Modifier.weight(0.4f)
+                                )
                                 Text("元本", modifier = Modifier.weight(1f))
                                 Text("利息", modifier = Modifier.weight(1f))
+                                Text("残金", modifier = Modifier.weight(1f))
                             }
                         }
                         itemsIndexed(scheduleState) { index, it ->
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
-                                /*Text(index.toString(),
-                                    //modifier = Modifier.weight(1f)
-                                )*/
-                                Text(it.first.roundToInt().toString(), modifier = Modifier.weight(1f))
-                                Text(it.second.roundToInt().toString(), modifier = Modifier.weight(1f))
+                                Text(
+                                    "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
+                                    modifier = Modifier.weight(0.4f)
+                                )
+                                Text(it.principal.roundToInt().toString(), modifier = Modifier.weight(1f))
+                                Text(it.interest.roundToInt().toString(), modifier = Modifier.weight(1f))
+                                Text(it.amount.toString(), modifier = Modifier.weight(1f))
                             }
                         }
                     }
@@ -220,7 +225,7 @@ fun LoanCalculatorView() {
                 )
             },
             {
-                result = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment, it.paymentSchedule.map { it.second }.sum().toLong())
+                result = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment, it.paymentSchedule.map { it.interest }.sum().toLong())
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
             }

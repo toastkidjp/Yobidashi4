@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.service.loan
 
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
+import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import kotlin.math.max
 import kotlin.math.pow
 
@@ -25,7 +26,7 @@ class LoanCalculator {
             val monthlyActualReturning = monthlyPaymentToBank - monthlyInterest
             currentAmount -= (monthlyPaymentToBank - monthlyInterest).toLong()
             // println("monthlyPayment $monthlyPaymentToBank monthlyActualReturning $monthlyActualReturning monthlyInterest $monthlyInterest currentAmount $currentAmount")
-            monthlyActualReturning to monthlyInterest
+            PaymentDetail(monthlyActualReturning, monthlyInterest, currentAmount)
         })
     }
 
