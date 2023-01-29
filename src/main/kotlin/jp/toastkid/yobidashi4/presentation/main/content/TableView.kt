@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
@@ -79,20 +81,37 @@ fun TableView(aggregationResult: AggregationResult) {
                     SelectionContainer {
                         Column(modifier = Modifier.animateItemPlacement()) {
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                                Icon(
+                                    painter = painterResource("images/icon/ic_edit.xml"),
+                                    contentDescription = "Open file",
+                                    tint = MaterialTheme.colors.secondary,
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                        .clickable {
+                                            MainViewModel.get().openFile(Article.withTitle(article[0].toString()).path())
+                                        }
+                                )
+
                                 article.forEachIndexed { index, any ->
                                     if (index != 0) {
                                         Divider(modifier = Modifier.fillMaxHeight().width(1.dp).padding(vertical = 1.dp))
+                                    }
+                                    if (any is Collection<*>) {
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            any.forEach { line ->
+                                                Text(
+                                                    line.toString(),
+                                                    modifier = Modifier
+                                                        .padding(horizontal = 16.dp)
+                                                )
+                                            }
+                                        }
+                                        return@forEachIndexed
                                     }
                                     Text(
                                         any.toString(),
                                         modifier = Modifier
                                             .weight(if (index == 0) 0.4f else 1f)
                                             .padding(horizontal = 16.dp)
-                                            .clickable {
-                                                if (index == 0) {
-                                                    MainViewModel.get().openFile(Article.withTitle(article[0].toString()).path())
-                                                }
-                                            }
                                     )
                                 }
                             }
