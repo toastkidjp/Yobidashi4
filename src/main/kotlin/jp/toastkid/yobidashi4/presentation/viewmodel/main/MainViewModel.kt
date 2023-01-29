@@ -17,6 +17,7 @@ interface MainViewModel {
     val tabs: SnapshotStateList<Tab>
     val showWebSearch: State<Boolean>
 
+    fun currentTab(): Tab?
     fun darkMode(): Boolean
 
     fun switchDarkMode()
