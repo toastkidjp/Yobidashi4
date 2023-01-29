@@ -79,7 +79,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item("Find", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, alt = true)) {
                 ArticleFinderService().invoke { title, articles ->
-                    viewModel.openFileListTab(title, articles, true, FileTab.Type.FIND)
+                    viewModel.openAggregationResultTab(title, articles)
                 }
             }
             Item("Dump all") {

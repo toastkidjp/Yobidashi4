@@ -1,13 +1,12 @@
 package jp.toastkid.yobidashi4.domain.service.archive
 
 import java.awt.Dimension
-import java.nio.file.Path
 import javax.swing.BoxLayout
 import javax.swing.JLabel
 import javax.swing.JOptionPane
 import javax.swing.JPanel
 import javax.swing.JTextField
-import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +15,7 @@ import org.koin.core.component.KoinComponent
 
 class ArticleFinderService : KoinComponent {
 
-    operator fun invoke(resultConsumer: (String, List<Path>) -> Unit = { _, _ -> }) {
+    operator fun invoke(resultConsumer: (String, AggregationResult) -> Unit = { _, _ -> }) {
         val (panel, fileFilter) = makeDialogContent()
         val keyword = JOptionPane.showInputDialog(null, panel)
         if (keyword.isNullOrBlank() && fileFilter.text.isNullOrBlank()) {
@@ -26,17 +25,17 @@ class ArticleFinderService : KoinComponent {
         CoroutineScope(Dispatchers.Default).launch {
             val articles = withContext(Dispatchers.IO) {
                 KeywordSearch().invoke(keyword, fileFilter.text)
-                    .asSequence()
-                    .filter { it.isNotBlank() }
-                    .map { Article.withTitle(it).path() }
-                    .toList()
+                    //.asSequence()
+                    //.filter { it.isNotBlank() }
+                    //.map { Article.withTitle(it).path() }
+                    //.toList()
             }
 
             if (articles.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Article which contains '$keyword' is not found.")
                 return@launch
             }
-            resultConsumer("'$keyword' find result ${articles.size}", articles)
+            resultConsumer("'$keyword' find result ${articles.itemArrays().size}", articles)
         }
     }
 
