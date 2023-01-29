@@ -92,6 +92,13 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override val tabs: SnapshotStateList<Tab> = _tabs
 
+    override fun currentTab(): Tab? {
+        if (tabs.isEmpty()) {
+            return null
+        }
+        return tabs.get(selected.value)
+    }
+
     override fun openFileListTab(title: String, items: Collection<Path>, closeable: Boolean, type: FileTab.Type) {
         openTab(FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, closeable, type))
     }
