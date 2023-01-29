@@ -108,7 +108,7 @@ private fun WebSearchBox(viewModel: MainViewModel) {
         elevation = 4.dp
     ) {
         val selectedSite = remember { mutableStateOf(SearchSite.getDefault()) }
-        val query = remember { mutableStateOf(TextFieldValue()) }
+        val query = remember { mutableStateOf(TextFieldValue())}
         val openDropdown = remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -235,6 +235,9 @@ private fun WebSearchBox(viewModel: MainViewModel) {
                 if (viewModel.showWebSearch.value) {
                     focusRequester.requestFocus()
                 }
+                query.value = TextFieldValue(
+                    (viewModel.currentTab() as? WebTab)?.url() ?: ""
+                )
             }
         }
     }
