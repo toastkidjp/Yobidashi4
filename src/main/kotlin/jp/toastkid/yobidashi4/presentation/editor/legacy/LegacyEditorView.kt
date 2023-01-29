@@ -20,8 +20,6 @@ fun LegacyEditorView(tab: EditorTab) {
     SwingPanel(
         background = Color.Transparent,
         factory = {
-            editorFrame.setText(tab.path, tab.getContent())
-            editorFrame.setCaretPosition(tab.caretPosition())
             editorFrame.getContent()
         },
         modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
@@ -32,6 +30,8 @@ fun LegacyEditorView(tab: EditorTab) {
     }
 
     DisposableEffect(tab.path) {
+        editorFrame.setText(tab.path, tab.getContent())
+        editorFrame.setCaretPosition(tab.caretPosition())
         onDispose {
             MainViewModel.get().updateEditorContent(tab.path, editorFrame.currentText(), editorFrame.caretPosition(), false)
         }
