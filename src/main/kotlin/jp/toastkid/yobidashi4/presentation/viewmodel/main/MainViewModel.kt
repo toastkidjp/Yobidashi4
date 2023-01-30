@@ -15,7 +15,7 @@ import org.koin.core.component.inject
 interface MainViewModel {
     val selected: State<Int>
     val tabs: SnapshotStateList<Tab>
-    val showWebSearch: State<Boolean>
+    fun showWebSearch(): Boolean
 
     fun currentTab(): Tab?
     fun darkMode(): Boolean
