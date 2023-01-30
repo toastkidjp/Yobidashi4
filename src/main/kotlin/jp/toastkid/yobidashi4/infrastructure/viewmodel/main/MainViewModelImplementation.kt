@@ -185,7 +185,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     private val _showWebSearch = mutableStateOf(false)
 
-    override val showWebSearch: State<Boolean> = _showWebSearch
+    override fun showWebSearch(): Boolean = _showWebSearch.value
 
     override fun setShowWebSearch(newState: Boolean) {
         _showWebSearch.value = newState
