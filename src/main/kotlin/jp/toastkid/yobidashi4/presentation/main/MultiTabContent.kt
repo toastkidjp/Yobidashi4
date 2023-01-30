@@ -65,7 +65,7 @@ fun MultiTabContent() {
     val viewModel = MainViewModel.get()
 
     Column {
-        if (viewModel.showWebSearch.value) {
+        if (viewModel.showWebSearch()) {
             WebSearchBox(viewModel)
         }
 
@@ -231,8 +231,8 @@ private fun WebSearchBox(viewModel: MainViewModel) {
                 Text("Search")
             }
 
-            LaunchedEffect(viewModel.showWebSearch.value) {
-                if (viewModel.showWebSearch.value) {
+            LaunchedEffect(viewModel.showWebSearch()) {
+                if (viewModel.showWebSearch()) {
                     focusRequester.requestFocus()
                 }
                 query.value = TextFieldValue(
