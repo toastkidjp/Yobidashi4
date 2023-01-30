@@ -166,7 +166,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.openTab(CalendarTab())
             }
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
-                viewModel.setShowWebSearch(viewModel.showWebSearch.value.not())
+                viewModel.setShowWebSearch(viewModel.showWebSearch().not())
             }
             Item("Image search", shortcut = KeyShortcut(Key.P, alt = true)) { PrivateImageSearchService().invoke() }
             Item("What happened today") {
