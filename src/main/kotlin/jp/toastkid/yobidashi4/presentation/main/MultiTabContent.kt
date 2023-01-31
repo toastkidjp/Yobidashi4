@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
+import jp.toastkid.yobidashi4.presentation.main.aggregation.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.content.FileList
 import jp.toastkid.yobidashi4.presentation.main.content.TabsView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -67,6 +68,10 @@ fun MultiTabContent() {
     Column {
         if (viewModel.showWebSearch()) {
             WebSearchBox(viewModel)
+        }
+
+        if (viewModel.showAggregationBox()) {
+            AggregationBox(viewModel)
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
