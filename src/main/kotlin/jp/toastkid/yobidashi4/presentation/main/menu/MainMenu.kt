@@ -24,14 +24,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.domain.service.aggregation.AggregationMenuItemGeneratorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
-import jp.toastkid.yobidashi4.domain.service.aggregation.MovieMemoSubtitleExtractor
-import jp.toastkid.yobidashi4.domain.service.aggregation.Nikkei225AggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.OutgoAggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
 import jp.toastkid.yobidashi4.domain.service.archive.ArticleFinderService
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
@@ -98,64 +90,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item("Exit", shortcut = KeyShortcut(Key.E, alt = true)) {
                 exitApplication()
-            }
-        }
-        Menu("Aggregation") {
-            Item("Movies", shortcut = KeyShortcut(Key.M, ctrl = true)) {
-                AggregationMenuItemGeneratorService().invoke(
-                    "Movie memo",
-                    "Please input year and month you want aggregate movies? ex)",
-                    { MovieMemoSubtitleExtractor().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
-            }
-            Item("Stock") {
-                AggregationMenuItemGeneratorService().invoke(
-                    "Stock",
-                    "Please input year and month you want aggregate stocks? ex)",
-                    { StocksAggregatorService().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
-            }
-            Item("Outgo", shortcut = KeyShortcut(Key.G, ctrl = true)) {
-                AggregationMenuItemGeneratorService().invoke(
-                    "OutGo",
-                    "Please input year and month you want aggregate outgo?",
-                    { OutgoAggregatorService().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
-            }
-            Item("Eat out") {
-                AggregationMenuItemGeneratorService().invoke(
-                    "Eat out count",
-                    "Please input year and month you want count eat-out times?",
-                    { EatingOutCounterService().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
-            }
-            Item("Article length") {
-                AggregationMenuItemGeneratorService().invoke(
-                    "Article length",
-                    "Please input year and month you want aggregate article length?",
-                    { ArticleLengthAggregatorService().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
-            }
-            Item("Steps") {
-                AggregationMenuItemGeneratorService().invoke(
-                    "Steps",
-                    "Please input year and month you want aggregate steps? ex)",
-                    { StepsAggregatorService().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
-            }
-            Item("Nikkei 225") {
-                AggregationMenuItemGeneratorService().invoke(
-                    "Nikkei 225",
-                    "Please input year and month you want aggregate Nikkei 225? ex)",
-                    { Nikkei225AggregatorService().invoke(it) },
-                    { title, result -> viewModel.openAggregationResultTab(title, result) }
-                )
             }
         }
         Menu("Tool") {
