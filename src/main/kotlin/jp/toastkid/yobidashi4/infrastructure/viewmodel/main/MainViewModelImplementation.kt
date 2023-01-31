@@ -191,6 +191,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _showWebSearch.value = newState
     }
 
+    private val _showAggregationBox = mutableStateOf(false)
+
+    override fun showAggregationBox(): Boolean {
+        return _showAggregationBox.value
+    }
+
+    override fun switchAggregationBox(newState: Boolean) {
+        _showAggregationBox.value = newState
+    }
+
     private val window = WindowState(
         size = DpSize(width = 1100.dp, height = 700.dp),
         position = WindowPosition(Alignment.Center)
