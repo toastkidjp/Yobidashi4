@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -77,7 +78,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             )
         }
         val selectedSite = remember { mutableStateOf(aggregations.entries.first()) }
-        val query = remember { mutableStateOf(TextFieldValue()) }
+        val query = remember { mutableStateOf(TextFieldValue("${LocalDate.now().year}")) }
         val openDropdown = remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.Start,
