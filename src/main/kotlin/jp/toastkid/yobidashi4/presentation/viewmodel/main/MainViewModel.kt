@@ -16,6 +16,8 @@ interface MainViewModel {
     val selected: State<Int>
     val tabs: SnapshotStateList<Tab>
     fun showWebSearch(): Boolean
+    fun showAggregationBox(): Boolean
+    fun switchAggregationBox(newState: Boolean)
 
     fun currentTab(): Tab?
     fun darkMode(): Boolean
