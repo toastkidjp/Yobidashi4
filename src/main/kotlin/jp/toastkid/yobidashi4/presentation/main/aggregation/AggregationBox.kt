@@ -203,7 +203,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             }
 
             LaunchedEffect(viewModel.showAggregationBox()) {
-                if (viewModel.showWebSearch()) {
+                if (viewModel.showAggregationBox()) {
                     focusRequester.requestFocus()
                 }
             }
