@@ -196,7 +196,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                     selectedSite.value.value(query.value.text).let {
                         viewModel.openAggregationResultTab(it.resultTitleSuffix(), it)
                     }
-                    viewModel.setShowWebSearch(false)
+                    viewModel.switchAggregationBox(false)
                 }
             ) {
                 Text("Start")
