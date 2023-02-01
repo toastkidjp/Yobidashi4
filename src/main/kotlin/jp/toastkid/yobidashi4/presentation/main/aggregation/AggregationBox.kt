@@ -88,7 +88,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             Text("x", modifier = Modifier
                 .padding(start = 4.dp)
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.setShowWebSearch(false) }
+                .clickable { viewModel.switchAggregationBox(false) }
                 .padding(8.dp)
             )
 
