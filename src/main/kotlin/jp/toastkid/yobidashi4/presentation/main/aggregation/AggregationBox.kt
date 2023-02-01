@@ -159,7 +159,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         selectedSite.value.value(query.value.text)
-                        viewModel.setShowWebSearch(false)
+                        viewModel.switchAggregationBox(false)
                     }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
