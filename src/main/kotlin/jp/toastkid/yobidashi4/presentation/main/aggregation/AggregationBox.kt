@@ -199,7 +199,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                     viewModel.setShowWebSearch(false)
                 }
             ) {
-                Text("Search")
+                Text("Start")
             }
 
             LaunchedEffect(viewModel.showWebSearch()) {
