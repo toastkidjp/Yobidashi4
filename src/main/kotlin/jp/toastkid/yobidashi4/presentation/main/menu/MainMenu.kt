@@ -209,6 +209,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
                 viewModel.switchDarkMode()
             }
+            Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true)) {
+                viewModel.loadBackgroundImage()
+            }
             Item("Editor's Color & Font") {
                 AppearanceSettingService().invoke()
             }
