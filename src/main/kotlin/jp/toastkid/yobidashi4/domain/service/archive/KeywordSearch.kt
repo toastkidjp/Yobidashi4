@@ -38,10 +38,4 @@ class KeywordSearch : KoinComponent {
         return aggregationResult
     }
 
-    private fun filterByKeyword(fileFilter: String?, it: Pair<String, MutableList<String>>, keyword: String): Boolean {
-        if (fileFilter?.isNotBlank() == true && !it.first.contains(fileFilter)) {
-            return false
-        }
-        return it.second.any { line -> line.contains(keyword) }
-    }
 }
