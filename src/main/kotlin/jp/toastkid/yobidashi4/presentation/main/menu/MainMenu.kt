@@ -109,9 +109,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("What happened today") {
                 viewModel.openUrl("https://kids.yahoo.co.jp/today/", false)
             }
-            Item("Google Trend") {
-                viewModel.openUrl("https://trends.google.co.jp/trends/trendingsearches/realtime", false)
-            }
             Item("URL Encode") {
                 UrlEncoderService().invoke()
             }
