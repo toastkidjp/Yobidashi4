@@ -93,7 +93,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override val tabs: SnapshotStateList<Tab> = _tabs
 
     override fun currentTab(): Tab? {
-        if (tabs.isEmpty()) {
+        if (tabs.isEmpty() || selected.value < 0) {
             return null
         }
         return tabs.get(selected.value)
@@ -113,8 +113,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        val indexOfFirst = tabs.filterIsInstance(EditorTab::class.java).indexOfFirst { it.path == path }
-        if (indexOfFirst != -1 || Files.exists(path).not()) {
+        if (Files.exists(path).not()) {
+            return
+        }
+
+        val indexOfFirst = tabs.indexOfFirst { it is EditorTab && it.path == path }
+        if (indexOfFirst != -1) {
             _selected.value = indexOfFirst
             return
         }
