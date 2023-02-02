@@ -44,6 +44,7 @@ dependencies {
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.10.6")
+    testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
 }
 
 compose.desktop {
