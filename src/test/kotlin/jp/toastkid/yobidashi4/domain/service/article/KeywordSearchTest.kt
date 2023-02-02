@@ -48,14 +48,14 @@ internal class KeywordSearchTest {
     fun test() {
         val result = keywordSearch.invoke("test", "mock", Stream.of(path1, path2))
 
-        assertEquals(2, result.size)
+        assertEquals(2, result.itemArrays().size)
     }
 
     @Test
     fun testUseTitleFilter() {
         val result = keywordSearch.invoke("test", "1", Stream.of(path1, path2))
 
-        assertEquals(1, result.size)
+        assertEquals(1, result.itemArrays().size)
     }
 
     @AfterEach
