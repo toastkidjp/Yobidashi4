@@ -134,7 +134,7 @@ fun CalendarView() {
                                 color = when (dayOfWeek) {
                                     DayOfWeek.SUNDAY -> OFF_DAY_FG
                                     DayOfWeek.SATURDAY -> SATURDAY_FG
-                                    else -> DAY_FG
+                                    else -> MaterialTheme.colors.onSurface
                                 }
                             )
                         }
