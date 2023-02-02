@@ -45,6 +45,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.10.6")
     testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
+    testImplementation("io.insert-koin:koin-test-jvm:3.3.2")
 }
 
 compose.desktop {
