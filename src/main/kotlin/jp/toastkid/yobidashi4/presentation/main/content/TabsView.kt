@@ -142,7 +142,7 @@ fun TabsView(modifier: Modifier) {
             }
         }
 
-        when (val currentTab = viewModel.tabs[viewModel.selected.value]) {
+        when (val currentTab = viewModel.currentTab()) {
             is FileTab -> FileList(currentTab.items)
             is TableTab -> TableView(currentTab.items)
             is EditorTab -> {
