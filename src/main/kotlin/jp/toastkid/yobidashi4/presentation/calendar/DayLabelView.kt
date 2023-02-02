@@ -16,7 +16,7 @@ import java.time.DayOfWeek
 @Composable
 fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, offDay: Boolean, today: Boolean, modifier: Modifier) {
     Surface(
-        color = if (today) MaterialTheme.colors.primary.copy(alpha = 0.5f) else DAY_BG,
+        color = if (today) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (offDay || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) Color.White.copy(alpha = 0.8f) else MaterialTheme.colors.surface,
         modifier = modifier
     ) {
         Box(
@@ -26,7 +26,7 @@ fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, offDay: Boolean, today: Boolea
             Text(if (date == -1) "" else "$date", fontSize = 16.sp, color = when (dayOfWeek) {
                 DayOfWeek.SUNDAY -> OFF_DAY_FG
                 DayOfWeek.SATURDAY -> SATURDAY_FG
-                else -> if (offDay) OFF_DAY_FG else if (today) Color.White else DAY_FG
+                else -> if (offDay) OFF_DAY_FG else if (today) Color.White else MaterialTheme.colors.onSurface
             })
         }
     }
