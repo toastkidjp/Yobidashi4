@@ -40,7 +40,7 @@ internal class ArticleFinderServiceTest {
         every { anyConstructed<JTextField>().setPreferredSize(any()) }.answers { mockk() }
 
         mockkConstructor(KeywordSearch::class)
-        coEvery { anyConstructed<KeywordSearch>().invoke(any(), any(), any()) }.returns(mutableListOf("test"))
+        coEvery { anyConstructed<KeywordSearch>().invoke(any(), any(), any()) }.returns(mockk())
 
         mockkObject(Article.Companion)
         coEvery { Article.withTitle(any()) }.returns(mockk())
