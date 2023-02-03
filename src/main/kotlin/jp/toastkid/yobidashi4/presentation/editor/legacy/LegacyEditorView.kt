@@ -36,32 +36,6 @@ fun LegacyEditorView(tab: EditorTab) {
     val focusRequester = remember { FocusRequester() }
 
     Row {
-        SelectionContainer(modifier = Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start)) {
-            val scrollState = rememberScrollState()
-            Box() {
-                RichTextThemeIntegration(
-                    contentColor = { MaterialTheme.colors.onSurface }
-                ) {
-                    RichText(
-                        //style = RichTextStyle(stringStyle = stringStyle),
-                        modifier = Modifier
-                            .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
-                            .padding(8.dp)
-                            .verticalScroll(scrollState)
-                    ) {
-                        Markdown(
-                            tab.getContent(),
-                            onLinkClicked = {
-                                //linkBehaviorService.invoke(it)
-                            }
-                        )
-                    }
-                }
-                VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                    Alignment.CenterEnd))
-            }
-        }
-
         SwingPanel(
             background = Color.Transparent,
             factory = {
@@ -69,6 +43,7 @@ fun LegacyEditorView(tab: EditorTab) {
             },
             modifier = Modifier.fillMaxHeight().weight(0.5f).focusRequester(focusRequester)
         )
+        MarkdownPreview(tab)
     }
 
     LaunchedEffect(tab.path) {
@@ -80,6 +55,38 @@ fun LegacyEditorView(tab: EditorTab) {
         editorFrame.setCaretPosition(tab.caretPosition())
         onDispose {
             MainViewModel.get().updateEditorContent(tab.path, editorFrame.currentText(), editorFrame.caretPosition(), false)
+        }
+    }
+}
+
+@Composable
+private fun MarkdownPreview(tab: EditorTab) {
+    SelectionContainer(modifier = Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start)) {
+        val scrollState = rememberScrollState()
+        Box() {
+            RichTextThemeIntegration(
+                contentColor = { MaterialTheme.colors.onSurface }
+            ) {
+                RichText(
+                    //style = RichTextStyle(stringStyle = stringStyle),
+                    modifier = Modifier
+                        .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
+                        .padding(8.dp)
+                        .verticalScroll(scrollState)
+                ) {
+                    Markdown(
+                        tab.getContent(),
+                        onLinkClicked = {
+                            //linkBehaviorService.invoke(it)
+                        }
+                    )
+                }
+            }
+            VerticalScrollbar(
+                adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
+                    Alignment.CenterEnd
+                )
+            )
         }
     }
 }
