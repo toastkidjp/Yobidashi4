@@ -59,7 +59,7 @@ fun LegacyEditorView(tab: EditorTab) {
             },
             modifier = Modifier.fillMaxHeight().weight(0.5f).focusRequester(focusRequester)
         )
-        if (showPreview.value) {
+        if (tab.showPreview()) {
             MarkdownPreview(tab, Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start))
         }
     }
