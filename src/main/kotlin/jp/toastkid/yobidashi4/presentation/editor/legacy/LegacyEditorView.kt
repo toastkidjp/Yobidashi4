@@ -81,7 +81,7 @@ fun LegacyEditorView(tab: EditorTab) {
 private fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
     SelectionContainer(modifier = modifier) {
         val scrollState = rememberScrollState()
-        Box() {
+        Box {
             RichTextThemeIntegration(
                 contentColor = { MaterialTheme.colors.onSurface }
             ) {
