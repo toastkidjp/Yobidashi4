@@ -43,7 +43,7 @@ fun LegacyEditorView(tab: EditorTab) {
             },
             modifier = Modifier.fillMaxHeight().weight(0.5f).focusRequester(focusRequester)
         )
-        MarkdownPreview(tab)
+        MarkdownPreview(tab, Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start))
     }
 
     LaunchedEffect(tab.path) {
@@ -60,8 +60,8 @@ fun LegacyEditorView(tab: EditorTab) {
 }
 
 @Composable
-private fun MarkdownPreview(tab: EditorTab) {
-    SelectionContainer(modifier = Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start)) {
+private fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
+    SelectionContainer(modifier = modifier) {
         val scrollState = rememberScrollState()
         Box() {
             RichTextThemeIntegration(
