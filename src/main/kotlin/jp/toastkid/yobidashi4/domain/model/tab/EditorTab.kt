@@ -46,4 +46,12 @@ data class EditorTab(
         titleState.value = "${path.nameWithoutExtension}${if (editing.shouldShowIndicator()) " *" else ""}"
     }
 
+    private val preview = mutableStateOf(false)
+
+    fun switchPreview() {
+        preview.value = preview.value.not()
+    }
+
+    fun showPreview() = preview.value
+
 }
