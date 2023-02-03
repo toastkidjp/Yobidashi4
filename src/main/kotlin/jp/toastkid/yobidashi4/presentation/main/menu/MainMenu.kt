@@ -19,6 +19,7 @@ import javax.swing.JOptionPane
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
@@ -92,6 +93,15 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
         }
+        val currentTab = viewModel.currentTab()
+        if (currentTab is EditorTab) {
+            Menu("Edit") {
+                Item("Show preview", shortcut = KeyShortcut(Key.M, ctrl = true)) {
+                    currentTab.switchPreview()
+                }
+            }
+        }
+
         Menu("Tool") {
             Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
                 viewModel.openTab(WebBookmarkTab())
