@@ -16,13 +16,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
@@ -30,12 +38,20 @@ import com.halilibo.richtext.ui.RichTextThemeIntegration
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LegacyEditorView(tab: EditorTab) {
     val editorFrame = remember { EditorFrame() }
     val focusRequester = remember { FocusRequester() }
+    val showPreview = remember { mutableStateOf(true) }
 
-    Row {
+    Row(modifier = Modifier.onKeyEvent {
+        if (it.type == KeyEventType.KeyUp && it.isCtrlPressed && it.key == Key.M) {
+            showPreview.value = showPreview.value.not()
+            return@onKeyEvent true
+        }
+        return@onKeyEvent false
+    }) {
         SwingPanel(
             background = Color.Transparent,
             factory = {
@@ -43,7 +59,9 @@ fun LegacyEditorView(tab: EditorTab) {
             },
             modifier = Modifier.fillMaxHeight().weight(0.5f).focusRequester(focusRequester)
         )
-        MarkdownPreview(tab, Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start))
+        if (showPreview.value) {
+            MarkdownPreview(tab, Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start))
+        }
     }
 
     LaunchedEffect(tab.path) {
