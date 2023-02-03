@@ -42,6 +42,10 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.3.2")
     implementation("io.insert-koin:koin-annotations:1.0.3")
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
+
+    implementation("com.halilibo.compose-richtext:richtext-commonmark:0.11.0")
+    implementation("com.halilibo.compose-richtext:richtext-ui-material:0.11.0")
+
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.10.6")
     testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
