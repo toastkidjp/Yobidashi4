@@ -122,6 +122,12 @@ fun CalendarView() {
                 }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionRight }) {
                     Text(">", modifier = Modifier.padding(8.dp))
                 }
+
+                Button(onClick = {
+                    calendarViewModel.moveToCurrentMonth()
+                }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionLeft }) {
+                    Text("Current month", modifier = Modifier.padding(8.dp))
+                }
             }
             Row {
                 week.forEach { dayOfWeek ->
