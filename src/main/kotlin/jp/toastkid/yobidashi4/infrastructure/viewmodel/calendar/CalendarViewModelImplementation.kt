@@ -24,6 +24,10 @@ class CalendarViewModelImplementation : CalendarViewModel {
         localDateState.value = localDateState.value.withMonth(month)
     }
 
+    override fun moveToCurrentMonth() {
+        localDateState.value = LocalDate.now()
+    }
+
     override fun getFirstDay(): LocalDate {
         return localDateState.value.withDayOfMonth(1)
     }
