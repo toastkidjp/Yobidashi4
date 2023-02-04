@@ -7,5 +7,7 @@ interface CalendarViewModel {
     fun plusMonths(i: Long)
     fun setYear(year: Int)
     fun moveMonth(month: Int)
+
+    fun moveToCurrentMonth()
     fun getFirstDay(): LocalDate
 }
