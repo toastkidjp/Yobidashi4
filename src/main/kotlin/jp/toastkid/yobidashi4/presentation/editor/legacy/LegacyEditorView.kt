@@ -16,7 +16,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -43,11 +42,9 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 fun LegacyEditorView(tab: EditorTab) {
     val editorFrame = remember { EditorFrame() }
     val focusRequester = remember { FocusRequester() }
-    val showPreview = remember { mutableStateOf(true) }
 
     Row(modifier = Modifier.onKeyEvent {
         if (it.type == KeyEventType.KeyUp && it.isCtrlPressed && it.key == Key.M) {
-            showPreview.value = showPreview.value.not()
             return@onKeyEvent true
         }
         return@onKeyEvent false
