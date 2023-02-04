@@ -24,12 +24,6 @@ import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.RichText
@@ -43,12 +37,7 @@ fun LegacyEditorView(tab: EditorTab) {
     val editorFrame = remember { EditorFrame() }
     val focusRequester = remember { FocusRequester() }
 
-    Row(modifier = Modifier.onKeyEvent {
-        if (it.type == KeyEventType.KeyUp && it.isCtrlPressed && it.key == Key.M) {
-            return@onKeyEvent true
-        }
-        return@onKeyEvent false
-    }) {
+    Row() {
         SwingPanel(
             background = Color.Transparent,
             factory = {
