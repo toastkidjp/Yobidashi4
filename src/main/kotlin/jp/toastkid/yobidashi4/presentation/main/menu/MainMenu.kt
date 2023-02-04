@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ArticleFinderService
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
@@ -197,14 +198,16 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
         }
 
-        Menu("User agent") {
-            val current = remember { mutableStateOf(UserAgent.findByName(setting.userAgentName())) }
-            UserAgent.values().forEach {
-                RadioButtonItem(it.title(), selected = (it == current.value)) {
-                    setting.setUserAgentName(it.name)
-                    setting.save()
-                    current.value = it
-                    viewModel.showSnackbar("Please would you restart this app?")
+        if (viewModel.currentTab() is WebTab) {
+            Menu("User agent") {
+                val current = remember { mutableStateOf(UserAgent.findByName(setting.userAgentName())) }
+                UserAgent.values().forEach {
+                    RadioButtonItem(it.title(), selected = (it == current.value)) {
+                        setting.setUserAgentName(it.name)
+                        setting.save()
+                        current.value = it
+                        viewModel.showSnackbar("Please would you restart this app?")
+                    }
                 }
             }
         }
