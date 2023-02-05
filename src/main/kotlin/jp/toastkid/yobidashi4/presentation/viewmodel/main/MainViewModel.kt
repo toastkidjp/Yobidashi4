@@ -48,6 +48,7 @@ interface MainViewModel {
     fun reloadAllArticle()
     fun openArticleList(): Boolean
     fun switchArticleList()
+    fun hideArticleList()
     fun openTextFile(path: Path)
 
     /**
