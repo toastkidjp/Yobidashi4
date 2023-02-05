@@ -90,6 +90,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Open article folder", shortcut = KeyShortcut(Key.O, alt = true)) {
                 Desktop.getDesktop().open(setting.articleFolderPath().toFile())
             }
+            Item("Open user folder", shortcut = KeyShortcut(Key.U, alt = true)) {
+                Desktop.getDesktop().open(Paths.get("user").toFile())
+            }
             Item("Exit", shortcut = KeyShortcut(Key.E, alt = true)) {
                 exitApplication()
             }
