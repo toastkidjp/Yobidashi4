@@ -7,6 +7,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import java.awt.Desktop
@@ -221,6 +223,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
                 viewModel.switchDarkMode()
+            }
+            Item("Compact window") {
+                viewModel.windowState().size = DpSize(440.dp, viewModel.windowState().size.height)
             }
             Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true)) {
                 viewModel.loadBackgroundImage()
