@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
+import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.main.aggregation.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.content.FileList
@@ -115,6 +116,10 @@ private fun WebSearchBox(viewModel: MainViewModel) {
         val selectedSite = remember { mutableStateOf(SearchSite.getDefault()) }
         val query = remember { mutableStateOf(TextFieldValue())}
         val openDropdown = remember { mutableStateOf(false) }
+
+        val calculator = remember { SimpleCalculator() }
+        val result = remember { mutableStateOf("") }
+
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
@@ -184,6 +189,8 @@ private fun WebSearchBox(viewModel: MainViewModel) {
                 label = { Text("Please would you input web search keyword?") },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
+                    val calculatorResult = calculator.invoke(query.value.text)
+                    result.value = calculatorResult?.toString() ?: ""
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
@@ -234,6 +241,10 @@ private fun WebSearchBox(viewModel: MainViewModel) {
                 }
             ) {
                 Text("Search")
+            }
+
+            if (result.value.isNotBlank()) {
+                Text(result.value)
             }
 
             LaunchedEffect(viewModel.showWebSearch()) {
