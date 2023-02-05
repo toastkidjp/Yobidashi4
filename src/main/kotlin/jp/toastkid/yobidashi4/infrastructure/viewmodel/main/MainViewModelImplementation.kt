@@ -269,6 +269,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _openArticleList.value = _openArticleList.value.not()
     }
 
+    override fun hideArticleList() {
+        _openArticleList.value = false
+    }
+
     private val _articles = mutableListOf<Path>()
 
     override fun articles(): List<Path> {
