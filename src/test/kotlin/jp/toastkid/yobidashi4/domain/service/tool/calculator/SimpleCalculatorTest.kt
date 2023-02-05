@@ -24,7 +24,7 @@ class SimpleCalculatorTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         assertEquals(2.0, calculator.invoke("1+1"))
         assertEquals(4.4682, calculator.invoke("2.2341*2"))
         assertEquals(51.0, calculator.invoke("1500*0.03+6"))
