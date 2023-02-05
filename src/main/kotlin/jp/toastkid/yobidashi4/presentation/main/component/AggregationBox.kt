@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.main.aggregation
+package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

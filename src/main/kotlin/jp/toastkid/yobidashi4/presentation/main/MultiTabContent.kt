@@ -16,7 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.presentation.main.aggregation.AggregationBox
+import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBox
 import jp.toastkid.yobidashi4.presentation.main.content.FileList
 import jp.toastkid.yobidashi4.presentation.main.content.TabsView
