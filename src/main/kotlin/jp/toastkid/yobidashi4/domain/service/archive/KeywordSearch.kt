@@ -17,20 +17,14 @@ class KeywordSearch : KoinComponent {
     operator fun invoke(keyword: String, fileFilter: String?, files: Stream<Path> = Files.list(Paths.get(setting.articleFolder()))): AggregationResult {
         val aggregationResult = FindResult(keyword)
 
-        val actualKeywords = mutableSetOf<String>()
-
-        if (keyword.contains(" ")) {
-            keyword.split(" ").forEach { actualKeywords.add(it) }
-        } else {
-            actualKeywords.add(keyword)
-        }
+        val filter = KeywordSearchFilter(keyword)
 
         files
             .parallel()
             .filter { fileFilter.isNullOrBlank() || it.toFile().nameWithoutExtension.contains(fileFilter) }
             .forEach {
                 val lines = Files.readAllLines(it)
-                val filteredList = lines.filter { line -> actualKeywords.any { actualKeyword -> line.contains(actualKeyword) } }
+                val filteredList = lines.filter { line -> filter.invoke(line) }
                 if (filteredList.isNotEmpty()) {
                     aggregationResult.add(it.toFile().nameWithoutExtension, filteredList)
                 }
