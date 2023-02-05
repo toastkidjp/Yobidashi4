@@ -190,13 +190,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    if (query.value.text.isBlank()) {
-                        return@Button
-                    }
-                    selectedSite.value.value(query.value.text).let {
-                        viewModel.openAggregationResultTab(it.resultTitleSuffix(), it)
-                    }
-                    viewModel.switchAggregationBox(false)
+                    invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
                 }
             ) {
                 Text("Start")
@@ -209,4 +203,18 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             }
         }
     }
+}
+
+private fun invokeAggregation(
+    viewModel: MainViewModel,
+    query: String,
+    aggregator: (String) -> AggregationResult
+) {
+    if (query.isBlank()) {
+        return
+    }
+    aggregator.invoke(query).let {
+        viewModel.openAggregationResultTab(it.resultTitleSuffix(), it)
+    }
+    viewModel.switchAggregationBox(false)
 }
