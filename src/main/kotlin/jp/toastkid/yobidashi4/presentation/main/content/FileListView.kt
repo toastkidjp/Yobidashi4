@@ -160,6 +160,7 @@ fun FileList(paths: List<Path>) {
                                 },
                                 onDoubleClick =  {
                                     viewModel.openFile(fileListItem.path)
+                                    viewModel.hideArticleList()
                                 }
                             )
                             .background(if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f) else Color.Transparent)
