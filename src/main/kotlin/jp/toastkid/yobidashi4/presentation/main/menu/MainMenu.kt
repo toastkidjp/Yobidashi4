@@ -87,7 +87,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 ZipArchiver().invoke(paths)
                 Desktop.getDesktop().open(File("."))
             }
-            Item("Open folder", shortcut = KeyShortcut(Key.O, alt = true)) {
+            Item("Open article folder", shortcut = KeyShortcut(Key.O, alt = true)) {
                 Desktop.getDesktop().open(setting.articleFolderPath().toFile())
             }
             Item("Exit", shortcut = KeyShortcut(Key.E, alt = true)) {
