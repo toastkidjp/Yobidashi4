@@ -9,6 +9,9 @@ class KeywordSearchFilter(private val input: String?) {
     init {
         if (input == null) {
             useAndSearch = false
+        } else if (input.contains("\"")) {
+            keywords.add(input)
+            useAndSearch = false
         } else if (input.contains("*")) {
             input.split("*").forEach { keywords.add(it) }
             useAndSearch = true
