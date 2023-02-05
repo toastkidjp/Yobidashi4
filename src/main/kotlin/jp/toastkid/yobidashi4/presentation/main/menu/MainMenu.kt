@@ -217,18 +217,21 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
         }
 
-        Menu("Setting") {
+        Menu("Window") {
             Item(viewModel.toggleFullscreenLabel(), shortcut = KeyShortcut(key = Key.F11), icon = painterResource("images/icon/ic_fullscreen.xml")) {
                 viewModel.toggleFullscreen()
-            }
-            Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
-                viewModel.switchDarkMode()
             }
             Item("Compact window") {
                 viewModel.windowState().size = DpSize(440.dp, viewModel.windowState().size.height)
             }
             Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true)) {
                 viewModel.loadBackgroundImage()
+            }
+        }
+
+        Menu("Setting") {
+            Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
+                viewModel.switchDarkMode()
             }
             Item("Editor's Color & Font") {
                 AppearanceSettingService().invoke()
