@@ -221,7 +221,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(viewModel.toggleFullscreenLabel(), shortcut = KeyShortcut(key = Key.F11), icon = painterResource("images/icon/ic_fullscreen.xml")) {
                 viewModel.toggleFullscreen()
             }
-            Item("Compact window") {
+            Item("Narrow window") {
                 viewModel.windowState().size = DpSize(440.dp, viewModel.windowState().size.height)
             }
             Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true)) {
