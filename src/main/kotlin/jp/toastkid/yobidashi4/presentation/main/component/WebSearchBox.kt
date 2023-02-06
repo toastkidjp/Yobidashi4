@@ -139,7 +139,12 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
                     val calculatorResult = calculator.invoke(query.value.text)
-                    result.value = calculatorResult?.toString() ?: ""
+                    val toString = calculatorResult?.toString()
+                    result.value = when {
+                        toString == null -> ""
+                        toString.endsWith(".0") -> toString.substring(0, toString.lastIndexOf("."))
+                        else -> toString
+                    }
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
