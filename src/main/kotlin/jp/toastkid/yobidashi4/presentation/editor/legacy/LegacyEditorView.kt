@@ -112,7 +112,7 @@ private fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
                         }
                     },
                     stringStyle = RichTextStringStyle(
-                        linkStyle = SpanStyle(Color(0xFF000099))
+                        linkStyle = SpanStyle(if (MaterialTheme.colors.isLight) Color(0xFF0000DD) else MaterialTheme.colors.onSurface)
                     )
                 ),
                 modifier = Modifier
