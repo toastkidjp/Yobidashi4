@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.preview
 
 class InternalLinkScheme {
 
-    fun makeLink(title: String?) = "[$title]($INTERNAL_LINK_SCHEME$title)"
+    fun makeLink(title: String?) = "[$title]($INTERNAL_LINK_SCHEME${title?.replace(" ", "%20")})"
 
     fun isInternalLink(url: String): Boolean {
         return url.startsWith(INTERNAL_LINK_SCHEME)
