@@ -17,7 +17,7 @@ class InternalLinkScheme {
 
     companion object {
 
-        private const val INTERNAL_LINK_SCHEME = "internal-article://"
+        private const val INTERNAL_LINK_SCHEME = "https://internal/"
 
     }
 
