@@ -18,7 +18,7 @@ class InternalLinkSchemeTest {
     @Test
     fun makeLink() {
         assertEquals(
-            "internal-article://tomato",
+            "[tomato](https://internal/tomato)",
             internalLinkScheme.makeLink("tomato")
         )
     }
@@ -29,7 +29,7 @@ class InternalLinkSchemeTest {
         assertFalse(internalLinkScheme.isInternalLink(" "))
         assertFalse(internalLinkScheme.isInternalLink("https://www.yahoo.co.jp"))
         assertFalse(internalLinkScheme.isInternalLink("tomato"))
-        assertTrue(internalLinkScheme.isInternalLink(internalLinkScheme.makeLink("tomato")))
+        assertTrue(internalLinkScheme.isInternalLink("https://internal/tomato"))
     }
 
     @Test
@@ -52,7 +52,7 @@ class InternalLinkSchemeTest {
         )
         assertEquals(
             "tomato",
-            internalLinkScheme.extract(internalLinkScheme.makeLink("tomato"))
+            internalLinkScheme.extract("https://internal/tomato")
         )
     }
 }
