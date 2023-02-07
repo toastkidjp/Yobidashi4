@@ -108,53 +108,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
         }
 
-        Menu("Tool") {
-            Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
-                viewModel.openTab(WebBookmarkTab())
-            }
-            Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true), icon = painterResource("images/icon/ic_calendar.xml")) {
-                viewModel.openTab(CalendarTab())
-            }
-            Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true)) {
-                viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
-            }
-            Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
-                viewModel.setShowWebSearch(viewModel.showWebSearch().not())
-            }
-            Item("Image search", shortcut = KeyShortcut(Key.P, alt = true)) { PrivateImageSearchService().invoke() }
-            Item("What happened today") {
-                viewModel.openUrl("https://kids.yahoo.co.jp/today/", false)
-            }
-            Item("URL Encode") {
-                UrlEncoderService().invoke()
-            }
-            Item("Unix time conversion") {
-                UnixTimeConverterService().invoke()
-            }
-            Item("File rename") {
-                FileRenameService().invoke()
-            }
-            Item("Compound interest calculator") {
-                CompoundInterestCalculatorMenuGeneratorService(
-                    resultConsumer = { title, result -> viewModel.openAggregationResultTab(title, result) }
-                ).invoke()
-            }
-            Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
-                viewModel.openTab(LoanCalculatorTab())
-            }
-            Item("Number place", shortcut = KeyShortcut(Key.N, alt = true), icon = painterResource("images/icon/ic_number_place.xml")) {
-                viewModel.openTab(NumberPlaceGameTab())
-            }
-            Item("Music player", shortcut = KeyShortcut(Key.M, alt = true), icon = painterResource("images/icon/ic_music.xml")) {
-                val mediaFileFolderPath = setting.mediaFolderPath() ?: return@Item
-                viewModel.openFileListTab(
-                    "Music",
-                    MediaFileFinder().invoke(mediaFileFolderPath),
-                    true,
-                    FileTab.Type.MUSIC
-                )
-            }
-        }
         Menu("Tab") {
             Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true)) {
                 if (viewModel.tabs.size != 0) {
@@ -200,6 +153,54 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }, alt = true)) {
                     viewModel.setSelectedIndex(it - 1)
                 }
+            }
+        }
+
+        Menu("Tool") {
+            Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
+                viewModel.openTab(WebBookmarkTab())
+            }
+            Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true), icon = painterResource("images/icon/ic_calendar.xml")) {
+                viewModel.openTab(CalendarTab())
+            }
+            Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true)) {
+                viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
+            }
+            Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
+                viewModel.setShowWebSearch(viewModel.showWebSearch().not())
+            }
+            Item("Image search", shortcut = KeyShortcut(Key.P, alt = true)) { PrivateImageSearchService().invoke() }
+            Item("What happened today") {
+                viewModel.openUrl("https://kids.yahoo.co.jp/today/", false)
+            }
+            Item("URL Encode") {
+                UrlEncoderService().invoke()
+            }
+            Item("Unix time conversion") {
+                UnixTimeConverterService().invoke()
+            }
+            Item("File rename") {
+                FileRenameService().invoke()
+            }
+            Item("Compound interest calculator") {
+                CompoundInterestCalculatorMenuGeneratorService(
+                    resultConsumer = { title, result -> viewModel.openAggregationResultTab(title, result) }
+                ).invoke()
+            }
+            Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
+                viewModel.openTab(LoanCalculatorTab())
+            }
+            Item("Number place", shortcut = KeyShortcut(Key.N, alt = true), icon = painterResource("images/icon/ic_number_place.xml")) {
+                viewModel.openTab(NumberPlaceGameTab())
+            }
+            Item("Music player", shortcut = KeyShortcut(Key.M, alt = true), icon = painterResource("images/icon/ic_music.xml")) {
+                val mediaFileFolderPath = setting.mediaFolderPath() ?: return@Item
+                viewModel.openFileListTab(
+                    "Music",
+                    MediaFileFinder().invoke(mediaFileFolderPath),
+                    true,
+                    FileTab.Type.MUSIC
+                )
             }
         }
 
