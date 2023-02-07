@@ -205,6 +205,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _showAggregationBox.value = newState
     }
 
+    private var initialAggregationType = 0
+
+    override fun initialAggregationType(): Int = initialAggregationType
+
+    override fun setInitialAggregationType(ordinal: Int) {
+        initialAggregationType = ordinal
+    }
+
     private val window = WindowState(
         size = DpSize(width = 1100.dp, height = 700.dp),
         position = WindowPosition(Alignment.Center)
