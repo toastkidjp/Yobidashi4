@@ -28,7 +28,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.domain.service.archive.ArticleFinderService
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchService
@@ -74,9 +73,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
 
             Item("Find", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, alt = true)) {
-                ArticleFinderService().invoke { title, articles ->
-                    viewModel.openAggregationResultTab(title, articles)
+                if (viewModel.showAggregationBox().not()) {
+                    viewModel.setInitialAggregationType(7)
                 }
+                viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
             }
             Item("Dump all") {
                 val paths = Files.list(setting.articleFolderPath())
@@ -164,6 +164,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.openTab(CalendarTab())
             }
             Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true)) {
+                if (viewModel.showAggregationBox().not()) {
+                    viewModel.setInitialAggregationType(0)
+                }
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
             }
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
