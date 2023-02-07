@@ -81,7 +81,14 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 "Find article" to { KeywordSearch().invoke(keyword.value.text, it) }
             )
         }
-        val selectedSite = remember { mutableStateOf(aggregations.entries.first()) }
+        val selectedSite = remember {
+            val ordinal = when {
+                viewModel.initialAggregationType() < 0 -> 0
+                viewModel.initialAggregationType() >= aggregations.size -> aggregations.size - 1
+                else -> viewModel.initialAggregationType()
+            }
+            mutableStateOf(aggregations.entries.toList().get(ordinal))
+        }
         val query = remember { mutableStateOf(TextFieldValue("${LocalDate.now().year}")) }
         val openDropdown = remember { mutableStateOf(false) }
         Row(
