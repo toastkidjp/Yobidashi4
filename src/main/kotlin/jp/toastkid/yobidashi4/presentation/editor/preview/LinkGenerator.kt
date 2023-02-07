@@ -26,8 +26,5 @@ class LinkGenerator {
         private val internalLinkPattern =
             Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL)
 
-        private val httpPattern =
-            Pattern.compile("https?://[a-zA-Z0-9/:%#&~=_!'\\\\\$\\\\?\\\\.\\\\+\\\\*\\\\-]+")
-
     }
 }
