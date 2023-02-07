@@ -18,6 +18,8 @@ interface MainViewModel {
     fun showWebSearch(): Boolean
     fun showAggregationBox(): Boolean
     fun switchAggregationBox(newState: Boolean)
+    fun initialAggregationType(): Int
+    fun setInitialAggregationType(ordinal: Int)
 
     fun currentTab(): Tab?
     fun darkMode(): Boolean
