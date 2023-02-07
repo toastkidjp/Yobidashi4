@@ -55,6 +55,7 @@ import jp.toastkid.yobidashi4.domain.service.aggregation.Nikkei225AggregatorServ
 import jp.toastkid.yobidashi4.domain.service.aggregation.OutgoAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
+import jp.toastkid.yobidashi4.domain.service.archive.KeywordSearch
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -66,6 +67,8 @@ internal fun AggregationBox(viewModel: MainViewModel) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
+        val keyword = remember { mutableStateOf(TextFieldValue()) }
+
         val aggregations = remember {
             mapOf<String, (String) -> AggregationResult>(
                 "Movies" to { MovieMemoSubtitleExtractor().invoke(it) },
@@ -74,7 +77,8 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 "Eat out" to { EatingOutCounterService().invoke(it) },
                 "Article length" to { ArticleLengthAggregatorService().invoke(it) },
                 "Steps" to { StepsAggregatorService().invoke(it) },
-                "Nikkei 225" to { Nikkei225AggregatorService().invoke(it) }
+                "Nikkei 225" to { Nikkei225AggregatorService().invoke(it) },
+                "Find article" to { KeywordSearch().invoke(keyword.value.text, it) }
             )
         }
         val selectedSite = remember { mutableStateOf(aggregations.entries.first()) }
@@ -148,6 +152,46 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                     }
                 }
             }
+
+            if (selectedSite.value.key == "Find article") {
+                TextField(
+                    keyword.value,
+                    maxLines = 1,
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    label = { Text("Please would you input web search keyword?") },
+                    onValueChange = {
+                        keyword.value = TextFieldValue(it.text, it.selection, it.composition)
+                    },
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            selectedSite.value.value(query.value.text)
+                            viewModel.switchAggregationBox(false)
+                        }
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    trailingIcon = {
+                        Icon(
+                            painterResource("images/icon/ic_clear_form.xml"),
+                            contentDescription = "Clear input.",
+                            tint = MaterialTheme.colors.primary,
+                            modifier = Modifier.clickable {
+                                keyword.value = TextFieldValue()
+                            }
+                        )
+                    },
+                    modifier = Modifier.focusRequester(focusRequester)
+                        .onKeyEvent {
+                            if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
+                                && keyword.value.composition == null
+                                && keyword.value.text.isNotBlank()
+                            ) {
+                                invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
+                            }
+                            true
+                        }
+                )
+            }
+
             TextField(
                 query.value,
                 maxLines = 1,
@@ -179,10 +223,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                             && query.value.composition == null
                             && query.value.text.isNotBlank()
                             ) {
-                            selectedSite.value.value(query.value.text).let {
-                                viewModel.openAggregationResultTab(it.resultTitleSuffix(), it)
-                            }
-                            viewModel.switchAggregationBox(false)
+                            invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
                         }
                         true
                     }
