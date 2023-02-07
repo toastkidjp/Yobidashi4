@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -35,6 +34,8 @@ import com.halilibo.richtext.ui.RichTextStyle
 import com.halilibo.richtext.ui.RichTextThemeIntegration
 import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
+import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -71,66 +72,67 @@ fun LegacyEditorView(tab: EditorTab) {
 
 @Composable
 private fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
-    SelectionContainer(modifier = modifier) {
-        val scrollState = rememberScrollState()
-        Box {
-            RichTextThemeIntegration(
-                contentColor = { MaterialTheme.colors.onSurface }
-            ) {
-                RichText(
-                    style = RichTextStyle(
-                        headingStyle = { level, textStyle ->
-                            when (level) {
-                                0 -> TextStyle(
-                                    fontSize = 36.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                1 -> TextStyle(
-                                    fontSize = 26.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                2 -> TextStyle(
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                3 -> TextStyle(
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                4 -> TextStyle(
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = textStyle.color.copy(alpha = .7F)
-                                )
-                                5 -> TextStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    color = textStyle.color.copy(alpha = .7f)
-                                )
-                                else -> textStyle
-                            }
-                        },
-                        stringStyle = RichTextStringStyle(
-                            linkStyle = SpanStyle(Color(0x000099))
-                        )
-                    ),
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
-                        .padding(8.dp)
-                        .verticalScroll(scrollState)
-                ) {
-                    Markdown(
-                        tab.getContent(),
-                        onLinkClicked = {
-                            //linkBehaviorService.invoke(it)
+    val linkGenerator = remember { LinkGenerator() }
+
+    val scrollState = rememberScrollState()
+    Box(modifier = modifier) {
+        RichTextThemeIntegration(
+            contentColor = { MaterialTheme.colors.onSurface }
+        ) {
+            RichText(
+                style = RichTextStyle(
+                    headingStyle = { level, textStyle ->
+                        when (level) {
+                            0 -> TextStyle(
+                                fontSize = 36.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            1 -> TextStyle(
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            2 -> TextStyle(
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            3 -> TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            4 -> TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = textStyle.color.copy(alpha = .7F)
+                            )
+                            5 -> TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = textStyle.color.copy(alpha = .7f)
+                            )
+                            else -> textStyle
                         }
+                    },
+                    stringStyle = RichTextStringStyle(
+                        linkStyle = SpanStyle(Color(0xFF000099))
                     )
-                }
-            }
-            VerticalScrollbar(
-                adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                    Alignment.CenterEnd
+                ),
+                modifier = Modifier
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
+                    .padding(8.dp)
+                    .verticalScroll(scrollState)
+            ) {
+                val content = linkGenerator.invoke(tab.getContent())
+                Markdown(
+                    content,
+                    onLinkClicked = {
+                        LinkBehaviorService().invoke(it)
+                    }
                 )
-            )
+            }
         }
+        VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
+                Alignment.CenterEnd
+            )
+        )
     }
 }
