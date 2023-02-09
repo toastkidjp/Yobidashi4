@@ -21,6 +21,10 @@ class InternalLinkSchemeTest {
             "[tomato](https://internal/tomato)",
             internalLinkScheme.makeLink("tomato")
         )
+        assertEquals(
+            "[tomato 33](https://internal/tomato%2033)",
+            internalLinkScheme.makeLink("tomato 33")
+        )
     }
 
     @Test
