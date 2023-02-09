@@ -232,6 +232,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         return if (window.placement == WindowPlacement.Maximized) "Exit full screen" else "Full screen"
     }
 
+    override fun toggleNarrowWindow() {
+        windowState().size = DpSize(if (windowState().size.width <= 1100.dp) 1100.dp else 520.dp, windowState().size.height)
+    }
+
     override fun openTab(tab: Tab) {
         val newIndex = if (_tabs.isEmpty()) 0 else _selected.value + 1
         _tabs.add(newIndex, tab)
