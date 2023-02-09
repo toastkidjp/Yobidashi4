@@ -24,10 +24,6 @@ class ArticleFinderService {
         CoroutineScope(Dispatchers.Default).launch {
             val articles = withContext(Dispatchers.IO) {
                 KeywordSearch().invoke(keyword, fileFilter.text)
-                    //.asSequence()
-                    //.filter { it.isNotBlank() }
-                    //.map { Article.withTitle(it).path() }
-                    //.toList()
             }
 
             if (articles.isEmpty()) {
