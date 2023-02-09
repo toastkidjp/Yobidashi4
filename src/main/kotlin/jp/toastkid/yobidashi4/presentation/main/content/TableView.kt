@@ -103,6 +103,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                                     modifier = Modifier
                                                         .padding(horizontal = 16.dp)
                                                 )
+                                                Divider(modifier = Modifier.padding(start = 8.dp))
                                             }
                                         }
                                         return@forEachIndexed
