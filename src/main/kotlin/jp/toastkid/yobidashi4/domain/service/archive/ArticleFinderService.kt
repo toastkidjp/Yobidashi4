@@ -11,9 +11,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
 
-class ArticleFinderService : KoinComponent {
+class ArticleFinderService {
 
     operator fun invoke(resultConsumer: (String, AggregationResult) -> Unit = { _, _ -> }) {
         val (panel, fileFilter) = makeDialogContent()
