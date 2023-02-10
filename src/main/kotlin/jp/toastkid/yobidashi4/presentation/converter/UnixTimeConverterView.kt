@@ -115,7 +115,7 @@ fun UnixTimeConverterView() {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                firstInput.value = TextFieldValue()
+                                secondInput.value = TextFieldValue()
                             }
                         )
                     }
