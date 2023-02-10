@@ -55,6 +55,7 @@ import jp.toastkid.yobidashi4.domain.model.list.FileListItem
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.extension
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
 import kotlin.math.min
@@ -160,7 +161,8 @@ fun FileList(paths: List<Path>) {
                                 },
                                 onDoubleClick =  {
                                     viewModel.openFile(fileListItem.path)
-                                    if (fileListItem.path.fileName.toString().endsWith(".md")) {
+                                    val extension = fileListItem.path.extension
+                                    if (extension == "md" || extension == "txt") {
                                         viewModel.hideArticleList()
                                     }
                                 }
