@@ -233,7 +233,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun toggleNarrowWindow() {
-        windowState().size = DpSize(if (windowState().size.width <= 1100.dp) 1100.dp else 520.dp, windowState().size.height)
+        windowState().size = DpSize(if (windowState().size.width <= 600.dp) 1100.dp else 520.dp, windowState().size.height)
     }
 
     override fun openTab(tab: Tab) {
