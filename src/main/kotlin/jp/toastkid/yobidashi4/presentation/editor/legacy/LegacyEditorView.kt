@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -39,11 +38,8 @@ fun LegacyEditorView(tab: EditorTab) {
         }
     }
 
-    LaunchedEffect(tab.path) {
-        focusRequester.requestFocus()
-    }
-
     DisposableEffect(tab.path) {
+        focusRequester.requestFocus()
         editorFrame.setText(tab.path, tab.getContent())
         editorFrame.setCaretPosition(tab.caretPosition())
         onDispose {
