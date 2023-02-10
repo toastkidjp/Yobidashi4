@@ -80,8 +80,8 @@ fun UnixTimeConverterView() {
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        firstInputAction(firstInput.value.text)?.let {
-                            secondInput.value = TextFieldValue(it)
+                        firstInputAction(firstInput.value.text)?.let { newValue ->
+                            secondInput.value = TextFieldValue(newValue)
                         }
                     },
                     trailingIcon = {
