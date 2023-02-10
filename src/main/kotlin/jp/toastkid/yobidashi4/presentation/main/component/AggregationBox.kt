@@ -165,7 +165,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                     keyword.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Please would you input web search keyword?") },
+                    label = { Text("Keyword") },
                     onValueChange = {
                         keyword.value = TextFieldValue(it.text, it.selection, it.composition)
                     },
@@ -203,7 +203,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 query.value,
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                label = { Text("Please would you input web search keyword?") },
+                label = { Text("Article name filter") },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
                 },
