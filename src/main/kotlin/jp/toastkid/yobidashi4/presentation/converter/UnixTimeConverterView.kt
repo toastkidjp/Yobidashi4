@@ -37,6 +37,32 @@ fun UnixTimeConverterView() {
         LocalDateTime.now().format(dateFormatter).toString()
     }
 
+    val firstInputAction: (String) -> String? = remember {
+        {
+            try {
+                LocalDateTime
+                    .ofInstant(Instant.ofEpochMilli(it.toLong()), ZoneId.systemDefault())
+                    .format(dateFormatter)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    val secondInputAction: (String) -> String? = remember {
+        {
+            try {
+                LocalDateTime.parse(it, dateFormatter)
+                    .toInstant(offset)
+                    .toEpochMilli()
+                    .toString()
+            } catch (e: DateTimeException) {
+                // > /dev/null
+                null
+            }
+        }
+    }
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
@@ -54,11 +80,9 @@ fun UnixTimeConverterView() {
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        secondInput.value = TextFieldValue(
-                            LocalDateTime
-                                .ofInstant(Instant.ofEpochMilli(firstInput.value.text.toLong()), ZoneId.systemDefault())
-                                .format(dateFormatter)
-                        )
+                        firstInputAction(firstInput.value.text)?.let {
+                            secondInput.value = TextFieldValue(it)
+                        }
                     },
                     trailingIcon = {
                         Icon(
@@ -81,15 +105,8 @@ fun UnixTimeConverterView() {
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        try {
-                            firstInput.value = TextFieldValue(
-                                LocalDateTime.parse(secondInput.value.text, dateFormatter)
-                                    .toInstant(offset)
-                                    .toEpochMilli()
-                                    .toString()
-                            )
-                        } catch (e: DateTimeException) {
-                            // > /dev/null
+                        secondInputAction(secondInput.value.text)?.let {
+                            firstInput.value = TextFieldValue(it)
                         }
                     },
                     trailingIcon = {
