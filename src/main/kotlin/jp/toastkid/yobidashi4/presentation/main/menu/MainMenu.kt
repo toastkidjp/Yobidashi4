@@ -7,8 +7,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import java.awt.Desktop
@@ -226,7 +224,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.toggleFullscreen()
             }
             Item("Narrow window") {
-                viewModel.windowState().size = DpSize(440.dp, viewModel.windowState().size.height)
+                viewModel.toggleNarrowWindow()
             }
             Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true)) {
                 viewModel.loadBackgroundImage()
