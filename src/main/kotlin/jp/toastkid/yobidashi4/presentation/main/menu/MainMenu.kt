@@ -19,6 +19,7 @@ import javax.swing.JOptionPane
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
@@ -30,7 +31,6 @@ import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchService
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorMenuGeneratorService
-import jp.toastkid.yobidashi4.domain.service.tool.converter.UnixTimeConverterService
 import jp.toastkid.yobidashi4.domain.service.tool.converter.UrlEncoderService
 import jp.toastkid.yobidashi4.domain.service.tool.rename.FileRenameService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.AppearanceSettingService
@@ -178,7 +178,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 UrlEncoderService().invoke()
             }
             Item("Unix time conversion") {
-                UnixTimeConverterService().invoke()
+                viewModel.openTab(ConverterToolTab())
             }
             Item("File rename") {
                 FileRenameService().invoke()
