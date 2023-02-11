@@ -19,56 +19,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import java.time.DateTimeException
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 
 @Composable
-fun UnixTimeConverterView() {
-    val dateFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss") }
-    val offset = remember { OffsetDateTime.now().offset }
-    val defaultFirstInputValue = remember {
-        LocalDateTime.now().toInstant(offset).toEpochMilli().toString()
-    }
-    val defaultSecondInputValue = remember {
-        LocalDateTime.now().format(dateFormatter).toString()
-    }
-
-    val firstInputAction: (String) -> String? = remember {
-        {
-            try {
-                LocalDateTime
-                    .ofInstant(Instant.ofEpochMilli(it.toLong()), ZoneId.systemDefault())
-                    .format(dateFormatter)
-            } catch (e: Exception) {
-                null
-            }
-        }
-    }
-
-    val secondInputAction: (String) -> String? = remember {
-        {
-            try {
-                LocalDateTime.parse(it, dateFormatter)
-                    .toInstant(offset)
-                    .toEpochMilli()
-                    .toString()
-            } catch (e: DateTimeException) {
-                // > /dev/null
-                null
-            }
-        }
-    }
-
+fun UnixTimeConverterView(unixTimeConverterService: TwoStringConverterService) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val firstInput = remember { mutableStateOf(TextFieldValue(defaultFirstInputValue)) }
-        val secondInput = remember { mutableStateOf(TextFieldValue(defaultSecondInputValue)) }
+        val firstInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultFirstInputValue())) }
+        val secondInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultSecondInputValue())) }
         val result = remember { mutableStateOf("") }
         Row {
             Column {
@@ -80,7 +40,7 @@ fun UnixTimeConverterView() {
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        firstInputAction(firstInput.value.text)?.let { newValue ->
+                        unixTimeConverterService.firstInputAction(firstInput.value.text)?.let { newValue ->
                             secondInput.value = TextFieldValue(newValue)
                         }
                     },
@@ -105,7 +65,7 @@ fun UnixTimeConverterView() {
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        secondInputAction(secondInput.value.text)?.let {
+                        unixTimeConverterService.secondInputAction(secondInput.value.text)?.let {
                             firstInput.value = TextFieldValue(it)
                         }
                     },
