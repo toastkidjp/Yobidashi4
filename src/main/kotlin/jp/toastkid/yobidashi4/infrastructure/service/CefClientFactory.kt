@@ -198,6 +198,15 @@ class CefClientFactory(
                     return false
                 }
 
+                if (event.windows_key_code == KeyEvent.VK_BACK_SPACE) {
+                    latestBrowser()?.let {
+                        if (it.canGoBack()) {
+                            it.goBack()
+                            return true
+                        }
+                    }
+                }
+
                 if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_F) {
                     object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchFind()
                     return true
