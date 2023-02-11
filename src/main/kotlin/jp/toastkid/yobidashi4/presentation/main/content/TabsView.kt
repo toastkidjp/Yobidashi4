@@ -27,6 +27,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
@@ -35,8 +36,10 @@ import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.service.converter.UnixTimeConverterService
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import jp.toastkid.yobidashi4.presentation.converter.UnixTimeConverterView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.LegacyEditorView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
@@ -158,6 +161,7 @@ fun TabsView(modifier: Modifier) {
             is NumberPlaceGameTab -> NumberPlaceView()
             is LoanCalculatorTab -> LoanCalculatorView()
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
+            is ConverterToolTab -> UnixTimeConverterView(UnixTimeConverterService())
             else -> Unit
         }
     }
