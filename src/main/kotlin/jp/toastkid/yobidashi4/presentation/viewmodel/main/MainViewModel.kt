@@ -4,11 +4,14 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.WindowState
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -53,6 +56,25 @@ interface MainViewModel {
     fun switchArticleList()
     fun hideArticleList()
     fun openTextFile(path: Path)
+
+    fun openFind(): Boolean
+
+    fun switchFind()
+
+    fun inputValue(): TextFieldValue
+
+    fun replaceInputValue(): TextFieldValue
+
+    fun finderFlow(): StateFlow<FindOrder>
+
+    fun onFindInputChange(value: TextFieldValue)
+    fun onReplaceInputChange(value: TextFieldValue)
+
+    fun findUp()
+
+    fun findDown()
+
+    fun replaceAll()
 
     /**
      * Temporary implementation.
