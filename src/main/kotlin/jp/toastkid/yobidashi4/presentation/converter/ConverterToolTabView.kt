@@ -15,8 +15,8 @@ fun ConverterToolTabView() {
         elevation = 4.dp
     ) {
         Column {
-            UnixTimeConverterView(UnixTimeConverterService())
-            UnixTimeConverterView(UrlEncodeConverterService())
+            TwoValueConverterBox(UnixTimeConverterService())
+            TwoValueConverterBox(UrlEncodeConverterService())
         }
     }
 }

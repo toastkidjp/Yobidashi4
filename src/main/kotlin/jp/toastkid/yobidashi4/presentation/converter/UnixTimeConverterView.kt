@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 
 @Composable
-fun UnixTimeConverterView(unixTimeConverterService: TwoStringConverterService) {
+fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
