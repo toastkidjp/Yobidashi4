@@ -6,4 +6,8 @@ data class FindOrder(
         val upper: Boolean = false,
         val invokeReplace: Boolean = false,
         val caseSensitive: Boolean = true
-)
+) {
+        companion object {
+                val EMPTY = FindOrder("", "")
+        }
+}
