@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi4.domain.service.converter
 
 interface TwoStringConverterService {
 
+    fun title(): String
+
     fun defaultFirstInputValue(): String
 
     fun defaultSecondInputValue(): String
