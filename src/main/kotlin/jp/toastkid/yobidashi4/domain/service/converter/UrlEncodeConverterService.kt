@@ -13,7 +13,7 @@ class UrlEncodeConverterService : TwoStringConverterService {
     }
 
     override fun defaultSecondInputValue(): String {
-        return URLEncoder.encode("東京特許 許可局", charset)
+        return "%E6%9D%B1%E4%BA%AC%E7%89%B9%E8%A8%B1+%E8%A8%B1%E5%8F%AF%E5%B1%80"
     }
 
     override fun firstInputAction(input: String): String? {
@@ -21,7 +21,11 @@ class UrlEncodeConverterService : TwoStringConverterService {
     }
 
     override fun secondInputAction(input: String): String? {
-        return URLDecoder.decode(input, charset)
+        return try {
+            URLDecoder.decode(input, charset)
+        } catch (e: IllegalArgumentException) {
+            null
+        }
     }
 
 }
