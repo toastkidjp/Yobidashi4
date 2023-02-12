@@ -74,6 +74,13 @@ compose.desktop {
                 iconFile.set(project.file("src/main/resources/images/icon.png"))
             }
         }
+
+        buildTypes.release {
+            proguard {
+                configurationFiles.from(project.file("compose-desktop.pro"))
+                obfuscate.set(true)
+            }
+        }
     }
 }
 
