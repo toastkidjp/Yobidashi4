@@ -31,7 +31,6 @@ import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchService
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorMenuGeneratorService
-import jp.toastkid.yobidashi4.domain.service.tool.converter.UrlEncoderService
 import jp.toastkid.yobidashi4.domain.service.tool.rename.FileRenameService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.AppearanceSettingService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -174,10 +173,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("What happened today") {
                 viewModel.openUrl("https://kids.yahoo.co.jp/today/", false)
             }
-            Item("URL Encode") {
-                UrlEncoderService().invoke()
-            }
-            Item("Unix time conversion") {
+            Item("Converter") {
                 viewModel.openTab(ConverterToolTab())
             }
             Item("File rename") {
