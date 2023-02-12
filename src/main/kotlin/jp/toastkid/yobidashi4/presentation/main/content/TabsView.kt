@@ -36,10 +36,9 @@ import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.service.converter.UnixTimeConverterService
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
-import jp.toastkid.yobidashi4.presentation.converter.UnixTimeConverterView
+import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.LegacyEditorView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
@@ -161,7 +160,7 @@ fun TabsView(modifier: Modifier) {
             is NumberPlaceGameTab -> NumberPlaceView()
             is LoanCalculatorTab -> LoanCalculatorView()
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
-            is ConverterToolTab -> UnixTimeConverterView(UnixTimeConverterService())
+            is ConverterToolTab -> ConverterToolTabView()
             else -> Unit
         }
     }
