@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.converter
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -32,6 +33,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
         val result = remember { mutableStateOf("") }
         Row {
             Column {
+                Text(unixTimeConverterService.title(), modifier = Modifier.padding(8.dp))
                 TextField(
                     firstInput.value,
                     maxLines = 1,
