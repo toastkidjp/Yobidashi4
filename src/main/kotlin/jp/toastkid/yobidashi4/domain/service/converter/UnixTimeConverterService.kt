@@ -13,6 +13,10 @@ class UnixTimeConverterService : TwoStringConverterService {
 
     private val offset = OffsetDateTime.now().offset
 
+    override fun title(): String {
+        return "Unixtime Converter"
+    }
+
     override fun defaultFirstInputValue(): String = LocalDateTime.now().toInstant(offset).toEpochMilli().toString()
 
     override fun defaultSecondInputValue(): String = LocalDateTime.now().format(dateFormatter).toString()
