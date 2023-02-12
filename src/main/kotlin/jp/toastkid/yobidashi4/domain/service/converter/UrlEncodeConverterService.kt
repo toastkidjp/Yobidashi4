@@ -8,6 +8,10 @@ class UrlEncodeConverterService : TwoStringConverterService {
 
     private val charset = StandardCharsets.UTF_8.name()
 
+    override fun title(): String {
+        return "URL Encoder"
+    }
+
     override fun defaultFirstInputValue(): String {
         return "東京特許 許可局"
     }
