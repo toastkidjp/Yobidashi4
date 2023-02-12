@@ -10,6 +10,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
@@ -31,6 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.media.MediaPlayerInvoker
+import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlin.io.path.inputStream
@@ -38,6 +40,9 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
@@ -294,6 +299,54 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun reloadAllArticle() {
         _articles.addAll(TopArticleLoaderService().invoke())
         _openArticleList.value = true
+    }
+
+    private val openFind = mutableStateOf(false)
+
+    private val findInput = mutableStateOf(TextFieldValue())
+    private val replaceInput = mutableStateOf(TextFieldValue())
+
+    override fun openFind() = openFind.value
+
+    override fun switchFind() {
+        openFind.value = openFind.value.not()
+    }
+
+    override fun inputValue() = findInput.value
+
+    override fun replaceInputValue() = replaceInput.value
+
+    private val _finderFlow = MutableStateFlow<FindOrder>(FindOrder.EMPTY)
+
+    override fun finderFlow(): StateFlow<FindOrder> {
+        return _finderFlow.asStateFlow()
+    }
+
+    override fun onFindInputChange(value: TextFieldValue) {
+        findInput.value = TextFieldValue(value.text, value.selection, value.composition)
+        findDown()
+    }
+
+    override fun onReplaceInputChange(value: TextFieldValue) {
+        replaceInput.value = TextFieldValue(value.text, value.selection, value.composition)
+    }
+
+    override fun findUp() {
+        CoroutineScope(Dispatchers.Default).launch {
+            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = true))
+        }
+    }
+
+    override fun replaceAll() {
+        CoroutineScope(Dispatchers.Default).launch {
+            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, invokeReplace = true))
+        }
+    }
+
+    override fun findDown() {
+        CoroutineScope(Dispatchers.Default).launch {
+            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = false))
+        }
     }
 
 }
