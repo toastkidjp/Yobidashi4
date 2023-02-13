@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -22,6 +23,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -76,6 +80,16 @@ class BrowserView : KoinComponent {
                 )
             }
         }
+
+        LaunchedEffect(id) {
+            val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+            withContext(Dispatchers.IO) {
+                viewModel.finderFlow().collect {
+                    browserPool.find(id, it.target, it.upper.not())
+                }
+            }
+        }
+
         DisposableEffect(component) {
             onDispose {
                 component.isVisible = false
