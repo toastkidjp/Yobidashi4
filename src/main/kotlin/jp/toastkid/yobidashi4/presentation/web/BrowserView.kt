@@ -17,8 +17,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -50,17 +48,9 @@ class BrowserView : KoinComponent {
                 .fillMaxSize()
                 .layout { measurable, constraints ->
                     val placeable = measurable.measure(constraints)
-                    size = IntSize(placeable.width, placeable.height)
-                    updateBounds()
                     layout(placeable.width, placeable.height) {
                         placeable.placeRelative(0, 0)
                     }
-                }
-                .onGloballyPositioned { coordinates ->
-                    location = IntOffset(
-                        coordinates.positionInWindow().x.toInt(),
-                        coordinates.positionInWindow().y.toInt()
-                    )
                 }
                 .focusRequester(focusRequester)
                 .clickable { focusRequester.requestFocus() }
