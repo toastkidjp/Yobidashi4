@@ -6,12 +6,13 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import kotlin.io.path.nameWithoutExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class Article(private val file: Path) {
 
-    private val title = file.toFile().nameWithoutExtension
+    private val title = file.nameWithoutExtension
 
     fun getTitle() = title
 
