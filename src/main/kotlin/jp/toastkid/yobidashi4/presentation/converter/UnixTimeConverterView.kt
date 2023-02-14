@@ -83,11 +83,6 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                     }
                 )
             }
-            if (result.value.isNotBlank()) {
-                Text(
-                    result.value
-                )
-            }
         }
     }
 }
