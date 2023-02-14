@@ -62,8 +62,7 @@ fun FindInPageBox(viewModel: MainViewModel) {
                     },
                     maxLines = 1,
                     label = { Text("Replacement") },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    modifier = Modifier.focusRequester(focusRequester)
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
                 )
             }
 
