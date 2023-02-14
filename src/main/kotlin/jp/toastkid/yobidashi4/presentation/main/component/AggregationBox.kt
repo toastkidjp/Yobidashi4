@@ -45,6 +45,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -89,7 +90,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             }
             mutableStateOf(aggregations.entries.toList().get(ordinal))
         }
-        val query = remember { mutableStateOf(TextFieldValue("${LocalDate.now().year}")) }
+        val query = remember { mutableStateOf(TextFieldValue("${LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))}")) }
         val openDropdown = remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.Start,
