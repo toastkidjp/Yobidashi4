@@ -4,11 +4,8 @@ import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import kotlin.io.path.nameWithoutExtension
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class Article(private val file: Path) {
 
@@ -45,11 +42,5 @@ class Article(private val file: Path) {
 
     companion object : KoinComponent {
 
-        private val setting: Setting by inject()
-
-        fun withTitle(title: String): Article {
-            val file = Paths.get(setting.articleFolder(), "$title.md")
-            return Article(file)
-        }
     }
 }
