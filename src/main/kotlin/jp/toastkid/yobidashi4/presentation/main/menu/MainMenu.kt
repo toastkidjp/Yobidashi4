@@ -16,7 +16,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Collectors
 import javax.swing.JOptionPane
-import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
@@ -45,6 +45,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     val koin = object: KoinComponent {
         val viewModel: MainViewModel by inject()
         val setting: Setting by inject()
+        val articleFactory: ArticleFactory by inject()
     }
     val viewModel = koin.viewModel
     val setting = koin.setting
@@ -57,7 +58,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     return@Item
                 }
 
-                val article = Article.withTitle(dialog)
+                val article = koin.articleFactory.withTitle(dialog)
                 article.makeFile { "# ${article.getTitle()}" }
                 viewModel.addNewArticle(article.path())
             }
@@ -92,7 +93,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Open user folder", shortcut = KeyShortcut(Key.U, alt = true)) {
                 Desktop.getDesktop().open(Paths.get("user").toFile())
             }
-            Item("Exit", shortcut = KeyShortcut(Key.E, alt = true)) {
+            Item("Exit") {
                 exitApplication()
             }
         }
