@@ -31,8 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
-import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -87,7 +89,10 @@ fun TableView(aggregationResult: AggregationResult) {
                                     tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(vertical = 4.dp)
                                         .clickable {
-                                            MainViewModel.get().openFile(Article.withTitle(article[0].toString()).path())
+                                            // TODO get main vm with koin.
+                                            val nextArticle = object : KoinComponent { val articleFactory: ArticleFactory by inject() }
+                                                .articleFactory.withTitle(article[0].toString())
+                                            MainViewModel.get().openFile(nextArticle.path())
                                         }
                                 )
 
