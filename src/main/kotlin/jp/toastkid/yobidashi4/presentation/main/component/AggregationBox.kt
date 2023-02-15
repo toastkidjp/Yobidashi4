@@ -62,7 +62,6 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun AggregationBox(viewModel: MainViewModel) {
-    val focusRequester = remember { FocusRequester() }
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -162,6 +161,8 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             }
 
             if (selectedSite.value.key == "Find article") {
+                val focusRequester = remember { FocusRequester() }
+
                 TextField(
                     keyword.value,
                     maxLines = 1,
@@ -198,6 +199,12 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                             true
                         }
                 )
+
+                LaunchedEffect(viewModel.showAggregationBox()) {
+                    if (viewModel.showAggregationBox()) {
+                        focusRequester.requestFocus()
+                    }
+                }
             }
 
             TextField(
@@ -225,7 +232,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                         }
                     )
                 },
-                modifier = Modifier.focusRequester(focusRequester)
+                modifier = Modifier
                     .onKeyEvent {
                         if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
                             && query.value.composition == null
@@ -243,12 +250,6 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 }
             ) {
                 Text("Start")
-            }
-
-            LaunchedEffect(viewModel.showAggregationBox()) {
-                if (viewModel.showAggregationBox()) {
-                    focusRequester.requestFocus()
-                }
             }
         }
     }
