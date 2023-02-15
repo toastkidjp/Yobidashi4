@@ -5,7 +5,6 @@ import java.nio.file.Path
 import javax.swing.JLabel
 import javax.swing.JPanel
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
-import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FinderAreaView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.CommandReceiverService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -13,8 +12,9 @@ import kotlin.io.path.extension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class EditorFrame(
     private val statusLabel: JLabel = JLabel()
@@ -43,11 +43,11 @@ class EditorFrame(
         panel.add(footer, BorderLayout.SOUTH)
 
         val finderChannel = Channel<FindOrder>()
-        val finderView = FinderAreaView(finderChannel, messageChannel)
+        //val finderView = FinderAreaView(finderChannel, messageChannel)
 
-        panel.add(finderView.view(), BorderLayout.NORTH)
+        //panel.add(finderView.view(), BorderLayout.NORTH)
         CoroutineScope(Dispatchers.Default).launch {
-            finderChannel.receiveAsFlow().collect {
+            object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
                 editorAreaView.find(it)
             }
         }
@@ -61,7 +61,7 @@ class EditorFrame(
                 editorAreaView,
                 { path },
             {  },
-                { finderView.switchVisibility() },
+                { /*finderView.switchVisibility()*/ },
             {  }
         )
         CoroutineScope(Dispatchers.Default).launch {
