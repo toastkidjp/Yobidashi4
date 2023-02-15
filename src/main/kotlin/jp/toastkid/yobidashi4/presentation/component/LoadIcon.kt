@@ -9,23 +9,32 @@ import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.painterResource
 import java.nio.file.Paths
 import kotlin.io.path.inputStream
+import org.slf4j.LoggerFactory
 
 @Composable
 internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
     iconPath ?: return
+    val path = Paths.get(iconPath)
     if (iconPath.contains("data")) {
-        Paths.get(iconPath).inputStream().use { inputStream ->
-            Image(
-                loadImageBitmap(inputStream),
-                contentDescription = "Icon",
-                modifier = modifier
-            )
+        path.inputStream().use { inputStream ->
+            try {
+                loadImageBitmap(inputStream)
+            } catch (e: IllegalArgumentException) {
+                LoggerFactory.getLogger("LoadIcon").debug("IllegalArgumentException by $path", e)
+                null
+            }?.let {
+                Image(
+                    it,
+                    contentDescription = "Icon",
+                    modifier = modifier
+                )
+                return
+            }
         }
-        return
     }
 
     Icon(
-        painterResource(iconPath),
+        painterResource("images/icon/ic_web.xml"),
         contentDescription = "Icon",
         tint = MaterialTheme.colors.onPrimary,
         modifier = modifier
