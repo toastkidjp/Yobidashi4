@@ -1,12 +1,14 @@
 package jp.toastkid.yobidashi4.domain.service.web
 
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import org.jsoup.Jsoup
+import org.slf4j.LoggerFactory
 
 class WebIconLoaderService {
 
@@ -20,7 +22,12 @@ class WebIconLoaderService {
             Files.createDirectories(faviconFolder)
         }
 
-        val targetUrl = URL(browserUrl)
+        val targetUrl = try {
+            URL(browserUrl)
+        } catch (e: MalformedURLException) {
+            LoggerFactory.getLogger(javaClass).warn("URL is malformed.", e)
+            return
+        }
 
         if (iconUrls.isEmpty()) {
             iconUrls.add("${targetUrl.protocol}://${targetUrl.host}/favicon.ico")
@@ -45,7 +52,13 @@ class WebIconLoaderService {
         faviconFolder: Path,
         targetUrl: URL
     ) {
-        val fileExtension = URL(it).path.split(".").lastOrNull() ?: "png"
+        val fileExtension = try {
+            URL(it).path.split(".").lastOrNull() ?: "png"
+        } catch (e: MalformedURLException) {
+            LoggerFactory.getLogger(javaClass).debug("Malformed URL: $it")
+            return
+        }
+
         val iconPath = faviconFolder.resolve("${targetUrl.host}.$fileExtension")
         if (Files.exists(iconPath)) {
             return
