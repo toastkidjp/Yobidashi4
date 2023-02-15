@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.web
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,13 +38,7 @@ fun WebTabView(tab: WebTab) {
         return
     }
 
-    Column {
-        if (viewModel.openFind()) {
-            FinderView(viewModel, tab.id())
-        }
-
-        viewModel.view(tab.id(), tab.url())
-    }
+    viewModel.view(tab.id(), tab.url())
 }
 
 @Composable
