@@ -31,7 +31,7 @@ internal class ArticleTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { path.toFile() }.returns(file)
+        every { path.fileName }.returns(path)
         every { file.getName() }.returns("test.md")
 
         mockkStatic(Paths::class)
@@ -47,18 +47,9 @@ internal class ArticleTest {
     }
 
     @Test
-    fun testMakeWith() {
-        Article.withTitle("test.md")
-
-        verify(exactly = 1) { Paths.get(any(), any()) }
-    }
-
-    @Test
     fun testGetTitle() {
-        val article = Article.withTitle("test.md")
+        val article = Article(path)
         assertEquals("test", article.getTitle())
-
-        verify(exactly = 1) { Paths.get(any(), any()) }
     }
 
     @Test
@@ -66,7 +57,7 @@ internal class ArticleTest {
         mockkStatic(Files::class)
         every { Files.readAllLines(any()) }.returns(listOf("test content", "is containing dummy text です"))
 
-        val article = Article.withTitle("test.md")
+        val article = Article(path)
         assertEquals(39, article.count())
     }
 
@@ -76,7 +67,7 @@ internal class ArticleTest {
         every { Files.createFile(any()) }.returns(path)
         every { Files.write(any(), any<ByteArray>()) }.returns(path)
 
-        Article.withTitle("test.md").makeFile { "test" }
+        Article(path).makeFile { "test" }
 
         verify { Files.createFile(any()) }
         verify { Files.write(any(), any<ByteArray>()) }
@@ -84,7 +75,7 @@ internal class ArticleTest {
 
     @Test
     fun testPath() {
-        assertSame(path, Article.withTitle("test.md").path())
+        assertSame(path, Article(path).path())
     }
 
     @Test
@@ -94,7 +85,7 @@ internal class ArticleTest {
         mockkStatic(Files::class)
         every { Files.getLastModifiedTime(any()) }.returns(fileTime)
 
-        val article = Article.withTitle("test.md")
+        val article = Article(path)
         assertEquals(42L, article.lastModified())
     }
 
@@ -105,7 +96,7 @@ internal class ArticleTest {
         mockkStatic(Files::class)
         every { Files.getLastModifiedTime(any()) }.returns(fileTime)
 
-        val article = Article.withTitle("test.md")
+        val article = Article(path)
         assertEquals(0L, article.lastModified())
     }
 
@@ -116,7 +107,7 @@ internal class ArticleTest {
         mockkStatic(Files::class)
         every { Files.getLastModifiedTime(any()) }.throws(IOException())
 
-        val article = Article.withTitle("test.md")
+        val article = Article(path)
         assertEquals(0L, article.lastModified())
     }
 
