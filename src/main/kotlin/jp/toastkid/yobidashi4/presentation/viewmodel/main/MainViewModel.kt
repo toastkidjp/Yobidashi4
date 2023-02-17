@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -65,7 +65,7 @@ interface MainViewModel {
 
     fun replaceInputValue(): TextFieldValue
 
-    fun finderFlow(): StateFlow<FindOrder>
+    fun finderFlow(): Flow<FindOrder>
 
     fun onFindInputChange(value: TextFieldValue)
     fun onReplaceInputChange(value: TextFieldValue)
