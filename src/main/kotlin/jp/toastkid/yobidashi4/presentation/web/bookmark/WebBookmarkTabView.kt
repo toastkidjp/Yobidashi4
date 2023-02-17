@@ -42,7 +42,7 @@ import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WebBookmarkTabView() {
+internal fun WebBookmarkTabView() {
     val koin = object : KoinComponent {
         val viewModel: MainViewModel by inject()
         val repo: BookmarkRepository by inject()
