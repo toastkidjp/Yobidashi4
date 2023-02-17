@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
-import org.koin.core.component.KoinComponent
 
 class Article(private val file: Path) {
 
@@ -40,7 +39,4 @@ class Article(private val file: Path) {
 
     fun path() = file
 
-    companion object : KoinComponent {
-
-    }
 }
