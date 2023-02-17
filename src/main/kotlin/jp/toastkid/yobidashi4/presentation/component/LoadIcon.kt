@@ -15,28 +15,37 @@ import org.slf4j.LoggerFactory
 internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
     iconPath ?: return
     val path = Paths.get(iconPath)
-    if (iconPath.contains("data")) {
-        path.inputStream().use { inputStream ->
-            try {
-                loadImageBitmap(inputStream)
-            } catch (e: IllegalArgumentException) {
-                LoggerFactory.getLogger("LoadIcon").debug("IllegalArgumentException by $path", e)
-                null
-            }?.let {
-                Image(
-                    it,
-                    contentDescription = "Icon",
-                    modifier = modifier
-                )
-                return
-            }
+    if (iconPath.contains("data").not()) {
+        Icon(
+            painterResource(iconPath),
+            contentDescription = "Icon",
+            tint = MaterialTheme.colors.onPrimary,
+            modifier = modifier
+        )
+        return
+    }
+
+    val bitmap = path.inputStream().use { inputStream ->
+        try {
+            loadImageBitmap(inputStream)
+        } catch (e: IllegalArgumentException) {
+            LoggerFactory.getLogger("LoadIcon").debug("IllegalArgumentException by $path", e)
+            null
         }
     }
 
-    Icon(
-        painterResource("images/icon/ic_web.xml"),
-        contentDescription = "Icon",
-        tint = MaterialTheme.colors.onPrimary,
-        modifier = modifier
-    )
+    if (bitmap != null) {
+        Image(
+            bitmap,
+            contentDescription = "Icon",
+            modifier = modifier
+        )
+    } else {
+        Icon(
+            painterResource("images/icon/ic_web.xml"),
+            contentDescription = "Icon",
+            tint = MaterialTheme.colors.onPrimary,
+            modifier = modifier
+        )
+    }
 }
