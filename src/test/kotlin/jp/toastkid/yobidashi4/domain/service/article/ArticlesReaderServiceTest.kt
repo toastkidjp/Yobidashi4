@@ -1,38 +1,49 @@
 package jp.toastkid.yobidashi4.domain.service.article
 
+import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
-import java.nio.file.Paths
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.setting.TestSettingImplementation
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 class ArticlesReaderServiceTest {
 
+    @InjectMockKs
     private lateinit var articlesReaderService: ArticlesReaderService
 
     @BeforeEach
     fun setUp() {
-        mockkConstructor(Setting::class)
-        every { anyConstructed<Setting>().articleFolder() }.returns("test")
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { TestSettingImplementation() } bind(jp.toastkid.yobidashi4.domain.model.setting.Setting::class)
+                }
+            )
+        }
+        MockKAnnotations.init(this)
 
-        mockkStatic(Paths::class)
-        every { Paths.get(any<String>()) }.returns(mockk())
+        //mockkStatic(Paths::class)
+       // every { Paths.get(any<String>()) }.returns(mockk())
 
         mockkStatic(Files::class)
-        every { Files.list(any()) }.returns(mockk())
-
-        articlesReaderService = ArticlesReaderService()
+        every { Files.list(any<Path>()) }.returns(mockk())
     }
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -40,8 +51,6 @@ class ArticlesReaderServiceTest {
     fun testInvoke() {
         articlesReaderService.invoke()
 
-        verify(exactly = 1) { anyConstructed<Setting>().articleFolder() }
-        verify(exactly = 1) { Paths.get(any<String>()) }
         verify(exactly = 1) { Files.list(any()) }
     }
 
