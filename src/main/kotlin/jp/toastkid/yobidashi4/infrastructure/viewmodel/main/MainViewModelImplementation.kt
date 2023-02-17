@@ -40,9 +40,9 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
@@ -316,10 +316,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun replaceInputValue() = replaceInput.value
 
-    private val _finderFlow = MutableStateFlow<FindOrder>(FindOrder.EMPTY)
+    private val _finderFlow = MutableSharedFlow<FindOrder>(1)
 
-    override fun finderFlow(): StateFlow<FindOrder> {
-        return _finderFlow.asStateFlow()
+    override fun finderFlow(): Flow<FindOrder> {
+        return _finderFlow.asSharedFlow()
     }
 
     override fun onFindInputChange(value: TextFieldValue) {
