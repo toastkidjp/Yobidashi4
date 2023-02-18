@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 import java.awt.Desktop
 import java.io.IOException
 import java.net.URI
+import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -131,6 +132,12 @@ class CommandReceiverService(
                     editorAreaView.replaceSelected(true) {
                         if (it.isEmpty()) return@replaceSelected it
                         return@replaceSelected URLEncoder.encode(it, StandardCharsets.UTF_8)
+                    }
+                }
+                MenuCommand.URL_DECODE -> {
+                    editorAreaView.replaceSelected(true) {
+                        if (it.isEmpty()) return@replaceSelected it
+                        return@replaceSelected URLDecoder.decode(it, StandardCharsets.UTF_8)
                     }
                 }
                 MenuCommand.DUPLICATE_LINE -> {
