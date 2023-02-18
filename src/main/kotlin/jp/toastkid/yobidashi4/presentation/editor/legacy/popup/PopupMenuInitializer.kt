@@ -120,6 +120,16 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
                 }
         )
 
+        popupMenu.add(
+            JMenuItem("URL Encode").also {
+                it.addActionListener {
+                    CoroutineScope(Dispatchers.Default).launch {
+                        channel.send(MenuCommand.URL_ENCODE)
+                    }
+                }
+            }
+        )
+
         val countMenu = JMenuItem("Count").also {
             it.addActionListener {
                 CoroutineScope(Dispatchers.Default).launch {
