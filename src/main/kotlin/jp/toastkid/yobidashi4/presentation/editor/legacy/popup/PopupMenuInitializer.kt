@@ -130,6 +130,16 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
             }
         )
 
+        popupMenu.add(
+            JMenuItem("URL Decode").also {
+                it.addActionListener {
+                    CoroutineScope(Dispatchers.Default).launch {
+                        channel.send(MenuCommand.URL_DECODE)
+                    }
+                }
+            }
+        )
+
         val countMenu = JMenuItem("Count").also {
             it.addActionListener {
                 CoroutineScope(Dispatchers.Default).launch {
