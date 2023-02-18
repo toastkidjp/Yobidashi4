@@ -127,6 +127,12 @@ class CommandReceiverService(
                         return@replaceSelected if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
                     }
                 }
+                MenuCommand.URL_ENCODE -> {
+                    editorAreaView.replaceSelected(true) {
+                        if (it.isEmpty()) return@replaceSelected it
+                        return@replaceSelected URLEncoder.encode(it, StandardCharsets.UTF_8)
+                    }
+                }
                 MenuCommand.DUPLICATE_LINE -> {
                     editorAreaView.duplicateLine()
                 }
