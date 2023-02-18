@@ -67,7 +67,6 @@ class KeyboardShortcutService(private val channel: Channel<MenuCommand>) {
                 KeyEvent.VK_I -> MenuCommand.ITALIC
                 KeyEvent.VK_B -> MenuCommand.BOLD
                 KeyEvent.VK_Q -> MenuCommand.PASTE_AS_QUOTATION
-                //TODO Delete it. KeyEvent.VK_F -> MenuCommand.FIND
                 KeyEvent.VK_S -> MenuCommand.SAVE
                 KeyEvent.VK_L -> MenuCommand.TO_HYPERLINK
                 KeyEvent.VK_PERIOD -> MenuCommand.BLOCKQUOTE
