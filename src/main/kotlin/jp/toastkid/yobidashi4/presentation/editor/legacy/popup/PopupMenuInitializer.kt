@@ -111,6 +111,16 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
         popupMenu.add(fontColorMenu)
 
         popupMenu.add(
+            JMenuItem("Paste as markdown link").also {
+                it.addActionListener {
+                    CoroutineScope(Dispatchers.Default).launch {
+                        channel.send(MenuCommand.PASTE_LINK_WITH_TITLE)
+                    }
+                }
+            }
+        )
+
+        popupMenu.add(
                 JMenuItem("To hyperlink").also {
                     it.addActionListener {
                         CoroutineScope(Dispatchers.Default).launch {
