@@ -11,7 +11,6 @@ import java.nio.file.Path
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.ListHeadAdder
@@ -34,8 +33,7 @@ class CommandReceiverService(
     private val currentArticle: () -> Path?,
     private val resetFrameTitle: () -> Unit,
     private val switchFinder: () -> Unit,
-    private val close: () -> Unit,
-    private val urlOpenerService: UrlOpenerService = UrlOpenerService()
+    private val close: () -> Unit
 ) : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
