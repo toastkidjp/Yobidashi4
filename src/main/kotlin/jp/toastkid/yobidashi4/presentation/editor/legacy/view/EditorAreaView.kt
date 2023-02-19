@@ -7,7 +7,6 @@ import javax.swing.AbstractAction
 import javax.swing.JComponent
 import javax.swing.KeyStroke
 import javax.swing.event.HyperlinkEvent
-import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FinderService
@@ -15,6 +14,7 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.popup.PopupMenuInitiali
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.EditorAreaViewRefresherService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.KeyboardShortcutService
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 import org.fife.ui.rtextarea.RTextScrollPane
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class EditorAreaView(
     private val editorArea: RSyntaxTextArea = RSyntaxTextArea(),
@@ -46,8 +48,8 @@ class EditorAreaView(
                 return@addHyperlinkListener
             }
 
-            it.url?.toURI()?.let { uri ->
-                UrlOpenerService().invoke(uri)
+            it.url?.let { uri ->
+                object : KoinComponent { val vm: MainViewModel by inject() }.vm.openUrl(uri.toString(), false)
             }
         }
         editorArea.paintTabLines = true
