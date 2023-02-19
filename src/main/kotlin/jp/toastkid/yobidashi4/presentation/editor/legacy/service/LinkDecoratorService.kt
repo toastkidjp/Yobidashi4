@@ -17,8 +17,4 @@ class LinkDecoratorService {
         return "[$title]($link)"
     }
 
-    companion object {
-
-    }
-
 }
