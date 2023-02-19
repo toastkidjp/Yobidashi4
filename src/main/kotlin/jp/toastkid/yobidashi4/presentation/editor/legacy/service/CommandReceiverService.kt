@@ -163,17 +163,17 @@ class CommandReceiverService(
                         return@collect
                     }
                     if (selectedText.startsWith("http://") || selectedText.startsWith("https://")) {
-                        urlOpenerService.invoke(selectedText)
+                        viewModel.openUrl(selectedText, false)
                         return@collect
                     }
-                    urlOpenerService("https://search.yahoo.co.jp/search?p=${encodeUtf8(selectedText)}")
+                    viewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selectedText)}", false)
                 }
                 MenuCommand.OPEN_URL -> {
                     val selectedText = editorAreaView.selectedText()
                     if (selectedText.isBlank() || selectedText.startsWith("https://").not()) {
                         return@collect
                     }
-                    urlOpenerService(selectedText)
+                    viewModel.openUrl(selectedText, false)
                 }
                 MenuCommand.OPEN_WITH_BROWSER -> {
                     val selectedText = editorAreaView.selectedText()
@@ -187,14 +187,14 @@ class CommandReceiverService(
                     if (selectedText.isBlank()) {
                         return@collect
                     }
-                    urlOpenerService("https://ejje.weblio.jp/content/${encodeUtf8(selectedText)}")
+                    viewModel.openUrl("https://ejje.weblio.jp/content/${encodeUtf8(selectedText)}", false)
                 }
                 MenuCommand.TRANSLATION_TO_ENGLISH -> {
                     val selectedText = editorAreaView.selectedText()
                     if (selectedText.isBlank()) {
                         return@collect
                     }
-                    urlOpenerService("https://translate.google.co.jp/?hl=en&sl=auto&tl=en&text=${encodeUtf8(selectedText)}&op=translate")
+                    viewModel.openUrl("https://translate.google.co.jp/?hl=en&sl=auto&tl=en&text=${encodeUtf8(selectedText)}&op=translate", false)
                 }
                 MenuCommand.SWITCH_WRAP_LINE -> {
                     setting.switchWrapLine()
