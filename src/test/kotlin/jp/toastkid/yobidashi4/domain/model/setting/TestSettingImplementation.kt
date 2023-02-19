@@ -28,7 +28,7 @@ class TestSettingImplementation : Setting {
     }
 
     override fun userOffDay(): List<Pair<Int, Int>> {
-        TODO("Not yet implemented")
+        return listOf(12 to 29)
     }
 
     override fun setUseCaseSensitiveInFinder(use: Boolean) {
@@ -40,39 +40,39 @@ class TestSettingImplementation : Setting {
     }
 
     override fun setEditorBackgroundColor(color: Color?) {
-        TODO("Not yet implemented")
+        // NOOP.
     }
 
     override fun editorBackgroundColor(): Color? {
-        TODO("Not yet implemented")
+        return Color.WHITE
     }
 
     override fun setEditorForegroundColor(color: Color?) {
-        TODO("Not yet implemented")
+        // NOOP.
     }
 
     override fun editorForegroundColor(): Color? {
-        TODO("Not yet implemented")
+        return Color.BLACK
     }
 
     override fun resetEditorColorSetting() {
-        TODO("Not yet implemented")
+        // NOOP.
     }
 
     override fun setEditorFontFamily(fontFamily: String?) {
-        TODO("Not yet implemented")
+        // NOOP.
     }
 
     override fun editorFontFamily(): String? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun setEditorFontSize(size: Int?) {
-        TODO("Not yet implemented")
+        // NOOP.
     }
 
     override fun editorFontSize(): Int {
-        TODO("Not yet implemented")
+        return 16
     }
 
     override fun mediaPlayerPath(): String? {
