@@ -27,7 +27,6 @@ import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchLauncher
-import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -461,12 +460,12 @@ class CefClientFactory(
         if (text.isBlank()) {
             return
         }
-        val urlOpenerService = UrlOpenerService()
+        val mainViewModel = object : KoinComponent{ val vm: MainViewModel by inject() }.vm
         if (text.startsWith("http://") || text.startsWith("https://")) {
-            urlOpenerService.invoke(text)
+            mainViewModel.openUrl(text, false)
             return
         }
-        urlOpenerService("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}")
+        mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
     }
 
     private fun addBookmark(params: CefContextMenuParams? = null) {
