@@ -1,12 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 
 import io.mockk.MockKAnnotations
-import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.model.Editing
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
@@ -44,13 +42,9 @@ internal class CommandReceiverServiceTest {
     @MockK
     private lateinit var close: () -> Unit
 
-    @MockK
-    private lateinit var urlOpenerService: UrlOpenerService
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { urlOpenerService.invoke(any<String>()) }.answers { Unit }
     }
 
     @AfterEach
