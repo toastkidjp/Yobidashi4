@@ -50,7 +50,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
-import jp.toastkid.yobidashi4.domain.service.web.UrlOpenerService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -169,7 +168,6 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                     .onKeyEvent {
                         if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
                             && query.value.composition == null) {
-                            val urlOpenerService = UrlOpenerService()
                             if (query.value.text.startsWith("https://")) {
                                 viewModel.openUrl(query.value.text, false)
                                 return@onKeyEvent true
