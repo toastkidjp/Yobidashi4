@@ -32,8 +32,7 @@ class CommandReceiverService(
     private val editorAreaView: EditorAreaView,
     private val currentArticle: () -> Path?,
     private val resetFrameTitle: () -> Unit,
-    private val switchFinder: () -> Unit,
-    private val close: () -> Unit
+    private val switchFinder: () -> Unit
 ) : KoinComponent {
 
     private val viewModel: MainViewModel by inject()

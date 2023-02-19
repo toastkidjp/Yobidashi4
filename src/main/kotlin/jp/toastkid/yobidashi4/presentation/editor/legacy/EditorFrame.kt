@@ -60,9 +60,8 @@ class EditorFrame(
             channel,
             editorAreaView,
             { path },
-            {  },
-            { /*finderView.switchVisibility()*/ }
-        ) { }
+            {  }
+        ) { /*finderView.switchVisibility()*/ }
         CoroutineScope(Dispatchers.Default).launch {
             commandReceiverService()
         }
