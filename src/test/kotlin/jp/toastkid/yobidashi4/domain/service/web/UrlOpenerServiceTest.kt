@@ -1,12 +1,14 @@
 package jp.toastkid.yobidashi4.domain.service.web
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
+import java.awt.Desktop
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.awt.Desktop
 
 internal class UrlOpenerServiceTest {
 
@@ -18,7 +20,7 @@ internal class UrlOpenerServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { desktop.browse(any()) }.answers { Unit }
+        every { desktop.browse(any()) }.just(Runs)
 
         urlOpenerService = UrlOpenerService(desktop)
     }
