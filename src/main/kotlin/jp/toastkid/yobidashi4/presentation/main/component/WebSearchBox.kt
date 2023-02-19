@@ -149,7 +149,7 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         selectedSite.value.make(query.value.text).let {
-                            UrlOpenerService().invoke(it)
+                            viewModel.openUrl(it.toString(), false)
                         }
                         viewModel.setShowWebSearch(false)
                     }
@@ -171,10 +171,12 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                             && query.value.composition == null) {
                             val urlOpenerService = UrlOpenerService()
                             if (query.value.text.startsWith("https://")) {
-                                urlOpenerService.invoke(query.value.text)
+                                viewModel.openUrl(query.value.text, false)
                                 return@onKeyEvent true
                             }
-                            selectedSite.value.make(query.value.text).let(urlOpenerService::invoke)
+                            selectedSite.value.make(query.value.text).let {
+                                viewModel.openUrl(it.toString(), false)
+                            }
                             viewModel.setShowWebSearch(false)
                         }
                         true
@@ -183,13 +185,12 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
 
             Button(
                 onClick = {
-                    val urlOpenerService = UrlOpenerService()
                     if (query.value.text.startsWith("https://")) {
-                        urlOpenerService.invoke(query.value.text)
+                        viewModel.openUrl(query.value.text, false)
                         return@Button
                     }
                     selectedSite.value.make(query.value.text).let {
-                        urlOpenerService.invoke(it)
+                        viewModel.openUrl(it.toString(), false)
                     }
                     viewModel.setShowWebSearch(false)
                 }
