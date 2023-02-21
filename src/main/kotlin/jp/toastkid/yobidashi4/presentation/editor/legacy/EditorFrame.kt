@@ -56,9 +56,8 @@ class EditorFrame(
         val commandReceiverService = CommandReceiverService(
             channel,
             editorAreaView,
-            { path },
-            {  }
-        ) { /*finderView.switchVisibility()*/ }
+            { path }
+        ) { }
         CoroutineScope(Dispatchers.Default).launch {
             commandReceiverService()
         }
