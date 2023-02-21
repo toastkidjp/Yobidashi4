@@ -83,8 +83,6 @@ interface MainViewModel {
 
         private val instance: MainViewModel by inject()
 
-        fun get() = instance
-
     }
 
 }
