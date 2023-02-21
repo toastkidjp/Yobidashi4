@@ -4,7 +4,6 @@ import java.awt.BorderLayout
 import java.nio.file.Path
 import javax.swing.JLabel
 import javax.swing.JPanel
-import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.CommandReceiverService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -42,7 +41,6 @@ class EditorFrame(
         footer.add(statusLabel, BorderLayout.EAST)
         panel.add(footer, BorderLayout.SOUTH)
 
-        val finderChannel = Channel<FindOrder>()
         //val finderView = FinderAreaView(finderChannel, messageChannel)
 
         //panel.add(finderView.view(), BorderLayout.NORTH)
