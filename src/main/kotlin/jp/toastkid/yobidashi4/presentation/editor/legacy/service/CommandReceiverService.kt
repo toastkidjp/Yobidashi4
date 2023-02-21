@@ -66,9 +66,6 @@ class CommandReceiverService(
                     val decorated = LinkDecoratorService().invoke(text)
                     editorAreaView.insertText(decorated)
                 }
-                MenuCommand.FIND -> {
-                    switchFinder()
-                }
                 MenuCommand.TO_TABLE -> {
                     editorAreaView.replaceSelected { text ->
                         TableFormConverter().invoke(text)
