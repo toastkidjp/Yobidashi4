@@ -92,7 +92,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                             // TODO get main vm with koin.
                                             val nextArticle = object : KoinComponent { val articleFactory: ArticleFactory by inject() }
                                                 .articleFactory.withTitle(article[0].toString())
-                                            MainViewModel.get().openFile(nextArticle.path())
+                                            object : KoinComponent { val vm: MainViewModel by inject() }.vm.openFile(nextArticle.path())
                                         }
                                 )
 
