@@ -75,7 +75,7 @@ class EditorFrame(
     private fun setStatus(status: String) {
         statusLabel.text = "${ if (editorAreaView.isEditable().not()) "Not editable " else "" } $status"
         path?.let {
-            MainViewModel.get().updateEditorContent(it, currentText(), -1, false)
+            object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateEditorContent(it, currentText(), -1, false)
         }
     }
 
