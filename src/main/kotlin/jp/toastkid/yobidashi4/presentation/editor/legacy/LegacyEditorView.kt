@@ -18,12 +18,15 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LegacyEditorView(tab: EditorTab) {
     val editorFrame = remember { EditorFrame() }
     val focusRequester = remember { FocusRequester() }
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     Row() {
         SwingPanel(
@@ -43,7 +46,7 @@ fun LegacyEditorView(tab: EditorTab) {
         editorFrame.setText(tab.path, tab.getContent())
         editorFrame.setCaretPosition(tab.caretPosition())
         onDispose {
-            MainViewModel.get().updateEditorContent(tab.path, editorFrame.currentText(), editorFrame.caretPosition(), false)
+            viewModel.updateEditorContent(tab.path, editorFrame.currentText(), editorFrame.caretPosition(), false)
         }
     }
 }
