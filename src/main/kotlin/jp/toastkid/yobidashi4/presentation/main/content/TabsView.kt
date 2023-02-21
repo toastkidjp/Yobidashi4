@@ -56,9 +56,7 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TabsView(modifier: Modifier) {
-    val viewModel = remember {
-        MainViewModel.get()
-    }
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     if (viewModel.tabs.isEmpty()) {
         return
