@@ -24,10 +24,12 @@ import jp.toastkid.yobidashi4.presentation.main.content.TabsView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @Composable
 fun MultiTabContent() {
-    val viewModel = MainViewModel.get()
+    val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
 
     Column {
         if (viewModel.showWebSearch()) {
