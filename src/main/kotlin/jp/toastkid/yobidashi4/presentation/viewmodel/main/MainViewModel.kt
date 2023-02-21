@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 interface MainViewModel {
     val selected: State<Int>
@@ -80,8 +79,6 @@ interface MainViewModel {
      * Temporary implementation.
      */
     companion object : KoinComponent {
-
-        private val instance: MainViewModel by inject()
 
     }
 
