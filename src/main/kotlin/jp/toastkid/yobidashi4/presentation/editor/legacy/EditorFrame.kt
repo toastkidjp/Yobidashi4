@@ -43,7 +43,6 @@ class EditorFrame(
 
         //val finderView = FinderAreaView(finderChannel, messageChannel)
 
-        //panel.add(finderView.view(), BorderLayout.NORTH)
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
                 editorAreaView.find(it)
