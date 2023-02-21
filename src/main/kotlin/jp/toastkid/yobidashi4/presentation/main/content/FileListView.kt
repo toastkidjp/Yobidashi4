@@ -60,6 +60,8 @@ import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
 import kotlin.math.min
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -73,7 +75,7 @@ fun FileList(paths: List<Path>) {
 
     val dateTimeFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH) }
 
-    val viewModel = MainViewModel.get()
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     val coroutineScope = rememberCoroutineScope()
 
