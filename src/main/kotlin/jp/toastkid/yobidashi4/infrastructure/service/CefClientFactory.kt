@@ -68,6 +68,8 @@ class CefClientFactory(
     operator fun invoke(): CefClient {
         val appSetting = object : KoinComponent { val s: Setting by inject() }.s
 
+        val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
+
         val builder = CefAppBuilder()
         builder.setInstallDir(File("jcef-bundle")) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
@@ -126,7 +128,7 @@ class CefClientFactory(
                 target_frame_name: String?
             ): Boolean {
                 target_url ?: return true
-                MainViewModel.get().openUrl(target_url, false)
+                viewModel.openUrl(target_url, false)
                 return true
             }
         })
@@ -160,8 +162,7 @@ class CefClientFactory(
             ): Boolean {
                 if (user_gesture) {
                     target_url?.let {
-                        object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
-                            .openUrl(it, true)
+                        viewModel.openUrl(it, true)
                     }
                     return true
                 }
@@ -172,7 +173,7 @@ class CefClientFactory(
             override fun onTitleChange(browser: CefBrowser?, title: String?) {
                 title ?: return
                 val id = findId(browser) ?: return
-                MainViewModel.get().updateWebTab(id, title, browser?.url)
+                viewModel.updateWebTab(id, title, browser?.url)
             }
         })
         client.addDownloadHandler(object : CefDownloadHandlerAdapter() {
@@ -211,7 +212,7 @@ class CefClientFactory(
                     return true
                 }
                 if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_W) {
-                    object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel.closeCurrent()
+                    viewModel.closeCurrent()
                     return true
                 }
                 if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_P) {
@@ -359,19 +360,15 @@ class CefClientFactory(
                     }
                     402 -> {
                         params?.linkUrl?.let {
-                            object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
-                                .openUrl(it, false)
+                            viewModel.openUrl(it, false)
                         }
                         return true
                     }
                     403 -> {
                         params?.linkUrl?.let {
-                            val mainViewModel = object : KoinComponent {
-                                val viewModel: MainViewModel by inject()
-                            }.viewModel
                             // TODO
-                            mainViewModel.openUrl(it, true)
-                            val webTab = mainViewModel.tabs.last() as? WebTab ?: return true
+                            viewModel.openUrl(it, true)
+                            val webTab = viewModel.tabs.last() as? WebTab ?: return true
                             object : KoinComponent { val browserPool: BrowserPool by inject() }.browserPool.component(
                                 webTab.id(), webTab.url()
                             )
@@ -412,9 +409,8 @@ class CefClientFactory(
                         return true
                     }
                     411 -> {
-                        val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
                         ClipboardPutterService().invoke(
-                            "[${mainViewModel.tabs[mainViewModel.selected.value].title()}](${params?.pageUrl})"
+                            "[${viewModel.tabs[viewModel.selected.value].title()}](${params?.pageUrl})"
                         )
                         return true
                     }
