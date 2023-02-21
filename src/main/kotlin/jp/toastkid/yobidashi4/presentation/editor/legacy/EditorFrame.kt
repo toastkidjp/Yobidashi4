@@ -53,10 +53,7 @@ class EditorFrame(
             setStatus("Character: $it")
         }
 
-        val commandReceiverService = CommandReceiverService(
-            channel,
-            editorAreaView
-        ) { path }
+        val commandReceiverService = CommandReceiverService(channel, editorAreaView) { path }
         CoroutineScope(Dispatchers.Default).launch {
             commandReceiverService()
         }
