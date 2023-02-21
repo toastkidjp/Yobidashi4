@@ -30,8 +30,7 @@ import org.slf4j.LoggerFactory
 class CommandReceiverService(
     private val channel: Channel<MenuCommand>,
     private val editorAreaView: EditorAreaView,
-    private val currentArticle: () -> Path?,
-    private val resetFrameTitle: () -> Unit
+    private val currentArticle: () -> Path?
 ) : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
