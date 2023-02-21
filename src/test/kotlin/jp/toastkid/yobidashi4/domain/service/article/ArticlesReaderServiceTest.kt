@@ -34,9 +34,6 @@ class ArticlesReaderServiceTest {
         }
         MockKAnnotations.init(this)
 
-        //mockkStatic(Paths::class)
-       // every { Paths.get(any<String>()) }.returns(mockk())
-
         mockkStatic(Files::class)
         every { Files.list(any<Path>()) }.returns(mockk())
     }
