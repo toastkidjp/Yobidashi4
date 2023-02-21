@@ -39,9 +39,6 @@ internal class CommandReceiverServiceTest {
     @MockK
     private lateinit var switchFinder: () -> Unit
 
-    @MockK
-    private lateinit var close: () -> Unit
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
