@@ -50,10 +50,6 @@ interface Setting {
 
     fun mediaFolderPath(): String?
 
-    fun privateSearchPath(): String?
-
-    fun privateSearchOption(): String?
-
     fun wrapLine(): Boolean
 
     fun switchWrapLine()
