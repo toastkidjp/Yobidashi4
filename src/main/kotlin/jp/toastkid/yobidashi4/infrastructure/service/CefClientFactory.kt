@@ -472,7 +472,7 @@ class CefClientFactory(
             params?.sourceUrl != null && params.sourceUrl.isNotBlank() -> makeBookmarkItemWithUrl(params.sourceUrl)
             params?.pageUrl != null && params.pageUrl.isNotBlank() -> Bookmark(mainViewModel.tabs[mainViewModel.selected.value].title(), url = params.pageUrl)
             else -> Bookmark(mainViewModel.tabs[mainViewModel.selected.value].title(), url = latestBrowser()?.url ?: "")
-        } ?: return
+        }
         object : KoinComponent{ val repository: BookmarkRepository by inject() }.repository.add(item)
         mainViewModel.showSnackbar("Add bookmark: $item")
     }
