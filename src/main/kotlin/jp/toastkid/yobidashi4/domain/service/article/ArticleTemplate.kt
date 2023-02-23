@@ -137,7 +137,6 @@ class ArticleTemplate {
         val now = LocalDate.now()
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek != DayOfWeek.MONDAY && dayOfWeek != DayOfWeek.SUNDAY
-                && OffDayFinderService().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek, false).not()
     }
 
 }
