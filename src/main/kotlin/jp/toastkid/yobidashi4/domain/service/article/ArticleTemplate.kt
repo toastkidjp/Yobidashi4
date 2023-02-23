@@ -3,19 +3,12 @@ package jp.toastkid.yobidashi4.domain.service.article
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.time.DayOfWeek
 import java.time.LocalDate
 
 class ArticleTemplate(private val now: LocalDate = LocalDate.now()) {
     operator fun invoke(header: String): String {
-        val userTemplatePath = Paths.get("user/article_template.txt")
-        val inputStream = if (Files.exists(userTemplatePath)) {
-            Files.newInputStream(userTemplatePath)
-        } else {
-            javaClass.classLoader?.getResourceAsStream("article/template/article_template.txt")
-        } ?: return ""
+        val inputStream = UserTemplateStreamReader().invoke() ?: return ""
         val text = BufferedReader(InputStreamReader(inputStream, StandardCharsets.UTF_8)).use {
             with(StringBuilder()) {
                 var inWorkdayBlock = false
