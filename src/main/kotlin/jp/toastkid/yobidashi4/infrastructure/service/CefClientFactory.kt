@@ -24,9 +24,9 @@ import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
-import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchLauncher
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -424,7 +424,7 @@ class CefClientFactory(
                     }
                     415 -> {
                         params?.sourceUrl?.let {
-                            PrivateImageSearchLauncher().invoke(it)
+                            viewModel.openUrl(SearchSite.SEARCH_WITH_IMAGE.make(it).toString(), false)
                         }
                         return true
                     }
