@@ -29,7 +29,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
-import jp.toastkid.yobidashi4.domain.service.tool.PrivateImageSearchService
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorMenuGeneratorService
 import jp.toastkid.yobidashi4.domain.service.tool.rename.FileRenameService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.AppearanceSettingService
@@ -174,7 +173,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
                 viewModel.setShowWebSearch(viewModel.showWebSearch().not())
             }
-            Item("Image search", shortcut = KeyShortcut(Key.P, alt = true)) { PrivateImageSearchService().invoke() }
             Item("What happened today") {
                 viewModel.openUrl("https://kids.yahoo.co.jp/today/", false)
             }
