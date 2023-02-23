@@ -55,4 +55,16 @@ test
         assertTrue(content.contains("test"))
     }
 
+    @Test
+    fun testContainsStockDayButOnSunday() {
+        mockkConstructor(UserTemplateStreamReader::class)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+            {{stock}}
+test
+            {{/stock}}
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2023, 2, 19)).invoke("test")
+        assertTrue(content.contains("test").not())
+    }
+
 }
