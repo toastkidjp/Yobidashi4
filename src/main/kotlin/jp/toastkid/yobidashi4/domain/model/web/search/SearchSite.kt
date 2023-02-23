@@ -13,10 +13,13 @@ enum class SearchSite(val siteName: String, private val searchUrlBase: String, p
     FILMARKS("Filmarks", "https://filmarks.com/search/movies?q=", "ic_filmarks.png"),
     AMAZON("Amazon", "https://www.amazon.co.jp/s?k=", "ic_amazon.xml"),
     GITHUB("GitHub", "https://github.com/search?utf8=%E2%9C%93&type=&q=", "ic_github.xml"),
+    SEARCH_WITH_IMAGE("Search with image", "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=", "ic_image.xml"),
     ;
 
     fun make(rawQuery: String): URI {
-        return URI("$searchUrlBase${URLEncoder.encode(rawQuery, StandardCharsets.UTF_8.name())}")
+        val additional = if (this == SEARCH_WITH_IMAGE
+            && (rawQuery.startsWith("https://") || rawQuery.startsWith("http://"))) "imgurl:" else ""
+        return URI("$searchUrlBase$additional${URLEncoder.encode(rawQuery, StandardCharsets.UTF_8.name())}")
     }
 
     fun iconPath() = "$IMAGE_FILE_FOLDER/$imageFileName"
