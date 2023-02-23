@@ -39,4 +39,14 @@ class UserTemplateStreamReaderTest {
         verify { Files.newInputStream(any()) }
     }
 
+    @Test
+    fun invoke2() {
+        every { Files.exists(any()) }.returns(false)
+
+        userTemplateStreamReader.invoke()
+
+        verify { Files.exists(any()) }
+        verify(inverse = true) { Files.newInputStream(any()) }
+    }
+
 }
