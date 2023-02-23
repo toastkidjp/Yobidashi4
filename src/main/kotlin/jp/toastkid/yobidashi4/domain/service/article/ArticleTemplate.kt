@@ -8,7 +8,7 @@ import java.nio.file.Paths
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-class ArticleTemplate {
+class ArticleTemplate(private val now: LocalDate = LocalDate.now()) {
     operator fun invoke(header: String): String {
         val userTemplatePath = Paths.get("user/article_template.txt")
         val inputStream = if (Files.exists(userTemplatePath)) {
@@ -114,27 +114,23 @@ class ArticleTemplate {
     }
 
     private fun isWeekDay(): Boolean {
-        val now = LocalDate.now()
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek in setOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
     }
 
     private fun isWorkDay(): Boolean {
-        val now = LocalDate.now()
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY
                 && OffDayFinderService().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek).not()
     }
 
     private fun isMarketDay(): Boolean {
-        val now = LocalDate.now()
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY
                 && OffDayFinderService().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek, false).not()
     }
 
     private fun isStockDay(): Boolean {
-        val now = LocalDate.now()
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek != DayOfWeek.MONDAY && dayOfWeek != DayOfWeek.SUNDAY
     }
