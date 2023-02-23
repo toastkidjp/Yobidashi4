@@ -6,13 +6,9 @@ import javax.swing.BoxLayout
 import javax.swing.JLabel
 import javax.swing.JOptionPane
 import javax.swing.JPanel
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class PrivateImageSearchService : KoinComponent {
-
-    private val setting: Setting by inject()
 
     operator fun invoke() {
         val content = JPanel().also { panel ->
