@@ -4,7 +4,7 @@ interface Tab {
 
     fun title(): String
 
-    fun closeable(): Boolean
+    fun closeable(): Boolean = true
 
     fun iconPath(): String? = null
 
