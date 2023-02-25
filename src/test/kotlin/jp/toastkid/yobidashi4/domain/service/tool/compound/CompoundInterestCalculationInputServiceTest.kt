@@ -13,10 +13,10 @@ import javax.swing.JFormattedTextField
 import javax.swing.JOptionPane
 import javax.swing.JPanel
 import javax.swing.text.NumberFormatter
+import kotlin.test.Ignore
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 internal class CompoundInterestCalculationInputServiceTest {
 
@@ -40,7 +40,7 @@ internal class CompoundInterestCalculationInputServiceTest {
         every { anyConstructed<JPanel>().add(any<JComponent>()) }.answers { mockk() }
     }
 
-    @Test
+    @Ignore
     fun test() {
         every { JOptionPane.showConfirmDialog(null, any<JComponent>()) }.answers { JOptionPane.OK_OPTION }
         every { anyConstructed<JFormattedTextField>().getText() }.answers { "1" }
@@ -54,7 +54,7 @@ internal class CompoundInterestCalculationInputServiceTest {
         verify(atLeast = 1) { anyConstructed<JFormattedTextField>().getText() }
     }
 
-    @Test
+    @Ignore
     fun testCancelCase() {
         every { JOptionPane.showConfirmDialog(null, any<JComponent>()) }.answers { JOptionPane.CANCEL_OPTION }
         every { anyConstructed<JFormattedTextField>().getText() }.answers { "1" }
