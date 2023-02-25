@@ -17,7 +17,6 @@ internal class CompoundInterestCalculatorServiceTest {
     @Test
     fun test() {
         val result = compoundInterestCalculatorService.invoke(120000, 0.01, 10)
-        result.itemArrays().forEach { println(it.contentToString()) }
         val tenYearsLater = result.get(10) ?: fail("This case does not allow null.")
         assertEquals(1212000, tenYearsLater.second)
         assertEquals(1255466, tenYearsLater.third)
