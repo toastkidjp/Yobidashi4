@@ -19,6 +19,9 @@ class CompoundInterestCalculatorService {
                     single += (installment * (1 + annualInterest))
                     val coefficient = ((1 + annualInterest).pow(index + 1) - 1) / annualInterest
                     val compound =  (installment.toDouble()) * coefficient
+                    if (compound.isNaN()) {
+                        return@forEachIndexed
+                    }
                     result.put(index + 1, single.toInt(), compound.roundToInt())
                 }
         return result
