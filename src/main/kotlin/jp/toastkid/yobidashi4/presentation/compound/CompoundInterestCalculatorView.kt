@@ -54,8 +54,8 @@ internal fun CompoundInterestCalculatorView() {
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        convert(firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            val (installment, annualRate, year) = it
+                        convert(firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let { converted ->
+                            val (installment, annualRate, year) = converted
                             result.value = calculator.invoke(installment, annualRate, year)
                         }
                     },
