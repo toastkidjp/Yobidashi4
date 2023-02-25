@@ -32,7 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculati
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
 
 @Composable
-fun CompoundInterestCalculatorView() {
+internal fun CompoundInterestCalculatorView() {
     val calculator = remember { CompoundInterestCalculatorService() }
 
     Surface(
