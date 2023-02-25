@@ -15,7 +15,7 @@ import androidx.compose.ui.window.application
 import java.nio.file.Files
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
-import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
@@ -119,13 +119,15 @@ fun main() {
 
 private fun makeTodayArticleIfNeed() {
     val title = ArticleTitleGenerator().invoke() ?: return
-    val path = object : KoinComponent {
+    val koin =  object : KoinComponent {
         val setting: Setting by inject()
-    }.setting.articleFolderPath().resolve("${title}.md")
+        val articleFactory: ArticleFactory by inject()
+    }
+    val path = koin.setting.articleFolderPath().resolve("${title}.md")
     if (Files.exists(path)) {
         return
     }
 
-    val article = Article.withTitle(title)
+    val article = koin.articleFactory.withTitle(title)
     article.makeFile { ArticleTemplate()(article.getTitle()) }
 }
