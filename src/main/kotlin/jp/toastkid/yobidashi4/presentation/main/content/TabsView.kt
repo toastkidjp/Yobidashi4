@@ -92,7 +92,7 @@ fun TabsView(modifier: Modifier) {
                             Text(tab.title(),
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
-                                modifier = Modifier.widthIn(max = if (tab is WebTab) 180.dp else 1000.dp).padding(vertical = 8.dp).padding(start = 8.dp))
+                                modifier = Modifier.widthIn(max = if (tab is WebTab) 232.dp else 1000.dp).padding(vertical = 8.dp).padding(start = 8.dp))
                             if (tab.closeable()) {
                                 Text("x",
                                     modifier = Modifier
