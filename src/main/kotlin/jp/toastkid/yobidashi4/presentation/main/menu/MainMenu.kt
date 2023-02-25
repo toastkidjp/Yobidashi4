@@ -19,6 +19,7 @@ import javax.swing.JOptionPane
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
@@ -29,7 +30,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
-import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorMenuGeneratorService
 import jp.toastkid.yobidashi4.domain.service.tool.rename.FileRenameService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.AppearanceSettingService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -183,9 +183,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 FileRenameService().invoke()
             }
             Item("Compound interest calculator") {
-                CompoundInterestCalculatorMenuGeneratorService(
-                    resultConsumer = { title, result -> viewModel.openAggregationResultTab(title, result) }
-                ).invoke()
+                viewModel.openTab(CompoundInterestCalculatorTab())
             }
             Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
                 viewModel.openTab(LoanCalculatorTab())
