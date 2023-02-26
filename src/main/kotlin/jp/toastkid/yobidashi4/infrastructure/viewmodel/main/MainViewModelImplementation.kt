@@ -349,4 +349,15 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
     }
 
+    private val droppedPathFlow = MutableSharedFlow<Path>()
+    override fun droppedPathFlow(): Flow<Path> {
+        return droppedPathFlow.asSharedFlow()
+    }
+
+    override fun emitDroppedPath(paths: Collection<Path>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            paths.forEach { droppedPathFlow.emit(it) }
+        }
+    }
+
 }
