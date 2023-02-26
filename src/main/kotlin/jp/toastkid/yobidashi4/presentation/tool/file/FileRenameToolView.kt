@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -76,9 +77,7 @@ fun FileRenameToolView() {
                             && firstInput.value.composition == null
                             && firstInput.value.text.isNotBlank()
                         ) {
-                            paths.forEachIndexed { i, p ->
-                                Files.copy(p, p.resolveSibling("${firstInput.value.text}_${i + 1}.${p.extension}"))
-                            }
+                            rename(paths, firstInput.value.text)
                         }
                         true
                     }
@@ -95,9 +94,7 @@ fun FileRenameToolView() {
                         Text("Clear files")
                     }
                     Button(onClick = {
-                        paths.forEachIndexed { i, p ->
-                            Files.copy(p, p.resolveSibling("${firstInput.value.text}_${i + 1}.${p.extension}"))
-                        }
+                        rename(paths, firstInput.value.text)
                     },
                         modifier = Modifier.padding(8.dp)
                         ) {
@@ -118,5 +115,14 @@ fun FileRenameToolView() {
                 paths.add(it)
             }
         }
+    }
+}
+
+private fun rename(
+    paths: SnapshotStateList<Path>,
+    baseName: String
+) {
+    paths.forEachIndexed { i, p ->
+        Files.copy(p, p.resolveSibling("${baseName}_${i + 1}.${p.extension}"))
     }
 }
