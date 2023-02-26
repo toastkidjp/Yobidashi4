@@ -125,4 +125,6 @@ private fun rename(
     paths.forEachIndexed { i, p ->
         Files.copy(p, p.resolveSibling("${baseName}_${i + 1}.${p.extension}"))
     }
+
+    object : KoinComponent { val vm: MainViewModel by inject() }.vm.showSnackbar("Rename completed!")
 }
