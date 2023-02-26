@@ -123,6 +123,10 @@ private fun rename(
     paths: SnapshotStateList<Path>,
     baseName: String
 ) {
+    if (paths.isEmpty()) {
+        return
+    }
+
     paths.forEachIndexed { i, p ->
         Files.copy(p, p.resolveSibling("${baseName}_${i + 1}.${p.extension}"))
     }
