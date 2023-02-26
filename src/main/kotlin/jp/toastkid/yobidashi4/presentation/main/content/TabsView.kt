@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
@@ -47,6 +48,7 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutter
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
+import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
@@ -156,6 +158,7 @@ fun TabsView(modifier: Modifier) {
             }
             is CalendarTab -> CalendarView()
             is CompoundInterestCalculatorTab -> CompoundInterestCalculatorView()
+            is FileRenameToolTab -> FileRenameToolView()
             is WebTab -> WebTabView(currentTab)
             is WebBookmarkTab -> WebBookmarkTabView()
             is NumberPlaceGameTab -> NumberPlaceView()
