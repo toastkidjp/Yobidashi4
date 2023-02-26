@@ -179,7 +179,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Converter") {
                 viewModel.openTab(ConverterToolTab())
             }
-            Item("File rename") {
+            Item("File rename", icon = painterResource("images/icon/ic_rename.xml")) {
                 viewModel.openTab(FileRenameToolTab())
             }
             Item("Compound interest calculator") {
