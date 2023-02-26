@@ -12,6 +12,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import java.awt.datatransfer.DataFlavor
+import java.awt.datatransfer.UnsupportedFlavorException
+import java.awt.dnd.DnDConstants
+import java.awt.dnd.DropTarget
+import java.awt.dnd.DropTargetAdapter
+import java.awt.dnd.DropTargetDropEvent
+import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
@@ -86,6 +94,34 @@ fun main() {
                         MultiTabContent()
                     }
                 }
+
+                val dropTarget = DropTarget()
+                dropTarget.addDropTargetListener(
+                    object : DropTargetAdapter() {
+                        override fun drop(dtde: DropTargetDropEvent?) {
+                            dtde ?: return
+                            try {
+                                if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
+                                    val transferable = dtde!!.transferable
+                                    val list = transferable.getTransferData(
+                                        DataFlavor.javaFileListFlavor
+                                    ) as List<*>
+                                    val files = list.filterIsInstance<File>().map { it.toPath() }
+                                    mainViewModel.emitDroppedPath(files)
+                                    dtde!!.dropComplete(true)
+                                    return
+                                }
+                            } catch (ex: UnsupportedFlavorException) {
+                                LoggerFactory.getLogger(javaClass).warn("I/O error.", ex)
+                            } catch (ex: IOException) {
+                                LoggerFactory.getLogger(javaClass).warn("I/O error.", ex)
+                            }
+                            dtde!!.rejectDrop()
+                        }
+                    }
+                )
+                window.dropTarget = dropTarget
             }
         }
 
