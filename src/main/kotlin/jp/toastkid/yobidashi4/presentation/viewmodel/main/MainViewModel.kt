@@ -74,4 +74,8 @@ interface MainViewModel {
 
     fun replaceAll()
 
+    fun droppedPathFlow(): Flow<Path>
+
+    fun emitDroppedPath(paths: Collection<Path>)
+
 }
