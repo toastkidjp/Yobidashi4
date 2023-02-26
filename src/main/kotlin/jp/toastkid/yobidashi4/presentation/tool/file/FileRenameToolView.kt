@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.tool.file
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -88,14 +89,18 @@ fun FileRenameToolView() {
                 Row {
                     Button(onClick = {
                         paths.clear()
-                    }) {
+                    },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
                         Text("Clear files")
                     }
                     Button(onClick = {
                         paths.forEachIndexed { i, p ->
                             Files.copy(p, p.resolveSibling("${firstInput.value.text}_${i + 1}.${p.extension}"))
                         }
-                    }) {
+                    },
+                        modifier = Modifier.padding(8.dp)
+                        ) {
                         Text("Rename")
                     }
                 }
