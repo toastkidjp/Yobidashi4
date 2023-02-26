@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
@@ -30,7 +31,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
-import jp.toastkid.yobidashi4.domain.service.tool.rename.FileRenameService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.AppearanceSettingService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
@@ -180,7 +180,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.openTab(ConverterToolTab())
             }
             Item("File rename") {
-                FileRenameService().invoke()
+                viewModel.openTab(FileRenameToolTab())
             }
             Item("Compound interest calculator") {
                 viewModel.openTab(CompoundInterestCalculatorTab())
