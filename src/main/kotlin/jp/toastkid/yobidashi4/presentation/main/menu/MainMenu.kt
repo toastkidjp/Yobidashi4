@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
+import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
@@ -31,7 +32,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.AppearanceSettingService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.min
@@ -103,7 +103,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     currentTab.switchPreview()
                 }
                 Item("Editor's Color & Font") {
-                    AppearanceSettingService().invoke()
+                    viewModel.openTab(EditorSettingTab())
                 }
             }
         }
