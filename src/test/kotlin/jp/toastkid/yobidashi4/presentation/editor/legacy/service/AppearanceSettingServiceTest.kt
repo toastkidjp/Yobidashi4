@@ -14,11 +14,17 @@ import java.awt.GridBagConstraints
 import javax.swing.JComponent
 import javax.swing.JOptionPane
 import javax.swing.JPanel
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.setting.TestSettingImplementation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 internal class AppearanceSettingServiceTest {
 
@@ -29,6 +35,14 @@ internal class AppearanceSettingServiceTest {
 
     @BeforeEach
     fun setUp() {
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { TestSettingImplementation() } bind(Setting::class)
+                }
+            )
+        }
+
         MockKAnnotations.init(this)
         coEvery { channel.send(any()) }.answers { Unit }
 
@@ -54,6 +68,7 @@ internal class AppearanceSettingServiceTest {
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
