@@ -102,6 +102,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Item("Show preview", shortcut = KeyShortcut(Key.M, ctrl = true)) {
                     currentTab.switchPreview()
                 }
+                Item("Editor's Color & Font") {
+                    AppearanceSettingService().invoke()
+                }
             }
         }
 
@@ -231,9 +234,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         Menu("Setting") {
             Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
                 viewModel.switchDarkMode()
-            }
-            Item("Editor's Color & Font") {
-                AppearanceSettingService().invoke()
             }
             Item("Show log") {
                 val logFilePath = Paths.get("data/logs/app.log")
