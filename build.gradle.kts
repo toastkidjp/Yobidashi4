@@ -46,6 +46,7 @@ dependencies {
 
     implementation("com.halilibo.compose-richtext:richtext-commonmark:0.16.0")
     implementation("com.halilibo.compose-richtext:richtext-ui-material:0.16.0")
+    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.10.6")
