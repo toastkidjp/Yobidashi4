@@ -46,7 +46,7 @@ class FileRenameService {
                                 DataFlavor.javaFileListFlavor
                             ) as List<*>
                             list.filterIsInstance<File>().forEach { defaultListModel.addElement(it) }
-                            dtde!!.dropComplete(true)
+                            dtde.dropComplete(true)
                             return
                         }
                     } catch (ex: UnsupportedFlavorException) {
