@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
+import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
@@ -45,6 +46,7 @@ import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.LegacyEditorView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
@@ -156,6 +158,7 @@ fun TabsView(modifier: Modifier) {
                     LegacyEditorView(currentTab)
                 }
             }
+            is EditorSettingTab -> EditorSettingComponent(modifier = Modifier)
             is CalendarTab -> CalendarView()
             is CompoundInterestCalculatorTab -> CompoundInterestCalculatorView()
             is FileRenameToolTab -> FileRenameToolView()
