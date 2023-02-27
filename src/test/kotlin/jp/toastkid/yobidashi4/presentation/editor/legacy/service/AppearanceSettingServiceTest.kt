@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
@@ -44,7 +46,7 @@ internal class AppearanceSettingServiceTest {
         }
 
         MockKAnnotations.init(this)
-        coEvery { channel.send(any()) }.answers { Unit }
+        coEvery { channel.send(any()) }.just(Runs)
 
         appearanceSettingService = AppearanceSettingService(channel)
 
