@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -120,7 +119,7 @@ fun FileRenameToolView() {
 }
 
 private fun rename(
-    paths: SnapshotStateList<Path>,
+    paths: List<Path>,
     baseName: String
 ) {
     if (paths.isEmpty()) {
