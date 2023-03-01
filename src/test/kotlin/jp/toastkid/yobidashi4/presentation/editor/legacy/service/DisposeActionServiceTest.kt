@@ -1,9 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -24,7 +26,7 @@ internal class DisposeActionServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { frame.dispose() }.answers { }
+        every { frame.dispose() }.just(Runs)
 
         mockkStatic(JOptionPane::class)
         every { JOptionPane.showConfirmDialog(any(), any()) }.returns(JOptionPane.OK_OPTION)
