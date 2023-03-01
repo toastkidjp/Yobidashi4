@@ -55,7 +55,7 @@ internal class AppearanceSettingServiceTest {
         every { anyConstructed<JPanel>().add(any<JComponent>(), any<GridBagConstraints>()) }.returns(mockk())
 
         mockkStatic(JOptionPane::class)
-        every { JOptionPane.showMessageDialog(any(), any()) }.answers { Unit }
+        every { JOptionPane.showMessageDialog(any(), any()) }.just(Runs)
     }
 
     @Test
