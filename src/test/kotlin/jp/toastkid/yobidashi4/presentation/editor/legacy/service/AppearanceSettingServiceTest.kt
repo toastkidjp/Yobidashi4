@@ -51,7 +51,7 @@ internal class AppearanceSettingServiceTest {
         appearanceSettingService = AppearanceSettingService(channel)
 
         mockkConstructor(JPanel::class)
-        every { anyConstructed<JPanel>().setLayout(any()) }.returns(mockk())
+        every { anyConstructed<JPanel>().layout = any() }.returns(mockk())
         every { anyConstructed<JPanel>().add(any<JComponent>(), any<GridBagConstraints>()) }.returns(mockk())
 
         mockkStatic(JOptionPane::class)
