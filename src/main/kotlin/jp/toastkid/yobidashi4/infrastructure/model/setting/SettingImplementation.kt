@@ -100,10 +100,6 @@ class SettingImplementation : Setting {
 
     override fun mediaFolderPath() = properties.getProperty("media_folder_path")
 
-    override fun privateSearchPath() = properties.getProperty("private_search_path")
-
-    override fun privateSearchOption() = properties.getProperty("private_search_option")
-
     override fun save() {
         if (Paths.get(PATH).parent.exists().not()) {
             Files.createDirectory(Paths.get(PATH).parent)
