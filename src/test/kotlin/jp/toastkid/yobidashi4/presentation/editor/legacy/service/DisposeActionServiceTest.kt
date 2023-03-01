@@ -24,7 +24,7 @@ internal class DisposeActionServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { frame.dispose() }.answers { Unit }
+        every { frame.dispose() }.answers { }
 
         mockkStatic(JOptionPane::class)
         every { JOptionPane.showConfirmDialog(any(), any()) }.returns(JOptionPane.OK_OPTION)
