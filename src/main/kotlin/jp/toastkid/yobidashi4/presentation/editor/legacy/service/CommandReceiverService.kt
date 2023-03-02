@@ -11,6 +11,7 @@ import java.nio.file.Path
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.ListHeadAdder
@@ -38,7 +39,7 @@ class CommandReceiverService(
         viewModel.editorCommandFlow().collect { command ->
             when (command) {
                 MenuCommand.SAVE -> {
-                    val path = currentArticle() ?: return@collect
+                    val path = (viewModel.currentTab() as? EditorTab)?.path ?: return@collect
                     try {
                         withContext(Dispatchers.IO) {
                             val textArray = editorAreaView.getTextArray()
