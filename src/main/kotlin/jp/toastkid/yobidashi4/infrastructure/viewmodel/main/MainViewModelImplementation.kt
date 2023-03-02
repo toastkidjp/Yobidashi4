@@ -32,6 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.media.MediaPlayerInvoker
+import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
@@ -357,6 +358,18 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun emitDroppedPath(paths: Collection<Path>) {
         CoroutineScope(Dispatchers.IO).launch {
             paths.forEach { droppedPathFlow.emit(it) }
+        }
+    }
+
+    private val editorCommandFlow = MutableSharedFlow<MenuCommand>()
+
+    override fun editorCommandFlow(): Flow<MenuCommand> {
+        return editorCommandFlow.asSharedFlow()
+    }
+
+    override fun emitEditorCommand(command: MenuCommand) {
+        CoroutineScope(Dispatchers.IO).launch {
+            editorCommandFlow.emit(command)
         }
     }
 
