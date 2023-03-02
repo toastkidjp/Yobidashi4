@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -38,7 +37,7 @@ class CommandReceiverService(
     private val setting: Setting by inject()
 
     suspend operator fun invoke() {
-        channel.receiveAsFlow().collect { command ->
+        viewModel.editorCommandFlow().collect { command ->
             when (command) {
                 MenuCommand.SAVE -> {
                     val path = currentArticle() ?: return@collect
