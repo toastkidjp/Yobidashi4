@@ -25,7 +25,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Composable
-fun EditorSettingComponent(modifier: Modifier) {
+internal fun EditorSettingComponent(modifier: Modifier) {
     val setting = object : KoinComponent { val s: Setting by inject() }.s
 
     Surface(
