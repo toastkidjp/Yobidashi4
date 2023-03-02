@@ -10,6 +10,7 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import kotlinx.coroutines.flow.Flow
 
@@ -77,5 +78,9 @@ interface MainViewModel {
     fun droppedPathFlow(): Flow<Path>
 
     fun emitDroppedPath(paths: Collection<Path>)
+
+    fun editorCommandFlow(): Flow<MenuCommand>
+
+    fun emitEditorCommand(command: MenuCommand)
 
 }
