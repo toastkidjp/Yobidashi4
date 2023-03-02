@@ -20,14 +20,12 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.text.TrimmingService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 
 class CommandReceiverService(
-    private val channel: Channel<MenuCommand>,
     private val editorAreaView: EditorAreaView,
     private val currentArticle: () -> Path?
 ) : KoinComponent {
