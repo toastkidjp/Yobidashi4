@@ -28,7 +28,6 @@ import org.koin.core.component.inject
 class EditorAreaView(
     private val editorArea: RSyntaxTextArea = RSyntaxTextArea(),
     private val syntaxHighlightApplier: SyntaxHighlightApplier = SyntaxHighlightApplier(),
-    private val channel: Channel<MenuCommand>,
     private val messageChannel: Channel<String>
 ) {
 
