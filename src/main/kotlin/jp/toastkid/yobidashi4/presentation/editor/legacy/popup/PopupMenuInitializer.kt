@@ -6,11 +6,10 @@ import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.channels.Channel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channel: Channel<MenuCommand>) {
+class PopupMenuInitializer(private val popupMenu: JPopupMenu) {
 
     operator fun invoke() {
         val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
