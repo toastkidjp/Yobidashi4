@@ -5,36 +5,34 @@ import javax.swing.AbstractAction
 import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channel: Channel<MenuCommand>) {
 
     operator fun invoke() {
+        val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
         val toTableMenu = JMenuItem("To table")
         toTableMenu.addActionListener {
-            CoroutineScope(Dispatchers.Default).launch {
-                channel.send(MenuCommand.TO_TABLE)
-            }
+            viewModel.emitEditorCommand(MenuCommand.TO_TABLE)
         }
         popupMenu.add(toTableMenu)
 
         val blockQuotationMenu = JMenuItem("Block quote").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.BLOCKQUOTE)
-                }
+                viewModel.emitEditorCommand(MenuCommand.BLOCKQUOTE)
             }
         }
         popupMenu.add(blockQuotationMenu)
 
         val hyphenListMenu = JMenuItem("Unordered list").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.UNORDERED_LIST)
-                }
+                viewModel.emitEditorCommand(MenuCommand.UNORDERED_LIST)
             }
         }
         popupMenu.add(hyphenListMenu)
@@ -51,61 +49,47 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
 
         val taskListMenu = JMenuItem("Task list").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.TASK_LIST)
-                }
+                viewModel.emitEditorCommand(MenuCommand.TASK_LIST)
             }
         }
         popupMenu.add(taskListMenu)
 
         val boldMenu = JMenuItem("Bold").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.BOLD)
-                }
+                viewModel.emitEditorCommand(MenuCommand.BOLD)
             }
         }
         popupMenu.add(boldMenu)
 
         val italicMenu = JMenuItem("Italic").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.ITALIC)
-                }
+                viewModel.emitEditorCommand(MenuCommand.ITALIC)
             }
         }
         popupMenu.add(italicMenu)
 
         val strikethroughMenu = JMenuItem("Strikethrough").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.STRIKETHROUGH)
-                }
+                viewModel.emitEditorCommand(MenuCommand.STRIKETHROUGH)
             }
         }
         popupMenu.add(strikethroughMenu)
 
         val codeBlockMenu = JMenuItem("Code block")
         codeBlockMenu.addActionListener {
-            CoroutineScope(Dispatchers.Default).launch {
-                channel.send(MenuCommand.CODE_BLOCK)
-            }
+            viewModel.emitEditorCommand(MenuCommand.CODE_BLOCK)
         }
         popupMenu.add(codeBlockMenu)
 
         popupMenu.add(JMenuItem("Trimming").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.TRIMMING)
-                }
+                viewModel.emitEditorCommand(MenuCommand.TRIMMING)
             }
         })
 
         val fontColorMenu = JMenuItem("Font color").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.FONT_COLOR)
-                }
+                viewModel.emitEditorCommand(MenuCommand.FONT_COLOR)
             }
         }
         popupMenu.add(fontColorMenu)
@@ -113,9 +97,7 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
         popupMenu.add(
             JMenuItem("Paste as markdown link").also {
                 it.addActionListener {
-                    CoroutineScope(Dispatchers.Default).launch {
-                        channel.send(MenuCommand.PASTE_LINK_WITH_TITLE)
-                    }
+                    viewModel.emitEditorCommand(MenuCommand.PASTE_LINK_WITH_TITLE)
                 }
             }
         )
@@ -123,9 +105,7 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
         popupMenu.add(
                 JMenuItem("To hyperlink").also {
                     it.addActionListener {
-                        CoroutineScope(Dispatchers.Default).launch {
-                            channel.send(MenuCommand.TO_HYPERLINK)
-                        }
+                        viewModel.emitEditorCommand(MenuCommand.TO_HYPERLINK)
                     }
                 }
         )
@@ -133,9 +113,7 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
         popupMenu.add(
             JMenuItem("URL Encode").also {
                 it.addActionListener {
-                    CoroutineScope(Dispatchers.Default).launch {
-                        channel.send(MenuCommand.URL_ENCODE)
-                    }
+                    viewModel.emitEditorCommand(MenuCommand.URL_ENCODE)
                 }
             }
         )
@@ -143,63 +121,49 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
         popupMenu.add(
             JMenuItem("URL Decode").also {
                 it.addActionListener {
-                    CoroutineScope(Dispatchers.Default).launch {
-                        channel.send(MenuCommand.URL_DECODE)
-                    }
+                    viewModel.emitEditorCommand(MenuCommand.URL_DECODE)
                 }
             }
         )
 
         val countMenu = JMenuItem("Count").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.COUNT)
-                }
+                viewModel.emitEditorCommand(MenuCommand.COUNT)
             }
         }
         popupMenu.add(countMenu)
 
         val webSearchMenu = JMenuItem("Web search").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.WEB_SEARCH)
-                }
+                viewModel.emitEditorCommand(MenuCommand.WEB_SEARCH)
             }
         }
         popupMenu.add(webSearchMenu)
 
         val openUrlMenu = JMenuItem("Open URL").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.OPEN_URL)
-                }
+                viewModel.emitEditorCommand(MenuCommand.OPEN_URL)
             }
         }
         popupMenu.add(openUrlMenu)
 
         val dictionaryMenu = JMenuItem("Dictionary").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.DICTIONARY_SEARCH)
-                }
+                viewModel.emitEditorCommand(MenuCommand.DICTIONARY_SEARCH)
             }
         }
         popupMenu.add(dictionaryMenu)
 
         val translateMenu = JMenuItem("Translate to English").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.TRANSLATION_TO_ENGLISH)
-                }
+                viewModel.emitEditorCommand(MenuCommand.TRANSLATION_TO_ENGLISH)
             }
         }
         popupMenu.add(translateMenu)
 
         val horizontalRuleMenu = JMenuItem("Horizontal rule").also {
             it.addActionListener {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.HORIZONTAL_RULE)
-                }
+                viewModel.emitEditorCommand(MenuCommand.HORIZONTAL_RULE)
             }
         }
         popupMenu.add(horizontalRuleMenu)
