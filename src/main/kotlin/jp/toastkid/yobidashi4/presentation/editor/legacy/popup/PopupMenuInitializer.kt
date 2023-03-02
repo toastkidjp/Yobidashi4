@@ -6,10 +6,7 @@ import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -40,9 +37,7 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu, private val channe
         val numberedListMenu = JMenuItem()
         numberedListMenu.action = object : AbstractAction("Ordered list") {
             override fun actionPerformed(e: ActionEvent?) {
-                CoroutineScope(Dispatchers.Default).launch {
-                    channel.send(MenuCommand.ORDERED_LIST)
-                }
+                viewModel.emitEditorCommand(MenuCommand.ORDERED_LIST)
             }
         }
         popupMenu.add(numberedListMenu)
