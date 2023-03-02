@@ -32,6 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
+import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.min
@@ -101,6 +102,9 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Menu("Edit") {
                 Item("Show preview", shortcut = KeyShortcut(Key.M, ctrl = true)) {
                     currentTab.switchPreview()
+                }
+                Item("Save") {
+                    viewModel.emitEditorCommand(MenuCommand.SAVE)
                 }
                 Item("Editor's Color & Font") {
                     viewModel.openTab(EditorSettingTab())
