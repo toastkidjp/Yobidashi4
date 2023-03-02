@@ -54,7 +54,7 @@ class FileRenameService {
                     } catch (ex: IOException) {
                         LoggerFactory.getLogger(javaClass).warn("I/O error.", ex)
                     }
-                    dtde!!.rejectDrop()
+                    dtde.rejectDrop()
                 }
             }
         )
