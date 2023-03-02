@@ -115,7 +115,10 @@ class EditorAreaView(
     fun getText() = editorArea.text
 
     fun save() {
-        CoroutineScope(Dispatchers.Default).launch { channel.send(MenuCommand.SAVE) }
+        CoroutineScope(Dispatchers.Default).launch {
+            object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
+                .emitEditorCommand(MenuCommand.SAVE)
+        }
     }
 
     fun setCaretPosition(position: Int) {
