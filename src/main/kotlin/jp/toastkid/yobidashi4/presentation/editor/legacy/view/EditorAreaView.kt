@@ -73,7 +73,7 @@ class EditorAreaView(
             }
         })
 
-        PopupMenuInitializer(editorArea.popupMenu, channel).invoke()
+        PopupMenuInitializer(editorArea.popupMenu).invoke()
 
         editorArea.inputMap.also {
             it.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK), "dupe")
