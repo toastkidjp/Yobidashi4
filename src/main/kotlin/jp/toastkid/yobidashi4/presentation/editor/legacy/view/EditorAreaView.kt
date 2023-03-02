@@ -54,7 +54,7 @@ class EditorAreaView(
         }
         editorArea.paintTabLines = true
         editorArea.addKeyListener(object : KeyListener {
-            private val keyboardShortcutService = KeyboardShortcutService(channel)
+            private val keyboardShortcutService = KeyboardShortcutService()
 
             override fun keyTyped(e: KeyEvent?) = Unit
 

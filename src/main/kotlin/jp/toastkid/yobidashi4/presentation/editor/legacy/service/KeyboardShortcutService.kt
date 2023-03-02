@@ -5,12 +5,11 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class KeyboardShortcutService(private val channel: Channel<MenuCommand>) {
+class KeyboardShortcutService {
 
     operator fun invoke(e: KeyEvent) {
         if (e.isControlDown.not()) {
