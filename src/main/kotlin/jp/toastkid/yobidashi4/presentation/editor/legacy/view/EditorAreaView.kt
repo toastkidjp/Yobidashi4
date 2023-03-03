@@ -166,7 +166,7 @@ class EditorAreaView(
     }
 
     fun selectedText(): String {
-        return editorArea.selectedText.trim()
+        return editorArea.selectedText?.trim() ?: ""
     }
 
     fun duplicateLine() {
