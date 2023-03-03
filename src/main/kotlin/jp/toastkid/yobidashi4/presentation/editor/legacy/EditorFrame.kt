@@ -10,6 +10,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -24,6 +25,8 @@ class EditorFrame(
     private var path: Path? = null
 
     private val panel = JPanel()
+
+    private var commandFlowJob: Job? = null
 
     fun getContent() = panel
 
@@ -52,7 +55,7 @@ class EditorFrame(
         }
 
         val commandReceiverService = CommandReceiverService(editorAreaView) { path }
-        CoroutineScope(Dispatchers.Default).launch {
+        commandFlowJob = CoroutineScope(Dispatchers.Default).launch {
             commandReceiverService()
         }
     }
@@ -84,5 +87,7 @@ class EditorFrame(
     }
 
     fun currentText() = editorAreaView.getText()
+
+    fun cancel() = commandFlowJob?.cancel()
 
 }
