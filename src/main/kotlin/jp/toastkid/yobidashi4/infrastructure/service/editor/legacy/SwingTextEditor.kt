@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy
+package jp.toastkid.yobidashi4.infrastructure.service.editor.legacy
 
 import java.awt.BorderLayout
 import java.nio.file.Path
