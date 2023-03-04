@@ -15,6 +15,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.service.editor.TextEditor
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -22,7 +23,7 @@ import org.koin.core.component.inject
 
 @Composable
 fun LegacyEditorView(tab: EditorTab) {
-    val textEditor = remember { TextEditor() }
+    val textEditor = object : KoinComponent { val editor: TextEditor by inject() }.editor
     val focusRequester = remember { FocusRequester() }
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
@@ -44,8 +45,9 @@ fun LegacyEditorView(tab: EditorTab) {
         textEditor.setText(tab.path, tab.getContent())
         textEditor.setCaretPosition(tab.caretPosition())
         onDispose {
-            viewModel.updateEditorContent(tab.path, textEditor.currentText(), textEditor.caretPosition(), false)
             textEditor.cancel()
+            val currentText = textEditor.currentText() ?: return@onDispose
+            viewModel.updateEditorContent(tab.path, currentText, textEditor.caretPosition(), false)
         }
     }
 }
