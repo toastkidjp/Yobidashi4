@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
@@ -46,6 +45,7 @@ fun LegacyEditorView(tab: EditorTab) {
         editorFrame.setCaretPosition(tab.caretPosition())
         onDispose {
             viewModel.updateEditorContent(tab.path, editorFrame.currentText(), editorFrame.caretPosition(), false)
+            editorFrame.cancel()
         }
     }
 }
