@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class EditorFrame(
-    private val statusLabel: JLabel = JLabel()
-) {
+class EditorFrame {
 
     private val editorAreaView: EditorAreaView
+
+    private val statusLabel: JLabel = JLabel()
 
     private var path: Path? = null
 
