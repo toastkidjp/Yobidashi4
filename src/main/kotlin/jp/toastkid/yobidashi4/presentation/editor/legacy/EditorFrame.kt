@@ -33,7 +33,6 @@ class EditorFrame(
     init {
         panel.layout = BorderLayout()
 
-        val channel = Channel<MenuCommand>()
         val messageChannel = Channel<String>()
         editorAreaView = EditorAreaView(messageChannel = messageChannel)
 
