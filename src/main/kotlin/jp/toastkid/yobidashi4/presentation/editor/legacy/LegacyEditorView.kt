@@ -22,7 +22,7 @@ import org.koin.core.component.inject
 
 @Composable
 fun LegacyEditorView(tab: EditorTab) {
-    val editorFrame = remember { EditorFrame() }
+    val textEditor = remember { TextEditor() }
     val focusRequester = remember { FocusRequester() }
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
@@ -30,7 +30,7 @@ fun LegacyEditorView(tab: EditorTab) {
         SwingPanel(
             background = Color.Transparent,
             factory = {
-                editorFrame.getContent()
+                textEditor.getContent()
             },
             modifier = Modifier.fillMaxHeight().weight(0.5f).focusRequester(focusRequester)
         )
@@ -41,11 +41,11 @@ fun LegacyEditorView(tab: EditorTab) {
 
     DisposableEffect(tab.path) {
         focusRequester.requestFocus()
-        editorFrame.setText(tab.path, tab.getContent())
-        editorFrame.setCaretPosition(tab.caretPosition())
+        textEditor.setText(tab.path, tab.getContent())
+        textEditor.setCaretPosition(tab.caretPosition())
         onDispose {
-            viewModel.updateEditorContent(tab.path, editorFrame.currentText(), editorFrame.caretPosition(), false)
-            editorFrame.cancel()
+            viewModel.updateEditorContent(tab.path, textEditor.currentText(), textEditor.caretPosition(), false)
+            textEditor.cancel()
         }
     }
 }
