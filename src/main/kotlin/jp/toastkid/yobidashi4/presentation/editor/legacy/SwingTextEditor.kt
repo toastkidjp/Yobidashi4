@@ -4,6 +4,7 @@ import java.awt.BorderLayout
 import java.nio.file.Path
 import javax.swing.JLabel
 import javax.swing.JPanel
+import jp.toastkid.yobidashi4.domain.service.editor.TextEditor
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.CommandReceiverService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -13,10 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class TextEditor {
+@Single
+class SwingTextEditor : TextEditor {
 
     private val editorAreaView: EditorAreaView
 
@@ -28,7 +31,7 @@ class TextEditor {
 
     private var commandFlowJob: Job? = null
 
-    fun getContent() = panel
+    override fun getContent() = panel
 
     init {
         panel.layout = BorderLayout()
@@ -59,7 +62,7 @@ class TextEditor {
         }
     }
 
-    fun setText(path: Path, text: String) {
+    override fun setText(path: Path, text: String) {
         this.path = path
         editorAreaView.setStyle(path.extension)
         editorAreaView.setText(text)
@@ -73,20 +76,22 @@ class TextEditor {
         }
     }
 
-    fun save() {
+    override  fun save() {
         editorAreaView.save()
     }
 
-    fun setCaretPosition(position: Int) {
+    override fun setCaretPosition(position: Int) {
         editorAreaView.setCaretPosition(position)
     }
 
-    fun caretPosition(): Int {
+    override fun caretPosition(): Int {
         return editorAreaView.caretPosition()
     }
 
-    fun currentText() = editorAreaView.getText()
+    override fun currentText() = editorAreaView.getText()
 
-    fun cancel() = commandFlowJob?.cancel()
+    override fun cancel() {
+        commandFlowJob?.cancel()
+    }
 
 }
