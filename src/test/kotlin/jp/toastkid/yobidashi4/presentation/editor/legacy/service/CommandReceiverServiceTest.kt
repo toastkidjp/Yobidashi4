@@ -1,14 +1,17 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -35,6 +38,9 @@ internal class CommandReceiverServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+
+        every { viewModel.editorCommandFlow() }.returns(flowOf())
+
         startKoin {
             modules(
                 module {
