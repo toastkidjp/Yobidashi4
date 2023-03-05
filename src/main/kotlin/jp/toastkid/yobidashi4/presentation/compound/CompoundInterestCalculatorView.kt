@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.compound
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CompoundInterestCalculatorView() {
     val calculator = remember { CompoundInterestCalculatorService() }
@@ -132,7 +134,7 @@ internal fun CompoundInterestCalculatorView() {
                     }
 
                     items(result.value.itemArrays().toList()) { columns ->
-                        Row {
+                        Row(modifier = Modifier.animateItemPlacement()) {
                             columns.forEach {
                                 Text(it.toString(), modifier = Modifier.weight(1f))
                             }
