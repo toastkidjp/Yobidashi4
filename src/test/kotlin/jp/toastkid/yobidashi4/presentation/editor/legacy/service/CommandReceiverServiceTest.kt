@@ -4,7 +4,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +19,6 @@ internal class CommandReceiverServiceTest {
 
     @MockK
     private lateinit var editorAreaView: EditorAreaView
-
-    @MockK
-    private lateinit var currentArticle: () -> Path
 
     @BeforeEach
     fun setUp() {
