@@ -134,7 +134,7 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                 query.value,
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                label = { Text("Please would you input web search keyword?") },
+                label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
                     val calculatorResult = calculator.invoke(query.value.text)
@@ -158,7 +158,7 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                     Icon(
                         painterResource("images/icon/ic_clear_form.xml"),
                         contentDescription = "Clear input.",
-                        tint = MaterialTheme.colors.primary,
+                        tint = MaterialTheme.colors.secondary,
                         modifier = Modifier.clickable {
                             query.value = TextFieldValue()
                         }
