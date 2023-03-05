@@ -107,7 +107,7 @@ fun main() {
                                     val list = transferable.getTransferData(
                                         DataFlavor.javaFileListFlavor
                                     ) as List<*>
-                                    val files = list.filterIsInstance<File>().map { it.toPath() }
+                                    val files = list.filterIsInstance<File>().map { it.toPath() }.sortedBy { it.fileName.toString() }
                                     mainViewModel.emitDroppedPath(files)
                                     dtde!!.dropComplete(true)
                                     return
