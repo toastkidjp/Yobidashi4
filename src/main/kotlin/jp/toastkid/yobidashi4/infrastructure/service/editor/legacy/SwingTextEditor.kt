@@ -56,7 +56,7 @@ class SwingTextEditor : TextEditor {
             setStatus("Character: $it")
         }
 
-        val commandReceiverService = CommandReceiverService(editorAreaView) { path }
+        val commandReceiverService = CommandReceiverService(editorAreaView)
         commandFlowJob = CoroutineScope(Dispatchers.Default).launch {
             commandReceiverService()
         }

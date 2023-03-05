@@ -7,7 +7,6 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.nio.file.Path
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -27,8 +26,7 @@ import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 
 class CommandReceiverService(
-    private val editorAreaView: EditorAreaView,
-    private val currentArticle: () -> Path?
+    private val editorAreaView: EditorAreaView
 ) : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
