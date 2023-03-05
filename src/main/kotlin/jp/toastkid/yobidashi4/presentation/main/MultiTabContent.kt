@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -45,8 +46,9 @@ fun MultiTabContent() {
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (viewModel.openArticleList()) {
-                Box(modifier = Modifier.widthIn(max = 330.dp).wrapContentWidth(Alignment.Start)) {
+            val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
+            if (viewModel.articles().isNotEmpty()) {
+                Box(modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)) {
                     ArticleListView(viewModel)
                     Text("x",
                         modifier = Modifier
@@ -57,6 +59,7 @@ fun MultiTabContent() {
                     )
                 }
             }
+
             TabsView(modifier = Modifier.fillMaxHeight().weight(1f))
         }
     }
