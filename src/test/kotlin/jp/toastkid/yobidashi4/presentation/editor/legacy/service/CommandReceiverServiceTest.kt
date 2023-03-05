@@ -1,9 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
@@ -59,10 +63,14 @@ internal class CommandReceiverServiceTest {
 
     @Test
     fun invoke() {
+        coEvery { viewModel.editorCommandFlow() }.returns(flowOf(MenuCommand.CODE_BLOCK))
+        coEvery { editorAreaView.replaceSelected(any(), any()) }.just(Runs)
+
         CoroutineScope(Dispatchers.Unconfined).launch {
             commandReceiverService.invoke()
         }
-        Unit
+
+        coVerify { editorAreaView.replaceSelected(any(), any()) }
     }
 
 }
