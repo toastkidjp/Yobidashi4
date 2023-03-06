@@ -55,7 +55,7 @@ fun TableView(aggregationResult: AggregationResult) {
                 state = state,
                 userScrollEnabled = true
             ) {
-                item {
+                stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
