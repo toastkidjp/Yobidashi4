@@ -1,8 +1,10 @@
 package jp.toastkid.yobidashi4.domain.service.tool.compound
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
@@ -36,7 +38,7 @@ internal class CompoundInterestCalculationInputServiceTest {
 
         mockkConstructor(JFormattedTextField::class)
         mockkConstructor(JPanel::class)
-        every { anyConstructed<JPanel>().setLayout(any()) }.answers { Unit }
+        every { anyConstructed<JPanel>().setLayout(any()) }.just(Runs)
         every { anyConstructed<JPanel>().add(any<JComponent>()) }.answers { mockk() }
     }
 
