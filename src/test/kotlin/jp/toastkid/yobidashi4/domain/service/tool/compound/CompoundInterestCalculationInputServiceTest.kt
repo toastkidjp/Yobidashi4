@@ -17,7 +17,6 @@ import javax.swing.JPanel
 import javax.swing.text.NumberFormatter
 import kotlin.test.Ignore
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 
 internal class CompoundInterestCalculationInputServiceTest {
@@ -54,20 +53,6 @@ internal class CompoundInterestCalculationInputServiceTest {
         verify(atLeast = 1) { anyConstructed<JPanel>().add(any<JComponent>()) }
         verify(exactly = 1) { JOptionPane.showConfirmDialog(null, any<JComponent>()) }
         verify(atLeast = 1) { anyConstructed<JFormattedTextField>().text }
-    }
-
-    @Ignore
-    fun testCancelCase() {
-        every { JOptionPane.showConfirmDialog(null, any<JComponent>()) }.answers { JOptionPane.CANCEL_OPTION }
-        every { anyConstructed<JFormattedTextField>().text }.answers { "1" }
-
-        assertNull(compoundInterestCalculationInputService.invoke())
-
-        verify(atLeast = 1) { intFormatter.install(any()) }
-        verify(exactly = 1) { anyConstructed<JPanel>().layout = any() }
-        verify(atLeast = 1) { anyConstructed<JPanel>().add(any<JComponent>()) }
-        verify(exactly = 1) { JOptionPane.showConfirmDialog(null, any<JComponent>()) }
-        verify(exactly = 0) { anyConstructed<JFormattedTextField>().text }
     }
 
     @AfterEach
