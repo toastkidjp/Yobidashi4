@@ -182,7 +182,10 @@ fun LoanCalculatorView() {
                     val scrollState = rememberLazyListState()
                     LazyColumn(state = scrollState) {
                         stickyHeader {
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.animateItemPlacement()
+                            ) {
                                 Text(
                                     "回数",
                                     modifier = Modifier.weight(0.4f)
