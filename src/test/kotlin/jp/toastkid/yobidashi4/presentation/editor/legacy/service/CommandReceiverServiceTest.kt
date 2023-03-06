@@ -62,7 +62,7 @@ internal class CommandReceiverServiceTest {
     }
 
     @Test
-    fun invoke() {
+    fun testCodeBlock() {
         coEvery { viewModel.editorCommandFlow() }.returns(flowOf(MenuCommand.CODE_BLOCK))
         coEvery { editorAreaView.replaceSelected(any(), any()) }.just(Runs)
 
