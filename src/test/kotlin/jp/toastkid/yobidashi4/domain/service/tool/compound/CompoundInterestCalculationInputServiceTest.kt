@@ -45,7 +45,7 @@ internal class CompoundInterestCalculationInputServiceTest {
     @Ignore
     fun test() {
         every { JOptionPane.showConfirmDialog(null, any<JComponent>()) }.answers { JOptionPane.OK_OPTION }
-        every { anyConstructed<JFormattedTextField>().getText() }.answers { "1" }
+        every { anyConstructed<JFormattedTextField>().text }.answers { "1" }
 
         compoundInterestCalculationInputService.invoke()
 
