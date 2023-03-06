@@ -30,7 +30,7 @@ internal class CompoundInterestCalculationInputServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { intFormatter.install(any()) }.answers { Unit }
+        every { intFormatter.install(any()) }.just(Runs)
 
         compoundInterestCalculationInputService = CompoundInterestCalculationInputService(intFormatter)
 
