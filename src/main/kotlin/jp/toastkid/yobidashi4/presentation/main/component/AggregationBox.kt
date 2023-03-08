@@ -166,7 +166,10 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 TextField(
                     keyword.value,
                     maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.secondary
+                    ),
                     label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
                         keyword.value = TextFieldValue(it.text, it.selection, it.composition)
