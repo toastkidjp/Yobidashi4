@@ -211,7 +211,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                 query.value,
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                label = { Text("Article name filter") },
+                label = { Text("Article name filter", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
                 },
@@ -226,7 +226,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                     Icon(
                         painterResource("images/icon/ic_clear_form.xml"),
                         contentDescription = "Clear input.",
-                        tint = MaterialTheme.colors.primary,
+                        tint = MaterialTheme.colors.secondary,
                         modifier = Modifier.clickable {
                             query.value = TextFieldValue()
                         }
