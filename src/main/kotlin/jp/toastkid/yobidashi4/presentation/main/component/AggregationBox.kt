@@ -167,7 +167,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                     keyword.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Keyword") },
+                    label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
                         keyword.value = TextFieldValue(it.text, it.selection, it.composition)
                     },
@@ -182,7 +182,7 @@ internal fun AggregationBox(viewModel: MainViewModel) {
                         Icon(
                             painterResource("images/icon/ic_clear_form.xml"),
                             contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
+                            tint = MaterialTheme.colors.secondary,
                             modifier = Modifier.clickable {
                                 keyword.value = TextFieldValue()
                             }
