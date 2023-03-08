@@ -20,6 +20,7 @@ import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
+import jp.toastkid.yobidashi4.domain.service.article.TodayArticleGenerator
 import jp.toastkid.yobidashi4.infrastructure.di.DiModule
 import jp.toastkid.yobidashi4.presentation.main.MultiTabContent
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
@@ -47,7 +48,7 @@ fun main() {
     }
 
     CoroutineScope(Dispatchers.IO).launch {
-        makeTodayArticleIfNeed()
+        TodayArticleGenerator().invoke()
     }
 
     application {
