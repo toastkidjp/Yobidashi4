@@ -12,14 +12,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import java.nio.file.Files
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
-import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.article.TodayArticleGenerator
 import jp.toastkid.yobidashi4.infrastructure.di.DiModule
 import jp.toastkid.yobidashi4.presentation.main.MultiTabContent
@@ -119,19 +115,4 @@ fun main() {
             }
         }
     }
-}
-
-private fun makeTodayArticleIfNeed() {
-    val title = ArticleTitleGenerator().invoke() ?: return
-    val koin =  object : KoinComponent {
-        val setting: Setting by inject()
-        val articleFactory: ArticleFactory by inject()
-    }
-    val path = koin.setting.articleFolderPath().resolve("${title}.md")
-    if (Files.exists(path)) {
-        return
-    }
-
-    val article = koin.articleFactory.withTitle(title)
-    article.makeFile { ArticleTemplate()(article.getTitle()) }
 }
