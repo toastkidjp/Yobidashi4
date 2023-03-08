@@ -213,7 +213,10 @@ internal fun AggregationBox(viewModel: MainViewModel) {
             TextField(
                 query.value,
                 maxLines = 1,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.secondary
+                ),
                 label = { Text("Article name filter", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
