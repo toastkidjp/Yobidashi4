@@ -1,14 +1,7 @@
 package jp.toastkid.yobidashi4.main
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -18,10 +11,9 @@ import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.TodayArticleGenerator
 import jp.toastkid.yobidashi4.infrastructure.di.DiModule
-import jp.toastkid.yobidashi4.presentation.main.MultiTabContent
+import jp.toastkid.yobidashi4.presentation.main.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
-import jp.toastkid.yobidashi4.presentation.main.snackbar.MainSnackbar
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,29 +53,7 @@ fun main() {
             ) {
                 MainMenu { exitApplication() }
 
-                Scaffold(
-                    snackbarHost = {
-                        SnackbarHost(
-                            hostState = mainViewModel.snackbarHostState(),
-                            snackbar = {
-                                MainSnackbar(it) { mainViewModel.snackbarHostState().currentSnackbarData?.dismiss() }
-                            }
-                        )
-                    }
-                ) {
-                    Box {
-                        if (mainViewModel.backgroundImage().height != 0) {
-                            Image(
-                                mainViewModel.backgroundImage(),
-                                "Background image",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-
-                        MultiTabContent()
-                    }
-                }
+                MainScaffold()
 
                 window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
             }
