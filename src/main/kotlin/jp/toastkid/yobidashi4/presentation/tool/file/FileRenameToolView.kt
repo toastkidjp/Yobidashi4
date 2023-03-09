@@ -1,8 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -46,7 +48,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun FileRenameToolView() {
     val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
@@ -57,66 +59,66 @@ fun FileRenameToolView() {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        Box {
-            val verticalScrollState = rememberLazyListState()
-            LazyColumn(state = verticalScrollState) {
-                item {
-                    TextField(
-                        firstInput.value,
-                        maxLines = 1,
-                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                        label = { Text("Base file name") },
-                        onValueChange = {
-                            firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
-                        },
-                        trailingIcon = {
-                            Icon(
-                                painterResource("images/icon/ic_clear_form.xml"),
-                                contentDescription = "Clear input.",
-                                tint = MaterialTheme.colors.primary,
-                                modifier = Modifier.clickable {
-                                    firstInput.value = TextFieldValue()
-                                }
-                            )
-                        },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.onKeyEvent {
-                            if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
-                                && firstInput.value.composition == null
-                                && firstInput.value.text.isNotBlank()
-                            ) {
-                                rename(paths, firstInput.value.text)
-                            }
-                            true
+        Column {
+            TextField(
+                firstInput.value,
+                maxLines = 1,
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                label = { Text("Base file name") },
+                onValueChange = {
+                    firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
+                },
+                trailingIcon = {
+                    Icon(
+                        painterResource("images/icon/ic_clear_form.xml"),
+                        contentDescription = "Clear input.",
+                        tint = MaterialTheme.colors.primary,
+                        modifier = Modifier.clickable {
+                            firstInput.value = TextFieldValue()
                         }
                     )
-                }
-
-                item {
-                    Row {
-                        Button(onClick = {
-                            paths.clear()
-                        },
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Text("Clear files")
-                        }
-                        Button(onClick = {
-                            rename(paths, firstInput.value.text)
-                        },
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Text("Rename")
-                        }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.onKeyEvent {
+                    if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
+                        && firstInput.value.composition == null
+                        && firstInput.value.text.isNotBlank()
+                    ) {
+                        rename(paths, firstInput.value.text)
                     }
+                    true
                 }
+            )
 
-                items(paths) { path ->
-                    Text(path.fileName.toString())
+            Row {
+                Button(
+                    onClick = {
+                        paths.clear()
+                    },
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text("Clear files")
+                }
+                Button(
+                    onClick = {
+                        rename(paths, firstInput.value.text)
+                    },
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text("Rename")
                 }
             }
-            VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(
-                Alignment.CenterEnd))
+
+            Box {
+                val verticalScrollState = rememberLazyListState()
+                LazyColumn(state = verticalScrollState) {
+                    items(paths) { path ->
+                        Text(path.fileName.toString())
+                    }
+                }
+                VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(
+                    Alignment.CenterEnd))
+            }
         }
     }
 
