@@ -171,7 +171,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true), icon = painterResource("images/icon/ic_calendar.xml")) {
                 viewModel.openTab(CalendarTab())
             }
-            Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true)) {
+            Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true), icon = painterResource("images/icon/ic_aggregation.xml")) {
                 if (viewModel.showAggregationBox().not()) {
                     viewModel.setInitialAggregationType(0)
                 }
