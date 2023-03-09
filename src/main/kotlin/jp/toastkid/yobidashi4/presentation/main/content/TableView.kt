@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.main.content
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
@@ -58,6 +60,7 @@ fun TableView(aggregationResult: AggregationResult) {
                 stickyHeader {
                     Row(
                         modifier = Modifier.fillMaxWidth()
+                            .background(if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent)
                     ) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
