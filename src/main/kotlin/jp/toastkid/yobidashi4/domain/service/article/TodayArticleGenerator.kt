@@ -6,20 +6,20 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class TodayArticleGenerator {
+class TodayArticleGenerator : KoinComponent {
+
+    private val setting: Setting by inject()
+
+    private val articleFactory: ArticleFactory by inject()
 
     operator fun invoke() {
         val title = ArticleTitleGenerator().invoke() ?: return
-        val koin =  object : KoinComponent {
-            val setting: Setting by inject()
-            val articleFactory: ArticleFactory by inject()
-        }
-        val path = koin.setting.articleFolderPath().resolve("${title}.md")
+        val path = setting.articleFolderPath().resolve("${title}.md")
         if (Files.exists(path)) {
             return
         }
 
-        val article = koin.articleFactory.withTitle(title)
+        val article = articleFactory.withTitle(title)
         article.makeFile { ArticleTemplate()(article.getTitle()) }
     }
 
