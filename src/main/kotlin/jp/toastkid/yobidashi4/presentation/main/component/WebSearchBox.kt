@@ -133,7 +133,7 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
             TextField(
                 query.value,
                 maxLines = 1,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
                 label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
@@ -172,8 +172,8 @@ internal fun WebSearchBox(viewModel: MainViewModel) {
                                 viewModel.openUrl(query.value.text, false)
                                 return@onKeyEvent true
                             }
-                            selectedSite.value.make(query.value.text).let {
-                                viewModel.openUrl(it.toString(), false)
+                            selectedSite.value.make(query.value.text).let { uri ->
+                                viewModel.openUrl(uri.toString(), false)
                             }
                             viewModel.setShowWebSearch(false)
                         }
