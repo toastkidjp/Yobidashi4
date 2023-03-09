@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.loan
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -185,6 +186,7 @@ fun LoanCalculatorView() {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.animateItemPlacement()
+                                    .background(if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent)
                             ) {
                                 Text(
                                     "回数",
