@@ -15,7 +15,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Composable
-fun MainScaffold() {
+internal fun MainScaffold() {
     val mainViewModel = remember { object : KoinComponent { val it: MainViewModel by inject() }.it }
 
     Scaffold(
