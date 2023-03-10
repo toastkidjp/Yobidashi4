@@ -94,12 +94,6 @@ class CommandReceiverService(
                 MenuCommand.STRIKETHROUGH -> editorAreaView.replaceSelected { "~~$it~~" }
                 MenuCommand.SURROUND_JA_BRACKET -> editorAreaView.replaceSelected { "「$it」" }
                 MenuCommand.SURROUND_BRACKET -> editorAreaView.replaceSelected { "($it)" }
-                MenuCommand.FONT_COLOR -> {
-                    val color = ColorChooserService().invoke() ?: return@collect
-                    editorAreaView.replaceSelected { text ->
-                        "<font color='#${Integer.toHexString(color.rgb)}'>$text</font>"
-                    }
-                }
                 MenuCommand.TO_HYPERLINK -> {
                     editorAreaView.replaceSelected { text ->
                         LinkDecoratorService().invoke(text)
