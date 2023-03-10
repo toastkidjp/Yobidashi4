@@ -15,7 +15,7 @@ class CompoundInterestCalculatorService {
         var single = 0.0
         (1 .. year)
                 .map { installment to installment }
-                .forEachIndexed() { index, _ ->
+                .forEachIndexed { index, _ ->
                     single += (installment * (1 + annualInterest))
                     val coefficient = ((1 + annualInterest).pow(index + 1) - 1) / annualInterest
                     val compound =  (installment.toDouble()) * coefficient
