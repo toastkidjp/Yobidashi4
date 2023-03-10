@@ -48,7 +48,7 @@ internal fun FindInPageBox(viewModel: MainViewModel) {
                     viewModel.onFindInputChange(it)
                 },
                 maxLines = 1,
-                label = { Text("Please would you input web search keyword?") },
+                label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 modifier = Modifier.focusRequester(focusRequester)
