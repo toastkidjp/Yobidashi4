@@ -81,13 +81,6 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu) {
             }
         })
 
-        val fontColorMenu = JMenuItem("Font color").also {
-            it.addActionListener {
-                viewModel.emitEditorCommand(MenuCommand.FONT_COLOR)
-            }
-        }
-        popupMenu.add(fontColorMenu)
-
         popupMenu.add(
             JMenuItem("Paste as markdown link").also {
                 it.addActionListener {
