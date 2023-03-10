@@ -281,7 +281,7 @@ class CefClientFactory(
                     && event.windows_key_code == KeyEvent.VK_K) {
                     //object : KoinComponent{ val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools()
                     val devToolsDialog = JDialog()
-                    devToolsDialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE)
+                    devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
                     devToolsDialog.setSize(800, 600)
                     devToolsDialog.add(browser?.devTools?.uiComponent)
                     devToolsDialog.isVisible = true
