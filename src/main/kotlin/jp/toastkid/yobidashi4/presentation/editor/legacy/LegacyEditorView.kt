@@ -3,11 +3,9 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
@@ -36,7 +34,7 @@ fun LegacyEditorView(tab: EditorTab) {
             modifier = Modifier.fillMaxHeight().weight(0.5f).focusRequester(focusRequester)
         )
         if (tab.showPreview()) {
-            MarkdownView(tab, Modifier.widthIn(max = 360.dp).wrapContentWidth(Alignment.Start))
+            MarkdownView(tab, Modifier.widthIn(max = 360.dp))
         }
     }
 
