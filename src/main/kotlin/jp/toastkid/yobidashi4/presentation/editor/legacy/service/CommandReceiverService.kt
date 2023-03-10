@@ -155,7 +155,9 @@ class CommandReceiverService(
                     if (selectedText.isBlank() || selectedText.startsWith("https://").not()) {
                         return@collect
                     }
-                    Desktop.getDesktop().browse(URI(selectedText))
+                    withContext(Dispatchers.IO) {
+                        Desktop.getDesktop().browse(URI(selectedText))
+                    }
                 }
                 MenuCommand.DICTIONARY_SEARCH -> {
                     val selectedText = editorAreaView.selectedText()
