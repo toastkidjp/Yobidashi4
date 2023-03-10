@@ -26,7 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
 @Composable
-fun FindInPageBox(viewModel: MainViewModel) {
+internal fun FindInPageBox(viewModel: MainViewModel) {
     val focusRequester = remember { FocusRequester() }
 
     Surface(
