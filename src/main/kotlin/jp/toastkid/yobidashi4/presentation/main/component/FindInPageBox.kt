@@ -49,7 +49,10 @@ internal fun FindInPageBox(viewModel: MainViewModel) {
                 },
                 maxLines = 1,
                 label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.secondary
+                ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 modifier = Modifier.focusRequester(focusRequester)
             )
