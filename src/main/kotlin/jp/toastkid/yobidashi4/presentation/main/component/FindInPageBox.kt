@@ -62,7 +62,10 @@ internal fun FindInPageBox(viewModel: MainViewModel) {
                     },
                     maxLines = 1,
                     label = { Text("Replacement", color = MaterialTheme.colors.secondary) },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colors.secondary
+                        )
                 )
             }
 
