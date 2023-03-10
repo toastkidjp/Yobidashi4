@@ -61,7 +61,7 @@ internal fun FindInPageBox(viewModel: MainViewModel) {
                         viewModel.onReplaceInputChange(it)
                     },
                     maxLines = 1,
-                    label = { Text("Replacement") },
+                    label = { Text("Replacement", color = MaterialTheme.colors.secondary) },
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
                 )
             }
