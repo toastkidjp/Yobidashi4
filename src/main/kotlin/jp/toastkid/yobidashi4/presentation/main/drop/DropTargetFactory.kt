@@ -28,7 +28,7 @@ class DropTargetFactory {
                             ) as List<*>
                             val files = list.filterIsInstance<File>().map { it.toPath() }.sortedBy { it.fileName.toString() }
                             consumer(files)
-                            dtde!!.dropComplete(true)
+                            dtde.dropComplete(true)
                             return
                         }
                     } catch (ex: UnsupportedFlavorException) {
