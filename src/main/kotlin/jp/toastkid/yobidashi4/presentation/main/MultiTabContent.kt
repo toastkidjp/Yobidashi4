@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
+import jp.toastkid.yobidashi4.presentation.main.component.InputBox
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBox
 import jp.toastkid.yobidashi4.presentation.main.content.FileList
 import jp.toastkid.yobidashi4.presentation.main.content.TabsView
@@ -43,6 +44,10 @@ fun MultiTabContent() {
 
         if (viewModel.openFind()) {
             FindInPageBox(viewModel)
+        }
+
+        if (viewModel.showInputBox()) {
+            InputBox(viewModel)
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
