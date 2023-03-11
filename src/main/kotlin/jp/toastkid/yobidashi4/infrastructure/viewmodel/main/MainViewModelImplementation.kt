@@ -219,6 +219,28 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         initialAggregationType = ordinal
     }
 
+    private val showInputBox = mutableStateOf(false)
+    private var inputBoxAction: ((String) -> Unit)? = null
+
+    override fun showInputBox(): Boolean {
+        return showInputBox.value
+    }
+
+    override fun setShowInputBox(newState: Boolean) {
+        showInputBox.value = newState
+    }
+
+    override fun setInputBoxAction(action: ((String) -> Unit)?) {
+        inputBoxAction = action
+    }
+
+    override fun invokeInputAction(input: String?) {
+        if (input.isNullOrBlank()) {
+            return
+        }
+        inputBoxAction?.let { it(input) }
+    }
+
     private val window = WindowState(
         size = DpSize(width = 1100.dp, height = 700.dp),
         position = WindowPosition(Alignment.Center)
