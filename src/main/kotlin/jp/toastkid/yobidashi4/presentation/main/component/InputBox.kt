@@ -40,7 +40,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputBox(viewModel: MainViewModel) {
+internal fun InputBox(viewModel: MainViewModel) {
     val focusRequester = remember { FocusRequester() }
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
