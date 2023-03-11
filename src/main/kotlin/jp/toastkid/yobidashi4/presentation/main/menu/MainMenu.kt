@@ -15,7 +15,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Collectors
-import javax.swing.JOptionPane
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -53,14 +52,16 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     MenuBar {
         Menu("File") {
             Item("Make new", shortcut = KeyShortcut(Key.N, ctrl = true)) {
-                val dialog = JOptionPane.showInputDialog("Please input new article name.")
-                if (dialog.isNullOrBlank() || existsArticle(dialog, setting.articleFolderPath())) {
-                    return@Item
-                }
+                viewModel.setInputBoxAction { input ->
+                    if (existsArticle(input, setting.articleFolderPath())) {
+                        return@setInputBoxAction
+                    }
 
-                val article = koin.articleFactory.withTitle(dialog)
-                article.makeFile { "# ${article.getTitle()}" }
-                viewModel.addNewArticle(article.path())
+                    val article = koin.articleFactory.withTitle(input)
+                    article.makeFile { "# ${article.getTitle()}" }
+                    viewModel.addNewArticle(article.path())
+                }
+                viewModel.setShowInputBox(true)
             }
 
             Item(
