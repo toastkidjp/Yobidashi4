@@ -23,6 +23,10 @@ interface MainViewModel {
     fun initialAggregationType(): Int
     fun setInitialAggregationType(ordinal: Int)
 
+    fun showInputBox(): Boolean
+    fun setShowInputBox(newState: Boolean)
+    fun setInputBoxAction(action: ((String) -> Unit)? = null)
+    fun invokeInputAction(input: String?)
     fun currentTab(): Tab?
     fun darkMode(): Boolean
 
