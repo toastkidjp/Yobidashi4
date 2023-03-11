@@ -228,6 +228,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun setShowInputBox(action: ((String) -> Unit)?) {
         showInputBox.value = action != null
+        inputBoxAction = action
     }
 
     override fun setInputBoxAction(action: ((String) -> Unit)?) {
