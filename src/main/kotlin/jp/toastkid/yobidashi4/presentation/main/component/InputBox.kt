@@ -57,7 +57,7 @@ internal fun InputBox(viewModel: MainViewModel) {
             Text("x", modifier = Modifier
                 .padding(start = 4.dp)
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.setShowInputBox(false) }
+                .clickable { viewModel.setShowInputBox() }
                 .padding(8.dp)
             )
 
@@ -89,7 +89,7 @@ internal fun InputBox(viewModel: MainViewModel) {
                             && query.value.composition == null
                         ) {
                             viewModel.invokeInputAction(query.value.text)
-                            viewModel.setShowInputBox(false)
+                            viewModel.setShowInputBox()
                             viewModel.setInputBoxAction()
                         }
                         true
@@ -99,7 +99,7 @@ internal fun InputBox(viewModel: MainViewModel) {
             Button(
                 onClick = {
                     viewModel.invokeInputAction(query.value.text)
-                    viewModel.setShowInputBox(false)
+                    viewModel.setShowInputBox()
                     viewModel.setInputBoxAction()
                 }
             ) {
