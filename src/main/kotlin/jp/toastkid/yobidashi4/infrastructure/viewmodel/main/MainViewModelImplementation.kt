@@ -226,8 +226,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         return showInputBox.value
     }
 
-    override fun setShowInputBox(newState: Boolean) {
-        showInputBox.value = newState
+    override fun setShowInputBox(action: ((String) -> Unit)?) {
+        showInputBox.value = action != null
     }
 
     override fun setInputBoxAction(action: ((String) -> Unit)?) {
