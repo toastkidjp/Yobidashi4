@@ -61,7 +61,6 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     article.makeFile { "# ${article.getTitle()}" }
                     viewModel.addNewArticle(article.path())
                 }
-                viewModel.setShowInputBox(true)
             }
 
             Item(
