@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.editor.TextEditor
-import jp.toastkid.yobidashi4.infrastructure.service.editor.legacy.SwingTextEditor
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -67,7 +66,7 @@ fun LegacyEditorView(tab: EditorTab) {
 @Composable
 fun StatusLabel(textEditor: TextEditor, modifier: Modifier) {
     Box(contentAlignment = Alignment.BottomEnd, modifier = modifier.fillMaxWidth().padding(end = 8.dp)) {
-        val statusLabel = (textEditor as? SwingTextEditor)?.statusLabel() ?: ""
+        val statusLabel = textEditor.statusLabel() ?: ""
         Text(statusLabel, fontSize = 16.sp)
     }
 }
