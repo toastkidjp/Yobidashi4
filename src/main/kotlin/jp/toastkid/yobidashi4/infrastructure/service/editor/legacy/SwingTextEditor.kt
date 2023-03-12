@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.infrastructure.service.editor.legacy
 
+import androidx.compose.runtime.mutableStateOf
 import java.awt.BorderLayout
 import java.nio.file.Path
-import javax.swing.JLabel
 import javax.swing.JPanel
 import jp.toastkid.yobidashi4.domain.service.editor.TextEditor
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.CommandReceiverService
@@ -23,7 +23,7 @@ class SwingTextEditor : TextEditor {
 
     private val editorAreaView: EditorAreaView
 
-    private val statusLabel: JLabel = JLabel()
+    private val statusLabel = mutableStateOf("")
 
     private var path: Path? = null
 
@@ -41,10 +41,10 @@ class SwingTextEditor : TextEditor {
 
         panel.add(editorAreaView.view(), BorderLayout.CENTER)
 
-        val footer = JPanel(BorderLayout())
+        /*val footer = JPanel(BorderLayout())
         statusLabel.font = statusLabel.font.deriveFont(16f)
         footer.add(statusLabel, BorderLayout.EAST)
-        panel.add(footer, BorderLayout.SOUTH)
+        panel.add(footer, BorderLayout.SOUTH)*/
 
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
@@ -70,7 +70,7 @@ class SwingTextEditor : TextEditor {
     }
 
     private fun setStatus(status: String) {
-        statusLabel.text = "${ if (editorAreaView.isEditable().not()) "Not editable " else "" } $status"
+        statusLabel.value = "${ if (editorAreaView.isEditable().not()) "Not editable " else "" } $status"
         path?.let {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateEditorContent(it, currentText(), -1, false)
         }
@@ -88,7 +88,9 @@ class SwingTextEditor : TextEditor {
         return editorAreaView.caretPosition()
     }
 
-    override fun currentText() = editorAreaView.getText()
+    override fun currentText() = editorAreaView.getText() ?: ""
+
+    fun statusLabel() = statusLabel.value
 
     override fun cancel() {
         commandFlowJob?.cancel()
