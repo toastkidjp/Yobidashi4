@@ -4,6 +4,8 @@ package jp.toastkid.yobidashi4.presentation.web
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -31,6 +33,8 @@ class BrowserView : KoinComponent {
 
     private val browserPool: BrowserPool by inject()
 
+    private val viewModel: MainViewModel by  inject()
+
     private var location = IntOffset.Zero
 
     internal var size = IntSize.Zero
@@ -43,32 +47,36 @@ class BrowserView : KoinComponent {
         component.isVisible = true
         val focusRequester = remember { FocusRequester() }
 
-        Box (
-            modifier = Modifier.background(color = Color.White)
-                .fillMaxSize()
-                .layout { measurable, constraints ->
-                    val placeable = measurable.measure(constraints)
-                    layout(placeable.width, placeable.height) {
-                        placeable.placeRelative(0, 0)
+        Column {
+            Box (
+                modifier = Modifier.background(color = Color.White)
+                    .fillMaxSize()
+                    .layout { measurable, constraints ->
+                        val placeable = measurable.measure(constraints)
+                        layout(placeable.width, placeable.height) {
+                            placeable.placeRelative(0, 0)
+                        }
                     }
-                }
-                .focusRequester(focusRequester)
-                .clickable { focusRequester.requestFocus() }
-        ) {
-            SwingPanel(
-                factory = {
-                    component
-                }
-            )
-
-            if (showDevTool.value) {
+                    .focusRequester(focusRequester)
+                    .clickable { focusRequester.requestFocus() }
+                    .weight(1f)
+            ) {
                 SwingPanel(
                     factory = {
-                        browserPool.devTools(id)
-                    },
-                    modifier = Modifier.height(300.dp)
+                        component
+                    }
                 )
+
+                if (showDevTool.value) {
+                    SwingPanel(
+                        factory = {
+                            browserPool.devTools(id)
+                        },
+                        modifier = Modifier.height(300.dp)
+                    )
+                }
             }
+            Spacer(modifier = Modifier.height(if (viewModel.snackbarHostState().currentSnackbarData != null) 48.dp else 0.dp))
         }
 
         LaunchedEffect(id) {
