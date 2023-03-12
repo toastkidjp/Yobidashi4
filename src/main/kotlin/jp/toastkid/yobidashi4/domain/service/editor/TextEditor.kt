@@ -17,6 +17,8 @@ interface TextEditor {
 
     fun currentText(): String?
 
+    fun statusLabel(): String?
+
     fun cancel()
 
 }
