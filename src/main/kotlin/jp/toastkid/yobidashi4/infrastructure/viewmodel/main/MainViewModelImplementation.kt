@@ -231,10 +231,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         inputBoxAction = action
     }
 
-    override fun setInputBoxAction(action: ((String) -> Unit)?) {
-        inputBoxAction = action
-    }
-
     override fun invokeInputAction(input: String?) {
         if (input.isNullOrBlank()) {
             return
