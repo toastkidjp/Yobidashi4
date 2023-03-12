@@ -90,7 +90,6 @@ internal fun InputBox(viewModel: MainViewModel) {
                         ) {
                             viewModel.invokeInputAction(query.value.text)
                             viewModel.setShowInputBox()
-                            viewModel.setInputBoxAction()
                         }
                         true
                     }
@@ -100,7 +99,6 @@ internal fun InputBox(viewModel: MainViewModel) {
                 onClick = {
                     viewModel.invokeInputAction(query.value.text)
                     viewModel.setShowInputBox()
-                    viewModel.setInputBoxAction()
                 }
             ) {
                 Text("Done")
