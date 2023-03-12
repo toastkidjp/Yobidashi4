@@ -25,7 +25,6 @@ interface MainViewModel {
 
     fun showInputBox(): Boolean
     fun setShowInputBox(action: ((String) -> Unit)? = null)
-    fun setInputBoxAction(action: ((String) -> Unit)? = null)
     fun invokeInputAction(input: String?)
     fun currentTab(): Tab?
     fun darkMode(): Boolean
