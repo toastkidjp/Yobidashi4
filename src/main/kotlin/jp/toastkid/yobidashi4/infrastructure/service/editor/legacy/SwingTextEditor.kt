@@ -90,7 +90,7 @@ class SwingTextEditor : TextEditor {
 
     override fun currentText() = editorAreaView.getText() ?: ""
 
-    fun statusLabel() = statusLabel.value
+    override fun statusLabel() = statusLabel.value
 
     override fun cancel() {
         commandFlowJob?.cancel()
