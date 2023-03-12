@@ -52,9 +52,9 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     MenuBar {
         Menu("File") {
             Item("Make new", shortcut = KeyShortcut(Key.N, ctrl = true)) {
-                viewModel.setInputBoxAction { input ->
+                viewModel.setShowInputBox { input ->
                     if (existsArticle(input, setting.articleFolderPath())) {
-                        return@setInputBoxAction
+                        return@setShowInputBox
                     }
 
                     val article = koin.articleFactory.withTitle(input)
