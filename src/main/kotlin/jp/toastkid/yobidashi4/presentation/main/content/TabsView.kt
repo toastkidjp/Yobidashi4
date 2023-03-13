@@ -69,7 +69,10 @@ fun TabsView(modifier: Modifier) {
     }
 
     Column(modifier = modifier) {
-        ScrollableTabRow(selectedTabIndex = viewModel.selected.value) {
+        ScrollableTabRow(
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f) ,
+            selectedTabIndex = viewModel.selected.value
+        ) {
             viewModel.tabs.forEachIndexed { index, tab ->
                 val openDropdownMenu = remember { mutableStateOf(false) }
                 Tab(
