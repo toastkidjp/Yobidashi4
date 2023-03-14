@@ -31,7 +31,7 @@ class SwingTextEditor : TextEditor {
 
     private var commandFlowJob: Job? = null
 
-    override fun getContent() = panel
+    override fun getContent() = editorAreaView.view()
 
     init {
         panel.layout = BorderLayout()
