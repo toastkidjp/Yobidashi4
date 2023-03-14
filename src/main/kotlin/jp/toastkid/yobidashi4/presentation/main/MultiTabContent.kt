@@ -43,7 +43,7 @@ fun MultiTabContent() {
         }
 
         if (viewModel.openFind()) {
-            FindInPageBox(viewModel)
+            FindInPageBox()
         }
 
         if (viewModel.showInputBox()) {
