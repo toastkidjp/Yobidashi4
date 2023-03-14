@@ -35,7 +35,7 @@ fun MultiTabContent() {
 
     Column {
         if (viewModel.showWebSearch()) {
-            WebSearchBox(viewModel)
+            WebSearchBox()
         }
 
         if (viewModel.showAggregationBox()) {

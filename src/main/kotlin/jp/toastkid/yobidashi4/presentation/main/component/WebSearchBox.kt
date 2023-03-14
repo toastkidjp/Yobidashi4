@@ -51,10 +51,13 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun WebSearchBox(viewModel: MainViewModel) {
+internal fun WebSearchBox() {
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
     val focusRequester = remember { FocusRequester() }
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
