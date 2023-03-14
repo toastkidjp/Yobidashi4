@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.editor.legacy
 
 import androidx.compose.runtime.mutableStateOf
-import java.awt.BorderLayout
 import java.nio.file.Path
-import javax.swing.JPanel
 import jp.toastkid.yobidashi4.domain.service.editor.TextEditor
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.CommandReceiverService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.view.EditorAreaView
@@ -27,19 +25,13 @@ class SwingTextEditor : TextEditor {
 
     private var path: Path? = null
 
-    private val panel = JPanel()
-
     private var commandFlowJob: Job? = null
 
     override fun getContent() = editorAreaView.view()
 
     init {
-        panel.layout = BorderLayout()
-
         val messageChannel = Channel<String>()
         editorAreaView = EditorAreaView(messageChannel = messageChannel)
-
-        panel.add(editorAreaView.view(), BorderLayout.CENTER)
 
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
