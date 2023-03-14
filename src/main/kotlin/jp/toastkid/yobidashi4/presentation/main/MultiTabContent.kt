@@ -47,7 +47,7 @@ fun MultiTabContent() {
         }
 
         if (viewModel.showInputBox()) {
-            InputBox(viewModel)
+            InputBox()
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
