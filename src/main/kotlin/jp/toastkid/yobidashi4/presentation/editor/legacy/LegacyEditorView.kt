@@ -30,9 +30,14 @@ import org.koin.core.component.inject
 
 @Composable
 fun LegacyEditorView(tab: EditorTab) {
-    val textEditor = object : KoinComponent { val editor: TextEditor by inject() }.editor
+    val koin = object : KoinComponent {
+        val editor: TextEditor by inject()
+        val vm: MainViewModel by inject()
+    }
+    val textEditor = koin.editor
+    val viewModel = remember { koin.vm }
+
     val focusRequester = remember { FocusRequester() }
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f)) {
         Column {
