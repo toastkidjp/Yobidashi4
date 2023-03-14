@@ -14,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,7 @@ fun MultiTabContent() {
             val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
             if (viewModel.articles().isNotEmpty()) {
                 Box(modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)) {
-                    ArticleListView(viewModel)
+                    ArticleListView()
                     Text("x",
                         modifier = Modifier
                             .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
@@ -77,6 +78,7 @@ fun MultiTabContent() {
 }
 
 @Composable
-private fun ArticleListView(viewModel: MainViewModel) {
+private fun ArticleListView() {
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
     FileList(viewModel.articles())
 }
