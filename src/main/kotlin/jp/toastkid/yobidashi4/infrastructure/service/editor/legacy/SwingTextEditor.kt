@@ -41,11 +41,6 @@ class SwingTextEditor : TextEditor {
 
         panel.add(editorAreaView.view(), BorderLayout.CENTER)
 
-        /*val footer = JPanel(BorderLayout())
-        statusLabel.font = statusLabel.font.deriveFont(16f)
-        footer.add(statusLabel, BorderLayout.EAST)
-        panel.add(footer, BorderLayout.SOUTH)*/
-
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
                 editorAreaView.find(it)
