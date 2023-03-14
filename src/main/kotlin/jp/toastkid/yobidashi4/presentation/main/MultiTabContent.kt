@@ -39,7 +39,7 @@ fun MultiTabContent() {
         }
 
         if (viewModel.showAggregationBox()) {
-            AggregationBox(viewModel)
+            AggregationBox()
         }
 
         if (viewModel.openFind()) {

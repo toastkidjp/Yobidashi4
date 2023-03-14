@@ -58,10 +58,13 @@ import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordSearch
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun AggregationBox(viewModel: MainViewModel) {
+internal fun AggregationBox() {
+    val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
