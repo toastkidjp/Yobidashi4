@@ -64,7 +64,7 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun AggregationBox() {
-    val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
