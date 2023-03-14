@@ -52,19 +52,7 @@ fun MultiTabContent() {
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
-            if (viewModel.articles().isNotEmpty()) {
-                Box(modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)) {
-                    ArticleListView()
-                    Text("x",
-                        modifier = Modifier
-                            .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                            .clickable { viewModel.switchArticleList() }
-                            .padding(16.dp)
-                            .align(Alignment.TopEnd)
-                    )
-                }
-            }
+            ArticleListView()
 
             TabsView(modifier = Modifier.fillMaxHeight().weight(1f))
         }
@@ -80,5 +68,19 @@ fun MultiTabContent() {
 @Composable
 private fun ArticleListView() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-    FileList(viewModel.articles())
+
+    val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
+
+    if (viewModel.articles().isNotEmpty()) {
+        Box(modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)) {
+            FileList(viewModel.articles())
+            Text("x",
+                modifier = Modifier
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .clickable { viewModel.switchArticleList() }
+                    .padding(16.dp)
+                    .align(Alignment.TopEnd)
+            )
+        }
+    }
 }
