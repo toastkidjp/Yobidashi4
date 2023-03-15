@@ -65,6 +65,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item(
                 if (viewModel.openArticleList()) "Close article list" else "Show article list",
+                icon = painterResource("images/icon/ic_left_panel_${if (viewModel.openArticleList()) "close" else "open"}.xml"),
                 shortcut = KeyShortcut(if (viewModel.openArticleList()) Key.DirectionLeft else Key.DirectionRight, alt = true)
             ) {
                 viewModel.switchArticleList()
