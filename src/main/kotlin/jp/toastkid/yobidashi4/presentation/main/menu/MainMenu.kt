@@ -244,6 +244,10 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
                 viewModel.switchDarkMode()
             }
+            Item("Open article template") {
+                val path = Paths.get("user/article_template.txt")
+                Desktop.getDesktop().open(path.toFile())
+            }
             Item("Show log") {
                 val logFilePath = Paths.get("data/logs/app.log")
                 viewModel.openTextFile(logFilePath)
