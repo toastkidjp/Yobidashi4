@@ -35,7 +35,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
-import jp.toastkid.yobidashi4.domain.model.tab.SettingTab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
@@ -51,7 +50,6 @@ import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
-import jp.toastkid.yobidashi4.presentation.setting.SettingTabView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -173,7 +171,6 @@ fun TabsView(modifier: Modifier) {
             is LoanCalculatorTab -> LoanCalculatorView()
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
             is ConverterToolTab -> ConverterToolTabView()
-            is SettingTab -> SettingTabView()
             else -> Unit
         }
     }
