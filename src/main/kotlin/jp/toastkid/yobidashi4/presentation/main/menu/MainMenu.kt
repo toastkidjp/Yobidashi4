@@ -190,7 +190,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("File rename", icon = painterResource("images/icon/ic_rename.xml")) {
                 viewModel.openTab(FileRenameToolTab())
             }
-            Item("Compound interest calculator") {
+            Item("Compound interest calculator", icon = painterResource("images/icon/ic_elevation.xml")) {
                 viewModel.openTab(CompoundInterestCalculatorTab())
             }
             Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
