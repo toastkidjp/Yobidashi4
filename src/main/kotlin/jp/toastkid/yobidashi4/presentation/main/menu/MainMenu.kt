@@ -238,9 +238,6 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
 
         Menu("Setting") {
-            Item("Setting") {
-                viewModel.openTab(SettingTab())
-            }
             Item("Switch dark mode", shortcut = KeyShortcut(key = Key.D, alt = true)) {
                 viewModel.switchDarkMode()
             }
