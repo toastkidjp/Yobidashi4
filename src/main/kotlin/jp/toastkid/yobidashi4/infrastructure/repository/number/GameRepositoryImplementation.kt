@@ -22,10 +22,7 @@ import org.koin.core.annotation.Single
 class GameRepositoryImplementation : GameRepository {
 
     override fun save(file: Path, game: NumberPlaceGame) {
-        val encodeToString = Json.encodeToString(game)
-        val printWriter = Files.newBufferedWriter(file)
-        printWriter.write(encodeToString)
-        printWriter.flush()
+        Files.write(file, Json.encodeToString(game).toByteArray())
     }
 
     override fun load(file: Path): NumberPlaceGame? {
