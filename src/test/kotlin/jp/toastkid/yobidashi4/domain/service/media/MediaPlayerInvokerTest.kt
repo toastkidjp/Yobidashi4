@@ -59,7 +59,7 @@ class MediaPlayerInvokerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         mediaPlayerInvoker.invoke(path)
 
         verify { runtime.exec(any<Array<String>>()) }
