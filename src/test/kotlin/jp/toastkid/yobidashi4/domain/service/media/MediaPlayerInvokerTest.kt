@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.io.IOException
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
@@ -59,6 +60,15 @@ class MediaPlayerInvokerTest {
 
     @Test
     fun invoke() {
+        mediaPlayerInvoker.invoke(path)
+
+        verify { runtime.exec(any<Array<String>>()) }
+    }
+
+    @Test
+    fun errorCase() {
+        every { runtime.exec(any<Array<String>>()) }.throws(IOException())
+
         mediaPlayerInvoker.invoke(path)
 
         verify { runtime.exec(any<Array<String>>()) }
