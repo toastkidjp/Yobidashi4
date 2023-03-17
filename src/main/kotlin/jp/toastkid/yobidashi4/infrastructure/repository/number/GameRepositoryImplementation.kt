@@ -12,7 +12,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
-import kotlin.io.path.bufferedReader
 import kotlin.io.path.exists
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -34,7 +33,7 @@ class GameRepositoryImplementation : GameRepository {
             return null
         }
 
-        val string = file.bufferedReader().readText()
+        val string = Files.readString(file)
         if (string.isBlank()) {
             return null
         }
