@@ -65,6 +65,9 @@ import org.koin.core.component.inject
 @Composable
 internal fun AggregationBox() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+    val focusRequester = remember { FocusRequester() }
+    val focusingModifier = Modifier.focusRequester(focusRequester)
+
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -164,8 +167,6 @@ internal fun AggregationBox() {
             }
 
             if (selectedSite.value.key == "Find article") {
-                val focusRequester = remember { FocusRequester() }
-
                 TextField(
                     keyword.value,
                     maxLines = 1,
@@ -194,7 +195,7 @@ internal fun AggregationBox() {
                             }
                         )
                     },
-                    modifier = Modifier.focusRequester(focusRequester)
+                    modifier = focusingModifier
                         .onKeyEvent {
                             if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
                                 && keyword.value.composition == null
@@ -205,12 +206,6 @@ internal fun AggregationBox() {
                             true
                         }
                 )
-
-                LaunchedEffect(viewModel.showAggregationBox()) {
-                    if (viewModel.showAggregationBox()) {
-                        focusRequester.requestFocus()
-                    }
-                }
             }
 
             TextField(
@@ -241,7 +236,7 @@ internal fun AggregationBox() {
                         }
                     )
                 },
-                modifier = Modifier
+                modifier = (if (selectedSite.value.key == "Find article") Modifier else focusingModifier)
                     .onKeyEvent {
                         if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
                             && query.value.composition == null
@@ -260,6 +255,12 @@ internal fun AggregationBox() {
             ) {
                 Text("Start")
             }
+        }
+    }
+
+    LaunchedEffect(viewModel.showAggregationBox()) {
+        if (viewModel.showAggregationBox()) {
+            focusRequester.requestFocus()
         }
     }
 }
