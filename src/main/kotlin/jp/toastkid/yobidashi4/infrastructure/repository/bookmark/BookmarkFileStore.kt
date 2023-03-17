@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.infrastructure.repository
+package jp.toastkid.yobidashi4.infrastructure.repository.bookmark
 
 import java.nio.file.Files
 import java.nio.file.Paths
