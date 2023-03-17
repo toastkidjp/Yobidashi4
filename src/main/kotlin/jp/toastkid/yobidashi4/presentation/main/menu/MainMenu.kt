@@ -184,9 +184,6 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
                 viewModel.setShowWebSearch(viewModel.showWebSearch().not())
             }
-            Item("What happened today") {
-                viewModel.openUrl("https://kids.yahoo.co.jp/today/", false)
-            }
             Item("Converter") {
                 viewModel.openTab(ConverterToolTab())
             }
