@@ -107,6 +107,9 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Item("Save") {
                     viewModel.emitEditorCommand(MenuCommand.SAVE)
                 }
+                Item("Replace", shortcut = KeyShortcut(Key.R, ctrl = true)) {
+                    viewModel.switchFind()
+                }
                 Item("Editor's Color & Font") {
                     viewModel.openTab(EditorSettingTab())
                 }
