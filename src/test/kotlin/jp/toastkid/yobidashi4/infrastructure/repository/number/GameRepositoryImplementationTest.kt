@@ -33,6 +33,17 @@ class GameRepositoryImplementationTest {
 
     @Test
     fun save() {
+        //TODO
+    }
+
+    @Test
+    fun load() {
+        every { Files.exists(any()) }.returns(true)
+        every { Files.readString(any()) }.returns("")
+
+        val loaded = gameRepositoryImplementation.load(mockk())
+
+        assertNull(loaded)
     }
 
     @Test
