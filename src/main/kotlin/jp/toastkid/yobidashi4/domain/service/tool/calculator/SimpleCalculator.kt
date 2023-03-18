@@ -6,7 +6,7 @@ class SimpleCalculator {
 
     operator fun invoke(expression: String): Double? {
         return try {
-            parse(expression.toList())
+            parse(expression.replace(",", "").toList())
         } catch (e: Exception) {
             null
         }
