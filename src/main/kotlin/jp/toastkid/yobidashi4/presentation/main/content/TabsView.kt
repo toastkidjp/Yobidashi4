@@ -152,7 +152,7 @@ fun TabsView(modifier: Modifier) {
         }
 
         when (val currentTab = viewModel.currentTab()) {
-            is FileTab -> FileList(currentTab.items)
+            is FileTab -> FileList(currentTab.items, Modifier)
             is TableTab -> TableView(currentTab.items)
             is EditorTab -> {
                 if (currentTab.path.name.contains("Sandbox")) {
