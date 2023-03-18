@@ -65,7 +65,7 @@ import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun FileList(paths: List<Path>) {
+fun FileList(paths: List<Path>, modifier: Modifier = Modifier) {
     val articleStates = remember { mutableStateListOf<FileListItem>() }
 
     LaunchedEffect(paths) {
@@ -81,7 +81,8 @@ fun FileList(paths: List<Path>) {
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = modifier
     ) {
         Box(modifier = Modifier) {
             val state = rememberLazyListState()
