@@ -133,7 +133,7 @@ fun FileList(paths: List<Path>, modifier: Modifier = Modifier) {
                         keyword.value,
                         maxLines = 1,
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
+                            backgroundColor = if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface.copy(alpha = 0.75f) else Color.Transparent,
                             cursorColor = MaterialTheme.colors.secondary
                         ),
                         label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
