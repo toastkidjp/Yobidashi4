@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.layout.Box
@@ -17,12 +18,16 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -41,6 +46,9 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.awt.Desktop
@@ -66,11 +74,13 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun FileList(paths: List<Path>, modifier: Modifier = Modifier) {
+    val completeItems = remember { mutableStateListOf<FileListItem>() }
     val articleStates = remember { mutableStateListOf<FileListItem>() }
 
     LaunchedEffect(paths) {
         articleStates.clear()
         paths.map { FileListItem(it) }.forEach { articleStates.add(it) }
+        completeItems.addAll(articleStates)
     }
 
     val dateTimeFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH) }
@@ -117,6 +127,41 @@ fun FileList(paths: List<Path>, modifier: Modifier = Modifier) {
                         false
                     }
             ) {
+                stickyHeader {
+                    val keyword = remember { mutableStateOf(TextFieldValue()) }
+                    TextField(
+                        keyword.value,
+                        maxLines = 1,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colors.secondary
+                        ),
+                        label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
+                        onValueChange = {
+                            keyword.value = TextFieldValue(it.text, it.selection, it.composition)
+                            if (keyword.value.composition == null) {
+                                articleStates.clear()
+                                articleStates.addAll(
+                                    if (keyword.value.text.isNotBlank()) completeItems.filter { it.path.nameWithoutExtension.contains(keyword.value.text) }
+                                    else completeItems
+                                )
+                                return@TextField
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        trailingIcon = {
+                            Icon(
+                                painterResource("images/icon/ic_clear_form.xml"),
+                                contentDescription = "Clear input.",
+                                tint = MaterialTheme.colors.secondary,
+                                modifier = Modifier.clickable {
+                                    keyword.value = TextFieldValue()
+                                }
+                            )
+                        }
+                    )
+                }
+
                 itemsIndexed(articleStates) { index, fileListItem ->
                     val openOption = remember { mutableStateOf(false) }
                     Box {
