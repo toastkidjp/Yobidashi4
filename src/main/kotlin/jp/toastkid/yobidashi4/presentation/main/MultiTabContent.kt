@@ -1,17 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.main
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -74,13 +69,6 @@ private fun ArticleListView() {
     if (viewModel.articles().isNotEmpty()) {
         Box(modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)) {
             FileList(viewModel.articles())
-            Text("x",
-                modifier = Modifier
-                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                    .clickable { viewModel.switchArticleList() }
-                    .padding(16.dp)
-                    .align(Alignment.TopEnd)
-            )
         }
     }
 }
