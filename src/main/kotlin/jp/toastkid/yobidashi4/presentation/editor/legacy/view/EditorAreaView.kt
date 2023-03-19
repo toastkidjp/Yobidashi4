@@ -35,7 +35,7 @@ class EditorAreaView(
 
     private val statusChannel: Channel<Int> = Channel()
 
-    private val finderService by lazy { FinderService(editorArea, messageChannel) }
+    private val finderService by lazy { FinderService(editorArea) }
 
     init {
         refresh()

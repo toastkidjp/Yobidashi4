@@ -1,11 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.finder
 
-import kotlinx.coroutines.channels.Channel
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 
 class FinderService(
-        private val editorArea: RSyntaxTextArea,
-        private val messageChannel: Channel<String>
+    private val editorArea: RSyntaxTextArea
 ) {
 
     private var lastFound = -1
