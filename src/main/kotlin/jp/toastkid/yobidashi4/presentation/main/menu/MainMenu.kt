@@ -125,11 +125,11 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
 
-            if (viewModel.tabs.size > 1) {
-                Item("Find in page", shortcut = KeyShortcut(Key.F, ctrl = true)) {
-                    viewModel.switchFind()
-                }
+            Item("Find in page", shortcut = KeyShortcut(Key.F, ctrl = true)) {
+                viewModel.switchFind()
+            }
 
+            if (viewModel.tabs.size > 1) {
                 Item("Move previous tab", shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
                     if (viewModel.tabs.isEmpty()) {
                         return@Item
