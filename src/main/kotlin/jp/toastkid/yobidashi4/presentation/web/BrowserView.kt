@@ -76,7 +76,7 @@ class BrowserView : KoinComponent {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(if (viewModel.snackbarHostState().currentSnackbarData != null) 48.dp else 0.dp))
+            Spacer(modifier = Modifier.height(if (viewModel.showingSnackbar()) 48.dp else 0.dp))
         }
 
         LaunchedEffect(id) {
