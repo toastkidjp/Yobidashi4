@@ -140,6 +140,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun removeTabAt(index: Int) {
         val targetTab = _tabs.get(index)
         if (targetTab.closeable().not()) {
+            showSnackbar("Cannot close this tab.")
             return
         }
         val presentSize = _tabs.size
