@@ -25,7 +25,7 @@ import org.fife.ui.rtextarea.RTextScrollPane
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class EditorAreaView(
+internal class EditorAreaView(
     private val editorArea: RSyntaxTextArea = RSyntaxTextArea(),
     private val syntaxHighlightApplier: SyntaxHighlightApplier = SyntaxHighlightApplier()
 ) {
