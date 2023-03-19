@@ -31,7 +31,7 @@ class SwingTextEditor : TextEditor {
 
     init {
         val messageChannel = Channel<String>()
-        editorAreaView = EditorAreaView(messageChannel = messageChannel)
+        editorAreaView = EditorAreaView()
 
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
