@@ -79,6 +79,7 @@ internal fun FindInPageBox() {
 
             Text(
                 "↑",
+                color = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
