@@ -77,11 +77,13 @@ internal fun FindInPageBox() {
                 )
             }
 
-            Text("↑", modifier = Modifier
-                .padding(start = 8.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.findUp() }
-                .padding(8.dp)
+            Text(
+                "↑",
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .clickable { viewModel.findUp() }
+                    .padding(8.dp)
             )
 
             Text("↓", modifier = Modifier
