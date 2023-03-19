@@ -86,11 +86,13 @@ internal fun FindInPageBox() {
                     .padding(8.dp)
             )
 
-            Text("↓", modifier = Modifier
-                .padding(start = 8.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.findDown() }
-                .padding(8.dp)
+            Text(
+                "↓",
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .clickable { viewModel.findDown() }
+                    .padding(8.dp)
             )
 
             Spacer(modifier = Modifier.width(40.dp))
