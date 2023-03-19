@@ -44,6 +44,7 @@ interface MainViewModel {
     fun updateEditorContent(path: Path, text: String, caretPosition: Int = -1, resetEditing: Boolean)
     fun openingEditor(): Boolean
     fun setShowWebSearch(newState: Boolean = true)
+    fun showingSnackbar(): Boolean
     fun updateWebTab(id: String, title: String, url: String?)
     fun windowState(): WindowState
     fun toggleFullscreen()
