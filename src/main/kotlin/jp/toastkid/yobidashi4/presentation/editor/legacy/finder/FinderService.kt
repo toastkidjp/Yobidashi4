@@ -1,9 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.finder
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 
 class FinderService(
@@ -26,10 +23,9 @@ class FinderService(
         var indexOf = editorArea.text.indexOf(order.target, 0, order.caseSensitive.not())
 
         if (indexOf == -1) {
-            showMessage("'${order.target}' is not found.")
+            //showMessage("'${order.target}' is not found.")
             return
         }
-        showMessage("")
 
         while (indexOf != -1) {
             editorArea.replaceRange(order.replace, indexOf, indexOf + order.target.length)
@@ -47,18 +43,13 @@ class FinderService(
             editorArea.text.indexOf(order.target, lastFound + 1, order.caseSensitive.not())
         }
         if (indexOf == -1) {
-            showMessage("'${order.target}' is not found.")
+            //showMessage("'${order.target}' is not found.")
             return
         }
-        showMessage("")
         lastFound = indexOf
 
         editorArea.selectionStart = indexOf
         editorArea.selectionEnd = indexOf + order.target.length
-    }
-
-    private fun showMessage(message: String) {
-        CoroutineScope(Dispatchers.Default).launch { messageChannel.send(message) }
     }
 
 }
