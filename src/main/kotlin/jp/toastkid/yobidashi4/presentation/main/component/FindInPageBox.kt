@@ -3,8 +3,10 @@ package jp.toastkid.yobidashi4.presentation.main.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -88,6 +90,8 @@ internal fun FindInPageBox() {
                 .clickable { viewModel.findDown() }
                 .padding(8.dp)
             )
+
+            Spacer(modifier = Modifier.width(40.dp))
 
             Button(onClick = { viewModel.replaceAll() }) {
                 Text("All")
