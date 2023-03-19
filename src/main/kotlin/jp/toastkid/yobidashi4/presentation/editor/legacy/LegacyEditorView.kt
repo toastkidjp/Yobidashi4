@@ -53,7 +53,7 @@ fun LegacyEditorView(tab: EditorTab) {
                     MarkdownView(tab, Modifier.widthIn(max = 360.dp))
                 }
             }
-            StatusLabel(textEditor, modifier = Modifier.height(if (viewModel.snackbarHostState().currentSnackbarData != null) 48.dp else 24.dp))
+            StatusLabel(textEditor, modifier = Modifier.height(if (viewModel.showingSnackbar()) 48.dp else 24.dp))
         }
     }
 
