@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy.finder
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 
-class FinderService(
+internal class FinderService(
     private val editorArea: RSyntaxTextArea
 ) {
 
