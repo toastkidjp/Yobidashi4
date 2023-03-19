@@ -10,7 +10,6 @@ import kotlin.io.path.extension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
@@ -30,7 +29,6 @@ class SwingTextEditor : TextEditor {
     override fun getContent() = editorAreaView.view()
 
     init {
-        val messageChannel = Channel<String>()
         editorAreaView = EditorAreaView()
 
         CoroutineScope(Dispatchers.Default).launch {
