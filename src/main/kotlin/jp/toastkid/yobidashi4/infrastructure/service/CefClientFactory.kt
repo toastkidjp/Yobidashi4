@@ -1,9 +1,6 @@
 package jp.toastkid.yobidashi4.infrastructure.service
 
 import java.awt.Desktop
-import java.awt.Point
-import java.awt.Robot
-import java.awt.event.KeyEvent
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -14,12 +11,8 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.Locale
-import java.util.UUID
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
-import javax.swing.JDialog
-import javax.swing.SwingUtilities
-import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -30,7 +23,6 @@ import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlin.io.path.absolutePathString
 import me.friwi.jcefmaven.CefAppBuilder
 import me.friwi.jcefmaven.impl.progress.ConsoleProgressHandler
@@ -55,7 +47,6 @@ import org.cef.handler.CefRequestHandlerAdapter
 import org.cef.handler.CefResourceRequestHandler
 import org.cef.handler.CefResourceRequestHandlerAdapter
 import org.cef.misc.BoolRef
-import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -192,119 +183,18 @@ class CefClientFactory(
         })
 
         client.addKeyboardHandler(object : CefKeyboardHandlerAdapter() {
+
+            private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor(
+                this@CefClientFactory::search,
+                this@CefClientFactory::addBookmark,
+                { selectedText },
+                this@CefClientFactory::browsePage
+            )
+
             override fun onKeyEvent(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent?): Boolean {
                 event ?: return false
-                if (event.type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP) {
-                    return false
-                }
 
-                if (event.windows_key_code == KeyEvent.VK_BACK_SPACE) {
-                    latestBrowser()?.let {
-                        if (it.canGoBack()) {
-                            it.goBack()
-                            return true
-                        }
-                    }
-                }
-
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_F) {
-                    object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchFind()
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_W) {
-                    viewModel.closeCurrent()
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_P) {
-                    printPdf()
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_UP) {
-                    latestBrowser()?.executeJavaScript("window.scrollTo(0, 0);", null, 1)
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_DOWN) {
-                    latestBrowser()?.executeJavaScript("window.scrollTo(0, document.body.scrollHeight);", null, 1)
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_B) {
-                    addBookmark()
-                    return true
-                }
-                if (event.windows_key_code == KeyEvent.VK_F5) {
-                    latestBrowser()?.reload()
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_R) {
-                    latestBrowser()?.reloadIgnoreCache()
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == 187) {
-                    latestBrowser()?.let {
-                        it.zoomLevel = it.zoomLevel + 0.25
-                    }
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == 189) {
-                    latestBrowser()?.let {
-                        it.zoomLevel = it.zoomLevel - 0.25
-                    }
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN && event.windows_key_code == KeyEvent.VK_LEFT) {
-                    latestBrowser()?.let {
-                        if (it.canGoBack()) {
-                            it.goBack()
-                        }
-                    }
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN && event.windows_key_code == KeyEvent.VK_RIGHT) {
-                    latestBrowser()?.let {
-                        if (it.canGoForward()) {
-                            it.goForward()
-                        }
-                    }
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_SHIFT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
-                    && event.windows_key_code == KeyEvent.VK_O) {
-                    search(selectedText)
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
-                    && event.windows_key_code == KeyEvent.VK_O) {
-                    browsePage(selectedText)
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN
-                    && event.windows_key_code == KeyEvent.VK_K) {
-                    //object : KoinComponent{ val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools()
-                    val devToolsDialog = JDialog()
-                    devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
-                    devToolsDialog.setSize(800, 600)
-                    devToolsDialog.add(browser?.devTools?.uiComponent)
-                    devToolsDialog.isVisible = true
-                    return true
-                }
-                if (event.modifiers == EventFlags.EVENTFLAG_SHIFT_DOWN
-                    && event.windows_key_code == KeyEvent.VK_P) {
-                    val folder = Paths.get("user/screenshot")
-                    if (Files.exists(folder).not()) {
-                        Files.createDirectories(folder)
-                    }
-                    val outputStream = Files.newOutputStream(folder.resolve("${UUID.randomUUID().toString()}.png"))
-                    outputStream.use {
-                        browser ?: return true
-                        val p = Point(0, 0)
-                        SwingUtilities.convertPointToScreen(p, browser.uiComponent)
-                        val region = browser.uiComponent.bounds;
-                        region.x = p.x;
-                        region.y = p.y;
-
-                        val screenshot = Robot().createScreenCapture(region)
-                        ImageIO.write(screenshot, "png", it)
-                    }
+                if (keyboardShortcutProcessor(browser, event)) {
                     return true
                 }
 
