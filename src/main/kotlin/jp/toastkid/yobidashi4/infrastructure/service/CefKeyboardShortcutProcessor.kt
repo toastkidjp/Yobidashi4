@@ -136,7 +136,7 @@ class CefKeyboardShortcutProcessor(
                 val p = Point(0, 0)
                 SwingUtilities.convertPointToScreen(p, browser.uiComponent)
                 val region = browser.uiComponent.bounds
-                region.x = p.x;
+                region.x = p.x
                 region.y = p.y;
 
                 val screenshot = Robot().createScreenCapture(region)
