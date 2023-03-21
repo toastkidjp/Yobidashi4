@@ -135,7 +135,7 @@ class CefKeyboardShortcutProcessor(
                 browser ?: return true
                 val p = Point(0, 0)
                 SwingUtilities.convertPointToScreen(p, browser.uiComponent)
-                val region = browser.uiComponent.bounds;
+                val region = browser.uiComponent.bounds
                 region.x = p.x;
                 region.y = p.y;
 
