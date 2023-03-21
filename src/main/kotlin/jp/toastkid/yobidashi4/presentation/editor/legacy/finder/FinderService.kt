@@ -1,9 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.finder
 
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 internal class FinderService(
     private val editorArea: RSyntaxTextArea
@@ -24,7 +21,6 @@ internal class FinderService(
         var indexOf = editorArea.text.indexOf(order.target, 0, order.caseSensitive.not())
 
         if (indexOf == -1) {
-            object : KoinComponent { val vm: MainViewModel by inject() }.vm.showSnackbar("'${order.target}' is not found.")
             return
         }
 
