@@ -44,7 +44,6 @@ internal class FinderService(
             editorArea.text.indexOf(order.target, lastFound + 1, order.caseSensitive.not())
         }
         if (indexOf == -1) {
-            object : KoinComponent { val vm: MainViewModel by inject() }.vm.showSnackbar("'${order.target}' is not found.")
             return
         }
         lastFound = indexOf
