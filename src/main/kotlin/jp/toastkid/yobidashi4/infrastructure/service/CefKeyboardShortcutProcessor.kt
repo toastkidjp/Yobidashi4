@@ -130,7 +130,7 @@ class CefKeyboardShortcutProcessor(
             if (Files.exists(folder).not()) {
                 Files.createDirectories(folder)
             }
-            val outputStream = Files.newOutputStream(folder.resolve("${UUID.randomUUID().toString()}.png"))
+            val outputStream = Files.newOutputStream(folder.resolve("${UUID.randomUUID()}.png"))
             outputStream.use {
                 browser ?: return true
                 val p = Point(0, 0)
