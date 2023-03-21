@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -67,8 +66,6 @@ private fun ArticleListView() {
     val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
 
     if (viewModel.articles().isNotEmpty()) {
-        Box(modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)) {
-            FileList(viewModel.articles())
-        }
+        FileList(viewModel.articles(), modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start))
     }
 }
