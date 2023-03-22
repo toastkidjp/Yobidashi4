@@ -40,6 +40,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
@@ -95,7 +96,10 @@ internal fun AggregationBox() {
             }
             mutableStateOf(aggregations.entries.toList().get(ordinal))
         }
-        val query = remember { mutableStateOf(TextFieldValue("${LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))}")) }
+        val query = remember {
+            val defaultInput = "${LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))}"
+            mutableStateOf(TextFieldValue(defaultInput, TextRange(defaultInput.length)))
+        }
         val openDropdown = remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.Start,
