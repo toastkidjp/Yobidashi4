@@ -184,7 +184,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
                 viewModel.setShowWebSearch(viewModel.showWebSearch().not())
             }
-            Item("Converter") {
+            Item("Converter", icon = painterResource("images/icon/ic_converter.xml")) {
                 viewModel.openTab(ConverterToolTab())
             }
             Item("File rename", icon = painterResource("images/icon/ic_rename.xml")) {
