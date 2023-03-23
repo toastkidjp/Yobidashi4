@@ -36,6 +36,7 @@ class BrowserPoolImplementationTest {
         every { cefClient.createBrowser(any(), any(), any()) }.returns(cefBrowser)
         every { cefBrowser.uiComponent }.returns(mockk())
         every { cefBrowser.close(any()) }.just(Runs)
+        every { cefBrowser.reload() }.just(Runs)
 
         mockkConstructor(CefClientFactory::class)
         every { anyConstructed<CefClientFactory>().invoke() }.returns(cefClient)
@@ -69,6 +70,11 @@ class BrowserPoolImplementationTest {
 
     @Test
     fun reload() {
+        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+
+        browserPoolImplementation.reload("1")
+
+        every { cefBrowser.reload() }
     }
 
     @Test
