@@ -231,7 +231,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Narrow window") {
                 viewModel.toggleNarrowWindow()
             }
-            Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true)) {
+            Item("Re-lottery background", shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true), icon = painterResource("images/icon/ic_wallpaper.xml")) {
                 viewModel.loadBackgroundImage()
             }
         }
