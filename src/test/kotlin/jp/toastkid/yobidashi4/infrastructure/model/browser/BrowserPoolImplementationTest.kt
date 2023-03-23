@@ -70,8 +70,10 @@ class BrowserPoolImplementationTest {
         browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
 
         browserPoolImplementation.find("1", "test", true)
+        browserPoolImplementation.find("1", "test", false)
 
-        every { cefBrowser.find(any(), any(), any(), any()) }
+        every { cefBrowser.find(any(), true, any(), any()) }
+        every { cefBrowser.find(any(), false, any(), any()) }
     }
 
     @Test
