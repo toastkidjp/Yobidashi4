@@ -72,8 +72,8 @@ class BrowserPoolImplementationTest {
         browserPoolImplementation.find("1", "test", true)
         browserPoolImplementation.find("1", "test", false)
 
-        every { cefBrowser.find(any(), true, any(), any()) }
-        every { cefBrowser.find(any(), false, any(), any()) }
+        verify { cefBrowser.find(any(), true, any(), any()) }
+        verify { cefBrowser.find(any(), false, any(), any()) }
     }
 
     @Test
