@@ -7,10 +7,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.infrastructure.service.CefClientFactory
 import kotlin.test.assertNotNull
+import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.junit.jupiter.api.AfterEach
@@ -37,6 +39,9 @@ class BrowserPoolImplementationTest {
 
         mockkConstructor(CefClientFactory::class)
         every { anyConstructed<CefClientFactory>().invoke() }.returns(cefClient)
+
+        mockkStatic(CefApp::class)
+        every { CefApp.getInstance().dispose() }.just(Runs)
 
         browserPoolImplementation = BrowserPoolImplementation()
     }
@@ -86,5 +91,10 @@ class BrowserPoolImplementationTest {
 
     @Test
     fun disposeAll() {
+        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+        browserPoolImplementation.disposeAll()
+
+        verify { cefBrowser.close(any()) }
+        verify { CefApp.getInstance().dispose() }
     }
 }
