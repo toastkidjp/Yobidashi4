@@ -18,7 +18,7 @@ import org.koin.core.component.inject
 @Single
 class SwingTextEditor : TextEditor {
 
-    private val editorAreaView: EditorAreaView
+    private val editorAreaView: EditorAreaView = EditorAreaView()
 
     private val statusLabel = mutableStateOf("")
 
@@ -29,7 +29,6 @@ class SwingTextEditor : TextEditor {
     override fun getContent() = editorAreaView.view()
 
     init {
-        editorAreaView = EditorAreaView()
 
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
