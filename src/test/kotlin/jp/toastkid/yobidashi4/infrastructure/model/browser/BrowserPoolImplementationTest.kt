@@ -97,4 +97,16 @@ class BrowserPoolImplementationTest {
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
     }
+
+    @Test
+    fun disposeAllPluralCase() {
+        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+        browserPoolImplementation.component("2", "https://www.yahoo.co.jp")
+        browserPoolImplementation.component("3", "https://www.yahoo.co.jp")
+
+        browserPoolImplementation.disposeAll()
+
+        verify(exactly = 3) { cefBrowser.close(any()) }
+        verify { CefApp.getInstance().dispose() }
+    }
 }
