@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,14 +42,20 @@ fun LegacyEditorView(tab: EditorTab) {
 
     Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f)) {
         Column {
-            Row(modifier = Modifier.weight(1f)) {
-                SwingPanel(
-                    background = Color.Transparent,
-                    factory = {
-                        textEditor.getContent()
-                    },
-                    modifier = Modifier.weight(1f).focusRequester(focusRequester)
-                )
+            Row(
+                modifier = Modifier.weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    SwingPanel(
+                        background = Color.Transparent,
+                        factory = {
+                            textEditor.getContent()
+                        },
+                        modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
+                    )
+                }
                 if (tab.showPreview()) {
                     MarkdownView(tab, Modifier.widthIn(max = 360.dp))
                 }
