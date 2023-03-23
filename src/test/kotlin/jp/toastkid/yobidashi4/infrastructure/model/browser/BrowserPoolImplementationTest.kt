@@ -90,6 +90,14 @@ class BrowserPoolImplementationTest {
     }
 
     @Test
+    fun disposeAllNoneCase() {
+        browserPoolImplementation.disposeAll()
+
+        verify(inverse = true) { cefBrowser.close(any()) }
+        verify { CefApp.getInstance().dispose() }
+    }
+
+    @Test
     fun disposeAll() {
         browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
         browserPoolImplementation.disposeAll()
