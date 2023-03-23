@@ -66,6 +66,12 @@ class BrowserPoolImplementationTest {
 
     @Test
     fun find() {
+        every { cefBrowser.find(any(), any(), any(), any()) } just Runs
+        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+
+        browserPoolImplementation.find("1", "test", true)
+
+        every { cefBrowser.find(any(), any(), any(), any()) }
     }
 
     @Test
