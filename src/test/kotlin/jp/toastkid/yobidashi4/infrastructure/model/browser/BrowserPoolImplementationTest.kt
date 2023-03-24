@@ -35,6 +35,7 @@ class BrowserPoolImplementationTest {
 
         every { cefClient.createBrowser(any(), any(), any()) }.returns(cefBrowser)
         every { cefBrowser.uiComponent }.returns(mockk())
+        every { cefBrowser.devTools.uiComponent }.returns(mockk())
         every { cefBrowser.close(any()) }.just(Runs)
         every { cefBrowser.reload() }.just(Runs)
 
@@ -57,11 +58,10 @@ class BrowserPoolImplementationTest {
     }
 
     @Test
-    fun component() {
-    }
-
-    @Test
     fun devTools() {
+        browserPoolImplementation.devTools("test")
+
+        verify { cefBrowser.devTools.uiComponent }
     }
 
     @Test
