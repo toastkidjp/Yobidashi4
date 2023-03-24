@@ -82,7 +82,7 @@ class BrowserPoolImplementationTest {
 
         browserPoolImplementation.reload("1")
 
-        every { cefBrowser.reload() }
+        verify { cefBrowser.reload() }
     }
 
     @Test
