@@ -95,10 +95,6 @@ class BrowserView : KoinComponent {
         }
     }
 
-    private fun updateBounds() {
-        browserPool.onLayout(location.x, location.y, size.width, size.height)
-    }
-
     fun find(id: String, text: String) {
         browserPool?.find(id, text, true)
     }
