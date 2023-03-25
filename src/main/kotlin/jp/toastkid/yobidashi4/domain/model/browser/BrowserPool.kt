@@ -9,5 +9,4 @@ interface BrowserPool {
     fun disposeAll()
     fun find(id: String, text: String, forward: Boolean)
     fun reload(id: String)
-    fun onLayout(x: Int, y: Int, width: Int, height: Int)
 }
