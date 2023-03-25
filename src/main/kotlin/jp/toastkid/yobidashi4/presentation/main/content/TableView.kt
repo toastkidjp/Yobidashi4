@@ -5,7 +5,6 @@ import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,28 +19,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerButton
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import java.nio.file.Files
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -56,23 +47,9 @@ fun TableView(aggregationResult: AggregationResult) {
 
     var lastSorted = remember { -1 to false }
 
-    val openDropdownMenu = remember { mutableStateOf(false) }
-
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
-        elevation = 4.dp,
-        modifier = Modifier.pointerInput(Unit) {
-            forEachGesture {
-                awaitPointerEventScope {
-                    val awaitPointerEvent = awaitPointerEvent()
-                    if (awaitPointerEvent.type == PointerEventType.Press
-                        && !openDropdownMenu.value
-                        && awaitPointerEvent.button == PointerButton.Secondary) {
-                        openDropdownMenu.value = true
-                    }
-                }
-            }
-        }
+        elevation = 4.dp
     ) {
         Box {
             val state = rememberLazyListState()
@@ -153,21 +130,6 @@ fun TableView(aggregationResult: AggregationResult) {
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                         }
                     }
-                }
-            }
-            DropdownMenu(openDropdownMenu.value, onDismissRequest = { openDropdownMenu.value = false }) {
-                DropdownMenuItem(onClick = {
-                    openDropdownMenu.value = false
-                    val outputFolder = Paths.get("user/table")
-                    if (Files.exists(outputFolder).not()) {
-                        Files.createDirectories(outputFolder)
-                    }
-                    Files.write(
-                        outputFolder.resolve("${aggregationResult.resultTitleSuffix().replace(":", "_")}.tsv"),
-                        aggregationResult.itemArrays().map { it.joinToString("\t") }.joinToString("\n") { it }.toByteArray()
-                    )
-                }) {
-                    Text("Print table")
                 }
             }
             VerticalScrollbar(adapter = rememberScrollbarAdapter(state), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
