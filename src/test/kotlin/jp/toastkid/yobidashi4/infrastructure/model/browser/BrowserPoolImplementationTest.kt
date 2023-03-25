@@ -53,9 +53,6 @@ class BrowserPoolImplementationTest {
         unmockkAll()
     }
 
-    @Test
-    fun onLayout() {
-    }
 
     @Test
     fun devTools() {
