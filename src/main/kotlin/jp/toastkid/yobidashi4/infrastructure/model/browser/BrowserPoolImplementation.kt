@@ -17,7 +17,10 @@ class BrowserPoolImplementation : BrowserPool {
     private var lastId: String? = null
 
     init {
-        client = CefClientFactory({ latestBrowser() }, { id -> browsers.entries.firstOrNull { it.value == id }?.key }).invoke()
+        client = CefClientFactory(
+            { latestBrowser() },
+            { id -> browsers.entries.firstOrNull { it.value == id }?.key }
+        ).invoke()
     }
 
 
