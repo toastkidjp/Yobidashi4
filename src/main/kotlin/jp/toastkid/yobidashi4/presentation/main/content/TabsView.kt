@@ -26,8 +26,6 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.file.Files
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
@@ -41,6 +39,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorView
@@ -151,14 +150,7 @@ fun TabsView(modifier: Modifier) {
                             if (tab is TableTab) {
                                 DropdownMenuItem(onClick = {
                                     openDropdownMenu.value = false
-                                    val outputFolder = Paths.get("user/table")
-                                    if (Files.exists(outputFolder).not()) {
-                                        Files.createDirectories(outputFolder)
-                                    }
-                                    Files.write(
-                                        outputFolder.resolve("${tab.items.resultTitleSuffix().replace(":", "_")}.tsv"),
-                                        tab.items.itemArrays().map { it.joinToString("\t") }.joinToString("\n") { it }.toByteArray()
-                                    )
+                                    TableContentExporter().invoke(tab.items)
                                 }) {
                                     Text("Print table")
                                 }
