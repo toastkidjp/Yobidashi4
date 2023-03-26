@@ -16,6 +16,7 @@ import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
@@ -111,51 +113,7 @@ fun TabsView(modifier: Modifier) {
                                 )
                             }
                         }
-                        DropdownMenu(
-                            expanded = openDropdownMenu.value,
-                            onDismissRequest = {
-                                openDropdownMenu.value = false
-                            }
-                        ) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    ClipboardPutterService().invoke(tab.title())
-                                    openDropdownMenu.value = false
-                                }
-                            ) {
-                                Text("タイトルコピー")
-                            }
-                            if (tab is WebTab) {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        ClipboardPutterService().invoke(tab.url())
-                                        openDropdownMenu.value = false
-                                    }
-                                ) {
-                                    Text("URLコピー")
-                                }
-                                DropdownMenuItem(
-                                    onClick = {
-                                        if (viewModel.tabs[viewModel.selected.value] is WebTab) {
-                                            object : KoinComponent { val vm: WebTabViewModel by inject() }
-                                                .vm.reload(tab.id())
-                                        }
-                                        openDropdownMenu.value = false
-                                    }
-                                ) {
-                                    Text("リロード")
-                                }
-                            }
-
-                            if (tab is TableTab) {
-                                DropdownMenuItem(onClick = {
-                                    openDropdownMenu.value = false
-                                    TableContentExporter().invoke(tab.items)
-                                }) {
-                                    Text("Print table")
-                                }
-                            }
-                        }
+                        TabOptionMenu(openDropdownMenu, tab, viewModel)
                     }
                 }
             }
@@ -182,6 +140,60 @@ fun TabsView(modifier: Modifier) {
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
             is ConverterToolTab -> ConverterToolTabView()
             else -> Unit
+        }
+    }
+}
+
+private fun TabOptionMenu(
+    openDropdownMenu: MutableState<Boolean>,
+    tab: Tab,
+    viewModel: MainViewModel
+) {
+    DropdownMenu(
+        expanded = openDropdownMenu.value,
+        onDismissRequest = {
+            openDropdownMenu.value = false
+        }
+    ) {
+        DropdownMenuItem(
+            onClick = {
+                ClipboardPutterService().invoke(tab.title())
+                openDropdownMenu.value = false
+            }
+        ) {
+            Text("タイトルコピー")
+        }
+        if (tab is WebTab) {
+            DropdownMenuItem(
+                onClick = {
+                    ClipboardPutterService().invoke(tab.url())
+                    openDropdownMenu.value = false
+                }
+            ) {
+                Text("URLコピー")
+            }
+            DropdownMenuItem(
+                onClick = {
+                    if (viewModel.tabs[viewModel.selected.value] is WebTab) {
+                        object : KoinComponent {
+                            val vm: WebTabViewModel by inject()
+                        }
+                            .vm.reload(tab.id())
+                    }
+                    openDropdownMenu.value = false
+                }
+            ) {
+                Text("リロード")
+            }
+        }
+
+        if (tab is TableTab) {
+            DropdownMenuItem(onClick = {
+                openDropdownMenu.value = false
+                TableContentExporter().invoke(tab.items)
+            }) {
+                Text("Print table")
+            }
         }
     }
 }
