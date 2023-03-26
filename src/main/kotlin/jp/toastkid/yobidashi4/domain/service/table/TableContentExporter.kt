@@ -7,7 +7,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 class TableContentExporter {
 
     operator fun invoke(aggregationResult: AggregationResult) {
-        val outputFolder = Paths.get("user/table")
+        val outputFolder = Paths.get(EXPORT_TO)
         if (Files.exists(outputFolder).not()) {
             Files.createDirectories(outputFolder)
         }
@@ -15,6 +15,12 @@ class TableContentExporter {
             outputFolder.resolve("${aggregationResult.resultTitleSuffix().replace(":", "_")}.tsv"),
             aggregationResult.itemArrays().map { it.joinToString("\t") }
         )
+    }
+
+    companion object {
+
+        private val EXPORT_TO = "user/table"
+
     }
 
 }
