@@ -60,4 +60,15 @@ class TableContentExporterTest {
         verify { Files.write(any(), any<Iterable<CharSequence>>()) }
     }
 
+    @Test
+    fun invoke2() {
+        every { Files.exists(any()) } returns false
+
+        tableContentExporter.invoke(aggregationResult)
+
+        verify { Files.exists(any()) }
+        verify { Files.createDirectories(any()) }
+        verify { Files.write(any(), any<Iterable<CharSequence>>()) }
+    }
+    
 }
