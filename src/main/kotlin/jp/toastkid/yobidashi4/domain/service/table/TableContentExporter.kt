@@ -21,6 +21,8 @@ class TableContentExporter {
 
         private val EXPORT_TO = "user/table"
 
+        fun exportTo() = EXPORT_TO
+
     }
 
 }
