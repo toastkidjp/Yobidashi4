@@ -13,7 +13,7 @@ class TableContentExporter {
         }
         Files.write(
             outputFolder.resolve("${aggregationResult.resultTitleSuffix().replace(":", "_")}.tsv"),
-            aggregationResult.itemArrays().map { it.joinToString("\t") }.joinToString("\n") { it }.toByteArray()
+            aggregationResult.itemArrays().map { it.joinToString("\t") }
         )
     }
 
