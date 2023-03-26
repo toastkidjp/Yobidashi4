@@ -144,6 +144,7 @@ fun TabsView(modifier: Modifier) {
     }
 }
 
+@Composable
 private fun TabOptionMenu(
     openDropdownMenu: MutableState<Boolean>,
     tab: Tab,
