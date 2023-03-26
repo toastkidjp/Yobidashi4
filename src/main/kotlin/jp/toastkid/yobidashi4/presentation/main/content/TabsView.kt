@@ -27,6 +27,8 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.awt.Desktop
+import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
@@ -193,6 +195,7 @@ private fun TabOptionMenu(
             DropdownMenuItem(onClick = {
                 openDropdownMenu.value = false
                 TableContentExporter().invoke(tab.items)
+                Desktop.getDesktop().open(Paths.get(TableContentExporter.exportTo()).toFile())
             }) {
                 Text("Print table")
             }
