@@ -61,7 +61,7 @@ class TableContentExporterTest {
     }
 
     @Test
-    fun invoke2() {
+    fun invokeWithFolderCreationIfTargetFolderDoesNotExists() {
         every { Files.exists(any()) } returns false
 
         tableContentExporter.invoke(aggregationResult)
@@ -70,5 +70,5 @@ class TableContentExporterTest {
         verify { Files.createDirectories(any()) }
         verify { Files.write(any(), any<Iterable<CharSequence>>()) }
     }
-    
+
 }
