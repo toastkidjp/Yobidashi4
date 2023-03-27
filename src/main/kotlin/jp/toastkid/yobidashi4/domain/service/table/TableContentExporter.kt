@@ -6,8 +6,6 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 
 class TableContentExporter {
 
-    private val COLUMN_DELIMITER = "\t"
-
     operator fun invoke(aggregationResult: AggregationResult) {
         val outputFolder = Paths.get(EXPORT_TO)
         if (Files.exists(outputFolder).not()) {
@@ -20,6 +18,8 @@ class TableContentExporter {
     }
 
     companion object {
+
+        private val COLUMN_DELIMITER = "\t"
 
         private const val EXPORT_TO = "user/table"
 
