@@ -13,6 +13,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -69,6 +70,11 @@ class TableContentExporterTest {
         verify { Files.exists(any()) }
         verify { Files.createDirectories(any()) }
         verify { Files.write(any(), any<Iterable<CharSequence>>()) }
+    }
+
+    @Test
+    fun exportTo() {
+        assertTrue(TableContentExporter.exportTo().startsWith("user/"))
     }
 
 }
