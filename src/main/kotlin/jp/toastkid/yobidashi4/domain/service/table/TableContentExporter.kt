@@ -19,7 +19,7 @@ class TableContentExporter {
 
     companion object {
 
-        private val EXPORT_TO = "user/table"
+        private const val EXPORT_TO = "user/table"
 
         fun exportTo() = EXPORT_TO
 
