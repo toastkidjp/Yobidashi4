@@ -195,9 +195,9 @@ private fun TabOptionMenu(
             DropdownMenuItem(onClick = {
                 openDropdownMenu.value = false
                 TableContentExporter().invoke(tab.items)
-                viewModel.showSnackbar("Done export.", "Open", {
+                viewModel.showSnackbar("Done export.", "Open") {
                     Desktop.getDesktop().open(Paths.get(TableContentExporter.exportTo()).toFile())
-                })
+                }
             }) {
                 Text("Export table")
             }
