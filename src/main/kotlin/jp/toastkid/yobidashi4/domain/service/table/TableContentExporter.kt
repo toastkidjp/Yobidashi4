@@ -19,7 +19,7 @@ class TableContentExporter {
 
     companion object {
 
-        private val COLUMN_DELIMITER = "\t"
+        private const val COLUMN_DELIMITER = "\t"
 
         private const val EXPORT_TO = "user/table"
 
