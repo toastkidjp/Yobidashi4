@@ -199,7 +199,7 @@ private fun TabOptionMenu(
                     Desktop.getDesktop().open(Paths.get(TableContentExporter.exportTo()).toFile())
                 })
             }) {
-                Text("Print table")
+                Text("Export table")
             }
         }
     }
