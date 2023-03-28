@@ -244,7 +244,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 val path = Paths.get("user/article_template.txt")
                 Desktop.getDesktop().open(path.toFile())
             }
-            Item("Show log") {
+            Item("Show log", icon = painterResource("images/icon/ic_log.xml")) {
                 val logFilePath = Paths.get("data/logs/app.log")
                 viewModel.openTextFile(logFilePath)
             }
