@@ -12,6 +12,10 @@ class TextFileViewerTab(private val path: Path) : Tab {
         return true
     }
 
+    override fun iconPath(): String? {
+        return "images/icon/ic_log.xml"
+    }
+
     fun path() = path
 
 }
