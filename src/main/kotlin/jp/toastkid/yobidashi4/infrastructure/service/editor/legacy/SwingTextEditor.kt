@@ -29,7 +29,6 @@ class SwingTextEditor : TextEditor {
     override fun getContent() = editorAreaView.view()
 
     init {
-
         CoroutineScope(Dispatchers.Default).launch {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow().collect {
                 editorAreaView.find(it)
