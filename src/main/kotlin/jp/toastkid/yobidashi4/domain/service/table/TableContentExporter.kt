@@ -21,7 +21,7 @@ class TableContentExporter {
 
         private const val COLUMN_DELIMITER = "\t"
 
-        private val ACCEPTABLE_CHARACTER = "_"
+        private const val ACCEPTABLE_CHARACTER = "_"
 
         private const val EXPORT_TO = "user/table"
 
