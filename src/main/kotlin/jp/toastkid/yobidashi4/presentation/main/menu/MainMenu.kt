@@ -125,7 +125,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
 
-            Item("Find in page", shortcut = KeyShortcut(Key.F, ctrl = true)) {
+            Item("Find in page", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, ctrl = true)) {
                 viewModel.switchFind()
             }
 
