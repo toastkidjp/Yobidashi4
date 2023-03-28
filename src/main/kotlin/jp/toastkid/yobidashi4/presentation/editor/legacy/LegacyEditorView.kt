@@ -30,7 +30,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Composable
-fun LegacyEditorView(tab: EditorTab) {
+internal fun LegacyEditorView(tab: EditorTab) {
     val koin = object : KoinComponent {
         val editor: TextEditor by inject()
         val vm: MainViewModel by inject()
