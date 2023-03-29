@@ -15,9 +15,11 @@ data class TableTab(
 
     override fun iconPath(): String? {
         return when (items) {
-            is MovieMemoExtractorResult -> "images/icon/ic_movie.xml"
+            is MovieMemoExtractorResult -> "${ICON_FOLDER}ic_movie.xml"
             else -> null
         }
     }
 
 }
+
+private val ICON_FOLDER = "images/icon/"
