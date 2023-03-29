@@ -14,7 +14,10 @@ data class TableTab(
     override fun closeable(): Boolean = closeable
 
     override fun iconPath(): String? {
-        return if (items is MovieMemoExtractorResult) "images/icon/ic_movie.xml" else null
+        return when (items) {
+            is MovieMemoExtractorResult -> "images/icon/ic_movie.xml"
+            else -> null
+        }
     }
 
 }
