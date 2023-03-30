@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
+import jp.toastkid.yobidashi4.presentation.main.component.MemoryUsageBox
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBox
 import jp.toastkid.yobidashi4.presentation.main.content.FileList
 import jp.toastkid.yobidashi4.presentation.main.content.TabsView
@@ -43,6 +44,10 @@ fun MultiTabContent() {
 
         if (viewModel.showInputBox()) {
             InputBox()
+        }
+
+        if (viewModel.openMemoryUsageBox()) {
+            MemoryUsageBox()
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
