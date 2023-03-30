@@ -323,6 +323,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _openArticleList.value = true
     }
 
+    private val openMemoryUsage = mutableStateOf(false)
+
+    override fun openMemoryUsageBox(): Boolean {
+        return openMemoryUsage.value
+    }
+
+    override fun switchMemoryUsageBox() {
+        openMemoryUsage.value = openMemoryUsage.value.not()
+    }
+
     private val openFind = mutableStateOf(false)
 
     private val findInput = mutableStateOf(TextFieldValue())
