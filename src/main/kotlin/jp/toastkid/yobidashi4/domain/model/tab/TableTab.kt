@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.tab
 
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
+import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 
 data class TableTab(
     private val title: String,
@@ -16,6 +17,7 @@ data class TableTab(
     override fun iconPath(): String? {
         return when (items) {
             is MovieMemoExtractorResult -> "${ICON_FOLDER}ic_movie.xml"
+            is OutgoAggregationResult -> "${ICON_FOLDER}ic_payments.xml"
             else -> null
         }
     }
