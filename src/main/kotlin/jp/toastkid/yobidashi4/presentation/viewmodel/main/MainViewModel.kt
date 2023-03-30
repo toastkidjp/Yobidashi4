@@ -60,6 +60,10 @@ interface MainViewModel {
     fun hideArticleList()
     fun openTextFile(path: Path)
 
+    fun openMemoryUsageBox(): Boolean
+
+    fun switchMemoryUsageBox()
+
     fun openFind(): Boolean
 
     fun switchFind()
