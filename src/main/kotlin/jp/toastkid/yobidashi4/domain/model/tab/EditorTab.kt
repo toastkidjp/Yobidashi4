@@ -43,7 +43,7 @@ data class EditorTab(
             return
         }
         content = newContent
-        titleState.value = "${path.nameWithoutExtension}${if (editing.shouldShowIndicator()) " *" else ""}"
+        titleState.value = "${path.nameWithoutExtension}${if (editing.shouldShowIndicator()) " * " else ""}"
     }
 
     private val preview = mutableStateOf(false)
