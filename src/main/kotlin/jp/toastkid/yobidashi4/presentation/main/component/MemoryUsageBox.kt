@@ -47,6 +47,7 @@ fun MemoryUsageBox() {
                 }
             }
             Text("x", modifier = Modifier
+                .align(Alignment.TopEnd)
                 .padding(start = 4.dp)
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
                 .clickable { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel.switchMemoryUsageBox() }
