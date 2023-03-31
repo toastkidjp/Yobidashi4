@@ -248,7 +248,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 val path = Paths.get("user/article_template.txt")
                 Desktop.getDesktop().open(path.toFile())
             }
-            Item("Memory usage") {
+            Item(if (viewModel.openMemoryUsageBox()) "Close memory usage" else "Memory usage") {
                 viewModel.switchMemoryUsageBox()
             }
             Item("Show log", icon = painterResource("images/icon/ic_log.xml")) {
