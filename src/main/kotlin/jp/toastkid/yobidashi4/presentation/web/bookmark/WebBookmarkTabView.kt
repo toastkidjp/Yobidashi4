@@ -62,7 +62,8 @@ internal fun WebBookmarkTabView() {
             val state = rememberLazyListState()
             LazyColumn(
                 state = state,
-                userScrollEnabled = true
+                userScrollEnabled = true,
+                modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(bookmarks) { bookmark ->
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
