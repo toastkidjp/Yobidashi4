@@ -12,7 +12,7 @@ class MemoryUsage(private val runtime: Runtime = Runtime.getRuntime()) {
 
     fun usedMemory() = format(runtime.totalMemory() - runtime.freeMemory())
 
-    private fun format(l: Long) = NumberFormat.getInstance().format(l / MEGA_BYTE)
+    private fun format(l: Long) = "${NumberFormat.getInstance().format(l / MEGA_BYTE)}[MB]"
 
 }
 
