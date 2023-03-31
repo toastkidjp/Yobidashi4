@@ -99,7 +99,7 @@ fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            LoadIcon(tab.iconPath(), Modifier.size(24.dp))
+                            LoadIcon(tab.iconPath(), Modifier.size(24.dp).padding(start = 4.dp))
 
                             val width = if (tab is WebTab) 232.dp else 1000.dp
                             Text(tab.title(),
