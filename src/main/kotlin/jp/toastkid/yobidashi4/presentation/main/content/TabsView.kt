@@ -109,6 +109,7 @@ fun TabsView(modifier: Modifier) {
                                 modifier = Modifier.widthIn(max = width).padding(vertical = 8.dp).padding(start = 8.dp))
                             if (tab.closeable()) {
                                 Text("x",
+                                    color = MaterialTheme.colors.onPrimary,
                                     modifier = Modifier
                                         .padding(start = 4.dp)
                                         .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
