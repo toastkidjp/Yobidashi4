@@ -103,6 +103,7 @@ fun TabsView(modifier: Modifier) {
 
                             val width = if (tab is WebTab) 232.dp else 1000.dp
                             Text(tab.title(),
+                                color = MaterialTheme.colors.onPrimary,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
                                 modifier = Modifier.widthIn(max = width).padding(vertical = 8.dp).padding(start = 8.dp))
