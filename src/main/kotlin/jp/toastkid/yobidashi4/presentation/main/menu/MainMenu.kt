@@ -229,7 +229,11 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
 
         Menu("Window") {
-            Item(viewModel.toggleFullscreenLabel(), shortcut = KeyShortcut(key = Key.F11), icon = painterResource("images/icon/ic_fullscreen.xml")) {
+            Item(
+                viewModel.toggleFullscreenLabel(),
+                shortcut = KeyShortcut(key = Key.F11),
+                icon = painterResource("images/icon/ic_fullscreen.xml")
+            ) {
                 viewModel.toggleFullscreen()
             }
             Item("Narrow window") {
