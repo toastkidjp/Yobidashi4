@@ -87,7 +87,7 @@ internal fun WebBookmarkTabView() {
                             .animateItemPlacement()
                         ) {
                             Text(bookmark.title)
-                            Text("${bookmark.url}", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis)
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                         }
                     }
