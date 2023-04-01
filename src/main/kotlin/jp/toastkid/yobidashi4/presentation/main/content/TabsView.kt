@@ -42,6 +42,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
@@ -60,6 +61,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
+import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
 import kotlin.io.path.name
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -140,6 +142,7 @@ internal fun TabsView(modifier: Modifier) {
             is FileRenameToolTab -> FileRenameToolView()
             is WebTab -> WebTabView(currentTab)
             is WebBookmarkTab -> WebBookmarkTabView()
+            is WebHistoryTab -> WebHistoryView()
             is NumberPlaceGameTab -> NumberPlaceView()
             is LoanCalculatorTab -> LoanCalculatorView()
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
