@@ -157,6 +157,8 @@ fun FileList(paths: List<Path>, modifier: Modifier = Modifier) {
                                 tint = MaterialTheme.colors.secondary,
                                 modifier = Modifier.clickable {
                                     keyword.value = TextFieldValue()
+                                    articleStates.clear()
+                                    articleStates.addAll(completeItems)
                                 }
                             )
                         }
