@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.media.MediaPlayerInvoker
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
@@ -169,8 +170,15 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(newTab)
     }
 
+    private val webHistoryRepository: WebHistoryRepository by inject()
+
     override fun updateWebTab(id: String, title: String, url: String?) {
         _tabs.filterIsInstance<WebTab>().firstOrNull { it.id() == id }?.update(title, url)
+        url?.let {
+            CoroutineScope(Dispatchers.IO).launch {
+                webHistoryRepository.add(title, url)
+            }
+        }
     }
 
     override fun closeCurrent() {
