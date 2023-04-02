@@ -25,7 +25,7 @@ import org.fife.ui.rtextarea.RTextScrollPane
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class EditorAreaView(
+class EditorAreaView(
     private val editorArea: RSyntaxTextArea = RSyntaxTextArea(),
     private val syntaxHighlightApplier: SyntaxHighlightApplier = SyntaxHighlightApplier()
 ) {
@@ -162,6 +162,11 @@ internal class EditorAreaView(
     fun count(): Long {
         val selectedText = editorArea.selectedText ?: editorArea.text
         return selectedText.trim().codePoints().count()
+    }
+
+    fun lineCount(): Int {
+        val selectedText = editorArea.selectedText?.trim() ?: editorArea.text
+        return selectedText.split("\n").size
     }
 
     fun selectedText(): String {
