@@ -186,7 +186,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
             }
-            Item("Web history", shortcut = KeyShortcut(Key.H, alt = true)) {
+            Item("Web history", shortcut = KeyShortcut(Key.H, alt = true), icon = painterResource("images/icon/ic_history.xml")) {
                 viewModel.openTab(WebHistoryTab())
             }
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
