@@ -2,7 +2,9 @@ package jp.toastkid.yobidashi4.presentation.editor.preview
 
 class InternalLinkScheme {
 
-    fun makeLink(title: String?) = "[$title]($INTERNAL_LINK_SCHEME${title?.replace(" ", "%20")})"
+    private val WHITE_SPACE = " "
+
+    fun makeLink(title: String?) = "[$title]($INTERNAL_LINK_SCHEME${title?.replace(WHITE_SPACE, "%20")})"
 
     fun isInternalLink(url: String): Boolean {
         return url.startsWith(INTERNAL_LINK_SCHEME)
@@ -12,7 +14,7 @@ class InternalLinkScheme {
         if (url.length <= INTERNAL_LINK_SCHEME.length || !url.startsWith(INTERNAL_LINK_SCHEME)) {
             return url
         }
-        return url.substring(INTERNAL_LINK_SCHEME.length).replace("%20", " ")
+        return url.substring(INTERNAL_LINK_SCHEME.length).replace("%20", WHITE_SPACE)
     }
 
     companion object {
