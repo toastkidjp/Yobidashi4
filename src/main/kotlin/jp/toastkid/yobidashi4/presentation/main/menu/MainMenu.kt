@@ -27,6 +27,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
@@ -184,6 +185,9 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     viewModel.setInitialAggregationType(0)
                 }
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
+            }
+            Item("Web history", shortcut = KeyShortcut(Key.H, alt = true)) {
+                viewModel.openTab(WebHistoryTab())
             }
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
                 viewModel.setShowWebSearch(viewModel.showWebSearch().not())
