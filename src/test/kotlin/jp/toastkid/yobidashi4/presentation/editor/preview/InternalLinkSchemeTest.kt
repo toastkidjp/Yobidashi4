@@ -58,5 +58,9 @@ class InternalLinkSchemeTest {
             "tomato",
             internalLinkScheme.extract("https://internal/tomato")
         )
+        assertEquals(
+            "Clean Code",
+            internalLinkScheme.extract("https://internal/Clean%20Code")
+        )
     }
 }
