@@ -19,7 +19,7 @@ class InternalLinkScheme {
 
         private const val INTERNAL_LINK_SCHEME = "https://internal/"
 
-        private val WHITE_SPACE = " "
+        private const val WHITE_SPACE = " "
 
         private val ESCAPED_WHITE_SPACE = "%20"
 
