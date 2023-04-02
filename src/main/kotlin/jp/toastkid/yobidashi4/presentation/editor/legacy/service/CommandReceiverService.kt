@@ -130,7 +130,7 @@ class CommandReceiverService(
                     editorAreaView.switchEditable()
                 }
                 MenuCommand.COUNT -> {
-                    viewModel.showSnackbar("Count: ${editorAreaView.count()}")
+                    viewModel.showSnackbar("Count: ${editorAreaView.count()}, lines: ${editorAreaView.lineCount()}")
                 }
                 MenuCommand.WEB_SEARCH -> {
                     val selectedText = editorAreaView.selectedText()
