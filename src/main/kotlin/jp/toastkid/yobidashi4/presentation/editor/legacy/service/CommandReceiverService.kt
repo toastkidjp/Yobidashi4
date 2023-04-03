@@ -7,10 +7,9 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.util.regex.Pattern
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.service.article.ArticleOpener
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.ListHeadAdder
@@ -33,7 +32,7 @@ class CommandReceiverService(
 
     private val setting: Setting by inject()
 
-    private val articleFactory: ArticleFactory by inject()
+    private val articleOpener: ArticleOpener by inject()
 
     suspend operator fun invoke() {
         viewModel.editorCommandFlow().collect { command ->
@@ -179,13 +178,7 @@ class CommandReceiverService(
                 }
                 MenuCommand.OPEN_ARTICLE -> {
                     val selectedText = editorAreaView.selectedText()
-                    if (selectedText.isBlank()) {
-                        return@collect
-                    }
-                    val matcher = Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL).matcher(selectedText)
-                    while (matcher.find()) {
-                        viewModel.openFile(articleFactory.withTitle(matcher.group(1)).path())
-                    }
+                    articleOpener.fromRawText(selectedText)
                 }
                 MenuCommand.SWITCH_WRAP_LINE -> {
                     setting.switchWrapLine()
