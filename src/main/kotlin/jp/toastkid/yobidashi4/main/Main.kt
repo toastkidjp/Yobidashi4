@@ -57,18 +57,7 @@ fun main() {
                 MainScaffold()
 
                 window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
-                LaunchedEffect(mainViewModel.droppedPathFlow()) {
-                    withContext(Dispatchers.IO) {
-                        mainViewModel.droppedPathFlow().collect {
-                            when (it.extension) {
-                                "txt", "md", "log", "java", "kt", "py" -> {
-                                    mainViewModel.openFile(it)
-                                }
-                                else -> Unit
-                            }
-                        }
-                    }
-                }
+                launchReceivingFile(mainViewModel)
             }
         }
 
@@ -95,6 +84,22 @@ fun main() {
 
             withContext(Dispatchers.IO) {
                 mainViewModel.loadBackgroundImage()
+            }
+        }
+    }
+}
+
+private fun launchReceivingFile(mainViewModel: MainViewModel) {
+    LaunchedEffect(mainViewModel.droppedPathFlow()) {
+        withContext(Dispatchers.IO) {
+            mainViewModel.droppedPathFlow().collect {
+                when (it.extension) {
+                    "txt", "md", "log", "java", "kt", "py" -> {
+                        mainViewModel.openFile(it)
+                    }
+
+                    else -> Unit
+                }
             }
         }
     }
