@@ -7,6 +7,8 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.util.regex.Pattern
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
@@ -30,6 +32,8 @@ class CommandReceiverService(
     private val viewModel: MainViewModel by inject()
 
     private val setting: Setting by inject()
+
+    private val articleFactory: ArticleFactory by inject()
 
     suspend operator fun invoke() {
         viewModel.editorCommandFlow().collect { command ->
@@ -172,6 +176,16 @@ class CommandReceiverService(
                         return@collect
                     }
                     viewModel.openUrl("https://translate.google.co.jp/?hl=en&sl=auto&tl=en&text=${encodeUtf8(selectedText)}&op=translate", false)
+                }
+                MenuCommand.OPEN_ARTICLE -> {
+                    val selectedText = editorAreaView.selectedText()
+                    if (selectedText.isBlank()) {
+                        return@collect
+                    }
+                    val matcher = Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL).matcher(selectedText)
+                    while (matcher.find()) {
+                        viewModel.openFile(articleFactory.withTitle(matcher.group(1)).path())
+                    }
                 }
                 MenuCommand.SWITCH_WRAP_LINE -> {
                     setting.switchWrapLine()
