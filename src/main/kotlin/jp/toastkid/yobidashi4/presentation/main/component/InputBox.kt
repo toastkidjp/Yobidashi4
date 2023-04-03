@@ -71,7 +71,7 @@ internal fun InputBox() {
                     backgroundColor = Color.Transparent,
                     cursorColor = MaterialTheme.colors.secondary
                 ),
-                label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
+                label = { Text("Please would you input file name?", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
                 },
