@@ -134,6 +134,13 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu) {
         }
         popupMenu.add(openUrlMenu)
 
+        val openArticleMenu = JMenuItem("Open article").also {
+            it.addActionListener {
+                viewModel.emitEditorCommand(MenuCommand.OPEN_ARTICLE)
+            }
+        }
+        popupMenu.add(openArticleMenu)
+
         val dictionaryMenu = JMenuItem("Dictionary").also {
             it.addActionListener {
                 viewModel.emitEditorCommand(MenuCommand.DICTIONARY_SEARCH)
