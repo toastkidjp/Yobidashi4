@@ -57,7 +57,7 @@ fun main() {
                 MainScaffold()
 
                 window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
-                launchReceivingFile(mainViewModel)
+                launchReceivingFile()
             }
         }
 
@@ -89,7 +89,9 @@ fun main() {
     }
 }
 
-private fun launchReceivingFile(mainViewModel: MainViewModel) {
+private fun launchReceivingFile() {
+    val mainViewModel = remember { object : KoinComponent { val it: MainViewModel by inject() }.it }
+
     LaunchedEffect(mainViewModel.droppedPathFlow()) {
         withContext(Dispatchers.IO) {
             mainViewModel.droppedPathFlow().collect {
