@@ -15,6 +15,7 @@ import jp.toastkid.yobidashi4.presentation.main.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.extension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,6 +57,18 @@ fun main() {
                 MainScaffold()
 
                 window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
+                LaunchedEffect(mainViewModel.droppedPathFlow()) {
+                    withContext(Dispatchers.IO) {
+                        mainViewModel.droppedPathFlow().collect {
+                            when (it.extension) {
+                                "txt", "md", "log", "java", "kt", "py" -> {
+                                    mainViewModel.openFile(it)
+                                }
+                                else -> Unit
+                            }
+                        }
+                    }
+                }
             }
         }
 
