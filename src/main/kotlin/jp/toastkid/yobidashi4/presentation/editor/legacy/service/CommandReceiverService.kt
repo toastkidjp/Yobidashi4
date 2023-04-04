@@ -32,8 +32,6 @@ class CommandReceiverService(
 
     private val setting: Setting by inject()
 
-    private val articleOpener: ArticleOpener by inject()
-
     suspend operator fun invoke() {
         viewModel.editorCommandFlow().collect { command ->
             when (command) {
@@ -178,7 +176,7 @@ class CommandReceiverService(
                 }
                 MenuCommand.OPEN_ARTICLE -> {
                     val selectedText = editorAreaView.selectedText()
-                    articleOpener.fromRawText(selectedText)
+                    ArticleOpener().fromRawText(selectedText)
                 }
                 MenuCommand.SWITCH_WRAP_LINE -> {
                     setting.switchWrapLine()
