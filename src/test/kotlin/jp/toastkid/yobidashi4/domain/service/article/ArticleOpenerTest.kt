@@ -98,4 +98,12 @@ class ArticleOpenerTest {
         verify { articleFactory wasNot called }
     }
 
+    @Test
+    fun nullcase() {
+        articleOpener.fromRawText(null)
+
+        verify { viewModel wasNot called }
+        verify { articleFactory wasNot called }
+    }
+
 }
