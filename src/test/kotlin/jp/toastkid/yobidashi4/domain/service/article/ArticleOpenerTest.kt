@@ -66,7 +66,7 @@ class ArticleOpenerTest {
     }
 
     @Test
-    fun fromRawText1() {
+    fun fromRawTextContainingPluralLinkCase() {
         articleOpener.fromRawText("今日はとにかく[[テスト]]して[[PDCA]]を回そう")
 
         verify(exactly = 2) { viewModel.openFile(any()) }
