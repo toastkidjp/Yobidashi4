@@ -55,7 +55,7 @@ fun WebHistoryView() {
     val webHistories = remember {
         val list = mutableStateListOf<WebHistory>()
         val repository = koin.repo
-        repository.readAll().forEach { list.add(it) }
+        repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach { list.add(it) }
         list
     }
 
