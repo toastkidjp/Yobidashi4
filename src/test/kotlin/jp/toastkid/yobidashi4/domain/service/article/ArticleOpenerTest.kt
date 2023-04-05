@@ -91,7 +91,7 @@ class ArticleOpenerTest {
     }
 
     @Test
-    fun empty() {
+    fun emptyCase() {
         articleOpener.fromRawText("")
 
         verify { viewModel wasNot called }
