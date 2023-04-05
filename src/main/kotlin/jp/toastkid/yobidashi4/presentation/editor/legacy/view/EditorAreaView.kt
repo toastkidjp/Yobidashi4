@@ -106,10 +106,6 @@ class EditorAreaView(
         editorArea.caretPosition = 0
     }
 
-    fun getTextArray(): ByteArray {
-        return editorArea.text.toByteArray()
-    }
-
     fun getText() = editorArea.text
 
     fun save() {
