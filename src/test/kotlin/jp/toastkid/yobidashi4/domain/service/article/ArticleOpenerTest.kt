@@ -82,4 +82,12 @@ class ArticleOpenerTest {
         verify { articleFactory wasNot called }
     }
 
+    @Test
+    fun blank() {
+        articleOpener.fromRawText(" ")
+
+        verify { viewModel wasNot called }
+        verify { articleFactory wasNot called }
+    }
+
 }
