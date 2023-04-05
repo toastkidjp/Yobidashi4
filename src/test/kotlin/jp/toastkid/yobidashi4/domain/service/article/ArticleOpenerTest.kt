@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.service.article
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -71,6 +72,14 @@ class ArticleOpenerTest {
 
         verify(exactly = 2) { viewModel.openFile(any()) }
         verify(exactly = 2) { articleFactory.withTitle(any()) }
+    }
+
+    @Test
+    fun fromRawText2() {
+        articleOpener.fromRawText("テスト")
+
+        verify { viewModel wasNot called }
+        verify { articleFactory wasNot called }
     }
 
 }
