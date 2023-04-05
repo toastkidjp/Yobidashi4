@@ -75,7 +75,7 @@ class ArticleOpenerTest {
     }
 
     @Test
-    fun fromRawText2() {
+    fun fromRawTextNoneLinkCase() {
         articleOpener.fromRawText("テスト")
 
         verify { viewModel wasNot called }
