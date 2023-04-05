@@ -106,7 +106,7 @@ class EditorAreaView(
         editorArea.caretPosition = 0
     }
 
-    fun getText() = editorArea.text
+    fun getText(): String? = editorArea.text
 
     fun save() {
         CoroutineScope(Dispatchers.Default).launch {
