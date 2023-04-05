@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.domain.service.article
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -64,6 +63,14 @@ class ArticleOpenerTest {
 
         verify(exactly = 1) { viewModel.openFile(any()) }
         verify(exactly = 1) { articleFactory.withTitle(any()) }
+    }
+
+    @Test
+    fun fromRawText1() {
+        articleOpener.fromRawText("今日はとにかく[[テスト]]して[[PDCA]]を回そう")
+
+        verify(exactly = 2) { viewModel.openFile(any()) }
+        verify(exactly = 2) { articleFactory.withTitle(any()) }
     }
 
 }
