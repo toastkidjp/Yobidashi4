@@ -39,7 +39,7 @@ class CommandReceiverService(
                     val path = (viewModel.currentTab() as? EditorTab)?.path ?: return@collect
                     try {
                         withContext(Dispatchers.IO) {
-                            val text = editorAreaView.getText()
+                            val text = editorAreaView.getText() ?: return@withContext
                             val textArray = text.toByteArray()
                             if (textArray.isNotEmpty()) {
                                 Files.write(path, textArray)
