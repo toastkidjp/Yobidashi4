@@ -99,7 +99,7 @@ class ArticleOpenerTest {
     }
 
     @Test
-    fun nullcase() {
+    fun nullCase() {
         articleOpener.fromRawText(null)
 
         verify { viewModel wasNot called }
