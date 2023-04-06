@@ -9,14 +9,15 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class KeyboardShortcutService {
+class KeyboardShortcutService : KoinComponent {
+
+    private val viewModel: MainViewModel by inject()
 
     operator fun invoke(e: KeyEvent) {
         if (e.isControlDown.not()) {
             return
         }
 
-        val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_UP) {
             CoroutineScope(Dispatchers.Default).launch {
                 viewModel.emitEditorCommand(MenuCommand.EDITOR_TO_TOP)
