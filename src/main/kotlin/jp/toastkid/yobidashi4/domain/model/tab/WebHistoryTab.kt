@@ -6,4 +6,8 @@ class WebHistoryTab : Tab {
         return "Web history"
     }
 
+    override fun iconPath(): String? {
+        return "images/icon/ic_history.xml"
+    }
+
 }
