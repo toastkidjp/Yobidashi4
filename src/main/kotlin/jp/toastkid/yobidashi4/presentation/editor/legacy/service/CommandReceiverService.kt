@@ -44,7 +44,7 @@ class CommandReceiverService(
                             if (textArray.isNotEmpty()) {
                                 Files.write(path, textArray)
                             }
-                            viewModel.updateEditorContent(path, editorAreaView.getText(), -1, true)
+                            viewModel.updateEditorContent(path, text, -1, true)
                         }
                     } catch (e: IOException) {
                         LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
