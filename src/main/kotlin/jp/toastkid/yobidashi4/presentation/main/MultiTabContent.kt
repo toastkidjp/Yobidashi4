@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
 import jp.toastkid.yobidashi4.presentation.main.component.MemoryUsageBox
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBox
-import jp.toastkid.yobidashi4.presentation.main.content.FileList
+import jp.toastkid.yobidashi4.presentation.main.content.FileListView
 import jp.toastkid.yobidashi4.presentation.main.content.TabsView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +71,6 @@ private fun ArticleListView() {
     val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
 
     if (viewModel.articles().isNotEmpty()) {
-        FileList(viewModel.articles(), modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start))
+        FileListView(viewModel.articles(), modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start))
     }
 }
