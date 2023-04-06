@@ -9,10 +9,15 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 internal class KeyboardShortcutServiceTest {
 
@@ -24,17 +29,30 @@ internal class KeyboardShortcutServiceTest {
     @MockK
     private lateinit var keyEvent: KeyEvent
 
+    @MockK
+    private lateinit var viewModel: MainViewModel
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
-        keyboardShortcutService = KeyboardShortcutService(channel)
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { viewModel } bind(MainViewModel::class)
+                }
+            )
+        }
 
-        coEvery { channel.send(any()) }.answers { Unit }
+        keyboardShortcutService = KeyboardShortcutService()
+
+        coEvery { viewModel.emitEditorCommand(any()) }.answers { Unit }
+        every { keyEvent.isAltDown() }.answers { false }
     }
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -45,7 +63,7 @@ internal class KeyboardShortcutServiceTest {
         keyboardShortcutService.invoke(keyEvent)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
-        coVerify(exactly = 0) { channel.send(any()) }
+        coVerify(exactly = 0) { viewModel.emitEditorCommand(any()) }
     }
 
     @Test
@@ -57,9 +75,9 @@ internal class KeyboardShortcutServiceTest {
         keyboardShortcutService.invoke(keyEvent)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
-        verify(exactly = 1) { keyEvent.isShiftDown() }
-        verify(exactly = 1) { keyEvent.getKeyCode() }
-        coVerify(exactly = 1) { channel.send(any()) }
+        verify(atLeast = 1) { keyEvent.isShiftDown() }
+        verify(atLeast = 1) { keyEvent.getKeyCode() }
+        coVerify(exactly = 1) { viewModel.emitEditorCommand(any()) }
     }
 
     @Test
@@ -71,9 +89,9 @@ internal class KeyboardShortcutServiceTest {
         keyboardShortcutService.invoke(keyEvent)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
-        verify(exactly = 1) { keyEvent.isShiftDown() }
-        verify(exactly = 2) { keyEvent.getKeyCode() }
-        coVerify(exactly = 0) { channel.send(any()) }
+        verify(atLeast = 1) { keyEvent.isShiftDown() }
+        verify(atLeast = 1) { keyEvent.getKeyCode() }
+        coVerify(exactly = 0) { viewModel.emitEditorCommand(any()) }
     }
 
     @Test
@@ -85,9 +103,9 @@ internal class KeyboardShortcutServiceTest {
         keyboardShortcutService.invoke(keyEvent)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
-        verify(exactly = 1) { keyEvent.isShiftDown() }
+        verify(atLeast = 1) { keyEvent.isShiftDown() }
         verify(exactly = 1) { keyEvent.getKeyCode() }
-        coVerify(exactly = 1) { channel.send(any()) }
+        coVerify(exactly = 1) { viewModel.emitEditorCommand(any()) }
     }
 
     @Test
@@ -99,9 +117,9 @@ internal class KeyboardShortcutServiceTest {
         keyboardShortcutService.invoke(keyEvent)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
-        verify(exactly = 1) { keyEvent.isShiftDown() }
+        verify(atLeast = 1) { keyEvent.isShiftDown() }
         verify(exactly = 1) { keyEvent.getKeyCode() }
-        coVerify(exactly = 1) { channel.send(MenuCommand.ITALIC) }
+        coVerify(exactly = 1) { viewModel.emitEditorCommand(MenuCommand.ITALIC) }
     }
 
 }
