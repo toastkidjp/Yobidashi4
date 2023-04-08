@@ -61,6 +61,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     val article = koin.articleFactory.withTitle(input)
                     article.makeFile { "# ${article.getTitle()}" }
                     viewModel.addNewArticle(article.path())
+                    viewModel.openFile(article.path())
                 }
             }
 
