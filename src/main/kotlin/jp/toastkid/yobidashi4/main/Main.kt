@@ -25,6 +25,7 @@ import org.cef.CefApp.CefAppState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.ksp.generated.module
 import org.slf4j.LoggerFactory
 
@@ -80,6 +81,7 @@ fun main() {
                     return@Thread
                 }
 
+                stopKoin()
                 koin.browserPool.disposeAll()
             })
 
