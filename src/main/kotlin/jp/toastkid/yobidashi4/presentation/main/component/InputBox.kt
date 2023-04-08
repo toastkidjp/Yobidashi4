@@ -107,8 +107,8 @@ internal fun InputBox() {
                 Text("Done")
             }
 
-            LaunchedEffect(viewModel.showWebSearch()) {
-                if (viewModel.showWebSearch()) {
+            LaunchedEffect(viewModel.showInputBox()) {
+                if (viewModel.showInputBox()) {
                     focusRequester.requestFocus()
                 }
                 query.value = TextFieldValue(
