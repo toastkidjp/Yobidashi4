@@ -111,9 +111,7 @@ internal fun InputBox() {
                 if (viewModel.showInputBox()) {
                     focusRequester.requestFocus()
                 }
-                query.value = TextFieldValue(
-                    (viewModel.currentTab() as? WebTab)?.url() ?: ""
-                )
+                query.value = TextFieldValue((viewModel.currentTab() as? WebTab)?.url() ?: "")
             }
         }
     }
