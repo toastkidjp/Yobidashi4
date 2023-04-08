@@ -77,7 +77,7 @@ fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
     val completeItems = remember { mutableStateListOf<FileListItem>() }
     val articleStates = remember { mutableStateListOf<FileListItem>() }
 
-    LaunchedEffect(paths) {
+    LaunchedEffect(paths.size) {
         articleStates.clear()
         paths.map { FileListItem(it) }.forEach { articleStates.add(it) }
         completeItems.addAll(articleStates)
