@@ -69,15 +69,16 @@ fun main() {
             })
 
             Runtime.getRuntime().addShutdownHook(Thread {
-                if (CefApp.getState() == CefAppState.NONE) {
-                    object : KoinComponent { val setting: Setting by inject() }.setting.save()
-                    return@Thread
-                }
-
                 val koin = object : KoinComponent {
                     val setting: Setting by inject()
                     val browserPool: BrowserPool by inject()
                 }
+
+                if (CefApp.getState() == CefAppState.NONE) {
+                    koin.setting.save()
+                    return@Thread
+                }
+
                 koin.setting.save()
                 koin.browserPool.disposeAll()
             })
