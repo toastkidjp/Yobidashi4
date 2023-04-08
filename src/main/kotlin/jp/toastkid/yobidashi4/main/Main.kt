@@ -74,12 +74,12 @@ fun main() {
                     val browserPool: BrowserPool by inject()
                 }
 
+                koin.setting.save()
+
                 if (CefApp.getState() == CefAppState.NONE) {
-                    koin.setting.save()
                     return@Thread
                 }
 
-                koin.setting.save()
                 koin.browserPool.disposeAll()
             })
 
