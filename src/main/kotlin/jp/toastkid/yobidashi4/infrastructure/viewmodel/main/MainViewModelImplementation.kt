@@ -320,7 +320,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _openArticleList.value = false
     }
 
-    private val _articles = mutableListOf<Path>()
+    private val _articles = mutableStateListOf<Path>()
 
     override fun articles(): List<Path> {
         return _articles
