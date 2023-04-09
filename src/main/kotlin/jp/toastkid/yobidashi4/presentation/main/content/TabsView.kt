@@ -85,9 +85,9 @@ internal fun TabsView(modifier: Modifier) {
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f),
             selectedTabIndex = viewModel.selected.value,
             indicator = { tabPositions ->
-                val tabIndex = if (viewModel.selected.value == tabPositions.size) 0 else viewModel.selected.value
+                val currentTabIndex = if (viewModel.selected.value == tabPositions.size) 0 else viewModel.selected.value
                 Divider(modifier = Modifier
-                    .tabIndicatorOffset(tabPositions[tabIndex])
+                    .tabIndicatorOffset(tabPositions[currentTabIndex])
                     .height(2.dp)
                     .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                     .padding(horizontal = 4.dp)
