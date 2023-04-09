@@ -299,9 +299,7 @@ class CefClientFactory(
                         return true
                     }
                     411 -> {
-                        ClipboardPutterService().invoke(
-                            "[${viewModel.currentTab()?.title()}](${params?.pageUrl})"
-                        )
+                        ClipboardPutterService().invoke("[${viewModel.currentTab()?.title()}](${params?.pageUrl})")
                         return true
                     }
                     412 -> {
