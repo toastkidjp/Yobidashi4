@@ -86,7 +86,7 @@ internal fun TabsView(modifier: Modifier) {
             selectedTabIndex = viewModel.selected.value,
             indicator = { tabPositions ->
                 Divider(modifier = Modifier
-                    .tabIndicatorOffset(tabPositions[viewModel.selected.value])
+                    .tabIndicatorOffset(if (viewModel.selected.value == tabPositions.size) tabPositions[0] else tabPositions[viewModel.selected.value])
                     .height(2.dp)
                     .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                     .padding(horizontal = 4.dp)
