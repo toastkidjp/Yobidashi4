@@ -94,7 +94,7 @@ internal fun WebSearchBox() {
                     )
                 }
 
-                val currentTab = if (viewModel.tabs.isEmpty()) null else viewModel.currentTab()
+                val currentTab = viewModel.currentTab()
                 val swingContent = currentTab is WebTab || currentTab is EditorTab
                 DropdownMenu(
                     expanded = openDropdown.value,
