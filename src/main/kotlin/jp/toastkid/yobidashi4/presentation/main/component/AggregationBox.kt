@@ -125,7 +125,7 @@ internal fun AggregationBox() {
                     Text(selectedSite.value.key, modifier = Modifier.padding(start = 8.dp))
                 }
 
-                val currentTab = if (viewModel.tabs.isEmpty()) null else viewModel.tabs[viewModel.selected.value]
+                val currentTab = if (viewModel.tabs.isEmpty()) null else viewModel.currentTab()
                 val swingContent = currentTab is WebTab || currentTab is EditorTab
                 DropdownMenu(
                     expanded = openDropdown.value,
