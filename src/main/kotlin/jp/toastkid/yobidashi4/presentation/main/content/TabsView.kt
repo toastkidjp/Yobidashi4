@@ -207,7 +207,7 @@ private fun TabOptionMenu(
                     openDropdownMenu.value = false
                 }
             ) {
-                Text("リロード")
+                Text("Reload")
             }
         }
 
