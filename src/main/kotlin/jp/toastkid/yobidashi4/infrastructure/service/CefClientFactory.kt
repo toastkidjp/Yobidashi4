@@ -356,10 +356,14 @@ class CefClientFactory(
         val mainViewModel = object : KoinComponent{ val vm: MainViewModel by inject() }.vm
 
         val item = when {
-            params?.linkUrl != null && params.linkUrl.isNotBlank() -> makeBookmarkItemWithUrl(params.linkUrl)
-            params?.sourceUrl != null && params.sourceUrl.isNotBlank() -> makeBookmarkItemWithUrl(params.sourceUrl)
-            params?.pageUrl != null && params.pageUrl.isNotBlank() -> Bookmark(mainViewModel.currentTab()?.title() ?: "", url = params.pageUrl)
-            else -> Bookmark(mainViewModel.currentTab()?.title() ?: "", url = latestBrowser()?.url ?: "")
+            params?.linkUrl != null && params.linkUrl.isNotBlank() ->
+                makeBookmarkItemWithUrl(params.linkUrl)
+            params?.sourceUrl != null && params.sourceUrl.isNotBlank() ->
+                makeBookmarkItemWithUrl(params.sourceUrl)
+            params?.pageUrl != null && params.pageUrl.isNotBlank() ->
+                Bookmark(mainViewModel.currentTab()?.title() ?: "", url = params.pageUrl)
+            else ->
+                Bookmark(mainViewModel.currentTab()?.title() ?: "", url = latestBrowser()?.url ?: "")
         }
         object : KoinComponent{ val repository: BookmarkRepository by inject() }.repository.add(item)
         mainViewModel.showSnackbar("Add bookmark: $item")
