@@ -97,7 +97,7 @@ internal fun AggregationBox() {
             mutableStateOf(aggregations.entries.toList().get(ordinal))
         }
         val query = remember {
-            val defaultInput = "${LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))}"
+            val defaultInput = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
             mutableStateOf(TextFieldValue(defaultInput, TextRange(defaultInput.length)))
         }
         val openDropdown = remember { mutableStateOf(false) }
