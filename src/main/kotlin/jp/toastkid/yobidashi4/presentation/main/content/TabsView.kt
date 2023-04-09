@@ -6,14 +6,18 @@ import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -22,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -78,7 +83,15 @@ internal fun TabsView(modifier: Modifier) {
     Column(modifier = modifier) {
         ScrollableTabRow(
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f),
-            selectedTabIndex = viewModel.selected.value
+            selectedTabIndex = viewModel.selected.value,
+            indicator = { tabPositions ->
+                Divider(modifier = Modifier
+                    .tabIndicatorOffset(tabPositions[viewModel.selected.value])
+                    .height(2.dp)
+                    .clip(RoundedCornerShape(8.dp)) // clip modifier not working
+                    .padding(horizontal = 4.dp)
+                    .background(color = MaterialTheme.colors.onPrimary))
+            }
         ) {
             viewModel.tabs.forEachIndexed { index, tab ->
                 val openDropdownMenu = remember { mutableStateOf(false) }
