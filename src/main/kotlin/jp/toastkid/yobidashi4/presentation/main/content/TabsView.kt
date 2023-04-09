@@ -197,7 +197,7 @@ private fun TabOptionMenu(
             }
             DropdownMenuItem(
                 onClick = {
-                    if (viewModel.tabs[viewModel.selected.value] is WebTab) {
+                    if (viewModel.currentTab() is WebTab) {
                         object : KoinComponent {
                             val vm: WebTabViewModel by inject()
                         }
