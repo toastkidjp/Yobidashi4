@@ -77,7 +77,7 @@ internal fun TabsView(modifier: Modifier) {
 
     Column(modifier = modifier) {
         ScrollableTabRow(
-            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f) ,
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f),
             selectedTabIndex = viewModel.selected.value
         ) {
             viewModel.tabs.forEachIndexed { index, tab ->
