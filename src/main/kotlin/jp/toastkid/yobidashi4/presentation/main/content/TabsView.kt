@@ -90,7 +90,8 @@ internal fun TabsView(modifier: Modifier) {
                     .height(2.dp)
                     .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                     .padding(horizontal = 4.dp)
-                    .background(color = MaterialTheme.colors.onPrimary))
+                    .background(color = MaterialTheme.colors.onPrimary)
+                )
             }
         ) {
             viewModel.tabs.forEachIndexed { index, tab ->
