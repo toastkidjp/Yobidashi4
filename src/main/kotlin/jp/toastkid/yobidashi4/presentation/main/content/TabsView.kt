@@ -194,7 +194,7 @@ private fun TabOptionMenu(
                     openDropdownMenu.value = false
                 }
             ) {
-                Text("URLコピー")
+                Text("Copy URL")
             }
             DropdownMenuItem(
                 onClick = {
