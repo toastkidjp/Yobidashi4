@@ -203,8 +203,8 @@ fun LoanCalculatorView() {
                                     "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text(it.principal.roundToInt().toString(), modifier = Modifier.weight(1f))
-                                Text(it.interest.roundToInt().toString(), modifier = Modifier.weight(1f))
+                                Text(roundToIntSafely(it.principal).toString(), modifier = Modifier.weight(1f))
+                                Text(roundToIntSafely(it.interest).toString(), modifier = Modifier.weight(1f))
                                 Text(it.amount.toString(), modifier = Modifier.weight(1f))
                             }
                         }
@@ -237,6 +237,9 @@ fun LoanCalculatorView() {
         ).invoke()
     }
 }
+
+private fun roundToIntSafely(d: Double) =
+    if (d.isNaN()) "0" else d.roundToInt().toString()
 
 private fun onChange(inputChannel: Channel<String>, text: String) {
     CoroutineScope(Dispatchers.IO).launch {
