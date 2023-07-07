@@ -277,8 +277,14 @@ private fun invokeAggregation(
     if (query.isBlank()) {
         return
     }
-    aggregator.invoke(query).let {
-        viewModel.openAggregationResultTab(it.resultTitleSuffix(), it)
+
+    val result = aggregator.invoke(query)
+    if (result.isEmpty()) {
+        viewModel.showSnackbar("Finding by \"$query\" has not get any result.")
+        return
     }
+
+    viewModel.openAggregationResultTab(result.resultTitleSuffix(), result)
+
     viewModel.switchAggregationBox(false)
 }
