@@ -204,7 +204,7 @@ fun LoanCalculatorView() {
                                     modifier = Modifier.weight(0.4f)
                                 )
                                 Text(roundToIntSafely(it.principal).toString(), modifier = Modifier.weight(1f))
-                                Text(roundToIntSafely(it.interest).toString(), modifier = Modifier.weight(1f))
+                                Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
                                 Text(it.amount.toString(), modifier = Modifier.weight(1f))
                             }
                         }
