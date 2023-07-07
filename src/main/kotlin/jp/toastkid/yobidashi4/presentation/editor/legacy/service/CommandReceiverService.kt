@@ -12,6 +12,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleOpener
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
+import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.TableFormConverter
@@ -88,6 +89,11 @@ class CommandReceiverService(
                 MenuCommand.TRIMMING -> {
                     editorAreaView.replaceSelected { text ->
                         TrimmingService().invoke(text) ?: text
+                    }
+                }
+                MenuCommand.DECIMAL_FORMAT -> {
+                    editorAreaView.replaceSelected { text ->
+                        CommaInserter().invoke(text) ?: text
                     }
                 }
                 MenuCommand.CODE_BLOCK -> editorAreaView.replaceSelected { "```\n$it```" }
