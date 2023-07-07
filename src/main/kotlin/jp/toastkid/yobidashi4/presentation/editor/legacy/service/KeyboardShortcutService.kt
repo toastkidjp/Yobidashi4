@@ -81,6 +81,7 @@ class KeyboardShortcutService : KoinComponent {
                 KeyEvent.VK_AT -> MenuCommand.CODE_BLOCK
                 KeyEvent.VK_8 -> MenuCommand.SURROUND_BRACKET
                 KeyEvent.VK_CLOSE_BRACKET -> MenuCommand.SURROUND_JA_BRACKET
+                KeyEvent.VK_COMMA -> MenuCommand.DECIMAL_FORMAT
                 else -> null
             } ?: return@launch
             viewModel.emitEditorCommand(command)
