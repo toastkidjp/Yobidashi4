@@ -50,7 +50,7 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CalendarView() {
-    val calendarViewModel = object : KoinComponent { val vm: CalendarViewModel by inject() }.vm
+    val calendarViewModel = remember { object : KoinComponent { val vm: CalendarViewModel by inject() }.vm }
 
     val week = arrayOf(
         DayOfWeek.SUNDAY,
