@@ -203,7 +203,7 @@ fun LoanCalculatorView() {
                                     "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text(roundToIntSafely(it.principal).toString(), modifier = Modifier.weight(1f))
+                                Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
                                 Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
                                 Text(it.amount.toString(), modifier = Modifier.weight(1f))
                             }
