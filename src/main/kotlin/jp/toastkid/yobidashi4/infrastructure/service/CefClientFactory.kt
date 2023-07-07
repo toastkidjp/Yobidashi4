@@ -178,6 +178,9 @@ class CefClientFactory(
                 if (Files.exists(downloadFolder).not()) {
                     Files.createDirectories(downloadFolder)
                 }
+                if (suggestedName == null) {
+                    return
+                }
                 callback?.Continue(downloadFolder.resolve(suggestedName).absolutePathString(), false)
             }
         })
