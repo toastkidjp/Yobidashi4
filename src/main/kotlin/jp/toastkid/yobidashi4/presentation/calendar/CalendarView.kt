@@ -228,6 +228,5 @@ private fun makeMonth(
     return weeks
 }
 
-private val DAY_FG: Color = Color.Black
 private val OFF_DAY_FG: Color = Color(190, 50, 55)
 private val SATURDAY_FG: Color = Color(55, 50, 190)
