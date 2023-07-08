@@ -53,6 +53,8 @@ fun WebHistoryView() {
 
     val viewModel = koin.viewModel
 
+    val favicons = Files.list(Paths.get("data/web/icon")).collect(Collectors.toList())
+
     val webHistories = remember {
         val list = mutableStateListOf<WebHistory>()
         val repository = koin.repo
@@ -75,7 +77,6 @@ fun WebHistoryView() {
             ) {
                 items(webHistories) { bookmark ->
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
-                        val favicons = Files.list(Paths.get("data/web/icon")).collect(Collectors.toList())
                         val iconPath = favicons.firstOrNull {
                             val host = extractHost(bookmark) ?: return@firstOrNull false
                             val startsWith = it.fileName.pathString.startsWith(host)
