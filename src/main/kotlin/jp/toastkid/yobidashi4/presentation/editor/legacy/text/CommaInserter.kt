@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy.text
 
 class CommaInserter {
 
-    private val NUMBER_OF_DIGITS = 3
-
     operator fun invoke(text: String?): String? {
         val toCharArray = text?.toCharArray() ?: return null
         return with(StringBuilder()) {
@@ -18,3 +16,5 @@ class CommaInserter {
     }
 
 }
+
+private val NUMBER_OF_DIGITS = 3
