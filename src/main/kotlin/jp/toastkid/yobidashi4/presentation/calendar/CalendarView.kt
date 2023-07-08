@@ -67,68 +67,7 @@ fun CalendarView() {
         elevation = 4.dp
     ) {
         Column {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(8.dp)) {
-                Button(onClick = {
-                    calendarViewModel.plusMonths(-1)
-                }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionLeft }) {
-                    Text("<", modifier = Modifier.padding(8.dp))
-                }
-
-                Surface(modifier = Modifier.padding(8.dp)) {
-                    val openYearChooser = remember { mutableStateOf(false) }
-                    Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                        Text("${calendarViewModel.localDate().year}", fontSize = 16.sp)
-                        DropdownMenu(
-                            expanded = openYearChooser.value,
-                            onDismissRequest = { openYearChooser.value = false }) {
-                            val years = (1900..2200).toList()
-                            Box {
-                                val state = rememberLazyListState(years.indexOf(calendarViewModel.localDate().year))
-                                LazyColumn(state = state, modifier = Modifier.size(200.dp, 500.dp)) {
-                                    items(years) {
-                                        Text("${it}", fontSize = 16.sp, modifier = Modifier.padding(8.dp).clickable {
-                                            calendarViewModel.setYear(it)
-                                            openYearChooser.value = false
-                                        })
-                                    }
-                                }
-                                VerticalScrollbar(adapter = rememberScrollbarAdapter(state), modifier = Modifier.height(500.dp).align(Alignment.CenterEnd))
-                            }
-                        }
-                    }
-                }
-
-                Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
-
-                Surface(modifier = Modifier.padding(8.dp)) {
-                    val openMonthChooser = remember { mutableStateOf(false) }
-                    Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                        Text("${calendarViewModel.localDate().month.value}", fontSize = 16.sp)
-                        DropdownMenu(expanded = openMonthChooser.value, onDismissRequest = { openMonthChooser.value = false }) {
-                            Month.values().forEach {
-                                DropdownMenuItem(onClick = {
-                                    calendarViewModel.moveMonth(it.value)
-                                    openMonthChooser.value = false
-                                }) {
-                                    Text("${it.value}")
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Button(onClick = {
-                    calendarViewModel.plusMonths(1)
-                }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionRight }) {
-                    Text(">", modifier = Modifier.padding(8.dp))
-                }
-
-                Button(onClick = {
-                    calendarViewModel.moveToCurrentMonth()
-                }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key ==  Key.DirectionLeft }) {
-                    Text("Current month", modifier = Modifier.padding(8.dp))
-                }
-            }
+            TopComponent(calendarViewModel)
             Row {
                 week.forEach { dayOfWeek ->
                     Surface(modifier = Modifier.weight(1f)) {
@@ -177,6 +116,80 @@ fun CalendarView() {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalComposeUiApi::class)
+private fun TopComponent(calendarViewModel: CalendarViewModel) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Button(onClick = {
+            calendarViewModel.plusMonths(-1)
+        }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionLeft }) {
+            Text("<", modifier = Modifier.padding(8.dp))
+        }
+
+        Surface(modifier = Modifier.padding(8.dp)) {
+            val openYearChooser = remember { mutableStateOf(false) }
+            Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
+                Text("${calendarViewModel.localDate().year}", fontSize = 16.sp)
+                DropdownMenu(
+                    expanded = openYearChooser.value,
+                    onDismissRequest = { openYearChooser.value = false }) {
+                    val years = (1900..2200).toList()
+                    Box {
+                        val state = rememberLazyListState(years.indexOf(calendarViewModel.localDate().year))
+                        LazyColumn(state = state, modifier = Modifier.size(200.dp, 500.dp)) {
+                            items(years) {
+                                Text("${it}", fontSize = 16.sp, modifier = Modifier.padding(8.dp).clickable {
+                                    calendarViewModel.setYear(it)
+                                    openYearChooser.value = false
+                                })
+                            }
+                        }
+                        VerticalScrollbar(
+                            adapter = rememberScrollbarAdapter(state),
+                            modifier = Modifier.height(500.dp).align(Alignment.CenterEnd)
+                        )
+                    }
+                }
+            }
+        }
+
+        Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
+
+        Surface(modifier = Modifier.padding(8.dp)) {
+            val openMonthChooser = remember { mutableStateOf(false) }
+            Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
+                Text("${calendarViewModel.localDate().month.value}", fontSize = 16.sp)
+                DropdownMenu(expanded = openMonthChooser.value, onDismissRequest = { openMonthChooser.value = false }) {
+                    Month.values().forEach {
+                        DropdownMenuItem(onClick = {
+                            calendarViewModel.moveMonth(it.value)
+                            openMonthChooser.value = false
+                        }) {
+                            Text("${it.value}")
+                        }
+                    }
+                }
+            }
+        }
+
+        Button(onClick = {
+            calendarViewModel.plusMonths(1)
+        }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionRight }) {
+            Text(">", modifier = Modifier.padding(8.dp))
+        }
+
+        Button(onClick = {
+            calendarViewModel.moveToCurrentMonth()
+        }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionLeft }) {
+            Text("Current month", modifier = Modifier.padding(8.dp))
         }
     }
 }
