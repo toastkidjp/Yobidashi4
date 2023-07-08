@@ -49,7 +49,7 @@ class WebHistoryFileStore : WebHistoryRepository {
                 split[0],
                 split[1],
                 split[2].toLongOrNull() ?: 0,
-                split[3].toIntOrNull() ?: 0
+                if (split.size >= 4) split[3].toIntOrNull() ?: 0 else 0
             )
         }
     }
