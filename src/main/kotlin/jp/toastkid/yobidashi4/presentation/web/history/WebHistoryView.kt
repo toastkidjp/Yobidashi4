@@ -75,8 +75,7 @@ fun WebHistoryView() {
             ) {
                 items(webHistories) { bookmark ->
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
-                        val faviconFolder = Paths.get("data/web/icon")
-                        val favicons = Files.list(faviconFolder).collect(Collectors.toList())
+                        val favicons = Files.list(Paths.get("data/web/icon")).collect(Collectors.toList())
                         val iconPath = favicons.firstOrNull {
                             val host = extractHost(bookmark) ?: return@firstOrNull false
                             val startsWith = it.fileName.pathString.startsWith(host)
