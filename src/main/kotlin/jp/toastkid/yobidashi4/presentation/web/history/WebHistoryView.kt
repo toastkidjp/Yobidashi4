@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.net.MalformedURLException
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -76,7 +77,8 @@ fun WebHistoryView() {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
                         val faviconFolder = Paths.get("data/web/icon")
                         val iconPath = Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
-                            val startsWith = it.fileName.pathString.startsWith(URL(bookmark.url).host.trim())
+                            val host = extractHost(bookmark) ?: return@firstOrNull false
+                            val startsWith = it.fileName.pathString.startsWith(host)
                             startsWith
                         }
                         LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
@@ -111,5 +113,13 @@ fun WebHistoryView() {
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
         }
+    }
+}
+
+private fun extractHost(bookmark: WebHistory): String? {
+    return try {
+        URL(bookmark.url).host.trim()
+    } catch (e: MalformedURLException) {
+        null
     }
 }
