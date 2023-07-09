@@ -5,6 +5,14 @@ class DistanceConverterService : TwoStringConverterService {
         return "Minutes and Distance"
     }
 
+    override fun firstInputLabel(): String {
+        return "Minutes"
+    }
+
+    override fun secondInputLabel(): String {
+        return "Distance(meter)"
+    }
+
     override fun defaultFirstInputValue(): String {
         return "20"
     }
