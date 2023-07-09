@@ -30,7 +30,6 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
     ) {
         val firstInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultFirstInputValue())) }
         val secondInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultSecondInputValue())) }
-        val result = remember { mutableStateOf("") }
         Row {
             Column {
                 Text(unixTimeConverterService.title(), modifier = Modifier.padding(8.dp))
