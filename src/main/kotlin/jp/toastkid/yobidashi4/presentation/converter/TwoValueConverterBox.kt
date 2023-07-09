@@ -37,7 +37,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                     firstInput.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Keyword") },
+                    label = { Text(unixTimeConverterService.firstInputLabel()) },
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
@@ -62,7 +62,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                     secondInput.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Keyword") },
+                    label = { Text(unixTimeConverterService.secondInputLabel()) },
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
