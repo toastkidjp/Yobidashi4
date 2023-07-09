@@ -53,7 +53,7 @@ fun WebHistoryView() {
 
     val viewModel = koin.viewModel
 
-    val favicons = Files.list(Paths.get("data/web/icon")).collect(Collectors.toList())
+    val favicons = remember { Files.list(Paths.get("data/web/icon")).collect(Collectors.toList()) }
 
     val webHistories = remember {
         val list = mutableStateListOf<WebHistory>()
