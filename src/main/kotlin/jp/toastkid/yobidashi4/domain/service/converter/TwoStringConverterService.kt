@@ -4,6 +4,10 @@ interface TwoStringConverterService {
 
     fun title(): String
 
+    fun firstInputLabel(): String
+
+    fun secondInputLabel(): String
+
     fun defaultFirstInputValue(): String
 
     fun defaultSecondInputValue(): String
