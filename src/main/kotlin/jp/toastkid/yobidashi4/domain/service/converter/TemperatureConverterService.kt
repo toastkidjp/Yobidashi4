@@ -24,6 +24,14 @@ class TemperatureConverterService : TwoStringConverterService {
         return "Temperature"
     }
 
+    override fun firstInputLabel(): String {
+        return "Fahrenheit temperature"
+    }
+
+    override fun secondInputLabel(): String {
+        return "Celsius temperature"
+    }
+
     override fun defaultFirstInputValue(): String {
         return "77.0"
     }
