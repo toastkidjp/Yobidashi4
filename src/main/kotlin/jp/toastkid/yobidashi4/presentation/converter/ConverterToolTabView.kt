@@ -4,6 +4,7 @@ import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -28,7 +29,7 @@ fun ConverterToolTabView() {
     ) {
         Box {
             val state = rememberScrollState()
-            Column(modifier = Modifier.padding(8.dp).verticalScroll(state)) {
+            Column(modifier = Modifier.padding(8.dp).verticalScroll(state).fillMaxWidth()) {
                 TwoValueConverterBox(UnixTimeConverterService())
                 TwoValueConverterBox(UrlEncodeConverterService())
                 TwoValueConverterBox(TatamiCountConverterService())
