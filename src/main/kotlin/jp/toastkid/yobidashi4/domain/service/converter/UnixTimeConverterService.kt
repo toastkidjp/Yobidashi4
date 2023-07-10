@@ -17,6 +17,14 @@ class UnixTimeConverterService : TwoStringConverterService {
         return "Unixtime Converter"
     }
 
+    override fun firstInputLabel(): String {
+        return "Unixtime"
+    }
+
+    override fun secondInputLabel(): String {
+        return "Date time"
+    }
+
     override fun defaultFirstInputValue(): String = LocalDateTime.now().toInstant(offset).toEpochMilli().toString()
 
     override fun defaultSecondInputValue(): String = LocalDateTime.now().format(dateFormatter).toString()
