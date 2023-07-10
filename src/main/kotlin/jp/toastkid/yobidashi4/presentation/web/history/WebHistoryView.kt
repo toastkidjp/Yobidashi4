@@ -51,7 +51,7 @@ fun WebHistoryView() {
         val repo: WebHistoryRepository by inject()
     }
 
-    val viewModel = koin.viewModel
+    val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
     val favicons = remember { Files.list(Paths.get("data/web/icon")).collect(Collectors.toList()) }
 
