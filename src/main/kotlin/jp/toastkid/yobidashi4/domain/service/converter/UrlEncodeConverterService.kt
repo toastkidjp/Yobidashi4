@@ -12,6 +12,14 @@ class UrlEncodeConverterService : TwoStringConverterService {
         return "URL Encoder"
     }
 
+    override fun firstInputLabel(): String {
+        return "Raw string"
+    }
+
+    override fun secondInputLabel(): String {
+        return "Encoded string"
+    }
+
     override fun defaultFirstInputValue(): String {
         return "東京特許 許可局"
     }
