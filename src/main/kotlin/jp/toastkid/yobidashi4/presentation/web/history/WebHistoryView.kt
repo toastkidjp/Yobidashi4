@@ -48,7 +48,6 @@ import org.koin.core.component.inject
 fun WebHistoryView() {
     val koin = object : KoinComponent {
         val viewModel: MainViewModel by inject()
-        val repo: WebHistoryRepository by inject()
     }
 
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
