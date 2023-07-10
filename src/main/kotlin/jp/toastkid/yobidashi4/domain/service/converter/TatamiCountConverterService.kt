@@ -6,6 +6,14 @@ class TatamiCountConverterService : TwoStringConverterService {
         return "Tatami counts(畳) <-> Square meter(㎡)"
     }
 
+    override fun firstInputLabel(): String {
+        return "Tatami counts(畳)"
+    }
+
+    override fun secondInputLabel(): String {
+        return "Square meter(㎡)"
+    }
+
     override fun defaultFirstInputValue(): String {
         return "8"
     }
