@@ -10,4 +10,8 @@ class ConverterToolTab : Tab {
         return true
     }
 
+    override fun iconPath(): String? {
+        return "images/icon/ic_converter.xml"
+    }
+
 }
