@@ -185,7 +185,7 @@ private fun TabOptionMenu(
                 openDropdownMenu.value = false
             }
         ) {
-            Text("タイトルコピー")
+            Text("Copy title")
         }
         if (tab is WebTab) {
             DropdownMenuItem(
