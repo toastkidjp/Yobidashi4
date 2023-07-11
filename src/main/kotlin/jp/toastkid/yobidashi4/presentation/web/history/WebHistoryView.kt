@@ -47,7 +47,6 @@ import org.koin.core.component.inject
 @Composable
 fun WebHistoryView() {
     val koin = object : KoinComponent {
-        val viewModel: MainViewModel by inject()
     }
 
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
