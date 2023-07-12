@@ -49,6 +49,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
@@ -284,7 +285,7 @@ private fun invokeAggregation(
         return
     }
 
-    viewModel.openAggregationResultTab(result.resultTitleSuffix(), result)
+    viewModel.openTab(TableTab(result.resultTitleSuffix(), result, true, { invokeAggregation(viewModel, query, aggregator) }))
 
     viewModel.switchAggregationBox(false)
 }
