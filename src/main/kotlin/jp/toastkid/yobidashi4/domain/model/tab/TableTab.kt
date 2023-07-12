@@ -7,8 +7,9 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 data class TableTab(
     private val title: String,
     val items: AggregationResult,
-    private val closeable: Boolean = true
-): Tab {
+    private val closeable: Boolean = true,
+    private val reloadAction: () -> Unit
+): Tab, Reloadable {
 
     override fun title(): String = title
 
@@ -22,6 +23,10 @@ data class TableTab(
         }
     }
 
+    override fun reload() {
+        reloadAction()
+    }
+
 }
 
-private val ICON_FOLDER = "images/icon/"
+private const val ICON_FOLDER = "images/icon/"
