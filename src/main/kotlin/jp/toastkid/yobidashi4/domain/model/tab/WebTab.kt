@@ -7,12 +7,15 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.UUID
 import java.util.stream.Collectors
+import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlin.io.path.pathString
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class WebTab(
     private val title: MutableState<String> = mutableStateOf( ""),
     private var url: String = ""
-) : Tab {
+) : Tab, Reloadable {
 
     private val id = UUID.randomUUID().toString()
 
@@ -57,6 +60,13 @@ class WebTab(
             this.url = newUrl
             iconPathState.value = makeIconPath()
         }
+    }
+
+    override fun reload() {
+        object : KoinComponent {
+            val vm: WebTabViewModel by inject()
+        }
+            .vm.reload(id)
     }
 
 }
