@@ -147,10 +147,10 @@ private fun TopComponent(calendarViewModel: CalendarViewModel) {
                         val state = rememberLazyListState(years.indexOf(calendarViewModel.localDate().year))
                         LazyColumn(state = state, modifier = Modifier.size(200.dp, 500.dp)) {
                             items(years) {
-                                Text("${it}", fontSize = 16.sp, modifier = Modifier.fillMaxSize().padding(8.dp).clickable {
+                                Text("${it}", fontSize = 16.sp, modifier = Modifier.fillMaxSize().clickable {
                                     calendarViewModel.setYear(it)
                                     openYearChooser.value = false
-                                })
+                                }.padding(8.dp))
                             }
                         }
                         VerticalScrollbar(
