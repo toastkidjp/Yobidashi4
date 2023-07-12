@@ -151,7 +151,8 @@ private fun TopComponent(calendarViewModel: CalendarViewModel) {
                                     .clickable {
                                         calendarViewModel.setYear(it)
                                         openYearChooser.value = false
-                                    }.padding(8.dp))
+                                    }
+                                    .padding(8.dp))
                             }
                         }
                         VerticalScrollbar(
