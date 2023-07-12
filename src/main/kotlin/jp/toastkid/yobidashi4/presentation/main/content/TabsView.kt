@@ -43,6 +43,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
+import jp.toastkid.yobidashi4.domain.model.tab.Reloadable
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
@@ -63,7 +64,6 @@ import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
@@ -198,11 +198,9 @@ private fun TabOptionMenu(
             }
             DropdownMenuItem(
                 onClick = {
-                    if (viewModel.currentTab() is WebTab) {
-                        object : KoinComponent {
-                            val vm: WebTabViewModel by inject()
-                        }
-                            .vm.reload(tab.id())
+                    val currentTab = viewModel.currentTab()
+                    if (currentTab is Reloadable) {
+                        currentTab.reload()
                     }
                     openDropdownMenu.value = false
                 }
