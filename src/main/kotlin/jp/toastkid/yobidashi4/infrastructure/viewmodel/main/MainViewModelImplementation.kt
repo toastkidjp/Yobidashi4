@@ -21,13 +21,11 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
-import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
@@ -110,9 +108,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, closeable, type))
     }
 
-    override fun openAggregationResultTab(title: String, result: AggregationResult) {
-        openTab(TableTab(title, result, true))
-    }
 
     override fun openFile(path: Path, onBackground: Boolean) {
         if (path.extension == "m4a" || path.extension == "mp3") {
