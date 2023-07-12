@@ -46,9 +46,6 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WebHistoryView() {
-    val koin = object : KoinComponent {
-    }
-
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
     val favicons = remember { Files.list(Paths.get("data/web/icon")).collect(Collectors.toList()) }
