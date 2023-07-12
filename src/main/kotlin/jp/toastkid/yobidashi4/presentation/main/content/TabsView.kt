@@ -201,10 +201,7 @@ private fun TabOptionMenu(
         if (tab is Reloadable) {
             DropdownMenuItem(
                 onClick = {
-                    val currentTab = viewModel.currentTab()
-                    if (currentTab is Reloadable) {
-                        currentTab.reload()
-                    }
+                    tab.reload()
                     openDropdownMenu.value = false
                 }
             ) {
