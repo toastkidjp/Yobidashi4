@@ -8,7 +8,7 @@ data class TableTab(
     private val title: String,
     val items: AggregationResult,
     private val closeable: Boolean = true,
-    private val reloadAction: () -> Unit
+    private val reloadAction: () -> Unit = {}
 ): Tab, Reloadable {
 
     override fun title(): String = title
