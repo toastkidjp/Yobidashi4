@@ -196,6 +196,9 @@ private fun TabOptionMenu(
             ) {
                 Text("Copy URL")
             }
+        }
+
+        if (tab is Reloadable) {
             DropdownMenuItem(
                 onClick = {
                     val currentTab = viewModel.currentTab()
