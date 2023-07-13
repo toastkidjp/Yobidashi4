@@ -143,7 +143,7 @@ internal fun TabsView(modifier: Modifier) {
 
         when (val currentTab = viewModel.currentTab()) {
             is FileTab -> FileListView(currentTab.items, Modifier)
-            is TableTab -> TableView(currentTab.items)
+            is TableTab -> TableView(currentTab.items())
             is EditorTab -> {
                 if (currentTab.path.name.contains("Sandbox")) {
                     EditorTabView(currentTab)
@@ -212,7 +212,7 @@ private fun TabOptionMenu(
         if (tab is TableTab) {
             DropdownMenuItem(onClick = {
                 openDropdownMenu.value = false
-                TableContentExporter().invoke(tab.items)
+                TableContentExporter().invoke(tab.items())
                 viewModel.showSnackbar("Done export.", "Open") {
                     Desktop.getDesktop().open(Paths.get(TableContentExporter.exportTo()).toFile())
                 }
