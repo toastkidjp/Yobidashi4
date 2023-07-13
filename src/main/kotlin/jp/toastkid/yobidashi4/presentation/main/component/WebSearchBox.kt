@@ -47,6 +47,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
@@ -94,8 +95,7 @@ internal fun WebSearchBox() {
                     )
                 }
 
-                val currentTab = viewModel.currentTab()
-                val swingContent = currentTab is WebTab || currentTab is EditorTab
+                val swingContent = containsSwingContent(viewModel.currentTab())
                 DropdownMenu(
                     expanded = openDropdown.value,
                     offset = DpOffset(0.dp, if (swingContent) (-80).dp else 0.dp),
@@ -213,4 +213,9 @@ internal fun WebSearchBox() {
             }
         }
     }
+}
+
+private fun containsSwingContent(currentTab: Tab?): Boolean {
+    val swingContent = currentTab is WebTab || currentTab is EditorTab
+    return swingContent
 }
