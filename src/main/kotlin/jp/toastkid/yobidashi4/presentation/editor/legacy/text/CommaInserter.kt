@@ -17,4 +17,4 @@ class CommaInserter {
 
 }
 
-private val NUMBER_OF_DIGITS = 3
+private const val NUMBER_OF_DIGITS = 3
