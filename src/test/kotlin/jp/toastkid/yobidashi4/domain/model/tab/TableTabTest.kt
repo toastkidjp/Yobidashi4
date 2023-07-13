@@ -1,6 +1,10 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 import kotlin.test.assertNull
@@ -15,4 +19,16 @@ class TableTabTest {
         assertTrue(TableTab("test", OutgoAggregationResult("test")).iconPath()!!.startsWith("images/icon/"))
         assertNull(TableTab("test", mockk()).iconPath())
     }
+
+    @Test
+    fun reload() {
+        val action = mockk<() -> Unit>()
+        every { action.invoke() } just Runs
+        val tab = TableTab("test", mockk(), reloadAction = action)
+
+        tab.reload()
+
+        verify { action.invoke() }
+    }
+
 }
