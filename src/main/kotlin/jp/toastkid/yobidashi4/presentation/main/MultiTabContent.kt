@@ -71,6 +71,9 @@ private fun ArticleListView() {
     val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
 
     if (viewModel.articles().isNotEmpty()) {
-        FileListView(viewModel.articles(), modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start))
+        FileListView(
+            viewModel.articles(),
+            modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)
+        )
     }
 }
