@@ -200,7 +200,7 @@ fun LoanCalculatorView() {
                         itemsIndexed(scheduleState) { index, it ->
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
                                 Text(
-                                    "${(index / 12) + 1} ${(index % 12) + 1}(${index + 1})",
+                                    "${index + 1} (${(index / 12) + 1}/${(index % 12) + 1})",
                                     modifier = Modifier.weight(0.4f)
                                 )
                                 Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
