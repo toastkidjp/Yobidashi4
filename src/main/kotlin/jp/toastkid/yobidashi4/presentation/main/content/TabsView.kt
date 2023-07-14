@@ -187,6 +187,7 @@ private fun TabOptionMenu(
         ) {
             Text("Copy title")
         }
+
         if (tab is WebTab) {
             DropdownMenuItem(
                 onClick = {
