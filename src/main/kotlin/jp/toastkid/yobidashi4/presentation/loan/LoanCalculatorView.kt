@@ -209,7 +209,10 @@ fun LoanCalculatorView() {
                             }
                         }
                     }
-                    VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+                    VerticalScrollbar(
+                        adapter = rememberScrollbarAdapter(scrollState),
+                        modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+                    )
                 }
             }
         }
