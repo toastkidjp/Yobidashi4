@@ -28,7 +28,7 @@ class TableTabTest {
 
         tab.reload()
 
-        verify { action.invoke() }
+        verify(exactly = 1) { action.invoke() }
     }
 
 }
