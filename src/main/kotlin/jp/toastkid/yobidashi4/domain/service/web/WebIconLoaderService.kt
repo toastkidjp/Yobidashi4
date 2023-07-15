@@ -6,7 +6,6 @@ import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 
@@ -17,7 +16,7 @@ class WebIconLoaderService {
             .filter { elem -> elem.attr("rel").contains("icon") }
             .map { it.attr("href") }
             .toMutableList()
-        val faviconFolder = Paths.get("data/web/icon")
+        val faviconFolder = Path.of("data/web/icon")
         if (Files.exists(faviconFolder).not()) {
             Files.createDirectories(faviconFolder)
         }
