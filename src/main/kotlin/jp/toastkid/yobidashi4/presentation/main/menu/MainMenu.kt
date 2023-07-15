@@ -258,7 +258,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.switchDarkMode()
             }
             Item("Open article template") {
-                val path = Paths.get("user/article_template.txt")
+                val path = Path.of("user/article_template.txt")
                 Desktop.getDesktop().open(path.toFile())
             }
             Item(
