@@ -174,7 +174,7 @@ class CefClientFactory(
                 suggestedName: String?,
                 callback: CefBeforeDownloadCallback?
             ) {
-                val downloadFolder = Paths.get("user/download")
+                val downloadFolder = Path.of("user/download")
                 if (Files.exists(downloadFolder).not()) {
                     Files.createDirectories(downloadFolder)
                 }
