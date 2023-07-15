@@ -18,7 +18,6 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
@@ -69,7 +68,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun backgroundImage(): ImageBitmap = backgroundImage.value
 
     override fun loadBackgroundImage() {
-        val imageFolder = Paths.get("user/background")
+        val imageFolder = Path.of("user/background")
         if (Files.exists(imageFolder).not()) {
             return
         }
