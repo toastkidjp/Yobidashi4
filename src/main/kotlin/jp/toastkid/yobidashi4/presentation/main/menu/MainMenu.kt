@@ -268,7 +268,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.switchMemoryUsageBox()
             }
             Item("Show log", icon = painterResource("images/icon/ic_log.xml")) {
-                val logFilePath = Paths.get("data/logs/app.log")
+                val logFilePath = Path.of("data/logs/app.log")
                 viewModel.openTextFile(logFilePath)
             }
         }
