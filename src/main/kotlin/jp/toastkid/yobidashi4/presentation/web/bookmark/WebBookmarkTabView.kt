@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.net.URL
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
@@ -67,7 +67,7 @@ internal fun WebBookmarkTabView() {
             ) {
                 items(bookmarks) { bookmark ->
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
-                        val faviconFolder = Paths.get("data/web/icon")
+                        val faviconFolder = Path.of("data/web/icon")
                         val iconPath = Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
                             val startsWith = it.fileName.pathString.startsWith(URL(bookmark.url).host.trim())
                             startsWith
