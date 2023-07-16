@@ -1,6 +1,8 @@
-package jp.toastkid.yobidashi4.domain.model.article
+package jp.toastkid.yobidashi4.infrastructure.model.article
 
 import java.nio.file.Paths
+import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
