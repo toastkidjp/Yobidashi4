@@ -13,6 +13,8 @@ import java.awt.Desktop
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -77,6 +79,17 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     viewModel.setInitialAggregationType(7)
                 }
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
+            }
+            Item("Dump latest") {
+                val oneWeekAgo = LocalDateTime.now().minusWeeks(1)
+                val paths = Files.list(setting.articleFolderPath())
+                    .sorted { p1, p2 -> Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1 }
+                    .filter {
+                        Files.getLastModifiedTime(it).toMillis() > oneWeekAgo.toInstant(OffsetDateTime.now().offset).toEpochMilli()
+                    }
+                    .collect(Collectors.toList())
+                ZipArchiver().invoke(paths)
+                Desktop.getDesktop().open(File("."))
             }
             Item("Dump all") {
                 val paths = Files.list(setting.articleFolderPath())
