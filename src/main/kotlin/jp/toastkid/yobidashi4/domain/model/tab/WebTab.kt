@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import java.net.URL
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.util.UUID
 import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -34,7 +34,7 @@ class WebTab(
             return "images/icon/ic_web.xml"
         }
 
-        val faviconFolder = Paths.get("data/web/icon")
+        val faviconFolder = Path.of("data/web/icon")
         val iconPath = Files.list(faviconFolder).filter {
             val startsWith = it.fileName.pathString.startsWith(URL(url).host)
             startsWith
