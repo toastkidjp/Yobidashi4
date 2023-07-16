@@ -81,8 +81,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
             }
             Item("Dump latest") {
-                val oneWeekAgo = LocalDateTime.now().minusWeeks(1)
-                val toEpochMilli = oneWeekAgo.toInstant(OffsetDateTime.now().offset).toEpochMilli()
+                val toEpochMilli =  LocalDateTime.now().minusWeeks(1).toInstant(OffsetDateTime.now().offset).toEpochMilli()
                 val paths = Files.list(setting.articleFolderPath())
                     .sorted { p1, p2 -> Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1 }
                     .filter {
