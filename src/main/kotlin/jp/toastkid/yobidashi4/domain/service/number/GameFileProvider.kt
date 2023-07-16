@@ -18,7 +18,7 @@ class GameFileProvider {
     operator fun invoke(): Path? {
         makeFolderIfNeed()
 
-        return Paths.get(FOLDER_NAME).resolve(FIXED_FILE_NAME)
+        return Path.of(FOLDER_NAME).resolve(FIXED_FILE_NAME)
     }
 
     private fun makeFolderIfNeed() {
