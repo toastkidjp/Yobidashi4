@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.model.setting
 
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.Properties
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -14,7 +15,7 @@ class SettingImplementation : Setting {
     private val properties = Properties()
 
     init {
-        properties.load(Files.newBufferedReader(Paths.get(PATH)))
+        properties.load(Files.newBufferedReader(Path.of(PATH)))
     }
 
     override fun darkMode(): Boolean {
