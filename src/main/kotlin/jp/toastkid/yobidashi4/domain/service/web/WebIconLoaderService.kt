@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.web
 
+import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URI
@@ -66,7 +67,7 @@ class WebIconLoaderService {
         if (urlConnection.responseCode != 200) {
             return
         }
-        urlConnection.getInputStream().use {
+        BufferedInputStream(urlConnection.getInputStream()).use {
             Files.write(iconPath, it.readAllBytes())
         }
     }
