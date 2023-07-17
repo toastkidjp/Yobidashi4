@@ -42,7 +42,7 @@ class ArticleFilesFinderTest {
         val path3 = mockk<Path>()
         every { path3.fileName.toString() } returns "『2021-01-02』"
 
-        every { Files.list(any()) }.returns(Stream.of(path, path2, path3))
+        every { Files.list(any()) } returns Stream.of(path, path2, path3)
         every { Files.getLastModifiedTime(any()) }.returns(FileTime.fromMillis(System.currentTimeMillis()))
 
         val paths = subject.invoke(mockk())
