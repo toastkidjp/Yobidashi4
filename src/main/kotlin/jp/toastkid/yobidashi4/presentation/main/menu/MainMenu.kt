@@ -14,8 +14,8 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
-import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -87,14 +87,7 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Desktop.getDesktop().open(File("."))
             }
             Item("Dump all") {
-                val paths = Files.list(setting.articleFolderPath())
-                    .sorted { p1, p2 -> Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1 }
-                    .filter {
-                        val name = it.fileName.toString()
-                        name.startsWith("20") || name.startsWith("『")
-                    }
-                    .collect(Collectors.toList())
-                ZipArchiver().invoke(paths)
+                ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
                 Desktop.getDesktop().open(File("."))
             }
             Item("Open article folder", shortcut = KeyShortcut(Key.O, alt = true)) {
