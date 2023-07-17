@@ -67,7 +67,7 @@ class WebIconLoaderService {
         if (urlConnection.responseCode != 200) {
             return
         }
-        BufferedInputStream(urlConnection.getInputStream()).use {
+        BufferedInputStream(urlConnection.inputStream).use {
             Files.write(iconPath, it.readAllBytes())
         }
     }
