@@ -27,7 +27,7 @@ import org.koin.core.component.inject
 
 @Composable
 fun MultiTabContent() {
-    val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     Column {
         if (viewModel.showWebSearch()) {
