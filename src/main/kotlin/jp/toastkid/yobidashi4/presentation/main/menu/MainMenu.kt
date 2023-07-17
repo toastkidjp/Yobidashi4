@@ -14,9 +14,9 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
@@ -81,14 +81,9 @@ internal fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
             }
             Item("Dump latest") {
-                val toEpochMilli =  LocalDateTime.now().minusWeeks(1).toInstant(OffsetDateTime.now().offset).toEpochMilli()
-                val paths = Files.list(setting.articleFolderPath())
-                    .sorted { p1, p2 -> Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1 }
-                    .filter {
-                        Files.getLastModifiedTime(it).toMillis() > toEpochMilli
-                    }
-                    .collect(Collectors.toList())
-                ZipArchiver().invoke(paths)
+                ZipArchiver().invoke(
+                    LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
+                )
                 Desktop.getDesktop().open(File("."))
             }
             Item("Dump all") {
