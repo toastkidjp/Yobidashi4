@@ -33,8 +33,10 @@ class ArticleFilesFinderTest {
 
     @Test
     fun test() {
-        val path = mockk<Path>()
-        every { path.fileName.toString() } returns "2021-01-02"
+        val path = mockk<Path>().also {
+            every { it.fileName.toString() } returns "2021-01-02"
+        }
+
         val path2 = mockk<Path>()
         every { path2.fileName.toString() } returns "Test"
         val path3 = mockk<Path>()
