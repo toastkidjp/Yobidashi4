@@ -11,7 +11,6 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.nio.file.attribute.FileTime
 import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
@@ -33,9 +32,6 @@ internal class ArticleTest {
         MockKAnnotations.init(this)
         every { path.fileName }.returns(path)
         every { file.getName() }.returns("test.md")
-
-        mockkStatic(Paths::class)
-        every { Paths.get(any(), any()) }.returns(path)
 
         mockkStatic("kotlin.io.path.PathsKt")
         every { path.nameWithoutExtension }.returns("test")
