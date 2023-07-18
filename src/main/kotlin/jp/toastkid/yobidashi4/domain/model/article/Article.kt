@@ -13,11 +13,7 @@ class Article(private val file: Path) {
     fun getTitle() = title
 
     fun open() {
-        /*try {
-            OpenEditorService().invoke(this)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }*/
+
     }
 
     fun makeFile(contentSupplier: () -> String) {
