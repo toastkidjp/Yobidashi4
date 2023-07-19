@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.infrastructure.repository.web
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import org.koin.core.annotation.Single
@@ -55,7 +54,7 @@ class WebHistoryFileStore : WebHistoryRepository {
     }
 
     private fun getPath(): Path {
-        return Paths.get(PATH_TO_HISTORY)
+        return Path.of(PATH_TO_HISTORY)
     }
 
     private fun makeFolderIfNeed(path: Path) {
