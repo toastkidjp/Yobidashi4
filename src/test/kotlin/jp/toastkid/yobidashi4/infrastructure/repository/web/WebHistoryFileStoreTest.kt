@@ -12,8 +12,8 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -52,6 +52,14 @@ class WebHistoryFileStoreTest {
 
     @Test
     fun add() {
+        val slot = slot<Iterable<CharSequence>>()
+        every { Files.write(any(), capture(slot)) } returns path
+
+        webHistoryFileStore.add("Yahoo! JAPAN Test2", "https://www.yahoo.co.jp")
+
+        println(slot.captured)
+        assertEquals(2, slot.captured.toMutableList().size)
+        verify { Files.write(any(), slot.captured)  }
     }
 
     @Test
