@@ -4,7 +4,7 @@ import java.awt.Point
 import java.awt.Robot
 import java.awt.event.KeyEvent
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.util.UUID
 import javax.imageio.ImageIO
 import javax.swing.JDialog
@@ -117,7 +117,7 @@ class CefKeyboardShortcutProcessor(
         }
         if (event.modifiers == EventFlags.EVENTFLAG_SHIFT_DOWN
             && event.windows_key_code == KeyEvent.VK_P) {
-            val folder = Paths.get("user/screenshot")
+            val folder = Path.of("user/screenshot")
             if (Files.exists(folder).not()) {
                 Files.createDirectories(folder)
             }
