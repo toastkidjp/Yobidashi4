@@ -7,12 +7,14 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -54,13 +56,13 @@ class WebHistoryFileStoreTest {
 
     @Test
     fun delete() {
-        //webHistoryFileStore.delete("test", "https://www.yahoo.co.jp")
-        /*
-         Files.write(
-            getPath(),
-            readAll().dropWhile { it.title == title && it.url == url }.map { it.toTsv() }
-        )
-         */
+        val slot = slot<Iterable<CharSequence>>()
+        every { Files.write(any(), capture(slot)) } returns path
+
+        webHistoryFileStore.delete("Yahoo! JAPAN Test", "https://www.yahoo.co.jp")
+
+        assertTrue(slot.captured.toMutableList().isEmpty())
+        verify { Files.write(any(), slot.captured)  }
     }
 
     @Test
