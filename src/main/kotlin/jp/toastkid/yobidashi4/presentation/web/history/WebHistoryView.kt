@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -48,7 +48,7 @@ import org.koin.core.component.inject
 fun WebHistoryView() {
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
-    val favicons = remember { Files.list(Paths.get("data/web/icon")).collect(Collectors.toList()) }
+    val favicons = remember { Files.list(Path.of("data/web/icon")).collect(Collectors.toList()) }
 
     val webHistories = remember {
         val list = mutableStateListOf<WebHistory>()
