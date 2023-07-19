@@ -7,14 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.painterResource
-import java.nio.file.Paths
+import java.nio.file.Path
 import kotlin.io.path.inputStream
 import org.slf4j.LoggerFactory
 
 @Composable
 internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
     iconPath ?: return
-    val path = Paths.get(iconPath)
+    val path = Path.of(iconPath)
     if (iconPath.contains("data").not()) {
         Icon(
             painterResource(iconPath),
