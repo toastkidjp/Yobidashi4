@@ -10,7 +10,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import org.junit.jupiter.api.AfterEach
@@ -37,8 +36,8 @@ class TableContentExporterTest {
             it.add("2023-03-26(Sun)", "『The 千秋楽』(2023年、日本)")
         }
 
-        mockkStatic(Paths::class)
-        every { Paths.get(any<String>()) } returns folderPaths
+        mockkStatic(Path::class)
+        every { Path.of(any<String>()) } returns folderPaths
         every { folderPaths.resolve(any<String>()) } returns folderPaths
 
         mockkStatic(Files::class)
