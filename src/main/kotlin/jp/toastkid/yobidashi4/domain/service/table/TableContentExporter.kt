@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi4.domain.service.table
 
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 
 class TableContentExporter {
 
     operator fun invoke(aggregationResult: AggregationResult) {
-        val outputFolder = Paths.get(EXPORT_TO)
+        val outputFolder = Path.of(EXPORT_TO)
         if (Files.exists(outputFolder).not()) {
             Files.createDirectories(outputFolder)
         }
