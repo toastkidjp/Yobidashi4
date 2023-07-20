@@ -38,7 +38,6 @@ class WebHistoryFileStore : WebHistoryRepository {
         makeFolderIfNeed(path)
 
         if (Files.exists(path).not()) {
-            println("tomato not exists")
             return emptyList()
         }
 
