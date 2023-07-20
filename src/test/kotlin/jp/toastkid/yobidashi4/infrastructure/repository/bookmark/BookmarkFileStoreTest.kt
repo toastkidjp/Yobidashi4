@@ -10,7 +10,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
@@ -34,8 +33,8 @@ class BookmarkFileStoreTest {
         @BeforeAll
         fun setUpAll() {
             MockKAnnotations.init(this)
-            mockkStatic(Paths::class)
-            every { Paths.get(any<String>()) }.returns(path)
+            mockkStatic(Path::class)
+            every { Path.of(any<String>()) }.returns(path)
             every { path.parent }.returns(path)
         }
 
