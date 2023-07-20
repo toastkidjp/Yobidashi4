@@ -17,7 +17,7 @@ class CommaInserterTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         assertEquals("100", commaInserter.invoke("100"))
         assertEquals("1,000", commaInserter.invoke("1000"))
         assertEquals("556,090", commaInserter.invoke("556090"))
