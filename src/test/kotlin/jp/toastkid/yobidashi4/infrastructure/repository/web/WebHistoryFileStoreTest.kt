@@ -81,6 +81,17 @@ class WebHistoryFileStoreTest {
     }
 
     @Test
+    fun readAllWithCreateFolder() {
+        every { Files.exists(parent) } returns false
+
+        val readAll = webHistoryFileStore.readAll()
+
+        assertEquals(1, readAll.size)
+        verify(exactly = 1) { Files.exists(parent) }
+        verify(exactly = 1) { Files.createDirectories(any()) }
+    }
+
+    @Test
     fun clear() {
         every { Files.delete(any()) } just Runs
 
