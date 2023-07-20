@@ -7,7 +7,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import java.nio.file.Path
-import java.nio.file.Paths
 import jp.toastkid.yobidashi4.infrastructure.di.DiModule
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.AfterEach
@@ -31,9 +30,9 @@ class ArticleFactoryImplementationTest {
             modules(DiModule().module)
         }
         MockKAnnotations.init(this)
-        mockkStatic(Paths::class)
-        every { Paths.get(any(), any()) }.returns(path)
-        every { path.fileName }.returns(Paths.get("test.md"))
+        mockkStatic(Path::class)
+        every { Path.of(any(), any()) }.returns(path)
+        every { path.fileName }.returns(Path.of("test.md"))
     }
 
     @AfterEach
