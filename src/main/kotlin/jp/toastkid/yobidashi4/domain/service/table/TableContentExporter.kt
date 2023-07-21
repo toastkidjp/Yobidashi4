@@ -12,7 +12,7 @@ class TableContentExporter {
             Files.createDirectories(outputFolder)
         }
         Files.write(
-            outputFolder.resolve("${aggregationResult.resultTitleSuffix().replace(":", ACCEPTABLE_CHARACTER)}.tsv"),
+            outputFolder.resolve("${aggregationResult.title().replace(":", ACCEPTABLE_CHARACTER)}.tsv"),
             aggregationResult.itemArrays().map { it.joinToString(COLUMN_DELIMITER) }
         )
     }

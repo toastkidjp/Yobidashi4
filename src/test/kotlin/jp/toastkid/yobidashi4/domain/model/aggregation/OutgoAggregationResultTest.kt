@@ -22,7 +22,7 @@ internal class OutgoAggregationResultTest {
 
         assertEquals(2, outgoAggregationResult.itemArrays().size)
         assertFalse(outgoAggregationResult.isEmpty())
-        assertEquals("Total: 311", outgoAggregationResult.resultTitleSuffix())
+        assertEquals("Total: 311", outgoAggregationResult.title())
     }
 
     @Test

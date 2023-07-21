@@ -16,7 +16,7 @@ class OutgoAggregationResult(val target: String): AggregationResult {
 
     override fun header(): Array<Any> = arrayOf("Date", "Item", "Price")
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return String.format("Total: %,d", sum())
     }
 

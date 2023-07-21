@@ -11,7 +11,7 @@ interface AggregationResult {
         else -> String::class.java
     }
 
-    fun resultTitleSuffix(): String
+    fun title(): String
 
     fun isEmpty(): Boolean
 

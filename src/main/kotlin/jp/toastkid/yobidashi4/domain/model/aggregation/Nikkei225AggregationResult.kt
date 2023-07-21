@@ -12,7 +12,7 @@ class Nikkei225AggregationResult : AggregationResult {
         return map.map { arrayOf<Any>(it.key, it.value.first, it.value.second) }
     }
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return " Nikkei 225"
     }
 

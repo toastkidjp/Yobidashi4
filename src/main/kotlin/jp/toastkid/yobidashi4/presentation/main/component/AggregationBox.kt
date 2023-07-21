@@ -285,7 +285,7 @@ private fun invokeAggregation(
         return
     }
 
-    viewModel.openTab(TableTab(result.resultTitleSuffix(), result, true, { invokeAggregation(viewModel, query, aggregator) }))
+    viewModel.openTab(TableTab(result.title(), result, true, { invokeAggregation(viewModel, query, aggregator) }))
 
     viewModel.switchAggregationBox(false)
 }

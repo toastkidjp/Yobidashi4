@@ -16,7 +16,7 @@ class CompoundInterestCalculationResult : AggregationResult {
         return Integer::class.java
     }
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return " compound interests"
     }
 

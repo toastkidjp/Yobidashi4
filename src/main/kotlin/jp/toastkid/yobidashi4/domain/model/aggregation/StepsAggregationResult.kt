@@ -16,7 +16,7 @@ class StepsAggregationResult : AggregationResult {
         return dateAndSteps.map { arrayOf(it.key, it.value.first, it.value.second) }
     }
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return "歩数"
     }
 

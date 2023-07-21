@@ -12,7 +12,7 @@ class FindResult(private val keyword: String) : AggregationResult {
         return items.map { arrayOf<Any>(it.key, it.value) }
     }
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return "'$keyword' find result ${items.size}"
     }
 

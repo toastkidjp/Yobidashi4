@@ -16,7 +16,7 @@ class ArticleLengthAggregationResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> =
             map.entries.map { arrayOf(it.key, it.value) }
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return String.format("Total: %,d", sum())
     }
 

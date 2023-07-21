@@ -16,7 +16,7 @@ class StocksAggregationResult : AggregationResult {
         return dateAndSteps.map { arrayOf(it.key, it.value.first, it.value.second, it.value.third) }
     }
 
-    override fun resultTitleSuffix(): String {
+    override fun title(): String {
         return "資産運用成績"
     }
 
