@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.infrastructure.model.setting
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.Properties
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ColorDecoderService
@@ -28,7 +27,7 @@ class SettingImplementation : Setting {
 
     override fun  articleFolder(): String = properties.getProperty("article.folder") ?: ""
 
-    override fun  articleFolderPath() = Paths.get(articleFolder())
+    override fun  articleFolderPath() = Path.of(articleFolder())
 
     override fun  setUseInternalEditor(newValue: Boolean) {
         properties.setProperty("use_internal_editor", newValue.toString())
