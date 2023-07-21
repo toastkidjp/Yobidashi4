@@ -102,7 +102,7 @@ class SettingImplementation : Setting {
     override fun mediaFolderPath() = properties.getProperty("media_folder_path")
 
     override fun save() {
-        if (Paths.get(PATH).parent.exists().not()) {
+        if (Path.of(PATH).parent.exists().not()) {
             Files.createDirectory(Paths.get(PATH).parent)
         }
         properties.store(Files.newBufferedWriter(Paths.get(PATH)), null)
