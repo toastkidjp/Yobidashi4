@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi4.domain.service.number
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import kotlin.io.path.exists
 
 class GameFileProvider {
@@ -22,7 +21,7 @@ class GameFileProvider {
     }
 
     private fun makeFolderIfNeed() {
-        val folder = Paths.get(FOLDER_NAME)
+        val folder = Path.of(FOLDER_NAME)
         if (Files.exists(folder).not()) {
             Files.createDirectories(folder)
         }
