@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.DistanceConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.TatamiCountConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.TemperatureConverterService
+import jp.toastkid.yobidashi4.domain.service.converter.TsuboCountConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.UnixTimeConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.UrlEncodeConverterService
 
@@ -33,6 +34,7 @@ fun ConverterToolTabView() {
                 TwoValueConverterBox(UnixTimeConverterService())
                 TwoValueConverterBox(UrlEncodeConverterService())
                 TwoValueConverterBox(TatamiCountConverterService())
+                TwoValueConverterBox(TsuboCountConverterService())
                 TwoValueConverterBox(TemperatureConverterService())
                 TwoValueConverterBox(DistanceConverterService())
             }
