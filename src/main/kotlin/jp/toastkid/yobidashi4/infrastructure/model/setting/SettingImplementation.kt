@@ -102,10 +102,11 @@ class SettingImplementation : Setting {
     override fun mediaFolderPath() = properties.getProperty("media_folder_path")
 
     override fun save() {
-        if (Path.of(PATH).parent.exists().not()) {
-            Files.createDirectory(Path.of(PATH).parent)
+        val path = Path.of(PATH)
+        if (path.parent.exists().not()) {
+            Files.createDirectory(path.parent)
         }
-        properties.store(Files.newBufferedWriter(Path.of(PATH)), null)
+        properties.store(Files.newBufferedWriter(path), null)
     }
 
     override fun wrapLine() = properties.getProperty("editor_wrap_line").toBoolean()
