@@ -184,11 +184,11 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             .combinedClickable(
                                 enabled = true,
                                 onClick = {
-                                    val index = articleStates.indexOf(fileListItem)
+                                    val clickedIndex = articleStates.indexOf(fileListItem)
 
                                     if (shiftPressing) {
                                         val startIndex = articleStates.indexOfFirst { it.selected }
-                                        val range = if (startIndex < index) (startIndex + 1)..index else (index until startIndex)
+                                        val range = if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
                                         range.forEach { targetIndex ->
                                             articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
                                         }
@@ -205,7 +205,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                             }
                                     }
 
-                                    articleStates.set(index, fileListItem.reverseSelection())
+                                    articleStates.set(clickedIndex, fileListItem.reverseSelection())
                                 },
                                 onLongClick = {
                                     viewModel.openFile(fileListItem.path, true)
