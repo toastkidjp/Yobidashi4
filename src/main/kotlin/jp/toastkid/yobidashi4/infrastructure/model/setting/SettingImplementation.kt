@@ -103,7 +103,7 @@ class SettingImplementation : Setting {
 
     override fun save() {
         if (Path.of(PATH).parent.exists().not()) {
-            Files.createDirectory(Paths.get(PATH).parent)
+            Files.createDirectory(Path.of(PATH).parent)
         }
         properties.store(Files.newBufferedWriter(Paths.get(PATH)), null)
     }
