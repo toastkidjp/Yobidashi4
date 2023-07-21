@@ -5,7 +5,6 @@ import java.io.BufferedOutputStream
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import org.slf4j.LoggerFactory
@@ -15,7 +14,7 @@ class ZipArchiver {
     operator fun invoke(paths: Collection<Path>) {
         var zos: ZipOutputStream? = null
         try {
-            zos = ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Paths.get(DESTINATION))))
+            zos = ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Path.of(DESTINATION))))
             createZip(zos, paths)
         } catch (e: IOException) {
             LoggerFactory.getLogger(javaClass).warn("Zip error.", e)
