@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.domain.service.media
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isExecutable
 import kotlin.io.path.nameWithoutExtension
@@ -10,7 +9,7 @@ import kotlin.io.path.nameWithoutExtension
 class MediaFileFinder {
 
     operator fun invoke(mediaFileFolderPath: String): Collection<Path> {
-        val folder = Paths.get(mediaFileFolderPath)
+        val folder = Path.of(mediaFileFolderPath)
         if (folder.isDirectory().not()) {
             return emptyList()
         }
