@@ -105,7 +105,7 @@ class SettingImplementation : Setting {
         if (Path.of(PATH).parent.exists().not()) {
             Files.createDirectory(Path.of(PATH).parent)
         }
-        properties.store(Files.newBufferedWriter(Paths.get(PATH)), null)
+        properties.store(Files.newBufferedWriter(Path.of(PATH)), null)
     }
 
     override fun wrapLine() = properties.getProperty("editor_wrap_line").toBoolean()
