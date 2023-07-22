@@ -5,12 +5,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
-import jp.toastkid.yobidashi4.presentation.web.BrowserView
+import jp.toastkid.yobidashi4.presentation.web.event.FindEvent
+import jp.toastkid.yobidashi4.presentation.web.event.ReloadEvent
+import jp.toastkid.yobidashi4.presentation.web.event.SwitchDeveloperToolEvent
+import jp.toastkid.yobidashi4.presentation.web.event.WebTabEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 
 @Single
 class WebTabViewModelImplementation : WebTabViewModel {
-    private val browserView = BrowserView()
+
+    private val _event = MutableSharedFlow<WebTabEvent>()
+
+    override fun event() = _event.asSharedFlow()
 
     private val openFind = mutableStateOf(false)
 
@@ -30,25 +41,33 @@ class WebTabViewModelImplementation : WebTabViewModel {
     }
 
     override fun findUp(id: String) {
-        browserView.findUp(id, inputValue().text)
+        CoroutineScope(Dispatchers.Default).launch {
+            _event.emit(FindEvent(id, inputValue().text, true))
+        }
     }
 
     override fun findDown(id: String) {
-        browserView.find(id, inputValue().text)
+        CoroutineScope(Dispatchers.Default).launch {
+            _event.emit(FindEvent(id, inputValue().text))
+        }
     }
 
     override fun switchDevTools() {
-        browserView.switchDevTools()
+        CoroutineScope(Dispatchers.Default).launch {
+            _event.emit(SwitchDeveloperToolEvent())
+        }
     }
 
     override fun reload(id: String) {
-        browserView.reload(id)
+        CoroutineScope(Dispatchers.Default).launch {
+            _event.emit(ReloadEvent(id))
+        }
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     override fun view(id: String, initialUrl: String) {
-        browserView.view(id, initialUrl)
+        // TODO Delete it. browserView.view(id, initialUrl)
     }
 
 }
