@@ -10,6 +10,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
+import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -33,7 +34,11 @@ class GameRepositoryImplementationTest {
 
     @Test
     fun save() {
-        //TODO
+        every { Files.write(any(), any<ByteArray>()) }.returns(mockk())
+
+        gameRepositoryImplementation.save(mockk(), NumberPlaceGame())
+
+        verify { Files.write(any(), any<ByteArray>()) }
     }
 
     @Test
