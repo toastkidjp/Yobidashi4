@@ -7,9 +7,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.UUID
 import javax.imageio.ImageIO
-import javax.swing.JDialog
 import javax.swing.SwingUtilities
-import javax.swing.WindowConstants
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
@@ -107,12 +106,9 @@ class CefKeyboardShortcutProcessor(
         }
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN
             && event.windows_key_code == KeyEvent.VK_K) {
-            //object : KoinComponent{ val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools()
-            val devToolsDialog = JDialog()
-            devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
-            devToolsDialog.setSize(800, 600)
-            devToolsDialog.add(browser?.devTools?.uiComponent)
-            devToolsDialog.isVisible = true
+            (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
+                object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools(id)
+            }
             return true
         }
         if (event.modifiers == EventFlags.EVENTFLAG_SHIFT_DOWN
