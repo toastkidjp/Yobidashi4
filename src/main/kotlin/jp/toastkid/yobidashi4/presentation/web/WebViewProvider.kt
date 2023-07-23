@@ -34,7 +34,7 @@ class WebViewProvider : KoinComponent {
 
     private val webViewPool: WebViewPool by inject()
 
-    private val viewModel: MainViewModel by  inject()
+    private val mainViewModel: MainViewModel by  inject()
 
     private var location = IntOffset.Zero
 
@@ -76,7 +76,7 @@ class WebViewProvider : KoinComponent {
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(if (viewModel.showingSnackbar()) 48.dp else 0.dp))
+            Spacer(modifier = Modifier.height(if (mainViewModel.showingSnackbar()) 48.dp else 0.dp))
         }
 
         LaunchedEffect(id) {
