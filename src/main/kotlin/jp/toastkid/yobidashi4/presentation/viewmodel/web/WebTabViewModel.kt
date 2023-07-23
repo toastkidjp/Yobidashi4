@@ -12,6 +12,6 @@ interface WebTabViewModel {
     fun onFindInputChange(id: String, value: TextFieldValue)
     fun findUp(id: String)
     fun findDown(id: String)
-    fun switchDevTools()
+    fun switchDevTools(id: String)
     fun reload(id: String)
 }
