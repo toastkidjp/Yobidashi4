@@ -92,7 +92,7 @@ class BrowserView : KoinComponent {
     }
 
     fun find(id: String, text: String) {
-        browserPool?.find(id, text, true)
+        browserPool.find(id, text, true)
     }
 
     fun findUp(id: String, text: String) {
