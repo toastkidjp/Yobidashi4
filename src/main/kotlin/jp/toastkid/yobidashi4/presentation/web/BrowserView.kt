@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -44,7 +44,6 @@ class BrowserView : KoinComponent {
     @Composable
     fun view(id: String, initialUrl: String) {
         val component = browserPool.component(id, initialUrl)
-        component.isVisible = true
         val focusRequester = remember { FocusRequester() }
 
         Column {
@@ -57,9 +56,9 @@ class BrowserView : KoinComponent {
                             placeable.placeRelative(0, 0)
                         }
                     }
+                    .weight(1f)
                     .focusRequester(focusRequester)
                     .clickable { focusRequester.requestFocus() }
-                    .weight(1f)
             ) {
                 SwingPanel(
                     factory = {
@@ -88,10 +87,8 @@ class BrowserView : KoinComponent {
             }
         }
 
-        DisposableEffect(component) {
-            onDispose {
-                component.isVisible = false
-            }
+        SideEffect {
+            component.requestFocus()
         }
     }
 
