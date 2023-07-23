@@ -96,7 +96,7 @@ class BrowserView : KoinComponent {
     }
 
     fun findUp(id: String, text: String) {
-        browserPool?.find(id, text, false)
+        browserPool.find(id, text, false)
     }
 
     fun reload(id: String) {
