@@ -28,21 +28,30 @@ fun WebTabView(tab: WebTab) {
     browserView.view(tab.id(), tab.url())
 
     LaunchedEffect(Unit) {
-        viewModel.event().collect {
-            when (it) {
-                is FindEvent -> {
-                    if (it.upward) {
-                        browserView.findUp(it.id, it.text)
-                    } else {
-                        browserView.find(it.id, it.text)
-                    }
+        receiveEvent(viewModel, browserView)
+    }
+}
+
+private suspend fun receiveEvent(
+    viewModel: WebTabViewModel,
+    browserView: BrowserView
+) {
+    viewModel.event().collect {
+        when (it) {
+            is FindEvent -> {
+                if (it.upward) {
+                    browserView.findUp(it.id, it.text)
+                } else {
+                    browserView.find(it.id, it.text)
                 }
-                is ReloadEvent -> {
-                    browserView.reload(it.id)
-                }
-                is SwitchDeveloperToolEvent -> {
-                    browserView.switchDevTools()
-                }
+            }
+
+            is ReloadEvent -> {
+                browserView.reload(it.id)
+            }
+
+            is SwitchDeveloperToolEvent -> {
+                browserView.switchDevTools()
             }
         }
     }
