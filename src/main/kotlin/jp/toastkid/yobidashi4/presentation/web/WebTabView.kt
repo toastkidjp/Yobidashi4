@@ -19,39 +19,39 @@ fun WebTabView(tab: WebTab) {
         }.webTabViewModel
     }
 
-    val browserView = remember { BrowserView() }
+    val webViewProvider = remember { WebViewProvider() }
 
     if (tab.isReadableUrl().not()) {
         return
     }
 
-    browserView.view(tab.id(), tab.url())
+    webViewProvider.view(tab.id(), tab.url())
 
     LaunchedEffect(Unit) {
-        receiveEvent(viewModel, browserView)
+        receiveEvent(viewModel, webViewProvider)
     }
 }
 
 private suspend fun receiveEvent(
     viewModel: WebTabViewModel,
-    browserView: BrowserView
+    webViewProvider: WebViewProvider
 ) {
     viewModel.event().collect {
         when (it) {
             is FindEvent -> {
                 if (it.upward) {
-                    browserView.findUp(it.id, it.text)
+                    webViewProvider.findUp(it.id, it.text)
                 } else {
-                    browserView.find(it.id, it.text)
+                    webViewProvider.find(it.id, it.text)
                 }
             }
 
             is ReloadEvent -> {
-                browserView.reload(it.id)
+                webViewProvider.reload(it.id)
             }
 
             is SwitchDeveloperToolEvent -> {
-                browserView.switchDevTools()
+                webViewProvider.switchDevTools()
             }
         }
     }

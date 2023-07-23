@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class BrowserView : KoinComponent {
+class WebViewProvider : KoinComponent {
 
     private val browserPool: BrowserPool by inject()
 
