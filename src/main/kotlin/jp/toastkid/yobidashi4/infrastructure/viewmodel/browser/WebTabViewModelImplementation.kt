@@ -50,9 +50,9 @@ class WebTabViewModelImplementation : WebTabViewModel {
         }
     }
 
-    override fun switchDevTools() {
+    override fun switchDevTools(id: String) {
         CoroutineScope(Dispatchers.Default).launch {
-            _event.emit(SwitchDeveloperToolEvent())
+            _event.emit(SwitchDeveloperToolEvent(id))
         }
     }
 
