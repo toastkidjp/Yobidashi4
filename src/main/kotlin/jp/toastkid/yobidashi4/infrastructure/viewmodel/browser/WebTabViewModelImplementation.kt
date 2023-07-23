@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.viewmodel.browser
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -61,11 +60,6 @@ class WebTabViewModelImplementation : WebTabViewModel {
         CoroutineScope(Dispatchers.Default).launch {
             _event.emit(ReloadEvent(id))
         }
-    }
-
-    @Composable
-    override fun view(id: String, initialUrl: String) {
-        // TODO Delete it. browserView.view(id, initialUrl)
     }
 
 }
