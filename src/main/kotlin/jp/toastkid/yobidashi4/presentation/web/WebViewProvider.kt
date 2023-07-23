@@ -21,6 +21,8 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import javax.swing.JDialog
+import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -103,8 +105,13 @@ class WebViewProvider : KoinComponent {
         webViewPool.reload(id)
     }
 
-    fun switchDevTools() {
-        showDevTool.value = showDevTool.value.not()
+    fun switchDevTools(id: String) {
+        //showDevTool.value = showDevTool.value.not()
+        val devToolsDialog = JDialog()
+        devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
+        devToolsDialog.setSize(800, 600)
+        devToolsDialog.add(webViewPool.devTools(id))
+        devToolsDialog.isVisible = true
     }
 
 }
