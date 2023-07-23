@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.viewmodel.web
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.presentation.web.event.WebTabEvent
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,6 +14,4 @@ interface WebTabViewModel {
     fun findDown(id: String)
     fun switchDevTools()
     fun reload(id: String)
-    @Composable
-    fun view(id: String, initialUrl: String)
 }
