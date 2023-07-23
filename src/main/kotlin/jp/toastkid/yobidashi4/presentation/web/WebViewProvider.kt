@@ -21,7 +21,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,7 +30,7 @@ import org.koin.core.component.inject
 
 class WebViewProvider : KoinComponent {
 
-    private val browserPool: BrowserPool by inject()
+    private val webViewPool: WebViewPool by inject()
 
     private val viewModel: MainViewModel by  inject()
 
@@ -42,7 +42,7 @@ class WebViewProvider : KoinComponent {
 
     @Composable
     fun view(id: String, initialUrl: String) {
-        val component = browserPool.component(id, initialUrl)
+        val component = webViewPool.component(id, initialUrl)
         val focusRequester = remember { FocusRequester() }
 
         Column {
@@ -68,7 +68,7 @@ class WebViewProvider : KoinComponent {
                 if (showDevTool.value) {
                     SwingPanel(
                         factory = {
-                            browserPool.devTools(id)
+                            webViewPool.devTools(id)
                         },
                         modifier = Modifier.height(300.dp)
                     )
@@ -81,7 +81,7 @@ class WebViewProvider : KoinComponent {
             val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
             withContext(Dispatchers.IO) {
                 viewModel.finderFlow().collect {
-                    browserPool.find(id, it.target, it.upper.not())
+                    webViewPool.find(id, it.target, it.upper.not())
                 }
             }
         }
@@ -92,15 +92,15 @@ class WebViewProvider : KoinComponent {
     }
 
     fun find(id: String, text: String) {
-        browserPool.find(id, text, true)
+        webViewPool.find(id, text, true)
     }
 
     fun findUp(id: String, text: String) {
-        browserPool.find(id, text, false)
+        webViewPool.find(id, text, false)
     }
 
     fun reload(id: String) {
-        browserPool.reload(id)
+        webViewPool.reload(id)
     }
 
     fun switchDevTools() {

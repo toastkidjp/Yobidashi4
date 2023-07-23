@@ -7,7 +7,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
-import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.TodayArticleGenerator
 import jp.toastkid.yobidashi4.infrastructure.di.DiModule
@@ -72,7 +72,7 @@ fun main() {
             Runtime.getRuntime().addShutdownHook(Thread {
                 val koin = object : KoinComponent {
                     val setting: Setting by inject()
-                    val browserPool: BrowserPool by inject()
+                    val webViewPool: WebViewPool by inject()
                 }
 
                 koin.setting.save()
@@ -82,7 +82,7 @@ fun main() {
                 }
 
                 stopKoin()
-                koin.browserPool.disposeAll()
+                koin.webViewPool.disposeAll()
             })
 
             withContext(Dispatchers.IO) {

@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.model.browser
 
 import java.awt.Component
-import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.infrastructure.service.CefClientFactory
 import org.cef.CefApp
 import org.cef.CefClient
@@ -10,7 +10,7 @@ import org.koin.core.annotation.Single
 
 
 @Single
-class BrowserPoolImplementation : BrowserPool {
+class WebViewPoolImplementation : WebViewPool {
 
     private val client: CefClient
 

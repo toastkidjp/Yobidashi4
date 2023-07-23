@@ -19,9 +19,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class BrowserPoolImplementationTest {
+class WebViewPoolImplementationTest {
 
-    private lateinit var browserPoolImplementation: BrowserPoolImplementation
+    private lateinit var browserPoolImplementation: WebViewPoolImplementation
 
     @MockK
     private lateinit var cefClient: CefClient
@@ -45,7 +45,7 @@ class BrowserPoolImplementationTest {
         mockkStatic(CefApp::class)
         every { CefApp.getInstance().dispose() }.just(Runs)
 
-        browserPoolImplementation = BrowserPoolImplementation()
+        browserPoolImplementation = WebViewPoolImplementation()
     }
 
     @AfterEach

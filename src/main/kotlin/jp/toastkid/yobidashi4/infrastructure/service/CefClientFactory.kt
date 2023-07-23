@@ -13,7 +13,7 @@ import java.nio.file.Path
 import java.util.Locale
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
@@ -262,7 +262,7 @@ class CefClientFactory(
                             // TODO
                             viewModel.openUrl(it, true)
                             val webTab = viewModel.tabs.last() as? WebTab ?: return true
-                            object : KoinComponent { val browserPool: BrowserPool by inject() }.browserPool.component(
+                            object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.component(
                                 webTab.id(), webTab.url()
                             )
                         }
