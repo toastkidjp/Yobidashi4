@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlin.io.path.absolutePathString
 import me.friwi.jcefmaven.CefAppBuilder
 import me.friwi.jcefmaven.impl.progress.ConsoleProgressHandler
@@ -237,6 +238,7 @@ class CefClientFactory(
                 model?.addItem(414, "ブラウザーで開く")
                 model?.addItem(406, "ズーム率をリセット")
                 model?.addItem(412, "PDF で保存")
+                model?.addItem(417, "Developer tool")
             }
 
             override fun onContextMenuCommand(
@@ -322,6 +324,12 @@ class CefClientFactory(
                     416 -> {
                         params?.selectionText?.let {
                             ClipboardPutterService().invoke(it)
+                        }
+                        return true
+                    }
+                    417 -> {
+                        (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
+                            object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools(id)
                         }
                         return true
                     }
