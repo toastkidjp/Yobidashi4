@@ -32,7 +32,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
 
     implementation("com.fifesoft:rsyntaxtextarea:3.3.2")
-    implementation("me.friwi:jcefmaven:108.4.13")
+    implementation("me.friwi:jcefmaven:110.0.25")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
