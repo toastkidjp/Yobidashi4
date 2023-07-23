@@ -51,7 +51,7 @@ private suspend fun receiveEvent(
             }
 
             is SwitchDeveloperToolEvent -> {
-                webViewProvider.switchDevTools()
+                webViewProvider.switchDevTools(it.id)
             }
         }
     }
