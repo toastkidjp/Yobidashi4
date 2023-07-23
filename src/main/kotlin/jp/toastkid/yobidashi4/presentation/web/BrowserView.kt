@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.web
 
-//EXPERIMENTAL FOCUS API
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
