@@ -8,7 +8,6 @@ import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.koin.core.annotation.Single
 
-
 @Single
 class WebViewPoolImplementation : WebViewPool {
 
