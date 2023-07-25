@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.web.user_agent
 
 
 /**
- * Browser's user agent.
+ * WebView's user agent.
  *
  * @author toastkidjp
  */
