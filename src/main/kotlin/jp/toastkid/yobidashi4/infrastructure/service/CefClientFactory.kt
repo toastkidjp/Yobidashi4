@@ -105,7 +105,7 @@ class CefClientFactory(
             ) {
                 super.onLoadingStateChange(browser, isLoading, canGoBack, canGoForward)
                 if (isLoading.not() && browser?.url?.startsWith("http") == true) {
-                    browser?.getSource {
+                    browser.getSource {
                         webIconLoaderService.invoke(it, browser.url)
                     }
                 }
