@@ -20,7 +20,10 @@ internal class LinkDecoratorServiceTest {
         val document = mockk<Document>()
         every { Jsoup.parse(any<URL>(), any()) }.returns(document)
         every { document.title() } returns "Yahoo! JAPAN"
-        assertEquals("[Yahoo! JAPAN](https://www.yahoo.co.jp)", LinkDecoratorService().invoke("https://www.yahoo.co.jp"))
+        assertEquals(
+            "[Yahoo! JAPAN](https://www.yahoo.co.jp)",
+            LinkDecoratorService().invoke("https://www.yahoo.co.jp")
+        )
         clearAllMocks()
     }
 
