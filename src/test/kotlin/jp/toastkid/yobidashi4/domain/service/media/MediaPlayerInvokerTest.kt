@@ -66,7 +66,7 @@ class MediaPlayerInvokerTest {
     }
 
     @Test
-    fun errorCase() {
+    fun testErrorCase() {
         every { runtime.exec(any<Array<String>>()) }.throws(IOException())
 
         mediaPlayerInvoker.invoke(path)
