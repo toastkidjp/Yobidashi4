@@ -21,7 +21,7 @@ class InternalLinkScheme {
 
         private const val WHITE_SPACE = " "
 
-        private val ESCAPED_WHITE_SPACE = "%20"
+        private const val ESCAPED_WHITE_SPACE = "%20"
 
     }
 
