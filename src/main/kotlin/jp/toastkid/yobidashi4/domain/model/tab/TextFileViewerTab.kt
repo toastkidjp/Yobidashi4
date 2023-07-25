@@ -12,7 +12,7 @@ class TextFileViewerTab(private val path: Path) : Tab {
         return true
     }
 
-    override fun iconPath(): String? {
+    override fun iconPath(): String {
         return "images/icon/${if (path.startsWith("data/logs/")) "ic_log" else "ic_text" }.xml"
     }
 
