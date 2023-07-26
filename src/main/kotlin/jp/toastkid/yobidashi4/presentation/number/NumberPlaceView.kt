@@ -144,7 +144,7 @@ fun NumberPlaceView() {
                                                 open.value = true
                                             },
                                             onLongClick = {
-                                                koin.mainViewModel?.showSnackbar(
+                                                koin.mainViewModel.showSnackbar(
                                                     "Would you like to use hint?",
                                                     "Use"
                                                 ) {
