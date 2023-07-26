@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
+import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuFactory
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -215,30 +216,7 @@ class CefClientFactory(
                 super.onBeforeContextMenu(browser, frame, params, model)
                 selectedText = params?.selectionText ?: ""
 
-                model?.addItem(401, "リロード")
-                model?.addItem(408, "ブックマークに追加")
-                if (params?.linkUrl.isNullOrBlank().not()) {
-                    model?.addItem(402, "別タブで開く")
-                    model?.addItem(403, "バックグラウンドで開く")
-                    model?.addItem(404, "リンクをコピー")
-                }
-                if (params?.sourceUrl.isNullOrBlank().not()) {
-                    model?.addItem(407, "ダウンロード")
-                    model?.addItem(409, "画像をコピー")
-                    model?.addItem(415, "この画像を検索")
-                }
-                if (params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()) {
-                    model?.addItem(410, "ページのリンクをコピー")
-                    model?.addItem(411, "Markdown のリンクをコピー")
-                }
-                if (selectedText.isNotBlank()) {
-                    model?.addItem(416, "テキストをコピー")
-                    model?.addItem(405, "選択したテキストを検索")
-                }
-                model?.addItem(414, "ブラウザーで開く")
-                model?.addItem(406, "ズーム率をリセット")
-                model?.addItem(412, "PDF で保存")
-                model?.addItem(417, "Developer tool")
+                CefContextMenuFactory().invoke(params, model)
             }
 
             override fun onContextMenuCommand(
