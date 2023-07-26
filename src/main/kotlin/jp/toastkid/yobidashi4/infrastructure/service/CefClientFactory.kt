@@ -207,6 +207,7 @@ class CefClientFactory(
             }
         })
         client.addContextMenuHandler(object : CefContextMenuHandlerAdapter() {
+
             private val cefContextMenuFactory = CefContextMenuFactory()
 
             override fun onBeforeContextMenu(
