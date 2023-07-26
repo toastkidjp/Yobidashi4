@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
+import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -30,18 +31,18 @@ class CefContextMenuAction : KoinComponent {
         commandId: Int
         ) {
         when (commandId) {
-            401 -> {
+            ContextMenu.RELOAD.id -> {
                 browser?.reload()
             }
 
-            402 -> {
+            ContextMenu.OPEN_OTHER_TAB.id -> {
                 params?.linkUrl?.let {
                     viewModel.openUrl(it, false)
                 }
                 
             }
 
-            403 -> {
+            ContextMenu.OPEN_BACKGROUND.id -> {
                 params?.linkUrl?.let {
                     // TODO
                     viewModel.openUrl(it, true)
@@ -55,73 +56,73 @@ class CefContextMenuAction : KoinComponent {
                 
             }
 
-            404 -> {
+            ContextMenu.CLIP_LINK.id -> {
                 params?.linkUrl?.let {
                     ClipboardPutterService().invoke(it)
                 }
                 
             }
 
-            405 -> {
+            ContextMenu.SEARCH_WITH_SELECTED_TEXT.id -> {
                 search(selectedText)
                 
             }
 
-            406 -> {
+            ContextMenu.RESET_ZOOM.id -> {
                 browser?.let {
                     it.zoomLevel = 0.0
                 }
                 
             }
 
-            407 -> {
+            ContextMenu.DOWNLOAD.id -> {
                 browser?.startDownload(params?.sourceUrl)
                 
             }
 
-            408 -> {
+            ContextMenu.ADD_BOOKMARK.id -> {
                 addBookmark(browser, params)
                 
             }
 
-            409 -> {
+            ContextMenu.CLIP_IMAGE.id -> {
                 val image = ImageIO.read(URL(params?.sourceUrl)) ?: return
                 ClipboardPutterService().invoke(image)
             }
 
-            410 -> {
+            ContextMenu.CLIP_PAGE_LINK.id -> {
                 ClipboardPutterService().invoke(params?.linkUrl ?: params?.sourceUrl ?: params?.pageUrl)
                 
             }
 
-            411 -> {
+            ContextMenu.CLIP_AS_MARKDOWN_LINK.id -> {
                 ClipboardPutterService().invoke("[${viewModel.currentTab()?.title()}](${params?.pageUrl})")
                 
             }
 
-            412 -> {
+            ContextMenu.SAVE_AS_PDF.id -> {
                 browser?.printToPDF("${browser.identifier}.pdf", null, null)
             }
 
-            414 -> {
+            ContextMenu.OPEN_WITH_OTHER_BROWSER.id -> {
                 browsePage(browser, params?.linkUrl ?: params?.sourceUrl ?: selectedText)
                 
             }
 
-            415 -> {
+            ContextMenu.SEARCH_WITH_IMAGE.id -> {
                 params?.sourceUrl?.let {
                     viewModel.openUrl(SearchSite.SEARCH_WITH_IMAGE.make(it).toString(), false)
                 }
             }
 
-            416 -> {
+            ContextMenu.CLIP_TEXT.id -> {
                 params?.selectionText?.let {
                     ClipboardPutterService().invoke(it)
                 }
                 
             }
 
-            417 -> {
+            ContextMenu.DEVELOPER_TOOL.id -> {
                 (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
                     object : KoinComponent {
                         val viewModel: WebTabViewModel by inject()
