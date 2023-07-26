@@ -5,26 +5,20 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.net.URI
-import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Locale
 import java.util.stream.Collectors
-import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
-import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
+import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuAction
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuFactory
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlin.io.path.absolutePathString
 import me.friwi.jcefmaven.CefAppBuilder
 import me.friwi.jcefmaven.impl.progress.ConsoleProgressHandler
@@ -229,93 +223,9 @@ class CefClientFactory(
                 commandId: Int,
                 eventFlags: Int
             ): Boolean {
-                return when (commandId) {
-                    401 -> {
-                        latestBrowser()?.reload()
-                        return true
-                    }
-                    402 -> {
-                        params?.linkUrl?.let {
-                            viewModel.openUrl(it, false)
-                        }
-                        return true
-                    }
-                    403 -> {
-                        params?.linkUrl?.let {
-                            // TODO
-                            viewModel.openUrl(it, true)
-                            val webTab = viewModel.tabs.last() as? WebTab ?: return true
-                            object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.component(
-                                webTab.id(), webTab.url()
-                            )
-                        }
-                        return true
-                    }
-                    404 -> {
-                        params?.linkUrl?.let {
-                            ClipboardPutterService().invoke(it)
-                        }
-                        return true
-                    }
-                    405 -> {
-                        search(selectedText)
-                        return true
-                    }
-                    406 -> {
-                        latestBrowser()?.let {
-                            it.zoomLevel = 0.0
-                        }
-                        return true
-                    }
-                    407 -> {
-                        latestBrowser()?.startDownload(params?.sourceUrl)
-                        return true
-                    }
-                    408 -> {
-                        addBookmark(params)
-                        return true
-                    }
-                    409 -> {
-                        val image = ImageIO.read(URL(params?.sourceUrl)) ?: return true
-                        ClipboardPutterService().invoke(image)
-                        return true
-                    }
-                    410 -> {
-                        ClipboardPutterService().invoke(params?.linkUrl ?: params?.sourceUrl ?: params?.pageUrl)
-                        return true
-                    }
-                    411 -> {
-                        ClipboardPutterService().invoke("[${viewModel.currentTab()?.title()}](${params?.pageUrl})")
-                        return true
-                    }
-                    412 -> {
-                        printPdf()
-                        return true
-                    }
-                    414 -> {
-                        browsePage(params?.linkUrl ?: params?.sourceUrl ?: selectedText)
-                        return true
-                    }
-                    415 -> {
-                        params?.sourceUrl?.let {
-                            viewModel.openUrl(SearchSite.SEARCH_WITH_IMAGE.make(it).toString(), false)
-                        }
-                        return true
-                    }
-                    416 -> {
-                        params?.selectionText?.let {
-                            ClipboardPutterService().invoke(it)
-                        }
-                        return true
-                    }
-                    417 -> {
-                        (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
-                            object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools(id)
-                        }
-                        return true
-                    }
-                    else -> super.onContextMenuCommand(browser, frame, params, commandId, eventFlags)
-                }
+                CefContextMenuAction().invoke(browser, params, selectedText, commandId)
+
+                return super.onContextMenuCommand(browser, frame, params, commandId, eventFlags)
             }
 
         })
