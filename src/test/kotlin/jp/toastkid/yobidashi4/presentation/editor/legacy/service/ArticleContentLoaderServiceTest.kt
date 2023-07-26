@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 
+import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
@@ -18,6 +19,7 @@ internal class ArticleContentLoaderServiceTest {
 
     @BeforeEach
     fun setUp() {
+        MockKAnnotations.init(this)
         mockkStatic(Files::class)
         every { Files.readAllLines(any()) }.answers { listOf("line1", "line2") }
     }
