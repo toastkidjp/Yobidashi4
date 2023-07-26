@@ -207,6 +207,8 @@ class CefClientFactory(
             }
         })
         client.addContextMenuHandler(object : CefContextMenuHandlerAdapter() {
+            private val cefContextMenuFactory = CefContextMenuFactory()
+
             override fun onBeforeContextMenu(
                 browser: CefBrowser?,
                 frame: CefFrame?,
@@ -216,7 +218,7 @@ class CefClientFactory(
                 super.onBeforeContextMenu(browser, frame, params, model)
                 selectedText = params?.selectionText ?: ""
 
-                CefContextMenuFactory().invoke(params, model)
+                cefContextMenuFactory.invoke(params, model)
             }
 
             override fun onContextMenuCommand(
