@@ -40,7 +40,7 @@ class UserTemplateStreamReaderTest {
     }
 
     @Test
-    fun invoke2() {
+    fun testReadingDefaultTemplateCase() {
         every { Files.exists(any()) }.returns(false)
 
         userTemplateStreamReader.invoke()
