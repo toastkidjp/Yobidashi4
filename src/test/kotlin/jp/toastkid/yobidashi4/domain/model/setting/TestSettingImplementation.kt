@@ -83,14 +83,6 @@ class TestSettingImplementation : Setting {
         TODO("Not yet implemented")
     }
 
-    override fun privateSearchPath(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override fun privateSearchOption(): String? {
-        TODO("Not yet implemented")
-    }
-
     override fun wrapLine(): Boolean {
         TODO("Not yet implemented")
     }
