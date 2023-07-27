@@ -39,7 +39,6 @@ class CefContextMenuAction : KoinComponent {
                 params?.linkUrl?.let {
                     viewModel.openUrl(it, false)
                 }
-                
             }
 
             ContextMenu.OPEN_BACKGROUND.id -> {
@@ -53,36 +52,30 @@ class CefContextMenuAction : KoinComponent {
                         webTab.id(), webTab.url()
                     )
                 }
-                
             }
 
             ContextMenu.CLIP_LINK.id -> {
                 params?.linkUrl?.let {
                     ClipboardPutterService().invoke(it)
                 }
-                
             }
 
             ContextMenu.SEARCH_WITH_SELECTED_TEXT.id -> {
                 search(selectedText)
-                
             }
 
             ContextMenu.RESET_ZOOM.id -> {
                 browser?.let {
                     it.zoomLevel = 0.0
                 }
-                
             }
 
             ContextMenu.DOWNLOAD.id -> {
                 browser?.startDownload(params?.sourceUrl)
-                
             }
 
             ContextMenu.ADD_BOOKMARK.id -> {
                 addBookmark(browser, params)
-                
             }
 
             ContextMenu.CLIP_IMAGE.id -> {
@@ -92,12 +85,10 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.CLIP_PAGE_LINK.id -> {
                 ClipboardPutterService().invoke(params?.linkUrl ?: params?.sourceUrl ?: params?.pageUrl)
-                
             }
 
             ContextMenu.CLIP_AS_MARKDOWN_LINK.id -> {
                 ClipboardPutterService().invoke("[${viewModel.currentTab()?.title()}](${params?.pageUrl})")
-                
             }
 
             ContextMenu.SAVE_AS_PDF.id -> {
@@ -106,7 +97,6 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.OPEN_WITH_OTHER_BROWSER.id -> {
                 browsePage(browser, params?.linkUrl ?: params?.sourceUrl ?: selectedText)
-                
             }
 
             ContextMenu.SEARCH_WITH_IMAGE.id -> {
@@ -119,7 +109,6 @@ class CefContextMenuAction : KoinComponent {
                 params?.selectionText?.let {
                     ClipboardPutterService().invoke(it)
                 }
-                
             }
 
             ContextMenu.DEVELOPER_TOOL.id -> {
