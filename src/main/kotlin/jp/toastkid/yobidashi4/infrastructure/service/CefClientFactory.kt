@@ -216,6 +216,8 @@ class CefClientFactory(
                 cefContextMenuFactory.invoke(params, model)
             }
 
+            private val cefContextMenuAction = CefContextMenuAction()
+
             override fun onContextMenuCommand(
                 browser: CefBrowser?,
                 frame: CefFrame?,
@@ -223,7 +225,7 @@ class CefClientFactory(
                 commandId: Int,
                 eventFlags: Int
             ): Boolean {
-                CefContextMenuAction().invoke(browser, params, selectedText, commandId)
+                cefContextMenuAction.invoke(browser, params, selectedText, commandId)
 
                 return super.onContextMenuCommand(browser, frame, params, commandId, eventFlags)
             }
