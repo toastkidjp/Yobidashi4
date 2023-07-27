@@ -21,6 +21,12 @@ class WebTabViewModelImplementation : WebTabViewModel {
 
     override fun event() = _event.asSharedFlow()
 
+    override fun switchDevTools(id: String) {
+        CoroutineScope(Dispatchers.Default).launch {
+            _event.emit(SwitchDeveloperToolEvent(id))
+        }
+    }
+
     private val openFind = mutableStateOf(false)
 
     private val findInput = mutableStateOf(TextFieldValue())
@@ -47,12 +53,6 @@ class WebTabViewModelImplementation : WebTabViewModel {
     override fun findDown(id: String) {
         CoroutineScope(Dispatchers.Default).launch {
             _event.emit(FindEvent(id, inputValue().text))
-        }
-    }
-
-    override fun switchDevTools(id: String) {
-        CoroutineScope(Dispatchers.Default).launch {
-            _event.emit(SwitchDeveloperToolEvent(id))
         }
     }
 
