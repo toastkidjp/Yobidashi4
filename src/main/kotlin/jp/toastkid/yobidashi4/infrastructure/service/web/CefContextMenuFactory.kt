@@ -12,16 +12,10 @@ class CefContextMenuFactory {
         model: CefMenuModel?
     ) {
         ContextMenu.values().filter {
-            when (it.context) {
-                Context.IMAGE -> {
-                    return@filter params?.sourceUrl.isNullOrBlank().not()
-                }
-                Context.LINK -> {
-                    return@filter params?.linkUrl.isNullOrBlank().not()
-                }
-                Context.PLAIN_TEXT -> {
-                    return@filter params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()
-                }
+            return@filter when (it.context) {
+                Context.IMAGE -> params?.sourceUrl.isNullOrBlank().not()
+                Context.LINK -> params?.linkUrl.isNullOrBlank().not()
+                Context.PLAIN_TEXT -> params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()
                 else -> return@filter true
             }
         }.forEach {
