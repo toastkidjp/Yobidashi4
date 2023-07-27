@@ -23,14 +23,14 @@ class CefKeyboardShortcutProcessor(
     private val addBookmark: (CefContextMenuParams?) -> Unit,
     private val selectedText: () -> String,
     private val browsePage: (String) -> Unit
-) {
+) : KoinComponent {
+
+    private val viewModel: MainViewModel by inject()
 
     operator fun invoke(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent): Boolean {
         if (event.type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP) {
             return false
         }
-
-        val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
 
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_F) {
             object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchFind()
