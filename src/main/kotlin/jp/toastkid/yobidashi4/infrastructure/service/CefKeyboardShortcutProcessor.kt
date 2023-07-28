@@ -9,6 +9,7 @@ import java.util.UUID
 import javax.imageio.ImageIO
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.infrastructure.service.web.BookmarkInsertion
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
@@ -55,7 +56,7 @@ class CefKeyboardShortcutProcessor(
             return true
         }
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_B) {
-            addBookmark(null)
+            BookmarkInsertion()(null, browser?.url)
             return true
         }
         if (event.windows_key_code == KeyEvent.VK_F5) {
