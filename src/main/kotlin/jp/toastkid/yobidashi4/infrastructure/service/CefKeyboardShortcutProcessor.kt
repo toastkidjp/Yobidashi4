@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi4.infrastructure.service.web.BookmarkInsertion
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
-import org.cef.callback.CefContextMenuParams
 import org.cef.handler.CefKeyboardHandler
 import org.cef.misc.EventFlags
 import org.koin.core.component.KoinComponent
@@ -21,7 +20,6 @@ import org.koin.core.component.inject
 
 class CefKeyboardShortcutProcessor(
     private val search: (String) -> Unit,
-    private val addBookmark: (CefContextMenuParams?) -> Unit,
     private val selectedText: () -> String,
     private val browsePage: (String) -> Unit
 ) : KoinComponent {
