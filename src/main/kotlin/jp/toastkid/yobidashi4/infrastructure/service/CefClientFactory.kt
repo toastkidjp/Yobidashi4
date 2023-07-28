@@ -89,7 +89,7 @@ class CefClientFactory(
         val cefApp = builder.build()
         val client = cefApp.createClient()
         client.addLoadHandler(object : CefLoadHandlerAdapter() {
-            // TODO Impl load action
+
             private val webIconLoaderService = WebIconLoaderService()
 
             override fun onLoadingStateChange(
