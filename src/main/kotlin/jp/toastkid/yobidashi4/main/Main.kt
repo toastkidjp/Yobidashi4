@@ -9,8 +9,8 @@ import javax.swing.JPopupMenu
 import javax.swing.UIManager
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.service.article.TodayArticleGenerator
 import jp.toastkid.yobidashi4.infrastructure.di.DiModule
+import jp.toastkid.yobidashi4.infrastructure.service.article.TodayArticleGeneratorImplementation
 import jp.toastkid.yobidashi4.presentation.main.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
@@ -38,7 +38,7 @@ fun main() {
     }
 
     CoroutineScope(Dispatchers.IO).launch {
-        TodayArticleGenerator().invoke()
+        TodayArticleGeneratorImplementation().invoke()
     }
 
     application {
