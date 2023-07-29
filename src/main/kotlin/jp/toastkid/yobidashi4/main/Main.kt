@@ -20,8 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.cef.CefApp
-import org.cef.CefApp.CefAppState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
@@ -76,10 +74,6 @@ fun main() {
                 }
 
                 koin.setting.save()
-
-                if (CefApp.getState() == CefAppState.NONE) {
-                    return@Thread
-                }
 
                 stopKoin()
                 koin.webViewPool.disposeAll()

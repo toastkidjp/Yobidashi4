@@ -57,6 +57,10 @@ class WebViewPoolImplementation : WebViewPool {
     }
 
     override fun disposeAll() {
+        if (CefApp.getState() == CefApp.CefAppState.NONE) {
+            return
+        }
+
         browsers.keys.forEach {
             browsers.get(it)?.close(true)
         }
