@@ -35,7 +35,6 @@ dependencies {
 
     implementation(compose.desktop.currentOs)
 
-    implementation("com.fifesoft:rsyntaxtextarea:3.3.2")
     implementation("me.friwi:jcefmaven:110.0.25")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
@@ -47,11 +46,6 @@ dependencies {
     implementation("io.insert-koin:koin-annotations:1.0.3")
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
 
-    implementation("com.halilibo.compose-richtext:richtext-commonmark:0.16.0")
-    implementation("com.halilibo.compose-richtext:richtext-ui-material:0.16.0")
-    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
-
-    testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.10.6")
     testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
 }
