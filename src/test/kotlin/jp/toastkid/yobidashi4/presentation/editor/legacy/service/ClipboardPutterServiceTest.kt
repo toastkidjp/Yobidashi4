@@ -3,8 +3,10 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.awt.Image
 import java.awt.datatransfer.Clipboard
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -33,6 +35,15 @@ internal class ClipboardPutterServiceTest {
     @Test
     fun testInvoke() {
         clipboardPutterService("test")
+
+        verify(exactly = 1) { clipboard.setContents(any(), any()) }
+    }
+
+    @Test
+    fun testImage() {
+        val image: Image = mockk()
+
+        clipboardPutterService(image)
 
         verify(exactly = 1) { clipboard.setContents(any(), any()) }
     }
