@@ -40,3 +40,8 @@ dependencies {
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
+
+// KSP - To use generated sources
+sourceSets.main {
+    java.srcDirs("build/generated/ksp/main/kotlin")
+}
