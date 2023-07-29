@@ -75,7 +75,7 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.ADD_BOOKMARK.id -> {
-                addBookmark(browser, params)
+                BookmarkInsertion()(params, browser?.url)
             }
 
             ContextMenu.CLIP_IMAGE.id -> {
