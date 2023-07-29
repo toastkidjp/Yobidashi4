@@ -687,6 +687,7 @@ i.socdm.com
 i.tapit.com
 i.vcimg.jp
 i.w.inmobi.com
+i0.wp.com
 i2ad.jp
 ib.adnxs.com
 ib.affil.jp
@@ -1154,6 +1155,7 @@ static.affiliate.rakuten.co.jp
 static.brandscreen.biz
 static.criteo.net
 static.doubleclick.net
+static.octopus.tokyo
 static.share-videos.se
 static.zucks.net.zimg.jp
 stats.g.doubleclick.net
