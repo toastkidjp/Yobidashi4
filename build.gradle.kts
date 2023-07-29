@@ -35,8 +35,6 @@ dependencies {
 
     implementation(compose.desktop.currentOs)
 
-    implementation("me.friwi:jcefmaven:110.0.25")
-
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     implementation("org.slf4j:slf4j-api:2.0.6")
