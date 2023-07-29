@@ -23,11 +23,6 @@ java {
     }
 }
 
-// KSP - To use generated sources
-sourceSets.main {
-    java.srcDirs("infrastructure/build/generated/ksp/main/kotlin")
-}
-
 dependencies {
     implementation(project(path = ":domain"))
     implementation(project(path = ":presentation"))
