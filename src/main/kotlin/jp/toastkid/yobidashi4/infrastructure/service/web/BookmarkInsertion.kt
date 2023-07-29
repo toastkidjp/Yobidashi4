@@ -7,11 +7,11 @@ import org.cef.callback.CefContextMenuParams
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class BookmarkInsertion {
+class BookmarkInsertion : KoinComponent {
+
+    private val mainViewModel: MainViewModel by inject()
 
     operator fun invoke(params: CefContextMenuParams? = null, latestUrl: String?) {
-        val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-
         val item = when {
             params?.linkUrl != null && params.linkUrl.isNotBlank() ->
                 makeBookmarkItemWithUrl(params.linkUrl)
