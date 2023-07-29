@@ -8,14 +8,14 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class MovieMemoSubtitleExtractorTest {
 
@@ -50,7 +50,7 @@ internal class MovieMemoSubtitleExtractorTest {
         val movieMemoExtractorResult = movieMemoSubtitleExtractor.invoke("file")
 
         val first = movieMemoExtractorResult.itemArrays().first()
-        assertEquals("file.md", first[0])
+        assertEquals("file", first[0])
         assertEquals("『ミッション：インポッシブル(原題：MISSION:IMPOSSIBLE)』(1996年、アメリカ合衆国)", first[1])
 
         verify(exactly = 1) { Files.readAllLines(any()) }
