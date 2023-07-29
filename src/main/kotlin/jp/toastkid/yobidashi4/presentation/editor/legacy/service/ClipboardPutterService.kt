@@ -12,8 +12,8 @@ class ClipboardPutterService(private val clipboard: Clipboard = Toolkit.getDefau
         clipboard.setContents(StringSelection(string)) { _, _ -> }
     }
 
-    operator fun invoke(string: Image) {
-        clipboard.setContents(TransferableImage(string)) { _, _ -> }
+    operator fun invoke(image: Image) {
+        clipboard.setContents(TransferableImage(image)) { _, _ -> }
     }
 
 }
