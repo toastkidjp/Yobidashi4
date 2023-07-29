@@ -1,75 +1,38 @@
 package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
-import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class LinkGeneratorTest {
 
     @InjectMockKs
-    private lateinit var linkBehaviorService: LinkBehaviorService
+    private lateinit var linkGenerator: LinkGenerator
 
-    @MockK
-    private lateinit var exists: (String) -> Boolean
-
-    @MockK
-    private lateinit var internalLinkScheme: InternalLinkScheme
-
-    @Suppress("unused")
-    private val mainDispatcher = Dispatchers.Unconfined
-
-    @Suppress("unused")
-    private val ioDispatcher = Dispatchers.Unconfined
+    private val markdown = """
+        1. [[『御伽草子』]] 4
+        1. [[『存在の耐えられない軽さ』感想]] 4
+        1. [[『あしながおじさん』感想]] 6
+        1. [[『続あしながおじさん』感想]] 5
+        1. [[『武士道』感想]] 6
+        1. [[『阿Ｑ正伝』感想]] 5
+        https://www.yahoo.co.jp
+    """.trimIndent()
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-
-        every { internalLinkScheme.isInternalLink(any()) }.returns(true)
-        every { internalLinkScheme.extract(any()) }.returns("yahoo")
-    }
-
-    @Test
-    fun testNullUrl() {
-        linkBehaviorService.invoke(null)
-    }
-
-    @Test
-    fun testEmptyUrl() {
-        linkBehaviorService.invoke("")
-    }
-
-    @Test
-    fun testWebUrl() {
-        every { internalLinkScheme.isInternalLink(any()) }.returns(false)
-
-        linkBehaviorService.invoke("https://www.yahoo.co.jp")
-    }
-
-    @Test
-    fun testArticleUrlDoesNotExists() {
-        coEvery { exists(any()) }.answers { false }
-
-        linkBehaviorService.invoke("internal-article://yahoo")
-    }
-
-    @Test
-    fun testArticleUrl() {
-        coEvery { exists(any()) }.answers { true }
-
-        linkBehaviorService.invoke("internal-article://yahoo")
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkAll()
     }
 
+    @Test
+    fun invoke() {
+        assertTrue(linkGenerator.invoke(markdown).contains("1. [『武士道』感想](https://internal/『武士道』感想)"))
+    }
 }
