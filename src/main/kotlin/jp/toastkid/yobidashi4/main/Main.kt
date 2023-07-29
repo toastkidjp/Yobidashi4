@@ -9,7 +9,7 @@ import javax.swing.JPopupMenu
 import javax.swing.UIManager
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.infrastructure.di.DiModule
+import jp.toastkid.yobidashi4.infrastructure.di.DependencyInjectionContainer
 import jp.toastkid.yobidashi4.infrastructure.service.article.TodayArticleGeneratorImplementation
 import jp.toastkid.yobidashi4.presentation.main.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
@@ -32,7 +32,7 @@ fun main() {
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
 
     startKoin {
-        modules(DiModule().module)
+        modules(DependencyInjectionContainer().module)
     }
 
     CoroutineScope(Dispatchers.IO).launch {

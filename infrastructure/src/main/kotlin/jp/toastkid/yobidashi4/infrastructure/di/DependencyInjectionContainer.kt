@@ -5,4 +5,4 @@ import org.koin.core.annotation.Module
 
 @Module
 @ComponentScan("jp.toastkid.yobidashi4.infrastructure")
-class DiModule
+class DependencyInjectionContainer
