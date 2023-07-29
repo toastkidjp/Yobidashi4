@@ -20,7 +20,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.browser.BrowserPool
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
@@ -146,7 +146,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _selected.value = max(0, _selected.value - 1)
 
         if (targetTab is WebTab) {
-            object : KoinComponent { val browserPool: BrowserPool by inject() }.browserPool.dispose(targetTab.id())
+            object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.dispose(targetTab.id())
         }
     }
 
