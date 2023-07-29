@@ -25,6 +25,7 @@ import javax.swing.JDialog
 import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -35,6 +36,8 @@ class WebViewProvider : KoinComponent {
     private val webViewPool: WebViewPool by inject()
 
     private val mainViewModel: MainViewModel by  inject()
+
+    private val webTabViewModel: WebTabViewModel by  inject()
 
     private var location = IntOffset.Zero
 
@@ -48,7 +51,7 @@ class WebViewProvider : KoinComponent {
         val focusRequester = remember { FocusRequester() }
 
         Column {
-            Box (
+            Box(
                 modifier = Modifier.background(color = Color.White)
                     .fillMaxSize()
                     .layout { measurable, constraints ->
@@ -66,15 +69,6 @@ class WebViewProvider : KoinComponent {
                         component
                     }
                 )
-
-                if (showDevTool.value) {
-                    SwingPanel(
-                        factory = {
-                            webViewPool.devTools(id)
-                        },
-                        modifier = Modifier.height(300.dp)
-                    )
-                }
             }
             Spacer(modifier = Modifier.height(if (mainViewModel.showingSnackbar()) 48.dp else 0.dp))
         }
