@@ -14,7 +14,6 @@ import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuAction
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuFactory
@@ -253,23 +252,6 @@ class CefClientFactory(
             return
         }
         mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
-    }
-
-    private fun addBookmark(params: CefContextMenuParams? = null) {
-        val mainViewModel = object : KoinComponent{ val vm: MainViewModel by inject() }.vm
-
-        val item = when {
-            params?.linkUrl != null && params.linkUrl.isNotBlank() ->
-                makeBookmarkItemWithUrl(params.linkUrl)
-            params?.sourceUrl != null && params.sourceUrl.isNotBlank() ->
-                makeBookmarkItemWithUrl(params.sourceUrl)
-            params?.pageUrl != null && params.pageUrl.isNotBlank() ->
-                Bookmark(mainViewModel.currentTab()?.title() ?: "", url = params.pageUrl)
-            else ->
-                Bookmark(mainViewModel.currentTab()?.title() ?: "", url = latestBrowser()?.url ?: "")
-        }
-        object : KoinComponent{ val repository: BookmarkRepository by inject() }.repository.add(item)
-        mainViewModel.showSnackbar("Add bookmark: $item")
     }
 
     private fun makeBookmarkItemWithUrl(url: String): Bookmark {
