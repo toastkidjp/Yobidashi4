@@ -20,6 +20,7 @@ import androidx.compose.material.Tab
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -97,6 +98,7 @@ internal fun TabsView(modifier: Modifier) {
         ) {
             viewModel.tabs.forEachIndexed { index, tab ->
                 val openDropdownMenu = remember { mutableStateOf(false) }
+                val titleState = remember { mutableStateOf(tab.title()) }
                 Tab(
                     selected = viewModel.selected.value == index,
                     onClick = { viewModel.setSelectedIndex(index) },
@@ -119,7 +121,7 @@ internal fun TabsView(modifier: Modifier) {
                             LoadIcon(tab.iconPath(), Modifier.size(24.dp).padding(start = 4.dp))
 
                             val width = if (tab is WebTab) 232.dp else 1000.dp
-                            Text(tab.title(),
+                            Text(titleState.value,
                                 color = MaterialTheme.colors.onPrimary,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
@@ -136,6 +138,13 @@ internal fun TabsView(modifier: Modifier) {
                             }
                         }
                         TabOptionMenu(openDropdownMenu, tab, viewModel)
+                    }
+                }
+
+                LaunchedEffect(tab.hashCode()) {
+                    tab.update().collect {
+                        titleState.value = tab.title()
+                        println("tab $index ${tab.title()}")
                     }
                 }
             }
