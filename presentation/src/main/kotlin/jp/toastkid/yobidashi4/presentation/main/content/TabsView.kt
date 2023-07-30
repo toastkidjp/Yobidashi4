@@ -98,7 +98,7 @@ internal fun TabsView(modifier: Modifier) {
         ) {
             viewModel.tabs.forEachIndexed { index, tab ->
                 val openDropdownMenu = remember { mutableStateOf(false) }
-                val titleState = remember { mutableStateOf(tab.title()) }
+                val titleState = mutableStateOf(tab.title())
                 Tab(
                     selected = viewModel.selected.value == index,
                     onClick = { viewModel.setSelectedIndex(index) },
@@ -139,12 +139,12 @@ internal fun TabsView(modifier: Modifier) {
                         }
                         TabOptionMenu(openDropdownMenu, tab, viewModel)
                     }
-                }
 
-                LaunchedEffect(tab.hashCode()) {
-                    tab.update().collect {
-                        titleState.value = tab.title()
-                        println("tab $index ${tab.title()}")
+                    LaunchedEffect(Unit) {
+                        tab.update().collect {
+                            titleState.value = tab.title()
+                            println("tab $index ${tab.title()}")
+                        }
                     }
                 }
             }
