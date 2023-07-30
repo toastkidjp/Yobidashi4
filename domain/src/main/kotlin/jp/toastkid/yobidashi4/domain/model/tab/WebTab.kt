@@ -6,10 +6,16 @@ import java.nio.file.Path
 import java.util.UUID
 import java.util.stream.Collectors
 import kotlin.io.path.pathString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 data class WebTab(
-    private val title: String = "",
-    private val url: String = ""
+    private var title: String = "",
+    private var url: String = ""
 ) : Tab, Reloadable {
 
     private val id = UUID.randomUUID().toString()
@@ -47,11 +53,25 @@ data class WebTab(
 
     fun id() = id
 
+    private val _updateFlow = MutableSharedFlow<Long>()
+
+    override fun update(): Flow<Long> {
+        return _updateFlow.asSharedFlow()
+    }
+
     override fun reload() {
         /*object : KoinComponent {
             val vm: WebTabViewModel by inject()
         }
             .vm.reload(id)*/
+    }
+
+    fun updateTitleAndUrl(title: String?, url: String?) {
+        title?.let { this.title = title }
+        url?.let { this.url = url }
+        CoroutineScope(Dispatchers.Default).launch {
+            _updateFlow.emit(System.currentTimeMillis())
+        }
     }
 
 }
