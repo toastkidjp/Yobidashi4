@@ -22,6 +22,12 @@ dependencies {
     testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
 }
 
-tasks.getByName<Test>("test") {
+tasks.test {
     useJUnitPlatform()
+
+    jvmArgs(
+        "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
+    )
 }
+
