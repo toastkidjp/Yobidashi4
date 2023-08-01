@@ -143,7 +143,6 @@ internal fun TabsView(modifier: Modifier) {
                     LaunchedEffect(Unit) {
                         tab.update().collect {
                             titleState.value = tab.title()
-                            println("tab $index ${tab.title()}")
                         }
                     }
                 }
