@@ -6,6 +6,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import org.junit.jupiter.api.AfterEach
@@ -47,6 +48,13 @@ class GameFileProviderTest {
     @Test
     fun test() {
         gameFileProvider.invoke()
+
+        verify (exactly = 2) { Path.of("user/number/place/games") }
+        verify (exactly = 1) { Files.exists(folder) }
+        verify (exactly = 1) { Files.exists(file) }
+        verify (inverse = true) { Files.createDirectories(folder) }
+        verify (inverse = true) { Files.createFile(file) }
+        verify (exactly = 2) { folder.resolve(any<String>()) }
     }
 
 }
