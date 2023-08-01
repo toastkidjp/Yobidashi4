@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.web
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -52,7 +50,7 @@ class WebViewProvider : KoinComponent {
 
         Column {
             Box(
-                modifier = Modifier.background(color = Color.White)
+                modifier = Modifier
                     .fillMaxSize()
                     .layout { measurable, constraints ->
                         val placeable = measurable.measure(constraints)
