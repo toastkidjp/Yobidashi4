@@ -31,10 +31,6 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.3")
     implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-    testImplementation("io.mockk:mockk:1.10.6")
 }
 
 tasks.getByName<Test>("test") {
