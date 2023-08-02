@@ -33,10 +33,6 @@ dependencies {
     implementation("com.halilibo.compose-richtext:richtext-commonmark:0.16.0")
     implementation("com.halilibo.compose-richtext:richtext-ui-material:0.16.0")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-    testImplementation("io.mockk:mockk:1.10.6")
 }
 
 tasks.getByName<Test>("test") {
