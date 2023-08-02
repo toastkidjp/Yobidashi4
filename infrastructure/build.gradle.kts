@@ -33,10 +33,6 @@ dependencies {
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
 // KSP - To use generated sources
 sourceSets.main {
     java.srcDirs("build/generated/ksp/main/kotlin")
