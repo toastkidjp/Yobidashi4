@@ -73,10 +73,6 @@ compose.desktop {
     }
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 allprojects {
     repositories {
         mavenCentral()
@@ -93,6 +89,10 @@ allprojects {
 
     tasks.withType<KotlinCompile>() {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    tasks.test {
+        useJUnitPlatform()
     }
 }
 
