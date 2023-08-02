@@ -38,9 +38,6 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.3.2")
     implementation("io.insert-koin:koin-annotations:1.0.3")
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
-
-    testImplementation("io.mockk:mockk:1.10.6")
-    testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
 }
 
 compose.desktop {
@@ -81,6 +78,19 @@ tasks.test {
 }
 
 allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    apply(plugin = "kotlin")
+
+    dependencies {
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+        testImplementation("io.mockk:mockk:1.10.6")
+        testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
+    }
+
     tasks.withType<KotlinCompile>() {
         kotlinOptions.jvmTarget = "1.8"
     }
