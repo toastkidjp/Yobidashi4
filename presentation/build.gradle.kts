@@ -22,8 +22,6 @@ dependencies {
     implementation("com.fifesoft:rsyntaxtextarea:3.3.2")
     implementation("me.friwi:jcefmaven:110.0.25")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
-
     implementation("org.jsoup:jsoup:1.15.3")
     implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
