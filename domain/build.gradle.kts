@@ -16,13 +16,3 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
-
-tasks.test {
-    useJUnitPlatform()
-
-    jvmArgs(
-        "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
-        "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
-    )
-}
-
