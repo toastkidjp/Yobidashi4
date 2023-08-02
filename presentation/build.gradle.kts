@@ -34,7 +34,3 @@ dependencies {
     implementation("com.halilibo.compose-richtext:richtext-ui-material:0.16.0")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 }
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
