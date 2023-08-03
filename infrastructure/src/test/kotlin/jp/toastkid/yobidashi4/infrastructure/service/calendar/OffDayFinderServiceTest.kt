@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.domain.service.calendar
+package jp.toastkid.yobidashi4.infrastructure.service.calendar
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -6,7 +6,10 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.time.DayOfWeek
-import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderServiceImplementation
+import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
+import jp.toastkid.yobidashi4.domain.service.calendar.MoveableHolidayCalculatorService
+import jp.toastkid.yobidashi4.domain.service.calendar.SpecialCaseOffDayCalculatorService
+import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

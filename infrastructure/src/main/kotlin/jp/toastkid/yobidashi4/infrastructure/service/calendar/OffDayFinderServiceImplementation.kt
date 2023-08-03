@@ -1,18 +1,22 @@
-package jp.toastkid.yobidashi4.domain.service.article
+package jp.toastkid.yobidashi4.infrastructure.service.calendar
 
 import java.time.DayOfWeek
 import jp.toastkid.yobidashi4.domain.model.calendar.FixedJapaneseHoliday
+import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.MoveableHolidayCalculatorService
 import jp.toastkid.yobidashi4.domain.service.calendar.SpecialCaseOffDayCalculatorService
+import org.koin.core.annotation.Single
+import org.koin.core.component.KoinComponent
 
+@Single
 class OffDayFinderServiceImplementation(
     private val equinoxDayCalculator: EquinoxDayCalculator = EquinoxDayCalculator(),
     private val moveableHolidayCalculatorService: MoveableHolidayCalculatorService = MoveableHolidayCalculatorService(),
     private val specialCaseOffDayCalculator: SpecialCaseOffDayCalculatorService = SpecialCaseOffDayCalculatorService()
-) {
+) : OffDayFinderService, KoinComponent {
 
-    operator fun invoke(year: Int, month: Int, date: Int, dayOfWeek: DayOfWeek, useUserOffDay: Boolean = true): Boolean {
+    override operator fun invoke(year: Int, month: Int, date: Int, dayOfWeek: DayOfWeek, useUserOffDay: Boolean): Boolean {
         if (month == 6) {
             return false
         }
