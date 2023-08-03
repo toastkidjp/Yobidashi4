@@ -6,7 +6,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.time.DayOfWeek
-import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
+import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderServiceImplementation
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 
 internal class OffDayFinderServiceTest {
 
-    private lateinit var offDayFinderService: OffDayFinderService
+    private lateinit var offDayFinderService: OffDayFinderServiceImplementation
 
     @MockK
     private lateinit var equinoxDayCalculator: EquinoxDayCalculator
@@ -32,7 +32,7 @@ internal class OffDayFinderServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        offDayFinderService = OffDayFinderService(
+        offDayFinderService = OffDayFinderServiceImplementation(
                 equinoxDayCalculator,
                 moveableHolidayCalculatorService,
                 specialCaseOffDayCalculator

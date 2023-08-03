@@ -114,13 +114,13 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now()) {
     private fun isWorkDay(): Boolean {
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY
-                && OffDayFinderService().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek).not()
+                && OffDayFinderServiceImplementation().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek).not()
     }
 
     private fun isMarketDay(): Boolean {
         val dayOfWeek = now.dayOfWeek
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY
-                && OffDayFinderService().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek, false).not()
+                && OffDayFinderServiceImplementation().invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek, false).not()
     }
 
     private fun isStockDay(): Boolean {

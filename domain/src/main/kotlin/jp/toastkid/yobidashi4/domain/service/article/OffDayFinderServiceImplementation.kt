@@ -6,7 +6,7 @@ import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.MoveableHolidayCalculatorService
 import jp.toastkid.yobidashi4.domain.service.calendar.SpecialCaseOffDayCalculatorService
 
-class OffDayFinderService(
+class OffDayFinderServiceImplementation(
     private val equinoxDayCalculator: EquinoxDayCalculator = EquinoxDayCalculator(),
     private val moveableHolidayCalculatorService: MoveableHolidayCalculatorService = MoveableHolidayCalculatorService(),
     private val specialCaseOffDayCalculator: SpecialCaseOffDayCalculatorService = SpecialCaseOffDayCalculatorService()
