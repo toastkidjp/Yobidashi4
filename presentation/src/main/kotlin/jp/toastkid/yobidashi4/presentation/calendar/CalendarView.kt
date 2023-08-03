@@ -43,6 +43,7 @@ import java.util.Locale
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
+import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -218,6 +219,8 @@ private fun makeMonth(
     week: Array<DayOfWeek>,
     firstDay: LocalDate
 ): MutableList<Week> {
+    val offDayFinderService = OffDayFinderService()
+
     var hasStarted1 = false
     var current1 = firstDay
     val weeks = mutableListOf<Week>()
@@ -233,7 +236,7 @@ private fun makeMonth(
             if (firstDay.month != current1.month) {
                 w.addEmpty()
             } else {
-                w.add(current1)
+                w.add(current1, offDayFinderService.invoke(current1.year, current1.month.value, current1.dayOfMonth, current1.dayOfWeek))
             }
             current1 = current1.plusDays(1L)
         }
