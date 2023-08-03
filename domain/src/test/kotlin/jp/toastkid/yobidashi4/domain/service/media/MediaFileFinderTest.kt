@@ -7,6 +7,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
@@ -58,5 +59,13 @@ class MediaFileFinderTest {
         val collection = mediaFileFinder.invoke("test")
 
         assertEquals(1, collection.size)
+        verify { Path.of(any<String>()) }
+        verify(inverse = true) { Files.list(path) }
+        verify { Files.list(root) }
+        verify { Files.isDirectory(root) }
+        verify { Files.isDirectory(path) }
+        verify { path.fileName }
+        verify { path.isExecutable() }
+        verify { fileName.toString() }
     }
 }
