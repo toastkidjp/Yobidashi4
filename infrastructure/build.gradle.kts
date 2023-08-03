@@ -9,10 +9,6 @@ plugins {
 group = "jp.toastkid.yobidashi4"
 version = "1.0.0"
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation(project(path = ":domain"))
     implementation(project(path = ":presentation"))
