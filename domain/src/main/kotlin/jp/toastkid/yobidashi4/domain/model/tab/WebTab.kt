@@ -27,7 +27,7 @@ data class WebTab(
     override fun closeable(): Boolean = true
 
     override fun iconPath(): String? {
-        return iconPathState
+        return makeIconPath()
     }
 
     private fun makeIconPath(): String? {
