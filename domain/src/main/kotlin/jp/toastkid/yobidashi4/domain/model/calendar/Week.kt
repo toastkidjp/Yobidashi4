@@ -2,16 +2,13 @@ package jp.toastkid.yobidashi4.domain.model.calendar
 
 import java.time.DayOfWeek
 import java.time.LocalDate
-import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 
 class Week {
     private val days: MutableList<CalendarDate> = mutableListOf()
 
-    private val offDayFinderService = OffDayFinderService()
-
-    fun add(date: LocalDate) {
+    fun add(date: LocalDate, offDay: Boolean) {
         days.add(CalendarDate(date.dayOfMonth, date.dayOfWeek,
-            offDay = offDayFinderService.invoke(date.year, date.month.value, date.dayOfMonth, date.dayOfWeek)))
+            offDay = offDay))
     }
 
     fun addEmpty() {
