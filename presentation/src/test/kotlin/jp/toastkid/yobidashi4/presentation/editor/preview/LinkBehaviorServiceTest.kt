@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -55,6 +57,8 @@ class LinkBehaviorServiceTest {
 
         every { internalLinkScheme.isInternalLink(any()) }.returns(true)
         every { internalLinkScheme.extract(any()) }.returns("yahoo")
+        every { viewModel.openFile(any()) } just Runs
+        every { viewModel.showSnackbar(any()) } just Runs
     }
 
     @Test
