@@ -1,9 +1,12 @@
 package jp.toastkid.yobidashi4.domain.model.article
 
+import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
+import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.article.UserTemplateStreamReader
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -13,9 +16,15 @@ internal class ArticleTemplateTest {
 
     private lateinit var articleTemplate: ArticleTemplate
 
+    @MockK
+    private lateinit var offDayFinderService: OffDayFinderService
+
     @BeforeEach
     fun setUp() {
-        articleTemplate = ArticleTemplate()
+        MockKAnnotations.init(this)
+        every { offDayFinderService.invoke(any(), any(), any(), any(), any()) }.returns(false)
+
+        articleTemplate = ArticleTemplate(offDayFinderService = offDayFinderService)
     }
 
     @Test
@@ -32,7 +41,7 @@ internal class ArticleTemplateTest {
 test
             {{/stock}}
         """.trimIndent().byteInputStream())
-        val content = ArticleTemplate(LocalDate.of(2023, 2, 23)).invoke("test")
+        val content = ArticleTemplate(LocalDate.of(2023, 2, 23), offDayFinderService).invoke("test")
         assertTrue(content.contains("test"))
     }
 
@@ -44,7 +53,7 @@ test
 test
             {{/stock}}
         """.trimIndent().byteInputStream())
-        val content = ArticleTemplate(LocalDate.of(2023, 2, 19)).invoke("test")
+        val content = ArticleTemplate(LocalDate.of(2023, 2, 19), offDayFinderService).invoke("test")
         assertTrue(content.contains("test").not())
     }
 
