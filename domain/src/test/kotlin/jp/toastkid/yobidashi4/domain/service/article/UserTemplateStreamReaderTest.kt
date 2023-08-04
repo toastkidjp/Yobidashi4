@@ -8,6 +8,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
+import java.nio.file.Path
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,6 +21,9 @@ class UserTemplateStreamReaderTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+
+        mockkStatic(Path::class)
+        every { Path.of(any<String>()) } returns mockk()
 
         mockkStatic(Files::class)
         every { Files.exists(any()) }.returns(true)
