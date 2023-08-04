@@ -6,8 +6,10 @@ import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.MoveableHolidayCalculatorService
 import jp.toastkid.yobidashi4.domain.service.calendar.SpecialCaseOffDayCalculatorService
+import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @Single
 class OffDayFinderServiceImplementation(
@@ -15,6 +17,8 @@ class OffDayFinderServiceImplementation(
     private val moveableHolidayCalculatorService: MoveableHolidayCalculatorService = MoveableHolidayCalculatorService(),
     private val specialCaseOffDayCalculator: SpecialCaseOffDayCalculatorService = SpecialCaseOffDayCalculatorService()
 ) : OffDayFinderService, KoinComponent {
+
+    private val userOffDayService: UserOffDayService by inject()
 
     override operator fun invoke(year: Int, month: Int, date: Int, dayOfWeek: DayOfWeek, useUserOffDay: Boolean): Boolean {
         if (month == 6) {
@@ -41,9 +45,9 @@ class OffDayFinderServiceImplementation(
             return true
         }
 
-        /*TODO if (useUserOffDay && userOffDayService(month, date)) {
+        if (useUserOffDay && userOffDayService(month, date)) {
             return true
-        }*/
+        }
 
         var firstOrNull = FixedJapaneseHoliday.values()
             .firstOrNull { month == it.month && date == it.date }
