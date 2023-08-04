@@ -15,6 +15,10 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 internal class OffDayFinderServiceTest {
 
@@ -35,6 +39,15 @@ internal class OffDayFinderServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { userOffDayService } bind(UserOffDayService::class)
+                }
+            )
+        }
+
         offDayFinderService = OffDayFinderServiceImplementation(
                 equinoxDayCalculator,
                 moveableHolidayCalculatorService,
@@ -159,6 +172,7 @@ internal class OffDayFinderServiceTest {
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
