@@ -42,6 +42,9 @@ internal class CommandReceiverServiceTest {
     @MockK
     private lateinit var setting: Setting
 
+    @MockK
+    private lateinit var articleOpener: ArticleOpener
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -55,6 +58,7 @@ internal class CommandReceiverServiceTest {
                 module {
                     single(qualifier=null) { viewModel } bind(MainViewModel::class)
                     single(qualifier=null) { setting } bind(Setting::class)
+                    single(qualifier = null) { articleOpener } bind(ArticleOpener::class)
                 }
             )
         }
@@ -82,11 +86,12 @@ internal class CommandReceiverServiceTest {
     fun openArticle() {
         coEvery { viewModel.editorCommandFlow() }.returns(flowOf(MenuCommand.OPEN_ARTICLE))
         coEvery { editorAreaView.selectedText() }.returns("including [[Internal link]] text.")
+        coEvery { articleOpener.fromRawText(any()) } just Runs
 
         runBlocking {
             commandReceiverService.invoke()
 
-            coVerify { anyConstructed<ArticleOpener>().fromRawText(any()) }
+            coVerify { articleOpener.fromRawText(any()) }
         }
     }
 
