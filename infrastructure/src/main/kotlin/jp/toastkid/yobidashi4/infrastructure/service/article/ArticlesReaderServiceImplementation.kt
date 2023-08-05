@@ -15,6 +15,6 @@ class ArticlesReaderServiceImplementation : KoinComponent, ArticlesReaderService
     private val setting: Setting by inject()
 
     override operator fun invoke(): Stream<Path> =
-        Files.list(Path.of(setting.articleFolder()))
+        Files.list(setting.articleFolderPath())
 
 }
