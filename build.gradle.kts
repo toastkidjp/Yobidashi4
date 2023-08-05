@@ -38,6 +38,11 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.3.2")
     implementation("io.insert-koin:koin-annotations:1.0.3")
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
+
+    // Kover
+    kover(project(path = ":domain"))
+    kover(project(path = ":presentation"))
+    kover(project(path = ":infrastructure"))
 }
 
 compose.desktop {
