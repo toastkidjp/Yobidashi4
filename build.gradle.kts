@@ -105,6 +105,17 @@ allprojects {
     }
 }
 
+koverReport {
+    // common filters for all reports of all variants
+    filters {
+        // exclusions for reports
+        excludes {
+            // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+            classes("jp.toastkid.yobidashi4.infrastructure.di.*")
+        }
+    }
+}
+
 val libraryPath = "jcef-bundle/"
 
 val hostOs = System.getProperty("os.name")
