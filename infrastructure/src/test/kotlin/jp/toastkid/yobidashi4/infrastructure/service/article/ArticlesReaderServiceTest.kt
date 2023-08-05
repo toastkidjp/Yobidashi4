@@ -41,6 +41,9 @@ class ArticlesReaderServiceTest {
         mockkStatic(Files::class)
         every { Files.list(any<Path>()) }.returns(mockk())
         every { setting.articleFolderPath() } returns mockk()
+
+        mockkStatic(Path::class)
+        every { Path.of(any<String>()) } returns mockk()
     }
 
     @AfterEach
