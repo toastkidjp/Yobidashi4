@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.editor.legacy.service
 import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,59 +14,59 @@ class KeyboardShortcutService : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
 
-    operator fun invoke(e: KeyEvent) {
+    operator fun invoke(e: KeyEvent, dispatcher: CoroutineDispatcher = Dispatchers.Default) {
         if (e.isControlDown.not()) {
             return
         }
 
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_UP) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.EDITOR_TO_TOP)
             }
         }
 
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_DOWN) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.EDITOR_TO_BOTTOM)
             }
         }
 
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_U) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.REVERSE_CASE)
             }
             return
         }
 
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_O) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.WEB_SEARCH)
             }
             return
         }
 
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_W) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.SWITCH_WRAP_LINE)
             }
             return
         }
 
         if (e.isShiftDown && e.keyCode == KeyEvent.VK_N) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.SWITCH_EDITABLE)
             }
             return
         }
 
         if (e.isAltDown && e.keyCode == KeyEvent.VK_O) {
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(dispatcher).launch {
                 viewModel.emitEditorCommand(MenuCommand.OPEN_WITH_BROWSER)
             }
             return
         }
 
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(dispatcher).launch {
             val command = when (e.keyCode) {
                 KeyEvent.VK_T -> MenuCommand.TO_TABLE
                 KeyEvent.VK_I -> MenuCommand.ITALIC
