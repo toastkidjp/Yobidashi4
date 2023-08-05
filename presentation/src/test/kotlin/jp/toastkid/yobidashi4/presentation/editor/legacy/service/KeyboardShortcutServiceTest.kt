@@ -10,6 +10,7 @@ import io.mockk.verify
 import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -60,7 +61,7 @@ internal class KeyboardShortcutServiceTest {
     fun testIsNotControlDown() {
         every { keyEvent.isControlDown() }.answers { false }
 
-        keyboardShortcutService.invoke(keyEvent)
+        keyboardShortcutService.invoke(keyEvent, Dispatchers.Unconfined)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
         coVerify(exactly = 0) { viewModel.emitEditorCommand(any()) }
@@ -72,7 +73,7 @@ internal class KeyboardShortcutServiceTest {
         every { keyEvent.isShiftDown() }.answers { true }
         every { keyEvent.getKeyCode() }.answers { KeyEvent.VK_U }
 
-        keyboardShortcutService.invoke(keyEvent)
+        keyboardShortcutService.invoke(keyEvent, Dispatchers.Unconfined)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
         verify(atLeast = 1) { keyEvent.isShiftDown() }
@@ -86,7 +87,7 @@ internal class KeyboardShortcutServiceTest {
         every { keyEvent.isShiftDown() }.answers { true }
         every { keyEvent.getKeyCode() }.answers { KeyEvent.VK_Z }
 
-        keyboardShortcutService.invoke(keyEvent)
+        keyboardShortcutService.invoke(keyEvent, Dispatchers.Unconfined)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
         verify(atLeast = 1) { keyEvent.isShiftDown() }
@@ -100,7 +101,7 @@ internal class KeyboardShortcutServiceTest {
         every { keyEvent.isShiftDown() }.answers { false }
         every { keyEvent.getKeyCode() }.answers { KeyEvent.VK_T }
 
-        keyboardShortcutService.invoke(keyEvent)
+        keyboardShortcutService.invoke(keyEvent, Dispatchers.Unconfined)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
         verify(atLeast = 1) { keyEvent.isShiftDown() }
@@ -114,7 +115,7 @@ internal class KeyboardShortcutServiceTest {
         every { keyEvent.isShiftDown() }.answers { false }
         every { keyEvent.getKeyCode() }.answers { KeyEvent.VK_I }
 
-        keyboardShortcutService.invoke(keyEvent)
+        keyboardShortcutService.invoke(keyEvent, Dispatchers.Unconfined)
 
         verify(exactly = 1) { keyEvent.isControlDown() }
         verify(atLeast = 1) { keyEvent.isShiftDown() }
