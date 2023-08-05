@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
     id("com.google.devtools.ksp") version "1.7.10-1.0.6"
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("org.jetbrains.kotlinx.kover") version "0.7.3"
 }
 
 group = "jp.toastkid.yobidashi4"
