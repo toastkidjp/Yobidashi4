@@ -1,6 +1,9 @@
 package jp.toastkid.yobidashi4.infrastructure.service.calendar
 
+import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -24,6 +27,9 @@ internal class UserOffDayServiceTest {
 
     @BeforeEach
     fun setUp() {
+        MockKAnnotations.init(this)
+        every { setting.userOffDay() } returns listOf(12 to 29, 12 to 30, 12 to 31)
+
         startKoin {
             modules(
                 module {
@@ -38,6 +44,7 @@ internal class UserOffDayServiceTest {
     @AfterEach
     fun tearDown() {
         stopKoin()
+        unmockkAll()
     }
 
     @Test
