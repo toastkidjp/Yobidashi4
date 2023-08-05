@@ -54,7 +54,7 @@ internal class KeywordSearchTest {
         mockkStatic(Path::class)
         every { Path.of(any<String>()) } returns mockk()
 
-        every { setting.articleFolder() } returns mockk()
+        every { setting.articleFolder() } returns "test"
 
         val mockFile1 = mockk<File>()
         every { mockFile1.getName() }.returns("mockFile1")
