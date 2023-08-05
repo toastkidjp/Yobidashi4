@@ -28,6 +28,9 @@ class ArticleFactoryImplementationTest {
     @MockK
     private lateinit var setting: Setting
 
+    @MockK
+    private lateinit var fileName: Path
+
     @BeforeEach
     fun setUp() {
         startKoin {
@@ -40,7 +43,9 @@ class ArticleFactoryImplementationTest {
         MockKAnnotations.init(this)
         mockkStatic(Path::class)
         every { Path.of(any(), any()) }.returns(path)
-        every { path.fileName }.returns(Path.of("test.md"))
+        every { path.fileName }.returns(fileName)
+        every { fileName.toString() } returns "test.md"
+        every { setting.articleFolder() } returns "test"
     }
 
     @AfterEach
