@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.domain.model.list
+package jp.toastkid.yobidashi4.presentation.main.content.data
 
 import java.nio.file.Path
 
