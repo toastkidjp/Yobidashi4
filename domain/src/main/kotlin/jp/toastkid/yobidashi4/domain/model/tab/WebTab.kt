@@ -35,7 +35,7 @@ data class WebTab(
             return "images/icon/ic_web.xml"
         }
 
-        val faviconFolder = Path.of("data/web/icon")
+        val faviconFolder = Path.of("temporary/web/icon")
         val iconPath = Files.list(faviconFolder).filter {
             val startsWith = it.fileName.pathString.startsWith(URL(url).host)
             startsWith
