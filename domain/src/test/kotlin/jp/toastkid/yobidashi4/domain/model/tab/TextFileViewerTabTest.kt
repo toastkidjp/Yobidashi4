@@ -9,8 +9,8 @@ class TextFileViewerTabTest {
     @Test
     fun iconPath() {
         assertTrue(TextFileViewerTab(Path.of("tomato.txt")).iconPath()?.contains("text") == true)
-        assertTrue(TextFileViewerTab(Path.of("data/log1/tomato.txt")).iconPath()?.contains("text") == true)
-        assertTrue(TextFileViewerTab(Path.of("data/logs/tomato.txt")).iconPath()?.contains("log") == true)
+        assertTrue(TextFileViewerTab(Path.of("temporary/log1/tomato.txt")).iconPath()?.contains("text") == true)
+        assertTrue(TextFileViewerTab(Path.of("temporary/logs/tomato.txt")).iconPath()?.contains("log") == true)
     }
 
 }
