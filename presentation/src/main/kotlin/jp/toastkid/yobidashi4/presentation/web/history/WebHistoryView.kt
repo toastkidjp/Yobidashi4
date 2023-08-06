@@ -48,7 +48,7 @@ import org.koin.core.component.inject
 fun WebHistoryView() {
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
-    val favicons = remember { Files.list(Path.of("data/web/icon")).collect(Collectors.toList()) }
+    val favicons = remember { Files.list(Path.of("temporary/web/icon")).collect(Collectors.toList()) }
 
     val webHistories = remember {
         val list = mutableStateListOf<WebHistory>()
