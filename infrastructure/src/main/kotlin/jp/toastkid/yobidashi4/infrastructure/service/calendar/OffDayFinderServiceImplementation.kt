@@ -12,11 +12,13 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Single
-class OffDayFinderServiceImplementation(
-    private val equinoxDayCalculator: EquinoxDayCalculator = EquinoxDayCalculator(),
-    private val moveableHolidayCalculatorService: MoveableHolidayCalculatorService = MoveableHolidayCalculatorService(),
+class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
+
+    private val equinoxDayCalculator: EquinoxDayCalculator = EquinoxDayCalculator()
+
+    private val moveableHolidayCalculatorService: MoveableHolidayCalculatorService = MoveableHolidayCalculatorService()
+
     private val specialCaseOffDayCalculator: SpecialCaseOffDayCalculatorService = SpecialCaseOffDayCalculatorService()
-) : OffDayFinderService, KoinComponent {
 
     private val userOffDayService: UserOffDayService by inject()
 
