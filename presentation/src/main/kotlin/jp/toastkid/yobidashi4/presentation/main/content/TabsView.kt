@@ -98,8 +98,18 @@ internal fun TabsView(modifier: Modifier) {
         ) {
             viewModel.tabs.forEachIndexed { index, tab ->
                 val openDropdownMenu = remember { mutableStateOf(false) }
-                val titleState = mutableStateOf(tab.title())
-                val iconPathState = mutableStateOf(tab.iconPath())
+                val titleState = remember { mutableStateOf(tab.title()) }
+                val iconPathState = remember { mutableStateOf(tab.iconPath()) }
+                LaunchedEffect("${index}_${tab.hashCode()}") {
+                    titleState.value = tab.title()
+                    iconPathState.value = tab.iconPath()
+
+                    tab.update().collect {
+                        titleState.value = tab.title()
+                        iconPathState.value = tab.iconPath()
+                    }
+                }
+
                 Tab(
                     selected = viewModel.selected.value == index,
                     onClick = { viewModel.setSelectedIndex(index) },
@@ -119,6 +129,7 @@ internal fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+
                             LoadIcon(iconPathState.value, Modifier.size(24.dp).padding(start = 4.dp))
 
                             val width = if (tab is WebTab) 232.dp else 1000.dp
@@ -138,14 +149,8 @@ internal fun TabsView(modifier: Modifier) {
                                 )
                             }
                         }
-                        TabOptionMenu(openDropdownMenu, tab, viewModel)
-                    }
 
-                    LaunchedEffect(Unit) {
-                        tab.update().collect {
-                            titleState.value = tab.title()
-                            iconPathState.value = tab.iconPath()
-                        }
+                        TabOptionMenu(openDropdownMenu, tab, viewModel)
                     }
                 }
             }
