@@ -20,7 +20,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
             .filter { elem -> elem.attr("rel").contains("icon") }
             .map { it.attr("href") }
             .toMutableList()
-        val faviconFolder = Path.of("data/web/icon")
+        val faviconFolder = Path.of("temporary/web/icon")
         if (Files.exists(faviconFolder).not()) {
             Files.createDirectories(faviconFolder)
         }
