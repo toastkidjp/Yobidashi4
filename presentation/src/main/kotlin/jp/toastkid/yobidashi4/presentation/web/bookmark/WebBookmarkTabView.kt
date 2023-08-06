@@ -68,6 +68,9 @@ internal fun WebBookmarkTabView() {
                 items(bookmarks) { bookmark ->
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
                         val faviconFolder = Path.of("temporary/web/icon")
+                        if (Files.exists(faviconFolder).not()) {
+                            Files.createDirectory(faviconFolder)
+                        }
                         val iconPath = Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
                             val startsWith = it.fileName.pathString.startsWith(URL(bookmark.url).host.trim())
                             startsWith
