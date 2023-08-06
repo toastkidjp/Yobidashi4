@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.web.search
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -21,6 +22,11 @@ class SearchSiteTest {
     @Test
     fun iconPath() {
         SearchSite.values().forEach { assertTrue(it.iconPath().isNotBlank()) }
+    }
+
+    @Test
+    fun getDefault() {
+        assertSame(SearchSite.YAHOO_JAPAN, SearchSite.getDefault())
     }
 
 }
