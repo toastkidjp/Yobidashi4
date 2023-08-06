@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
     iconPath ?: return
     val path = Path.of(iconPath)
-    if (iconPath.contains("data").not()) {
+    if (iconPath.contains("temporary").not()) {
         Icon(
             painterResource(iconPath),
             contentDescription = "Icon",
