@@ -30,7 +30,14 @@ class MediaFileFinder {
         }
 
         return Files.list(folder)
-            .filter { it.isDirectory().not() && it.nameWithoutExtension.startsWith("AlbumArt").not() && it.isExecutable() }
+            .filter {
+                it.isDirectory().not()
+                        && it.nameWithoutExtension.startsWith("AlbumArt").not()
+                        && it.nameWithoutExtension.startsWith("Folder").not()
+                        && it.nameWithoutExtension.startsWith("iTunes").not()
+                        && it.nameWithoutExtension.startsWith("desktop").not()
+                        && it.isExecutable()
+            }
             .collect(Collectors.toList())
     }
 
