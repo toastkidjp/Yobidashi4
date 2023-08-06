@@ -68,4 +68,4 @@ class WebHistoryFileStore : WebHistoryRepository {
 
 }
 
-private const val PATH_TO_HISTORY = "data/web/history.tsv"
+private const val PATH_TO_HISTORY = "temporary/web/history.tsv"
