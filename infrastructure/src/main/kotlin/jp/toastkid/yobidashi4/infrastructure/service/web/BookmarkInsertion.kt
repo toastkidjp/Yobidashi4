@@ -11,6 +11,8 @@ class BookmarkInsertion : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
+    private val repository: BookmarkRepository by inject()
+
     operator fun invoke(params: CefContextMenuParams? = null, latestUrl: String?) {
         val item = when {
             params?.linkUrl != null && params.linkUrl.isNotBlank() ->
@@ -22,7 +24,9 @@ class BookmarkInsertion : KoinComponent {
             else ->
                 Bookmark(mainViewModel.currentTab()?.title() ?: "", url = latestUrl ?: "")
         }
-        object : KoinComponent { val repository: BookmarkRepository by inject() }.repository.add(item)
+
+        repository.add(item)
+
         mainViewModel.showSnackbar("Add bookmark: $item")
     }
 
