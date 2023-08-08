@@ -30,15 +30,3 @@ class LoanCalculator {
     }
 
 }
-
-
-fun main() {
-    LoanCalculator().invoke(Factor(
-        30_000_000,
-        35,
-        1.0,
-        0,
-        0,
-        0
-    ))
-}
