@@ -12,11 +12,10 @@ import java.nio.file.Path
 import java.util.Locale
 import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.infrastructure.service.web.WebIconLoaderServiceImplementation
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuAction
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuFactory
+import jp.toastkid.yobidashi4.infrastructure.service.web.WebIconLoaderServiceImplementation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
 import me.friwi.jcefmaven.CefAppBuilder
@@ -252,10 +251,6 @@ class CefClientFactory(
             return
         }
         mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
-    }
-
-    private fun makeBookmarkItemWithUrl(url: String): Bookmark {
-        return Bookmark(url, url = url)
     }
 
 }
