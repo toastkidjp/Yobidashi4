@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 
@@ -19,6 +20,7 @@ data class TableTab(
         return when (items) {
             is MovieMemoExtractorResult -> "${ICON_FOLDER}ic_movie.xml"
             is OutgoAggregationResult -> "${ICON_FOLDER}ic_payments.xml"
+            is FindResult -> "${ICON_FOLDER}ic_find_in_page.xml"
             else -> null
         }
     }
