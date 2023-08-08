@@ -17,6 +17,7 @@ class SearchSiteTest {
             "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:https%3A%2F%2Fwww.yahoo.co.jp%2Ffavicon.ico",
             SearchSite.SEARCH_WITH_IMAGE.make("https://www.yahoo.co.jp/favicon.ico").toString()
         )
+        assertEquals("https://filmarks.com/search/movies?q=Up", SearchSite.FILMARKS.make("Up").toString())
     }
 
     @Test
