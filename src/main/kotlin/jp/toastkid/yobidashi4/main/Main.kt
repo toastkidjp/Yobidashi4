@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.main
 
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -34,9 +33,15 @@ fun main() {
         TodayArticleGeneratorImplementation().invoke()
     }
 
-    application {
-        val mainViewModel = remember { object : KoinComponent { val it: MainViewModel by inject() }.it }
+    val koin = object : KoinComponent {
+        val setting: Setting by inject()
+        val webViewPool: WebViewPool by inject()
+        val viewModel: MainViewModel by inject()
+    }
 
+    val mainViewModel = koin.viewModel
+
+    application {
         AppTheme(darkTheme = mainViewModel.darkMode()) {
             Window(
                 onCloseRequest = {
@@ -62,21 +67,16 @@ fun main() {
                 }
             })
 
-            Runtime.getRuntime().addShutdownHook(Thread {
-                val koin = object : KoinComponent {
-                    val setting: Setting by inject()
-                    val webViewPool: WebViewPool by inject()
-                }
-
-                koin.setting.save()
-
-                DependencyInjectionContainer.stop()
-                koin.webViewPool.disposeAll()
-            })
-
             withContext(Dispatchers.IO) {
                 mainViewModel.loadBackgroundImage()
             }
         }
     }
+
+    Runtime.getRuntime().addShutdownHook(Thread {
+        koin.setting.save()
+
+        DependencyInjectionContainer.stop()
+        koin.webViewPool.disposeAll()
+    })
 }
