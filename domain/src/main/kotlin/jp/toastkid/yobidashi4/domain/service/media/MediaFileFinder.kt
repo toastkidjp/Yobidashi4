@@ -31,14 +31,16 @@ class MediaFileFinder {
 
         return Files.list(folder)
             .filter {
-                it.isDirectory().not()
-                        && it.nameWithoutExtension.startsWith("AlbumArt").not()
-                        && it.nameWithoutExtension.startsWith("Folder").not()
-                        && it.nameWithoutExtension.startsWith("iTunes").not()
-                        && it.nameWithoutExtension.startsWith("desktop").not()
-                        && it.isExecutable()
+                isKeep(it)
             }
             .collect(Collectors.toList())
     }
+
+    private fun isKeep(it: Path) = (it.isDirectory().not()
+            && it.nameWithoutExtension.startsWith("AlbumArt").not()
+            && it.nameWithoutExtension.startsWith("Folder").not()
+            && it.nameWithoutExtension.startsWith("iTunes").not()
+            && it.nameWithoutExtension.startsWith("desktop").not()
+            && it.isExecutable())
 
 }
