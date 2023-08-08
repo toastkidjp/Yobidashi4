@@ -7,8 +7,7 @@ class Week {
     private val days: MutableList<CalendarDate> = mutableListOf()
 
     fun add(date: LocalDate, offDay: Boolean) {
-        days.add(CalendarDate(date.dayOfMonth, date.dayOfWeek,
-            offDay = offDay))
+        days.add(CalendarDate(date.dayOfMonth, date.dayOfWeek, offDay = offDay))
     }
 
     fun addEmpty() {
