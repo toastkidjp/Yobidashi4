@@ -48,6 +48,11 @@ class EditorTabTest {
     }
 
     @Test
+    fun title() {
+        assertEquals("test", editorTab.title())
+    }
+
+    @Test
     fun closeable() {
         assertTrue(editorTab.closeable())
     }
