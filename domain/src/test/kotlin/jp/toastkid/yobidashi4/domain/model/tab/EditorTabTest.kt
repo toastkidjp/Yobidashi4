@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -48,7 +49,6 @@ class EditorTabTest {
     @Test
     fun test() {
         val countDownLatch = CountDownLatch(1)
-
         val job = CoroutineScope(Dispatchers.Unconfined).launch {
             editorTab.update().collect {
                 countDownLatch.countDown()
@@ -59,6 +59,7 @@ class EditorTabTest {
 
         countDownLatch.await(3, TimeUnit.SECONDS)
         assertEquals(0, countDownLatch.count)
+        assertFalse(editorTab.closeable())
         job.cancel()
     }
 
