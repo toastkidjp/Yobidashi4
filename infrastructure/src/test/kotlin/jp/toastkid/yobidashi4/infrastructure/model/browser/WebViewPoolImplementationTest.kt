@@ -10,7 +10,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.infrastructure.service.CefClientFactory
+import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
