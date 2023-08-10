@@ -53,7 +53,7 @@ class GameFileProviderTest {
         verify (exactly = 1) { Files.exists(folder) }
         verify (exactly = 1) { Files.exists(file) }
         verify (inverse = true) { Files.createDirectories(any()) }
-        verify (inverse = true) { Files.createFile(file) }
+        verify (inverse = true) { Files.createFile(any()) }
         verify (exactly = 2) { folder.resolve(any<String>()) }
     }
 
