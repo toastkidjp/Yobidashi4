@@ -8,7 +8,7 @@ import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
-import org.jsoup.Jsoup
+import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 
@@ -16,10 +16,7 @@ import org.slf4j.LoggerFactory
 class WebIconLoaderServiceImplementation : WebIconLoaderService {
 
     override operator fun invoke(htmlSource: String, browserUrl: String?) {
-        val iconUrls = Jsoup.parse(htmlSource).select("link")
-            .filter { elem -> elem.attr("rel").contains("icon") }
-            .map { it.attr("href") }
-            .toMutableList()
+        val iconUrls = IconUrlFinder().invoke(htmlSource).toMutableList()
         val faviconFolder = Path.of("temporary/web/icon")
         if (Files.exists(faviconFolder).not()) {
             Files.createDirectories(faviconFolder)
