@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
@@ -141,10 +140,6 @@ class CefContextMenuAction : KoinComponent {
             return
         }
         mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
-    }
-
-    private fun makeBookmarkItemWithUrl(url: String): Bookmark {
-        return Bookmark(url, url = url)
     }
 
 }
