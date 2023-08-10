@@ -9,12 +9,12 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.Locale
 import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuAction
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuFactory
+import jp.toastkid.yobidashi4.infrastructure.service.web.CefSettingsApplier
 import jp.toastkid.yobidashi4.infrastructure.service.web.WebIconLoaderServiceImplementation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
@@ -70,11 +70,7 @@ class CefClientFactory(
             }
         })
 
-        val settings = builder.cefSettings
-        settings.windowless_rendering_enabled = false //Default - select OSR mode
-        settings.background_color = settings.ColorType(80, 0, 0, 0)
-        settings.user_agent = UserAgent.findByName(appSetting.userAgentName()).text()
-        settings.locale = Locale.getDefault().language
+        CefSettingsApplier().invoke(builder.cefSettings, UserAgent.findByName(appSetting.userAgentName()).text())
 
         val adHosts = javaClass.classLoader.getResourceAsStream("web/ad_hosts.txt")?.use { stream ->
             return@use BufferedReader(InputStreamReader(stream)).use { reader ->
