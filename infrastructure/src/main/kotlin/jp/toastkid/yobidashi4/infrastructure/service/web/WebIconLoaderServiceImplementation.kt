@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
-import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
@@ -65,7 +64,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         if (Files.exists(iconPath)) {
             return
         }
-        val urlConnection = URI(iconUrl).toURL().openConnection() as? HttpURLConnection ?: return
+        val urlConnection = url.openConnection() as? HttpURLConnection ?: return
         if (urlConnection.responseCode != 200) {
             return
         }
