@@ -59,14 +59,14 @@ class CefClientFactory(
         builder.setInstallDir(File("jcef-bundle")) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
         CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {
-            override fun onBeforeCommandLineProcessing(process_type: String?, commandLine: CefCommandLine?) {
-                if (process_type.isNullOrEmpty()) {
+            override fun onBeforeCommandLineProcessing(processType: String?, commandLine: CefCommandLine?) {
+                if (processType.isNullOrEmpty()) {
                     commandLine?.appendSwitchWithValue("enable-media-stream", "true")
                     if (appSetting.darkMode()) {
                         commandLine?.appendSwitchWithValue("blink-settings", "forceDarkModeInversionAlgorithm=1,forceDarkModeEnabled=true")
                     }
                 }
-                super.onBeforeCommandLineProcessing(process_type, commandLine)
+                super.onBeforeCommandLineProcessing(processType, commandLine)
             }
         })
 
