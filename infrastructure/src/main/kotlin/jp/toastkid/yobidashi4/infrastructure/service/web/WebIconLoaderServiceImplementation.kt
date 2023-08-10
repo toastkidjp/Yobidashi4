@@ -48,14 +48,14 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
     }
 
     override fun download(
-        it: String,
+        iconUrl: String,
         faviconFolder: Path,
         targetHost: String?
     ) {
         val fileExtension = try {
-            URL(it).path.split(".").lastOrNull() ?: "png"
+            URL(iconUrl).path.split(".").lastOrNull() ?: "png"
         } catch (e: MalformedURLException) {
-            LoggerFactory.getLogger(javaClass).debug("Malformed URL: $it")
+            LoggerFactory.getLogger(javaClass).debug("Malformed URL: $iconUrl")
             return
         }
 
@@ -63,7 +63,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         if (Files.exists(iconPath)) {
             return
         }
-        val urlConnection = URI(it).toURL().openConnection() as? HttpURLConnection ?: return
+        val urlConnection = URI(iconUrl).toURL().openConnection() as? HttpURLConnection ?: return
         if (urlConnection.responseCode != 200) {
             return
         }
