@@ -8,6 +8,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -29,6 +30,14 @@ class TableTabTest {
         tab.reload()
 
         verify(exactly = 1) { action.invoke() }
+    }
+
+    @Test
+    fun items() {
+        val items = MovieMemoExtractorResult()
+        val tableTab = TableTab("test", items, true, mockk())
+
+        assertSame(items, tableTab.items())
     }
 
 }
