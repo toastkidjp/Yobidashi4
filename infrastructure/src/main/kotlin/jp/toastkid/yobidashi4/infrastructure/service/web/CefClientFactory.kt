@@ -10,7 +10,6 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.infrastructure.service.CefKeyboardShortcutProcessor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
 import me.friwi.jcefmaven.CefAppBuilder
