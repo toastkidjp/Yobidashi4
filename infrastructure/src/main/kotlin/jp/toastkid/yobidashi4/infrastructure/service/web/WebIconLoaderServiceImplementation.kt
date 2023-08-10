@@ -44,13 +44,13 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
                 it
             }
         }
-            .forEach { download(it, faviconFolder, targetUrl) }
+            .forEach { download(it, faviconFolder, targetUrl.host) }
     }
 
     override fun download(
         it: String,
         faviconFolder: Path,
-        targetUrl: URL
+        targetHost: String?
     ) {
         val fileExtension = try {
             URL(it).path.split(".").lastOrNull() ?: "png"
@@ -59,7 +59,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
             return
         }
 
-        val iconPath = faviconFolder.resolve("${targetUrl.host}.$fileExtension")
+        val iconPath = faviconFolder.resolve("$targetHost.$fileExtension")
         if (Files.exists(iconPath)) {
             return
         }
