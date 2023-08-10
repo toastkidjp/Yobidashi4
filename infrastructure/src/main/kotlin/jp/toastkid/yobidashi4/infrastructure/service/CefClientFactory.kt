@@ -1,16 +1,14 @@
 package jp.toastkid.yobidashi4.infrastructure.service
 
 import java.awt.Desktop
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuAction
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefContextMenuFactory
@@ -72,11 +70,7 @@ class CefClientFactory(
 
         CefSettingsApplier().invoke(builder.cefSettings, UserAgent.findByName(appSetting.userAgentName()).text())
 
-        val adHosts = javaClass.classLoader.getResourceAsStream("web/ad_hosts.txt")?.use { stream ->
-            return@use BufferedReader(InputStreamReader(stream)).use { reader ->
-                reader.lines().collect(Collectors.toList())
-            }
-        } ?: emptyList()
+        val adHosts = AdHosts()
 
         var selectedText = ""
 
@@ -126,7 +120,7 @@ class CefClientFactory(
             ): CefResourceRequestHandler {
                 return object : CefResourceRequestHandlerAdapter() {
                     override fun onBeforeResourceLoad(browser: CefBrowser?, frame: CefFrame?, request: CefRequest?): Boolean {
-                        if (adHosts.any { request?.url?.contains(it) == true }) {
+                        if (adHosts.contains(request?.url)) {
                             request?.dispose()
                             return true
                         }
