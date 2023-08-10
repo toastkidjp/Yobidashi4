@@ -52,12 +52,14 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         faviconFolder: Path,
         targetHost: String?
     ) {
-        val fileExtension = try {
-            URL(iconUrl).path.split(".").lastOrNull() ?: "png"
+        val url =  try {
+            URL(iconUrl)
         } catch (e: MalformedURLException) {
             LoggerFactory.getLogger(javaClass).debug("Malformed URL: $iconUrl")
             return
         }
+
+        val fileExtension = url.path.split(".").lastOrNull() ?: "png"
 
         val iconPath = faviconFolder.resolve("$targetHost.$fileExtension")
         if (Files.exists(iconPath)) {
