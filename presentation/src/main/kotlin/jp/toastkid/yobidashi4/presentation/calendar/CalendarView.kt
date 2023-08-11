@@ -1,27 +1,23 @@
 package jp.toastkid.yobidashi4.presentation.calendar
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +29,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.DayOfWeek
@@ -139,29 +137,18 @@ private fun TopComponent(calendarViewModel: CalendarViewModel) {
         Surface(modifier = Modifier.padding(8.dp)) {
             val openYearChooser = remember { mutableStateOf(false) }
             Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                Text("${calendarViewModel.localDate().year}", fontSize = 16.sp)
-                DropdownMenu(
-                    expanded = openYearChooser.value,
-                    onDismissRequest = { openYearChooser.value = false }) {
-                    val years = (1900..2200).toList()
-                    Box {
-                        val state = rememberLazyListState(years.indexOf(calendarViewModel.localDate().year))
-                        LazyColumn(state = state, modifier = Modifier.size(200.dp, 500.dp)) {
-                            items(years) {
-                                Text("${it}", fontSize = 16.sp, modifier = Modifier.fillMaxSize()
-                                    .clickable {
-                                        calendarViewModel.setYear(it)
-                                        openYearChooser.value = false
-                                    }
-                                    .padding(8.dp))
-                            }
-                        }
-                        VerticalScrollbar(
-                            adapter = rememberScrollbarAdapter(state),
-                            modifier = Modifier.height(500.dp).align(Alignment.CenterEnd)
-                        )
-                    }
-                }
+                TextField(
+                    calendarViewModel.yearInput(),
+                    maxLines = 1,
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    label = { Text("Installment") },
+                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
+                    onValueChange = {
+                        calendarViewModel.setYearInput(TextFieldValue(it.text, it.selection, it.composition))
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.widthIn(100.dp)
+                )
             }
         }
 
