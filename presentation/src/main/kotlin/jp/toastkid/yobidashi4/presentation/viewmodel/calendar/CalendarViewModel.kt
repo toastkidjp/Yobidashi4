@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.viewmodel.calendar
 
+import androidx.compose.ui.text.input.TextFieldValue
 import java.time.LocalDate
 
 interface CalendarViewModel {
@@ -10,4 +11,8 @@ interface CalendarViewModel {
 
     fun moveToCurrentMonth()
     fun getFirstDay(): LocalDate
+
+    fun yearInput(): TextFieldValue
+
+    fun setYearInput(textFieldValue: TextFieldValue)
 }
