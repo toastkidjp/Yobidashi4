@@ -21,16 +21,14 @@ fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, label: String?, offDay: Boolea
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = modifier.padding(vertical = 16.dp)
         ) {
             Text(if (date == -1) "" else "$date", fontSize = 16.sp, color = when (dayOfWeek) {
                 DayOfWeek.SUNDAY -> OFF_DAY_FG
                 DayOfWeek.SATURDAY -> SATURDAY_FG
                 else -> if (offDay) OFF_DAY_FG else if (today) Color.White else MaterialTheme.colors.onSurface
-            })
-            if (!label.isNullOrEmpty()) {
-                Text(label, fontSize = 10.sp, color = OFF_DAY_FG, modifier = Modifier.padding(top = 4.dp))
-            }
+            }, modifier = Modifier.padding(bottom = 4.dp))
+            Text(label ?: "", fontSize = if (label.isNullOrEmpty()) 12.sp else 10.sp, color = OFF_DAY_FG)
         }
     }
 }
