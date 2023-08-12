@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.calendar
 
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+
 
 class SpecialCaseOffDayCalculatorService {
 
@@ -7,51 +9,45 @@ class SpecialCaseOffDayCalculatorService {
      *
      * @return isOffDay, forceNormal
      */
-    operator fun invoke(year: Int, month: Int, date: Int): Pair<Boolean, Boolean> {
+    operator fun invoke(year: Int, month: Int): Set<Holiday> {
         if (TARGET_YEARS.contains(year).not() || TARGET_MONTHS.contains(month).not()) {
-            return false to false
+            return emptySet()
         }
 
         if (year == 2019) {
-            if (month == 4 && date == 30) {
-                return true to false
+            if (month == 4) {
+                return setOf(makeJapaneseHoliday("Special holiday", month, 30))
             }
-            if (month == 5 && (date == 1 || date == 2)) {
-                return true to false
+            if (month == 5) {
+                return setOf(
+                    makeJapaneseHoliday("Special holiday", month, 1),
+                    makeJapaneseHoliday("Special holiday", month, 2)
+                )
             }
         }
 
         if (year == 2020) {
             if (month == 7) {
-                return when (date) {
-                    23, 24 -> return true to true
-                    else -> false to true
-                }
-            }
-            if (month == 8) {
-                return (date == 10) to true
-            }
-            if (month == 10) {
-                return false to true
+                return setOf(
+                    makeJapaneseHoliday("Marine day", month, 23),
+                    makeJapaneseHoliday("Sports day", month, 24)
+                )
             }
         }
 
         if (year == 2021) {
             if (month == 7) {
-                return when (date) {
-                    22, 23 -> return true to true
-                    else -> false to true
-                }
-            }
-            if (month == 8) {
-                return (date == 9) to true
-            }
-            if (month == 10) {
-                return false to true
+                return setOf(
+                    makeJapaneseHoliday("Marine day", month, 22),
+                    makeJapaneseHoliday("Sports day", month, 23)
+                )
             }
         }
-        return false to false
+        return emptySet()
     }
+
+    private fun makeJapaneseHoliday(title: String, month: Int, day: Int) = Holiday(title, month,
+        day, "\uD83C\uDDEF\uD83C\uDDF5")
 
     companion object {
         private val TARGET_YEARS = setOf(2019, 2020, 2021)

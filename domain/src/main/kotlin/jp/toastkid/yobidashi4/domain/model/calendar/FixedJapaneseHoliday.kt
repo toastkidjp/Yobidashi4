@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi4.domain.model.calendar
 
-enum class FixedJapaneseHoliday(val month: Int, val date: Int, japaneseTitle: String) {
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+
+enum class FixedJapaneseHoliday(val month: Int, val date: Int, val japaneseTitle: String) {
     NATIONAL_FOUNDATION_DAY(2, 11, "建国記念の日"),
     EMPERORS_BIRTHDAY(2, 23, "天皇誕生日"),
     SHOWA_DAY(4,29, "昭和の日"),
@@ -11,4 +13,32 @@ enum class FixedJapaneseHoliday(val month: Int, val date: Int, japaneseTitle: St
     CULTURE_DAY(11, 3, "文化の日"),
     LABOR_THANKSGIVING_DAY(11, 23, "勤労感謝の日"),
     ;
+
+
+    companion object {
+        fun find(year: Int, month: Int): List<Holiday> {
+            return values().filter { it.month == month }
+                .map {
+                    Holiday(
+                        it.japaneseTitle,
+                        it.month,
+                        calculateDate(year, it),
+                        "\uD83C\uDDEF\uD83C\uDDF5"
+                    )
+                }
+        }
+
+        private inline fun calculateDate(year: Int, it: FixedJapaneseHoliday): Int {
+            if (it != MOUNTAIN_DAY) {
+                return it.date
+            }
+
+            return when (year) {
+                2020 -> 10
+                2021 -> 8
+                else -> it.date
+            }
+        }
+    }
+
 }

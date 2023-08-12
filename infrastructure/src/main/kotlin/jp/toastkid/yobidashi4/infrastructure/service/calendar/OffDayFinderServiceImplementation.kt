@@ -27,20 +27,17 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
             return false
         }
 
-        if (month == 3 && date == equinoxDayCalculator.calculateVernalEquinoxDay(year)) {
+        if (month == 3 && date == equinoxDayCalculator.calculateVernalEquinoxDay(year).day) {
             return true
         }
 
-        if (month == 9 && date == equinoxDayCalculator.calculateAutumnalEquinoxDay(year)) {
+        if (month == 9 && date == equinoxDayCalculator.calculateAutumnalEquinoxDay(year).day) {
             return true
         }
 
-        val isSpecialCase = specialCaseOffDayCalculator(year, month, date)
-        if (isSpecialCase.first) {
+        val isSpecialCases = specialCaseOffDayCalculator(year, month)
+        if (isSpecialCases.any { it.month == month && it.day == date }) {
             return true
-        }
-        if (isSpecialCase.second) {
-            return false
         }
 
         if (moveableHolidayCalculatorService(year, month, date)) {
