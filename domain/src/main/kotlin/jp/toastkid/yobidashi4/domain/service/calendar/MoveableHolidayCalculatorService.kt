@@ -9,8 +9,7 @@ class MoveableHolidayCalculatorService {
             return false
         }
 
-        val targetDay = MoveableJapaneseHoliday.find(year, month).first()
-        return targetDay.month == month && targetDay.day == date
+        return MoveableJapaneseHoliday.find(year, month).any { it.month == month && it.day == date }
     }
 
 }
