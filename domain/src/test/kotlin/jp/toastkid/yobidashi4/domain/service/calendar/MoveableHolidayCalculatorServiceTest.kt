@@ -27,6 +27,7 @@ internal class MoveableHolidayCalculatorServiceTest {
         assertFalse(moveableHolidayCalculatorService.invoke(2019, 10, 13))
         assertTrue(moveableHolidayCalculatorService.invoke(2019, 10, 14))
         assertFalse(moveableHolidayCalculatorService.invoke(2019, 10, 15))
+        assertFalse(moveableHolidayCalculatorService.invoke(2023, 8, 14))
     }
 
     @Test
