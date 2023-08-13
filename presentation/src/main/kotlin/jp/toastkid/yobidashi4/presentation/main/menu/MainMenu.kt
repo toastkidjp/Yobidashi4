@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
@@ -192,6 +193,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
                 viewModel.setShowWebSearch(viewModel.showWebSearch().not())
+            }
+            Item("Barcode tool", icon = painterResource("images/icon/ic_converter.xml")) {
+                viewModel.openTab(BarcodeToolTab())
             }
             Item("Converter", icon = painterResource("images/icon/ic_converter.xml")) {
                 viewModel.openTab(ConverterToolTab())
