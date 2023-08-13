@@ -11,42 +11,26 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.awt.image.BufferedImage
-import java.io.IOException
-import java.net.URL
-import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeDecoder
-import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import jp.toastkid.yobidashi4.presentation.viewmodel.barcode.BarcodeToolTabViewModel
 
 @Composable
 fun BarcodeToolTabView() {
+    val viewModel = remember { BarcodeToolTabViewModel() }
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val lastBarcode = remember { mutableStateOf<BufferedImage?>(null) }
-        val input = remember { mutableStateOf(TextFieldValue()) }
-        val decodeInput = remember { mutableStateOf(TextFieldValue()) }
-        val decodeResult = remember { mutableStateOf("") }
-        val barcodeEncoder = remember { object : KoinComponent { val it: BarcodeEncoder by inject() }.it }
-        val barcodeDecoder = remember { object : KoinComponent { val it: BarcodeDecoder by inject() }.it }
-
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            lastBarcode.value?.toComposeImageBitmap()?.let {
+            viewModel.barcodeImage()?.let {
                 Image(
                     it,
                     "Generated barcode",
@@ -55,17 +39,13 @@ fun BarcodeToolTabView() {
             }
 
             TextField(
-                input.value,
+                viewModel.encodeInputValue(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 label = { Text("Installment") },
                 textStyle = TextStyle(fontSize = 16.sp),
                 onValueChange = {
-                    input.value = it
-
-                    if (it.text.isNotBlank()) {
-                        lastBarcode.value = barcodeEncoder.invoke(it.text, 400, 400)
-                    }
+                    viewModel.setEncodeInputValue(it)
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
@@ -73,39 +53,25 @@ fun BarcodeToolTabView() {
             Text("Decoder")
 
             TextField(
-                decodeInput.value,
+                viewModel.decodeInputValue(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 label = { Text("Installment") },
                 textStyle = TextStyle(fontSize = 16.sp),
                 onValueChange = {
-                    decodeInput.value = it
-
-                    if (it.text.isNotBlank()) {
-                        val image = try {
-                            ImageIO.read(URL(it.text))
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                            null
-                        } ?: return@TextField
-
-                        barcodeDecoder.invoke(image)?.let {
-                            decodeResult.value = it
-                        }
-                        lastBarcode.value = image
-                    }
+                    viewModel.setDecodeInputValue(it)
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
-            if (decodeResult.value.isNotBlank()) {
+            if (viewModel.decodeResult().isNotBlank()) {
                 Surface(
                     elevation = 4.dp
                 ) {
                     Text(
-                        decodeResult.value,
+                        viewModel.decodeResult(),
                         modifier = Modifier.clickable {
-                            object : KoinComponent { val vm: MainViewModel by inject() }.vm.openUrl(decodeResult.value, false)
+                            viewModel.onClickDecodeResult()
                         }
                     )
                 }
