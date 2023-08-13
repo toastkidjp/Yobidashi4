@@ -42,6 +42,7 @@ import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
+import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -206,7 +207,8 @@ private fun makeMonth(
     week: Array<DayOfWeek>,
     firstDay: LocalDate
 ): MutableList<Week> {
-    val offDayFinderService = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value)
+    val userOffDayService = object : KoinComponent { val userOffDayService: UserOffDayService by inject() }.userOffDayService
+    val offDayFinderService = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
 
     var hasStarted1 = false
     var current1 = firstDay
