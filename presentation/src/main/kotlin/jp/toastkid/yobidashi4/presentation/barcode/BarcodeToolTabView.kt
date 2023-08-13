@@ -42,7 +42,7 @@ fun BarcodeToolTabView() {
                 viewModel.encodeInputValue(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                label = { Text("Installment") },
+                label = { Text("Barcode text input") },
                 textStyle = TextStyle(fontSize = 16.sp),
                 onValueChange = {
                     viewModel.setEncodeInputValue(it)
