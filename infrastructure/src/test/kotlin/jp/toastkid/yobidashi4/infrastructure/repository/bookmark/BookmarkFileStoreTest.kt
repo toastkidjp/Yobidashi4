@@ -11,11 +11,9 @@ import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -24,27 +22,8 @@ class BookmarkFileStoreTest {
     @InjectMockKs
     private lateinit var bookmarkFileStore: BookmarkFileStore
 
-    companion object {
-
-        @MockK
-        private lateinit var path: Path
-
-        @JvmStatic
-        @BeforeAll
-        fun setUpAll() {
-            MockKAnnotations.init(this)
-            mockkStatic(Path::class)
-            every { Path.of(any<String>()) }.returns(path)
-            every { path.parent }.returns(path)
-        }
-
-        @JvmStatic
-        @AfterAll
-        fun tearDownAll() {
-            unmockkAll()
-        }
-
-    }
+    @MockK
+    private lateinit var path: Path
 
     @BeforeEach
     fun setUp() {
@@ -55,6 +34,10 @@ class BookmarkFileStoreTest {
         every { Files.readAllLines(any()) }.returns(listOf("test\thttps://www.yahoo.co.jp"))
         every { Files.write(any(), any<Iterable<String>>()) }.returns(mockk())
         every { Files.createDirectories(any()) }.returns(mockk())
+
+        mockkStatic(Path::class)
+        every { Path.of(any<String>()) }.returns(path)
+        every { path.parent }.returns(path)
     }
 
     @AfterEach
