@@ -36,7 +36,7 @@ class UserTemplateStreamReaderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         userTemplateStreamReader.invoke()
 
         verify { Files.exists(any()) }
