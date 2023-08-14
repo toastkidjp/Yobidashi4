@@ -30,6 +30,8 @@ fun BarcodeToolTabView() {
         elevation = 4.dp
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Generator")
+
             viewModel.barcodeImage()?.let {
                 Image(
                     it,
