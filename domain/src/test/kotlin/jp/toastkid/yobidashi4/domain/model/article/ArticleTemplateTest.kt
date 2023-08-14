@@ -4,10 +4,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
 import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.article.UserTemplateStreamReader
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,6 +27,11 @@ internal class ArticleTemplateTest {
         every { offDayFinderService.invoke(any(), any(), any(), any(), any()) }.returns(false)
 
         articleTemplate = ArticleTemplate(offDayFinderService = offDayFinderService)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
