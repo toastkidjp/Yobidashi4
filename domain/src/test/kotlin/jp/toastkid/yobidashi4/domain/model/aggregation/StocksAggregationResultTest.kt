@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.aggregation
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -22,6 +23,7 @@ class StocksAggregationResultTest {
 
     @AfterEach
     fun tearDown() {
+        unmockkAll()
     }
 
     @Test
