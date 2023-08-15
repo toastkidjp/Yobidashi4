@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.calendar
 
-import java.util.Calendar
-import java.util.GregorianCalendar
+import java.time.DayOfWeek
+import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 
@@ -74,20 +74,10 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
         }
 
         private fun calculateDate(year: Int, month: Int, week: Int): Int {
-            val localDate = GregorianCalendar(year, month - 1, 1)
-            val dayOfWeek = localDate.get(Calendar.DAY_OF_WEEK)
-            val d = if (dayOfWeek == Calendar.MONDAY) {
-                1
-            } else {
-                Calendar.SUNDAY - (dayOfWeek - 2)
-            }
-
-            val offset = if (dayOfWeek <= Calendar.MONDAY) {
-                1
-            } else {
-                0
-            }
-            return d + (7 * (week - offset))
+            val localDate = LocalDate.of(year, month, 1)
+            val dayOfWeek = localDate.dayOfWeek
+            val o = if (dayOfWeek == DayOfWeek.MONDAY) 6 else (dayOfWeek.ordinal - (DayOfWeek.MONDAY.ordinal + 1))
+            return 7 * week - (o)
         }
 
     }
