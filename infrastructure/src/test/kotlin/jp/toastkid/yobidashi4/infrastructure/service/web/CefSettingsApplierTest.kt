@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.unmockkAll
 import org.cef.CefSettings
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -28,6 +29,7 @@ class CefSettingsApplierTest {
 
     @AfterEach
     fun tearDown() {
+        unmockkAll()
     }
 
     @Test
