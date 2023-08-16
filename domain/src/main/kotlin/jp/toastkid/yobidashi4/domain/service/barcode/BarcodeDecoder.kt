@@ -4,6 +4,6 @@ import java.awt.image.BufferedImage
 
 interface BarcodeDecoder {
 
-    operator fun invoke(image: BufferedImage): String?
+    operator fun invoke(sourceImage: BufferedImage): String?
 
 }
