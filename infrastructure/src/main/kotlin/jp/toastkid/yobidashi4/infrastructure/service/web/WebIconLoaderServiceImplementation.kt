@@ -6,6 +6,7 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import org.koin.core.annotation.Single
@@ -16,10 +17,9 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
 
     override operator fun invoke(htmlSource: String, browserUrl: String?) {
         val iconUrls = IconUrlFinder().invoke(htmlSource).toMutableList()
-        val faviconFolder = Path.of("temporary/web/icon")
-        if (Files.exists(faviconFolder).not()) {
-            Files.createDirectories(faviconFolder)
-        }
+
+        val webIcon = WebIcon()
+        webIcon.makeFolderIfNeed()
 
         val targetUrl = try {
             URL(browserUrl)
@@ -43,7 +43,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
                 it
             }
         }
-            .forEach { download(it, faviconFolder, targetUrl.host) }
+            .forEach { download(it, webIcon.faviconFolder(), targetUrl.host) }
     }
 
     override fun download(
