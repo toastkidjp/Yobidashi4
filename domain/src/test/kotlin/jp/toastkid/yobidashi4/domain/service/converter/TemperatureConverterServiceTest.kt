@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.service.converter
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,6 +15,15 @@ class TemperatureConverterServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+    }
+
+    @Test
+    fun checkValues() {
+        Assertions.assertTrue(temperatureConverterService.title().isNotBlank())
+        Assertions.assertTrue(temperatureConverterService.firstInputLabel().isNotBlank())
+        Assertions.assertTrue(temperatureConverterService.secondInputLabel().isNotBlank())
+        Assertions.assertTrue(temperatureConverterService.defaultFirstInputValue().isNotBlank())
+        Assertions.assertTrue(temperatureConverterService.defaultSecondInputValue().isNotBlank())
     }
 
     @Test
