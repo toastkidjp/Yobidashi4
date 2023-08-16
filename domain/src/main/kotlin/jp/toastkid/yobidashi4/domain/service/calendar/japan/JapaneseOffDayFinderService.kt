@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.calendar.japan
 
-import java.util.Calendar
-import java.util.GregorianCalendar
+import java.time.DayOfWeek
+import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.FixedJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.MoveableJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
@@ -39,15 +39,15 @@ class JapaneseOffDayFinderService(
         holidays.addAll(firstOrNull)
 
         if (month == 5) {
-            val calendar = GregorianCalendar(year, month - 1, 6)
-            if (calendar.get(Calendar.DAY_OF_WEEK) <= Calendar.WEDNESDAY) {
+            val calendar = LocalDate.of(year, month, 6)
+            if (calendar.dayOfWeek <= DayOfWeek.WEDNESDAY) {
                 holidays.add(Holiday("Substitute holiday", month, 6, "\uD83C\uDDEF\uD83C\uDDF5"))
             }
         }
 
         val substitutes = holidays.mapNotNull {
-            val calendar = GregorianCalendar(year, month - 1, it.day)
-            if (month != 5 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            val calendar = LocalDate.of(year, month, it.day)
+            if (month != 5 && calendar.dayOfWeek == DayOfWeek.SUNDAY) {
                 Holiday("Substitute Holiday", month, it.day + 1, "\uD83C\uDDEF\uD83C\uDDF5")
             } else null
         }
