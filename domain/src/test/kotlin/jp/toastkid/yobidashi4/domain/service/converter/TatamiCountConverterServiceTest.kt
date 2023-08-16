@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -21,6 +22,15 @@ class TatamiCountConverterServiceTest {
     @AfterEach
     fun tearDown() {
         unmockkAll()
+    }
+
+    @Test
+    fun checkValues() {
+        Assertions.assertTrue(tatamiCountConverter.title().isNotBlank())
+        Assertions.assertTrue(tatamiCountConverter.firstInputLabel().isNotBlank())
+        Assertions.assertTrue(tatamiCountConverter.secondInputLabel().isNotBlank())
+        Assertions.assertTrue(tatamiCountConverter.defaultFirstInputValue().isNotBlank())
+        Assertions.assertTrue(tatamiCountConverter.defaultSecondInputValue().isNotBlank())
     }
 
     @Test
