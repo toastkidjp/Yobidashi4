@@ -4,7 +4,9 @@ import java.awt.Image
 import java.awt.Toolkit
 import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.StringSelection
+import java.io.IOException
 import jp.toastkid.yobidashi4.domain.model.clipboard.TransferableImage
+import org.slf4j.LoggerFactory
 
 class ClipboardPutterService(private val clipboard: Clipboard = Toolkit.getDefaultToolkit().systemClipboard) {
 
@@ -13,7 +15,11 @@ class ClipboardPutterService(private val clipboard: Clipboard = Toolkit.getDefau
     }
 
     operator fun invoke(image: Image) {
-        clipboard.setContents(TransferableImage(image)) { _, _ -> }
+        try {
+            clipboard.setContents(TransferableImage(image)) { _, _ -> }
+        } catch (e: IOException) {
+            LoggerFactory.getLogger(javaClass).debug("IO Exception", e)
+        }
     }
 
 }
