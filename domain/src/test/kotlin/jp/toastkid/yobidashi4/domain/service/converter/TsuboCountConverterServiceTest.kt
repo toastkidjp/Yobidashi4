@@ -22,7 +22,16 @@ class TsuboCountConverterServiceTest {
     fun tearDown() {
         unmockkAll()
     }
-
+    
+    @Test
+    fun checkValues() {
+        Assertions.assertTrue(converter.title().isNotBlank())
+        Assertions.assertTrue(converter.firstInputLabel().isNotBlank())
+        Assertions.assertTrue(converter.secondInputLabel().isNotBlank())
+        Assertions.assertTrue(converter.defaultFirstInputValue().isNotBlank())
+        Assertions.assertTrue(converter.defaultSecondInputValue().isNotBlank())
+    }
+    
     @Test
     fun test() {
         Assertions.assertEquals("324.00", converter.firstInputAction("100"))
