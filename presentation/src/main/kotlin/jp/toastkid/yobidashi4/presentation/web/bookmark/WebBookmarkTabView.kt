@@ -24,16 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
-import kotlin.io.path.pathString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -67,14 +63,9 @@ internal fun WebBookmarkTabView() {
             ) {
                 items(bookmarks) { bookmark ->
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
-                        val faviconFolder = Path.of("temporary/web/icon")
-                        if (Files.exists(faviconFolder).not()) {
-                            Files.createDirectory(faviconFolder)
-                        }
-                        val iconPath = Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
-                            val startsWith = it.fileName.pathString.startsWith(URL(bookmark.url).host.trim())
-                            startsWith
-                        }
+                        val faviconFolder = WebIcon()
+                        faviconFolder.makeFolderIfNeed()
+                        val iconPath = faviconFolder.find(bookmark.url)
                         LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
                         Column(modifier = Modifier
                             .combinedClickable(
