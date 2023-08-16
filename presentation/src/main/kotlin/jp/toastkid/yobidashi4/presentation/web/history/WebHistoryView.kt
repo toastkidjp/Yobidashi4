@@ -26,15 +26,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.net.MalformedURLException
 import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Path
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
+import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -48,7 +46,7 @@ import org.koin.core.component.inject
 fun WebHistoryView() {
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
-    val favicons = remember { Files.list(Path.of("temporary/web/icon")).collect(Collectors.toList()) }
+    val favicons = remember { WebIcon().readAll() }
 
     val webHistories = remember {
         val list = mutableStateListOf<WebHistory>()
