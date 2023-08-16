@@ -15,16 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.barcode.BarcodeToolTabViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Composable
 fun BarcodeToolTabView() {
@@ -43,9 +38,7 @@ fun BarcodeToolTabView() {
                     "Generated barcode",
                     modifier = Modifier.sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
                         .clickable {
-                            ClipboardPutterService().invoke(it.toAwtImage())
-                            object : KoinComponent { val vm: MainViewModel by inject() }.vm
-                                .showSnackbar("Copy barcode to clipboard.")
+                            viewModel.onClickImage()
                         }
                 )
             }
