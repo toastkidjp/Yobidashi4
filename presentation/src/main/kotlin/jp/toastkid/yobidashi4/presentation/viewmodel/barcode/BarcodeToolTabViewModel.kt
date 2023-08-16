@@ -23,6 +23,8 @@ class BarcodeToolTabViewModel {
 
     private val decodeResult = mutableStateOf("")
 
+    private val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+
     private val barcodeEncoder = object : KoinComponent { val it: BarcodeEncoder by inject() }.it
 
     private val barcodeDecoder = object : KoinComponent { val it: BarcodeDecoder by inject() }.it
@@ -63,7 +65,7 @@ class BarcodeToolTabViewModel {
     fun decodeResult() = decodeResult.value
 
     fun onClickDecodeResult() {
-        object : KoinComponent { val vm: MainViewModel by inject() }.vm.openUrl(decodeResult.value, false)
+        mainViewModel.openUrl(decodeResult.value, false)
     }
 
 }
