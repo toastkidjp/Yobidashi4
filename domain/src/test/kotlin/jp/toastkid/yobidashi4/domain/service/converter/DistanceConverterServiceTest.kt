@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.converter
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -14,6 +15,15 @@ class DistanceConverterServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+    }
+
+    @Test
+    fun checkValues() {
+        assertTrue(distanceConverterService.title().isNotBlank())
+        assertTrue(distanceConverterService.firstInputLabel().isNotBlank())
+        assertTrue(distanceConverterService.secondInputLabel().isNotBlank())
+        assertTrue(distanceConverterService.defaultFirstInputValue().isNotBlank())
+        assertTrue(distanceConverterService.defaultSecondInputValue().isNotBlank())
     }
 
     @Test
