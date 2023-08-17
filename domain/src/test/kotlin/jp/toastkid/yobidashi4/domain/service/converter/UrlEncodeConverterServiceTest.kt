@@ -52,4 +52,14 @@ class UrlEncodeConverterServiceTest {
         assertEquals(" ", urlEncodeConverterService.secondInputAction(" "))
         assertEquals("東京特許 許可局", urlEncodeConverterService.secondInputAction("%E6%9D%B1%E4%BA%AC%E7%89%B9%E8%A8%B1+%E8%A8%B1%E5%8F%AF%E5%B1%80"))
     }
+
+    @Test
+    fun checkValues() {
+        assertTrue(urlEncodeConverterService.title().isNotBlank())
+        assertTrue(urlEncodeConverterService.firstInputLabel().isNotBlank())
+        assertTrue(urlEncodeConverterService.secondInputLabel().isNotBlank())
+        assertTrue(urlEncodeConverterService.defaultFirstInputValue().isNotBlank())
+        assertTrue(urlEncodeConverterService.defaultSecondInputValue().isNotBlank())
+    }
+    
 }
