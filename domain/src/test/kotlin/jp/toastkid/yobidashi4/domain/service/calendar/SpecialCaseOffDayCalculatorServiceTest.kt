@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.calendar
 
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,98 +16,72 @@ internal class SpecialCaseOffDayCalculatorServiceTest {
 
     @Test
     fun testNormalDay() {
-        val result = specialCaseOffDayCalculatorService.invoke(2019, 1, 2)
+        val result = specialCaseOffDayCalculatorService.invoke(2019, 1)
 
-        assertFalse(result.first)
-        assertFalse(result.second)
+        assertTrue(result.isEmpty())
     }
 
     @Test
     fun test2019_4() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2019, 4, 30)
+        val result = specialCaseOffDayCalculatorService.invoke(2019, 4)
 
-        assertTrue(isOffDay)
-        assertFalse(forceNormal)
+        assertEquals(1, result.size)
     }
 
     @Test
     fun test2019_May() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2019, 5, 1)
+        val result = specialCaseOffDayCalculatorService.invoke(2019, 5)
 
-        assertTrue(isOffDay)
-        assertFalse(forceNormal)
+        assertEquals(2, result.size)
     }
 
     @Test
-    fun test2020_7_20() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2020, 7, 20)
+    fun test2020_July() {
+        val result = specialCaseOffDayCalculatorService.invoke(2020, 7)
 
-        assertFalse(isOffDay)
-        assertTrue(forceNormal)
+        assertEquals(2, result.size)
     }
 
     @Test
-    fun test2020_Jul_23() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2020, 7, 23)
+    fun test2021_July() {
+        val result = specialCaseOffDayCalculatorService.invoke(2021, 7)
 
-        assertTrue(isOffDay)
-        assertTrue(forceNormal)
+        assertEquals(2, result.size)
     }
 
     @Test
-    fun test2021_Jul_22() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2021, 7, 22)
+    fun test2020_August() {
+        val result = specialCaseOffDayCalculatorService.invoke(2020, 8)
 
-        assertTrue(isOffDay)
-        assertTrue(forceNormal)
-    }
-
-    @Test
-    fun test2021_Jul_24() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2021, 7, 24)
-
-        assertFalse(isOffDay)
-        assertTrue(forceNormal)
-    }
-
-    @Test
-    fun test2020_8_11() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2020, 8, 11)
-
-        assertFalse(isOffDay)
-        assertTrue(forceNormal)
+        assertTrue(result.isEmpty())
     }
 
     @Test
     fun test2020_Oct() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2020, 10, 11)
+        val result = specialCaseOffDayCalculatorService.invoke(2020, 10)
 
-        assertFalse(isOffDay)
-        assertTrue(forceNormal)
+        assertTrue(result.isEmpty())
     }
 
     @Test
-    fun test2021_8_9() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2021, 8, 9)
+    fun test2021_August() {
+        val result = specialCaseOffDayCalculatorService.invoke(2021, 8)
 
-        assertTrue(isOffDay)
-        assertTrue(forceNormal)
+        assertTrue(result.isEmpty())
     }
 
     @Test
     fun test2021_Oct() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2021, 10, 11)
+        val result = specialCaseOffDayCalculatorService.invoke(2021, 10)
 
-        assertFalse(isOffDay)
-        assertTrue(forceNormal)
+        assertTrue(result.isEmpty())
     }
 
     @Test
     fun test2021_Apr() {
-        val (isOffDay, forceNormal) = specialCaseOffDayCalculatorService.invoke(2021, 4, 26)
+        val result = specialCaseOffDayCalculatorService.invoke(2021, 4)
 
-        assertFalse(isOffDay)
-        assertFalse(forceNormal)
+        assertTrue(result.isEmpty())
     }
 
 }
