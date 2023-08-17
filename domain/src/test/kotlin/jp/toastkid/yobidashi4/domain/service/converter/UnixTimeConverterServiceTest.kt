@@ -75,4 +75,14 @@ class UnixTimeConverterServiceTest {
         assertEquals("1676254953000", unixTimeConverterService.secondInputAction("2023-02-13 11:22:33"))
         assertEquals("2370565353000", unixTimeConverterService.secondInputAction("2045-02-13 11:22:33"))
     }
+
+    @Test
+    fun checkValues() {
+        assertTrue(unixTimeConverterService.title().isNotBlank())
+        assertTrue(unixTimeConverterService.firstInputLabel().isNotBlank())
+        assertTrue(unixTimeConverterService.secondInputLabel().isNotBlank())
+        assertTrue(unixTimeConverterService.defaultFirstInputValue().isNotBlank())
+        assertTrue(unixTimeConverterService.defaultSecondInputValue().isNotBlank())
+    }
+    
 }
