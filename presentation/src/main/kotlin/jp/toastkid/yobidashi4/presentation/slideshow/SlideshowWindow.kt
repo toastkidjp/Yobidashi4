@@ -13,13 +13,15 @@ import jp.toastkid.yobidashi4.main.AppTheme
 
 class SlideshowWindow {
 
-    fun show(path: Path) {
+    fun show(path: Path, exitApplicationOnCloseRequest: Boolean = true) {
         application {
             AppTheme {
                 val deck = SlideDeckReader(path).invoke()
                 Window(
                     onCloseRequest = {
-                        exitApplication()
+                        if (exitApplicationOnCloseRequest) {
+                            exitApplication()
+                        }
                     },
                     title = deck.title,
                 ) {
