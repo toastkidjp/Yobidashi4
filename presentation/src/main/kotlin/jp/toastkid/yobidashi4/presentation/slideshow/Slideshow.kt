@@ -90,7 +90,13 @@ fun Slideshow(deck: SlideDeck, modifier: Modifier) {
 
                 Column(modifier = columnModifier) {
                     if (slide.hasTitle()) {
-                        Text(slide.title(), fontSize = if (slide.isFront()) 48.sp else 36.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 16.dp))
+                        Text(
+                            slide.title(),
+                            fontSize = if (slide.isFront()) 48.sp else 36.sp,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
                     }
 
                     slide.lines().forEach { line ->
