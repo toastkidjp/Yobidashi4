@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -14,25 +15,35 @@ import jp.toastkid.yobidashi4.main.AppTheme
 class SlideshowWindow {
 
     fun show(path: Path, exitApplicationOnCloseRequest: Boolean = true) {
-        application {
+        application(false) {
             AppTheme {
-                val deck = SlideDeckReader(path).invoke()
-                Window(
-                    onCloseRequest = {
-                        if (exitApplicationOnCloseRequest) {
-                            exitApplication()
-                        }
-                    },
-                    title = deck.title,
-                ) {
-                    val focusRequester = remember { FocusRequester() }
-
-                    Slideshow(deck, modifier = Modifier.focusRequester(focusRequester))
-
-                    LaunchedEffect(Unit) {
-                        focusRequester.requestFocus()
+                openWindow(path, {
+                    if (exitApplicationOnCloseRequest) {
+                        exitApplication()
                     }
-                }
+                })
+            }
+        }
+    }
+
+    @Composable
+    fun openWindow(
+        path: Path,
+        onCloseWindow: () -> Unit
+    ) {
+        val deck = SlideDeckReader(path).invoke()
+        Window(
+            onCloseRequest = {
+                onCloseWindow()
+            },
+            title = deck.title,
+        ) {
+            val focusRequester = remember { FocusRequester() }
+
+            Slideshow(deck, modifier = Modifier.focusRequester(focusRequester))
+
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
             }
         }
     }
