@@ -14,6 +14,7 @@ import jp.toastkid.yobidashi4.presentation.main.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
+import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,10 @@ fun main() {
 
                 window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
                 TextFileReceiver().launch()
+            }
+
+            mainViewModel.slideshowPath()?.let { path ->
+                SlideshowWindow().openWindow(path, { mainViewModel.closeSlideshow() })
             }
         }
 
