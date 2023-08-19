@@ -16,13 +16,11 @@ class SlideshowWindow {
 
     fun show(path: Path, exitApplicationOnCloseRequest: Boolean = true) {
         application(false) {
-            AppTheme {
-                openWindow(path, {
-                    if (exitApplicationOnCloseRequest) {
-                        exitApplication()
-                    }
-                })
-            }
+            openWindow(path, {
+                if (exitApplicationOnCloseRequest) {
+                    exitApplication()
+                }
+            })
         }
     }
 
@@ -31,19 +29,21 @@ class SlideshowWindow {
         path: Path,
         onCloseWindow: () -> Unit
     ) {
-        val deck = SlideDeckReader(path).invoke()
-        Window(
-            onCloseRequest = {
-                onCloseWindow()
-            },
-            title = deck.title,
-        ) {
-            val focusRequester = remember { FocusRequester() }
+        AppTheme(darkTheme = false) {
+            val deck = SlideDeckReader(path).invoke()
+            Window(
+                onCloseRequest = {
+                    onCloseWindow()
+                },
+                title = deck.title,
+            ) {
+                val focusRequester = remember { FocusRequester() }
 
-            Slideshow(deck, modifier = Modifier.focusRequester(focusRequester))
+                Slideshow(deck, modifier = Modifier.focusRequester(focusRequester))
 
-            LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
             }
         }
     }
