@@ -409,4 +409,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
     }
 
+    private val slideshowState = mutableStateOf<Path?>(null)
+
+    override fun slideshowPath() = slideshowState.value
+
+    override fun slideshow(path: Path) {
+        slideshowState.value = path
+    }
+
+    override fun closeSlideshow() {
+        slideshowState.value = null
+    }
+
 }
