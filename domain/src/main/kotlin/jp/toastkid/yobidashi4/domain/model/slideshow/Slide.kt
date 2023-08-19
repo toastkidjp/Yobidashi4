@@ -1,0 +1,48 @@
+package jp.toastkid.yobidashi4.domain.model.slideshow
+
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
+
+class Slide {
+
+    private var title = ""
+
+    private var backgroundPath = ""
+
+    private var front = false
+
+    private val lines = mutableListOf<Line>()
+
+    fun setTitle(title: String) {
+        this.title = title
+    }
+
+    fun hasTitle() = this.title.isNotBlank()
+
+    fun title() = this.title
+
+    fun addText(line: String) {
+        this.lines.add(TextLine(line))
+    }
+
+    fun addQuotedLines(line: String) {
+        this.lines.add(TextLine("<html>$line</html>"))
+    }
+
+    fun setBackground(background: String) {
+        backgroundPath = background
+    }
+
+    fun setFront(front: Boolean) {
+        this.front = front
+    }
+
+    fun isFront() = this.front
+
+    fun addLines(lines: List<Line>) {
+        this.lines.addAll(lines)
+    }
+
+    fun lines() = lines
+
+}
