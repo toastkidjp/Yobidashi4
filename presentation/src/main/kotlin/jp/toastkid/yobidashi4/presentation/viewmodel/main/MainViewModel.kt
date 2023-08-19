@@ -89,4 +89,10 @@ interface MainViewModel {
 
     fun emitEditorCommand(command: MenuCommand)
 
+    fun slideshowPath(): Path?
+
+    fun slideshow(path: Path)
+
+    fun closeSlideshow()
+
 }
