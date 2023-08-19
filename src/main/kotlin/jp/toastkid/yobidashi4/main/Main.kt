@@ -61,7 +61,7 @@ fun main() {
             }
 
             mainViewModel.slideshowPath()?.let { path ->
-                SlideshowWindow().openWindow(path, { mainViewModel.closeSlideshow() })
+                SlideshowWindow().openWindow(path) { mainViewModel.closeSlideshow() }
             }
         }
 
