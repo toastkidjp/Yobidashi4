@@ -33,6 +33,8 @@ class Slide {
         backgroundPath = background
     }
 
+    fun background() = backgroundPath
+
     fun setFront(front: Boolean) {
         this.front = front
     }

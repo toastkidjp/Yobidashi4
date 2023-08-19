@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -30,8 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
+import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
@@ -81,6 +84,15 @@ fun Slideshow(deck: SlideDeck, modifier: Modifier) {
             Box(
                 modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
             ) {
+                val backgroundUrl = if (slide.background().isNotBlank()) slide.background() else deck.background
+                if (backgroundUrl.isNotBlank()) {
+                    Image(
+                        ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
+                        "Background image",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
                 val columnModifier =
                 if (slide.isFront()) {
                     Modifier.clickable {  }.wrapContentHeight().align(Alignment.Center)
