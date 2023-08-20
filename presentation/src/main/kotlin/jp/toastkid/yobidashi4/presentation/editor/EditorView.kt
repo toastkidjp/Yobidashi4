@@ -46,36 +46,6 @@ import kotlin.text.Regex.Companion.fromLiteral
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 
-@Composable
-private fun Lines(lines: Editor.Lines) = with(LocalDensity.current) {
-    val maxNum = remember(lines.lineNumberDigitCount) {
-        (1..lines.lineNumberDigitCount).joinToString(separator = "") { "9" }
-    }
-
-    Box(Modifier.fillMaxSize()) {
-        val scrollState = rememberLazyListState()
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = scrollState
-        ) {
-            items(lines.size) { index ->
-                Box(Modifier.height(16.sp.toDp() * 1.6f)) {
-                    Line(Modifier.align(Alignment.CenterStart), maxNum, lines[index])
-                }
-            }
-        }
-        VerticalScrollbar(
-            adapter = rememberScrollbarAdapter(scrollState),
-            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
-        )
-        HorizontalScrollbar(
-            adapter = rememberScrollbarAdapter(scrollState),
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
-        )
-    }
-}
-
 // Поддержка русского языка
 // دعم اللغة العربية
 // 中文支持
