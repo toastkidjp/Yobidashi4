@@ -26,14 +26,11 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Path
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
@@ -131,11 +128,12 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
                             when (line) {
                                 is TextLine ->
                                     Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
-                                is ImageLine ->
+                                is ImageLine -> {
                                     Image(
-                                        loadImageBitmap(Files.newInputStream(Path.of(line.source))),
+                                        ImageIO.read(URL(line.source)).toComposeImageBitmap(),
                                         contentDescription = line.source
                                     )
+                                }
                                 else -> Unit
                             }
                         }
