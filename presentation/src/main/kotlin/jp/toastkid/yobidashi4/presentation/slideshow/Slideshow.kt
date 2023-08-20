@@ -73,54 +73,67 @@ fun Slideshow(deck: SlideDeck, modifier: Modifier) {
                 }
             }
     ) {
-        HorizontalPager(
-            pageCount = deck.slides.size,
-            pageSize = PageSize.Fill,
-            state = pagerState,
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
         ) {
-            val slide = deck.slides.get(pagerState.currentPage)
+            val backgroundUrl = deck.background
+            if (backgroundUrl.isNotBlank()) {
+                Image(
+                    ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
+                    "Background image",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
-            Box(
-                modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
+            HorizontalPager(
+                pageCount = deck.slides.size,
+                pageSize = PageSize.Fill,
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
             ) {
-                val backgroundUrl = if (slide.background().isNotBlank()) slide.background() else deck.background
-                if (backgroundUrl.isNotBlank()) {
-                    Image(
-                        ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
-                        "Background image",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+                val slide = deck.slides.get(pagerState.currentPage)
 
-                val columnModifier =
-                if (slide.isFront()) {
-                    Modifier.clickable {  }.wrapContentHeight().align(Alignment.Center)
-                } else {
-                    Modifier.clickable {  }.fillMaxHeight().align(Alignment.TopCenter)
-                }
-
-                Column(modifier = columnModifier) {
-                    if (slide.hasTitle()) {
-                        Text(
-                            slide.title(),
-                            fontSize = if (slide.isFront()) 48.sp else 36.sp,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                Box(
+                    modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
+                ) {
+                    val backgroundUrl = slide.background()
+                    if (backgroundUrl.isNotBlank()) {
+                        Image(
+                            ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
+                            "Background image",
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
 
-                    slide.lines().forEach { line ->
-                        when (line) {
-                            is TextLine ->
-                                Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
-                            is ImageLine ->
-                                Image(
-                                    loadImageBitmap(Files.newInputStream(Path.of(line.source))),
-                                    contentDescription = line.source
-                                )
-                            else -> Unit
+                    val columnModifier =
+                        if (slide.isFront()) {
+                            Modifier.clickable {  }.wrapContentHeight().align(Alignment.Center)
+                        } else {
+                            Modifier.clickable {  }.fillMaxHeight().align(Alignment.TopCenter)
+                        }
+
+                    Column(modifier = columnModifier) {
+                        if (slide.hasTitle()) {
+                            Text(
+                                slide.title(),
+                                fontSize = if (slide.isFront()) 48.sp else 36.sp,
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
+                        }
+
+                        slide.lines().forEach { line ->
+                            when (line) {
+                                is TextLine ->
+                                    Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
+                                is ImageLine ->
+                                    Image(
+                                        loadImageBitmap(Files.newInputStream(Path.of(line.source))),
+                                        contentDescription = line.source
+                                    )
+                                else -> Unit
+                            }
                         }
                     }
                 }
