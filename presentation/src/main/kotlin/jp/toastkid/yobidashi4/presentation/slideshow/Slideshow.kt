@@ -32,6 +32,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -296,6 +297,17 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
             Text(
                 "${pagerState.currentPage + 1} / ${deck.slides.size}",
                 modifier = Modifier.align(Alignment.BottomEnd)
+            )
+
+            Slider(
+                pagerState.currentPage.toFloat(),
+                onValueChange = {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(it.toInt())
+                    }
+                },
+                valueRange = 0f .. (deck.slides.size - 1).toFloat(),
+                modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
     }
