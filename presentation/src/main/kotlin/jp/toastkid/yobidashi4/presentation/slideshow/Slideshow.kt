@@ -2,16 +2,22 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -34,6 +40,7 @@ import java.net.URL
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
 import kotlin.math.max
 import kotlin.math.min
@@ -133,6 +140,50 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
                                         ImageIO.read(URL(line.source)).toComposeImageBitmap(),
                                         contentDescription = line.source
                                     )
+                                }
+                                is TableLine -> {
+                                    Column {
+                                        Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+                                            println("line.header ${line.header}")
+                                            line.header.forEachIndexed { index, item ->
+                                                if (index != 0) {
+                                                    Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
+                                                }
+
+                                                Text(
+                                                    item.toString(),
+                                                    fontSize = 24.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    modifier = Modifier
+                                                        .weight(1f)
+                                                        .padding(horizontal = 16.dp)
+                                                )
+                                            }
+                                        }
+
+                                        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+
+                                        line.table.forEach { itemRow ->
+                                            Column {
+                                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                                    itemRow.forEachIndexed { index, any ->
+                                                        if (index != 0) {
+                                                            Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
+                                                        }
+                                                        Text(
+                                                            any.toString(),
+                                                            fontSize = 24.sp,
+                                                            modifier = Modifier
+                                                                .weight(1f)
+                                                                .padding(horizontal = 16.dp)
+                                                        )
+                                                    }
+                                                }
+                                                Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+                                            }
+
+                                        }
+                                    }
                                 }
                                 else -> Unit
                             }
