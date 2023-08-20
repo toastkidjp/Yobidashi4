@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun Slideshow(deck: SlideDeck, modifier: Modifier) {
+fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifier) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -67,6 +67,10 @@ fun Slideshow(deck: SlideDeck, modifier: Modifier) {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(min(deck.slides.size - 1, pagerState.currentPage + 1))
                         }
+                        true
+                    }
+                    Key.Escape -> {
+                        onEscapeKeyReleased()
                         true
                     }
                     else -> false

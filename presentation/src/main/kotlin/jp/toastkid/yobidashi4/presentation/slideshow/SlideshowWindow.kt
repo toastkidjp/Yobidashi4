@@ -11,6 +11,7 @@ import androidx.compose.ui.window.application
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.main.AppTheme
+import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
 
 class SlideshowWindow {
 
@@ -31,15 +32,18 @@ class SlideshowWindow {
     ) {
         AppTheme(darkTheme = false) {
             val deck = SlideDeckReader(path).invoke()
+            val viewModel = remember { SlideshowViewModel() }
             Window(
                 onCloseRequest = {
                     onCloseWindow()
                 },
+                undecorated = true,
+                state = viewModel.windowState(),
                 title = deck.title,
             ) {
                 val focusRequester = remember { FocusRequester() }
 
-                Slideshow(deck, modifier = Modifier.focusRequester(focusRequester))
+                Slideshow(deck, { viewModel.closeFullscreen() }, modifier = Modifier.focusRequester(focusRequester))
 
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
