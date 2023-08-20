@@ -112,9 +112,9 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     }
 
                     if (tableBuilder != null) {
-                       /*TODO tableBuilder?.get()?.let {
-                            builder?.add(it)
-                        }*/
+                        tableBuilder?.build()?.let {
+                            builder?.addLine(it)
+                        }
                         tableBuilder = null
                     }
                     // Not code.
