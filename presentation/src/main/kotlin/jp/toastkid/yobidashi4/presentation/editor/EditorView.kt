@@ -47,43 +47,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun EditorView(model: Editor) = key(model) {
-    model.selection = SingleSelection()
-    model.activate()
-    with (LocalDensity.current) {
-        SelectionContainer {
-            Surface(
-                Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.surface.copy(alpha = 0.70f)
-            ) {
-                val lines by loadableScoped(model.lines)
-
-                if (lines != null) {
-                    Box {
-                        Lines(lines!!)
-                        Box(
-                            Modifier
-                                .offset(
-                                    x = 16.sp.toDp() * 0.5f //* settings.maxLineSymbols
-                                )
-                                .width(1.dp)
-                                .fillMaxHeight()
-                               // .background(EditorTheme.get().colors.backgroundLight)
-                        )
-                    }
-                } else {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .padding(4.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun Lines(lines: Editor.Lines) = with(LocalDensity.current) {
     val maxNum = remember(lines.lineNumberDigitCount) {
         (1..lines.lineNumberDigitCount).joinToString(separator = "") { "9" }
