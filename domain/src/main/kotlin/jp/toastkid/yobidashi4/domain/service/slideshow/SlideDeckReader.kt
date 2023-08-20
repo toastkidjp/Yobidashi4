@@ -83,9 +83,18 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     }
                     // Adding code block.
                     if (line.startsWith("```")) {
-                        /*TODO codeBlockBuilder.build()?.let {
-                            builder?.add(it)
-                        }*/
+                        if (codeBlockBuilder.inCodeBlock()) {
+                            codeBlockBuilder.build()?.let {
+                                builder?.addLine(it)
+                                codeBlockBuilder.initialize()
+                            }
+                            return@forEach
+                        }
+
+                        codeBlockBuilder.startCodeBlock()
+                        val index = line.indexOf(":")
+                        val lastIndex = if (index == -1) line.length else index
+                        codeBlockBuilder.setCodeFormat(line.substring(3, lastIndex))
                         return@forEach
                     }
                     if (codeBlockBuilder.shouldAppend(line)) {
