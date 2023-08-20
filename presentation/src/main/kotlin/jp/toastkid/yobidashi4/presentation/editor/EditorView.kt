@@ -46,29 +46,6 @@ import kotlin.text.Regex.Companion.fromLiteral
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 
-// Поддержка русского языка
-// دعم اللغة العربية
-// 中文支持
-@Composable
-private fun Line(modifier: Modifier, maxNum: String, line: Editor.Line) {
-    Row(modifier = modifier) {
-        DisableSelection {
-            Box {
-                LineNumber(maxNum, Modifier.alpha(0f))
-                LineNumber(line.number.toString(), Modifier.align(Alignment.CenterEnd))
-            }
-        }
-        LineContent(
-            line.content,
-            modifier = Modifier
-                .weight(1f)
-                //.withoutWidthConstraints()
-                .padding(start = 28.dp, end = 12.dp)//,
-            //settings = settings
-        )
-    }
-}
-
 @Composable
 private fun LineNumber(number: String, modifier: Modifier) = Text(
     text = number,
