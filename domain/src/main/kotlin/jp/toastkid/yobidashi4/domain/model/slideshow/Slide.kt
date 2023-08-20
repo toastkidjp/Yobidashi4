@@ -45,6 +45,10 @@ class Slide {
         this.lines.addAll(lines)
     }
 
+    fun addLine(line: Line) {
+        this.lines.add(line)
+    }
+
     fun lines() = lines
 
 }
