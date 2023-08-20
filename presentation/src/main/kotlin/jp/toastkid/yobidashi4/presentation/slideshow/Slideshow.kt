@@ -294,6 +294,13 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
                 }
             }
 
+            if (deck.footerText.isNotBlank()) {
+                Text(
+                    deck.footerText,
+                    modifier = Modifier.align(Alignment.BottomStart)
+                )
+            }
+
             Text(
                 "${pagerState.currentPage + 1} / ${deck.slides.size}",
                 modifier = Modifier.align(Alignment.BottomEnd)
