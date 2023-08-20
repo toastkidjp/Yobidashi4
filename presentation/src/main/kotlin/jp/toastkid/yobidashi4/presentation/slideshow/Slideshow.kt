@@ -292,6 +292,11 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
                     }
                 }
             }
+
+            Text(
+                "${pagerState.currentPage + 1} / ${deck.slides.size}",
+                modifier = Modifier.align(Alignment.BottomEnd)
+            )
         }
     }
 }
