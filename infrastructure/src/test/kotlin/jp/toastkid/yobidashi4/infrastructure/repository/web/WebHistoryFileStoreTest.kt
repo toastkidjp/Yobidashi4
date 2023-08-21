@@ -92,6 +92,22 @@ class WebHistoryFileStoreTest {
     }
 
     @Test
+    fun readAllWithInsufficientInput() {
+        every { Files.exists(parent) } returns false
+        every { Files.readAllLines(any()) } returns listOf("Yahoo! JAPAN Test\thttps://www.yahoo.co.jp")
+
+        val readAll = webHistoryFileStore.readAll()
+
+        assertEquals(1, readAll.size)
+        verify(exactly = 1) { Files.exists(parent) }
+        verify(exactly = 1) { Files.createDirectories(any()) }
+        readAll.first().also {
+            assertEquals(0, it.lastVisitedTime)
+            assertEquals(0, it.visitingCount)
+        }
+    }
+
+    @Test
     fun clear() {
         every { Files.delete(any()) } just Runs
 
