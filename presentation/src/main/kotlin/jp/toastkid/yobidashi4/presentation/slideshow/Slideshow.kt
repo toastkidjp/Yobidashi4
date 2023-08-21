@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import java.net.URL
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
@@ -133,165 +134,7 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
             ) {
                 val slide = deck.slides.get(pagerState.currentPage)
 
-                Box(
-                    modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
-                ) {
-                    val backgroundUrl = slide.background()
-                    if (backgroundUrl.isNotBlank()) {
-                        Image(
-                            ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
-                            "Background image",
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    val columnModifier =
-                        if (slide.isFront()) {
-                            Modifier.clickable {  }.wrapContentHeight().align(Alignment.Center)
-                        } else {
-                            Modifier.clickable {  }.fillMaxHeight().align(Alignment.TopCenter)
-                        }
-
-                    Column(modifier = columnModifier) {
-                        if (slide.hasTitle()) {
-                            Text(
-                                slide.title(),
-                                fontSize = if (slide.isFront()) 48.sp else 36.sp,
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
-                        }
-
-                        slide.lines().forEach { line ->
-                            when (line) {
-                                is TextLine ->
-                                    Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
-                                is ImageLine -> {
-                                    Image(
-                                        ImageIO.read(URL(line.source)).toComposeImageBitmap(),
-                                        contentDescription = line.source
-                                    )
-                                }
-                                is CodeBlockLine -> {
-                                    val verticalScrollState = rememberScrollState()
-                                    val horizontalScrollState = rememberScrollState()
-
-                                    val bringIntoViewRequester = remember { BringIntoViewRequester() }
-                                    val textLayoutResultState = remember { mutableStateOf<TextLayoutResult?>(null) }
-                                    val content = remember { mutableStateOf(TextFieldValue(line.code)) }
-
-                                    Box(modifier = Modifier.background(MaterialTheme.colors.surface)) {
-                                        BasicTextField(
-                                            value = content.value,
-                                            onValueChange = {
-                                                content.value = it
-                                            },
-                                            visualTransformation = {
-                                                val t = codeString(content.value.text)
-                                                TransformedText(t, OffsetMapping.Identity)
-                                            },
-                                            decorationBox = {
-                                                Row {
-                                                    Column(
-                                                        modifier = Modifier
-                                                            .scrollable(verticalScrollState, Orientation.Vertical)
-                                                            .padding(end = 8.dp)
-                                                            .wrapContentSize(unbounded = true)
-                                                            .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
-                                                    ) {
-                                                        val textLines = content.value.text.split("\n")
-                                                        val max = textLines.size
-                                                        val length = max.toString().length
-                                                        repeat(max) {
-                                                            val lineNumberCount = it + 1
-                                                            val fillCount = length - lineNumberCount.toString().length
-                                                            val lineNumberText = with(StringBuilder()) {
-                                                                repeat(fillCount) {
-                                                                    append(" ")
-                                                                }
-                                                                append(lineNumberCount)
-                                                            }.toString()
-                                                            Box(
-                                                                contentAlignment = Alignment.CenterEnd
-                                                            ) {
-                                                                Text(lineNumberText, fontSize = 28.sp, fontFamily = FontFamily.Monospace,
-                                                                    textAlign = TextAlign.End, lineHeight = 1.5.em)
-                                                            }
-                                                        }
-                                                    }
-                                                    it()
-                                                }
-                                            },
-                                            onTextLayout = {
-                                                textLayoutResultState.value = it
-                                            },
-                                            textStyle = TextStyle(fontSize = 28.sp, fontFamily = FontFamily.Monospace, lineHeight = 1.5.em),
-                                            modifier = modifier
-                                                .verticalScroll(verticalScrollState)
-                                                .horizontalScroll(horizontalScrollState)
-                                                .onPointerEvent(PointerEventType.Scroll, PointerEventPass.Main) {
-                                                    coroutineScope.launch {
-                                                        verticalScrollState.scrollBy(it.changes.first().scrollDelta.y)
-                                                    }
-                                                }
-                                                .bringIntoViewRequester(bringIntoViewRequester)
-                                        )
-
-                                        VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
-                                        HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
-                                            Alignment.BottomCenter))
-                                    }
-                                }
-                                is TableLine -> {
-                                    Column {
-                                        Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
-                                            println("line.header ${line.header}")
-                                            line.header.forEachIndexed { index, item ->
-                                                if (index != 0) {
-                                                    Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
-                                                }
-
-                                                Text(
-                                                    item.toString(),
-                                                    fontSize = 24.sp,
-                                                    fontWeight = FontWeight.Bold,
-                                                    modifier = Modifier
-                                                        .weight(1f)
-                                                        .padding(horizontal = 16.dp)
-                                                )
-                                            }
-                                        }
-
-                                        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-
-                                        line.table.forEach { itemRow ->
-                                            Column {
-                                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                                    itemRow.forEachIndexed { index, any ->
-                                                        if (index != 0) {
-                                                            Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
-                                                        }
-                                                        Text(
-                                                            any.toString(),
-                                                            fontSize = 24.sp,
-                                                            modifier = Modifier
-                                                                .weight(1f)
-                                                                .padding(horizontal = 16.dp)
-                                                        )
-                                                    }
-                                                }
-                                                Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-                                            }
-
-                                        }
-                                    }
-                                }
-                                else -> Unit
-                            }
-                        }
-                    }
-                }
+                SlideView(slide, modifier)
             }
 
             if (deck.footerText.isNotBlank()) {
@@ -316,6 +159,198 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
                 valueRange = 0f .. (deck.slides.size - 1).toFloat(),
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+private fun SlideView(
+    slide: Slide,
+    modifier: Modifier
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
+    ) {
+        val backgroundUrl = slide.background()
+        if (backgroundUrl.isNotBlank()) {
+            Image(
+                ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
+                "Background image",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        val columnModifier =
+            if (slide.isFront()) {
+                Modifier.clickable { }.wrapContentHeight().align(Alignment.Center)
+            } else {
+                Modifier.clickable { }.fillMaxHeight().align(Alignment.TopCenter)
+            }
+
+        Column(modifier = columnModifier) {
+            if (slide.hasTitle()) {
+                Text(
+                    slide.title(),
+                    fontSize = if (slide.isFront()) 48.sp else 36.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+
+            slide.lines().forEach { line ->
+                when (line) {
+                    is TextLine ->
+                        Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
+
+                    is ImageLine -> {
+                        Image(
+                            ImageIO.read(URL(line.source)).toComposeImageBitmap(),
+                            contentDescription = line.source
+                        )
+                    }
+
+                    is CodeBlockLine -> {
+                        val verticalScrollState = rememberScrollState()
+                        val horizontalScrollState = rememberScrollState()
+
+                        val bringIntoViewRequester = remember { BringIntoViewRequester() }
+                        val textLayoutResultState = remember { mutableStateOf<TextLayoutResult?>(null) }
+                        val content = remember { mutableStateOf(TextFieldValue(line.code)) }
+
+                        Box(modifier = Modifier.background(MaterialTheme.colors.surface)) {
+                            BasicTextField(
+                                value = content.value,
+                                onValueChange = {
+                                    content.value = it
+                                },
+                                visualTransformation = {
+                                    val t = codeString(content.value.text)
+                                    TransformedText(t, OffsetMapping.Identity)
+                                },
+                                decorationBox = {
+                                    Row {
+                                        Column(
+                                            modifier = Modifier
+                                                .scrollable(verticalScrollState, Orientation.Vertical)
+                                                .padding(end = 8.dp)
+                                                .wrapContentSize(unbounded = true)
+                                                .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
+                                        ) {
+                                            val textLines = content.value.text.split("\n")
+                                            val max = textLines.size
+                                            val length = max.toString().length
+                                            repeat(max) {
+                                                val lineNumberCount = it + 1
+                                                val fillCount = length - lineNumberCount.toString().length
+                                                val lineNumberText = with(StringBuilder()) {
+                                                    repeat(fillCount) {
+                                                        append(" ")
+                                                    }
+                                                    append(lineNumberCount)
+                                                }.toString()
+                                                Box(
+                                                    contentAlignment = Alignment.CenterEnd
+                                                ) {
+                                                    Text(
+                                                        lineNumberText,
+                                                        fontSize = 28.sp,
+                                                        fontFamily = FontFamily.Monospace,
+                                                        textAlign = TextAlign.End,
+                                                        lineHeight = 1.5.em
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        it()
+                                    }
+                                },
+                                onTextLayout = {
+                                    textLayoutResultState.value = it
+                                },
+                                textStyle = TextStyle(
+                                    fontSize = 28.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    lineHeight = 1.5.em
+                                ),
+                                modifier = modifier
+                                    .verticalScroll(verticalScrollState)
+                                    .horizontalScroll(horizontalScrollState)
+                                    .onPointerEvent(PointerEventType.Scroll, PointerEventPass.Main) {
+                                        coroutineScope.launch {
+                                            verticalScrollState.scrollBy(it.changes.first().scrollDelta.y)
+                                        }
+                                    }
+                                    .bringIntoViewRequester(bringIntoViewRequester)
+                            )
+
+                            VerticalScrollbar(
+                                adapter = rememberScrollbarAdapter(verticalScrollState),
+                                modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+                            )
+                            HorizontalScrollbar(
+                                adapter = rememberScrollbarAdapter(horizontalScrollState),
+                                modifier = Modifier.fillMaxWidth().align(
+                                    Alignment.BottomCenter
+                                )
+                            )
+                        }
+                    }
+
+                    is TableLine -> {
+                        Column {
+                            Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+                                println("line.header ${line.header}")
+                                line.header.forEachIndexed { index, item ->
+                                    if (index != 0) {
+                                        Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
+                                    }
+
+                                    Text(
+                                        item.toString(),
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(horizontal = 16.dp)
+                                    )
+                                }
+                            }
+
+                            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+
+                            line.table.forEach { itemRow ->
+                                Column {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        itemRow.forEachIndexed { index, any ->
+                                            if (index != 0) {
+                                                Divider(
+                                                    modifier = Modifier.height(24.dp).width(1.dp)
+                                                        .padding(vertical = 1.dp)
+                                                )
+                                            }
+                                            Text(
+                                                any.toString(),
+                                                fontSize = 24.sp,
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(horizontal = 16.dp)
+                                            )
+                                        }
+                                    }
+                                    Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+                                }
+
+                            }
+                        }
+                    }
+
+                    else -> Unit
+                }
+            }
         }
     }
 }
