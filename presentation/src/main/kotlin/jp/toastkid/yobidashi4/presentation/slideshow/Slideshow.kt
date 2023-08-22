@@ -138,7 +138,7 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
             ) {
                 val slide = deck.slides.get(pagerState.currentPage)
 
-                SlideView(slide, modifier)
+                SlideView(slide)
             }
 
             if (deck.footerText.isNotBlank()) {
@@ -169,8 +169,7 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
 
 @Composable
 private fun SlideView(
-    slide: Slide,
-    modifier: Modifier
+    slide: Slide
 ) {
     val coroutineScope = rememberCoroutineScope()
 
