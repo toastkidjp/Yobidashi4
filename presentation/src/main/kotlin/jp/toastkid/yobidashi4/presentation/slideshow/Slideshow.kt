@@ -232,7 +232,6 @@ private fun SlideView(
 private fun TableLine(line: TableLine) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
-            println("line.header ${line.header}")
             line.header.forEachIndexed { index, item ->
                 if (index != 0) {
                     Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
