@@ -168,7 +168,6 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 private fun SlideView(
     slide: Slide,
     modifier: Modifier
