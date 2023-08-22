@@ -217,92 +217,7 @@ private fun SlideView(
                         )
                     }
 
-                    is CodeBlockLine -> {
-                        val verticalScrollState = rememberScrollState()
-                        val horizontalScrollState = rememberScrollState()
-
-                        val bringIntoViewRequester = remember { BringIntoViewRequester() }
-                        val textLayoutResultState = remember { mutableStateOf<TextLayoutResult?>(null) }
-                        val content = remember { mutableStateOf(TextFieldValue(line.code)) }
-
-                        Box(modifier = Modifier.background(MaterialTheme.colors.surface)) {
-                            BasicTextField(
-                                value = content.value,
-                                onValueChange = {
-                                    content.value = it
-                                },
-                                visualTransformation = {
-                                    val t = codeString(content.value.text)
-                                    TransformedText(t, OffsetMapping.Identity)
-                                },
-                                decorationBox = {
-                                    Row {
-                                        Column(
-                                            modifier = Modifier
-                                                .scrollable(verticalScrollState, Orientation.Vertical)
-                                                .padding(end = 8.dp)
-                                                .wrapContentSize(unbounded = true)
-                                                .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
-                                        ) {
-                                            val textLines = content.value.text.split("\n")
-                                            val max = textLines.size
-                                            val length = max.toString().length
-                                            repeat(max) {
-                                                val lineNumberCount = it + 1
-                                                val fillCount = length - lineNumberCount.toString().length
-                                                val lineNumberText = with(StringBuilder()) {
-                                                    repeat(fillCount) {
-                                                        append(" ")
-                                                    }
-                                                    append(lineNumberCount)
-                                                }.toString()
-                                                Box(
-                                                    contentAlignment = Alignment.CenterEnd
-                                                ) {
-                                                    Text(
-                                                        lineNumberText,
-                                                        fontSize = 28.sp,
-                                                        fontFamily = FontFamily.Monospace,
-                                                        textAlign = TextAlign.End,
-                                                        lineHeight = 1.5.em
-                                                    )
-                                                }
-                                            }
-                                        }
-                                        it()
-                                    }
-                                },
-                                onTextLayout = {
-                                    textLayoutResultState.value = it
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = 28.sp,
-                                    fontFamily = FontFamily.Monospace,
-                                    lineHeight = 1.5.em
-                                ),
-                                modifier = modifier
-                                    .verticalScroll(verticalScrollState)
-                                    .horizontalScroll(horizontalScrollState)
-                                    .onPointerEvent(PointerEventType.Scroll, PointerEventPass.Main) {
-                                        coroutineScope.launch {
-                                            verticalScrollState.scrollBy(it.changes.first().scrollDelta.y)
-                                        }
-                                    }
-                                    .bringIntoViewRequester(bringIntoViewRequester)
-                            )
-
-                            VerticalScrollbar(
-                                adapter = rememberScrollbarAdapter(verticalScrollState),
-                                modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
-                            )
-                            HorizontalScrollbar(
-                                adapter = rememberScrollbarAdapter(horizontalScrollState),
-                                modifier = Modifier.fillMaxWidth().align(
-                                    Alignment.BottomCenter
-                                )
-                            )
-                        }
-                    }
+                    is CodeBlockLine -> CodeBlockView(line)
 
                     is TableLine -> {
                         Column {
@@ -356,6 +271,96 @@ private fun SlideView(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+fun CodeBlockView(line: CodeBlockLine) {
+    val coroutineScope = rememberCoroutineScope()
+    val verticalScrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
+
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val textLayoutResultState = remember { mutableStateOf<TextLayoutResult?>(null) }
+    val content = remember { mutableStateOf(TextFieldValue(line.code)) }
+
+    Box(modifier = Modifier.background(MaterialTheme.colors.surface)) {
+        BasicTextField(
+            value = content.value,
+            onValueChange = {
+                content.value = it
+            },
+            visualTransformation = {
+                val t = codeString(content.value.text)
+                TransformedText(t, OffsetMapping.Identity)
+            },
+            decorationBox = {
+                Row {
+                    Column(
+                        modifier = Modifier
+                            .scrollable(verticalScrollState, Orientation.Vertical)
+                            .padding(end = 8.dp)
+                            .wrapContentSize(unbounded = true)
+                            .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
+                    ) {
+                        val textLines = content.value.text.split("\n")
+                        val max = textLines.size
+                        val length = max.toString().length
+                        repeat(max) {
+                            val lineNumberCount = it + 1
+                            val fillCount = length - lineNumberCount.toString().length
+                            val lineNumberText = with(StringBuilder()) {
+                                repeat(fillCount) {
+                                    append(" ")
+                                }
+                                append(lineNumberCount)
+                            }.toString()
+                            Box(
+                                contentAlignment = Alignment.CenterEnd
+                            ) {
+                                Text(
+                                    lineNumberText,
+                                    fontSize = 28.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    textAlign = TextAlign.End,
+                                    lineHeight = 1.5.em
+                                )
+                            }
+                        }
+                    }
+                    it()
+                }
+            },
+            onTextLayout = {
+                textLayoutResultState.value = it
+            },
+            textStyle = TextStyle(
+                fontSize = 28.sp,
+                fontFamily = FontFamily.Monospace,
+                lineHeight = 1.5.em
+            ),
+            modifier = Modifier
+                .verticalScroll(verticalScrollState)
+                .horizontalScroll(horizontalScrollState)
+                .onPointerEvent(PointerEventType.Scroll, PointerEventPass.Main) {
+                    coroutineScope.launch {
+                        verticalScrollState.scrollBy(it.changes.first().scrollDelta.y)
+                    }
+                }
+                .bringIntoViewRequester(bringIntoViewRequester)
+        )
+
+        VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(verticalScrollState),
+            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+        )
+        HorizontalScrollbar(
+            adapter = rememberScrollbarAdapter(horizontalScrollState),
+            modifier = Modifier.fillMaxWidth().align(
+                Alignment.BottomCenter
+            )
+        )
     }
 }
 
