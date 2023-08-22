@@ -220,56 +220,61 @@ private fun SlideView(
                     is CodeBlockLine -> CodeBlockView(line)
 
                     is TableLine -> {
-                        Column {
-                            Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
-                                println("line.header ${line.header}")
-                                line.header.forEachIndexed { index, item ->
-                                    if (index != 0) {
-                                        Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
-                                    }
-
-                                    Text(
-                                        item.toString(),
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(horizontal = 16.dp)
-                                    )
-                                }
-                            }
-
-                            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-
-                            line.table.forEach { itemRow ->
-                                Column {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        itemRow.forEachIndexed { index, any ->
-                                            if (index != 0) {
-                                                Divider(
-                                                    modifier = Modifier.height(24.dp).width(1.dp)
-                                                        .padding(vertical = 1.dp)
-                                                )
-                                            }
-                                            Text(
-                                                any.toString(),
-                                                fontSize = 24.sp,
-                                                modifier = Modifier
-                                                    .weight(1f)
-                                                    .padding(horizontal = 16.dp)
-                                            )
-                                        }
-                                    }
-                                    Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-                                }
-
-                            }
-                        }
+                        TableLine(line)
                     }
 
                     else -> Unit
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun TableLine(line: TableLine) {
+    Column {
+        Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+            println("line.header ${line.header}")
+            line.header.forEachIndexed { index, item ->
+                if (index != 0) {
+                    Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
+                }
+
+                Text(
+                    item.toString(),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp)
+                )
+            }
+        }
+
+        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+
+        line.table.forEach { itemRow ->
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    itemRow.forEachIndexed { index, any ->
+                        if (index != 0) {
+                            Divider(
+                                modifier = Modifier.height(24.dp).width(1.dp)
+                                    .padding(vertical = 1.dp)
+                            )
+                        }
+                        Text(
+                            any.toString(),
+                            fontSize = 24.sp,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 16.dp)
+                        )
+                    }
+                }
+                Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+            }
+
         }
     }
 }
