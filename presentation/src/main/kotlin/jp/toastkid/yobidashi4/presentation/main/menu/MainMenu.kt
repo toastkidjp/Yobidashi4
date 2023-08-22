@@ -116,7 +116,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Item("Editor's Color & Font") {
                     viewModel.openTab(EditorSettingTab())
                 }
-                Item("Slideshow", shortcut = KeyShortcut(Key.F5)) {
+                Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource("images/icon/ic_slideshow.xml")) {
                     viewModel.slideshow(currentTab.path)
                 }
             }
