@@ -81,7 +81,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifier) {
+fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit, modifier: Modifier) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -108,6 +108,10 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, modifier: Modifi
                     }
                     Key.Escape -> {
                         onEscapeKeyReleased()
+                        true
+                    }
+                    Key.F5 -> {
+                        onFullscreenKeyReleased()
                         true
                     }
                     else -> false

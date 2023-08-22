@@ -43,7 +43,7 @@ class SlideshowWindow {
             ) {
                 val focusRequester = remember { FocusRequester() }
 
-                Slideshow(deck, { viewModel.closeFullscreen() }, modifier = Modifier.focusRequester(focusRequester))
+                Slideshow(deck, { viewModel.closeFullscreen() }, { viewModel.toggleFullscreen() }, modifier = Modifier.focusRequester(focusRequester))
 
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
