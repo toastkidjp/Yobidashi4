@@ -33,22 +33,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
-import jp.toastkid.yobidashi4.presentation.editor.EditorTheme
+import jp.toastkid.yobidashi4.presentation.text.code.CodeStringBuilder
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -61,6 +57,7 @@ fun CodeBlockView(line: CodeBlockLine) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val textLayoutResultState = remember { mutableStateOf<TextLayoutResult?>(null) }
     val content = remember { mutableStateOf(TextFieldValue(line.code)) }
+    val codeStringBuilder = remember { CodeStringBuilder() }
 
     Box(modifier = Modifier.background(MaterialTheme.colors.surface)) {
         BasicTextField(
@@ -69,7 +66,7 @@ fun CodeBlockView(line: CodeBlockLine) {
                 content.value = it
             },
             visualTransformation = {
-                val t = codeString(content.value.text)
+                val t = codeStringBuilder(content.value.text)
                 TransformedText(t, OffsetMapping.Identity)
             },
             decorationBox = {
@@ -138,53 +135,5 @@ fun CodeBlockView(line: CodeBlockLine) {
                 Alignment.BottomCenter
             )
         )
-    }
-}
-
-
-private fun codeString(str: String) = buildAnnotatedString {
-    val theme = EditorTheme.get()
-    withStyle(theme.code.simple) {
-        append(str)
-        addStyle(theme.code.punctuation, str, ":")
-        addStyle(theme.code.punctuation, str, "=")
-        addStyle(theme.code.punctuation, str, "\"")
-        addStyle(theme.code.punctuation, str, "[")
-        addStyle(theme.code.punctuation, str, "]")
-        addStyle(theme.code.punctuation, str, "{")
-        addStyle(theme.code.punctuation, str, "}")
-        addStyle(theme.code.punctuation, str, "(")
-        addStyle(theme.code.punctuation, str, ")")
-        addStyle(theme.code.punctuation, str, ",")
-        addStyle(theme.code.keyword, str, "fun ")
-        addStyle(theme.code.keyword, str, "---")
-        addStyle(theme.code.keyword, str, "val ")
-        addStyle(theme.code.keyword, str, "var ")
-        addStyle(theme.code.keyword, str, "private ")
-        addStyle(theme.code.keyword, str, "internal ")
-        addStyle(theme.code.keyword, str, "for ")
-        addStyle(theme.code.keyword, str, "expect ")
-        addStyle(theme.code.keyword, str, "actual ")
-        addStyle(theme.code.keyword, str, "import ")
-        addStyle(theme.code.keyword, str, "package ")
-        addStyle(theme.code.value, str, "true")
-        addStyle(theme.code.value, str, "false")
-        addStyle(theme.code.value, str, Regex("[0-9]*"))
-        addStyle(theme.code.header, str, Regex("\\n#.*"))
-        addStyle(theme.code.table, str, Regex("\\n\\|.*"))
-        addStyle(theme.code.quote, str, Regex("\\n>.*"))
-        addStyle(theme.code.quote, str, Regex("\\n-.*"))
-        addStyle(theme.code.annotation, str, Regex("^@[a-zA-Z_]*"))
-        addStyle(theme.code.comment, str, Regex("^\\s*//.*"))
-    }
-}
-
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: String) {
-    addStyle(style, text, Regex.fromLiteral(regexp))
-}
-
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex) {
-    for (result in regexp.findAll(text)) {
-        addStyle(style, result.range.first, result.range.last + 1)
     }
 }
