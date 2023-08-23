@@ -189,7 +189,7 @@ private fun SlideView(
                     is CodeBlockLine -> CodeBlockView(line)
 
                     is TableLine -> {
-                        TableLine(line)
+                        TableLineView(line)
                     }
 
                     else -> Unit
@@ -200,7 +200,7 @@ private fun SlideView(
 }
 
 @Composable
-private fun TableLine(line: TableLine) {
+private fun TableLineView(line: TableLine) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
             line.header.forEachIndexed { index, item ->
