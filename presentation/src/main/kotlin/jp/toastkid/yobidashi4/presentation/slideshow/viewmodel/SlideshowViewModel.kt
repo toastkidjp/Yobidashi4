@@ -10,11 +10,10 @@ class SlideshowViewModel {
     fun windowState() = windowState
 
     fun toggleFullscreen() {
-        windowState.placement = if (windowState.placement == WindowPlacement.Maximized) {
+        windowState.placement = if (windowState.placement == WindowPlacement.Maximized)
             WindowPlacement.Floating
-        } else {
+        else
             WindowPlacement.Maximized
-        }
     }
 
     fun closeFullscreen() {
