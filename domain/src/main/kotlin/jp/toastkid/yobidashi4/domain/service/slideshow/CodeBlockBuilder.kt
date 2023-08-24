@@ -9,22 +9,6 @@ class CodeBlockBuilder {
     private val code = StringBuilder()
 
     private var codeFormat = ""
-/*TODO
-    fun build(): JComponent? {
-        isInCodeBlock = !isInCodeBlock
-        if (!isInCodeBlock && code.isNotEmpty()) {
-            val codeArea = RSyntaxTextArea()
-            codeArea.syntaxEditingStyle = SyntaxConstants.SYNTAX_STYLE_JAVA
-            //KotlinHighlighter(codeArea).highlight()
-            codeArea.isEditable = false
-            codeArea.isFocusable = false
-            codeArea.font = codeArea.font.deriveFont(48f)
-            codeArea.text = code.toString()
-            code.setLength(0)
-            return JScrollPane(codeArea)
-        }
-        return null
-    }*/
 
     fun append(line: String) {
         code.append(if (code.isNotEmpty()) LINE_SEPARATOR else "").append(line)
