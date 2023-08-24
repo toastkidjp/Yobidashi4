@@ -84,7 +84,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     // Adding code block.
                     if (line.startsWith("```")) {
                         if (codeBlockBuilder.inCodeBlock()) {
-                            codeBlockBuilder.build()?.let {
+                            codeBlockBuilder.build().let {
                                 builder?.addLine(it)
                                 codeBlockBuilder.initialize()
                             }
