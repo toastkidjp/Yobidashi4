@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 class SlideDeckReader(private val pathToMarkdown: Path) {
 
     /** Slide builder.  */
-    private var builder: Slide? = null
+    private var builder: Slide? = Slide()
 
     /** Table builder.  */
     private var tableBuilder: TableBuilder? = null
@@ -21,13 +21,6 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
     private val imageExtractor = ImageExtractor()
 
     private val backgroundExtractor = BackgroundExtractor()
-
-    /**
-     * Init with source's path.
-     */
-    init {
-        builder = Slide()
-    }
 
     /**
      * Convert to Slides.
