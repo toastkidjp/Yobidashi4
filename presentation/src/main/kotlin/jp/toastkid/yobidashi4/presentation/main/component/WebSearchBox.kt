@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -200,7 +201,9 @@ internal fun WebSearchBox() {
             }
 
             if (result.value.isNotBlank()) {
-                Text(result.value)
+                SelectionContainer {
+                    Text(result.value)
+                }
             }
 
             LaunchedEffect(viewModel.showWebSearch()) {
