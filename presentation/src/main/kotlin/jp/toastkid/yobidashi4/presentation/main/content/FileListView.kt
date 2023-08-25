@@ -45,6 +45,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -167,7 +168,18 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
                 itemsIndexed(articleStates) { index, fileListItem ->
                     val openOption = remember { mutableStateOf(false) }
-                    Box {
+                    val cursorOn = remember { mutableStateOf(false) }
+                    Box(
+                        modifier = Modifier.background(
+                            if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
+                        )
+                            .onPointerEvent(PointerEventType.Enter) {
+                                cursorOn.value = true
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                cursorOn.value = false
+                            }
+                    ) {
                         Column(modifier = Modifier
                             .pointerInput(Unit) {
                                 forEachGesture {
@@ -222,12 +234,13 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             .padding(horizontal = 16.dp)
                             .animateItemPlacement()
                         ) {
-                            Text("${fileListItem.path.nameWithoutExtension}", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+                            Text("${fileListItem.path.nameWithoutExtension}", maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
                             Text("${Files.size(fileListItem.path) / 1000} KB | ${
                                 LocalDateTime
                                     .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
                                     .format(dateTimeFormatter)
-                            }")
+                            }", color = textColor)
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                         }
 
