@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,16 +18,21 @@ import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -119,6 +125,9 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
                 modifier = Modifier.align(Alignment.BottomEnd)
             )
 
+            val sliderVisibility = remember { mutableStateOf(false) }
+
+            val alpha = animateFloatAsState(if (sliderVisibility.value) 1f else 0f)
             Slider(
                 pagerState.currentPage.toFloat(),
                 onValueChange = {
@@ -127,7 +136,13 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
                     }
                 },
                 valueRange = 0f .. (deck.slides.size - 1).toFloat(),
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter).alpha(alpha.value)
+                    .onPointerEvent(PointerEventType.Enter) {
+                        sliderVisibility.value = true
+                    }
+                    .onPointerEvent(PointerEventType.Exit) {
+                        sliderVisibility.value = false
+                    }
             )
         }
     }
