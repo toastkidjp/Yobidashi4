@@ -152,8 +152,6 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
 private fun SlideView(
     slide: Slide
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Box(
         modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
     ) {
