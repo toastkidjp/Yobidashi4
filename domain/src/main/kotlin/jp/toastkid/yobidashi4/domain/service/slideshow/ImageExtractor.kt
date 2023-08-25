@@ -7,11 +7,6 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 class ImageExtractor {
 
     operator fun invoke(line: String?): List<ImageLine> {
-       /* TODO val imagePanel = JPanel().also { panel ->
-            panel.layout = BoxLayout(panel, BoxLayout.LINE_AXIS)
-            panel.alignmentX = JComponent.CENTER_ALIGNMENT
-        }*/
-
         if (line.isNullOrBlank()) {
             return emptyList()
         }
