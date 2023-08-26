@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.lib
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.ImageBitmap
 
 class ImageCache {
@@ -14,4 +16,11 @@ class ImageCache {
         return map.get(key)
     }
 
+}
+
+@Composable
+fun rememberImageCache(): ImageCache {
+    return rememberSaveable {
+        ImageCache()
+    }
 }
