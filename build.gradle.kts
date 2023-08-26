@@ -19,7 +19,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -49,7 +49,6 @@ compose.desktop {
     //"-Djava.library.path=$libraryPath"
     application {
         mainClass = "jp.toastkid.yobidashi4.main.MainKt"
-        javaHome = System.getenv("JDK_16")
 
         nativeDistributions {
             packageVersion = rootProject.version.toString()
