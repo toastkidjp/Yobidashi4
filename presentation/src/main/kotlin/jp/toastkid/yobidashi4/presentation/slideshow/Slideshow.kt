@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -45,6 +46,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
+import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 import kotlin.math.max
@@ -56,6 +58,7 @@ import kotlinx.coroutines.launch
 fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit, modifier: Modifier) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    val imageCache = remember { ImageCache() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -95,8 +98,9 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
         ) {
             val backgroundUrl = deck.background
             if (backgroundUrl.isNotBlank()) {
+                val bitmap = loadImage(imageCache, backgroundUrl)
                 Image(
-                    ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
+                    bitmap,
                     "Background image",
                     modifier = Modifier.fillMaxSize()
                 )
@@ -110,7 +114,7 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
             ) {
                 val slide = deck.slides.get(pagerState.currentPage)
 
-                SlideView(slide)
+                SlideView(slide, imageCache)
             }
 
             if (deck.footerText.isNotBlank()) {
@@ -149,16 +153,15 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
 }
 
 @Composable
-private fun SlideView(
-    slide: Slide
-) {
+private fun SlideView(slide: Slide, imageCache: ImageCache) {
     Box(
         modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
     ) {
         val backgroundUrl = slide.background()
         if (backgroundUrl.isNotBlank()) {
+            val bitmap = loadImage(imageCache, backgroundUrl)
             Image(
-                ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap(),
+                bitmap,
                 "Background image",
                 modifier = Modifier.fillMaxSize()
             )
@@ -188,8 +191,9 @@ private fun SlideView(
                         Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
 
                     is ImageLine -> {
+                        val bitmap = loadImage(imageCache, line.source)
                         Image(
-                            ImageIO.read(URL(line.source)).toComposeImageBitmap(),
+                            bitmap,
                             contentDescription = line.source
                         )
                     }
@@ -205,4 +209,18 @@ private fun SlideView(
             }
         }
     }
+}
+
+private fun loadImage(
+    imageCache: ImageCache,
+    backgroundUrl: String
+): ImageBitmap {
+    val fromCache = imageCache.get(backgroundUrl)
+    if (fromCache != null) {
+        return fromCache
+    }
+
+    val bitmap = ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap()
+    imageCache.put(backgroundUrl, bitmap)
+    return bitmap
 }
