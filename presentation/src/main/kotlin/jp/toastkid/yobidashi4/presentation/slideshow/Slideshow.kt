@@ -47,6 +47,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
+import jp.toastkid.yobidashi4.presentation.slideshow.lib.rememberImageCache
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 import kotlin.math.max
@@ -58,7 +59,7 @@ import kotlinx.coroutines.launch
 fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit, modifier: Modifier) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
-    val imageCache = remember { ImageCache() }
+    val imageCache = rememberImageCache()
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -114,7 +115,7 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
             ) {
                 val slide = deck.slides.get(pagerState.currentPage)
 
-                SlideView(slide, imageCache)
+                SlideView(slide)
             }
 
             if (deck.footerText.isNotBlank()) {
@@ -153,7 +154,8 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
 }
 
 @Composable
-private fun SlideView(slide: Slide, imageCache: ImageCache) {
+private fun SlideView(slide: Slide) {
+    val imageCache = rememberImageCache()
     Box(
         modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
     ) {
