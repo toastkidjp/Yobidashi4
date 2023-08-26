@@ -9,4 +9,13 @@ data class SlideDeck(
     fun add(slide: Slide) {
         slides.add(slide)
     }
+
+    fun extractImageUrls(): Set<String> {
+        val imageUrls = mutableSetOf<String>()
+        if (background.isNotBlank()) {
+            imageUrls.add(background)
+        }
+        slides.map { it.extractImageUrls() }.flatten().forEach { imageUrls.add(it) }
+        return imageUrls
+    }
 }
