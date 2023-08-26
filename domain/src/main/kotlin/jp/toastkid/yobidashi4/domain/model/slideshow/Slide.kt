@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.slideshow
 
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
 
@@ -50,5 +51,14 @@ class Slide {
     }
 
     fun lines() = lines
+
+    fun extractImageUrls(): Set<String> {
+        val imageUrls = mutableSetOf<String>()
+        if (backgroundPath.isNotBlank()) {
+            imageUrls.add(backgroundPath)
+        }
+        lines.filterIsInstance<ImageLine>().map { it.source }.forEach { imageUrls.add(it) }
+        return imageUrls
+    }
 
 }
