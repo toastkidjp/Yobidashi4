@@ -204,9 +204,8 @@ private fun SlideView(slide: Slide) {
                         Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
 
                     is ImageLine -> {
-                        val bitmap = loadImage(imageCache, line.source)
                         Image(
-                            bitmap,
+                            loadImage(imageCache, line.source),
                             contentDescription = line.source
                         )
                     }
