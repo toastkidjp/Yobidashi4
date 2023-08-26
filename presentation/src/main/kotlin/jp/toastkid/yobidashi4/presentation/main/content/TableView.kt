@@ -25,12 +25,15 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
@@ -88,7 +91,20 @@ fun TableView(aggregationResult: AggregationResult) {
                 items(articleStates) { article ->
                     SelectionContainer {
                         Column(modifier = Modifier.animateItemPlacement()) {
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                            val cursorOn = remember { mutableStateOf(false) }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                                    .background(
+                                        if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
+                                    )
+                                    .onPointerEvent(PointerEventType.Enter) {
+                                        cursorOn.value = true
+                                    }
+                                    .onPointerEvent(PointerEventType.Exit) {
+                                        cursorOn.value = false
+                                    }
+                            ) {
                                 Icon(
                                     painter = painterResource("images/icon/ic_edit.xml"),
                                     contentDescription = "Open file",
@@ -121,6 +137,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                     }
                                     Text(
                                         any.toString(),
+                                        color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                                         modifier = Modifier
                                             .weight(if (index == 0) 0.4f else 1f)
                                             .padding(horizontal = 16.dp)
