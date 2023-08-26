@@ -18,6 +18,7 @@ import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,6 +53,8 @@ import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -60,6 +63,14 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
     val imageCache = rememberImageCache()
+
+    LaunchedEffect(deck) {
+        CoroutineScope(Dispatchers.IO).launch {
+            deck.extractImageUrls().forEach {
+                imageCache.get(it)
+            }
+        }
+    }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
