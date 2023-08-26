@@ -32,7 +32,7 @@ fun MemoryUsageBox() {
     ) {
         val memoryUsage = remember { mutableStateOf(MemoryUsage()) }
         Box {
-            Row {
+            Row(modifier = Modifier.padding(start = 40.dp)) {
                 Column {
                     Text("Used memory: ${memoryUsage.value.usedMemory()}", modifier = Modifier.padding(8.dp))
                     Text("Free memory: ${memoryUsage.value.freeMemory()}", modifier = Modifier.padding(8.dp))
@@ -47,7 +47,7 @@ fun MemoryUsageBox() {
                 }
             }
             Text("x", modifier = Modifier
-                .align(Alignment.TopEnd)
+                .align(Alignment.CenterStart)
                 .padding(start = 4.dp)
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
                 .clickable { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel.switchMemoryUsageBox() }
