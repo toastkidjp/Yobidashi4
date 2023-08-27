@@ -111,10 +111,12 @@ fun TableView(aggregationResult: AggregationResult) {
                                     tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(vertical = 4.dp)
                                         .clickable {
-                                            // TODO get main vm with koin.
-                                            val nextArticle = object : KoinComponent { val articleFactory: ArticleFactory by inject() }
-                                                .articleFactory.withTitle(article[0].toString())
-                                            object : KoinComponent { val vm: MainViewModel by inject() }.vm.openFile(nextArticle.path())
+                                            val koin = object : KoinComponent {
+                                                val articleFactory: ArticleFactory by inject()
+                                                val vm: MainViewModel by inject()
+                                            }
+                                            val nextArticle = koin.articleFactory.withTitle(article[0].toString())
+                                            koin.vm.openFile(nextArticle.path())
                                         }
                                 )
 
