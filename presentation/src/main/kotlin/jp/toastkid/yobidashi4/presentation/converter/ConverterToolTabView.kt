@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.DistanceConverterService
+import jp.toastkid.yobidashi4.domain.service.converter.JapaneseAgeConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.JapaneseEraConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.TatamiCountConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.TemperatureConverterService
@@ -39,6 +40,7 @@ fun ConverterToolTabView() {
                 TwoValueConverterBox(TemperatureConverterService())
                 TwoValueConverterBox(DistanceConverterService())
                 TwoValueConverterBox(JapaneseEraConverterService())
+                TwoValueConverterBox(JapaneseAgeConverterService())
             }
 
             VerticalScrollbar(
