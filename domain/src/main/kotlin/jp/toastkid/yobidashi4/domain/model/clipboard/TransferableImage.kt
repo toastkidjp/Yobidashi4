@@ -22,12 +22,6 @@ class TransferableImage(private val i: Image) : Transferable {
     }
 
     override fun isDataFlavorSupported(flavor: DataFlavor): Boolean {
-        val flavors = transferDataFlavors
-        for (i in flavors.indices) {
-            if (flavor.equals(flavors[i])) {
-                return true
-            }
-        }
-        return false
+        return flavor == DataFlavor.imageFlavor
     }
 }
