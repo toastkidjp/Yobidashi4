@@ -6,7 +6,7 @@ import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.forEachGesture
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -182,14 +182,12 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                     ) {
                         Column(modifier = Modifier
                             .pointerInput(Unit) {
-                                forEachGesture {
-                                    awaitPointerEventScope {
-                                        val awaitPointerEvent = awaitPointerEvent()
-                                        if (awaitPointerEvent.type == PointerEventType.Press
-                                            && !openOption.value
-                                            && awaitPointerEvent.button == PointerButton.Secondary) {
-                                            openOption.value = true
-                                        }
+                                awaitEachGesture {
+                                    val awaitPointerEvent = awaitPointerEvent()
+                                    if (awaitPointerEvent.type == PointerEventType.Press
+                                        && !openOption.value
+                                        && awaitPointerEvent.button == PointerButton.Secondary) {
+                                        openOption.value = true
                                     }
                                 }
                             }
