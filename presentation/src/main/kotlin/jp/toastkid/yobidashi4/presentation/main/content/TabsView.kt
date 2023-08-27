@@ -89,6 +89,10 @@ internal fun TabsView(modifier: Modifier) {
             selectedTabIndex = viewModel.selected.value,
             indicator = { tabPositions ->
                 val currentTabIndex = if (viewModel.selected.value == tabPositions.size) 0 else viewModel.selected.value
+                if (currentTabIndex >= tabPositions.size) {
+                    return@ScrollableTabRow
+                }
+
                 Divider(modifier = Modifier
                     .tabIndicatorOffset(tabPositions[currentTabIndex])
                     .height(2.dp)
