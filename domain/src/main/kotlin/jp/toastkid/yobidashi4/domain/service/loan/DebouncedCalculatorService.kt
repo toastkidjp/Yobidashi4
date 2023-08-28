@@ -15,7 +15,6 @@ class DebouncedCalculatorService(
     private val currentFactorProvider: () -> Factor,
     private val onResult: (LoanPayment) -> Unit,
     private val calculator: LoanCalculator = LoanCalculator(),
-    private val debounceMillis: Long = 1000,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
