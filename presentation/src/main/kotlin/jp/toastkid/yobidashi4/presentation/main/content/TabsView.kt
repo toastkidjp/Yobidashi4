@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.forEachGesture
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -121,14 +121,12 @@ internal fun TabsView(modifier: Modifier) {
                     onClick = { viewModel.setSelectedIndex(index) },
                     modifier = Modifier
                         .pointerInput(Unit) {
-                            forEachGesture {
-                                awaitPointerEventScope {
-                                    val awaitPointerEvent = awaitPointerEvent()
-                                    if (awaitPointerEvent.type == PointerEventType.Press
-                                        && !openDropdownMenu.value
-                                        && awaitPointerEvent.button == PointerButton.Secondary) {
-                                        openDropdownMenu.value = true
-                                    }
+                            awaitEachGesture {
+                                val awaitPointerEvent = awaitPointerEvent()
+                                if (awaitPointerEvent.type == PointerEventType.Press
+                                    && !openDropdownMenu.value
+                                    && awaitPointerEvent.button == PointerButton.Secondary) {
+                                    openDropdownMenu.value = true
                                 }
                             }
                         }
