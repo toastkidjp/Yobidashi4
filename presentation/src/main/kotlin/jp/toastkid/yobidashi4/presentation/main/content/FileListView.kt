@@ -233,7 +233,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             .animateItemPlacement()
                         ) {
                             val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
-                            Text("${fileListItem.path.nameWithoutExtension}", maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
+                            Text(fileListItem.path.nameWithoutExtension, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
                             Text("${Files.size(fileListItem.path) / 1000} KB | ${
                                 LocalDateTime
                                     .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
