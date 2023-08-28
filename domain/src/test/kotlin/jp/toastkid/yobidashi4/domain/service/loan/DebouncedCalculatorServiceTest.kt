@@ -36,8 +36,6 @@ class DebouncedCalculatorServiceTest {
     @MockK
     private lateinit var calculator: LoanCalculator
 
-    private val debounceMillis: Long = 1000
-
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
