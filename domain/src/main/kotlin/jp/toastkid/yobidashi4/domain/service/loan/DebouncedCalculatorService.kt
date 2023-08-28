@@ -16,8 +16,7 @@ class DebouncedCalculatorService(
     private val onResult: (LoanPayment) -> Unit,
     private val calculator: LoanCalculator = LoanCalculator(),
     private val debounceMillis: Long = 1000,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke() {
