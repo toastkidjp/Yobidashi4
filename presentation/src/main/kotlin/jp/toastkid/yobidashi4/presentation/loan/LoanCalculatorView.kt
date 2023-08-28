@@ -272,7 +272,7 @@ private fun extractLong(editText: String) =
     editText.replace(",", "").toLongOrNull() ?: 0
 
 private fun extractInt(editText: String) =
-    editText.replace(",", "")?.toIntOrNull() ?: 0
+    editText.replace(",", "").toIntOrNull() ?: 0
 
 private fun extractDouble(editText: String) =
     editText.replace(",", "")?.toDoubleOrNull() ?: 0.0
