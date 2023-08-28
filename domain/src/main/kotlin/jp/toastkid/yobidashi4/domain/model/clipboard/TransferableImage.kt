@@ -10,7 +10,7 @@ class TransferableImage(private val i: Image) : Transferable {
 
     @Throws(UnsupportedFlavorException::class, IOException::class)
     override fun getTransferData(flavor: DataFlavor): Any {
-        return if (flavor.equals(DataFlavor.imageFlavor)) {
+        return if (isDataFlavorSupported(flavor)) {
             i
         } else {
             throw UnsupportedFlavorException(flavor)
