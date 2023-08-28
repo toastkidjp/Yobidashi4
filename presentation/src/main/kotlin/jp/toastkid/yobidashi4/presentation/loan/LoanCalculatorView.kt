@@ -259,7 +259,7 @@ private fun format(input: String?): String {
 
     val formatted = try {
         formatter.format(
-            input.filter { it.isDigit() || it == '.' }.trim()?.toBigDecimalOrNull()
+            input.filter { it.isDigit() || it == '.' }.trim().toBigDecimalOrNull()
         )
     } catch (e: IllegalArgumentException) {
         LoggerFactory.getLogger("LoanCalculator").debug("Illegal input", e)
