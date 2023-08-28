@@ -5,7 +5,6 @@ import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -21,7 +20,6 @@ class DebouncedCalculatorService(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) {
 
-    @FlowPreview
     operator fun invoke() {
         CoroutineScope(ioDispatcher).launch {
             inputChannel
