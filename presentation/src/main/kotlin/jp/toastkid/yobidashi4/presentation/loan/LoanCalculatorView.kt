@@ -275,4 +275,4 @@ private fun extractInt(editText: String) =
     editText.replace(",", "").toIntOrNull() ?: 0
 
 private fun extractDouble(editText: String) =
-    editText.replace(",", "")?.toDoubleOrNull() ?: 0.0
+    editText.replace(",", "").toDoubleOrNull() ?: 0.0
