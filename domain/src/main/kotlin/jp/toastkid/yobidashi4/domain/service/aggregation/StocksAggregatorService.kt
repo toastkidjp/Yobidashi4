@@ -4,6 +4,7 @@ import java.nio.file.Files
 import java.util.regex.Pattern
 import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import kotlin.io.path.nameWithoutExtension
 
 class StocksAggregatorService(private val articlesReaderService: ArticlesReaderService) {
 
@@ -11,7 +12,7 @@ class StocksAggregatorService(private val articlesReaderService: ArticlesReaderS
         val aggregationResult = StocksAggregationResult()
         articlesReaderService.invoke()
             .parallel()
-            .map { it.toFile().nameWithoutExtension to Files.readAllLines(it) }
+            .map { it.nameWithoutExtension to Files.readAllLines(it) }
             .filter { it.first.startsWith(keyword) && it.first.endsWith("n)").not() }
             .forEach {
                 it.second.filter { line -> line.contains(TARGET) }
