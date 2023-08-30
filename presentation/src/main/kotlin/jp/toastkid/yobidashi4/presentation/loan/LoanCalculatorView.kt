@@ -248,7 +248,7 @@ private fun roundToIntSafely(d: Double) =
 
 private fun onChange(inputChannel: Channel<String>, text: String) {
     CoroutineScope(Dispatchers.IO).launch {
-        inputChannel.send(text ?: "")
+        inputChannel.send(text)
     }
 }
 
