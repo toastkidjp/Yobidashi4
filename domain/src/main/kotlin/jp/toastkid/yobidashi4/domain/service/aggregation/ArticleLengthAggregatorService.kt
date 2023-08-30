@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.aggregation
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.aggregation.ArticleLengthAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import kotlin.io.path.nameWithoutExtension
 
 class ArticleLengthAggregatorService(
     private val articlesReaderService: ArticlesReaderService
@@ -13,7 +14,7 @@ class ArticleLengthAggregatorService(
 
         articlesReaderService.invoke()
                 .parallel()
-                .map { it.toFile().nameWithoutExtension to Files.readAllBytes(it) }
+                .map { it.nameWithoutExtension to Files.readAllBytes(it) }
                 .filter { it.first.startsWith(keyword) }
                 .forEach {
                     result.put(it.first, String(it.second).trim().codePoints().count())
