@@ -8,11 +8,11 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,11 +27,8 @@ class ArticleLengthAggregatorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val file = mockk<File>()
-        every { file.getName() }.returns("file.md")
-
         val path = mockk<Path>()
-        every { path.toFile() }.returns(file)
+        every { path.nameWithoutExtension }.returns("file.md")
 
         mockkStatic(Files::class)
         every { Files.readAllBytes(any()) }.returns("test content".toByteArray())
