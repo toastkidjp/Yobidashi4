@@ -6,6 +6,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
+import kotlin.io.path.nameWithoutExtension
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -24,12 +25,12 @@ class KeywordSearch : KeywordArticleFinder, KoinComponent {
 
         files
             .parallel()
-            .filter { fileFilter.isNullOrBlank() || it.toFile().nameWithoutExtension.contains(fileFilter) }
+            .filter { fileFilter.isNullOrBlank() || it.nameWithoutExtension.contains(fileFilter) }
             .forEach {
                 val lines = Files.readAllLines(it)
                 val filteredList = lines.filter { line -> filter.invoke(line) }
                 if (filteredList.isNotEmpty()) {
-                    aggregationResult.add(it.toFile().nameWithoutExtension, filteredList)
+                    aggregationResult.add(it.nameWithoutExtension, filteredList)
                 }
             }
         return aggregationResult
