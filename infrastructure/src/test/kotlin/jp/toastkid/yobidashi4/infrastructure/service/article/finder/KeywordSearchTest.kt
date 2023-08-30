@@ -6,11 +6,11 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -56,13 +56,8 @@ internal class KeywordSearchTest {
 
         every { setting.articleFolder() } returns "test"
 
-        val mockFile1 = mockk<File>()
-        every { mockFile1.getName() }.returns("mockFile1")
-        every { path1.toFile() }.returns(mockFile1)
-
-        val mockFile2 = mockk<File>()
-        every { mockFile2.getName() }.returns("mockFile2")
-        every { path2.toFile() }.returns(mockFile2)
+        every { path1.nameWithoutExtension }.returns("mockFile1")
+        every { path2.nameWithoutExtension }.returns("mockFile2")
     }
 
     @Test
