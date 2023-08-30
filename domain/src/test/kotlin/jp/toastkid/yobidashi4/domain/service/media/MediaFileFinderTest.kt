@@ -14,6 +14,7 @@ import java.util.stream.Stream
 import kotlin.io.path.isExecutable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -68,4 +69,12 @@ class MediaFileFinderTest {
         verify { path.isExecutable() }
         verify { fileName.toString() }
     }
+
+    @Test
+    fun notExists() {
+        every { Files.isDirectory(root) } returns false
+
+        assertTrue(mediaFileFinder.invoke("empty").isEmpty())
+    }
+
 }
