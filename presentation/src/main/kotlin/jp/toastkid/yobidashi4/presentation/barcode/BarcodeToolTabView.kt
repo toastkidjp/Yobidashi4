@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.viewmodel.barcode.BarcodeToolTabViewModel
 
 @Composable
-fun BarcodeToolTabView() {
+internal fun BarcodeToolTabView() {
     val viewModel = remember { BarcodeToolTabViewModel() }
 
     Surface(
