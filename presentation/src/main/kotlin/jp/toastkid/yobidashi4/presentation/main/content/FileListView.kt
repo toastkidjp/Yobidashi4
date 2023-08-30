@@ -144,7 +144,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             if (keyword.value.composition == null) {
                                 articleStates.clear()
                                 articleStates.addAll(
-                                    if (keyword.value.text.isNotBlank()) completeItems.filter { it.path.nameWithoutExtension.lowercase().contains(keyword.value.text.lowercase()) }
+                                    if (keyword.value.text.isNotBlank()) completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(keyword.value.text.lowercase()) }
                                     else completeItems
                                 )
                                 return@TextField
