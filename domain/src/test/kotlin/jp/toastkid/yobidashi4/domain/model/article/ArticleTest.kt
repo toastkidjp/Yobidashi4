@@ -7,7 +7,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -24,14 +23,10 @@ internal class ArticleTest {
     @MockK
     private lateinit var path: Path
 
-    @MockK
-    private lateinit var file: File
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
         every { path.fileName }.returns(path)
-        every { file.getName() }.returns("test.md")
 
         mockkStatic("kotlin.io.path.PathsKt")
         every { path.nameWithoutExtension }.returns("test")
