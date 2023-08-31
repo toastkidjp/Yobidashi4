@@ -95,7 +95,6 @@ private fun WebBookmarkItemRow(
     bookmark: Bookmark,
     modifier: Modifier
 ) {
-    val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
     val cursorOn = remember { mutableStateOf(false) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
