@@ -14,7 +14,8 @@ class SettingImplementation : Setting {
     private val properties = Properties()
 
     init {
-        properties.load(Files.newBufferedReader(Path.of(PATH)))
+        val path = Path.of(PATH)
+        properties.load(Files.newBufferedReader(path))
     }
 
     override fun darkMode(): Boolean {
