@@ -87,8 +87,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
     val dateTimeFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH) }
 
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-
     val coroutineScope = rememberCoroutineScope()
 
     Surface(
