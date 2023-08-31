@@ -47,8 +47,6 @@ internal fun WebBookmarkTabView() {
         val repo: BookmarkRepository by inject()
     }
 
-    val viewModel = koin.viewModel
-
     val bookmarks = remember {
         val list = mutableStateListOf<Bookmark>()
         val repository = koin.repo
