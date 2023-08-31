@@ -166,15 +166,17 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 }
 
                 itemsIndexed(articleStates) { index, fileListItem ->
-                    FileListItemRow(
-                        articleStates,
-                        fileListItem,
-                        shiftPressing,
-                        controlPressing,
-                        index,
-                        dateTimeFormatter,
-                        modifier.animateItemPlacement()
-                    )
+                    if (Files.exists(fileListItem.path)) {
+                        FileListItemRow(
+                            articleStates,
+                            fileListItem,
+                            shiftPressing,
+                            controlPressing,
+                            index,
+                            dateTimeFormatter,
+                            modifier.animateItemPlacement()
+                        )
+                    }
                 }
             }
             VerticalScrollbar(
