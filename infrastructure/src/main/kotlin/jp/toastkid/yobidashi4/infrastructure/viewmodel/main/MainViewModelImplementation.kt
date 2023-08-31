@@ -28,7 +28,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
-import jp.toastkid.yobidashi4.infrastructure.service.article.finder.TopArticleLoaderServiceImplementation
+import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
@@ -51,6 +51,8 @@ import org.koin.core.component.inject
 class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     private val setting: Setting by inject()
+
+    private val topArticleLoaderService: TopArticleLoaderService by inject()
 
     private val _darkMode = mutableStateOf(setting.darkMode())
 
@@ -323,8 +325,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun reloadAllArticle() {
-        // TODO Extract to field
-        _articles.addAll(TopArticleLoaderServiceImplementation().invoke())
+        _articles.addAll(topArticleLoaderService.invoke())
         _openArticleList.value = true
     }
 
