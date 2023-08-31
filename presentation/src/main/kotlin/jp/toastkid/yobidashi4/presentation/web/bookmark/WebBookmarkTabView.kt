@@ -68,43 +68,7 @@ internal fun WebBookmarkTabView() {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(bookmarks) { bookmark ->
-                    val cursorOn = remember { mutableStateOf(false) }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.animateItemPlacement()
-                            .background(
-                                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
-                            )
-                            .onPointerEvent(PointerEventType.Enter) {
-                                cursorOn.value = true
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                cursorOn.value = false
-                            }
-                    ) {
-                        val faviconFolder = WebIcon()
-                        faviconFolder.makeFolderIfNeed()
-                        val iconPath = faviconFolder.find(bookmark.url)
-                        LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
-                        Column(modifier = Modifier
-                            .combinedClickable(
-                                enabled = true,
-                                onClick = {
-                                    viewModel.openUrl(bookmark.url, false)
-                                },
-                                onLongClick = {
-                                    viewModel.openUrl(bookmark.url, true)
-                                }
-                            )
-                            .padding(horizontal = 16.dp)
-                            .animateItemPlacement()
-                        ) {
-                            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
-                            Text(bookmark.title, color = textColor)
-                            Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
-                            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-                        }
-                    }
+                    WebBookmarkItemRow(bookmark, Modifier.animateItemPlacement())
                 }
             }
 
@@ -112,6 +76,51 @@ internal fun WebBookmarkTabView() {
                 adapter = rememberScrollbarAdapter(state),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+private fun WebBookmarkItemRow(
+    bookmark: Bookmark,
+    modifier: Modifier
+) {
+    val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
+    val cursorOn = remember { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .background(
+                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
+            )
+            .onPointerEvent(PointerEventType.Enter) {
+                cursorOn.value = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                cursorOn.value = false
+            }
+    ) {
+        val faviconFolder = WebIcon()
+        faviconFolder.makeFolderIfNeed()
+        val iconPath = faviconFolder.find(bookmark.url)
+        LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
+        Column(modifier = Modifier
+            .combinedClickable(
+                enabled = true,
+                onClick = {
+                    viewModel.openUrl(bookmark.url, false)
+                },
+                onLongClick = {
+                    viewModel.openUrl(bookmark.url, true)
+                }
+            )
+            .padding(horizontal = 16.dp)
+        ) {
+            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+            Text(bookmark.title, color = textColor)
+            Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
+            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
         }
     }
 }
