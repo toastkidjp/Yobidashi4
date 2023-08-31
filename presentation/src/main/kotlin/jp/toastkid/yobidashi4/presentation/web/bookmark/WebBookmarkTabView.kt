@@ -46,6 +46,7 @@ internal fun WebBookmarkTabView() {
         val viewModel: MainViewModel by inject()
         val repo: BookmarkRepository by inject()
     }
+    val viewModel = remember { koin.viewModel }
 
     val bookmarks = remember {
         val list = mutableStateListOf<Bookmark>()
@@ -66,7 +67,17 @@ internal fun WebBookmarkTabView() {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(bookmarks) { bookmark ->
-                    WebBookmarkItemRow(bookmark, Modifier.animateItemPlacement())
+                    WebBookmarkItemRow(bookmark, Modifier.animateItemPlacement()
+                        .combinedClickable(
+                            enabled = true,
+                            onClick = {
+                                viewModel.openUrl(bookmark.url, false)
+                            },
+                            onLongClick = {
+                                viewModel.openUrl(bookmark.url, true)
+                            }
+                        )
+                    )
                 }
             }
 
@@ -104,15 +115,6 @@ private fun WebBookmarkItemRow(
         val iconPath = faviconFolder.find(bookmark.url)
         LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
         Column(modifier = Modifier
-            .combinedClickable(
-                enabled = true,
-                onClick = {
-                    viewModel.openUrl(bookmark.url, false)
-                },
-                onLongClick = {
-                    viewModel.openUrl(bookmark.url, true)
-                }
-            )
             .padding(horizontal = 16.dp)
         ) {
             val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
