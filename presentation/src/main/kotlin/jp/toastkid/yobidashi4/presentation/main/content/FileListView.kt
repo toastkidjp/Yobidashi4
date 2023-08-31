@@ -34,6 +34,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -167,131 +168,15 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 }
 
                 itemsIndexed(articleStates) { index, fileListItem ->
-                    val openOption = remember { mutableStateOf(false) }
-                    val cursorOn = remember { mutableStateOf(false) }
-                    Box(
-                        modifier = Modifier.background(
-                            if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
-                        )
-                            .onPointerEvent(PointerEventType.Enter) {
-                                cursorOn.value = true
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                cursorOn.value = false
-                            }
-                    ) {
-                        Column(modifier = Modifier
-                            .pointerInput(Unit) {
-                                awaitEachGesture {
-                                    val awaitPointerEvent = awaitPointerEvent()
-                                    if (awaitPointerEvent.type == PointerEventType.Press
-                                        && !openOption.value
-                                        && awaitPointerEvent.button == PointerButton.Secondary) {
-                                        openOption.value = true
-                                    }
-                                }
-                            }
-                            .combinedClickable(
-                                enabled = true,
-                                onClick = {
-                                    val clickedIndex = articleStates.indexOf(fileListItem)
-
-                                    if (shiftPressing) {
-                                        val startIndex = articleStates.indexOfFirst { it.selected }
-                                        val range = if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
-                                        range.forEach { targetIndex ->
-                                            articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
-                                        }
-                                        return@combinedClickable
-                                    }
-
-                                    if (controlPressing.not() && shiftPressing.not()) {
-                                        articleStates.mapIndexed { i, fileListItem ->
-                                            i to fileListItem
-                                        }
-                                            .filter { it.second.selected }
-                                            .forEach {
-                                                articleStates.set(it.first, it.second.unselect())
-                                            }
-                                    }
-
-                                    articleStates.set(clickedIndex, fileListItem.reverseSelection())
-                                },
-                                onLongClick = {
-                                    viewModel.openFile(fileListItem.path, true)
-                                },
-                                onDoubleClick =  {
-                                    viewModel.openFile(fileListItem.path)
-                                    val extension = fileListItem.path.extension
-                                    if (extension == "md" || extension == "txt") {
-                                        viewModel.hideArticleList()
-                                    }
-                                }
-                            )
-                            .background(if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f) else Color.Transparent)
-                            .padding(horizontal = 16.dp)
-                            .animateItemPlacement()
-                        ) {
-                            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
-                            Text(fileListItem.path.nameWithoutExtension, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
-                            Text("${Files.size(fileListItem.path) / 1000} KB | ${
-                                LocalDateTime
-                                    .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
-                                    .format(dateTimeFormatter)
-                            }", color = textColor)
-                            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-                        }
-
-                        DropdownMenu(
-                            openOption.value,
-                            onDismissRequest = { openOption.value = false }
-                        ) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.openFile(fileListItem.path)
-                                    openOption.value = false
-                                }
-                            ) {
-                                Text(
-                                    "開く",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
-                            }
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.openFile(fileListItem.path, true)
-                                    openOption.value = false
-                                }
-                            ) {
-                                Text(
-                                    "バックグラウンドで開く",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
-                            }
-                            DropdownMenuItem(
-                                onClick = {
-                                    ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
-                                    openOption.value = false
-                                }
-                            ) {
-                                Text(
-                                    "記事名をコピー",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
-                            }
-                            DropdownMenuItem(
-                                onClick = {
-                                    ClipboardPutterService().invoke("[[${fileListItem.path.nameWithoutExtension}]]")
-                                    openOption.value = false
-                                }
-                            ) {
-                                Text(
-                                    "内部リンクをコピー",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
-                            }
-                        }
-                    }
+                    FileListItemRow(
+                        articleStates,
+                        fileListItem,
+                        shiftPressing,
+                        controlPressing,
+                        index,
+                        dateTimeFormatter,
+                        modifier.animateItemPlacement()
+                    )
                 }
             }
             VerticalScrollbar(
@@ -302,6 +187,158 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 adapter = rememberScrollbarAdapter(horizontalScrollState),
                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
             )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+private fun FileListItemRow(
+    articleStates: SnapshotStateList<FileListItem>,
+    fileListItem: FileListItem,
+    shiftPressing: Boolean,
+    controlPressing: Boolean,
+    index: Int,
+    dateTimeFormatter: DateTimeFormatter?,
+    modifier: Modifier
+) {
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+    val openOption = remember { mutableStateOf(false) }
+    val cursorOn = remember { mutableStateOf(false) }
+
+    Box(
+        modifier = modifier.background(
+            if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
+        )
+            .onPointerEvent(PointerEventType.Enter) {
+                cursorOn.value = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                cursorOn.value = false
+            }
+    ) {
+        Column(modifier = Modifier
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    val awaitPointerEvent = awaitPointerEvent()
+                    if (awaitPointerEvent.type == PointerEventType.Press
+                        && !openOption.value
+                        && awaitPointerEvent.button == PointerButton.Secondary
+                    ) {
+                        openOption.value = true
+                    }
+                }
+            }
+            .combinedClickable(
+                enabled = true,
+                onClick = {
+                    val clickedIndex = articleStates.indexOf(fileListItem)
+
+                    if (shiftPressing) {
+                        val startIndex = articleStates.indexOfFirst { it.selected }
+                        val range =
+                            if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
+                        range.forEach { targetIndex ->
+                            articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
+                        }
+                        return@combinedClickable
+                    }
+
+                    if (controlPressing.not() && shiftPressing.not()) {
+                        articleStates.mapIndexed { i, fileListItem ->
+                            i to fileListItem
+                        }
+                            .filter { it.second.selected }
+                            .forEach {
+                                articleStates.set(it.first, it.second.unselect())
+                            }
+                    }
+
+                    articleStates.set(clickedIndex, fileListItem.reverseSelection())
+                },
+                onLongClick = {
+                    viewModel.openFile(fileListItem.path, true)
+                },
+                onDoubleClick = {
+                    viewModel.openFile(fileListItem.path)
+                    val extension = fileListItem.path.extension
+                    if (extension == "md" || extension == "txt") {
+                        viewModel.hideArticleList()
+                    }
+                }
+            )
+            .background(
+                if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (index % 2 == 0) MaterialTheme.colors.surface.copy(
+                    alpha = 0.5f
+                ) else Color.Transparent
+            )
+            .padding(horizontal = 16.dp)
+        ) {
+            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+            Text(
+                fileListItem.path.nameWithoutExtension,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = textColor
+            )
+            Text(
+                "${Files.size(fileListItem.path) / 1000} KB | ${
+                    LocalDateTime
+                        .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
+                        .format(dateTimeFormatter)
+                }", color = textColor
+            )
+            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+        }
+
+        DropdownMenu(
+            openOption.value,
+            onDismissRequest = { openOption.value = false }
+        ) {
+            DropdownMenuItem(
+                onClick = {
+                    viewModel.openFile(fileListItem.path)
+                    openOption.value = false
+                }
+            ) {
+                Text(
+                    "開く",
+                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                )
+            }
+            DropdownMenuItem(
+                onClick = {
+                    viewModel.openFile(fileListItem.path, true)
+                    openOption.value = false
+                }
+            ) {
+                Text(
+                    "バックグラウンドで開く",
+                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                )
+            }
+            DropdownMenuItem(
+                onClick = {
+                    ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
+                    openOption.value = false
+                }
+            ) {
+                Text(
+                    "記事名をコピー",
+                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                )
+            }
+            DropdownMenuItem(
+                onClick = {
+                    ClipboardPutterService().invoke("[[${fileListItem.path.nameWithoutExtension}]]")
+                    openOption.value = false
+                }
+            ) {
+                Text(
+                    "内部リンクをコピー",
+                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                )
+            }
         }
     }
 }
