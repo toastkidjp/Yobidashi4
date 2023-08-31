@@ -15,6 +15,13 @@ class SettingImplementation : Setting {
 
     init {
         val path = Path.of(PATH)
+        if (Files.exists(path.parent).not()) {
+            Files.createDirectories(path.parent)
+        }
+        if (Files.exists(path).not()) {
+            Files.createFile(path)
+        }
+
         properties.load(Files.newBufferedReader(path))
     }
 
