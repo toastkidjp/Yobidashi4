@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
@@ -47,7 +46,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorView() {
     var result by rememberSaveable {
