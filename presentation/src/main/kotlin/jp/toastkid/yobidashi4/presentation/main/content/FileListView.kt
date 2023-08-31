@@ -87,6 +87,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
     val dateTimeFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH) }
 
+    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
     val coroutineScope = rememberCoroutineScope()
 
     Surface(
@@ -175,6 +176,44 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             index,
                             dateTimeFormatter,
                             modifier.animateItemPlacement()
+                                .combinedClickable(
+                                    enabled = true,
+                                    onClick = {
+                                        val clickedIndex = articleStates.indexOf(fileListItem)
+
+                                        if (shiftPressing) {
+                                            val startIndex = articleStates.indexOfFirst { it.selected }
+                                            val range =
+                                                if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
+                                            range.forEach { targetIndex ->
+                                                articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
+                                            }
+                                            return@combinedClickable
+                                        }
+
+                                        if (controlPressing.not() && shiftPressing.not()) {
+                                            articleStates.mapIndexed { i, fileListItem ->
+                                                i to fileListItem
+                                            }
+                                                .filter { it.second.selected }
+                                                .forEach {
+                                                    articleStates.set(it.first, it.second.unselect())
+                                                }
+                                        }
+
+                                        articleStates.set(clickedIndex, fileListItem.reverseSelection())
+                                    },
+                                    onLongClick = {
+                                        viewModel.openFile(fileListItem.path, true)
+                                    },
+                                    onDoubleClick = {
+                                        viewModel.openFile(fileListItem.path)
+                                        val extension = fileListItem.path.extension
+                                        if (extension == "md" || extension == "txt") {
+                                            viewModel.hideArticleList()
+                                        }
+                                    }
+                                )
                         )
                     }
                 }
@@ -229,44 +268,6 @@ private fun FileListItemRow(
                     }
                 }
             }
-            .combinedClickable(
-                enabled = true,
-                onClick = {
-                    val clickedIndex = articleStates.indexOf(fileListItem)
-
-                    if (shiftPressing) {
-                        val startIndex = articleStates.indexOfFirst { it.selected }
-                        val range =
-                            if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
-                        range.forEach { targetIndex ->
-                            articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
-                        }
-                        return@combinedClickable
-                    }
-
-                    if (controlPressing.not() && shiftPressing.not()) {
-                        articleStates.mapIndexed { i, fileListItem ->
-                            i to fileListItem
-                        }
-                            .filter { it.second.selected }
-                            .forEach {
-                                articleStates.set(it.first, it.second.unselect())
-                            }
-                    }
-
-                    articleStates.set(clickedIndex, fileListItem.reverseSelection())
-                },
-                onLongClick = {
-                    viewModel.openFile(fileListItem.path, true)
-                },
-                onDoubleClick = {
-                    viewModel.openFile(fileListItem.path)
-                    val extension = fileListItem.path.extension
-                    if (extension == "md" || extension == "txt") {
-                        viewModel.hideArticleList()
-                    }
-                }
-            )
             .background(
                 if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (index % 2 == 0) MaterialTheme.colors.surface.copy(
                     alpha = 0.5f
