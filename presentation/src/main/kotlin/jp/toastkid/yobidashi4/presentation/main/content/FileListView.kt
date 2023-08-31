@@ -298,8 +298,10 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 adapter = rememberScrollbarAdapter(state),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
-            HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
-                Alignment.BottomCenter))
+            HorizontalScrollbar(
+                adapter = rememberScrollbarAdapter(horizontalScrollState),
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
+            )
         }
     }
 }
