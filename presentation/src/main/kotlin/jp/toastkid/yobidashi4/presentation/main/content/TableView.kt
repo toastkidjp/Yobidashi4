@@ -167,12 +167,16 @@ private fun sort(
     val swap = if (lastSortOrder)
         if (aggregationResult.columnClass(index) == Integer::class.java) {
             articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
+        } else if (aggregationResult.columnClass(index) == Double::class.java) {
+            articleStates.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
         } else {
             articleStates.sortedBy { return@sortedBy it[index].toString() }
         }
     else
         if (aggregationResult.columnClass(index) == Integer::class.java) {
             articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
+        } else if (aggregationResult.columnClass(index) == Double::class.java) {
+            articleStates.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
         } else {
             articleStates.sortedByDescending { it[index].toString() }
         }
