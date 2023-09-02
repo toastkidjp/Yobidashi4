@@ -34,7 +34,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -169,10 +168,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 itemsIndexed(articleStates) { index, fileListItem ->
                     if (Files.exists(fileListItem.path)) {
                         FileListItemRow(
-                            articleStates,
                             fileListItem,
-                            shiftPressing,
-                            controlPressing,
                             index,
                             dateTimeFormatter,
                             modifier.animateItemPlacement()
@@ -233,10 +229,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 @Composable
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 private fun FileListItemRow(
-    articleStates: SnapshotStateList<FileListItem>,
     fileListItem: FileListItem,
-    shiftPressing: Boolean,
-    controlPressing: Boolean,
     index: Int,
     dateTimeFormatter: DateTimeFormatter?,
     modifier: Modifier
