@@ -140,7 +140,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
 
             if (viewModel.tabs.size > 1) {
-                Item("Move previous tab", shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
+                Item("Move previous tab", icon = painterResource("images/icon/ic_back.xml"), shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
                     if (viewModel.tabs.isEmpty()) {
                         return@Item
                     }
@@ -149,7 +149,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     viewModel.setSelectedIndex(nextIndex)
                 }
 
-                Item("Move next tab", shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
+                Item("Move next tab", icon = painterResource("images/icon/ic_forward.xml"), shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
                     if (viewModel.tabs.isEmpty()) {
                         return@Item
                     }
