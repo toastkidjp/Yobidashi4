@@ -166,52 +166,50 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 }
 
                 itemsIndexed(articleStates) { index, fileListItem ->
-                    if (Files.exists(fileListItem.path)) {
-                        FileListItemRow(
-                            fileListItem,
-                            index,
-                            dateTimeFormatter,
-                            modifier.animateItemPlacement()
-                                .combinedClickable(
-                                    enabled = true,
-                                    onClick = {
-                                        val clickedIndex = articleStates.indexOf(fileListItem)
+                    FileListItemRow(
+                        fileListItem,
+                        index,
+                        dateTimeFormatter,
+                        modifier.animateItemPlacement()
+                            .combinedClickable(
+                                enabled = true,
+                                onClick = {
+                                    val clickedIndex = articleStates.indexOf(fileListItem)
 
-                                        if (shiftPressing) {
-                                            val startIndex = articleStates.indexOfFirst { it.selected }
-                                            val range =
-                                                if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
-                                            range.forEach { targetIndex ->
-                                                articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
-                                            }
-                                            return@combinedClickable
+                                    if (shiftPressing) {
+                                        val startIndex = articleStates.indexOfFirst { it.selected }
+                                        val range =
+                                            if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
+                                        range.forEach { targetIndex ->
+                                            articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
                                         }
-
-                                        if (controlPressing.not() && shiftPressing.not()) {
-                                            articleStates.mapIndexed { i, fileListItem ->
-                                                i to fileListItem
-                                            }
-                                                .filter { it.second.selected }
-                                                .forEach {
-                                                    articleStates.set(it.first, it.second.unselect())
-                                                }
-                                        }
-
-                                        articleStates.set(clickedIndex, fileListItem.reverseSelection())
-                                    },
-                                    onLongClick = {
-                                        viewModel.openFile(fileListItem.path, true)
-                                    },
-                                    onDoubleClick = {
-                                        viewModel.openFile(fileListItem.path)
-                                        val extension = fileListItem.path.extension
-                                        if (extension == "md" || extension == "txt") {
-                                            viewModel.hideArticleList()
-                                        }
+                                        return@combinedClickable
                                     }
-                                )
-                        )
-                    }
+
+                                    if (controlPressing.not() && shiftPressing.not()) {
+                                        articleStates.mapIndexed { i, fileListItem ->
+                                            i to fileListItem
+                                        }
+                                            .filter { it.second.selected }
+                                            .forEach {
+                                                articleStates.set(it.first, it.second.unselect())
+                                            }
+                                    }
+
+                                    articleStates.set(clickedIndex, fileListItem.reverseSelection())
+                                },
+                                onLongClick = {
+                                    viewModel.openFile(fileListItem.path, true)
+                                },
+                                onDoubleClick = {
+                                    viewModel.openFile(fileListItem.path)
+                                    val extension = fileListItem.path.extension
+                                    if (extension == "md" || extension == "txt") {
+                                        viewModel.hideArticleList()
+                                    }
+                                }
+                            )
+                    )
                 }
             }
             VerticalScrollbar(
@@ -275,13 +273,15 @@ private fun FileListItemRow(
                 overflow = TextOverflow.Ellipsis,
                 color = textColor
             )
-            Text(
-                "${Files.size(fileListItem.path) / 1000} KB | ${
-                    LocalDateTime
-                        .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
-                        .format(dateTimeFormatter)
-                }", color = textColor
-            )
+            if (Files.exists(fileListItem.path)) {
+                Text(
+                    "${Files.size(fileListItem.path) / 1000} KB | ${
+                        LocalDateTime
+                            .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
+                            .format(dateTimeFormatter)
+                    }", color = textColor
+                )
+            }
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
         }
 
