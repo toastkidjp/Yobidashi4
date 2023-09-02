@@ -67,16 +67,18 @@ internal fun WebBookmarkTabView() {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(bookmarks) { bookmark ->
-                    WebBookmarkItemRow(bookmark, Modifier.animateItemPlacement()
-                        .combinedClickable(
-                            enabled = true,
-                            onClick = {
-                                viewModel.openUrl(bookmark.url, false)
-                            },
-                            onLongClick = {
-                                viewModel.openUrl(bookmark.url, true)
-                            }
-                        )
+                    WebBookmarkItemRow(
+                        bookmark,
+                        Modifier.animateItemPlacement()
+                            .combinedClickable(
+                                enabled = true,
+                                onClick = {
+                                    viewModel.openUrl(bookmark.url, false)
+                                },
+                                onLongClick = {
+                                    viewModel.openUrl(bookmark.url, true)
+                                }
+                            )
                     )
                 }
             }
