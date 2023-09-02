@@ -157,6 +157,11 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openUrl(url: String, background: Boolean) {
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            showSnackbar("Invalid URL. $url")
+            return
+        }
+
         val newTab = WebTab(title = url, url = url)
         if (background) {
             _tabs.add(newTab)
