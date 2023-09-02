@@ -170,7 +170,7 @@ private fun sort(
         } else if (aggregationResult.columnClass(index) == Double::class.java) {
             articleStates.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
         } else {
-            articleStates.sortedBy { return@sortedBy it[index].toString() }
+            articleStates.sortedBy { it[index].toString() }
         }
     else
         if (aggregationResult.columnClass(index) == Integer::class.java) {
