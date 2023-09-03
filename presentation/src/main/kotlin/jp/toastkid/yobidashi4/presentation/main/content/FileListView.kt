@@ -303,6 +303,17 @@ private fun FileListItemRow(
             }
             DropdownMenuItem(
                 onClick = {
+                    viewModel.openPreview(fileListItem.path)
+                    openOption.value = false
+                }
+            ) {
+                Text(
+                    "Preview",
+                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                )
+            }
+            DropdownMenuItem(
+                onClick = {
                     viewModel.openFile(fileListItem.path, true)
                     openOption.value = false
                 }
