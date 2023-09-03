@@ -41,27 +41,31 @@ fun TableLineView(line: TableLine) {
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         line.table.forEach { itemRow ->
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    itemRow.forEachIndexed { index, any ->
-                        if (index != 0) {
-                            Divider(
-                                modifier = Modifier.height(24.dp).width(1.dp)
-                                    .padding(vertical = 1.dp)
-                            )
-                        }
-                        Text(
-                            any.toString(),
-                            fontSize = 24.sp,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(horizontal = 16.dp)
-                        )
-                    }
-                }
-                Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-            }
-
+            TableRow(itemRow)
         }
+    }
+}
+
+@Composable
+private fun TableRow(itemRow: List<Any>) {
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            itemRow.forEachIndexed { index, any ->
+                if (index != 0) {
+                    Divider(
+                        modifier = Modifier.height(24.dp).width(1.dp)
+                            .padding(vertical = 1.dp)
+                    )
+                }
+                Text(
+                    any.toString(),
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp)
+                )
+            }
+        }
+        Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
     }
 }
