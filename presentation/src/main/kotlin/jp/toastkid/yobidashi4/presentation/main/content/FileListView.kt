@@ -279,7 +279,8 @@ private fun FileListItemRow(
                         LocalDateTime
                             .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
                             .format(dateTimeFormatter)
-                    }", color = textColor
+                    }",
+                    color = textColor
                 )
             }
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
