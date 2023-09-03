@@ -138,7 +138,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                         return@forEachIndexed
                                     }
                                     Text(
-                                        any.toString(),
+                                        if (any is Integer) String.format("%,d", any) else any.toString(),
                                         color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                                         modifier = Modifier
                                             .weight(if (index == 0) 0.4f else 1f)
