@@ -13,6 +13,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,8 +61,17 @@ internal fun LegacyEditorView(tab: EditorTab) {
                             modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
                         )
                     }
-                    if (tab.showPreview()) {
+
+                    val showPreview = remember { mutableStateOf(tab.showPreview()) }
+
+                    if (showPreview.value) {
                         MarkdownView(tab, Modifier.widthIn(max = 360.dp))
+                    }
+
+                    LaunchedEffect(tab) {
+                        tab.update().collect {
+                            showPreview.value = tab.showPreview()
+                        }
                     }
                 }
             }
