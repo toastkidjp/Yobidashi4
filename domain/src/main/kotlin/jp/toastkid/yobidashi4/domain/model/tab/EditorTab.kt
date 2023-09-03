@@ -62,6 +62,9 @@ data class EditorTab(
 
     fun switchPreview() {
         preview = if (preview == Preview.HALF) Preview.CLOSE else Preview.HALF
+        CoroutineScope(Dispatchers.IO).launch {
+            _updateFlow.emit(System.currentTimeMillis())
+        }
     }
 
     fun showPreview() = preview == Preview.HALF
