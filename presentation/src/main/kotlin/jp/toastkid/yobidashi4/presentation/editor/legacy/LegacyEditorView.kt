@@ -45,19 +45,23 @@ internal fun LegacyEditorView(tab: EditorTab) {
             Row(
                 modifier = Modifier.weight(1f)
             ) {
-                Box(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    SwingPanel(
-                        background = Color.Transparent,
-                        factory = {
-                            textEditor.getContent()
-                        },
-                        modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
-                    )
-                }
-                if (tab.showPreview()) {
-                    MarkdownView(tab, Modifier.widthIn(max = 360.dp))
+                if (tab.preview == EditorTab.Preview.FULL) {
+                    MarkdownView(tab, Modifier.weight(1f))
+                } else {
+                    Box(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        SwingPanel(
+                            background = Color.Transparent,
+                            factory = {
+                                textEditor.getContent()
+                            },
+                            modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
+                        )
+                    }
+                    if (tab.showPreview()) {
+                        MarkdownView(tab, Modifier.widthIn(max = 360.dp))
+                    }
                 }
             }
             StatusLabel(textEditor, modifier = Modifier.height(if (viewModel.showingSnackbar()) 48.dp else 24.dp))
@@ -65,7 +69,9 @@ internal fun LegacyEditorView(tab: EditorTab) {
     }
 
     DisposableEffect(tab.path) {
-        focusRequester.requestFocus()
+        if (tab.preview != EditorTab.Preview.FULL) {
+            focusRequester.requestFocus()
+        }
         textEditor.setText(tab.path, tab.getContent())
         textEditor.setCaretPosition(tab.caretPosition())
         onDispose {
