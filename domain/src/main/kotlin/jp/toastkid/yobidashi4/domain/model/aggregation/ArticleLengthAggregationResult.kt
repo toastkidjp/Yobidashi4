@@ -22,7 +22,7 @@ class ArticleLengthAggregationResult : AggregationResult {
 
     override fun columnClass(columnIndex: Int): Class<out Any> {
         return when (columnIndex) {
-            1 -> Integer::class.java
+            1 -> Int::class.java
             else -> String::class.java
         }
     }
