@@ -24,4 +24,11 @@ class OutgoAggregationResult(val target: String): AggregationResult {
         return map.isEmpty()
     }
 
+    override fun columnClass(columnIndex: Int): Class<out Any> {
+        return when (columnIndex) {
+            2 -> Int::class.java
+            else -> String::class.java
+        }
+    }
+
 }
