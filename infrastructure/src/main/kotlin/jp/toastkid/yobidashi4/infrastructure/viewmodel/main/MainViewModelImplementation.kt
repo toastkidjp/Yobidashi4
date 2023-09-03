@@ -134,6 +134,15 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(tab)
     }
 
+    override fun openPreview(path: Path, onBackground: Boolean) {
+        val tab = EditorTab.makePreviewTab(path)
+        if (onBackground) {
+            _tabs.add(tab)
+            return
+        }
+        openTab(tab)
+    }
+
     override fun removeTabAt(index: Int) {
         val targetTab = _tabs.get(index)
         if (targetTab.closeable().not()) {
