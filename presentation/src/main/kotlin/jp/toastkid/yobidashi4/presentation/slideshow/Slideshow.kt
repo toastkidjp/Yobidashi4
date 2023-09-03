@@ -201,7 +201,7 @@ private fun SlideView(slide: Slide) {
             slide.lines().forEach { line ->
                 when (line) {
                     is TextLine ->
-                        Text(line.text, modifier = Modifier.padding(bottom = 8.dp))
+                        Text(line.text, fontSize = 24.sp, modifier = Modifier.padding(bottom = 8.dp))
 
                     is ImageLine -> {
                         Image(
