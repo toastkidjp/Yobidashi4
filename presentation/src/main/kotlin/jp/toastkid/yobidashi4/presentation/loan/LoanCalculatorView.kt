@@ -233,7 +233,7 @@ fun LoanCalculatorView() {
             },
             {
                 result = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment,
-                    it.paymentSchedule.sumOf { it.interest }.toLong()
+                    it.paymentSchedule.sumOf { paymentDetail -> paymentDetail.interest }.toLong()
                 )
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
