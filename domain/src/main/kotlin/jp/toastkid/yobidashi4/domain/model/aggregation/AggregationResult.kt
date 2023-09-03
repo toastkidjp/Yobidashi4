@@ -7,7 +7,7 @@ interface AggregationResult {
     fun itemArrays(): Collection<Array<Any>>
 
     fun columnClass(columnIndex: Int) = when (columnIndex) {
-        itemArrays().size - 1 -> Integer::class.java
+        itemArrays().size - 1 -> Int::class.java
         else -> String::class.java
     }
 
