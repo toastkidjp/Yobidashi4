@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 data class EditorTab(
-    val path: Path
+    val path: Path,
+    var preview: Preview = Preview.CLOSE
 ): Tab {
 
     private var title: String = path.nameWithoutExtension
@@ -59,13 +60,11 @@ data class EditorTab(
         }
     }
 
-    private var preview = false
-
     fun switchPreview() {
-        preview = preview.not()
+        preview = if (preview == Preview.HALF) Preview.CLOSE else Preview.HALF
     }
 
-    fun showPreview() = preview
+    fun showPreview() = preview == Preview.HALF
 
     private val _updateFlow = MutableSharedFlow<Long>()
 
@@ -73,4 +72,11 @@ data class EditorTab(
         return _updateFlow.asSharedFlow()
     }
 
+    enum class Preview {
+        FULL, HALF, CLOSE
+    }
+
+    companion object {
+        fun makePreviewTab(path: Path) = EditorTab(path, Preview.FULL)
+    }
 }
