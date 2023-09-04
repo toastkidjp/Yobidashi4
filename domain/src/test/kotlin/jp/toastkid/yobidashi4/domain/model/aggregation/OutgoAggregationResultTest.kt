@@ -30,4 +30,11 @@ internal class OutgoAggregationResultTest {
         assertTrue(outgoAggregationResult.header().isNotEmpty())
     }
 
+    @Test
+    fun columnClass() {
+        assertEquals(String::class.java, outgoAggregationResult.columnClass(0))
+        assertEquals(String::class.java, outgoAggregationResult.columnClass(1))
+        assertEquals(Int::class.java, outgoAggregationResult.columnClass(2))
+    }
+
 }
