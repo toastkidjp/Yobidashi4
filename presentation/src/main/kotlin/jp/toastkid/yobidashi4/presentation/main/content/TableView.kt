@@ -138,7 +138,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                         return@forEachIndexed
                                     }
                                     Text(
-                                        if (any is Integer) String.format("%,d", any) else any.toString(),
+                                        if (any is Int) String.format("%,d", any) else any.toString(),
                                         color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                                         modifier = Modifier
                                             .weight(if (index == 0) 0.4f else 1f)
@@ -165,7 +165,7 @@ private fun sort(
     articleStates: SnapshotStateList<Array<Any>>
 ) {
     val swap = if (lastSortOrder)
-        if (aggregationResult.columnClass(index) == Integer::class.java) {
+        if (aggregationResult.columnClass(index) == Int::class.java) {
             articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
         } else if (aggregationResult.columnClass(index) == Double::class.java) {
             articleStates.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
@@ -173,7 +173,7 @@ private fun sort(
             articleStates.sortedBy { it[index].toString() }
         }
     else
-        if (aggregationResult.columnClass(index) == Integer::class.java) {
+        if (aggregationResult.columnClass(index) == Int::class.java) {
             articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
         } else if (aggregationResult.columnClass(index) == Double::class.java) {
             articleStates.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
