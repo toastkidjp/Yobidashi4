@@ -49,8 +49,8 @@ class StocksAggregationResultTest {
     @Test
     fun columnClass() {
         assertEquals(String::class.java, stocksAggregationResult.columnClass(0))
-        assertEquals(Integer::class.java, stocksAggregationResult.columnClass(1))
-        assertEquals(Integer::class.java, stocksAggregationResult.columnClass(2))
+        assertEquals(Int::class.java, stocksAggregationResult.columnClass(1))
+        assertEquals(Int::class.java, stocksAggregationResult.columnClass(2))
         assertEquals(Double::class.java, stocksAggregationResult.columnClass(3))
     }
 }
