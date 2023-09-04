@@ -13,7 +13,7 @@ class CompoundInterestCalculationResult : AggregationResult {
     }
 
     override fun columnClass(columnIndex: Int): Class<out Any> {
-        return Integer::class.java
+        return Int::class.java
     }
 
     override fun title(): String {
