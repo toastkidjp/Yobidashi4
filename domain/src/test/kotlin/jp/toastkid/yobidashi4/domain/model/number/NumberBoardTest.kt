@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.number
 
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -43,10 +44,13 @@ class NumberBoardTest {
 
     @Test
     fun copyFrom() {
-    }
+        numberBoard.placeRandom()
+        val copied = NumberBoard()
+        copied.copyFrom(numberBoard)
 
-    @Test
-    fun rows() {
+        numberBoard.rows().forEachIndexed { index, list ->
+            assertEquals(list, copied.rows().get(index))
+        }
     }
 
     @Test
