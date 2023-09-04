@@ -26,8 +26,8 @@ class StocksAggregationResult : AggregationResult {
 
     override fun columnClass(columnIndex: Int): Class<out Any> {
         return when (columnIndex) {
-            1 -> Integer::class.java
-            2 -> Integer::class.java
+            1 -> Int::class.java
+            2 -> Int::class.java
             3 -> Double::class.java
             else -> String::class.java
         }
