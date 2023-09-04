@@ -26,7 +26,7 @@ class AggregationResultTest {
         }
 
         assertEquals(String::class.java, aggregationResult.columnClass(0))
-        assertEquals(Integer::class.java, aggregationResult.columnClass(1))
+        assertEquals(Int::class.java, aggregationResult.columnClass(1))
     }
 
 }
