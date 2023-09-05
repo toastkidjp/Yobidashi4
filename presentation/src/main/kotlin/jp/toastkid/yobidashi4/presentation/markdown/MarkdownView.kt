@@ -130,9 +130,8 @@ fun MarkdownView(tab: EditorTab, modifier: Modifier) {
             }
         }
         VerticalScrollbar(
-            adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                Alignment.CenterEnd
-            )
+            adapter = rememberScrollbarAdapter(scrollState),
+            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
         )
     }
 }
