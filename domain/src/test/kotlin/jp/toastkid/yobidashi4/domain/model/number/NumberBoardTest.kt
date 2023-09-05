@@ -55,6 +55,11 @@ class NumberBoardTest {
 
     @Test
     fun place() {
+        numberBoard.place(0, 0, 2)
+
+        val picked = numberBoard.pick(0, 0)
+
+        assertEquals(2, picked)
     }
 
     @Test
@@ -64,7 +69,4 @@ class NumberBoardTest {
         numberBoard.pick(0, 0)
     }
 
-    @Test
-    fun copy() {
-    }
 }
