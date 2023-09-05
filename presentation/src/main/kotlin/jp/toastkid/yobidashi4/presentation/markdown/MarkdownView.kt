@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
@@ -37,6 +38,7 @@ import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -50,27 +52,19 @@ fun MarkdownView(tab: EditorTab, modifier: Modifier) {
     Box(modifier = modifier.onKeyEvent {
         when (it.key) {
             Key.DirectionUp -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(-50f)
-                }
+                scrollBy(coroutineScope, scrollState, -50f)
                 return@onKeyEvent true
             }
             Key.DirectionDown -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(50f)
-                }
+                scrollBy(coroutineScope, scrollState, 50f)
                 return@onKeyEvent true
             }
             Key.PageUp -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(-300f)
-                }
+                scrollBy(coroutineScope, scrollState, -300f)
                 return@onKeyEvent true
             }
             Key.PageDown -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(300f)
-                }
+                scrollBy(coroutineScope, scrollState, 300f)
                 return@onKeyEvent true
             }
         }
@@ -140,5 +134,15 @@ fun MarkdownView(tab: EditorTab, modifier: Modifier) {
                 Alignment.CenterEnd
             )
         )
+    }
+}
+
+private fun scrollBy(
+    coroutineScope: CoroutineScope,
+    scrollState: ScrollState,
+    value: Float
+) {
+    coroutineScope.launch {
+        scrollState.animateScrollBy(value)
     }
 }
