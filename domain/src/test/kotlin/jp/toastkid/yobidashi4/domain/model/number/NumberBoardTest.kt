@@ -59,6 +59,9 @@ class NumberBoardTest {
 
     @Test
     fun pick() {
+        numberBoard.placeRandom()
+
+        numberBoard.pick(0, 0)
     }
 
     @Test
