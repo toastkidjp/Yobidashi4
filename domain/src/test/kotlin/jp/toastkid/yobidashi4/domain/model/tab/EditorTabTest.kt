@@ -74,4 +74,13 @@ class EditorTabTest {
         job.cancel()
     }
 
+    @Test
+    fun switchPreview() {
+        assertFalse(editorTab.showPreview())
+
+        editorTab.switchPreview()
+
+        assertTrue(editorTab.showPreview())
+    }
+
 }
