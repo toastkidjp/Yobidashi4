@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -10,10 +12,18 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,13 +37,45 @@ import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MarkdownView(tab: EditorTab, modifier: Modifier) {
     val linkGenerator = remember { LinkGenerator() }
 
+    val focusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    Box(modifier = modifier) {
+    Box(modifier = modifier.onKeyEvent {
+        when (it.key) {
+            Key.DirectionUp -> {
+                coroutineScope.launch {
+                    scrollState.animateScrollBy(-50f)
+                }
+                return@onKeyEvent true
+            }
+            Key.DirectionDown -> {
+                coroutineScope.launch {
+                    scrollState.animateScrollBy(50f)
+                }
+                return@onKeyEvent true
+            }
+            Key.PageUp -> {
+                coroutineScope.launch {
+                    scrollState.animateScrollBy(-300f)
+                }
+                return@onKeyEvent true
+            }
+            Key.PageDown -> {
+                coroutineScope.launch {
+                    scrollState.animateScrollBy(300f)
+                }
+                return@onKeyEvent true
+            }
+        }
+        return@onKeyEvent false
+    }.focusRequester(focusRequester).focusable(true)) {
         RichTextThemeIntegration(
             contentColor = { MaterialTheme.colors.onSurface }
         ) {
@@ -88,6 +130,9 @@ fun MarkdownView(tab: EditorTab, modifier: Modifier) {
                         LinkBehaviorService().invoke(it)
                     }
                 )
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
             }
         }
         VerticalScrollbar(
