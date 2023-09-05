@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -182,9 +182,9 @@ private fun SlideView(slide: Slide) {
 
         val columnModifier =
             if (slide.isFront()) {
-                Modifier.clickable { }.wrapContentHeight().align(Alignment.Center)
+                Modifier.focusable(true).wrapContentHeight().align(Alignment.Center)
             } else {
-                Modifier.clickable { }.fillMaxHeight().align(Alignment.TopCenter)
+                Modifier.focusable(true).fillMaxHeight().align(Alignment.TopCenter)
             }
 
         Column(modifier = columnModifier) {
