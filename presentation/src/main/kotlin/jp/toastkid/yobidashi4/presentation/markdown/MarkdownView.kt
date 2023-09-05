@@ -45,10 +45,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun MarkdownView(tab: EditorTab, modifier: Modifier) {
     val linkGenerator = remember { LinkGenerator() }
-
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+
     Box(modifier = modifier.onKeyEvent {
         when (it.key) {
             Key.DirectionUp -> {
