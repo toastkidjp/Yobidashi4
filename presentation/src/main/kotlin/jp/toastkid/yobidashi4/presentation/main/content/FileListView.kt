@@ -80,7 +80,8 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
     LaunchedEffect(paths.size) {
         articleStates.clear()
-        paths.map { FileListItem(it) }.forEach { articleStates.add(it) }
+        val editableExtensions = setOf("md", "txt")
+        paths.map { FileListItem(it, editable = editableExtensions.contains(it.extension)) }.forEach { articleStates.add(it) }
         completeItems.addAll(articleStates)
     }
 
@@ -301,49 +302,52 @@ private fun FileListItemRow(
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
-            DropdownMenuItem(
-                onClick = {
-                    viewModel.openPreview(fileListItem.path)
-                    openOption.value = false
+
+            if (fileListItem.editable) {
+                DropdownMenuItem(
+                    onClick = {
+                        viewModel.openPreview(fileListItem.path)
+                        openOption.value = false
+                    }
+                ) {
+                    Text(
+                        "Preview",
+                        modifier = Modifier.padding(8.dp).fillMaxSize()
+                    )
                 }
-            ) {
-                Text(
-                    "Preview",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
-            }
-            DropdownMenuItem(
-                onClick = {
-                    viewModel.openFile(fileListItem.path, true)
-                    openOption.value = false
+                DropdownMenuItem(
+                    onClick = {
+                        viewModel.openFile(fileListItem.path, true)
+                        openOption.value = false
+                    }
+                ) {
+                    Text(
+                        "バックグラウンドで開く",
+                        modifier = Modifier.padding(8.dp).fillMaxSize()
+                    )
                 }
-            ) {
-                Text(
-                    "バックグラウンドで開く",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
-            }
-            DropdownMenuItem(
-                onClick = {
-                    ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
-                    openOption.value = false
+                DropdownMenuItem(
+                    onClick = {
+                        ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
+                        openOption.value = false
+                    }
+                ) {
+                    Text(
+                        "記事名をコピー",
+                        modifier = Modifier.padding(8.dp).fillMaxSize()
+                    )
                 }
-            ) {
-                Text(
-                    "記事名をコピー",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
-            }
-            DropdownMenuItem(
-                onClick = {
-                    ClipboardPutterService().invoke("[[${fileListItem.path.nameWithoutExtension}]]")
-                    openOption.value = false
+                DropdownMenuItem(
+                    onClick = {
+                        ClipboardPutterService().invoke("[[${fileListItem.path.nameWithoutExtension}]]")
+                        openOption.value = false
+                    }
+                ) {
+                    Text(
+                        "内部リンクをコピー",
+                        modifier = Modifier.padding(8.dp).fillMaxSize()
+                    )
                 }
-            ) {
-                Text(
-                    "内部リンクをコピー",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
             }
         }
     }
