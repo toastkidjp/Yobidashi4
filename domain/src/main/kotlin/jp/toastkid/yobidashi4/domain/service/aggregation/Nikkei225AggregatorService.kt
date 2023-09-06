@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.aggregation
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.aggregation.Nikkei225AggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import kotlin.io.path.nameWithoutExtension
 
 class Nikkei225AggregatorService(private val articlesReaderService: ArticlesReaderService) {
 
@@ -11,7 +12,7 @@ class Nikkei225AggregatorService(private val articlesReaderService: ArticlesRead
 
         articlesReaderService.invoke()
                 .parallel()
-                .map { it.toFile().nameWithoutExtension to Files.readAllLines(it) }
+                .map { it.nameWithoutExtension to Files.readAllLines(it) }
                 .filter { it.first.startsWith(keyword) }
                 .forEach {
                     extract(result, it)
