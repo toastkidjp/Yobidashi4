@@ -30,6 +30,9 @@ class MediaFileFinderTest {
     private lateinit var path: Path
 
     @MockK
+    private lateinit var subFolder: Path
+
+    @MockK
     private lateinit var fileName: Path
 
     @BeforeEach
@@ -41,9 +44,11 @@ class MediaFileFinderTest {
 
         mockkStatic(Files::class)
         every { Files.list(path) } returns Stream.of(mockk())
-        every { Files.list(root) } answers { Stream.of(path) }
+        every { Files.list(subFolder) } returns Stream.of(path)
+        every { Files.list(root) } answers { Stream.of(path, subFolder) }
         every { Files.isDirectory(root) } returns true
         every { Files.isDirectory(path) } returns false
+        every { Files.isDirectory(subFolder) } returns true
 
         every { path.fileName } returns fileName
         every { path.isExecutable() } returns true
