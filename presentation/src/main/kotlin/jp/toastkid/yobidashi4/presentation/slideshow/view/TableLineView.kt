@@ -14,12 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 
 @Composable
-fun TableLineView(line: TableLine) {
+fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
             line.header.forEachIndexed { index, item ->
@@ -29,7 +30,7 @@ fun TableLineView(line: TableLine) {
 
                 Text(
                     item.toString(),
-                    fontSize = 24.sp,
+                    fontSize = fontSize,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .weight(1f)
