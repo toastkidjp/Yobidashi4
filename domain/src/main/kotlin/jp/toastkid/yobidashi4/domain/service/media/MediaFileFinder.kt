@@ -25,10 +25,6 @@ class MediaFileFinder {
     }
 
     private fun readFromFolder(folder: Path): List<Path> {
-        if (folder.isDirectory().not()) {
-            return emptyList()
-        }
-
         return Files.list(folder)
             .filter {
                 isKeep(it)
