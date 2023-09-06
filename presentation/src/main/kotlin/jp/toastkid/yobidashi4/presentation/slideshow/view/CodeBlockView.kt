@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun CodeBlockView(line: CodeBlockLine) {
+fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp) {
     val coroutineScope = rememberCoroutineScope()
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
@@ -95,7 +96,7 @@ fun CodeBlockView(line: CodeBlockLine) {
                             ) {
                                 Text(
                                     lineNumberText,
-                                    fontSize = 28.sp,
+                                    fontSize = fontSize,
                                     fontFamily = FontFamily.Monospace,
                                     textAlign = TextAlign.End,
                                     lineHeight = 1.5.em
@@ -110,7 +111,7 @@ fun CodeBlockView(line: CodeBlockLine) {
                 textLayoutResultState.value = it
             },
             textStyle = TextStyle(
-                fontSize = 28.sp,
+                fontSize = fontSize,
                 fontFamily = FontFamily.Monospace,
                 lineHeight = 1.5.em
             ),
