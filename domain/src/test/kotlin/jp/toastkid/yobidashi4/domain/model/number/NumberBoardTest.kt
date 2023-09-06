@@ -62,11 +62,4 @@ class NumberBoardTest {
         assertEquals(2, picked)
     }
 
-    @Test
-    fun pick() {
-        numberBoard.placeRandom()
-
-        numberBoard.pick(0, 0)
-    }
-
 }
