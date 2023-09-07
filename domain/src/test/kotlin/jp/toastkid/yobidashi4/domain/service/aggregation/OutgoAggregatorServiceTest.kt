@@ -8,11 +8,11 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -28,11 +28,8 @@ internal class OutgoAggregatorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val file = mockk<File>()
-        every { file.getName() }.returns("file.md")
-
         val path = mockk<Path>()
-        every { path.toFile() }.returns(file)
+        every { path.nameWithoutExtension }.returns("file.md")
 
         mockkStatic(Files::class)
         val lines = """
