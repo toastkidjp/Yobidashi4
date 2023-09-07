@@ -27,8 +27,6 @@ internal class ArticleTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { path.fileName }.returns(path)
-
-        mockkStatic("kotlin.io.path.PathsKt")
         every { path.nameWithoutExtension }.returns("test")
     }
 
