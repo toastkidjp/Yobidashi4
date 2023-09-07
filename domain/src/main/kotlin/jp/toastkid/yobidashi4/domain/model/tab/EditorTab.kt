@@ -15,8 +15,6 @@ data class EditorTab(
     var preview: Preview = Preview.CLOSE
 ): Tab {
 
-    private var title: String = path.nameWithoutExtension
-
     private val editing: Editing = Editing()
 
     override fun title(): String = "${path.nameWithoutExtension}${if (editing.shouldShowIndicator()) " * " else ""}"
