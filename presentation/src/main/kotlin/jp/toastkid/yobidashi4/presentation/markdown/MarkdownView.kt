@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MarkdownView(tab: EditorTab, modifier: Modifier) {
+internal fun MarkdownView(tab: EditorTab, modifier: Modifier) {
     val linkGenerator = remember { LinkGenerator() }
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
