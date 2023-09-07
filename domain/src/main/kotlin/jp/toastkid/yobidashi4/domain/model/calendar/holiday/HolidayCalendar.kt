@@ -11,10 +11,7 @@ enum class HolidayCalendar(
     JAPAN(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5");
 
     fun getHolidays(year: Int, month: Int): List<Holiday> {
-        return offDayFinderService.invoke(
-            year,
-            month
-        )
+        return offDayFinderService.invoke(year, month)
     }
 
     companion object {
