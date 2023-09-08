@@ -15,8 +15,8 @@ internal class EquinoxDayCalculatorTest {
 
     @Test
     fun test() {
-        assertEquals(20, equinoxDayCalculator.calculateVernalEquinoxDay(2020))
-        assertEquals(22, equinoxDayCalculator.calculateAutumnalEquinoxDay(2020))
+        assertEquals(20, equinoxDayCalculator.calculateVernalEquinoxDay(2020).day)
+        assertEquals(22, equinoxDayCalculator.calculateAutumnalEquinoxDay(2020).day)
     }
 
 }
