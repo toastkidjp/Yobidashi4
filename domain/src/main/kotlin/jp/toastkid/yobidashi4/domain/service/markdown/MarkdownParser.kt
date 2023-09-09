@@ -31,7 +31,7 @@ class MarkdownParser {
 
     private val listLineBuilder = ListLineBuilder()
 
-    private val orderedListPrefixPattern = "[0-9]{1,}\\.".toRegex()
+    private val orderedListPrefixPattern = "^[0-9]+\\.".toRegex()
 
     /**
      * Convert to Slides.

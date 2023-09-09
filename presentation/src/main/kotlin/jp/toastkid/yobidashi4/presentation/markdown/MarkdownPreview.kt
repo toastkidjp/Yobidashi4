@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,7 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -84,38 +90,48 @@ fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
             }
         }
         return@onKeyEvent false
-    }.focusRequester(focusRequester).focusable(true).padding(8.dp)) {
+    }.focusRequester(focusRequester).focusable(true).verticalScroll(scrollState)) {
         val content = MarkdownParser().invoke(tab.path)
 
-        Column(modifier = Modifier.verticalScroll(scrollState)) {
-            content.lines().forEach { line ->
-                when (line) {
-                    is TextBlock -> {
-                        TextLineView(
-                            line.text,
-                            TextStyle(
-                                fontSize = line.fontSize().sp,
-                                fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
-                                fontStyle = if (line.quote) FontStyle.Italic else FontStyle.Normal,
+        SelectionContainer {
+            Column(modifier = Modifier.padding(8.dp)) {
+                content.lines().forEach { line ->
+                    when (line) {
+                        is TextBlock -> {
+                            TextLineView(
+                                line.text,
+                                TextStyle(
+                                    fontSize = line.fontSize().sp,
+                                    fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
+                                    fontStyle = if (line.quote) FontStyle.Italic else FontStyle.Normal,
+                                ),
+                                Modifier.padding(bottom = 8.dp)
                             )
-                        )
-                    }
-                    is ListLine -> Column {
-                        line.list.forEachIndexed { index, it ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                if (line.ordered) {
-                                    Text("${index + 1}. ", fontSize = 14.sp)
+                        }
+                        is ListLine -> Column {
+                            line.list.forEachIndexed { index, it ->
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    when {
+                                        line.ordered -> DisableSelection {
+                                            Text("${index + 1}. ", fontSize = 14.sp)
+                                        }
+                                        line.taskList -> Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
+                                        else -> DisableSelection {
+                                            Text("・ ", fontSize = 14.sp)
+                                        }
+                                    }
+                                    TextLineView(
+                                        if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
+                                        TextStyle(fontSize = 14.sp),
+                                        Modifier.padding(bottom = 4.dp)
+                                    )
                                 }
-                                if (line.taskList) {
-                                    Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
-                                }
-                                TextLineView(if (line.taskList) it.substring(it.indexOf("] ") + 1) else it, TextStyle(fontSize = 14.sp))
                             }
                         }
+                        is TableLine -> TableLineView(line, 16.sp)
+                        is CodeBlockLine -> CodeBlockView(line, 16.sp)
+                        else -> Unit
                     }
-                    is TableLine -> TableLineView(line, 16.sp)
-                    is CodeBlockLine -> CodeBlockView(line, 16.sp)
-                    else -> Unit
                 }
             }
         }
@@ -132,21 +148,29 @@ fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun TextLineView(text: String, textStyle: TextStyle) {
+private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
+    val lastLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val annotatedString = annotate(LinkGenerator().invoke(text), MaterialTheme.colors.onSurface)
     ClickableText(
         annotatedString,
         style = textStyle,
-        onClick = { offset ->
-            annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset)
-                .firstOrNull()?.let { annotation ->
+        onClick = {},
+        modifier = modifier.onPointerEvent(PointerEventType.Release) {
+            val offset = lastLayoutResult.value?.getOffsetForPosition(it.changes.first().position) ?: 0
+            annotatedString
+                .getStringAnnotations(tag = "URL", start = offset, end = offset)
+                .firstOrNull()
+                ?.let { annotation ->
                     if (annotation.tag == "URL") {
                         LinkBehaviorService().invoke(annotation.item)
                     }
                 }
         },
-        modifier = Modifier.padding(bottom = 8.dp)
+        onTextLayout = { layoutResult ->
+            lastLayoutResult.value = layoutResult
+        }
     )
 }
 
@@ -162,7 +186,6 @@ private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedStri
         addStyle(
             style = SpanStyle(
                 color = normalTextColor,
-                fontSize = 14.sp,
             ), start = lastIndex, end = startIndex
         )
 
@@ -171,7 +194,6 @@ private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedStri
         addStyle(
             style = SpanStyle(
                 color = Color(0xff64B5F6),
-                fontSize = 14.sp,
                 textDecoration = TextDecoration.Underline
             ), start = annotateStart, end = annotateStart + title.length
         )
@@ -189,7 +211,6 @@ private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedStri
     addStyle(
         style = SpanStyle(
             color = normalTextColor,
-            fontSize = 14.sp,
         ), start = finalTextStart, end = length
     )
 }
