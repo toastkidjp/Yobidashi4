@@ -92,11 +92,11 @@ fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
             }
         }
         return@onKeyEvent false
-    }.focusRequester(focusRequester).focusable(true).verticalScroll(scrollState)) {
+    }.focusRequester(focusRequester).focusable(true)) {
         val content = MarkdownParser().invoke(tab.path)
 
         SelectionContainer {
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
                 content.lines().forEach { line ->
                     when (line) {
                         is TextBlock -> {
