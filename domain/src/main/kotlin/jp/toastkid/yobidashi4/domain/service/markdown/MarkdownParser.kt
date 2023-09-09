@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.markdown
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLineBuilder
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
@@ -32,6 +33,8 @@ class MarkdownParser {
     private val listLineBuilder = ListLineBuilder()
 
     private val orderedListPrefixPattern = "^[0-9]+\\.".toRegex()
+
+    private val horizontalRulePattern = "^-{3,}$".toRegex()
 
     /**
      * Convert to Slides.
@@ -131,6 +134,11 @@ class MarkdownParser {
                 if (orderedListPrefixPattern.containsMatchIn(line)) {
                     listLineBuilder.setOrdered()
                     listLineBuilder.add(line)
+                    return@forEach
+                }
+
+                if (horizontalRulePattern.containsMatchIn(line)) {
+                    markdown.add(HorizontalRule())
                     return@forEach
                 }
 
