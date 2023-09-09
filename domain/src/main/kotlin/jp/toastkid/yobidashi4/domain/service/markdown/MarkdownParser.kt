@@ -47,7 +47,7 @@ class MarkdownParser {
                 if (line.startsWith("#")) {
                     markdown.add(
                         TextBlock(
-                            line.substring(line.indexOf(" ")),
+                            line.substring(line.indexOf(" ") + 1),
                             level = line.split(" ")[0].length
                         )
                     )
