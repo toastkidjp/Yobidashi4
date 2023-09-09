@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +45,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.util.regex.Pattern
+import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
@@ -128,6 +130,7 @@ fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
                                 }
                             }
                         }
+                        is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
                         is TableLine -> TableLineView(line, 16.sp)
                         is CodeBlockLine -> CodeBlockView(line, 16.sp)
                         else -> Unit
