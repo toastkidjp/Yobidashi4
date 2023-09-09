@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 
 @Composable
-fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp) {
-    Column {
+fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
             line.header.forEachIndexed { index, item ->
                 if (index != 0) {
