@@ -160,7 +160,20 @@ class MarkdownParser {
                     return@forEach
                 }
             }
-            markdown.add(TextBlock(stringBuilder.toString()))
+
+            if (stringBuilder.isNotEmpty()) {
+                markdown.add(TextBlock(stringBuilder.toString()))
+            }
+            if (listLineBuilder.isNotEmpty()) {
+                markdown.add(listLineBuilder.build())
+                listLineBuilder.clear()
+            }
+            if (tableBuilder != null) {
+                tableBuilder?.build()?.let {
+                    markdown.add(it)
+                }
+                tableBuilder = null
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
