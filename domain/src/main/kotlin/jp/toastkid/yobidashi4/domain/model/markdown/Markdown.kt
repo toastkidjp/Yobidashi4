@@ -11,6 +11,10 @@ data class Markdown(
         lines.add(line)
     }
 
+    fun addAll(lines: List<Line>) {
+        this.lines.addAll(lines)
+    }
+
     fun lines(): List<Line> = lines
 
 }

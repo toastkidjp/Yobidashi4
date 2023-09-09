@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -44,11 +46,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.net.URL
 import java.util.regex.Pattern
+import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
@@ -130,6 +135,11 @@ fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
                                 }
                             }
                         }
+                        is ImageLine -> Image(
+                            ImageIO.read(URL(line.source)).toComposeImageBitmap(),
+                            contentDescription = line.source,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
                         is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
                         is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
                         is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))

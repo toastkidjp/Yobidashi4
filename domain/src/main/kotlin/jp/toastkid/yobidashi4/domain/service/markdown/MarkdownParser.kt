@@ -66,7 +66,7 @@ class MarkdownParser {
                         return@forEach
                     }*/
 
-                    // TODO builder?.addLines(imageExtractor.invoke(line))
+                    markdown.addAll(imageExtractor.invoke(line))
                     return@forEach
                 }
 
