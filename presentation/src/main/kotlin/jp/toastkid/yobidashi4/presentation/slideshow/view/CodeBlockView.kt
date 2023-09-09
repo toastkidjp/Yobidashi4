@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp) {
+fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
@@ -60,7 +60,7 @@ fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp) {
     val content = remember { mutableStateOf(TextFieldValue(line.code)) }
     val codeStringBuilder = remember { CodeStringBuilder() }
 
-    Box(modifier = Modifier.background(MaterialTheme.colors.surface)) {
+    Box(modifier = modifier.background(MaterialTheme.colors.surface)) {
         BasicTextField(
             value = content.value,
             onValueChange = {
