@@ -107,7 +107,6 @@ fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
                                     Text("${index + 1}. ", fontSize = 14.sp)
                                 }
                                 if (line.taskList) {
-                                    println("${it.startsWith("[x]")} `$it`")
                                     Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
                                 }
                                 TextLineView(if (line.taskList) it.substring(it.indexOf("] ") + 1) else it, TextStyle(fontSize = 14.sp))
