@@ -147,7 +147,7 @@ private fun TextLineView(text: String, textStyle: TextStyle) {
                     }
                 }
         },
-        modifier = Modifier.padding(bottom = 4.dp)
+        modifier = Modifier.padding(bottom = 8.dp)
     )
 }
 
