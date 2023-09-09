@@ -42,13 +42,13 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp) {
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         line.table.forEach { itemRow ->
-            TableRow(itemRow)
+            TableRow(itemRow, fontSize)
         }
     }
 }
 
 @Composable
-private fun TableRow(itemRow: List<Any>) {
+private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             itemRow.forEachIndexed { index, any ->
@@ -60,7 +60,7 @@ private fun TableRow(itemRow: List<Any>) {
                 }
                 Text(
                     any.toString(),
-                    fontSize = 24.sp,
+                    fontSize = fontSize,
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp)
