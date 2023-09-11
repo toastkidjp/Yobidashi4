@@ -19,8 +19,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,109 +57,128 @@ import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
+import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MarkdownPreview(tab: EditorTab, modifier: Modifier) {
+fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    Box(modifier = modifier.onKeyEvent {
-        when (it.key) {
-            Key.DirectionUp -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(-50f)
-                }
-                return@onKeyEvent true
-            }
-            Key.DirectionDown -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(50f)
-                }
-                return@onKeyEvent true
-            }
-            Key.PageUp -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(-300f)
-                }
-                return@onKeyEvent true
-            }
-            Key.PageDown -> {
-                coroutineScope.launch {
-                    scrollState.animateScrollBy(300f)
-                }
-                return@onKeyEvent true
-            }
-        }
-        return@onKeyEvent false
-    }.focusRequester(focusRequester).focusable(true)) {
-        val content = MarkdownParser().invoke(tab.path)
 
-        SelectionContainer {
-            Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
-                content.lines().forEach { line ->
-                    when (line) {
-                        is TextBlock -> {
-                            TextLineView(
-                                line.text,
-                                TextStyle(
-                                    fontSize = line.fontSize().sp,
-                                    fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
-                                    fontStyle = if (line.quote) FontStyle.Italic else FontStyle.Normal,
-                                ),
-                                Modifier.padding(bottom = 8.dp)
-                            )
-                        }
-                        is ListLine -> Column {
-                            line.list.forEachIndexed { index, it ->
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    when {
-                                        line.ordered -> DisableSelection {
-                                            Text("${index + 1}. ", fontSize = 14.sp)
+    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f)) {
+        Box(modifier = modifier.onKeyEvent {
+            when (it.key) {
+                Key.DirectionUp -> {
+                    coroutineScope.launch {
+                        scrollState.animateScrollBy(-50f)
+                    }
+                    return@onKeyEvent true
+                }
+                Key.DirectionDown -> {
+                    coroutineScope.launch {
+                        scrollState.animateScrollBy(50f)
+                    }
+                    return@onKeyEvent true
+                }
+                Key.PageUp -> {
+                    coroutineScope.launch {
+                        scrollState.animateScrollBy(-300f)
+                    }
+                    return@onKeyEvent true
+                }
+                Key.PageDown -> {
+                    coroutineScope.launch {
+                        scrollState.animateScrollBy(300f)
+                    }
+                    return@onKeyEvent true
+                }
+            }
+            return@onKeyEvent false
+        }.focusRequester(focusRequester).focusable(true)) {
+            val content = tab.markdown()
+
+            SelectionContainer {
+                Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
+                    content.lines().forEach { line ->
+                        when (line) {
+                            is TextBlock -> {
+                                TextLineView(
+                                    line.text,
+                                    TextStyle(
+                                        fontSize = line.fontSize().sp,
+                                        fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
+                                        fontStyle = if (line.quote) FontStyle.Italic else FontStyle.Normal,
+                                    ),
+                                    Modifier.padding(bottom = 8.dp)
+                                )
+                            }
+                            is ListLine -> Column {
+                                line.list.forEachIndexed { index, it ->
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        when {
+                                            line.ordered -> DisableSelection {
+                                                Text("${index + 1}. ", fontSize = 14.sp)
+                                            }
+                                            line.taskList -> Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
+                                            else -> DisableSelection {
+                                                Text("・ ", fontSize = 14.sp)
+                                            }
                                         }
-                                        line.taskList -> Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
-                                        else -> DisableSelection {
-                                            Text("・ ", fontSize = 14.sp)
-                                        }
+                                        TextLineView(
+                                            if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
+                                            TextStyle(fontSize = 14.sp),
+                                            Modifier.padding(bottom = 4.dp)
+                                        )
                                     }
-                                    TextLineView(
-                                        if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
-                                        TextStyle(fontSize = 14.sp),
-                                        Modifier.padding(bottom = 4.dp)
-                                    )
                                 }
                             }
+                            is ImageLine -> Image(
+                                ImageIO.read(URL(line.source)).toComposeImageBitmap(),
+                                contentDescription = line.source,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                            is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
+                            is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                            is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                            else -> Unit
                         }
-                        is ImageLine -> Image(
-                            ImageIO.read(URL(line.source)).toComposeImageBitmap(),
-                            contentDescription = line.source,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                        is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
-                        is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                        is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                        else -> Unit
                     }
                 }
             }
-        }
 
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
+            LaunchedEffect(tab) {
+                scrollState.scrollTo(tab.scrollPosition())
 
-        VerticalScrollbar(
-            adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                Alignment.CenterEnd
+                focusRequester.requestFocus()
+            }
+
+            DisposableEffect(tab) {
+                onDispose {
+                    val viewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm
+                    val indexOf = viewModel.tabs.indexOf(tab)
+                    if (indexOf == -1) {
+                        return@onDispose
+                    }
+                    tab.setScrollPosition(scrollState.value)
+                    viewModel.tabs.set(indexOf, tab)
+                }
+            }
+
+            VerticalScrollbar(
+                adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
+                    Alignment.CenterEnd
+                )
             )
-        )
+        }
     }
 }
 
