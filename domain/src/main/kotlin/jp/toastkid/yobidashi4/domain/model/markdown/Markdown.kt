@@ -7,6 +7,8 @@ data class Markdown(
     private val lines: MutableList<Line> = mutableListOf()
 ) {
 
+    fun title() = title
+
     fun add(line: Line) {
         lines.add(line)
     }
