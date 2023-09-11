@@ -6,7 +6,6 @@ import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -47,8 +45,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -62,38 +60,13 @@ fun TableView(aggregationResult: AggregationResult) {
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     val state = rememberLazyListState()
+    val scrollAction = remember { KeyboardScrollAction(state) }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            when (it.key) {
-                Key.DirectionUp -> {
-                    coroutineScope.launch {
-                        state.animateScrollBy(-50f)
-                    }
-                    return@onKeyEvent true
-                }
-                Key.DirectionDown -> {
-                    coroutineScope.launch {
-                        state.animateScrollBy(50f)
-                    }
-                    return@onKeyEvent true
-                }
-                Key.PageUp -> {
-                    coroutineScope.launch {
-                        state.animateScrollBy(-300f)
-                    }
-                    return@onKeyEvent true
-                }
-                Key.PageDown -> {
-                    coroutineScope.launch {
-                        state.animateScrollBy(300f)
-                    }
-                    return@onKeyEvent true
-                }
-            }
-            return@onKeyEvent false
+            scrollAction.invoke(coroutineScope, it.key)
         }.focusRequester(focusRequester).focusable(true)
     ) {
         Box {
