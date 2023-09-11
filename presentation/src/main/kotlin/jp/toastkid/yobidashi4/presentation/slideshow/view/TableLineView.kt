@@ -17,7 +17,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -64,10 +67,21 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
     Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        val cursorOn = remember { mutableStateOf(false) }
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(
+            if (cursorOn.value) MaterialTheme.colors.primary else MaterialTheme.colors.surface.copy(alpha = 0.25f)
+        )
+            .onPointerEvent(PointerEventType.Enter) {
+                cursorOn.value = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                cursorOn.value = false
+            }
+        ) {
             itemRow.forEachIndexed { index, any ->
                 if (index != 0) {
                     Divider(
@@ -77,6 +91,7 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
                 }
                 Text(
                     any.toString(),
+                    color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                     fontSize = fontSize,
                     modifier = Modifier
                         .weight(1f)
