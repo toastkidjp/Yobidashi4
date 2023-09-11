@@ -47,31 +47,27 @@ internal fun LegacyEditorView(tab: EditorTab) {
             Row(
                 modifier = Modifier.weight(1f)
             ) {
-                if (tab.preview == EditorTab.Preview.FULL) {
-                    MarkdownView(tab, Modifier.weight(1f))
-                } else {
-                    Box(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        SwingPanel(
-                            background = Color.Transparent,
-                            factory = {
-                                textEditor.getContent()
-                            },
-                            modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
-                        )
-                    }
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    SwingPanel(
+                        background = Color.Transparent,
+                        factory = {
+                            textEditor.getContent()
+                        },
+                        modifier = Modifier.fillMaxSize().focusRequester(focusRequester)
+                    )
+                }
 
-                    val showPreview = remember { mutableStateOf(tab.showPreview()) }
+                val showPreview = remember { mutableStateOf(tab.showPreview()) }
 
-                    if (showPreview.value) {
-                        MarkdownView(tab, Modifier.widthIn(max = 360.dp))
-                    }
+                if (showPreview.value) {
+                    MarkdownView(tab, Modifier.widthIn(max = 360.dp))
+                }
 
-                    LaunchedEffect(tab) {
-                        tab.update().collect {
-                            showPreview.value = tab.showPreview()
-                        }
+                LaunchedEffect(tab) {
+                    tab.update().collect {
+                        showPreview.value = tab.showPreview()
                     }
                 }
             }
@@ -80,9 +76,8 @@ internal fun LegacyEditorView(tab: EditorTab) {
     }
 
     DisposableEffect(tab.path) {
-        if (tab.preview != EditorTab.Preview.FULL) {
-            focusRequester.requestFocus()
-        }
+        focusRequester.requestFocus()
+
         textEditor.setText(tab.path, tab.getContent())
         textEditor.setCaretPosition(tab.caretPosition())
         onDispose {
