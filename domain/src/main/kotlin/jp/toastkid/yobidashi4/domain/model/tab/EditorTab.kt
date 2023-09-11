@@ -78,6 +78,5 @@ data class EditorTab(
     }
 
     companion object {
-        fun makePreviewTab(path: Path) = EditorTab(path, Preview.FULL)
     }
 }
