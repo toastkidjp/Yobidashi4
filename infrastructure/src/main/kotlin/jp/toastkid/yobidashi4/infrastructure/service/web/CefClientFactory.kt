@@ -100,7 +100,7 @@ class CefClientFactory(
             ): Boolean {
                 target_url ?: return true
                 viewModel.openUrl(target_url, false)
-                return true
+                return false
             }
         })
         client.addRequestHandler(object : CefRequestHandlerAdapter() {
@@ -135,7 +135,8 @@ class CefClientFactory(
                     target_url?.let {
                         viewModel.openUrl(it, true)
                     }
-                    return true
+
+                    return false
                 }
                 return super.onOpenURLFromTab(browser, frame, target_url, user_gesture)
             }
