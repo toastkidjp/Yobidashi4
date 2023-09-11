@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,13 +20,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,6 +48,7 @@ import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.pathString
@@ -63,12 +71,19 @@ fun WebHistoryView() {
 
     val dateFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss").withLocale(Locale.ENGLISH) }
 
+    val coroutineScope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
+    val state = rememberLazyListState()
+    val scrollAction = remember { KeyboardScrollAction(state) }
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier.onKeyEvent {
+            return@onKeyEvent scrollAction.invoke(coroutineScope, it.key)
+        }.focusRequester(focusRequester).focusable(true)
     ) {
         Box {
-            val state = rememberLazyListState()
             LazyColumn(
                 state = state,
                 userScrollEnabled = true,
@@ -128,6 +143,10 @@ fun WebHistoryView() {
                 adapter = rememberScrollbarAdapter(state),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
+
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
         }
     }
 }
