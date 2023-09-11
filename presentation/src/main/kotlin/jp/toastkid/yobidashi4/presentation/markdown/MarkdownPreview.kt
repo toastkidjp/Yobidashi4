@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +32,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -60,10 +57,10 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
+import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -73,37 +70,13 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val scrollAction = remember { KeyboardScrollAction(scrollState) }
 
-    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f)) {
-        Box(modifier = modifier.onKeyEvent {
-            when (it.key) {
-                Key.DirectionUp -> {
-                    coroutineScope.launch {
-                        scrollState.animateScrollBy(-50f)
-                    }
-                    return@onKeyEvent true
-                }
-                Key.DirectionDown -> {
-                    coroutineScope.launch {
-                        scrollState.animateScrollBy(50f)
-                    }
-                    return@onKeyEvent true
-                }
-                Key.PageUp -> {
-                    coroutineScope.launch {
-                        scrollState.animateScrollBy(-300f)
-                    }
-                    return@onKeyEvent true
-                }
-                Key.PageDown -> {
-                    coroutineScope.launch {
-                        scrollState.animateScrollBy(300f)
-                    }
-                    return@onKeyEvent true
-                }
-            }
-            return@onKeyEvent false
-        }.focusRequester(focusRequester).focusable(true)) {
+    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
+        modifier = modifier.onKeyEvent { scrollAction(coroutineScope, it.key) }
+            .focusRequester(focusRequester)
+    ) {
+        Box {
             val content = tab.markdown()
 
             SelectionContainer {
