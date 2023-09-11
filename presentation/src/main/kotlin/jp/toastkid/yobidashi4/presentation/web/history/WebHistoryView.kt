@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.web.history
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,14 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.net.MalformedURLException
@@ -41,7 +47,7 @@ import kotlin.io.path.pathString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun WebHistoryView() {
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
@@ -69,7 +75,20 @@ fun WebHistoryView() {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(webHistories) { bookmark ->
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
+                    val cursorOn = remember { mutableStateOf(false) }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.animateItemPlacement()
+                            .background(
+                                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
+                            )
+                            .onPointerEvent(PointerEventType.Enter) {
+                                cursorOn.value = true
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                cursorOn.value = false
+                            }
+                    ) {
                         val iconPath = favicons.firstOrNull {
                             val host = extractHost(bookmark) ?: return@firstOrNull false
                             val startsWith = it.fileName.pathString.startsWith(host)
@@ -89,12 +108,15 @@ fun WebHistoryView() {
                             .padding(horizontal = 16.dp)
                             .animateItemPlacement()
                         ) {
-                            Text(bookmark.title)
-                            Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+
+                            Text(bookmark.title, color = textColor)
+                            Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
                             Text(
                                 LocalDateTime
                                     .ofInstant(Instant.ofEpochMilli(bookmark.lastVisitedTime), ZoneId.systemDefault())
                                     .format(dateFormatter),
+                                color = textColor,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis)
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                         }
