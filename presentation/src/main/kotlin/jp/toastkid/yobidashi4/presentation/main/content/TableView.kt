@@ -147,10 +147,27 @@ fun TableView(aggregationResult: AggregationResult) {
                                     }
                             ) {
                                 Icon(
+                                    painter = painterResource("images/icon/ic_markdown.xml"),
+                                    contentDescription = "Open preview",
+                                    tint = MaterialTheme.colors.secondary,
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                        .padding(start = 8.dp)
+                                        .clickable {
+                                            val koin = object : KoinComponent {
+                                                val articleFactory: ArticleFactory by inject()
+                                                val vm: MainViewModel by inject()
+                                            }
+                                            val nextArticle = koin.articleFactory.withTitle(article[0].toString())
+                                            koin.vm.openPreview(nextArticle.path())
+                                        }
+                                )
+
+                                Icon(
                                     painter = painterResource("images/icon/ic_edit.xml"),
                                     contentDescription = "Open file",
                                     tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(vertical = 4.dp)
+                                        .padding(start = 4.dp)
                                         .clickable {
                                             val koin = object : KoinComponent {
                                                 val articleFactory: ArticleFactory by inject()
