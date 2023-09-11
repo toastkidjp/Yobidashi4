@@ -1,16 +1,21 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,27 +26,39 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 
 @Composable
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
-            line.header.forEachIndexed { index, item ->
-                if (index != 0) {
-                    Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
-                }
+    var lastSorted = remember { -1 to false }
 
-                Text(
-                    item.toString(),
-                    fontSize = fontSize,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp)
-                )
+    val tableData = remember { mutableStateOf(line.table) }
+
+    Column(modifier = modifier) {
+        DisableSelection {
+            Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+                line.header.forEachIndexed { index, item ->
+                    if (index != 0) {
+                        Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
+                    }
+
+                    Text(
+                        item.toString(),
+                        fontSize = fontSize,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
+                                lastSorted = index to lastSortOrder.not()
+
+                                sort(lastSortOrder, index, tableData)
+                            }
+                    )
+                }
             }
         }
 
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
-        line.table.forEach { itemRow ->
+        tableData.value.forEach { itemRow ->
             TableRow(itemRow, fontSize)
         }
     }
@@ -69,4 +86,31 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
         }
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
     }
+}
+
+private fun sort(
+    lastSortOrder: Boolean,
+    index: Int,
+    articleStates: MutableState<List<List<Any>>>
+) {
+    val first = articleStates.value.firstOrNull() ?: return
+    val snapshot = articleStates.value
+    val swap = if (lastSortOrder)
+        if (first[index].toString().toDoubleOrNull() != null) {
+            snapshot.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
+        } else if (first[index].toString().toIntOrNull() != null) {
+            snapshot.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
+        } else {
+            snapshot.sortedBy { it[index].toString() }
+        }
+    else
+        if (first[index].toString().toDoubleOrNull() != null) {
+            snapshot.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
+        } else if (first[index].toString().toIntOrNull() != null) {
+            snapshot.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
+        } else {
+            snapshot.sortedByDescending { it[index].toString() }
+        }
+
+    articleStates.value = swap
 }
