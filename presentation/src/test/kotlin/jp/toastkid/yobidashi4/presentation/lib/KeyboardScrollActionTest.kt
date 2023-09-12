@@ -43,7 +43,7 @@ class KeyboardScrollActionTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun up() {
-        keyboardScrollAction.invoke(coroutineScope, Key.DirectionUp)
+        keyboardScrollAction.invoke(coroutineScope, Key.DirectionUp, false)
 
         coVerify(exactly = 1) { state.animateScrollBy(any()) }
     }
@@ -51,7 +51,7 @@ class KeyboardScrollActionTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun down() {
-        keyboardScrollAction.invoke(coroutineScope, Key.DirectionDown)
+        keyboardScrollAction.invoke(coroutineScope, Key.DirectionDown, false)
 
         coVerify(exactly = 1) { state.animateScrollBy(any()) }
     }
@@ -59,7 +59,7 @@ class KeyboardScrollActionTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun pageUp() {
-        keyboardScrollAction.invoke(coroutineScope, Key.PageUp)
+        keyboardScrollAction.invoke(coroutineScope, Key.PageUp, false)
 
         coVerify(exactly = 1) { state.animateScrollBy(any()) }
     }
@@ -67,7 +67,7 @@ class KeyboardScrollActionTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun pageDown() {
-        keyboardScrollAction.invoke(coroutineScope, Key.PageDown)
+        keyboardScrollAction.invoke(coroutineScope, Key.PageDown, false)
 
         coVerify(exactly = 1) { state.animateScrollBy(any()) }
     }
@@ -75,7 +75,7 @@ class KeyboardScrollActionTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun other() {
-        keyboardScrollAction.invoke(coroutineScope, Key.DirectionRight)
+        keyboardScrollAction.invoke(coroutineScope, Key.DirectionRight, false)
 
         coVerify(inverse = true) { state.animateScrollBy(any(), any()) }
     }
