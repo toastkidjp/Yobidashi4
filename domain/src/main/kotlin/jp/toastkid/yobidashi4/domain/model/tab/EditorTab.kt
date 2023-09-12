@@ -77,6 +77,4 @@ data class EditorTab(
         FULL, HALF, CLOSE
     }
 
-    companion object {
-    }
 }
