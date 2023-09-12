@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.SpanStyle
@@ -38,6 +38,7 @@ import com.halilibo.richtext.ui.string.RichTextStringStyle
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
+import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -48,27 +49,10 @@ internal fun MarkdownView(tab: EditorTab, modifier: Modifier) {
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val keyboardScrollAction = remember { KeyboardScrollAction(scrollState) }
 
     Box(modifier = modifier.onKeyEvent {
-        when (it.key) {
-            Key.DirectionUp -> {
-                scrollBy(coroutineScope, scrollState, -50f)
-                return@onKeyEvent true
-            }
-            Key.DirectionDown -> {
-                scrollBy(coroutineScope, scrollState, 50f)
-                return@onKeyEvent true
-            }
-            Key.PageUp -> {
-                scrollBy(coroutineScope, scrollState, -300f)
-                return@onKeyEvent true
-            }
-            Key.PageDown -> {
-                scrollBy(coroutineScope, scrollState, 300f)
-                return@onKeyEvent true
-            }
-        }
-        return@onKeyEvent false
+        keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
     }.focusRequester(focusRequester).focusable(true)) {
         RichTextThemeIntegration(
             contentColor = { MaterialTheme.colors.onSurface }
