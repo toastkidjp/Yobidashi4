@@ -1,10 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -39,8 +37,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -117,15 +113,5 @@ internal fun MarkdownView(tab: EditorTab, modifier: Modifier) {
             adapter = rememberScrollbarAdapter(scrollState),
             modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
         )
-    }
-}
-
-private fun scrollBy(
-    coroutineScope: CoroutineScope,
-    scrollState: ScrollState,
-    value: Float
-) {
-    coroutineScope.launch {
-        scrollState.animateScrollBy(value)
     }
 }
