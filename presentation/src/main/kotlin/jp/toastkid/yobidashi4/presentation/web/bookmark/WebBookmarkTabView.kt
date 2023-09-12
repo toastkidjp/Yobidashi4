@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -72,7 +73,7 @@ internal fun WebBookmarkTabView() {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            return@onKeyEvent scrollAction(coroutineScope, it.key)
+            return@onKeyEvent scrollAction(coroutineScope, it.key, it.isCtrlPressed)
         }.focusRequester(focusRequester).focusable(true)
     ) {
         Box {
