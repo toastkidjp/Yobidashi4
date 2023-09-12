@@ -10,16 +10,18 @@ import kotlinx.coroutines.launch
 class KeyboardScrollAction(private val state: ScrollableState) {
 
     @OptIn(ExperimentalComposeUiApi::class)
-    operator fun invoke(coroutineScope: CoroutineScope, key: Key) = when (key) {
+    operator fun invoke(coroutineScope: CoroutineScope, key: Key, controlDown: Boolean) = when (key) {
         Key.DirectionUp -> {
             coroutineScope.launch {
-                state.animateScrollBy(-50f)
+                val max = if (controlDown) Float.MAX_VALUE else 50f
+                state.animateScrollBy(-1f * max)
             }
             true
         }
         Key.DirectionDown -> {
             coroutineScope.launch {
-                state.animateScrollBy(50f)
+                val max = if (controlDown) Float.MAX_VALUE else 50f
+                state.animateScrollBy(max)
             }
             true
         }
