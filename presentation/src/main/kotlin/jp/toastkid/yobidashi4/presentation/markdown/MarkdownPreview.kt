@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -73,7 +74,7 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
     val scrollAction = remember { KeyboardScrollAction(scrollState) }
 
     Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
-        modifier = modifier.onKeyEvent { scrollAction(coroutineScope, it.key) }
+        modifier = modifier.onKeyEvent { scrollAction(coroutineScope, it.key, it.isCtrlPressed) }
             .focusRequester(focusRequester)
     ) {
         Box {
