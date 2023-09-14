@@ -72,9 +72,11 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
     Column {
         val cursorOn = remember { mutableStateOf(false) }
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(
-            if (cursorOn.value) MaterialTheme.colors.primary else MaterialTheme.colors.surface.copy(alpha = 0.25f)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.background(
+                if (cursorOn.value) MaterialTheme.colors.primary else MaterialTheme.colors.surface.copy(alpha = 0.25f)
+            )
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
