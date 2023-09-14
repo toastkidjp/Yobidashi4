@@ -10,6 +10,7 @@ import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleOpener
+import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
@@ -128,6 +129,12 @@ class CommandReceiverService(
                     editorAreaView.replaceSelected(true) {
                         if (it.isEmpty()) return@replaceSelected it
                         return@replaceSelected URLDecoder.decode(it, StandardCharsets.UTF_8)
+                    }
+                }
+                MenuCommand.CALCULATE -> {
+                    editorAreaView.replaceSelected(true) {
+                        if (it.isEmpty()) return@replaceSelected it
+                        return@replaceSelected "${SimpleCalculator().invoke(it)  ?: it}"
                     }
                 }
                 MenuCommand.DUPLICATE_LINE -> {
