@@ -74,7 +74,7 @@ data class EditorTab(
     }
 
     enum class Preview {
-        FULL, HALF, CLOSE
+        HALF, CLOSE
     }
 
 }
