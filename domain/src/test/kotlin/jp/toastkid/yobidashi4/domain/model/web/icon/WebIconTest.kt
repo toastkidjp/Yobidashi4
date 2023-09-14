@@ -40,9 +40,8 @@ class WebIconTest {
         unmockkAll()
     }
 
-    // TODO other case.
     @Test
-    fun makeFolderIfNeed() {
+    fun makeFolderNoopIfNotNeed() {
         every { Files.exists(any()) } returns true
         every { Files.createDirectories(any()) } returns path
 
@@ -50,6 +49,17 @@ class WebIconTest {
 
         verify { Files.exists(any()) }
         verify(inverse = true) { Files.createDirectories(any()) }
+    }
+
+    @Test
+    fun makeFolderIfNeed() {
+        every { Files.exists(any()) } returns false
+        every { Files.createDirectories(any()) } returns path
+
+        webIcon.makeFolderIfNeed()
+
+        verify { Files.exists(any()) }
+        verify { Files.createDirectories(any()) }
     }
 
     @Test
