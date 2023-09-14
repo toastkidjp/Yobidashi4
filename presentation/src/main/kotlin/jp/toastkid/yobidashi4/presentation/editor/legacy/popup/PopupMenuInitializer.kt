@@ -90,6 +90,14 @@ class PopupMenuInitializer(private val popupMenu: JPopupMenu) {
         )
 
         popupMenu.add(
+            JMenuItem("Calculate").also {
+                it.addActionListener {
+                    viewModel.emitEditorCommand(MenuCommand.CALCULATE)
+                }
+            }
+        )
+
+        popupMenu.add(
                 JMenuItem("To hyperlink").also {
                     it.addActionListener {
                         viewModel.emitEditorCommand(MenuCommand.TO_HYPERLINK)
