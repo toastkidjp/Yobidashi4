@@ -45,7 +45,7 @@ class WebHistoryFileStore : WebHistoryRepository {
             val split = it.split("\t")
             WebHistory(
                 split[0],
-                split[1],
+                if (split.size >= 2) split[1] else "",
                 if (split.size >= 3) split[2].toLongOrNull() ?: 0 else 0,
                 if (split.size >= 4) split[3].toIntOrNull() ?: 0 else 0
             )
