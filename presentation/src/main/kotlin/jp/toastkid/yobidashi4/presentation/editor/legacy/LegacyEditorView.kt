@@ -89,7 +89,9 @@ internal fun LegacyEditorView(tab: EditorTab) {
 
 @Composable
 private fun StatusLabel(textEditor: TextEditor, modifier: Modifier) {
-    Box(contentAlignment = Alignment.BottomEnd, modifier = modifier.fillMaxWidth().padding(end = 8.dp)) {
+    Box(
+        contentAlignment = Alignment.BottomEnd,
+        modifier = modifier.fillMaxWidth().padding(end = 8.dp)) {
         val statusLabel = textEditor.statusLabel() ?: ""
         Text(statusLabel, fontSize = 16.sp)
     }
