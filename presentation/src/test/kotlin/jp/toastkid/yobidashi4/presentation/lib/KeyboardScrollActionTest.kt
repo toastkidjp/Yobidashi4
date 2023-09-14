@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalComposeUiApi::class)
 class KeyboardScrollActionTest {
 
     @InjectMockKs
@@ -40,7 +41,6 @@ class KeyboardScrollActionTest {
         unmockkAll()
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun up() {
         keyboardScrollAction.invoke(coroutineScope, Key.DirectionUp, false)
@@ -48,7 +48,6 @@ class KeyboardScrollActionTest {
         coVerify(exactly = 1) { state.animateScrollBy(any()) }
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun down() {
         keyboardScrollAction.invoke(coroutineScope, Key.DirectionDown, false)
@@ -56,7 +55,6 @@ class KeyboardScrollActionTest {
         coVerify(exactly = 1) { state.animateScrollBy(any()) }
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun pageUp() {
         keyboardScrollAction.invoke(coroutineScope, Key.PageUp, false)
@@ -64,7 +62,6 @@ class KeyboardScrollActionTest {
         coVerify(exactly = 1) { state.animateScrollBy(-300f) }
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun pageDown() {
         keyboardScrollAction.invoke(coroutineScope, Key.PageDown, false)
@@ -72,7 +69,6 @@ class KeyboardScrollActionTest {
         coVerify(exactly = 1) { state.animateScrollBy(300f) }
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun other() {
         keyboardScrollAction.invoke(coroutineScope, Key.DirectionRight, false)
