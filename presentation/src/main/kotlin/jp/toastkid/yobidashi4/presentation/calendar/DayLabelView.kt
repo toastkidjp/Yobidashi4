@@ -33,7 +33,6 @@ fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, label: String?, offDay: Boolea
     }
 }
 
-private val DAY_FG: Color = Color.Black
 private val OFF_DAY_FG:  Color = Color(220, 50, 55)
 private val SATURDAY_FG:  Color = Color(55, 50, 190)
 private val DAY_BG: Color = Color(250, 250, 255)
