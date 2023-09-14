@@ -38,7 +38,6 @@ import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun MarkdownView(tab: EditorTab, modifier: Modifier) {
     val linkGenerator = remember { LinkGenerator() }
