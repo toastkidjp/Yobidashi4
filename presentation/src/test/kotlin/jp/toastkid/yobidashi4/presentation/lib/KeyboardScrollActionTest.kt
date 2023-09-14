@@ -61,7 +61,7 @@ class KeyboardScrollActionTest {
     fun pageUp() {
         keyboardScrollAction.invoke(coroutineScope, Key.PageUp, false)
 
-        coVerify(exactly = 1) { state.animateScrollBy(any()) }
+        coVerify(exactly = 1) { state.animateScrollBy(-300f) }
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
