@@ -18,11 +18,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
+import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -41,9 +48,17 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
         }
     }
 
+    val keyboardScrollAction = remember { KeyboardScrollAction(scrollState) }
+    val coroutineScope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier.onKeyEvent {
+            keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
+        }
+            .focusRequester(focusRequester)
     ) {
         Box() {
             SelectionContainer {
@@ -75,6 +90,10 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
             }
             VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
                 Alignment.CenterEnd))
+
+            LaunchedEffect(tab) {
+                focusRequester.requestFocus()
+            }
         }
     }
 }
