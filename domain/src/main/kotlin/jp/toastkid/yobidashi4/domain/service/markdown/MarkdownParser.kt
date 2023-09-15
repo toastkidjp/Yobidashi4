@@ -7,7 +7,6 @@ import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLineBuilder
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
-import jp.toastkid.yobidashi4.domain.service.slideshow.BackgroundExtractor
 import jp.toastkid.yobidashi4.domain.service.slideshow.CodeBlockBuilder
 import jp.toastkid.yobidashi4.domain.service.slideshow.ImageExtractor
 import jp.toastkid.yobidashi4.domain.service.slideshow.TableBuilder
@@ -21,8 +20,6 @@ class MarkdownParser {
     private var codeBlockBuilder = CodeBlockBuilder()
 
     private val imageExtractor = ImageExtractor()
-
-    private val backgroundExtractor = BackgroundExtractor()
 
     private val stringBuilder = StringBuilder()
 
