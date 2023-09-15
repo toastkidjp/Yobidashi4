@@ -82,13 +82,14 @@ println("Hello")
     fun invoke() {
         val markdown = markdownParser.invoke(path)
 
+        val lines = markdown.lines()
         assertAll(
             { assertEquals("test", markdown.title()) },
-            { assertTrue(markdown.lines().any { it is TextBlock }) },
-            { assertTrue(markdown.lines().any { it is CodeBlockLine }) },
-            { assertTrue(markdown.lines().any { it is HorizontalRule }) },
-            { assertTrue(markdown.lines().any { it is TableLine }) },
-            { assertTrue(markdown.lines().any { it is ImageLine }) },
+            { assertTrue(lines.any { it is TextBlock }) },
+            { assertTrue(lines.any { it is CodeBlockLine }) },
+            { assertTrue(lines.any { it is HorizontalRule }) },
+            { assertTrue(lines.any { it is TableLine }) },
+            { assertTrue(lines.any { it is ImageLine }) },
         )
     }
 }
