@@ -74,7 +74,7 @@ fun CalendarView() {
                     Surface(modifier = Modifier.weight(1f)) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
-                                "${dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)}",
+                                dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = when (dayOfWeek) {
