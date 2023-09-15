@@ -78,7 +78,7 @@ fun CalendarView() {
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = when (dayOfWeek) {
-                                    DayOfWeek.SUNDAY -> OFF_DAY_FG
+                                    DayOfWeek.SUNDAY -> Color(190, 50, 55)
                                     DayOfWeek.SATURDAY -> SATURDAY_FG
                                     else -> MaterialTheme.colors.onSurface
                                 }
@@ -236,5 +236,4 @@ private fun makeMonth(
     return weeks
 }
 
-private val OFF_DAY_FG: Color = Color(190, 50, 55)
 private val SATURDAY_FG: Color = Color(55, 50, 190)
