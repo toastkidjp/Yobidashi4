@@ -8,8 +8,6 @@ import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
 import org.koin.core.annotation.Single
 
@@ -22,8 +20,6 @@ class BarcodeEncoderImplementation : BarcodeEncoder {
         val hints = hashMapOf(EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M)
 
         val bitMatrix: BitMatrix = writer.encode(contents, BarcodeFormat.QR_CODE, width, height, hints)
-        val image: BufferedImage = toBufferedImage(bitMatrix)
-        ImageIO.write(image, "png", File("barcode.png"))
         return toBufferedImage(bitMatrix)
     }
 
