@@ -92,4 +92,5 @@ println("Hello")
             { assertTrue(lines.any { it is ImageLine }) },
         )
     }
+
 }
