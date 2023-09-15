@@ -88,7 +88,7 @@ println("Hello")
             { assertTrue(lines.any { it is TextBlock }) },
             { assertTrue(lines.any { it is CodeBlockLine }) },
             { assertTrue(lines.any { it is HorizontalRule }) },
-            { assertTrue(lines.any { it is TableLine }) },
+            { assertEquals(2, lines.count { it is TableLine }) },
             { assertTrue(lines.any { it is ImageLine }) },
         )
     }
