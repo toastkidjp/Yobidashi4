@@ -55,17 +55,6 @@ class MarkdownParser {
                 }
 
                 if (line.startsWith("![")) {
-                    /*if (BackgroundExtractor.shouldInvoke(line)) {
-                        backgroundExtractor(line)?.let {
-                            if (markdown.background.isBlank()) {
-                                markdown.background = it
-                                return@forEach
-                            }
-                            builder?.setBackground(it)
-                        }
-                        return@forEach
-                    }*/
-
                     markdown.addAll(imageExtractor.invoke(line))
                     return@forEach
                 }
