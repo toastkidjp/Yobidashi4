@@ -14,7 +14,7 @@ class KeyboardScrollAction(private val state: ScrollableState) {
     operator fun invoke(coroutineScope: CoroutineScope, key: Key, controlDown: Boolean) = when (key) {
         Key.DirectionUp -> {
             coroutineScope.launch {
-                if (state is LazyListState) {
+                if (controlDown && state is LazyListState) {
                     state.scrollToItem(0)
                     return@launch
                 }
@@ -26,7 +26,7 @@ class KeyboardScrollAction(private val state: ScrollableState) {
         }
         Key.DirectionDown -> {
             coroutineScope.launch {
-                if (state is LazyListState) {
+                if (controlDown && state is LazyListState) {
                     state.scrollToItem(state.layoutInfo.totalItemsCount)
                     return@launch
                 }
