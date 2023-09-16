@@ -80,6 +80,13 @@ class KeyboardScrollActionTest {
     }
 
     @Test
+    fun toBottom() {
+        keyboardScrollAction.invoke(coroutineScope, Key.DirectionDown, true)
+
+        coVerify(exactly = 1) { state.animateScrollBy(Float.MAX_VALUE) }
+    }
+
+    @Test
     fun toBottomForLazyListStateCase() {
         keyboardScrollAction = KeyboardScrollAction(lazyListState)
 
