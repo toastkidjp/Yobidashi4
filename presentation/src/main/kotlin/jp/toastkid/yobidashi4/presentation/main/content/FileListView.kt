@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
@@ -237,10 +238,10 @@ private fun FileListItemRow(
     val openOption = remember { mutableStateOf(false) }
     val cursorOn = remember { mutableStateOf(false) }
 
+    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
+
     Box(
-        modifier = modifier.background(
-            if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
-        )
+        modifier = modifier.background(backgroundColor.value)
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
