@@ -189,12 +189,17 @@ private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedStri
         val url = matcher.group(2)
         val startIndex = matcher.start()
         val endIndex = matcher.end()
-        append(text.substring(lastIndex, startIndex))
-        addStyle(
-            style = SpanStyle(
-                color = normalTextColor,
-            ), start = lastIndex, end = startIndex
-        )
+
+        val extracted = text.substring(lastIndex, startIndex)
+        if (extracted.isNotEmpty()) {
+            val styleStart = length
+            append(extracted)
+            addStyle(
+                style = SpanStyle(
+                    color = normalTextColor,
+                ), start = styleStart, end = styleStart + extracted.length
+            )
+        }
 
         val annotateStart = length
         append(title)
@@ -214,6 +219,11 @@ private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedStri
         lastIndex = endIndex
     }
     val finalTextStart = length
+
+    if (lastIndex >= text.length) {
+        return@buildAnnotatedString
+    }
+
     append(text.substring(lastIndex, text.length))
     addStyle(
         style = SpanStyle(
