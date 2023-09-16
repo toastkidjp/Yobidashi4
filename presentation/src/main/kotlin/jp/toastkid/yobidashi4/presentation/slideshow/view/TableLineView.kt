@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.view
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.font.FontWeight
@@ -72,11 +74,10 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
     Column {
         val cursorOn = remember { mutableStateOf(false) }
+        val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.background(
-                if (cursorOn.value) MaterialTheme.colors.primary else MaterialTheme.colors.surface.copy(alpha = 0.25f)
-            )
+            modifier = Modifier.background(backgroundColor.value)
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
