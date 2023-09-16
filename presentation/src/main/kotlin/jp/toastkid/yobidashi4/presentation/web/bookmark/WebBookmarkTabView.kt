@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.web.bookmark
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
@@ -118,12 +119,12 @@ private fun WebBookmarkItemRow(
     modifier: Modifier
 ) {
     val cursorOn = remember { mutableStateOf(false) }
+    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .background(
-                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
-            )
+            .background(backgroundColor.value)
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
