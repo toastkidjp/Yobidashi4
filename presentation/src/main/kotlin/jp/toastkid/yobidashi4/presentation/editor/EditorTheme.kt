@@ -8,9 +8,9 @@ class EditorTheme {
 
     class Code(
         val simple: SpanStyle = SpanStyle(Color(0xFF000B00)),
-        val header: SpanStyle = SpanStyle(Color(0xFF008800), fontWeight = FontWeight.Bold),
-        val table: SpanStyle = SpanStyle(Color(0xFF8800CC)),
-        val quote: SpanStyle = SpanStyle(Color(0xFF7744AA)),
+        val header: SpanStyle = SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold),
+        val table: SpanStyle = SpanStyle(Color(0xFF68BB97)),
+        val quote: SpanStyle = SpanStyle(Color(0xFFCCAAFF)),
         val value: SpanStyle = SpanStyle(Color(0xFF6897BB)),
         val keyword: SpanStyle = SpanStyle(Color(0xFFCC7832)),
         val punctuation: SpanStyle = SpanStyle(Color(0xFFA1C17E)),
