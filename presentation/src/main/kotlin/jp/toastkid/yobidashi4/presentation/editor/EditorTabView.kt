@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 fun EditorTabView(tab: EditorTab) {
     Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f)) {
         SimpleTextEditor(
-            tab.path,
+            tab,
             Modifier
         )
     }
