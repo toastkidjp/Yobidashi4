@@ -67,7 +67,10 @@ internal fun LegacyEditorView(tab: EditorTab) {
                     }
                 }
             }
-            StatusLabel(textEditor, modifier = Modifier.height(if (viewModel.showingSnackbar()) 48.dp else 24.dp))
+            StatusLabel(
+                textEditor.statusLabel(),
+                modifier = Modifier.height(if (viewModel.showingSnackbar()) 48.dp else 24.dp)
+            )
         }
     }
 
