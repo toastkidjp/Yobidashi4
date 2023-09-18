@@ -212,6 +212,29 @@ fun SimpleTextEditor(
                             )
                             true
                         }
+                        it.isCtrlPressed && it.key == Key.Minus -> {
+                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
+                            val selected = content.value.text.substring(content.value.selection.start, content.value.selection.end)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+
+                            val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
+                            val lineStart = textLayoutResult.getLineStart(currentLine)
+
+                            val newText = StringBuilder(content.value.text)
+                                .replace(
+                                    content.value.selection.start,
+                                    content.value.selection.end,
+                                    selected.trimEnd().split("\n").map { "- $it" }.joinToString("\n"))
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                TextRange(lineStart),
+                                content.value.composition
+                            )
+                            true
+                        }
                         else -> false
                     }
                 }
