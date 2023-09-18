@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi4.presentation.markdown.MarkdownView
 @Composable
 fun EditorTabView(tab: EditorTab) {
     val status = remember { mutableStateOf("") }
-    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f)) {
+    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
         Column {
             Row(
                 modifier = Modifier.weight(1f)
