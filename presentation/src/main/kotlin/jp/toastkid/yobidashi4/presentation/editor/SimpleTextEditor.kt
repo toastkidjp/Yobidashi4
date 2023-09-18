@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import java.io.IOException
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -190,6 +191,23 @@ fun SimpleTextEditor(
                             content.value = TextFieldValue(
                                 newText,
                                 content.value.selection,
+                                content.value.composition
+                            )
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.X -> {
+                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
+                            val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
+                            val lineStart = textLayoutResult.getLineStart(currentLine)
+                            val lineEnd = textLayoutResult.getLineEnd(currentLine)
+                            val currentLineText = content.value.text.substring(lineStart, lineEnd + 1)
+                            ClipboardPutterService().invoke(currentLineText)
+                            val newText = StringBuilder(content.value.text)
+                                .delete(lineStart, lineEnd + 1)
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                TextRange(lineStart),
                                 content.value.composition
                             )
                             true
