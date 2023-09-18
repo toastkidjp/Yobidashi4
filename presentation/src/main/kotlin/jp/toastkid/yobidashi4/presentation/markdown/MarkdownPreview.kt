@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,6 +57,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
@@ -132,6 +134,13 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
                 scrollState.scrollTo(tab.scrollPosition())
 
                 focusRequester.requestFocus()
+
+                /*val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                withContext(Dispatchers.IO) {
+                    viewModel.finderFlow().collect {
+                        webViewPool.find(id, it.target, it.upper.not())
+                    }
+                }*/
             }
 
             DisposableEffect(tab) {
@@ -159,7 +168,8 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
 @Composable
 private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     val lastLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-    val annotatedString = annotate(LinkGenerator().invoke(text), MaterialTheme.colors.onSurface)
+    val finderTarget = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow() }
+    val annotatedString = annotate(LinkGenerator().invoke(text), MaterialTheme.colors.onSurface, finderTarget.collectAsState(FindOrder.EMPTY).value.target)
     ClickableText(
         annotatedString,
         style = textStyle,
@@ -181,7 +191,7 @@ private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier)
     )
 }
 
-private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedString {
+private fun annotate(text: String,  normalTextColor: Color, finderTarget: String?) = buildAnnotatedString {
     var lastIndex = 0
     val matcher = internalLinkPattern.matcher(text)
     while (matcher.find()) {
@@ -230,6 +240,18 @@ private fun annotate(text: String,  normalTextColor: Color) = buildAnnotatedStri
             color = normalTextColor,
         ), start = finalTextStart, end = length
     )
+
+    if (finderTarget.isNullOrBlank().not()) {
+        val finderMatcher = Pattern.compile(finderTarget).matcher(text)
+        while (finderMatcher.find()) {
+            addStyle(
+                style = SpanStyle(
+                    color = Color(0xFF00AAFF),
+                    background = Color(0xFFFFFFFF)
+                ), start = finderMatcher.start(), end = finderMatcher.end()
+            )
+        }
+    }
 }
 
 private val internalLinkPattern =
