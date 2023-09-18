@@ -63,6 +63,7 @@ import org.slf4j.LoggerFactory
 @Composable
 fun SimpleTextEditor(
     tab: EditorTab,
+    setStatus: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val content = remember { mutableStateOf(TextFieldValue()) }
@@ -90,6 +91,7 @@ fun SimpleTextEditor(
                     return@BasicTextField
                 }
                 if (content.value.text.length != it.text.length) {
+                    setStatus("Character: ${it.text.length}")
                     mainViewModel.updateEditorContent(
                         tab.path,
                         content.value.text,
@@ -185,6 +187,7 @@ fun SimpleTextEditor(
         focusRequester.requestFocus()
 
         content.value = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
+        setStatus("Character: ${content.value.text.length}")
 
         onDispose {
             val currentText = content.value.text
