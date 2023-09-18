@@ -53,7 +53,9 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.editor.legacy.service.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -293,6 +295,44 @@ fun SimpleTextEditor(
                                 return@onKeyEvent true
                             }
                             mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.L -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.startsWith("http://") || selected.startsWith("https://")) {
+                                val decoratedLink = LinkDecoratorService().invoke(selected)
+                                val newText = StringBuilder(content.value.text)
+                                    .replace(
+                                        selectionStartIndex,
+                                        selectionEndIndex,
+                                        decoratedLink
+                                    )
+                                    .toString()
+                                content.value = TextFieldValue(
+                                    newText,
+                                    TextRange(selectionStartIndex + decoratedLink.length + 1),
+                                    content.value.composition
+                                )
+                                return@onKeyEvent true
+                            }
+
+                            val clipped = ClipboardFetcher().invoke() ?: return@onKeyEvent false
+                            if (clipped.startsWith("http://") || clipped.startsWith("https://")) {
+                                val decoratedLink = LinkDecoratorService().invoke(clipped)
+                                val newText = StringBuilder(content.value.text)
+                                    .insert(
+                                        selectionStartIndex,
+                                        decoratedLink
+                                    )
+                                    .toString()
+                                content.value = TextFieldValue(
+                                    newText,
+                                    TextRange(selectionStartIndex + decoratedLink.length + 1),
+                                    content.value.composition
+                                )
+                                return@onKeyEvent true
+                            }
+
                             true
                         }
                         it.isAltPressed && it.key == Key.DirectionRight -> {
