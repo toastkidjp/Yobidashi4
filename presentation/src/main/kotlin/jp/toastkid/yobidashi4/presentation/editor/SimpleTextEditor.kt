@@ -59,6 +59,8 @@ import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.math.max
+import kotlin.math.min
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -162,6 +164,12 @@ fun SimpleTextEditor(
                     if (it.type != KeyEventType.KeyUp) {
                         return@onKeyEvent false
                     }
+
+                    val rawSelectionStartIndex = content.value.selection.start
+                    val rauSelectionEndIndex = content.value.selection.end
+                    val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
+                    val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
+
                     when {
                         it.isCtrlPressed && it.key == Key.S -> {
                             try {
@@ -184,6 +192,21 @@ fun SimpleTextEditor(
                             true
                         }
                         it.isCtrlPressed && it.key == Key.D -> {
+                            val startIndex = content.value.selection.start
+                            val endIndex = content.value.selection.end
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isNotEmpty()) {
+                                val newText = StringBuilder(content.value.text)
+                                    .insert(max(startIndex, endIndex), selected)
+                                    .toString()
+                                content.value = TextFieldValue(
+                                    newText,
+                                    TextRange(max(startIndex, endIndex)),
+                                    content.value.composition
+                                )
+                                return@onKeyEvent true
+                            }
+
                             val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
                             val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
                             val lineStart = textLayoutResult.getLineStart(currentLine)
@@ -198,7 +221,7 @@ fun SimpleTextEditor(
                             )
                             true
                         }
-                        it.isCtrlPressed && it.key == Key.X -> {
+                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.X -> {
                             val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
                             val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
                             val lineStart = textLayoutResult.getLineStart(currentLine)
@@ -215,20 +238,21 @@ fun SimpleTextEditor(
                             )
                             true
                         }
-                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.Minus -> {
+                        it.isCtrlPressed && it.key == Key.Minus -> {
                             val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
-                            val selected = content.value.text.substring(content.value.selection.start, content.value.selection.end)
+
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.isEmpty()) {
                                 return@onKeyEvent false
                             }
 
-                            val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
+                            val currentLine = textLayoutResult.getLineForOffset(selectionStartIndex)
                             val lineStart = textLayoutResult.getLineStart(currentLine)
 
                             val newText = StringBuilder(content.value.text)
                                 .replace(
-                                    content.value.selection.start,
-                                    content.value.selection.end,
+                                    selectionStartIndex,
+                                    selectionEndIndex,
                                     selected.trimEnd().split("\n").map { "- $it" }.joinToString("\n"))
                                 .toString()
                             content.value = TextFieldValue(
@@ -238,9 +262,31 @@ fun SimpleTextEditor(
                             )
                             true
                         }
-                        it.isCtrlPressed && it.key == Key.O -> {
+                        it.isCtrlPressed && it.key == Key.T -> {
                             val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
-                            val selected = content.value.text.substring(content.value.selection.start, content.value.selection.end)
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+
+                            val currentLine = textLayoutResult.getLineForOffset(selectionStartIndex)
+                            val lineStart = textLayoutResult.getLineStart(currentLine)
+
+                            val newText = StringBuilder(content.value.text)
+                                .replace(
+                                    selectionStartIndex,
+                                    selectionEndIndex,
+                                    selected.trimEnd().split("\n").map { "| ${it.replace(" ", " | ")}" }.joinToString("\n"))
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                TextRange(lineStart),
+                                content.value.composition
+                            )
+                            true
+                        }
+                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.O -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.isEmpty()) {
                                 return@onKeyEvent false
                             }
