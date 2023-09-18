@@ -37,18 +37,14 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -91,6 +87,8 @@ fun SimpleTextEditor(
             Color(0xFF000B00)
     }
 
+    val theme = remember { EditorTheme() }
+
     Box {
         var last:TransformedText? = null
         var altPressed = false
@@ -116,7 +114,7 @@ fun SimpleTextEditor(
                     return@BasicTextField last!!
                 }
                 val start = System.nanoTime()
-                val t = codeString(content.value.text, textColor)
+                val t = theme.codeString(content.value.text, textColor, mainViewModel.darkMode())
                 //println("convert ${t.length} time ${System.nanoTime() - start} [ns]")
                 last = TransformedText(t, OffsetMapping.Identity)
                 last!!
@@ -334,29 +332,6 @@ fun SimpleTextEditor(
             }
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
         }
-    }
-}
-
-private fun codeString(str: String, textColor: Color) = buildAnnotatedString {
-    val theme = EditorTheme.get()
-    withStyle(SpanStyle(textColor)) {
-        append(str)
-        addStyle(theme.code.keyword, str, "---")
-        addStyle(theme.code.value, str, Regex("[0-9]*"))
-        addStyle(theme.code.header, str, Regex("\\n#.*"))
-        addStyle(theme.code.table, str, Regex("\\n\\|.*"))
-        addStyle(theme.code.quote, str, Regex("\\n>.*"))
-        addStyle(theme.code.quote, str, Regex("\\n-.*"))
-    }
-}
-
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: String) {
-    addStyle(style, text, Regex.fromLiteral(regexp))
-}
-
-private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex) {
-    for (result in regexp.findAll(text)) {
-        addStyle(style, result.range.first, result.range.last + 1)
     }
 }
 
