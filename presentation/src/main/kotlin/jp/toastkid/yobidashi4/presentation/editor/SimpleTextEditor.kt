@@ -33,6 +33,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
@@ -52,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import java.io.IOException
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
@@ -212,7 +215,7 @@ fun SimpleTextEditor(
                             )
                             true
                         }
-                        it.isCtrlPressed && it.key == Key.Minus -> {
+                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.Minus -> {
                             val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
                             val selected = content.value.text.substring(content.value.selection.start, content.value.selection.end)
                             if (selected.isEmpty()) {
@@ -233,6 +236,20 @@ fun SimpleTextEditor(
                                 TextRange(lineStart),
                                 content.value.composition
                             )
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.O -> {
+                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
+                            val selected = content.value.text.substring(content.value.selection.start, content.value.selection.end)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+
+                            if (selected.startsWith("http://") || selected.startsWith("https://")) {
+                                mainViewModel.openUrl(selected, false)
+                                return@onKeyEvent true
+                            }
+                            mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
                             true
                         }
                         else -> false
@@ -287,3 +304,5 @@ private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, reg
         addStyle(style, result.range.first, result.range.last + 1)
     }
 }
+
+private fun encodeUtf8(selectedText: String) = URLEncoder.encode(selectedText, StandardCharsets.UTF_8.name())
