@@ -30,12 +30,15 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -71,6 +74,7 @@ fun SimpleTextEditor(
     val lineNumberScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
+    val lastTextLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
 
     val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
@@ -111,6 +115,9 @@ fun SimpleTextEditor(
                 last = TransformedText(t, OffsetMapping.Identity)
                 last!!
             },
+            onTextLayout = {
+                lastTextLayoutResult.value = it
+            },
             decorationBox = {
                 Row {
                     Column(
@@ -148,6 +155,9 @@ fun SimpleTextEditor(
             modifier = modifier.focusRequester(focusRequester)
                 .onKeyEvent {
                     altPressed = it.isAltPressed
+                    if (it.type != KeyEventType.KeyUp) {
+                        return@onKeyEvent false
+                    }
                     when {
                         it.isCtrlPressed && it.key == Key.S -> {
                             try {
@@ -167,6 +177,21 @@ fun SimpleTextEditor(
                             } catch (e: IOException) {
                                 LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
                             }
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.D -> {
+                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
+                            val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
+                            val lineStart = textLayoutResult.getLineStart(currentLine)
+                            val lineEnd = textLayoutResult.getLineEnd(currentLine)
+                            val newText = StringBuilder(content.value.text)
+                                .insert(lineEnd, "\n${content.value.text.substring(lineStart, lineEnd)}")
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                content.value.selection,
+                                content.value.composition
+                            )
                             true
                         }
                         else -> false
