@@ -298,6 +298,16 @@ fun SimpleTextEditor(
                             mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
                             true
                         }
+                        it.isAltPressed && it.key == Key.DirectionRight -> {
+                            if (mainViewModel.openArticleList().not()) {
+                                mainViewModel.switchArticleList()
+                            }
+                            true
+                        }
+                        it.isAltPressed && it.key == Key.DirectionLeft -> {
+                            mainViewModel.hideArticleList()
+                            true
+                        }
                         else -> false
                     }
                 }
