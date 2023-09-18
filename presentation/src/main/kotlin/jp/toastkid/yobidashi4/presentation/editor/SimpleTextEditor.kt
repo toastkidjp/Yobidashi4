@@ -15,8 +15,10 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.rememberTextFieldVerticalScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,8 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.isAltPressed
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -39,49 +48,73 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import java.nio.file.Path
+import java.io.IOException
+import java.nio.file.Files
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.readText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.slf4j.LoggerFactory
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SimpleTextEditor(
-    path: Path,
+    tab: EditorTab,
     modifier: Modifier = Modifier
 ) {
-    val content = remember { mutableStateOf(TextFieldValue(path.readText())) }
+    val content = remember { mutableStateOf(TextFieldValue()) }
     val verticalScrollState = rememberTextFieldVerticalScrollState()
     val lineNumberScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
 
+    val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+
     val textColor = remember {
-        if (object : KoinComponent { val vm : MainViewModel by inject() }.vm.darkMode())
+        if (mainViewModel.darkMode())
             Color(0xFFF0F0F0)
         else
             Color(0xFF000B00)
     }
 
     Box {
+        var last:TransformedText? = null
+        var altPressed = false
         BasicTextField(
             value = content.value,
             onValueChange = {
+                if (altPressed) {
+                    return@BasicTextField
+                }
+                if (content.value.text.length != it.text.length) {
+                    mainViewModel.updateEditorContent(
+                        tab.path,
+                        content.value.text,
+                        -1,
+                        false
+                    )
+                }
                 content.value = it
             },
             visualTransformation = {
-                val start = System.currentTimeMillis()
+                if (content.value.composition != null && last != null) {
+                    return@BasicTextField last!!
+                }
+                val start = System.nanoTime()
                 val t = codeString(content.value.text, textColor)
-                println("convert ${t.length} time ${System.currentTimeMillis() - start} [ms]")
-                TransformedText(t, OffsetMapping.Identity)
+                //println("convert ${t.length} time ${System.nanoTime() - start} [ns]")
+                last = TransformedText(t, OffsetMapping.Identity)
+                last!!
             },
             decorationBox = {
                 Row {
                     Column(
                         modifier = Modifier
                             .verticalScroll(lineNumberScrollState)
-                            .padding(end = 8.dp)
+                            .padding(horizontal = 8.dp)
                             .wrapContentSize(unbounded = true)
                     ) {
                         val textLines = content.value.text.split("\n")
@@ -109,7 +142,34 @@ fun SimpleTextEditor(
             },
             textStyle = TextStyle(fontSize = 16.sp, fontFamily = FontFamily.Monospace, lineHeight = 1.5.em),
             scrollState = verticalScrollState,
+            cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(focusRequester)
+                .onKeyEvent {
+                    altPressed = it.isAltPressed
+                    when {
+                        it.isCtrlPressed && it.key == Key.S -> {
+                            try {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val text = content.value.text
+                                    val textArray = text.toByteArray()
+                                    if (textArray.isNotEmpty()) {
+                                        Files.write(tab.path, textArray)
+                                    }
+                                    mainViewModel.updateEditorContent(
+                                        tab.path,
+                                        content.value.text,
+                                        -1,
+                                        true
+                                    )
+                                }
+                            } catch (e: IOException) {
+                                LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
+                            }
+                            true
+                        }
+                        else -> false
+                    }
+                }
         )
 
         VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
@@ -121,8 +181,18 @@ fun SimpleTextEditor(
         lineNumberScrollState.scrollTo(verticalScrollState.offset.toInt())
     }
 
-    LaunchedEffect(path) {
+    DisposableEffect(tab.path) {
         focusRequester.requestFocus()
+
+        content.value = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
+
+        onDispose {
+            val currentText = content.value.text
+            if (currentText.isEmpty()) {
+                return@onDispose
+            }
+            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
+        }
     }
 }
 
@@ -130,36 +200,12 @@ private fun codeString(str: String, textColor: Color) = buildAnnotatedString {
     val theme = EditorTheme.get()
     withStyle(SpanStyle(textColor)) {
         append(str)
-        addStyle(theme.code.punctuation, str, ":")
-        addStyle(theme.code.punctuation, str, "=")
-        addStyle(theme.code.punctuation, str, "\"")
-        addStyle(theme.code.punctuation, str, "[")
-        addStyle(theme.code.punctuation, str, "]")
-        addStyle(theme.code.punctuation, str, "{")
-        addStyle(theme.code.punctuation, str, "}")
-        addStyle(theme.code.punctuation, str, "(")
-        addStyle(theme.code.punctuation, str, ")")
-        addStyle(theme.code.punctuation, str, ",")
         addStyle(theme.code.keyword, str, "---")
-        addStyle(theme.code.keyword, str, "fun ")
-        addStyle(theme.code.keyword, str, "val ")
-        addStyle(theme.code.keyword, str, "var ")
-        addStyle(theme.code.keyword, str, "private ")
-        addStyle(theme.code.keyword, str, "internal ")
-        addStyle(theme.code.keyword, str, "for ")
-        addStyle(theme.code.keyword, str, "expect ")
-        addStyle(theme.code.keyword, str, "actual ")
-        addStyle(theme.code.keyword, str, "import ")
-        addStyle(theme.code.keyword, str, "package ")
-        addStyle(theme.code.value, str, "true")
-        addStyle(theme.code.value, str, "false")
         addStyle(theme.code.value, str, Regex("[0-9]*"))
         addStyle(theme.code.header, str, Regex("\\n#.*"))
         addStyle(theme.code.table, str, Regex("\\n\\|.*"))
         addStyle(theme.code.quote, str, Regex("\\n>.*"))
         addStyle(theme.code.quote, str, Regex("\\n-.*"))
-        addStyle(theme.code.annotation, str, Regex("^@[a-zA-Z_]*"))
-        addStyle(theme.code.comment, str, Regex("^\\s*//.*"))
     }
 }
 
