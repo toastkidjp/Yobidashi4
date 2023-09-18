@@ -132,8 +132,7 @@ fun SimpleTextEditor(
                             .padding(horizontal = 8.dp)
                             .wrapContentSize(unbounded = true)
                     ) {
-                        val textLines = content.value.text.split("\n")
-                        val max = textLines.size
+                        val max = lastTextLayoutResult.value?.lineCount ?: content.value.text.split("\n").size
                         val length = max.toString().length
                         repeat(max) {
                             val lineNumberCount = it + 1
