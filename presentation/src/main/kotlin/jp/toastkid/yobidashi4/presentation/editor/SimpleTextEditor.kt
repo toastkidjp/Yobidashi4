@@ -370,6 +370,7 @@ fun SimpleTextEditor(
             if (currentText.isEmpty()) {
                 return@onDispose
             }
+            lastTextLayoutResult.value = null
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
         }
     }
