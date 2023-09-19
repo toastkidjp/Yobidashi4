@@ -44,7 +44,7 @@ class EditorTheme {
         )
     )
 
-    fun codeString(str: String, textColor: Color, darkTheme: Boolean) = buildAnnotatedString {
+    fun codeString(str: String, darkTheme: Boolean) = buildAnnotatedString {
         withStyle(if (darkTheme) plainText.darkStyle else plainText.lightStyle) {
             append(str)
 

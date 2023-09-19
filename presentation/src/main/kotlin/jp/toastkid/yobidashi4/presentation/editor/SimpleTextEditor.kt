@@ -116,7 +116,7 @@ fun SimpleTextEditor(
                     return@BasicTextField last!!
                 }
                 val start = System.nanoTime()
-                val t = theme.codeString(content.value.text, textColor, mainViewModel.darkMode())
+                val t = theme.codeString(content.value.text, mainViewModel.darkMode())
                 //println("convert ${t.length} time ${System.nanoTime() - start} [ns]")
                 last = TransformedText(t, OffsetMapping.Identity)
                 last!!
