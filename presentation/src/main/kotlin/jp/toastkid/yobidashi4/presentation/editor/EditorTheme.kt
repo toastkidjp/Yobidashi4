@@ -18,22 +18,22 @@ class EditorTheme {
         ),
         EditorStyle(
             Regex("\\n#.*"),
-            SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold),
+            SpanStyle(Color(0xFF008800), fontWeight = FontWeight.Bold),
             SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold)
         ),
         EditorStyle(
             Regex("\\n\\|.*"),
-            SpanStyle(Color(0xFF68BB97)),
+            SpanStyle(Color(0xFF8800CC)),
             SpanStyle(Color(0xFF68BB97))
         ),
         EditorStyle(
             Regex("\\n>.*"),
-            SpanStyle(Color(0xFFCCAAFF)),
+            SpanStyle(Color(0xFF7744AA)),
             SpanStyle(Color(0xFFCCAAFF))
         ),
         EditorStyle(
             Regex("\\n-.*"),
-            SpanStyle(Color(0xFFCCAAFF)),
+            SpanStyle(Color(0xFF777239)),
             SpanStyle(Color(0xFFCCAAFF))
         )
     )
