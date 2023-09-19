@@ -285,6 +285,27 @@ fun SimpleTextEditor(
                             )
                             true
                         }
+                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+
+                            val reversed = if (selected.toCharArray()[0].isUpperCase()) selected.lowercase() else selected.uppercase()
+                            val newText = StringBuilder(content.value.text)
+                                .replace(
+                                    selectionStartIndex,
+                                    selectionEndIndex,
+                                    reversed
+                                )
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                content.value.selection,
+                                content.value.composition
+                            )
+                            true
+                        }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
                             val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.isEmpty()) {
