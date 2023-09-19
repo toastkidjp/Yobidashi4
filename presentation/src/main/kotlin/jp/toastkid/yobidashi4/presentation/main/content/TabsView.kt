@@ -60,7 +60,6 @@ import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorView
 import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
-import jp.toastkid.yobidashi4.presentation.editor.legacy.LegacyEditorView
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
@@ -72,7 +71,6 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
-import kotlin.io.path.name
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -165,13 +163,7 @@ internal fun TabsView(modifier: Modifier) {
         when (val currentTab = viewModel.currentTab()) {
             is FileTab -> FileListView(currentTab.items, Modifier)
             is TableTab -> TableView(currentTab.items())
-            is EditorTab -> {
-                if (currentTab.path.name.contains("Sandbox")) {
-                    EditorTabView(currentTab)
-                } else {
-                    LegacyEditorView(currentTab)
-                }
-            }
+            is EditorTab -> EditorTabView(currentTab)
             is MarkdownPreviewTab -> MarkdownPreview(currentTab, Modifier)
             is EditorSettingTab -> EditorSettingComponent(modifier = Modifier)
             is CalendarTab -> CalendarView()
