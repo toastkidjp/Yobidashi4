@@ -252,7 +252,7 @@ fun SimpleTextEditor(
                                 .replace(
                                     selectionStartIndex,
                                     selectionEndIndex,
-                                    selected.trimEnd().split("\n").map { "- $it" }.joinToString("\n"))
+                                    selected.split("\n").map { "- $it" }.joinToString("\n"))
                                 .toString()
                             content.value = TextFieldValue(
                                 newText,
@@ -275,7 +275,7 @@ fun SimpleTextEditor(
                                 .replace(
                                     selectionStartIndex,
                                     selectionEndIndex,
-                                    selected.trimEnd().split("\n").map { "| ${it.replace(" ", " | ")}" }.joinToString("\n"))
+                                    selected.split("\n").map { "| ${it.replace(" ", " | ")}" }.joinToString("\n"))
                                 .toString()
                             content.value = TextFieldValue(
                                 newText,
