@@ -27,7 +27,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -82,13 +81,6 @@ fun SimpleTextEditor(
     val lastTextLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
 
     val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-
-    val textColor = remember {
-        if (mainViewModel.darkMode())
-            Color(0xFFF0F0F0)
-        else
-            Color(0xFF000B00)
-    }
 
     val theme = remember { EditorTheme() }
 
