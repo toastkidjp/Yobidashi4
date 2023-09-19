@@ -53,6 +53,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.LinkDecoratorService
@@ -280,6 +281,26 @@ fun SimpleTextEditor(
                             content.value = TextFieldValue(
                                 newText,
                                 TextRange(lineStart),
+                                content.value.composition
+                            )
+                            true
+                        }
+                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+                            val calculated = SimpleCalculator().invoke(selected) ?: return@onKeyEvent false
+                            val newText = StringBuilder(content.value.text)
+                                .replace(
+                                    selectionStartIndex,
+                                    selectionEndIndex,
+                                    calculated.toString()
+                                )
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                TextRange(selectionStartIndex + calculated.toString().length),
                                 content.value.composition
                             )
                             true
