@@ -263,24 +263,24 @@ fun SimpleTextEditor(
                             true
                         }
                         it.isCtrlPressed && it.key == Key.T -> {
-                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
                             val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.isEmpty()) {
                                 return@onKeyEvent false
                             }
 
-                            val currentLine = textLayoutResult.getLineForOffset(selectionStartIndex)
-                            val lineStart = textLayoutResult.getLineStart(currentLine)
-
+                            val endLineBreak = selected.endsWith("\n")
+                            val tableString = selected.trimEnd().split("\n").map { "| ${it.replace(" ", " | ")}" }
+                                .joinToString("\n") + if (endLineBreak) "\n" else ""
                             val newText = StringBuilder(content.value.text)
                                 .replace(
                                     selectionStartIndex,
                                     selectionEndIndex,
-                                    selected.split("\n").map { "| ${it.replace(" ", " | ")}" }.joinToString("\n"))
+                                    tableString
+                                )
                                 .toString()
                             content.value = TextFieldValue(
                                 newText,
-                                TextRange(lineStart),
+                                TextRange(selectionStartIndex + tableString.length),
                                 content.value.composition
                             )
                             true
