@@ -72,8 +72,6 @@ class EditorTheme {
         val comment: SpanStyle = SpanStyle(Color(0xFF808080))
     )
 
-    val code = Code()
-
     companion object {
 
         private val instance = EditorTheme()
