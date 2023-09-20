@@ -395,19 +395,9 @@ fun SimpleTextEditor(
                         it.isCtrlPressed && it.key == Key.L -> {
                             val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.startsWith("http://") || selected.startsWith("https://")) {
-                                val decoratedLink = LinkDecoratorService().invoke(selected)
-                                val newText = StringBuilder(content.value.text)
-                                    .replace(
-                                        selectionStartIndex,
-                                        selectionEndIndex,
-                                        decoratedLink
-                                    )
-                                    .toString()
-                                content.value = TextFieldValue(
-                                    newText,
-                                    TextRange(selectionStartIndex + decoratedLink.length + 1),
-                                    content.value.composition
-                                )
+                                convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
+                                    LinkDecoratorService().invoke(selected)
+                                }
                                 return@onKeyEvent true
                             }
 
