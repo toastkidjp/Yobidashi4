@@ -61,6 +61,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -79,13 +80,14 @@ fun SimpleTextEditor(
     val horizontalScrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val lastTextLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+    val job = remember { Job() }
 
     val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     val theme = remember { EditorTheme() }
+    var last:TransformedText? = null
 
     Box {
-        var last:TransformedText? = null
         var altPressed = false
         BasicTextField(
             value = content.value,
@@ -165,7 +167,7 @@ fun SimpleTextEditor(
                     when {
                         it.isCtrlPressed && it.key == Key.S -> {
                             try {
-                                CoroutineScope(Dispatchers.IO).launch {
+                                CoroutineScope(Dispatchers.IO).launch(job) {
                                     val text = content.value.text
                                     val textArray = text.toByteArray()
                                     if (textArray.isNotEmpty()) {
@@ -231,25 +233,22 @@ fun SimpleTextEditor(
                             true
                         }
                         it.isCtrlPressed && it.key == Key.Minus -> {
-                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
-
                             val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.isEmpty()) {
                                 return@onKeyEvent false
                             }
 
-                            val currentLine = textLayoutResult.getLineForOffset(selectionStartIndex)
-                            val lineStart = textLayoutResult.getLineStart(currentLine)
-
+                            val converted = selected.split("\n").map { "- $it" }.joinToString("\n")
                             val newText = StringBuilder(content.value.text)
                                 .replace(
                                     selectionStartIndex,
                                     selectionEndIndex,
-                                    selected.split("\n").map { "- $it" }.joinToString("\n"))
+                                    converted
+                                )
                                 .toString()
                             content.value = TextFieldValue(
                                 newText,
-                                TextRange(lineStart),
+                                TextRange(selectionStartIndex + converted.length),
                                 content.value.composition
                             )
                             true
@@ -405,6 +404,8 @@ fun SimpleTextEditor(
                 return@onDispose
             }
             lastTextLayoutResult.value = null
+            last = null
+            job.cancel()
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
         }
     }
