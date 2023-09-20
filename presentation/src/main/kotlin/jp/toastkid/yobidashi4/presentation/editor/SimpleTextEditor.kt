@@ -274,6 +274,27 @@ fun SimpleTextEditor(
                             )
                             true
                         }
+                        it.isCtrlPressed && it.key == Key.Two -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+
+                            val converted = selected.split("\n").map { line -> "- [ ] $line" }.joinToString("\n")
+                            val newText = StringBuilder(content.value.text)
+                                .replace(
+                                    selectionStartIndex,
+                                    selectionEndIndex,
+                                    converted
+                                )
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                TextRange(selectionStartIndex + converted.length),
+                                content.value.composition
+                            )
+                            true
+                        }
                         it.isCtrlPressed && it.key == Key.T -> {
                             val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
                             if (selected.isEmpty()) {
