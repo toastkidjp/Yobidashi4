@@ -367,6 +367,12 @@ fun SimpleTextEditor(
                             }
                             true
                         }
+                        it.isCtrlPressed && it.key == Key.I -> {
+                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
+                                "*$it*"
+                            }
+                            true
+                        }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
                             convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                 SimpleCalculator().invoke(it)?.toString()
