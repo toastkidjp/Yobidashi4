@@ -364,19 +364,19 @@ fun SimpleTextEditor(
                         it.isCtrlPressed && it.key == Key.B -> {
                             convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                 "**$it**"
-                            }
+                            }?.let { content.value = it }
                             true
                         }
                         it.isCtrlPressed && it.key == Key.I -> {
                             convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                 "*$it*"
-                            }
+                            }?.let { content.value = it }
                             true
                         }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
                             convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                 SimpleCalculator().invoke(it)?.toString()
-                            }
+                            }?.let { content.value = it }
                             true
                         }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.O -> {
@@ -397,7 +397,7 @@ fun SimpleTextEditor(
                             if (selected.startsWith("http://") || selected.startsWith("https://")) {
                                 convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                     LinkDecoratorService().invoke(selected)
-                                }
+                                }?.let { content.value = it }
                                 return@onKeyEvent true
                             }
 
