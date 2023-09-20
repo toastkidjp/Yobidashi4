@@ -362,23 +362,9 @@ fun SimpleTextEditor(
                             true
                         }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
+                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
+                                SimpleCalculator().invoke(it)?.toString()
                             }
-                            val calculated = SimpleCalculator().invoke(selected) ?: return@onKeyEvent false
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    calculated.toString()
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(selectionStartIndex + calculated.toString().length),
-                                content.value.composition
-                            )
                             true
                         }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.O -> {
@@ -473,6 +459,32 @@ fun SimpleTextEditor(
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
         }
     }
+}
+
+private fun convertSelectedText(
+    content: TextFieldValue,
+    selectionStartIndex: Int,
+    selectionEndIndex: Int,
+    conversion: (String) -> String?
+): TextFieldValue? {
+    val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
+    if (selected.isEmpty()) {
+        return null
+    }
+
+    val converted = conversion(selected) ?: return null
+    val newText = StringBuilder(content.text)
+        .replace(
+            selectionStartIndex,
+            selectionEndIndex,
+            converted
+        )
+        .toString()
+    return TextFieldValue(
+        newText,
+        TextRange(selectionStartIndex + converted.length),
+        content.composition
+    )
 }
 
 private fun encodeUtf8(selectedText: String) = URLEncoder.encode(selectedText, StandardCharsets.UTF_8.name())
