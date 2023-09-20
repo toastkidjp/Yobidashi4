@@ -56,6 +56,7 @@ import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.LinkDecoratorService
+import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -281,6 +282,27 @@ fun SimpleTextEditor(
                             }
 
                             val converted = selected.split("\n").map { line -> "- [ ] $line" }.joinToString("\n")
+                            val newText = StringBuilder(content.value.text)
+                                .replace(
+                                    selectionStartIndex,
+                                    selectionEndIndex,
+                                    converted
+                                )
+                                .toString()
+                            content.value = TextFieldValue(
+                                newText,
+                                TextRange(selectionStartIndex + converted.length),
+                                content.value.composition
+                            )
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.Comma -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isEmpty()) {
+                                return@onKeyEvent false
+                            }
+
+                            val converted = CommaInserter().invoke(selected) ?: return@onKeyEvent false
                             val newText = StringBuilder(content.value.text)
                                 .replace(
                                     selectionStartIndex,
