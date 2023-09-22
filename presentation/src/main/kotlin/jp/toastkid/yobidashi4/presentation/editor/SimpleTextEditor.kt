@@ -58,6 +58,7 @@ import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.LinkDecoratorService
+import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
@@ -415,6 +416,34 @@ fun SimpleTextEditor(
                                 return@onKeyEvent true
                             }
                             mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.Q -> {
+                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
+                            if (selected.isNotEmpty()) {
+                                convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
+                                    BlockQuotation().invoke(it)
+                                }?.let { content.value = it }
+                                return@onKeyEvent true
+                            }
+
+                            val clipped = ClipboardFetcher().invoke() ?: return@onKeyEvent false
+                            if (clipped.isNotEmpty()) {
+                                val decoratedLink = BlockQuotation().invoke(clipped) ?: return@onKeyEvent false
+                                val newText = StringBuilder(content.value.text)
+                                    .insert(
+                                        selectionStartIndex,
+                                        decoratedLink
+                                    )
+                                    .toString()
+                                content.value = TextFieldValue(
+                                    newText,
+                                    TextRange(selectionStartIndex + decoratedLink.length + 1),
+                                    content.value.composition
+                                )
+                                return@onKeyEvent true
+                            }
+
                             true
                         }
                         it.isCtrlPressed && it.key == Key.L -> {
