@@ -30,13 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.isShiftPressed
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
@@ -50,28 +45,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import java.awt.event.KeyEvent
-import java.io.IOException
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.LinkDecoratorService
-import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
-import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
+import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.math.max
-import kotlin.math.min
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.slf4j.LoggerFactory
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -93,6 +73,8 @@ fun SimpleTextEditor(
 
     val theme = remember { EditorTheme() }
     var last:TransformedText? = null
+
+    val keyEventConsumer = remember { KeyEventConsumer() }
 
     Box {
         var altPressed = false
@@ -170,342 +152,18 @@ fun SimpleTextEditor(
                         return@onKeyEvent false
                     }
 
-                    val rawSelectionStartIndex = content.value.selection.start
-                    val rauSelectionEndIndex = content.value.selection.end
-                    val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
-                    val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
-
-                    when {
-                        it.isCtrlPressed && it.key == Key.S -> {
-                            try {
-                                CoroutineScope(Dispatchers.IO).launch(job) {
-                                    val text = content.value.text
-                                    val textArray = text.toByteArray()
-                                    if (textArray.isNotEmpty()) {
-                                        Files.write(tab.path, textArray)
-                                    }
-                                    mainViewModel.updateEditorContent(
-                                        tab.path,
-                                        content.value.text,
-                                        -1,
-                                        true
-                                    )
-                                }
-                            } catch (e: IOException) {
-                                LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
-                            }
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.D -> {
-                            val startIndex = content.value.selection.start
-                            val endIndex = content.value.selection.end
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isNotEmpty()) {
-                                val newText = StringBuilder(content.value.text)
-                                    .insert(max(startIndex, endIndex), selected)
-                                    .toString()
-                                content.value = TextFieldValue(
-                                    newText,
-                                    TextRange(max(startIndex, endIndex)),
-                                    content.value.composition
-                                )
-                                return@onKeyEvent true
-                            }
-
-                            val textLayoutResult = lastParagraph.value ?: return@onKeyEvent false
-                            val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
-                            val lineStart = textLayoutResult.getLineStart(currentLine)
-                            val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                            val newText = StringBuilder(content.value.text)
-                                .insert(lineEnd, "\n${content.value.text.substring(lineStart, lineEnd)}")
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                content.value.selection,
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.X -> {
-                            val textLayoutResult = lastParagraph.value ?: return@onKeyEvent false
-                            val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
-                            val lineStart = textLayoutResult.getLineStart(currentLine)
-                            val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                            val currentLineText = content.value.text.substring(lineStart, lineEnd + 1)
-                            ClipboardPutterService().invoke(currentLineText)
-                            val newText = StringBuilder(content.value.text)
-                                .delete(lineStart, lineEnd + 1)
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(lineStart),
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.Minus -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            val converted = selected.split("\n").map { "- $it" }.joinToString("\n")
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    converted
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(selectionStartIndex + converted.length),
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.One -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            val converted = selected.split("\n").mapIndexed { index, line -> "${index + 1}. $line" }.joinToString("\n")
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    converted
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(selectionStartIndex + converted.length),
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.Two -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            val converted = selected.split("\n").map { line -> "- [ ] $line" }.joinToString("\n")
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    converted
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(selectionStartIndex + converted.length),
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.Comma -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            val converted = CommaInserter().invoke(selected) ?: return@onKeyEvent false
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    converted
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(selectionStartIndex + converted.length),
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.T -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            val endLineBreak = selected.endsWith("\n")
-                            val tableString = selected.trimEnd().split("\n").map { "| ${it.replace(" ", " | ")}" }
-                                .joinToString("\n") + if (endLineBreak) "\n" else ""
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    tableString
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                TextRange(selectionStartIndex + tableString.length),
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            val reversed = if (selected.toCharArray()[0].isUpperCase()) selected.lowercase() else selected.uppercase()
-                            val newText = StringBuilder(content.value.text)
-                                .replace(
-                                    selectionStartIndex,
-                                    selectionEndIndex,
-                                    reversed
-                                )
-                                .toString()
-                            content.value = TextFieldValue(
-                                newText,
-                                content.value.selection,
-                                content.value.composition
-                            )
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.B -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                "**$it**"
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.I -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                "```\n$it```"
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.Eight -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                "($it)"
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.RightBracket -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                "「$it」"
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.At -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                "*$it*"
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.key.nativeKeyCode == KeyEvent.VK_CIRCUMFLEX -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                "~~$it~~"
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
-                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                SimpleCalculator().invoke(it)?.toString()
-                            }?.let { content.value = it }
-                            true
-                        }
-                        it.isCtrlPressed && it.isShiftPressed && it.key == Key.O -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isEmpty()) {
-                                return@onKeyEvent false
-                            }
-
-                            if (selected.startsWith("http://") || selected.startsWith("https://")) {
-                                mainViewModel.openUrl(selected, false)
-                                return@onKeyEvent true
-                            }
-                            mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.Q -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.isNotEmpty()) {
-                                convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                    BlockQuotation().invoke(it)
-                                }?.let { content.value = it }
-                                return@onKeyEvent true
-                            }
-
-                            val clipped = ClipboardFetcher().invoke() ?: return@onKeyEvent false
-                            if (clipped.isNotEmpty()) {
-                                val decoratedLink = BlockQuotation().invoke(clipped) ?: return@onKeyEvent false
-                                val newText = StringBuilder(content.value.text)
-                                    .insert(
-                                        selectionStartIndex,
-                                        decoratedLink
-                                    )
-                                    .toString()
-                                content.value = TextFieldValue(
-                                    newText,
-                                    TextRange(selectionStartIndex + decoratedLink.length + 1),
-                                    content.value.composition
-                                )
-                                return@onKeyEvent true
-                            }
-
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.L -> {
-                            val selected = content.value.text.substring(selectionStartIndex, selectionEndIndex)
-                            if (selected.startsWith("http://") || selected.startsWith("https://")) {
-                                convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
-                                    LinkDecoratorService().invoke(selected)
-                                }?.let { content.value = it }
-                                return@onKeyEvent true
-                            }
-
-                            val clipped = ClipboardFetcher().invoke() ?: return@onKeyEvent false
-                            if (clipped.startsWith("http://") || clipped.startsWith("https://")) {
-                                val decoratedLink = LinkDecoratorService().invoke(clipped)
-                                val newText = StringBuilder(content.value.text)
-                                    .insert(
-                                        selectionStartIndex,
-                                        decoratedLink
-                                    )
-                                    .toString()
-                                content.value = TextFieldValue(
-                                    newText,
-                                    TextRange(selectionStartIndex + decoratedLink.length + 1),
-                                    content.value.composition
-                                )
-                                return@onKeyEvent true
-                            }
-
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.DirectionUp -> {
+                    keyEventConsumer(
+                        it,
+                        tab.path,
+                        content.value,
+                        lastParagraph.value,
+                        {
                             coroutineScope.launch {
                                 verticalScrollState.scrollBy(-16.sp.value)
                             }
-                            true
-                        }
-                        it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                            coroutineScope.launch {
-                                verticalScrollState.scrollBy(16.sp.value)
-                            }
-                            true
-                        }
-                        it.isAltPressed && it.key == Key.DirectionRight -> {
-                            if (mainViewModel.openArticleList().not()) {
-                                mainViewModel.switchArticleList()
-                            }
-                            true
-                        }
-                        it.isAltPressed && it.key == Key.DirectionLeft -> {
-                            mainViewModel.hideArticleList()
-                            true
-                        }
-                        else -> false
-                    }
+                        },
+                        { content.value = it }
+                    )
                 }
         )
 
@@ -536,31 +194,3 @@ fun SimpleTextEditor(
         }
     }
 }
-
-private fun convertSelectedText(
-    content: TextFieldValue,
-    selectionStartIndex: Int,
-    selectionEndIndex: Int,
-    conversion: (String) -> String?
-): TextFieldValue? {
-    val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
-    if (selected.isEmpty()) {
-        return null
-    }
-
-    val converted = conversion(selected) ?: return null
-    val newText = StringBuilder(content.text)
-        .replace(
-            selectionStartIndex,
-            selectionEndIndex,
-            converted
-        )
-        .toString()
-    return TextFieldValue(
-        newText,
-        TextRange(selectionStartIndex + converted.length),
-        content.composition
-    )
-}
-
-private fun encodeUtf8(selectedText: String) = URLEncoder.encode(selectedText, StandardCharsets.UTF_8.name())
