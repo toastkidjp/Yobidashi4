@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
-import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
@@ -137,7 +136,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openPreview(path: Path, onBackground: Boolean) {
-        val tab = MarkdownPreviewTab(MarkdownParser().invoke(path))
+        val tab = MarkdownPreviewTab.with(path)
         if (onBackground) {
             _tabs.add(tab)
             return
