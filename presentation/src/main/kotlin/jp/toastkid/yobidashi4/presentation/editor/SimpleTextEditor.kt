@@ -38,7 +38,7 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -82,7 +82,7 @@ fun SimpleTextEditor(
     val lineNumberScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
-    val lastTextLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+    val lastParagraph = remember { mutableStateOf<MultiParagraph?>(null) }
     val job = remember { Job() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -121,7 +121,7 @@ fun SimpleTextEditor(
                 last!!
             },
             onTextLayout = {
-                lastTextLayoutResult.value = it
+                lastParagraph.value = it.multiParagraph
             },
             decorationBox = {
                 Row {
@@ -131,7 +131,7 @@ fun SimpleTextEditor(
                             .padding(horizontal = 8.dp)
                             .wrapContentSize(unbounded = true)
                     ) {
-                        val max = lastTextLayoutResult.value?.lineCount ?: content.value.text.split("\n").size
+                        val max = lastParagraph.value?.lineCount ?: content.value.text.split("\n").size
                         val length = max.toString().length
                         repeat(max) {
                             val lineNumberCount = it + 1
@@ -205,7 +205,7 @@ fun SimpleTextEditor(
                                 return@onKeyEvent true
                             }
 
-                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
+                            val textLayoutResult = lastParagraph.value ?: return@onKeyEvent false
                             val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
                             val lineStart = textLayoutResult.getLineStart(currentLine)
                             val lineEnd = textLayoutResult.getLineEnd(currentLine)
@@ -220,7 +220,7 @@ fun SimpleTextEditor(
                             true
                         }
                         it.isCtrlPressed && it.isShiftPressed && it.key == Key.X -> {
-                            val textLayoutResult = lastTextLayoutResult.value ?: return@onKeyEvent false
+                            val textLayoutResult = lastParagraph.value ?: return@onKeyEvent false
                             val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
                             val lineStart = textLayoutResult.getLineStart(currentLine)
                             val lineEnd = textLayoutResult.getLineEnd(currentLine)
@@ -488,7 +488,7 @@ fun SimpleTextEditor(
             if (currentText.isEmpty()) {
                 return@onDispose
             }
-            lastTextLayoutResult.value = null
+            lastParagraph.value = null
             last = null
             job.cancel()
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
