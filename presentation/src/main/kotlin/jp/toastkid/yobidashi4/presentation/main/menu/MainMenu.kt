@@ -27,6 +27,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
+import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
@@ -116,9 +117,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Item("Editor's Color & Font") {
                     viewModel.openTab(EditorSettingTab())
                 }
-                Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource("images/icon/ic_slideshow.xml")) {
-                    viewModel.slideshow(currentTab.path)
-                }
             }
         }
 
@@ -129,6 +127,16 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     return@Item
                 }
                 exitApplication()
+            }
+
+            when (currentTab) {
+                is EditorTab -> currentTab.path
+                is MarkdownPreviewTab -> currentTab.slideshowSourcePath()
+                else -> null
+            }?.let { slideshowSourcePath ->
+                Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource("images/icon/ic_slideshow.xml")) {
+                    viewModel.slideshow(slideshowSourcePath)
+                }
             }
 
             Item(
