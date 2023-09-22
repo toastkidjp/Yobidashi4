@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.editor
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -82,6 +84,7 @@ fun SimpleTextEditor(
     val focusRequester = remember { FocusRequester() }
     val lastTextLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val job = remember { Job() }
+    val coroutineScope = rememberCoroutineScope()
 
     val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
@@ -436,6 +439,12 @@ fun SimpleTextEditor(
                                 return@onKeyEvent true
                             }
 
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.DirectionUp -> {
+                            coroutineScope.launch {
+                                verticalScrollState.scrollBy(16.sp.value)
+                            }
                             true
                         }
                         it.isAltPressed && it.key == Key.DirectionRight -> {
