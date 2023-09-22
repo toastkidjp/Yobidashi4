@@ -34,6 +34,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -74,12 +76,25 @@ fun SimpleTextEditor(
     val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     val theme = remember { EditorTheme() }
-    var last:TransformedText? = null
+    //var last:TransformedText? = null
 
     val keyEventConsumer = remember { KeyEventConsumer() }
 
+    val visualTransformation = remember {
+        object : VisualTransformation {
+            override fun filter(text: AnnotatedString): TransformedText {
+                if (content.value.text.length > 8000) {
+                    return TransformedText(text, OffsetMapping.Identity)
+                }
+
+                return TransformedText(theme.codeString(content.value.text, mainViewModel.darkMode()), OffsetMapping.Identity)
+            }
+        }
+    }
+
     Box {
         var altPressed = false
+
         BasicTextField(
             value = content.value,
             onValueChange = {
@@ -97,20 +112,7 @@ fun SimpleTextEditor(
                 }
                 content.value = it
             },
-            visualTransformation = {
-                if (content.value.text.length > 8000) {
-                    return@BasicTextField TransformedText(it, OffsetMapping.Identity)
-                }
-
-                if (content.value.composition != null && last != null) {
-                    return@BasicTextField last!!
-                }
-                val start = System.nanoTime()
-                val t = theme.codeString(content.value.text, mainViewModel.darkMode())
-                //println("convert ${t.length} time ${System.nanoTime() - start} [ns]")
-                last = TransformedText(t, OffsetMapping.Identity)
-                last!!
-            },
+            visualTransformation = visualTransformation,
             onTextLayout = {
                 lastParagraph.value = it.multiParagraph
             },
@@ -208,7 +210,6 @@ fun SimpleTextEditor(
                 return@onDispose
             }
             lastParagraph.value = null
-            last = null
             job.cancel()
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
         }
