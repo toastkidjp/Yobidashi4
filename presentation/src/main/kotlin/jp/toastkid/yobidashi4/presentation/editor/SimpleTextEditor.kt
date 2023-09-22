@@ -369,6 +369,12 @@ fun SimpleTextEditor(
                         }
                         it.isCtrlPressed && it.key == Key.I -> {
                             convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
+                                "```\n$it```"
+                            }?.let { content.value = it }
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.At -> {
+                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                 "*$it*"
                             }?.let { content.value = it }
                             true
