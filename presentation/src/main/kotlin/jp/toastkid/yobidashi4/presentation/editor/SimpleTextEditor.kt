@@ -34,7 +34,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
@@ -42,7 +41,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -75,22 +73,8 @@ fun SimpleTextEditor(
 
     val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
-    val theme = remember { EditorTheme() }
-    //var last:TransformedText? = null
-
     val keyEventConsumer = remember { KeyEventConsumer() }
-
-    val visualTransformation = remember {
-        object : VisualTransformation {
-            override fun filter(text: AnnotatedString): TransformedText {
-                if (content.value.text.length > 8000) {
-                    return TransformedText(text, OffsetMapping.Identity)
-                }
-
-                return TransformedText(theme.codeString(content.value.text, mainViewModel.darkMode()), OffsetMapping.Identity)
-            }
-        }
-    }
+    val theme = remember { EditorTheme() }
 
     Box {
         var altPressed = false
@@ -112,7 +96,13 @@ fun SimpleTextEditor(
                 }
                 content.value = it
             },
-            visualTransformation = visualTransformation,
+            visualTransformation = {
+                if (it.length > 8000) {
+                    return@BasicTextField TransformedText(it, OffsetMapping.Identity)
+                }
+
+                return@BasicTextField TransformedText(theme.codeString(it.text, mainViewModel.darkMode()), OffsetMapping.Identity)
+            },
             onTextLayout = {
                 lastParagraph.value = it.multiParagraph
             },
