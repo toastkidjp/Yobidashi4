@@ -443,6 +443,12 @@ fun SimpleTextEditor(
                         }
                         it.isCtrlPressed && it.key == Key.DirectionUp -> {
                             coroutineScope.launch {
+                                verticalScrollState.scrollBy(-16.sp.value)
+                            }
+                            true
+                        }
+                        it.isCtrlPressed && it.key == Key.DirectionDown -> {
+                            coroutineScope.launch {
                                 verticalScrollState.scrollBy(16.sp.value)
                             }
                             true
