@@ -36,6 +36,7 @@ import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import java.awt.event.KeyEvent
 import java.io.IOException
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -396,6 +398,12 @@ fun SimpleTextEditor(
                         it.isCtrlPressed && it.key == Key.At -> {
                             convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
                                 "*$it*"
+                            }?.let { content.value = it }
+                            true
+                        }
+                        it.isCtrlPressed && it.key.nativeKeyCode == KeyEvent.VK_CIRCUMFLEX -> {
+                            convertSelectedText(content.value, selectionStartIndex, selectionEndIndex) {
+                                "~~$it~~"
                             }?.let { content.value = it }
                             true
                         }
