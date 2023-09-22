@@ -111,6 +111,10 @@ fun SimpleTextEditor(
                 content.value = it
             },
             visualTransformation = {
+                if (content.value.text.length > 8000) {
+                    return@BasicTextField TransformedText(it, OffsetMapping.Identity)
+                }
+
                 if (content.value.composition != null && last != null) {
                     return@BasicTextField last!!
                 }
@@ -153,7 +157,7 @@ fun SimpleTextEditor(
                     it()
                 }
             },
-            textStyle = TextStyle(fontSize = 16.sp, fontFamily = FontFamily.Monospace, lineHeight = 1.5.em),
+            textStyle = TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 16.sp, fontFamily = FontFamily.Monospace, lineHeight = 1.5.em),
             scrollState = verticalScrollState,
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(focusRequester)
