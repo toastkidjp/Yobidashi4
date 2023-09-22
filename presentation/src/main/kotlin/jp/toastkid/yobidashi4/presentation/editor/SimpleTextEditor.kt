@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -181,6 +183,24 @@ fun SimpleTextEditor(
 
         content.value = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
         setStatus("Character: ${content.value.text.length}")
+
+        var selected = -1
+        CoroutineScope(Dispatchers.IO).launch {
+            mainViewModel.finderFlow().collect {
+                if (it.invokeReplace) {
+                    content.value = TextFieldValue(content.value.text.replace(it.target, it.replace, it.caseSensitive.not()))
+                    return@collect
+                }
+                selected =
+                    if (it.upper) content.value.text.lastIndexOf(it.target, selected - 1, it.caseSensitive.not())
+                    else content.value.text.indexOf(it.target, selected + 1, it.caseSensitive.not())
+                if (selected == -1) {
+                    return@collect
+                }
+
+                content.value = content.value.copy(selection = TextRange(selected, selected + it.target.length))
+            }
+        }
 
         onDispose {
             val currentText = content.value.text
