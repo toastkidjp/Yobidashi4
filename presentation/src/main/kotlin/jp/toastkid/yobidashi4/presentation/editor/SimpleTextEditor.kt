@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.editor
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -126,7 +127,14 @@ fun SimpleTextEditor(
                                 append(lineNumberCount)
                             }.toString()
                             Box(
-                                contentAlignment = Alignment.CenterEnd
+                                contentAlignment = Alignment.CenterEnd,
+                                modifier = Modifier.clickable {
+                                    val multiParagraph = lastParagraph.value ?: return@clickable
+
+                                    content.value = content.value.copy(
+                                        selection = TextRange(multiParagraph.getLineStart(it), multiParagraph.getLineEnd(it))
+                                    )
+                                }
                             ) {
                                 Text(lineNumberText, fontSize = 16.sp, fontFamily = FontFamily.Monospace,
                                     textAlign = TextAlign.End, lineHeight = 1.5.em)
