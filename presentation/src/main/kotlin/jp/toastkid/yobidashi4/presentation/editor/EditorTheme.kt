@@ -5,7 +5,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import jp.toastkid.yobidashi4.presentation.editor.style.EditorStyle
 
 class EditorTheme {
@@ -20,7 +19,7 @@ class EditorTheme {
         EditorStyle(
             Regex("[0-9]*"),
             SpanStyle(Color(0xFF6897BB)),
-            SpanStyle(Color(0xFF6897BB))
+            SpanStyle(Color(0xFFA8B7EE))
         ),
         EditorStyle(
             Regex("\\n#.*"),
@@ -30,7 +29,7 @@ class EditorTheme {
         EditorStyle(
             Regex("\\n\\|.*"),
             SpanStyle(Color(0xFF8800CC)),
-            SpanStyle(Color(0xFF68BB97))
+            SpanStyle(Color(0xFF86EEC7))
         ),
         EditorStyle(
             Regex("\\n>.*"),
@@ -39,18 +38,16 @@ class EditorTheme {
         ),
         EditorStyle(
             Regex("\\n-.*"),
-            SpanStyle(Color(0xFF777239)),
-            SpanStyle(Color(0xFFCCAAFF))
+            SpanStyle(Color(0xFF666239)),
+            SpanStyle(Color(0xFFDDBBFF))
         )
     )
 
     fun codeString(str: String, darkTheme: Boolean) = buildAnnotatedString {
-        withStyle(if (darkTheme) plainText.darkStyle else plainText.lightStyle) {
-            append(str)
+        append(str)
 
-            patterns.forEach {
-                addStyle(if (darkTheme) it.darkStyle else it.lightStyle, str, it.regex)
-            }
+        patterns.forEach {
+            addStyle(if (darkTheme) it.darkStyle else it.lightStyle, str, it.regex)
         }
     }
 
