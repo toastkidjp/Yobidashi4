@@ -39,9 +39,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -86,7 +84,8 @@ fun SimpleTextEditor(
                 if (altPressed) {
                     return@BasicTextField
                 }
-                if (content.value.text.length != it.text.length) {
+                val inComposition = it.composition == null
+                if (inComposition && content.value.text.length != it.text.length) {
                     setStatus("Character: ${it.text.length}")
                     mainViewModel.updateEditorContent(
                         tab.path,
@@ -95,14 +94,7 @@ fun SimpleTextEditor(
                         resetEditing = false
                     )
                 }
-                content.value = it
-            },
-            visualTransformation = {
-                if (it.length > 8000) {
-                    return@BasicTextField TransformedText(it, OffsetMapping.Identity)
-                }
-
-                return@BasicTextField TransformedText(theme.codeString(it.text, mainViewModel.darkMode()), OffsetMapping.Identity)
+                content.value = if (inComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
             },
             onTextLayout = {
                 lastParagraph.value = it.multiParagraph
