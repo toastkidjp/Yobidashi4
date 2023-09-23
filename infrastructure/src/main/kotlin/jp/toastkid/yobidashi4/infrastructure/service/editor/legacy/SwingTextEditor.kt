@@ -55,7 +55,7 @@ class SwingTextEditor : TextEditor {
     private fun setStatus(status: String) {
         statusLabel.value = "${ if (editorAreaView.isEditable().not()) "Not editable " else "" } $status"
         path?.let {
-            object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateEditorContent(it, currentText(), -1, false)
+            object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateEditorContent(it, currentText(), -1, resetEditing = false)
         }
     }
 

@@ -91,7 +91,7 @@ fun SimpleTextEditor(
                         tab.path,
                         content.value.text,
                         -1,
-                        false
+                        resetEditing = false
                     )
                 }
                 content.value = it
@@ -174,6 +174,7 @@ fun SimpleTextEditor(
         focusRequester.requestFocus()
 
         content.value = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
+        verticalScrollState.offset = tab.scroll()
         setStatus("Character: ${content.value.text.length}")
 
         var selected = -1
@@ -201,7 +202,7 @@ fun SimpleTextEditor(
             }
             lastParagraph.value = null
             job.cancel()
-            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, false)
+            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, verticalScrollState.offset, resetEditing = false)
         }
     }
 }

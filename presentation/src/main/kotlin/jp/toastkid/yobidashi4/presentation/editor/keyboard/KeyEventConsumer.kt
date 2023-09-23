@@ -64,7 +64,7 @@ class KeyEventConsumer(
                             path,
                             content.text,
                             -1,
-                            true
+                            resetEditing = true
                         )
                     }
                 } catch (e: IOException) {

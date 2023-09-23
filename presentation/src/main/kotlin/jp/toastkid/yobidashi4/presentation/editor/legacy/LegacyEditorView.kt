@@ -81,7 +81,7 @@ internal fun LegacyEditorView(tab: EditorTab) {
         textEditor.setCaretPosition(tab.caretPosition())
         onDispose {
             val currentText = textEditor.currentText() ?: return@onDispose
-            viewModel.updateEditorContent(tab.path, currentText, textEditor.caretPosition(), false)
+            viewModel.updateEditorContent(tab.path, currentText, textEditor.caretPosition(), resetEditing = false)
         }
     }
 }

@@ -33,6 +33,14 @@ data class EditorTab(
         caretPosition = newPosition
     }
 
+    private var scroll = 0f
+
+    fun scroll() = scroll
+
+    fun setScroll(newPosition: Float) {
+        scroll = newPosition
+    }
+
     private var content: String = Files.readString(path)
 
     fun getContent() = content
