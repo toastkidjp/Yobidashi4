@@ -63,6 +63,7 @@ fun SimpleTextEditor(
 ) {
     val content = remember { mutableStateOf(TextFieldValue()) }
     val verticalScrollState = rememberTextFieldVerticalScrollState()
+    val adapter = rememberScrollbarAdapter(verticalScrollState)
     val lineNumberScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
@@ -162,7 +163,7 @@ fun SimpleTextEditor(
                 }
         )
 
-        VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+        VerticalScrollbar(adapter = adapter, modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
         HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
             Alignment.BottomCenter))
     }
@@ -174,8 +175,11 @@ fun SimpleTextEditor(
     DisposableEffect(tab.path) {
         focusRequester.requestFocus()
 
+        coroutineScope.launch {
+            adapter.scrollTo(tab.scroll().toDouble())
+        }
         content.value = TextFieldValue(theme.codeString(tab.getContent(), mainViewModel.darkMode()), TextRange(tab.caretPosition()))
-        verticalScrollState.offset = tab.scroll()
+
         setStatus("Character: ${content.value.text.length}")
 
         var selected = -1
