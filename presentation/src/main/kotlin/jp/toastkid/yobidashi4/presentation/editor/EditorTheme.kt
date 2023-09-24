@@ -57,12 +57,4 @@ class EditorTheme {
         }
     }
 
-    companion object {
-
-        private val instance = EditorTheme()
-
-        fun get() = instance
-
-    }
-
 }
