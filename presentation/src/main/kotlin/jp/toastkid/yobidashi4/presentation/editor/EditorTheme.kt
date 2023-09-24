@@ -16,6 +16,11 @@ class EditorTheme {
             SpanStyle(Color(0xFFA8B7EE))
         ),
         EditorStyle(
+            Regex("^#.*"),
+            SpanStyle(Color(0xFF008800), fontWeight = FontWeight.Bold),
+            SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold)
+        ),
+        EditorStyle(
             Regex("\\n#.*"),
             SpanStyle(Color(0xFF008800), fontWeight = FontWeight.Bold),
             SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold)
