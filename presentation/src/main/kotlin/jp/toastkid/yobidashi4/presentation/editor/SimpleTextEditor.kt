@@ -176,7 +176,7 @@ fun SimpleTextEditor(
         focusRequester.requestFocus()
 
         coroutineScope.launch {
-            adapter.scrollTo(tab.scroll().toDouble())
+            adapter.scrollTo(tab.scroll())
         }
         content.value = TextFieldValue(theme.codeString(tab.getContent(), mainViewModel.darkMode()), TextRange(tab.caretPosition()))
 
@@ -207,7 +207,7 @@ fun SimpleTextEditor(
             }
             lastParagraph.value = null
             job.cancel()
-            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, verticalScrollState.offset, resetEditing = false)
+            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, adapter.scrollOffset, resetEditing = false)
         }
     }
 }

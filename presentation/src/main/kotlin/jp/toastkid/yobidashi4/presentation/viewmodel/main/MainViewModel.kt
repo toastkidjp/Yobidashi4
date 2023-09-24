@@ -40,7 +40,7 @@ interface MainViewModel {
     fun removeTabAt(index: Int)
     fun closeCurrent()
     fun addNewArticle(path: Path)
-    fun updateEditorContent(path: Path, text: String, caretPosition: Int = -1, scroll: Float = 0f, resetEditing: Boolean)
+    fun updateEditorContent(path: Path, text: String, caretPosition: Int = -1, scroll: Double = 0.0, resetEditing: Boolean)
     fun openingEditor(): Boolean
     fun setShowWebSearch(newState: Boolean = true)
     fun showingSnackbar(): Boolean

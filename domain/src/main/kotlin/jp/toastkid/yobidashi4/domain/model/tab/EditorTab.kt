@@ -33,11 +33,11 @@ data class EditorTab(
         caretPosition = newPosition
     }
 
-    private var scroll = 0f
+    private var scroll = 0.0
 
     fun scroll() = scroll
 
-    fun setScroll(newPosition: Float) {
+    fun setScroll(newPosition: Double) {
         scroll = newPosition
     }
 
