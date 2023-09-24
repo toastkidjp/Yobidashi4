@@ -86,8 +86,8 @@ fun SimpleTextEditor(
                     return@BasicTextField
                 }
                 val forceEfficientMode = content.value.text.length > 6000
-                val inComposition = it.composition == null
-                if (inComposition && content.value.text.length != it.text.length) {
+                val notInComposition = it.composition == null
+                if (notInComposition && content.value.text.length != it.text.length) {
                     setStatus("Character: ${it.text.length}")
                     mainViewModel.updateEditorContent(
                         tab.path,
@@ -96,7 +96,7 @@ fun SimpleTextEditor(
                         resetEditing = false
                     )
                 }
-                content.value = if (!forceEfficientMode && inComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
+                content.value = if (!forceEfficientMode && notInComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
             },
             onTextLayout = {
                 lastParagraph.value = it.multiParagraph
