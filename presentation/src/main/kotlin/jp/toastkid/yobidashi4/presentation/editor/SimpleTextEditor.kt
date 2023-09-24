@@ -84,6 +84,7 @@ fun SimpleTextEditor(
                 if (altPressed) {
                     return@BasicTextField
                 }
+                val forceEfficientMode = content.value.text.length > 6000
                 val inComposition = it.composition == null
                 if (inComposition && content.value.text.length != it.text.length) {
                     setStatus("Character: ${it.text.length}")
@@ -94,7 +95,7 @@ fun SimpleTextEditor(
                         resetEditing = false
                     )
                 }
-                content.value = if (inComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
+                content.value = if (!forceEfficientMode && inComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
             },
             onTextLayout = {
                 lastParagraph.value = it.multiParagraph
@@ -173,7 +174,7 @@ fun SimpleTextEditor(
     DisposableEffect(tab.path) {
         focusRequester.requestFocus()
 
-        content.value = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
+        content.value = TextFieldValue(theme.codeString(tab.getContent(), mainViewModel.darkMode()), TextRange(tab.caretPosition()))
         verticalScrollState.offset = tab.scroll()
         setStatus("Character: ${content.value.text.length}")
 
