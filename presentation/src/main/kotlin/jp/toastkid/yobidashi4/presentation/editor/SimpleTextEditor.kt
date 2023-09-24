@@ -96,7 +96,7 @@ fun SimpleTextEditor(
                         resetEditing = false
                     )
                 }
-                content.value = if (!forceEfficientMode && notInComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
+                content.value = if (!forceEfficientMode && (notInComposition || content.value.text.length < 4000)) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
             },
             onTextLayout = {
                 lastParagraph.value = it.multiParagraph
