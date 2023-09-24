@@ -9,12 +9,6 @@ import jp.toastkid.yobidashi4.presentation.editor.style.EditorStyle
 
 class EditorTheme {
 
-    private val plainText = EditorStyle(
-        Regex("\\n-.*"),
-        SpanStyle(Color(0xFF000B00)),
-        SpanStyle(Color(0xFFF0F0F0))
-    )
-
     private val patterns = listOf(
         EditorStyle(
             Regex("[0-9]*"),
