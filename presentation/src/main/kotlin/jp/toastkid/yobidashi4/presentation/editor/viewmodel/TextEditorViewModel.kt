@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -63,7 +64,7 @@ class TextEditorViewModel {
                 resetEditing = false
             )
         }
-        content.value = if (!forceEfficientMode && (notInComposition || content.value.text.length < 4000)) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
+        content.value = if (!forceEfficientMode && notInComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
@@ -109,16 +110,18 @@ class TextEditorViewModel {
         lineNumberScrollState.scrollTo(verticalScrollState.offset.toInt())
     }
 
+    fun initialScroll(coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            delay(500)
+            adapter.scrollTo(tab.scroll())
+        }
+    }
+
     fun launchTab(tab: EditorTab, coroutineScope: CoroutineScope) {
         this.tab = tab
         focusRequester.requestFocus()
 
-        coroutineScope.launch {
-            content.value = TextFieldValue(theme.codeString(tab.getContent(), mainViewModel.darkMode()), TextRange(tab.caretPosition()))
-
-            adapter.scrollTo(tab.scroll())
-            println("tab ${verticalScrollState.offset} ${adapter.scrollOffset} ${tab.scroll()}")
-        }
+        content.value = TextFieldValue(theme.codeString(tab.getContent(), mainViewModel.darkMode()), TextRange(tab.caretPosition()))
 
         var selected = -1
         CoroutineScope(Dispatchers.IO).launch {
@@ -142,11 +145,8 @@ class TextEditorViewModel {
     fun dispose() {
         val currentText = content.value.text
         if (currentText.isNotEmpty()) {
-            println("set ${adapter.scrollOffset} ${tab.path}")
             mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, verticalScrollState.offset.toDouble(), resetEditing = false)
         }
-
-        verticalScrollState.offset = 0f
 
         lastParagraph = null
         content.value = TextFieldValue()
