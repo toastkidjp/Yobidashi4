@@ -46,12 +46,13 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
     val horizontalScrollState = rememberScrollState()
     val content = remember { mutableStateOf(TextFieldValue(line.code)) }
     val codeStringBuilder = remember { CodeStringBuilder() }
+    val maxHeight = remember { min(content.value.text.split("\n").size * fontSize.value, 800f).dp }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        Box(modifier = modifier.background(MaterialTheme.colors.surface).heightIn(max = min(content.value.text.split("\n").size * fontSize.value, 800f).dp)) {
+        Box(modifier = modifier.background(MaterialTheme.colors.surface).heightIn(max = maxHeight)) {
             BasicTextField(
                 value = content.value,
                 onValueChange = {
