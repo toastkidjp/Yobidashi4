@@ -8,7 +8,7 @@ data class FileListItem(
     val editable: Boolean = false
 ) {
 
-    fun reverseSelection() = FileListItem(path, selected.not())
+    fun reverseSelection() = FileListItem(path, selected.not(), editable)
 
     fun unselect() = FileListItem(path, false, editable)
 
