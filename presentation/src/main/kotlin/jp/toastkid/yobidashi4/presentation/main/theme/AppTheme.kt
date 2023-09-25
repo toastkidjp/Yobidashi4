@@ -1,9 +1,12 @@
 package jp.toastkid.yobidashi4.main
 
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 @Composable
@@ -37,6 +40,11 @@ fun AppTheme(
             )
 
     MaterialTheme(colors = colors) {
-        content()
+        CompositionLocalProvider(LocalTextSelectionColors provides TextSelectionColors(
+            handleColor = MaterialTheme.colors.secondary,
+            backgroundColor = MaterialTheme.colors.secondary.copy(alpha = 0.65f)
+        )) {
+            content()
+        }
     }
 }
