@@ -38,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isCtrlPressed
@@ -241,7 +242,7 @@ private fun FileListItemRow(
     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
     Box(
-        modifier = modifier.background(backgroundColor.value)
+        modifier = modifier.drawBehind { drawRect(backgroundColor.value) }
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
