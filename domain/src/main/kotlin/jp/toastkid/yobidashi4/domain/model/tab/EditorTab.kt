@@ -41,7 +41,7 @@ data class EditorTab(
         scroll = newPosition
     }
 
-    private var content: String = Files.readString(path)
+    private var content: String = ""
 
     fun getContent() = content
 
@@ -79,6 +79,10 @@ data class EditorTab(
 
     override fun update(): Flow<Long> {
         return _updateFlow.asSharedFlow()
+    }
+
+    fun loadContent() {
+        content = Files.readString(path)
     }
 
     enum class Preview {
