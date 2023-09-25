@@ -330,6 +330,17 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
+                        viewModel.slideshow(fileListItem.path)
+                        openOption.value = false
+                    }
+                ) {
+                    Text(
+                        "Slideshow",
+                        modifier = Modifier.padding(8.dp).fillMaxSize()
+                    )
+                }
+                DropdownMenuItem(
+                    onClick = {
                         ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
                         openOption.value = false
                     }
