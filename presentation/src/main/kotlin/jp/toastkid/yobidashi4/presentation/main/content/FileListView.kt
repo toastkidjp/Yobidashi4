@@ -173,6 +173,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         fileListItem,
                         index,
                         dateTimeFormatter,
+                        { articleStates.filter { it.selected }.map { it.path } },
                         modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
@@ -233,6 +234,7 @@ private fun FileListItemRow(
     fileListItem: FileListItem,
     index: Int,
     dateTimeFormatter: DateTimeFormatter?,
+    selectedFiles: () -> List<Path>,
     modifier: Modifier
 ) {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
@@ -295,7 +297,9 @@ private fun FileListItemRow(
         ) {
             DropdownMenuItem(
                 onClick = {
-                    viewModel.openFile(fileListItem.path)
+                    selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
+                        viewModel.openFile(it)
+                    }
                     openOption.value = false
                 }
             ) {
@@ -308,7 +312,9 @@ private fun FileListItemRow(
             if (fileListItem.editable) {
                 DropdownMenuItem(
                     onClick = {
-                        viewModel.openPreview(fileListItem.path)
+                        selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
+                            viewModel.openPreview(it)
+                        }
                         openOption.value = false
                     }
                 ) {
