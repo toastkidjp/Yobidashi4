@@ -117,8 +117,9 @@ fun SimpleTextEditor(
 
     DisposableEffect(tab.path) {
         viewModel.launchTab(tab, coroutineScope)
+        viewModel.initialScroll(coroutineScope)
 
-        setStatus("Character: ${viewModel.content().text.length}")
+        setStatus("Character: ${tab.getContent().length}")
 
         onDispose {
             viewModel.dispose()
