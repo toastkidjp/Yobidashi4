@@ -300,7 +300,7 @@ private fun FileListItemRow(
                 }
             ) {
                 Text(
-                    "Edit",
+                    if (fileListItem.editable) "Edit" else "Open",
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
