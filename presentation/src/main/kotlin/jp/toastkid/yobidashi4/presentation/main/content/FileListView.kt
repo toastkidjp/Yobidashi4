@@ -300,7 +300,7 @@ private fun FileListItemRow(
                 }
             ) {
                 Text(
-                    "開く",
+                    "Edit",
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
