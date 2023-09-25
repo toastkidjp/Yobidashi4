@@ -128,6 +128,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         val tab = EditorTab(path)
+        (tab as? EditorTab)?.loadContent()
         if (onBackground) {
             _tabs.add(tab)
             return
@@ -208,7 +209,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         if (caretPosition != -1) {
             editorTab?.setCaretPosition(caretPosition)
         }
-        editorTab?.setScroll(scroll)
+
+        if (scroll >= 0) {
+            editorTab?.setScroll(scroll)
+        }
     }
 
     override fun openingEditor(): Boolean {
