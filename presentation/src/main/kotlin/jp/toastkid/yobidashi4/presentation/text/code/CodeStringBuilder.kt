@@ -9,7 +9,7 @@ import androidx.compose.ui.text.withStyle
 
 class CodeStringBuilder {
 
-    private val simple: SpanStyle = SpanStyle(Color(0xFF000B00))
+    private val simple: SpanStyle = SpanStyle()
 
     private val header: SpanStyle = SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold)
 
