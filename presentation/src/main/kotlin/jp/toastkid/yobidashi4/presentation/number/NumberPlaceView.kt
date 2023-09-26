@@ -11,6 +11,7 @@ package jp.toastkid.yobidashi4.presentation.number
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -36,13 +37,18 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.nio.file.Files
+import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
 import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
@@ -53,7 +59,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NumberPlaceView() {
     val fontSize = 32.sp
@@ -67,6 +73,9 @@ fun NumberPlaceView() {
     val setting = koin.setting
     val viewModel = remember { NumberPlaceViewModel() }
     val renewGame = {
+        val game = NumberPlaceGame()
+        game.initialize(setting.getMaskingCount())
+        viewModel.setGame(game)
         viewModel.initializeSolving()
         viewModel.initialize(setting.getMaskingCount())
         viewModel.saveCurrentGame()
@@ -87,10 +96,22 @@ fun NumberPlaceView() {
     })
 
     val numberStates = mutableListOf<MutableState<String>>()
+    val openOption = remember { mutableStateOf(false) }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(0.5f),
-        elevation = 4.dp
+        elevation = 4.dp,
+        modifier = Modifier.pointerInput(Unit) {
+            awaitEachGesture {
+                val awaitPointerEvent = awaitPointerEvent()
+                if (awaitPointerEvent.type == PointerEventType.Press
+                    && !openOption.value
+                    && awaitPointerEvent.button == PointerButton.Secondary
+                ) {
+                    openOption.value = true
+                }
+            }
+        }
     ) {
         Box(
             contentAlignment = Alignment.Center
@@ -179,27 +200,39 @@ fun NumberPlaceView() {
                 CircularProgressIndicator()
             }
         }
-    }
+        DropdownMenu(
+            openOption.value,
+            onDismissRequest = { openOption.value = false }
+        ) {
+            DropdownMenuItem(
+                onClick = {
+                    renewGame()
+                    openOption.value = false
+                }
+            ) {
+                Text("Other board")
+            }
 
-    /*
-    OptionMenu(
-            titleId = R.string.menu_other_board,
-            action = {
-                deleteCurrentGame(context)
-                contentViewModel.nextRoute("tool/number/place")
-            }),
-        OptionMenu(
-            titleId = R.string.menu_set_correct_answer,
-            action = {
-                viewModel.setCorrect()
-            }),
-        OptionMenu(
-            titleId = R.string.clear_all,
-            action = {
-                viewModel.initializeSolving()
-                numberStates.forEach { it.value = "_" }
-            })
-     */
+            DropdownMenuItem(
+                onClick = {
+                    viewModel.setCorrect()
+                    openOption.value = false
+                }
+            ) {
+                Text("Set answer")
+            }
+
+            DropdownMenuItem(
+                onClick = {
+                    viewModel.initializeSolving()
+                    numberStates.forEach { it.value = "_" }
+                    openOption.value = false
+                }
+            ) {
+                Text("Clear")
+            }
+        }
+    }
 
     DisposableEffect(key1 = viewModel, effect = {
         onDispose {
