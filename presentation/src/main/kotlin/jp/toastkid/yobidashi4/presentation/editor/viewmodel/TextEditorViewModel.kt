@@ -140,7 +140,7 @@ class TextEditorViewModel {
         }
     }
 
-    fun launchTab(tab: EditorTab, coroutineScope: CoroutineScope) {
+    fun launchTab(tab: EditorTab) {
         this.tab = tab
         focusRequester.requestFocus()
 
