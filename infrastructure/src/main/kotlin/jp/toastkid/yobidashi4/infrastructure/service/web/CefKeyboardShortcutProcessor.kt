@@ -25,6 +25,8 @@ class CefKeyboardShortcutProcessor(
 
     private val viewModel: MainViewModel by inject()
 
+    private val webTabViewModel : WebTabViewModel by inject()
+
     operator fun invoke(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent): Boolean {
         if (event.type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP) {
             return false
@@ -126,6 +128,13 @@ class CefKeyboardShortcutProcessor(
 
                 val screenshot = Robot().createScreenCapture(region)
                 ImageIO.write(screenshot, "png", it)
+            }
+            return true
+        }
+
+        if (event.windows_key_code == KeyEvent.VK_F12) {
+            (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
+                webTabViewModel.switchDevTools(id)
             }
             return true
         }
