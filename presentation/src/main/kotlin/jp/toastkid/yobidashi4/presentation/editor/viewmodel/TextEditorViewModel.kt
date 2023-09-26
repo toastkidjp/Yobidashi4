@@ -76,12 +76,12 @@ class TextEditorViewModel {
             return
         }
 
-        applyStyle(it)
+        applyStyle(it, 1200)
     }
 
-    private fun applyStyle(it: TextFieldValue) {
+    private fun applyStyle(it: TextFieldValue, useDelay: Long = 0L) {
         lastConversionJob = CoroutineScope(Dispatchers.IO).launch {
-            delay(1500)
+            delay(useDelay)
             content.value = it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
         }
     }
