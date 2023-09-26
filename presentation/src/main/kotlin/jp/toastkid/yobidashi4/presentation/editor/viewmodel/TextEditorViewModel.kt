@@ -108,6 +108,7 @@ class TextEditorViewModel {
     fun focusRequester() = focusRequester
 
     fun onKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+        lastConversionJob?.cancel()
         return keyEventConsumer(
             it,
             tab.path,
