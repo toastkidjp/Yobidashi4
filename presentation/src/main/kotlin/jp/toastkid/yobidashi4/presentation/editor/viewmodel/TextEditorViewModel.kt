@@ -51,9 +51,9 @@ class TextEditorViewModel {
 
     private val focusRequester = FocusRequester()
 
-    fun content() = content.value
-
     private var lastConversionJob: Job? = null
+
+    fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
         lastConversionJob?.cancel()
