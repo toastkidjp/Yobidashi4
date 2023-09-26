@@ -144,7 +144,12 @@ class TextEditorViewModel {
         this.tab = tab
         focusRequester.requestFocus()
 
-        content.value = TextFieldValue(theme.codeString(tab.getContent(), mainViewModel.darkMode()), TextRange(tab.caretPosition()))
+        val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
+        if (newContent.text.length > 8000) {
+            content.value = newContent
+        } else {
+            applyStyle(newContent)
+        }
 
         var selected = -1
         CoroutineScope(Dispatchers.IO).launch {
