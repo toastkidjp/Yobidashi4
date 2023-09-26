@@ -37,7 +37,7 @@ class TextEditorViewModel {
 
     private var lastParagraph: MultiParagraph? = null
 
-    private val job = Job()
+    private val lineCount = mutableStateOf(0)
 
     private val keyEventConsumer = KeyEventConsumer()
 
@@ -50,6 +50,8 @@ class TextEditorViewModel {
     private val lineNumberScrollState = ScrollState(0)
 
     private val focusRequester = FocusRequester()
+
+    private val job = Job()
 
     private var lastConversionJob: Job? = null
 
@@ -82,6 +84,7 @@ class TextEditorViewModel {
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
+        lineCount.value = multiParagraph.lineCount
     }
 
     fun verticalScrollState() = verticalScrollState
@@ -91,7 +94,7 @@ class TextEditorViewModel {
     fun lineNumberScrollState() = lineNumberScrollState
 
     fun maxLineCount(): Int {
-        return lastParagraph?.lineCount ?: content.value.text.split("\n").size
+        return lineCount.value
     }
 
     fun onClickLineNumber(it: Int) {
