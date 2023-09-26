@@ -53,7 +53,10 @@ class TextEditorViewModel {
 
     fun content() = content.value
 
+    private var lastConversionJob: Job? = null
+
     fun onValueChange(it: TextFieldValue) {
+        lastConversionJob?.cancel()
         val forceEfficientMode = content.value.text.length > 6000
         val notInComposition = it.composition == null
         if (notInComposition && content.value.text.length != it.text.length) {
@@ -64,7 +67,17 @@ class TextEditorViewModel {
                 resetEditing = false
             )
         }
-        content.value = if (!forceEfficientMode && notInComposition) it.copy(theme.codeString(it.text, mainViewModel.darkMode())) else it
+
+        content.value = it
+
+        if (forceEfficientMode || !notInComposition) {
+            return
+        }
+
+        lastConversionJob = CoroutineScope(Dispatchers.IO).launch {
+            delay(1500)
+            content.value =  it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
+        }
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
