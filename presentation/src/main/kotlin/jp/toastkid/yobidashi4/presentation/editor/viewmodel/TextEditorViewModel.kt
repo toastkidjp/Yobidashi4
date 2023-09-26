@@ -122,7 +122,10 @@ class TextEditorViewModel {
                     verticalScrollState.scrollBy(it.sp.value)
                 }
             },
-            { content.value = it }
+            {
+                lastConversionJob?.cancel()
+                applyStyle(it)
+            }
         )
     }
 
