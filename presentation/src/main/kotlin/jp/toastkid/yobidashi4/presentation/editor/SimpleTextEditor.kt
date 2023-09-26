@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
@@ -98,6 +99,7 @@ fun SimpleTextEditor(
             scrollState = viewModel.verticalScrollState(),
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(viewModel.focusRequester())
+                .fillMaxWidth()
                 .onKeyEvent {
                     altPressed = it.isAltPressed
                     if (it.type != KeyEventType.KeyUp) {
