@@ -164,6 +164,7 @@ class TextEditorViewModel {
         lastParagraph = null
         content.value = TextFieldValue()
         job.cancel()
+        lastConversionJob?.cancel()
     }
 
 }
