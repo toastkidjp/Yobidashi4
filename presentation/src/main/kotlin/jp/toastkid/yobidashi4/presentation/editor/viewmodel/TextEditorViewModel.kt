@@ -76,9 +76,13 @@ class TextEditorViewModel {
             return
         }
 
+        applyStyle(it)
+    }
+
+    private fun applyStyle(it: TextFieldValue) {
         lastConversionJob = CoroutineScope(Dispatchers.IO).launch {
             delay(1500)
-            content.value =  it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
+            content.value = it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
         }
     }
 
@@ -108,7 +112,6 @@ class TextEditorViewModel {
     fun focusRequester() = focusRequester
 
     fun onKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
-        lastConversionJob?.cancel()
         return keyEventConsumer(
             it,
             tab.path,
