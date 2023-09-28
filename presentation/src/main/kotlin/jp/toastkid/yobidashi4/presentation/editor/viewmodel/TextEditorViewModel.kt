@@ -97,10 +97,6 @@ class TextEditorViewModel {
 
     fun lineNumberScrollState() = lineNumberScrollState
 
-    fun maxLineCount(): Int {
-        return lineCount.value
-    }
-
     fun onClickLineNumber(it: Int) {
         val multiParagraph = lastParagraph ?: return
 
@@ -144,7 +140,7 @@ class TextEditorViewModel {
     }
 
     fun lineNumbers(): List<Pair<Int, String>> {
-        val max = maxLineCount()
+        val max = lineCount.value
         val length = max.toString().length
         return (1 .. max).map {
             val lineNumberCount = it
