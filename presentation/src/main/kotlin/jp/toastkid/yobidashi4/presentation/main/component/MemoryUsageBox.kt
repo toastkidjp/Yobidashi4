@@ -36,6 +36,8 @@ fun MemoryUsageBox() {
                 Column {
                     Text("Used memory: ${memoryUsage.value.usedMemory()}", modifier = Modifier.padding(8.dp))
                     Text("Free memory: ${memoryUsage.value.freeMemory()}", modifier = Modifier.padding(8.dp))
+                }
+                Column {
                     Text("Total memory: ${memoryUsage.value.totalMemory()}", modifier = Modifier.padding(8.dp))
                     Text("Max memory: ${memoryUsage.value.maxMemory()}", modifier = Modifier.padding(8.dp))
                 }
