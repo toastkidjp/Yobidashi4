@@ -35,6 +35,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -114,7 +115,7 @@ fun TableView(aggregationResult: AggregationResult) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.fillMaxWidth()
-                                    .background(backgroundColor.value)
+                                    .drawBehind { drawRect(backgroundColor.value) }
                                     .onPointerEvent(PointerEventType.Enter) {
                                         cursorOn.value = true
                                     }
