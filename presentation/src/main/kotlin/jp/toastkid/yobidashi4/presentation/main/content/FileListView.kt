@@ -363,7 +363,7 @@ private fun FileListItemRow(
                     }
                 ) {
                     Text(
-                        "内部リンクをコピー",
+                        "Clip internal link",
                         modifier = Modifier.padding(8.dp).fillMaxSize()
                     )
                 }
