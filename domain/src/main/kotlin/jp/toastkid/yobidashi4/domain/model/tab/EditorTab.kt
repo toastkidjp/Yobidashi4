@@ -21,7 +21,7 @@ data class EditorTab(
 
     override fun closeable(): Boolean = editing.shouldShowIndicator().not()
 
-    override fun iconPath(): String? {
+    override fun iconPath(): String {
         return "images/icon/ic_edit.xml"
     }
 
