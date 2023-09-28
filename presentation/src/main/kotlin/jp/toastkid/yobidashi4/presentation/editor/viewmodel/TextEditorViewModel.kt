@@ -143,6 +143,21 @@ class TextEditorViewModel {
         }
     }
 
+    fun lineNumbers(): List<Pair<Int, String>> {
+        val max = maxLineCount()
+        val length = max.toString().length
+        return (1 .. max).map {
+            val lineNumberCount = it
+            val fillCount = length - lineNumberCount.toString().length
+            return@map (it - 1 to with(StringBuilder()) {
+                repeat(fillCount) {
+                    append(" ")
+                }
+                append(lineNumberCount)
+            }.toString())
+        }
+    }
+
     fun launchTab(tab: EditorTab) {
         this.tab = tab
         focusRequester.requestFocus()
