@@ -70,19 +70,7 @@ fun SimpleTextEditor(
                             .padding(horizontal = 8.dp)
                             .wrapContentSize(unbounded = true)
                     ) {
-                        val max = viewModel.maxLineCount()
-                        val length = max.toString().length
-                        val lineNumbers = (1 .. max).map {
-                            val lineNumberCount = it
-                            val fillCount = length - lineNumberCount.toString().length
-                            return@map (it - 1 to with(StringBuilder()) {
-                                repeat(fillCount) {
-                                    append(" ")
-                                }
-                                append(lineNumberCount)
-                            }.toString())
-                        }
-                        lineNumbers.forEach { (lineNumber, lineNumberText) ->
+                        viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
                             Box(
                                 contentAlignment = Alignment.CenterEnd,
                                 modifier = Modifier.clickable {
