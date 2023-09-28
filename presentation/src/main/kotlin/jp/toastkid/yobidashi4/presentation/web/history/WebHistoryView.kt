@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.web.history
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -29,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -98,7 +98,7 @@ fun WebHistoryView() {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.animateItemPlacement()
-                            .background(backgroundColor.value)
+                            .drawBehind { drawRect(backgroundColor.value) }
                             .onPointerEvent(PointerEventType.Enter) {
                                 cursorOn.value = true
                             }
