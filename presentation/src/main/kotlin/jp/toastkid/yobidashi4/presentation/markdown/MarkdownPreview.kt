@@ -134,13 +134,6 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
                 scrollState.scrollTo(tab.scrollPosition())
 
                 focusRequester.requestFocus()
-
-                /*val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-                withContext(Dispatchers.IO) {
-                    viewModel.finderFlow().collect {
-                        webViewPool.find(id, it.target, it.upper.not())
-                    }
-                }*/
             }
 
             DisposableEffect(tab) {
