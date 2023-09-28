@@ -23,7 +23,7 @@ import org.koin.core.component.inject
 
 class FinderAreaView(
     private val orderChannel: Channel<FindOrder>,
-    private val messageChannel: Channel<String>
+    messageChannel: Channel<String>
 ): KoinComponent {
 
     private val setting: Setting by inject()
