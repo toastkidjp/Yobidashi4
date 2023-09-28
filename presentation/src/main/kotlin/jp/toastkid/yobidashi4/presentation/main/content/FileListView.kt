@@ -352,7 +352,7 @@ private fun FileListItemRow(
                     }
                 ) {
                     Text(
-                        "記事名をコピー",
+                        "Copy title",
                         modifier = Modifier.padding(8.dp).fillMaxSize()
                     )
                 }
