@@ -124,6 +124,9 @@ class TextEditorViewModel {
             },
             {
                 lastConversionJob?.cancel()
+                if (it.text.length > 8000) {
+                    return@keyEventConsumer
+                }
                 applyStyle(it)
             }
         )
