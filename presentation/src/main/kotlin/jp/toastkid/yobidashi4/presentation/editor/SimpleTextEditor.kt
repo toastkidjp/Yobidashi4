@@ -61,6 +61,7 @@ fun SimpleTextEditor(
             onTextLayout = {
                 viewModel.setMultiParagraph(it.multiParagraph)
             },
+            visualTransformation = viewModel.visualTransformation(),
             decorationBox = {
                 Row {
                     Column(
