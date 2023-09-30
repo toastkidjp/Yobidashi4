@@ -177,8 +177,12 @@ class TextEditorViewModel {
                     if (it.upper) content.value.text.lastIndexOf(it.target, selected - 1, it.caseSensitive.not())
                     else content.value.text.indexOf(it.target, selected + 1, it.caseSensitive.not())
                 if (selected == -1) {
+                    mainViewModel.setFindStatus("\"${it.target}\" was not found.")
                     return@collect
                 }
+
+                val foundCount = if (content.value.text.isBlank()) 0 else content.value.text.split(it.target).size - 1
+                mainViewModel.setFindStatus("\"${it.target}\" was found. $foundCount")
 
                 content.value = content.value.copy(selection = TextRange(selected, selected + it.target.length))
             }
