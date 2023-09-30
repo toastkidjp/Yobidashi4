@@ -11,10 +11,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -85,7 +82,7 @@ class TextEditorViewModel {
     private fun applyStyle(it: TextFieldValue, useDelay: Long = 0L) {
         lastConversionJob = CoroutineScope(Dispatchers.IO).launch {
             delay(useDelay)
-            //content.value = it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
+            content.value = it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
         }
     }
 
@@ -124,6 +121,7 @@ class TextEditorViewModel {
             {
                 lastConversionJob?.cancel()
                 if (it.text.length > 8000) {
+                    content.value = it
                     return@keyEventConsumer
                 }
                 applyStyle(it)
@@ -162,12 +160,11 @@ class TextEditorViewModel {
         focusRequester.requestFocus()
 
         val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
-        /*TODO if (newContent.text.length > 8000) {
+        if (newContent.text.length > 8000) {
             content.value = newContent
         } else {
             applyStyle(newContent)
-        }*/
-        content.value = newContent
+        }
 
         var selected = -1
         CoroutineScope(Dispatchers.IO).launch {
@@ -198,14 +195,6 @@ class TextEditorViewModel {
         content.value = TextFieldValue()
         job.cancel()
         lastConversionJob?.cancel()
-    }
-
-    fun visualTransformation(): VisualTransformation {
-        return if (content.value.text.length < 6000) {
-            VisualTransformation { TransformedText(theme.codeString(it.text, mainViewModel.darkMode()), OffsetMapping.Identity) }
-        } else {
-            VisualTransformation.None
-        }
     }
 
 }
