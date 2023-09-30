@@ -298,18 +298,36 @@ private fun FileListItemRow(
             DropdownMenuItem(
                 onClick = {
                     selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                        viewModel.openFile(it)
+                        if (it.extension == "md" || it.extension == "txt") {
+                            // TODO refactor code.
+                            Desktop.getDesktop().open(it.toFile())
+                        } else {
+                            viewModel.openFile(it)
+                        }
                     }
                     openOption.value = false
                 }
             ) {
                 Text(
-                    if (fileListItem.editable) "Edit" else "Open",
+                    "Open",
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
 
             if (fileListItem.editable) {
+                DropdownMenuItem(
+                    onClick = {
+                        selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
+                            viewModel.openFile(it)
+                        }
+                        openOption.value = false
+                    }
+                ) {
+                    Text(
+                        "Edit",
+                        modifier = Modifier.padding(8.dp).fillMaxSize()
+                    )
+                }
                 DropdownMenuItem(
                     onClick = {
                         selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
