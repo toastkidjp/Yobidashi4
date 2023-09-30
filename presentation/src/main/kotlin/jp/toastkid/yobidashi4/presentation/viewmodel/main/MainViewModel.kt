@@ -82,6 +82,10 @@ interface MainViewModel {
 
     fun replaceAll()
 
+    fun setFindStatus(status: String)
+
+    fun findStatus(): String
+
     fun droppedPathFlow(): Flow<Path>
 
     fun emitDroppedPath(paths: Collection<Path>)
