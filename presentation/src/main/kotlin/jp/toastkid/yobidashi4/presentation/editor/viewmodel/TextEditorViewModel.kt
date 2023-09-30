@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.EditorTheme
+import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +51,8 @@ class TextEditorViewModel {
     private val lineNumberScrollState = ScrollState(0)
 
     private val focusRequester = FocusRequester()
+
+    private val finderMessageFactory = FinderMessageFactory()
 
     private val job = Job()
 
@@ -176,13 +179,13 @@ class TextEditorViewModel {
                 selected =
                     if (it.upper) content.value.text.lastIndexOf(it.target, selected - 1, it.caseSensitive.not())
                     else content.value.text.indexOf(it.target, selected + 1, it.caseSensitive.not())
+
+                val foundCount = if (it.target.isBlank()) 0 else content.value.text.split(it.target).size - 1
+                mainViewModel.setFindStatus(finderMessageFactory(it.target, foundCount))
+
                 if (selected == -1) {
-                    mainViewModel.setFindStatus("\"${it.target}\" was not found.")
                     return@collect
                 }
-
-                val foundCount = if (content.value.text.isBlank()) 0 else content.value.text.split(it.target).size - 1
-                mainViewModel.setFindStatus("\"${it.target}\" was found. $foundCount")
 
                 content.value = content.value.copy(selection = TextRange(selected, selected + it.target.length))
             }
