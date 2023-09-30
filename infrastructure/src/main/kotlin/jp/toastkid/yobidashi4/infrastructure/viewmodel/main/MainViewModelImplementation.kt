@@ -407,6 +407,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
     }
 
+    private val findStatus = mutableStateOf("")
+
+    override fun setFindStatus(status: String) {
+        findStatus.value = status
+    }
+
+    override fun findStatus(): String {
+        return findStatus.value
+    }
+
     private val droppedPathFlow = MutableSharedFlow<Path>()
     override fun droppedPathFlow(): Flow<Path> {
         return droppedPathFlow.asSharedFlow()
