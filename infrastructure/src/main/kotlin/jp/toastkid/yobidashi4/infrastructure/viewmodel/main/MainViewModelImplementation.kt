@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
+import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -121,19 +122,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        val indexOfFirst = tabs.indexOfFirst { it is EditorTab && it.path == path }
-        if (indexOfFirst != -1) {
-            _selected.value = indexOfFirst
-            return
-        }
-
-        val tab = EditorTab(path)
-        (tab as? EditorTab)?.loadContent()
-        if (onBackground) {
-            _tabs.add(tab)
-            return
-        }
-        openTab(tab)
+        Desktop.getDesktop().open(path.toFile())
     }
 
     override fun openPreview(path: Path, onBackground: Boolean) {
@@ -180,6 +169,26 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         openTab(newTab)
+    }
+
+    override fun edit(path: Path, onBackground: Boolean) {
+        if (Files.exists(path).not()) {
+            return
+        }
+
+        val indexOfFirst = tabs.indexOfFirst { it is EditorTab && it.path == path }
+        if (indexOfFirst != -1) {
+            _selected.value = indexOfFirst
+            return
+        }
+
+        val tab = EditorTab(path)
+        (tab as? EditorTab)?.loadContent()
+        if (onBackground) {
+            _tabs.add(tab)
+            return
+        }
+        openTab(tab)
     }
 
     private val webHistoryRepository: WebHistoryRepository by inject()
