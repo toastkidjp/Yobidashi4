@@ -37,6 +37,9 @@ interface MainViewModel {
     fun openFile(path: Path, onBackground: Boolean = false)
     fun openPreview(path: Path, onBackground: Boolean = false)
     fun openUrl(url: String, background: Boolean)
+
+    fun edit(path: Path, onBackground: Boolean = false)
+
     fun removeTabAt(index: Int)
     fun closeCurrent()
     fun addNewArticle(path: Path)
