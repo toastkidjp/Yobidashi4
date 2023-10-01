@@ -47,7 +47,7 @@ class ArticleOpenerTest {
             )
         }
 
-        every { viewModel.openFile(any()) } just Runs
+        every { viewModel.edit(any()) } just Runs
         every { articleFactory.withTitle(any()) } returns article
         every { article.path() } returns mockk()
     }
@@ -62,7 +62,7 @@ class ArticleOpenerTest {
     fun fromRawText() {
         articleOpener.fromRawText("[[テスト]]")
 
-        verify(exactly = 1) { viewModel.openFile(any()) }
+        verify(exactly = 1) { viewModel.edit(any()) }
         verify(exactly = 1) { articleFactory.withTitle(any()) }
     }
 
@@ -70,7 +70,7 @@ class ArticleOpenerTest {
     fun fromRawTextContainingPluralLinkCase() {
         articleOpener.fromRawText("今日はとにかく[[テスト]]して[[PDCA]]を回そう")
 
-        verify(exactly = 2) { viewModel.openFile(any()) }
+        verify(exactly = 2) { viewModel.edit(any()) }
         verify(exactly = 2) { articleFactory.withTitle(any()) }
     }
 
