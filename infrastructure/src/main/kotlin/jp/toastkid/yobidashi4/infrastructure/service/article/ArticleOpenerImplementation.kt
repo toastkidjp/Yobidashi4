@@ -21,7 +21,7 @@ class ArticleOpenerImplementation : KoinComponent, ArticleOpener {
         }
         val matcher = Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL).matcher(rawText)
         while (matcher.find()) {
-            viewModel.openFile(articleFactory.withTitle(matcher.group(1)).path())
+            viewModel.edit(articleFactory.withTitle(matcher.group(1)).path())
         }
     }
 
