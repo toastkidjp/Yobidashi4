@@ -203,13 +203,18 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                     articleStates.set(clickedIndex, fileListItem.reverseSelection())
                                 },
                                 onLongClick = {
-                                    viewModel.openFile(fileListItem.path, true)
+                                    if (fileListItem.editable) {
+                                        viewModel.edit(fileListItem.path, true)
+                                    } else {
+                                        viewModel.openFile(fileListItem.path, true)
+                                    }
                                 },
                                 onDoubleClick = {
-                                    viewModel.openFile(fileListItem.path)
-                                    val extension = fileListItem.path.extension
-                                    if (extension == "md" || extension == "txt") {
+                                    if (fileListItem.editable) {
                                         viewModel.hideArticleList()
+                                        viewModel.edit(fileListItem.path)
+                                    } else {
+                                        viewModel.openFile(fileListItem.path)
                                     }
                                 }
                             )
@@ -298,12 +303,7 @@ private fun FileListItemRow(
             DropdownMenuItem(
                 onClick = {
                     selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                        if (it.extension == "md" || it.extension == "txt") {
-                            // TODO refactor code.
-                            Desktop.getDesktop().open(it.toFile())
-                        } else {
-                            viewModel.openFile(it)
-                        }
+                        viewModel.openFile(it)
                     }
                     openOption.value = false
                 }
@@ -318,7 +318,7 @@ private fun FileListItemRow(
                 DropdownMenuItem(
                     onClick = {
                         selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                            viewModel.openFile(it)
+                            viewModel.edit(it)
                         }
                         openOption.value = false
                     }
