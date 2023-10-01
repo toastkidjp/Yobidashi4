@@ -19,7 +19,6 @@ dependencies {
 
     implementation(project(path = ":domain"))
 
-    implementation("com.fifesoft:rsyntaxtextarea:3.3.2")
     implementation("me.friwi:jcefmaven:110.0.25")
 
     implementation("org.jsoup:jsoup:1.15.3")
