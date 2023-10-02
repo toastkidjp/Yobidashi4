@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -246,10 +245,13 @@ private fun FileListItemRow(
     val openOption = remember { mutableStateOf(false) }
     val cursorOn = remember { mutableStateOf(false) }
 
+    val underlay = if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f)
+    else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f)
+    else Color.Transparent
     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
     Box(
-        modifier = modifier.drawBehind { drawRect(backgroundColor.value) }
+        modifier = modifier.drawBehind { drawRect(underlay) }
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
@@ -269,11 +271,7 @@ private fun FileListItemRow(
                     }
                 }
             }
-            .background(
-                if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (index % 2 == 0) MaterialTheme.colors.surface.copy(
-                    alpha = 0.5f
-                ) else Color.Transparent
-            )
+            .drawBehind { drawRect(backgroundColor.value) }
             .padding(horizontal = 16.dp)
         ) {
             val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
