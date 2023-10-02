@@ -111,7 +111,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, closeable, type))
     }
 
-
     override fun openFile(path: Path, onBackground: Boolean) {
         if (path.extension == "m4a" || path.extension == "mp3") {
             MediaPlayerInvokerImplementation().invoke(path)
