@@ -348,7 +348,7 @@ private fun FileListItemRow(
                     }
                 ) {
                     Text(
-                        "バックグラウンドで開く",
+                        "Open background",
                         modifier = Modifier.padding(8.dp).fillMaxSize()
                     )
                 }
