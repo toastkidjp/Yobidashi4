@@ -16,10 +16,6 @@ class Editor(
     val isActive: Boolean
         get() = selection.selected === this
 
-    fun activate() {
-        selection.selected = this
-    }
-
     class Line(val number: Int, val content: Content)
 
     interface Lines {
