@@ -14,7 +14,7 @@ class CefContextMenuFactory {
         ContextMenu.values().filter {
             return@filter when (it.context) {
                 Context.IMAGE -> params?.sourceUrl.isNullOrBlank().not()
-                Context.LINK -> params?.linkUrl.isNullOrBlank().not()
+                Context.LINK -> params?.pageUrl.isNullOrBlank().not()
                 Context.PLAIN_TEXT -> params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()
                 else -> return@filter true
             }
