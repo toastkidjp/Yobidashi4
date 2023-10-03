@@ -13,11 +13,9 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import java.awt.Desktop
-import java.io.IOException
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
@@ -28,12 +26,8 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.slf4j.LoggerFactory
 
 class KeyEventConsumer(
     private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm
@@ -55,23 +49,7 @@ class KeyEventConsumer(
 
         return when {
             it.isCtrlPressed && it.key == Key.S -> {
-                try {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val text = content.text
-                        val textArray = text.toByteArray()
-                        if (textArray.isNotEmpty()) {
-                            Files.write(path, textArray)
-                        }
-                        mainViewModel.updateEditorContent(
-                            path,
-                            content.text,
-                            -1,
-                            resetEditing = true
-                        )
-                    }
-                } catch (e: IOException) {
-                    LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
-                }
+                mainViewModel.saveCurrentEditorTab()
                 true
             }
             it.isCtrlPressed && it.key == Key.D -> {
