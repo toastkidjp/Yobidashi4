@@ -12,7 +12,9 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
+import java.awt.Desktop
 import java.io.IOException
+import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -318,6 +320,19 @@ class KeyEventConsumer(
                     return true
                 }
                 mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
+                true
+            }
+            it.isCtrlPressed && it.isAltPressed && it.key == Key.O -> {
+                val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
+                if (selected.isEmpty()) {
+                    return false
+                }
+
+                val url = if (selected.startsWith("http://") || selected.startsWith("https://"))
+                    selected
+                else
+                    "https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}"
+                Desktop.getDesktop().browse(URI(url))
                 true
             }
             it.isCtrlPressed && it.key == Key.Q -> {
