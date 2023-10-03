@@ -34,7 +34,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
-import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.min
@@ -108,7 +107,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     currentTab.switchPreview()
                 }
                 Item("Save") {
-                    viewModel.emitEditorCommand(MenuCommand.SAVE)
+                    viewModel.saveCurrentEditorTab()
                 }
                 Item("Replace", shortcut = KeyShortcut(Key.R, ctrl = true)) {
                     viewModel.switchFind()
