@@ -64,10 +64,10 @@ class TextEditorViewModel {
         lastConversionJob?.cancel()
         val forceEfficientMode = content.value.text.length > 6000
         val notInComposition = it.composition == null
-        if (notInComposition && content.value.text.length != it.text.length) {
+        if (content.value.text != it.text) {
             mainViewModel.updateEditorContent(
                 tab.path,
-                content.value.text,
+                it.text,
                 -1,
                 resetEditing = false
             )
