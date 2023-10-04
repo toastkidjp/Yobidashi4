@@ -9,8 +9,8 @@ import androidx.compose.ui.window.WindowState
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
-import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
+import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import kotlinx.coroutines.flow.Flow
 
 interface MainViewModel {
@@ -93,8 +93,6 @@ interface MainViewModel {
     fun droppedPathFlow(): Flow<Path>
 
     fun emitDroppedPath(paths: Collection<Path>)
-
-    fun editorCommandFlow(): Flow<MenuCommand>
 
     fun emitEditorCommand(command: MenuCommand)
 

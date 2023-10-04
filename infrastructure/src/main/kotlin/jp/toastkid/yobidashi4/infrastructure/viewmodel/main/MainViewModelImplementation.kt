@@ -462,10 +462,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     private val editorCommandFlow = MutableSharedFlow<MenuCommand>()
 
-    override fun editorCommandFlow(): Flow<MenuCommand> {
-        return editorCommandFlow.asSharedFlow()
-    }
-
     override fun emitEditorCommand(command: MenuCommand) {
         CoroutineScope(Dispatchers.IO).launch {
             editorCommandFlow.emit(command)
