@@ -106,7 +106,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Item(if (currentTab.showPreview()) "Hide preview" else "Show preview", shortcut = KeyShortcut(Key.M, ctrl = true)) {
                     currentTab.switchPreview()
                 }
-                Item("Save") {
+                Item("Save", icon = painterResource("images/icon/ic_save.xml")) {
                     viewModel.saveCurrentEditorTab()
                 }
                 Item("Replace", shortcut = KeyShortcut(Key.R, ctrl = true)) {
