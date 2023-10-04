@@ -94,8 +94,6 @@ interface MainViewModel {
 
     fun emitDroppedPath(paths: Collection<Path>)
 
-    fun emitEditorCommand(command: MenuCommand)
-
     fun slideshowPath(): Path?
 
     fun slideshow(path: Path)
