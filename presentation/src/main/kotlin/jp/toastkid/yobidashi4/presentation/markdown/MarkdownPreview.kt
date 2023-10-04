@@ -57,7 +57,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
-import jp.toastkid.yobidashi4.presentation.editor.legacy.finder.FindOrder
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
@@ -162,7 +162,8 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
 private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     val lastLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val finderTarget = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow() }
-    val annotatedString = annotate(LinkGenerator().invoke(text), MaterialTheme.colors.onSurface, finderTarget.collectAsState(FindOrder.EMPTY).value.target)
+    val annotatedString = annotate(LinkGenerator().invoke(text), MaterialTheme.colors.onSurface, finderTarget.collectAsState(
+        FindOrder.EMPTY).value.target)
     ClickableText(
         annotatedString,
         style = textStyle,
