@@ -20,7 +20,7 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.LinkDecoratorService
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel

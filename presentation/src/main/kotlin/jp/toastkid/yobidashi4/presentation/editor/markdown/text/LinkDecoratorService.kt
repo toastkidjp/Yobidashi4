@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.service
+package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import java.io.IOException
 import java.net.MalformedURLException
