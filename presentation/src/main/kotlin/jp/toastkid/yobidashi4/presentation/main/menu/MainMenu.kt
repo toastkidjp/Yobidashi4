@@ -109,7 +109,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 Item("Save", icon = painterResource("images/icon/ic_save.xml")) {
                     viewModel.saveCurrentEditorTab()
                 }
-                Item("Replace", shortcut = KeyShortcut(Key.R, ctrl = true)) {
+                Item("Replace", shortcut = KeyShortcut(Key.R, ctrl = true), icon = painterResource("images/icon/ic_replace.xml")) {
                     viewModel.switchFind()
                 }
                 Item("Editor's Color & Font") {
