@@ -29,7 +29,8 @@ class CefContextMenuFactoryTest {
 
         every { model.addItem(any(), any()) } returns true
         every { params.sourceUrl } returns "https://www.yahoo.co.jp/favicon.ico"
-        every { params.linkUrl } returns "https://www.yahoo.co.jp"
+        every { params.linkUrl } returns "https://www.yahoo.co.jp/link"
+        every { params.pageUrl } returns "https://www.yahoo.co.jp"
     }
 
     @Test
