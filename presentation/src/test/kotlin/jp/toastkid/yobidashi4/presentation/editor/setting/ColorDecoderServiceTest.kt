@@ -1,5 +1,6 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.service
+package jp.toastkid.yobidashi4.presentation.editor.setting
 
+import jp.toastkid.yobidashi4.presentation.editor.setting.ColorDecoderService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach

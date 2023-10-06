@@ -4,7 +4,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Properties
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ColorDecoderService
+import jp.toastkid.yobidashi4.presentation.editor.setting.ColorDecoderService
 import kotlin.io.path.exists
 import org.koin.core.annotation.Single
 

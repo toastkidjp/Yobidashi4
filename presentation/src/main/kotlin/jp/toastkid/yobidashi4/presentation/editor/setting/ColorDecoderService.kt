@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.service
+package jp.toastkid.yobidashi4.presentation.editor.setting
 
 import java.awt.Color
 
