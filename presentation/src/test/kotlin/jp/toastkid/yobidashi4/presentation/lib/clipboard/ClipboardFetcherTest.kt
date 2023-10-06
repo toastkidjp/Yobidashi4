@@ -1,10 +1,11 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.service
+package jp.toastkid.yobidashi4.presentation.lib.clipboard
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.Transferable
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach

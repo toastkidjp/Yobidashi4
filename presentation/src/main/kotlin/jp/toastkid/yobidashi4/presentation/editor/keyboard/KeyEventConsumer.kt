@@ -18,13 +18,13 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min

@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.service
+package jp.toastkid.yobidashi4.presentation.lib.clipboard
 
 import java.awt.Image
 import java.awt.Toolkit

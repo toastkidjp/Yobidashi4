@@ -9,7 +9,7 @@ import java.net.URL
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeDecoder
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
-import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
