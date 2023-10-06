@@ -104,8 +104,8 @@ internal fun CompoundInterestCalculatorView() {
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Year") },
-                    onValueChange = {
-                        thirdInput.value = TextFieldValue(it.text, it.selection, it.composition)
+                    onValueChange = { newValue ->
+                        thirdInput.value = TextFieldValue(newValue.text, newValue.selection, newValue.composition)
 
                         convert(firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
                             val (installment, annualRate, year) = it
