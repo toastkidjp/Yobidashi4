@@ -10,7 +10,10 @@ class ListHeadAdder {
         if (text.isNullOrEmpty()) {
             return text
         }
-        return head + " " + text.trimEnd().replace("\n", "\n$head ")
+
+        val putEndLineBreak = if (text.endsWith("\n")) "\n" else ""
+
+        return head + " " + text.trimEnd().replace("\n", "\n$head ") + putEndLineBreak
     }
 
 }
