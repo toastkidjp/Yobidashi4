@@ -10,7 +10,6 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
-import jp.toastkid.yobidashi4.presentation.editor.legacy.MenuCommand
 import kotlinx.coroutines.flow.Flow
 
 interface MainViewModel {
