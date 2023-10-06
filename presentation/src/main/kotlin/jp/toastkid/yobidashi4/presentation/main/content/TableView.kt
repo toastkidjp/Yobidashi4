@@ -151,7 +151,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                                 val vm: MainViewModel by inject()
                                             }
                                             val nextArticle = koin.articleFactory.withTitle(article[0].toString())
-                                            koin.vm.openFile(nextArticle.path())
+                                            koin.vm.edit(nextArticle.path())
                                         }
                                 )
 
