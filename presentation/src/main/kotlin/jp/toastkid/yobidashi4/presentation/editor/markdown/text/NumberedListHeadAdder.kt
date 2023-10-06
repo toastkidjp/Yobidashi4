@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.text
+package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 class NumberedListHeadAdder {
 

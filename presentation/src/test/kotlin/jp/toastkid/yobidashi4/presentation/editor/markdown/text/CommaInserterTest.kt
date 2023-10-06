@@ -1,7 +1,8 @@
-package jp.toastkid.yobidashi4.presentation.editor.legacy.text
+package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
