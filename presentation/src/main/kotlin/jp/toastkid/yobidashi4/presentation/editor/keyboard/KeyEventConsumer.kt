@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutter
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.ListHeadAdder
+import jp.toastkid.yobidashi4.presentation.editor.legacy.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
@@ -135,7 +136,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val converted = selected.split("\n").mapIndexed { index, line -> "${index + 1}. $line" }.joinToString("\n")
+                val converted = NumberedListHeadAdder().invoke(selected) ?: return false
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
