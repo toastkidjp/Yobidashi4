@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun StatusLabel(labelText: String?, modifier: Modifier) {
+internal fun StatusLabel(labelText: String?, modifier: Modifier) {
     Box(
         contentAlignment = Alignment.BottomEnd,
         modifier = modifier.fillMaxWidth().padding(end = 8.dp)) {
