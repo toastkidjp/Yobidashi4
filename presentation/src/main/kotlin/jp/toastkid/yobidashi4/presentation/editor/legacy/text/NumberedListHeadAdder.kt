@@ -10,9 +10,11 @@ class NumberedListHeadAdder {
             return text
         }
 
+        val putEndLineBreak = if (text.endsWith("\n")) "\n" else ""
+
         return text.trimEnd().split("\n")
                 .mapIndexed { index, s -> "${index + 1}. $s" }
-                .reduceRight { s, acc -> "$s\n$acc" } + "\n"
+                .reduceRight { s, acc -> "$s\n$acc" } + putEndLineBreak
     }
 
 }
