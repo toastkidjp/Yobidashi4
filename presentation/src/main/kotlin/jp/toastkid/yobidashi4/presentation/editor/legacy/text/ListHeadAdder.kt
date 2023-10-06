@@ -10,7 +10,7 @@ class ListHeadAdder {
         if (text.isNullOrEmpty()) {
             return text
         }
-        return head + " " + text.trimEnd().replace("\n", "\n$head ") + "\n"
+        return head + " " + text.trimEnd().replace("\n", "\n$head ")
     }
 
 }
