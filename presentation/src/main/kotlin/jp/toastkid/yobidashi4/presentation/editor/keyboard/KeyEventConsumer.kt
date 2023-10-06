@@ -20,9 +20,10 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.editor.legacy.service.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.legacy.text.CommaInserter
+import jp.toastkid.yobidashi4.presentation.editor.legacy.text.ListHeadAdder
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -111,7 +112,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val converted = selected.split("\n").map { "- $it" }.joinToString("\n")
+                val converted = ListHeadAdder().invoke(selected, "-") ?: return false
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
