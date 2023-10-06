@@ -103,7 +103,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         val currentTab = viewModel.currentTab()
         if (currentTab is EditorTab) {
             Menu("Edit") {
-                Item(if (currentTab.showPreview()) "Hide preview" else "Show preview", shortcut = KeyShortcut(Key.M, ctrl = true)) {
+                Item(if (currentTab.showPreview()) "Hide preview" else "Show preview", shortcut = KeyShortcut(Key.M, ctrl = true), icon = painterResource("images/icon/ic_markdown.xml")) {
                     currentTab.switchPreview()
                 }
                 Item("Save", icon = painterResource("images/icon/ic_save.xml")) {
