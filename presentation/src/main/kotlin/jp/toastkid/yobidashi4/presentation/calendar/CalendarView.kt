@@ -195,7 +195,7 @@ private fun openDateArticle(localDate: LocalDate, onBackground: Boolean = false)
         val viewModel: MainViewModel by inject()
         val setting: Setting by inject()
     }
-    koin.viewModel.openFile(
+    koin.viewModel.edit(
         koin.setting.articleFolderPath().resolve(
             "${ArticleTitleGenerator().invoke(localDate)}.md"
         ),
