@@ -16,7 +16,6 @@ import java.awt.Desktop
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
@@ -223,26 +222,9 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
-                val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
-                if (selected.isEmpty()) {
-                    return false
-                }
-
-                val reversed = if (selected.toCharArray()[0].isUpperCase()) selected.lowercase() else selected.uppercase()
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        reversed
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        content.selection,
-                        content.composition
-                    )
-                )
+                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                    if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
+                }?.let(setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.B -> {
