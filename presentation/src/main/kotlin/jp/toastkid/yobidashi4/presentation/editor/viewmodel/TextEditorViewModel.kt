@@ -113,7 +113,6 @@ class TextEditorViewModel {
     fun onKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
         return keyEventConsumer(
             it,
-            tab.path,
             content.value,
             lastParagraph,
             {

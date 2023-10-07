@@ -39,7 +39,6 @@ class KeyEventConsumer(
     @OptIn(ExperimentalComposeUiApi::class)
     operator fun invoke(
         it: KeyEvent,
-        path: Path,
         content: TextFieldValue,
         lastParagraph: MultiParagraph?,
         scrollBy: (Float) -> Unit,
