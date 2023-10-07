@@ -399,7 +399,7 @@ class KeyEventConsumer(
             .toString()
         return TextFieldValue(
             newText,
-            TextRange(selectionStartIndex + converted.length),
+            TextRange(selectionStartIndex, selectionStartIndex + converted.length),
             content.composition
         )
     }
