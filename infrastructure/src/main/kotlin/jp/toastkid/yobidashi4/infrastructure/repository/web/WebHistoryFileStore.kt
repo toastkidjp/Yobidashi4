@@ -41,7 +41,7 @@ class WebHistoryFileStore : WebHistoryRepository {
             return emptyList()
         }
 
-        return Files.readAllLines(path).map {
+        return Files.readAllLines(path).filter { it.isNotBlank() }.map {
             val split = it.split("\t")
             WebHistory(
                 split[0],
