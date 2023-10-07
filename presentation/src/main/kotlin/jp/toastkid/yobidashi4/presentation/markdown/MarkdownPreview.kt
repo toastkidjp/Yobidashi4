@@ -2,12 +2,15 @@ package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.ClickableText
@@ -42,9 +45,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.net.URL
@@ -86,15 +89,20 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
                     content.lines().forEach { line ->
                         when (line) {
                             is TextBlock -> {
-                                TextLineView(
-                                    line.text,
-                                    TextStyle(
-                                        fontSize = line.fontSize().sp,
-                                        fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
-                                        fontStyle = if (line.quote) FontStyle.Italic else FontStyle.Normal,
-                                    ),
-                                    Modifier.padding(bottom = 8.dp)
-                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    if (line.quote) {
+                                        VerticalDivider(2.dp, Color(0x88CCAAFF), Modifier.padding(start = 4.dp, end = 8.dp))
+                                    }
+                                    TextLineView(
+                                        line.text,
+                                        TextStyle(
+                                            color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
+                                            fontSize = line.fontSize().sp,
+                                            fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
+                                        ),
+                                        Modifier.padding(bottom = 8.dp)
+                                    )
+                                }
                             }
                             is ListLine -> Column {
                                 line.list.forEachIndexed { index, it ->
@@ -110,7 +118,7 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
                                         }
                                         TextLineView(
                                             if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
-                                            TextStyle(fontSize = 14.sp),
+                                            TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
                                             Modifier.padding(bottom = 4.dp)
                                         )
                                     }
@@ -157,6 +165,19 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
     }
 }
 
+@Composable
+private fun VerticalDivider(
+    thickness: Dp,
+    color: Color,
+    modifier: Modifier
+) {
+    Box(
+        modifier = modifier.heightIn(28.dp)
+            .width(thickness)
+            .background(color)
+    )
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
@@ -196,13 +217,7 @@ private fun annotate(text: String,  normalTextColor: Color, finderTarget: String
 
         val extracted = text.substring(lastIndex, startIndex)
         if (extracted.isNotEmpty()) {
-            val styleStart = length
             append(extracted)
-            addStyle(
-                style = SpanStyle(
-                    color = normalTextColor,
-                ), start = styleStart, end = styleStart + extracted.length
-            )
         }
 
         val annotateStart = length
@@ -229,11 +244,6 @@ private fun annotate(text: String,  normalTextColor: Color, finderTarget: String
     }
 
     append(text.substring(lastIndex, text.length))
-    addStyle(
-        style = SpanStyle(
-            color = normalTextColor,
-        ), start = finalTextStart, end = length
-    )
 
     if (finderTarget.isNullOrBlank().not()) {
         val finderMatcher = Pattern.compile(finderTarget).matcher(text)

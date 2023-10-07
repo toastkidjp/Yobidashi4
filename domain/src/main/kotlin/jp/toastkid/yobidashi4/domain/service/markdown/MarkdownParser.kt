@@ -53,7 +53,7 @@ class MarkdownParser {
                 }
 
                 if (line.startsWith("> ")) {
-                    markdown.add(TextBlock(line, quote = true))
+                    markdown.add(TextBlock(line.substring(2), quote = true))
                     return@forEach
                 }
                 // Adding code block.
