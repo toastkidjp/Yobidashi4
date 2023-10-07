@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.TableFormConverter
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -205,9 +206,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val endLineBreak = selected.endsWith("\n")
-                val tableString = selected.trimEnd().split("\n").map { "| ${it.replace(" ", " | ")}" }
-                    .joinToString("\n") + if (endLineBreak) "\n" else ""
+                val tableString = TableFormConverter().invoke(selected)
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
