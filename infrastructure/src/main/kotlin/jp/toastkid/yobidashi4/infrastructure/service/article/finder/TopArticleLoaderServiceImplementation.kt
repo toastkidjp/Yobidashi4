@@ -15,7 +15,7 @@ class TopArticleLoaderServiceImplementation : KoinComponent, TopArticleLoaderSer
 
     override operator fun invoke() =
         Files.list(setting.articleFolderPath())
+            .sorted { o1, o2 -> -Files.getLastModifiedTime(o1).compareTo(Files.getLastModifiedTime(o2)) }
             .collect(Collectors.toList())
-            .sortedByDescending { Files.getLastModifiedTime(it).toMillis() }
 
 }
