@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit, modifier: Modifier) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { deck.slides.size }
     val coroutineScope = rememberCoroutineScope()
     val imageCache = rememberImageCache()
 
@@ -119,12 +119,11 @@ fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyR
             }
 
             HorizontalPager(
-                pageCount = deck.slides.size,
                 pageSize = PageSize.Fill,
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) {
-                val slide = deck.slides.get(pagerState.currentPage)
+                val slide = deck.slides.get(it)
 
                 SlideView(slide)
             }

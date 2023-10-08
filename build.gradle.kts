@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.8.22"
-    id("org.jetbrains.compose") version "1.4.3"
+    id("org.jetbrains.compose") version "1.5.3"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
     id("com.google.devtools.ksp") version "1.8.22-1.0.11"
@@ -27,7 +27,9 @@ dependencies {
     implementation(project(path = ":presentation"))
     implementation(project(path = ":infrastructure"))
 
+    implementation("org.jetbrains.compose.runtime:runtime:1.5.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
 
     implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
@@ -57,7 +59,7 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile>() {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = org.jetbrains.kotlin.config.JvmTarget.JVM_11.description
     }
 
     tasks.test {
@@ -85,13 +87,38 @@ koverReport {
 
 val libraryPath = "jcef-bundle/"
 
-val hostOs = System.getProperty("os.name")
-open val target = when {
-    hostOs == "Mac OS X" -> "macos"
-    hostOs == "Linux" -> "linux"
-    hostOs.startsWith("Win") -> "windows"
-    else -> throw Error("Unknown os $hostOs")
+compose.desktop {
+    //"-Djava.library.path=$libraryPath"
+    application {
+        mainClass = "jp.toastkid.yobidashi4.main.MainKt"
+
+        nativeDistributions {
+            packageVersion = rootProject.version.toString()
+            description = "Yobidashi 4 is a Toast kid's super tool aop."
+            copyright = "c2022 toastkidjp. All rights reserved."
+            vendor = "Toast kid"
+            //licenseFile.set(project.file("LICENSE.txt"))
+            includeAllModules = true
+            outputBaseDir.set(project.rootDir.resolve("."))
+            targetFormats(
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg,
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi,
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
+            )
+            windows {
+                iconFile.set(project.file("src/main/resources/images/icon.png"))
+            }
+        }
+
+        buildTypes.release {
+            proguard {
+                configurationFiles.from(project.file("compose-desktop.pro"))
+                obfuscate.set(true)
+            }
+        }
+    }
 }
+
 /*TODO
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
