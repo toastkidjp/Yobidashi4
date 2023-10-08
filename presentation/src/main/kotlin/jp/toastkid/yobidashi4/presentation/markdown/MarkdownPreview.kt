@@ -1,8 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.ContextMenuArea
-import androidx.compose.foundation.ContextMenuItem
-import androidx.compose.foundation.ContextMenuState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
@@ -18,8 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.LocalTextContextMenu
-import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +24,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -52,7 +46,6 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.platform.LocalLocalization
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -90,146 +83,111 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
     val scrollState = rememberScrollState()
     val scrollAction = remember { KeyboardScrollAction(scrollState) }
 
-    var lastSelected: TextContextMenu.TextManager? = null
+    val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
 
-    CompositionLocalProvider(
-        LocalTextContextMenu provides object : TextContextMenu {
-            @Composable
-            override fun Area(textManager: TextContextMenu.TextManager, state: ContextMenuState, content: @Composable () -> Unit) {
-                val localization = LocalLocalization.current
-                lastSelected = textManager
-                val items = {
-                    listOfNotNull(
-                        textManager.cut?.let {
-                            ContextMenuItem(localization.cut, it)
-                        },
-                        textManager.copy?.let {
-                            ContextMenuItem(localization.copy, it)
-                        },
-                        textManager.paste?.let {
-                            ContextMenuItem(localization.paste, it)
-                        },
-                        textManager.selectAll?.let {
-                            ContextMenuItem(localization.selectAll, it)
-                        },
-                        ContextMenuItem("Search", {
-                            object : KoinComponent { val vm: MainViewModel by inject() }.vm
-                                .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
-                        })
-                    )
-                }
-
-                ContextMenuArea(items, state, content = content)
+    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
+        modifier = modifier.onKeyEvent {
+            val scrollActionConsumed = scrollAction(coroutineScope, it.key, it.isCtrlPressed)
+            if (scrollActionConsumed) {
+                return@onKeyEvent true
             }
+
+            if (it.type != KeyEventType.KeyUp) {
+                return@onKeyEvent false
+            }
+
+            val selectedText = mainViewModel.selectedText()
+            if (!selectedText.isNullOrBlank() && it.isCtrlPressed && it.isShiftPressed && it.key == Key.O) {
+                mainViewModel
+                    .openUrl("https://search.yahoo.co.jp/search?p=$selectedText", false)
+                return@onKeyEvent true
+            }
+
+            false
         }
+            .focusRequester(focusRequester)
     ) {
-        Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
-            modifier = modifier.onKeyEvent {
-                val scrollActionConsumed = scrollAction(coroutineScope, it.key, it.isCtrlPressed)
-                if (scrollActionConsumed) {
-                    return@onKeyEvent true
-                }
+        Box {
+            val content = tab.markdown()
 
-                if (it.type != KeyEventType.KeyUp) {
-                    return@onKeyEvent false
-                }
-
-                val selectedText = lastSelected?.selectedText?.text
-                if (!selectedText.isNullOrBlank() && it.isCtrlPressed && it.isShiftPressed && it.key == Key.O) {
-                    object : KoinComponent { val vm: MainViewModel by inject() }.vm
-                        .openUrl("https://search.yahoo.co.jp/search?p=$selectedText", false)
-                    return@onKeyEvent true
-                }
-
-                false
-            }
-                .focusRequester(focusRequester)
-        ) {
-            Box {
-                val content = tab.markdown()
-
-                SelectionContainer {
-                    Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
-                        content.lines().forEach { line ->
-                            when (line) {
-                                is TextBlock -> {
+            SelectionContainer {
+                Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
+                    content.lines().forEach { line ->
+                        when (line) {
+                            is TextBlock -> {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    if (line.quote) {
+                                        VerticalDivider(2.dp, Color(0x88CCAAFF), Modifier.padding(start = 4.dp, end = 8.dp))
+                                    }
+                                    TextLineView(
+                                        line.text,
+                                        TextStyle(
+                                            color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
+                                            fontSize = line.fontSize().sp,
+                                            fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
+                                        ),
+                                        Modifier.padding(bottom = 8.dp)
+                                    )
+                                }
+                            }
+                            is ListLine -> Column {
+                                line.list.forEachIndexed { index, it ->
                                     Row(verticalAlignment = Alignment.CenterVertically) {
-                                        if (line.quote) {
-                                            VerticalDivider(2.dp, Color(0x88CCAAFF), Modifier.padding(start = 4.dp, end = 8.dp))
+                                        when {
+                                            line.ordered -> DisableSelection {
+                                                Text("${index + 1}. ", fontSize = 14.sp)
+                                            }
+                                            line.taskList -> Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
+                                            else -> DisableSelection {
+                                                Text("・ ", fontSize = 14.sp)
+                                            }
                                         }
                                         TextLineView(
-                                            line.text,
-                                            TextStyle(
-                                                color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
-                                                fontSize = line.fontSize().sp,
-                                                fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
-                                            ),
-                                            Modifier.padding(bottom = 8.dp)
+                                            if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
+                                            TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
+                                            Modifier.padding(bottom = 4.dp)
                                         )
                                     }
                                 }
-                                is ListLine -> Column {
-                                    line.list.forEachIndexed { index, it ->
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            when {
-                                                line.ordered -> DisableSelection {
-                                                    Text("${index + 1}. ", fontSize = 14.sp)
-                                                }
-                                                line.taskList -> Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
-                                                else -> DisableSelection {
-                                                    Text("・ ", fontSize = 14.sp)
-                                                }
-                                            }
-                                            TextLineView(
-                                                if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
-                                                TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
-                                                Modifier.padding(bottom = 4.dp)
-                                            )
-                                        }
-                                    }
-                                }
-                                is ImageLine -> Image(
-                                    ImageIO.read(URL(line.source)).toComposeImageBitmap(),
-                                    contentDescription = line.source,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
-                                is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
-                                is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                                is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                                else -> Unit
                             }
+                            is ImageLine -> Image(
+                                ImageIO.read(URL(line.source)).toComposeImageBitmap(),
+                                contentDescription = line.source,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                            is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
+                            is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                            is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                            else -> Unit
                         }
                     }
                 }
-
-                LaunchedEffect(tab) {
-                    scrollState.scrollTo(tab.scrollPosition())
-
-                    focusRequester.requestFocus()
-                }
-
-                DisposableEffect(tab) {
-                    onDispose {
-                        val viewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm
-                        val indexOf = viewModel.tabs.indexOf(tab)
-                        if (indexOf == -1) {
-                            return@onDispose
-                        }
-                        tab.setScrollPosition(scrollState.value)
-                        viewModel.tabs.set(indexOf, tab)
-                    }
-                }
-
-                VerticalScrollbar(
-                    adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                        Alignment.CenterEnd
-                    )
-                )
             }
+
+            LaunchedEffect(tab) {
+                scrollState.scrollTo(tab.scrollPosition())
+
+                focusRequester.requestFocus()
+            }
+
+            DisposableEffect(tab) {
+                onDispose {
+                    val indexOf = mainViewModel.tabs.indexOf(tab)
+                    if (indexOf == -1) {
+                        return@onDispose
+                    }
+                    tab.setScrollPosition(scrollState.value)
+                    mainViewModel.tabs.set(indexOf, tab)
+                }
+            }
+
+            VerticalScrollbar(
+                adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
+                    Alignment.CenterEnd
+                )
+            )
         }
-
     }
-
 }
 
 @Composable

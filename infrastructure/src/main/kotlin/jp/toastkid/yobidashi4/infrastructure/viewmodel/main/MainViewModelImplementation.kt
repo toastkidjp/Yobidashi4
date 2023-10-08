@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
@@ -469,6 +471,19 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun closeSlideshow() {
         slideshowState.value = null
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    private var textManager: TextContextMenu.TextManager? = null
+
+    @OptIn(ExperimentalFoundationApi::class)
+    override fun setTextManager(textManager: TextContextMenu.TextManager) {
+        this.textManager = textManager
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    override fun selectedText(): String? {
+        return textManager?.selectedText?.text
     }
 
 }

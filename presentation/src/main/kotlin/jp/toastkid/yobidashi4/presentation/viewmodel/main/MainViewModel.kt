@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.viewmodel.main
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -98,5 +100,10 @@ interface MainViewModel {
     fun slideshow(path: Path)
 
     fun closeSlideshow()
+
+    @OptIn(ExperimentalFoundationApi::class)
+    fun setTextManager(textManager: TextContextMenu.TextManager)
+
+    fun selectedText(): String?
 
 }

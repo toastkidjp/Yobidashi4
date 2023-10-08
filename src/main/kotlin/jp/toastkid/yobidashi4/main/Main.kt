@@ -1,6 +1,15 @@
 package jp.toastkid.yobidashi4.main
 
+import androidx.compose.foundation.ContextMenuArea
+import androidx.compose.foundation.ContextMenuItem
+import androidx.compose.foundation.ContextMenuState
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.LocalTextContextMenu
+import androidx.compose.foundation.text.TextContextMenu
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalLocalization
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -24,6 +33,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 
+@OptIn(ExperimentalFoundationApi::class)
 fun main() {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
@@ -54,7 +64,39 @@ fun main() {
             ) {
                 MainMenu { exitApplication() }
 
-                MainScaffold()
+                CompositionLocalProvider(
+                    LocalTextContextMenu provides object : TextContextMenu {
+                        @Composable
+                        override fun Area(textManager: TextContextMenu.TextManager, state: ContextMenuState, content: @Composable () -> Unit) {
+                            val localization = LocalLocalization.current
+                            mainViewModel.setTextManager(textManager)
+                            val items = {
+                                listOfNotNull(
+                                    textManager.cut?.let {
+                                        ContextMenuItem(localization.cut, it)
+                                    },
+                                    textManager.copy?.let {
+                                        ContextMenuItem(localization.copy, it)
+                                    },
+                                    textManager.paste?.let {
+                                        ContextMenuItem(localization.paste, it)
+                                    },
+                                    textManager.selectAll?.let {
+                                        ContextMenuItem(localization.selectAll, it)
+                                    },
+                                    ContextMenuItem("Search", {
+                                        object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                                            .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
+                                    })
+                                )
+                            }
+
+                            ContextMenuArea(items, state, content = content)
+                        }
+                    }
+                ) {
+                    MainScaffold()
+                }
 
                 window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
                 TextFileReceiver().launch()
