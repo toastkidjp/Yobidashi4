@@ -62,8 +62,6 @@ class TextEditorViewModel {
 
     fun onValueChange(it: TextFieldValue) {
         lastConversionJob?.cancel()
-        val forceEfficientMode = content.value.text.length > 6000
-        val notInComposition = it.composition == null
         if (content.value.text != it.text) {
             mainViewModel.updateEditorContent(
                 tab.path,
@@ -73,19 +71,18 @@ class TextEditorViewModel {
             )
         }
 
-        content.value = it
-
-        if (forceEfficientMode || !notInComposition) {
-            return
-        }
-
         applyStyle(it, 1200)
     }
 
     private fun applyStyle(it: TextFieldValue, useDelay: Long = 0L) {
+        if (it.text.length > 8000) {
+            content.value = it
+            return
+        }
+
         lastConversionJob = CoroutineScope(Dispatchers.IO).launch {
-            delay(useDelay)
-            content.value = it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
+            val str = if (it.composition == null) theme.codeString(it.annotatedString.text, mainViewModel.darkMode()) else it.annotatedString
+            content.value = it.copy(annotatedString = str)
         }
     }
 
@@ -122,10 +119,6 @@ class TextEditorViewModel {
             },
             {
                 lastConversionJob?.cancel()
-                if (it.text.length > 8000) {
-                    content.value = it
-                    return@keyEventConsumer
-                }
                 applyStyle(it)
             }
         )
@@ -162,11 +155,7 @@ class TextEditorViewModel {
         focusRequester.requestFocus()
 
         val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
-        if (newContent.text.length > 8000) {
-            content.value = newContent
-        } else {
-            applyStyle(newContent)
-        }
+        applyStyle(newContent)
 
         var selected = -1
         CoroutineScope(Dispatchers.IO).launch {
