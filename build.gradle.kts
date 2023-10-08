@@ -14,7 +14,6 @@ version = "1.0.0"
 
 repositories {
     mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
 java {
@@ -27,8 +26,6 @@ dependencies {
     implementation(project(path = ":domain"))
     implementation(project(path = ":presentation"))
     implementation(project(path = ":infrastructure"))
-
-    implementation(compose.desktop.currentOs)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
@@ -43,38 +40,6 @@ dependencies {
     kover(project(path = ":domain"))
     kover(project(path = ":presentation"))
     kover(project(path = ":infrastructure"))
-}
-
-compose.desktop {
-    //"-Djava.library.path=$libraryPath"
-    application {
-        mainClass = "jp.toastkid.yobidashi4.main.MainKt"
-
-        nativeDistributions {
-            packageVersion = rootProject.version.toString()
-            description = "Yobidashi 4 is a Toast kid's super tool aop."
-            copyright = "c2022 toastkidjp. All rights reserved."
-            vendor = "Toast kid"
-            //licenseFile.set(project.file("LICENSE.txt"))
-            includeAllModules = true
-            outputBaseDir.set(project.rootDir.resolve("."))
-            targetFormats(
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg,
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi,
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
-            )
-            windows {
-                iconFile.set(project.file("src/main/resources/images/icon.png"))
-            }
-        }
-
-        buildTypes.release {
-            proguard {
-                configurationFiles.from(project.file("compose-desktop.pro"))
-                obfuscate.set(true)
-            }
-        }
-    }
 }
 
 allprojects {

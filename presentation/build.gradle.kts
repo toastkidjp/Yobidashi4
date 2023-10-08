@@ -33,3 +33,35 @@ dependencies {
     implementation("com.halilibo.compose-richtext:richtext-ui-material:0.16.0")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 }
+
+compose.desktop {
+    //"-Djava.library.path=$libraryPath"
+    application {
+        mainClass = "jp.toastkid.yobidashi4.main.MainKt"
+
+        nativeDistributions {
+            packageVersion = rootProject.version.toString()
+            description = "Yobidashi 4 is a Toast kid's super tool aop."
+            copyright = "c2022 toastkidjp. All rights reserved."
+            vendor = "Toast kid"
+            //licenseFile.set(project.file("LICENSE.txt"))
+            includeAllModules = true
+            outputBaseDir.set(project.rootDir.resolve("."))
+            targetFormats(
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg,
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi,
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
+            )
+            windows {
+                iconFile.set(project.file("src/main/resources/images/icon.png"))
+            }
+        }
+
+        buildTypes.release {
+            proguard {
+                configurationFiles.from(project.file("compose-desktop.pro"))
+                obfuscate.set(true)
+            }
+        }
+    }
+}
