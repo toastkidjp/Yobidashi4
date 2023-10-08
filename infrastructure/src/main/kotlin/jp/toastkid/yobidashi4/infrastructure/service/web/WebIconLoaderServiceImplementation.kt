@@ -46,7 +46,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
             .forEach { download(it, webIcon.faviconFolder(), targetUrl.host) }
     }
 
-    override fun download(
+    private fun download(
         iconUrl: String,
         faviconFolder: Path,
         targetHost: String?
