@@ -69,6 +69,10 @@ fun launchMainApplication() {
                                     ContextMenuItem("Search", {
                                         object : KoinComponent { val vm: MainViewModel by inject() }.vm
                                             .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
+                                    }),
+                                    ContextMenuItem("Count", {
+                                        object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                                            .showSnackbar("Count: ${textManager.selectedText.text.codePoints().count()} | Lines: ${textManager.selectedText.text.trimEnd().count { it == '\n' } + 1}")
                                     })
                                 )
                             }
