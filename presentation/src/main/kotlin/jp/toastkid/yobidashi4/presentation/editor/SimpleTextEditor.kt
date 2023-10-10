@@ -21,7 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
@@ -97,6 +101,12 @@ fun SimpleTextEditor(
                     }
 
                     viewModel.onKeyEvent(it, coroutineScope)
+                }
+                .drawBehind {
+                    val currentLineOffset = viewModel.currentLineOffset()
+                    if (currentLineOffset != Offset.Unspecified) {
+                        drawRect(Color(0xCC666239), topLeft = currentLineOffset, size = Size(Float.MAX_VALUE, 30f))
+                    }
                 }
         )
 

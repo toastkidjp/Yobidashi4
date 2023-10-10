@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.text.TextFieldScrollState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
@@ -178,6 +179,12 @@ class TextEditorViewModel {
                 content.value = content.value.copy(selection = TextRange(selected, selected + it.target.length))
             }
         }
+    }
+
+    fun currentLineOffset(): Offset {
+        val paragraph = lastParagraph ?: return Offset.Unspecified
+        val currentLine = paragraph.getLineForOffset(content.value.selection.start)
+        return Offset(paragraph.getLineLeft(currentLine), paragraph.getLineTop(currentLine) - verticalScrollState.offset)
     }
 
     fun dispose() {
