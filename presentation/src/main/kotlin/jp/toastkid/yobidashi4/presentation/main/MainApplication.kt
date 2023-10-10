@@ -68,7 +68,7 @@ fun launchMainApplication() {
                                         ContextMenuItem(localization.selectAll, it)
                                     },
                                     ContextMenuItem("Search") {
-                                        object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                                        mainViewModel
                                             .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
                                     },
                                     ContextMenuItem("Count") {
