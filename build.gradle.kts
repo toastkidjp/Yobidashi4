@@ -63,6 +63,7 @@ allprojects {
     }
 
     tasks.test {
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
         useJUnitPlatform()
         jvmArgs(
             "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
