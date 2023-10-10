@@ -72,7 +72,7 @@ fun launchMainApplication() {
                                             .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
                                     },
                                     ContextMenuItem("Count") {
-                                        object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                                        mainViewModel
                                             .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
                                     }
                                 )
