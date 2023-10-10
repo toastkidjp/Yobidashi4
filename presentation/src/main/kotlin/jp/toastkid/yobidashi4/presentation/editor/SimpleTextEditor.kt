@@ -27,10 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -51,14 +48,9 @@ fun SimpleTextEditor(
     val coroutineScope = rememberCoroutineScope()
 
     Box {
-        var altPressed = false
-
         BasicTextField(
             value = viewModel.content(),
             onValueChange = {
-                if (altPressed) {
-                    return@BasicTextField
-                }
                 viewModel.onValueChange(it)
                 setStatus("Character: ${it.text.length}")
             },
@@ -95,11 +87,6 @@ fun SimpleTextEditor(
             modifier = modifier.focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
                 .onKeyEvent {
-                    altPressed = it.isAltPressed
-                    if (it.type != KeyEventType.KeyUp) {
-                        return@onKeyEvent false
-                    }
-
                     viewModel.onKeyEvent(it, coroutineScope)
                 }
                 .drawBehind {

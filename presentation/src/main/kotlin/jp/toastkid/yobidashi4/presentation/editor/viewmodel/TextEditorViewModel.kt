@@ -10,6 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isAltPressed
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,6 +42,8 @@ class TextEditorViewModel {
 
     private var lastParagraph: MultiParagraph? = null
 
+    private var altPressed = false
+
     private val lineCount = mutableStateOf(0)
 
     private val keyEventConsumer = KeyEventConsumer()
@@ -62,6 +67,10 @@ class TextEditorViewModel {
     fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
+        if (altPressed) {
+            return
+        }
+
         lastConversionJob?.cancel()
         if (content.value.text != it.text) {
             mainViewModel.updateEditorContent(
@@ -109,6 +118,12 @@ class TextEditorViewModel {
     fun focusRequester() = focusRequester
 
     fun onKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+        altPressed = it.isAltPressed
+
+        if (it.type != KeyEventType.KeyUp) {
+            return@onKeyEvent false
+        }
+
         return keyEventConsumer(
             it,
             content.value,
