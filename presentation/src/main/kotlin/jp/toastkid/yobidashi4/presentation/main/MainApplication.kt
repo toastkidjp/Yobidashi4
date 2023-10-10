@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
+import jp.toastkid.yobidashi4.domain.service.text.TextCountMessageFactory
 import jp.toastkid.yobidashi4.main.AppTheme
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
@@ -72,7 +73,7 @@ fun launchMainApplication() {
                                     }),
                                     ContextMenuItem("Count", {
                                         object : KoinComponent { val vm: MainViewModel by inject() }.vm
-                                            .showSnackbar("Count: ${textManager.selectedText.text.codePoints().count()} | Lines: ${textManager.selectedText.text.trimEnd().count { it == '\n' } + 1}")
+                                            .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
                                     })
                                 )
                             }
