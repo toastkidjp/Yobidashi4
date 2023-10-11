@@ -21,7 +21,7 @@ class TextFileReceiver(private val dispatcher: CoroutineDispatcher = Dispatchers
                 mainViewModel.droppedPathFlow().collect {
                     when (it.extension) {
                         "txt", "md", "log", "java", "kt", "py" -> {
-                            mainViewModel.openFile(it)
+                            mainViewModel.edit(it)
                         }
 
                         else -> Unit
