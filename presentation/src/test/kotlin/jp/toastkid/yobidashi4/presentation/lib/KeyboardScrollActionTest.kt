@@ -97,6 +97,13 @@ class KeyboardScrollActionTest {
     }
 
     @Test
+    fun toTop() {
+        keyboardScrollAction.invoke(coroutineScope, Key.DirectionUp, true)
+
+        coVerify(exactly = 1) { state.animateScrollBy(-Float.MAX_VALUE) }
+    }
+
+    @Test
     fun other() {
         keyboardScrollAction.invoke(coroutineScope, Key.DirectionRight, false)
 
