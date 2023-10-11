@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLocalization
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
@@ -34,7 +35,7 @@ fun launchMainApplication() {
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
 
     application {
-        val mainViewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
+        val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
         AppTheme(darkTheme = mainViewModel.darkMode()) {
             Window(
