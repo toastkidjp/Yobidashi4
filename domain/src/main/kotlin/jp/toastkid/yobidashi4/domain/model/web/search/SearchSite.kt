@@ -9,6 +9,7 @@ enum class SearchSite(val siteName: String, private val searchUrlBase: String, p
     WIKIPEDIA("Wikipedia", "https://ja.wikipedia.org/w/index.php?search=", "ic_wikipedia.xml"),
     GOOGLE_MAP("Google Map", "https://www.google.co.jp/maps/search/", "ic_google_map.webp"),
     IMAGE_YAHOO_JAPAN("Image (Yahoo! JAPAN)", "https://search.yahoo.co.jp/image/search?p=", "ic_yahoo_japan_image_search.png"),
+    YOUTUBE("YouTube",  "https://www.youtube.com/results?search_query=", "ic_video.xml"),
     REALTIME_YAHOO_JAPAN("Realtime (Yahoo! JAPAN)", "https://search.yahoo.co.jp/realtime/search?p=", "ic_yahoo_japan_realtime_search.webp"),
     FILMARKS("Filmarks", "https://filmarks.com/search/movies?q=", "ic_filmarks.png"),
     AMAZON("Amazon", "https://www.amazon.co.jp/s?k=", "ic_amazon.xml"),
