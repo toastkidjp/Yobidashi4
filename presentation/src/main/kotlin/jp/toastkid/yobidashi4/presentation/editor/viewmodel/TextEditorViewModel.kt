@@ -81,10 +81,10 @@ class TextEditorViewModel {
             )
         }
 
-        applyStyle(it, 1200)
+        applyStyle(it)
     }
 
-    private fun applyStyle(it: TextFieldValue, useDelay: Long = 0L) {
+    private fun applyStyle(it: TextFieldValue) {
         if (it.text.length > 10000) {
             content.value = it
             return
