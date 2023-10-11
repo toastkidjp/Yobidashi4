@@ -90,10 +90,8 @@ class TextEditorViewModel {
             return
         }
 
-        lastConversionJob = CoroutineScope(Dispatchers.IO).launch {
-            val str = if (it.composition == null) theme.codeString(it.annotatedString.text, mainViewModel.darkMode()) else it.annotatedString
-            content.value = it.copy(annotatedString = str)
-        }
+        val str = if (it.composition == null) theme.codeString(it.annotatedString.text, mainViewModel.darkMode()) else it.annotatedString
+        content.value = it.copy(annotatedString = str)
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
