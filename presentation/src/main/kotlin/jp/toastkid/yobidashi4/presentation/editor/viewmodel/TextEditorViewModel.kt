@@ -85,12 +85,12 @@ class TextEditorViewModel {
     }
 
     private fun applyStyle(it: TextFieldValue) {
-        if (it.text.length > 10000) {
+        if (it.text.length > 10000 || it.composition != null) {
             content.value = it
             return
         }
 
-        val str = if (it.composition == null) theme.codeString(it.annotatedString.text, mainViewModel.darkMode()) else it.annotatedString
+        val str = theme.codeString(it.annotatedString.text, mainViewModel.darkMode())
         content.value = it.copy(annotatedString = str)
     }
 
