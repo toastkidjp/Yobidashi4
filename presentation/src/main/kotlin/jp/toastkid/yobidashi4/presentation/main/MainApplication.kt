@@ -48,39 +48,7 @@ fun launchMainApplication() {
                 MainMenu { exitApplication() }
 
                 CompositionLocalProvider(
-                    LocalTextContextMenu provides object : TextContextMenu {
-                        @Composable
-                        override fun Area(textManager: TextContextMenu.TextManager, state: ContextMenuState, content: @Composable () -> Unit) {
-                            val localization = LocalLocalization.current
-                            mainViewModel.setTextManager(textManager)
-                            val items = {
-                                listOfNotNull(
-                                    textManager.cut?.let {
-                                        ContextMenuItem(localization.cut, it)
-                                    },
-                                    textManager.copy?.let {
-                                        ContextMenuItem(localization.copy, it)
-                                    },
-                                    textManager.paste?.let {
-                                        ContextMenuItem(localization.paste, it)
-                                    },
-                                    textManager.selectAll?.let {
-                                        ContextMenuItem(localization.selectAll, it)
-                                    },
-                                    ContextMenuItem("Search") {
-                                        mainViewModel
-                                            .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
-                                    },
-                                    ContextMenuItem("Count") {
-                                        mainViewModel
-                                            .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
-                                    }
-                                )
-                            }
-
-                            ContextMenuArea(items, state, content = content)
-                        }
-                    }
+                    LocalTextContextMenu provides makeTextContextMenu()
                 ) {
                     MainScaffold()
                 }
@@ -104,6 +72,49 @@ fun launchMainApplication() {
             withContext(Dispatchers.IO) {
                 mainViewModel.loadBackgroundImage()
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+private fun makeTextContextMenu(): TextContextMenu {
+    val mainViewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
+
+    return object : TextContextMenu {
+        @Composable
+        override fun Area(
+            textManager: TextContextMenu.TextManager,
+            state: ContextMenuState,
+            content: @Composable () -> Unit
+        ) {
+            val localization = LocalLocalization.current
+            mainViewModel.setTextManager(textManager)
+            val items = {
+                listOfNotNull(
+                    textManager.cut?.let {
+                        ContextMenuItem(localization.cut, it)
+                    },
+                    textManager.copy?.let {
+                        ContextMenuItem(localization.copy, it)
+                    },
+                    textManager.paste?.let {
+                        ContextMenuItem(localization.paste, it)
+                    },
+                    textManager.selectAll?.let {
+                        ContextMenuItem(localization.selectAll, it)
+                    },
+                    ContextMenuItem("Search") {
+                        mainViewModel
+                            .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
+                    },
+                    ContextMenuItem("Count") {
+                        mainViewModel
+                            .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
+                    }
+                )
+            }
+
+            ContextMenuArea(items, state, content = content)
         }
     }
 }
