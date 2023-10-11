@@ -188,7 +188,7 @@ internal fun AggregationBox() {
                     },
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            selectedSite.value.value(query.value.text)
+                            invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
                             viewModel.switchAggregationBox(false)
                         }
                     ),
@@ -229,7 +229,7 @@ internal fun AggregationBox() {
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        selectedSite.value.value(query.value.text)
+                        invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
                         viewModel.switchAggregationBox(false)
                     }
                 ),
