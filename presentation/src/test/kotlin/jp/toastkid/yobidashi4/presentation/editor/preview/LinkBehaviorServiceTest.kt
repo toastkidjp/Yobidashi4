@@ -58,7 +58,7 @@ class LinkBehaviorServiceTest {
         every { internalLinkScheme.isInternalLink(any()) }.returns(true)
         every { internalLinkScheme.extract(any()) }.returns("yahoo")
         every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.openFile(any()) } just Runs
+        every { viewModel.edit(any()) } just Runs
         every { viewModel.showSnackbar(any()) } just Runs
     }
 
