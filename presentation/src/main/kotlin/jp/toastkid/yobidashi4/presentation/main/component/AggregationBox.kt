@@ -34,11 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -204,15 +199,6 @@ internal fun AggregationBox() {
                         )
                     },
                     modifier = focusingModifier
-                        .onKeyEvent {
-                            if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
-                                && keyword.value.composition == null
-                                && keyword.value.text.isNotBlank()
-                            ) {
-                                invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
-                            }
-                            true
-                        }
                 )
             }
 
@@ -245,15 +231,6 @@ internal fun AggregationBox() {
                     )
                 },
                 modifier = (if (selectedSite.value.key == "Find article") Modifier else focusingModifier)
-                    .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
-                            && query.value.composition == null
-                            && query.value.text.isNotBlank()
-                            ) {
-                            invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
-                        }
-                        true
-                    }
             )
 
             Button(
