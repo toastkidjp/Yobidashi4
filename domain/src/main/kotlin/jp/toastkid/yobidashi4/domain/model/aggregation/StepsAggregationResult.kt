@@ -27,6 +27,7 @@ class StepsAggregationResult : AggregationResult {
     override fun columnClass(columnIndex: Int): Class<out Any> {
         return when (columnIndex) {
             1 -> Int::class.java
+            2 -> Int::class.java
             else -> String::class.java
         }
     }
