@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.TextFieldScrollState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
@@ -210,6 +211,13 @@ class TextEditorViewModel {
         content.value = TextFieldValue()
         job.cancel()
         lastConversionJob?.cancel()
+    }
+
+    fun currentLineHighlightColor(): Color {
+        return Color(
+            if (mainViewModel.darkMode()) 0xCC666239
+            else 0xCCFFF9AF
+        )
     }
 
 }
