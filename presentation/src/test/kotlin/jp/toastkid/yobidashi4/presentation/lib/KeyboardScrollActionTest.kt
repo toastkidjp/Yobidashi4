@@ -104,6 +104,16 @@ class KeyboardScrollActionTest {
     }
 
     @Test
+    fun toTopForLazyListStateCase() {
+        keyboardScrollAction = KeyboardScrollAction(lazyListState)
+
+        keyboardScrollAction.invoke(coroutineScope, Key.DirectionUp, true)
+
+        coVerify(inverse = true) { state.animateScrollBy(any()) }
+        coVerify(exactly = 1) { lazyListState.scrollToItem(0) }
+    }
+
+    @Test
     fun other() {
         keyboardScrollAction.invoke(coroutineScope, Key.DirectionRight, false)
 
