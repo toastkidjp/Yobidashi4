@@ -15,6 +15,8 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -54,6 +56,12 @@ _
         val outgoAggregationResult = stepsAggregatorService.invoke("file")
 
         outgoAggregationResult.itemArrays().firstOrNull()?.let {
+            assertTrue(outgoAggregationResult.title().isNotBlank())
+            assertFalse(outgoAggregationResult.isEmpty())
+            assertEquals(3, outgoAggregationResult.header().size)
+            assertEquals(String::class.java, outgoAggregationResult.columnClass(0))
+            assertEquals(Int::class.java, outgoAggregationResult.columnClass(1))
+            assertEquals(Int::class.java, outgoAggregationResult.columnClass(2))
             assertEquals("file", it[0])
             assertEquals(4122, it[1])
             assertEquals(143, it[2])
