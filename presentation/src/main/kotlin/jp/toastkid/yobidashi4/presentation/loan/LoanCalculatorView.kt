@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.loan
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +30,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -180,12 +180,14 @@ fun LoanCalculatorView() {
             if (scheduleState.isNotEmpty()) {
                 Box (modifier = Modifier.weight(0.5f)) {
                     val scrollState = rememberLazyListState()
+                    val color =
+                        if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
                     LazyColumn(state = scrollState) {
                         stickyHeader {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.animateItemPlacement()
-                                    .background(if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent)
+                                    .drawBehind { drawRect(color) }
                             ) {
                                 Text(
                                     "回数",
