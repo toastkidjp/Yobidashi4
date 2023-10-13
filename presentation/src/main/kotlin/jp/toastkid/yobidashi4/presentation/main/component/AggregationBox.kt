@@ -59,7 +59,6 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun AggregationBox() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
