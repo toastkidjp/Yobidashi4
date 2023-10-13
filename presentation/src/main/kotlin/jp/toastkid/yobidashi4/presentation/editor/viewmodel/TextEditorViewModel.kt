@@ -97,7 +97,9 @@ class TextEditorViewModel {
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
-        lineCount.value = multiParagraph.lineCount
+        if (lineCount.value != multiParagraph.lineCount) {
+            lineCount.value = multiParagraph.lineCount
+        }
     }
 
     fun verticalScrollState() = verticalScrollState
