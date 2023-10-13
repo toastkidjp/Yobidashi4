@@ -91,7 +91,7 @@ class TextEditorViewModel {
             return
         }
 
-        val str = theme.codeString(it.annotatedString.text, mainViewModel.darkMode())
+        val str = theme.codeString(it.annotatedString, mainViewModel.darkMode())
         content.value = it.copy(annotatedString = str)
     }
 
