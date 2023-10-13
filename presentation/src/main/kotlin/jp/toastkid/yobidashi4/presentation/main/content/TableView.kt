@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -74,6 +73,7 @@ fun TableView(aggregationResult: AggregationResult) {
     ) {
         Box {
             val horizontalScrollState = rememberScrollState()
+            val backgroundColor = if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
             LazyColumn(
                 state = state,
                 userScrollEnabled = true
@@ -81,7 +81,7 @@ fun TableView(aggregationResult: AggregationResult) {
                 stickyHeader {
                     Row(
                         modifier = Modifier.fillMaxWidth()
-                            .background(if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent)
+                            .drawBehind { drawRect(backgroundColor) }
                     ) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
