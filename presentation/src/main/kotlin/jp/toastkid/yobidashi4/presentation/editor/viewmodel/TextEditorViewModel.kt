@@ -16,7 +16,10 @@ import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -91,8 +94,9 @@ class TextEditorViewModel {
             return
         }
 
-        val str = theme.codeString(it.annotatedString.text, mainViewModel.darkMode())
-        content.value = it.copy(annotatedString = str)
+        content.value = it
+        //val str = theme.codeString(it.annotatedString.text, mainViewModel.darkMode())
+        //content.value = it.copy(annotatedString = str)
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
@@ -220,6 +224,25 @@ class TextEditorViewModel {
             if (mainViewModel.darkMode()) 0xCC666239
             else 0xCCFFF9AF
         )
+    }
+
+    private var transformedText: TransformedText? = null
+
+    fun visualTransformation(): VisualTransformation {
+        if (content.value.text.length > 10000) {
+            return VisualTransformation.None
+        }
+
+        return VisualTransformation { text ->
+            val last = transformedText
+            if (last != null && content.value.composition == null && last.text.text == text.text) {
+                return@VisualTransformation last
+            }
+
+            val new = TransformedText(theme.codeString(text.text, mainViewModel.darkMode()), OffsetMapping.Identity)
+            transformedText = new
+            return@VisualTransformation new
+        }
     }
 
 }
