@@ -89,14 +89,7 @@ class TextEditorViewModel {
     }
 
     private fun applyStyle(it: TextFieldValue) {
-        if (it.text.length > 10000 || it.composition != null) {
-            content.value = it
-            return
-        }
-
         content.value = it
-        //val str = theme.codeString(it.annotatedString.text, mainViewModel.darkMode())
-        //content.value = it.copy(annotatedString = str)
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
