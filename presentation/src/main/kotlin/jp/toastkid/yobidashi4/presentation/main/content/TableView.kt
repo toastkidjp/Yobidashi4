@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -47,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -81,7 +81,7 @@ fun TableView(aggregationResult: AggregationResult) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
-                                Divider(modifier = Modifier.fillMaxHeight().width(1.dp).padding(vertical = 1.dp))
+                                VerticalDivider(modifier = Modifier.fillMaxHeight().padding(vertical = 1.dp))
                             }
                             val headerCursorOn = remember { mutableStateOf(false) }
                             val headerColumnBackgroundColor =
@@ -166,7 +166,7 @@ fun TableView(aggregationResult: AggregationResult) {
 
                                 article.forEachIndexed { index, any ->
                                     if (index != 0) {
-                                        Divider(modifier = Modifier.fillMaxHeight().width(1.dp).padding(vertical = 1.dp))
+                                        VerticalDivider(modifier = Modifier.fillMaxHeight().padding(vertical = 1.dp))
                                     }
                                     if (any is Collection<*>) {
                                         Column(modifier = Modifier.weight(1f)) {
