@@ -85,7 +85,7 @@ class TextEditorViewModel {
     }
 
     private fun applyStyle(it: TextFieldValue) {
-        if (it.text.length > 10000 || it.composition != null) {
+        if (it.text.length > 10000 || it.composition != null || it.annotatedString.spanStyles.isNotEmpty()) {
             content.value = it
             return
         }
