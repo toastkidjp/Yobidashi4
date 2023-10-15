@@ -57,7 +57,6 @@ class WebHistoryFileStoreTest {
 
         webHistoryFileStore.add("Yahoo! JAPAN Test2", "https://www.yahoo.co.jp")
 
-        println(slot.captured)
         assertEquals(2, slot.captured.toMutableList().size)
         verify { Files.write(any(), slot.captured)  }
     }
