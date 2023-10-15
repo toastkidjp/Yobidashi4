@@ -16,9 +16,7 @@ import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import java.nio.file.Path
@@ -89,7 +87,12 @@ class TextEditorViewModel {
     }
 
     private fun applyStyle(it: TextFieldValue) {
-        content.value = it
+        if (it.text.length > 10000 || it.composition != null) {
+            content.value = it
+            return
+        }
+
+        content.value = it.copy(theme.codeString(it.text, mainViewModel.darkMode()))
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
@@ -207,7 +210,6 @@ class TextEditorViewModel {
         }
 
         lastParagraph = null
-        transformedText = null
         content.value = TextFieldValue()
         job.cancel()
         lastConversionJob?.cancel()
@@ -220,23 +222,6 @@ class TextEditorViewModel {
         )
     }
 
-    private var transformedText: TransformedText? = null
-
-    fun visualTransformation(): VisualTransformation {
-        if (content.value.text.length > 10000) {
-            return VisualTransformation.None
-        }
-
-        return VisualTransformation { text ->
-            val last = transformedText
-            if (last != null && content.value.composition == null && last.text.text == text.text) {
-                return@VisualTransformation last
-            }
-
-            val new = TransformedText(theme.codeString(text.text, mainViewModel.darkMode()), OffsetMapping.Identity)
-            transformedText = new
-            return@VisualTransformation new
-        }
-    }
+    fun visualTransformation(): VisualTransformation = VisualTransformation.None
 
 }
