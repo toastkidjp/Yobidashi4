@@ -73,27 +73,18 @@ fun TableView(aggregationResult: AggregationResult) {
     ) {
         Box {
             val horizontalScrollState = rememberScrollState()
-            val headerCursorOn = remember { mutableStateOf(false) }
-            val backgroundColor = if (headerCursorOn.value) MaterialTheme.colors.primary else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
             LazyColumn(
                 state = state,
                 userScrollEnabled = true
             ) {
                 stickyHeader {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .drawBehind { drawRect(backgroundColor) }
-                            .onPointerEvent(PointerEventType.Enter) {
-                                headerCursorOn.value = true
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                headerCursorOn.value = false
-                            }
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
                                 Divider(modifier = Modifier.fillMaxHeight().width(1.dp).padding(vertical = 1.dp))
                             }
+                            val headerCursorOn = remember { mutableStateOf(false) }
+                            val headerColumnBackgroundColor = if (headerCursorOn.value) MaterialTheme.colors.primary else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
 
                             Text(
                                 item.toString(),
@@ -104,6 +95,13 @@ fun TableView(aggregationResult: AggregationResult) {
                                         lastSorted = index to lastSortOrder.not()
 
                                         sort(lastSortOrder, aggregationResult, index, articleStates)
+                                    }
+                                    .drawBehind { drawRect(headerColumnBackgroundColor) }
+                                    .onPointerEvent(PointerEventType.Enter) {
+                                        headerCursorOn.value = true
+                                    }
+                                    .onPointerEvent(PointerEventType.Exit) {
+                                        headerCursorOn.value = false
                                     }
                                     .weight(if (index == 0) 0.4f else 1f)
                                     .padding(horizontal = 16.dp)
