@@ -84,7 +84,10 @@ fun TableView(aggregationResult: AggregationResult) {
                                 Divider(modifier = Modifier.fillMaxHeight().width(1.dp).padding(vertical = 1.dp))
                             }
                             val headerCursorOn = remember { mutableStateOf(false) }
-                            val headerColumnBackgroundColor = if (headerCursorOn.value) MaterialTheme.colors.primary else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
+                            val headerColumnBackgroundColor =
+                                if (headerCursorOn.value) MaterialTheme.colors.primary
+                                else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+                                else Color.Transparent
 
                             Text(
                                 item.toString(),
