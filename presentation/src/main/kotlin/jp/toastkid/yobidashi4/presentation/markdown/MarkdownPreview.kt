@@ -65,6 +65,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
@@ -188,19 +189,6 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
             )
         }
     }
-}
-
-@Composable
-private fun VerticalDivider(
-    thickness: Dp,
-    color: Color,
-    modifier: Modifier
-) {
-    Box(
-        modifier = modifier.heightIn(28.dp)
-            .width(thickness)
-            .background(color)
-    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
