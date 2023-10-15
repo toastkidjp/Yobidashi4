@@ -224,4 +224,8 @@ class TextEditorViewModel {
 
     fun visualTransformation(): VisualTransformation = VisualTransformation.None
 
+    fun makeCharacterCountMessage(count: Int): String {
+        return "Character: $count"
+    }
+
 }
