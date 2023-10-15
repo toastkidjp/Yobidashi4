@@ -51,7 +51,7 @@ fun SimpleTextEditor(
             value = viewModel.content(),
             onValueChange = {
                 viewModel.onValueChange(it)
-                setStatus("Character: ${it.text.length}")
+                setStatus(makeCharacterCountMessage(it.text.length))
             },
             onTextLayout = {
                 viewModel.setMultiParagraph(it.multiParagraph)
@@ -111,10 +111,12 @@ fun SimpleTextEditor(
         viewModel.launchTab(tab)
         viewModel.initialScroll(coroutineScope)
 
-        setStatus("Character: ${tab.getContent().length}")
+        setStatus(makeCharacterCountMessage(tab.getContent().length))
 
         onDispose {
             viewModel.dispose()
         }
     }
 }
+
+private fun makeCharacterCountMessage(count: Int) = "Character: $count"
