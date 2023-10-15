@@ -62,8 +62,6 @@ class TextEditorViewModel {
 
     private val finderMessageFactory = FinderMessageFactory()
 
-    private val job = Job()
-
     private var lastConversionJob: Job? = null
 
     fun content() = content.value
@@ -211,7 +209,6 @@ class TextEditorViewModel {
 
         lastParagraph = null
         content.value = TextFieldValue()
-        job.cancel()
         lastConversionJob?.cancel()
     }
 
