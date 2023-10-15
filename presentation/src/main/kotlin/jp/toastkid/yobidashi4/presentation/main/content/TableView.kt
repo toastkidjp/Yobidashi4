@@ -109,13 +109,13 @@ fun TableView(aggregationResult: AggregationResult) {
                     SelectionContainer {
                         Column(modifier = Modifier.animateItemPlacement()) {
                             val cursorOn = remember { mutableStateOf(false) }
-                            val backgroundColor = animateColorAsState(
+                            val rowBackgroundColor = animateColorAsState(
                                 if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
                             )
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.fillMaxWidth()
-                                    .drawBehind { drawRect(backgroundColor.value) }
+                                    .drawBehind { drawRect(rowBackgroundColor.value) }
                                     .onPointerEvent(PointerEventType.Enter) {
                                         cursorOn.value = true
                                     }
