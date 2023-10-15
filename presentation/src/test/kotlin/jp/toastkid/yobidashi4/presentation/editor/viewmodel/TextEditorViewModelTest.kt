@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
+import androidx.compose.ui.text.input.VisualTransformation
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -102,6 +103,7 @@ class TextEditorViewModelTest {
 
     @Test
     fun visualTransformation() {
+        assertEquals(VisualTransformation.None, viewModel.visualTransformation())
     }
 
     @Test
