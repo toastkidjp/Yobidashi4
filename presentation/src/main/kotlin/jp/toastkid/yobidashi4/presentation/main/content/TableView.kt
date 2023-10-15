@@ -73,7 +73,8 @@ fun TableView(aggregationResult: AggregationResult) {
     ) {
         Box {
             val horizontalScrollState = rememberScrollState()
-            val backgroundColor = if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
+            val headerCursorOn = remember { mutableStateOf(false) }
+            val backgroundColor = if (headerCursorOn.value) MaterialTheme.colors.primary else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
             LazyColumn(
                 state = state,
                 userScrollEnabled = true
@@ -82,6 +83,12 @@ fun TableView(aggregationResult: AggregationResult) {
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .drawBehind { drawRect(backgroundColor) }
+                            .onPointerEvent(PointerEventType.Enter) {
+                                headerCursorOn.value = true
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                headerCursorOn.value = false
+                            }
                     ) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
@@ -90,6 +97,7 @@ fun TableView(aggregationResult: AggregationResult) {
 
                             Text(
                                 item.toString(),
+                                color = if (headerCursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                                 modifier = Modifier
                                     .clickable {
                                         val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
