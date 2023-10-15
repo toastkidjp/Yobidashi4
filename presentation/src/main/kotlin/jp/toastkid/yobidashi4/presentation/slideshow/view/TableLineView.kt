@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
+import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
 @Composable
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
@@ -41,7 +41,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
             Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
                 line.header.forEachIndexed { index, item ->
                     if (index != 0) {
-                        Divider(modifier = Modifier.height(24.dp).width(1.dp).padding(vertical = 1.dp))
+                        VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
                     }
 
                     Text(
@@ -88,10 +88,7 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
         ) {
             itemRow.forEachIndexed { index, any ->
                 if (index != 0) {
-                    Divider(
-                        modifier = Modifier.height(24.dp).width(1.dp)
-                            .padding(vertical = 1.dp)
-                    )
+                    VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
                 }
                 Text(
                     any.toString(),
