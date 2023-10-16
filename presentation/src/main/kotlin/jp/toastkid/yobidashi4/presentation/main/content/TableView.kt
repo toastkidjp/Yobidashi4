@@ -84,10 +84,11 @@ fun TableView(aggregationResult: AggregationResult) {
                                 VerticalDivider(modifier = Modifier.fillMaxHeight().padding(vertical = 1.dp))
                             }
                             val headerCursorOn = remember { mutableStateOf(false) }
-                            val headerColumnBackgroundColor =
+                            val headerColumnBackgroundColor = animateColorAsState(
                                 if (headerCursorOn.value) MaterialTheme.colors.primary
                                 else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface
                                 else Color.Transparent
+                            )
 
                             Text(
                                 item.toString(),
@@ -99,7 +100,7 @@ fun TableView(aggregationResult: AggregationResult) {
 
                                         sort(lastSortOrder, aggregationResult, index, articleStates)
                                     }
-                                    .drawBehind { drawRect(headerColumnBackgroundColor) }
+                                    .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                                     .onPointerEvent(PointerEventType.Enter) {
                                         headerCursorOn.value = true
                                     }
