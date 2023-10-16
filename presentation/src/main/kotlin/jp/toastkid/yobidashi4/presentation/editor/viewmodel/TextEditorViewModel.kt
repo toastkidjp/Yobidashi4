@@ -220,7 +220,7 @@ class TextEditorViewModel {
     private var transformedText: TransformedText? = null
 
     fun visualTransformation(): VisualTransformation {
-        if (content.value.text.length > 10000) {
+        if (content.value.text.length > 5600) {
             return VisualTransformation.None
         }
 
