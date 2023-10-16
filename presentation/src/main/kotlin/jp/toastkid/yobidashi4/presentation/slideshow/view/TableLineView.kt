@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
     var lastSorted = remember { -1 to false }
@@ -44,6 +45,12 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                         VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
                     }
 
+                    val headerCursorOn = remember { mutableStateOf(false) }
+                    val headerColumnBackgroundColor = animateColorAsState(
+                        if (headerCursorOn.value) MaterialTheme.colors.primary
+                        else MaterialTheme.colors.surface
+                    )
+
                     Text(
                         item.toString(),
                         fontSize = fontSize,
@@ -57,6 +64,13 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
                                 sort(lastSortOrder, index, tableData)
                             }
+                            .onPointerEvent(PointerEventType.Enter) {
+                                headerCursorOn.value = true
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                headerCursorOn.value = false
+                            }
+                            .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     )
                 }
             }
