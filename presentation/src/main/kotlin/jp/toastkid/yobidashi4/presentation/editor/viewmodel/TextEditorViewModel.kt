@@ -202,6 +202,16 @@ class TextEditorViewModel {
 
     private var transformedText: TransformedText? = null
 
+    private val offsetMapping = object : OffsetMapping {
+        override fun originalToTransformed(offset: Int): Int {
+            return if (offset >= content.value.text.length) content.value.text.length else offset
+        }
+
+        override fun transformedToOriginal(offset: Int): Int {
+            return if (offset >= content.value.text.length) content.value.text.length else offset
+        }
+    }
+
     fun visualTransformation(): VisualTransformation {
         if (content.value.text.length > CONVERSION_LIMIT_LENGTH) {
             return VisualTransformation.None
@@ -213,16 +223,7 @@ class TextEditorViewModel {
                 return@VisualTransformation last
             }
 
-            val new = TransformedText(theme.codeString(text.text, mainViewModel.darkMode()), object : OffsetMapping {
-                override fun originalToTransformed(offset: Int): Int {
-                    return if (offset >= text.text.length) text.text.length else offset
-                }
-
-                override fun transformedToOriginal(offset: Int): Int {
-                    return if (offset >= text.text.length) text.text.length else offset
-                }
-
-            })
+            val new = TransformedText(theme.codeString(text.text, mainViewModel.darkMode()), offsetMapping)
             transformedText = new
             return@VisualTransformation new
         }
