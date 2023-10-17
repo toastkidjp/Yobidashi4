@@ -29,7 +29,6 @@ import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -64,8 +63,6 @@ class TextEditorViewModel {
 
     private val finderMessageFactory = FinderMessageFactory()
 
-    private var lastConversionJob: Job? = null
-
     fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
@@ -73,7 +70,6 @@ class TextEditorViewModel {
             return
         }
 
-        lastConversionJob?.cancel()
         if (content.value.text != it.text) {
             mainViewModel.updateEditorContent(
                 tab.path,
@@ -130,7 +126,6 @@ class TextEditorViewModel {
                 }
             },
             {
-                lastConversionJob?.cancel()
                 applyStyle(it)
             }
         )
@@ -243,7 +238,6 @@ class TextEditorViewModel {
         lastParagraph = null
         transformedText = null
         content.value = TextFieldValue()
-        lastConversionJob?.cancel()
     }
 
 }
