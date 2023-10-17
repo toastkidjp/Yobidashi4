@@ -206,9 +206,8 @@ class TextEditorViewModel {
         override fun originalToTransformed(offset: Int): Int =
             if (offset >= content.value.text.length) content.value.text.length else offset
 
-        override fun transformedToOriginal(offset: Int): Int {
-            return if (offset >= content.value.text.length) content.value.text.length else offset
-        }
+        override fun transformedToOriginal(offset: Int): Int =
+            if (offset >= content.value.text.length) content.value.text.length else offset
     }
 
     fun visualTransformation(): VisualTransformation {
