@@ -135,9 +135,9 @@ class TextEditorViewModel {
         lineNumberScrollState.scrollTo(verticalScrollState.offset.toInt())
     }
 
-    fun initialScroll(coroutineScope: CoroutineScope) {
+    fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 500) {
         coroutineScope.launch {
-            delay(500)
+            delay(ms)
             adapter.scrollTo(tab.scroll())
         }
     }
