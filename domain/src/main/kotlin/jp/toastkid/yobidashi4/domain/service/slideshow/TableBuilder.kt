@@ -12,7 +12,7 @@ class TableBuilder {
 
     fun setColumns(line: String) {
         table.clear()
-        columnNames = line.split("|").drop(1)
+        columnNames = line.split("|").filter { it.isNotEmpty() }
     }
 
     fun addTableLines(line: String) {
