@@ -203,9 +203,8 @@ class TextEditorViewModel {
     private var transformedText: TransformedText? = null
 
     private val offsetMapping = object : OffsetMapping {
-        override fun originalToTransformed(offset: Int): Int {
-            return if (offset >= content.value.text.length) content.value.text.length else offset
-        }
+        override fun originalToTransformed(offset: Int): Int =
+            if (offset >= content.value.text.length) content.value.text.length else offset
 
         override fun transformedToOriginal(offset: Int): Int {
             return if (offset >= content.value.text.length) content.value.text.length else offset
