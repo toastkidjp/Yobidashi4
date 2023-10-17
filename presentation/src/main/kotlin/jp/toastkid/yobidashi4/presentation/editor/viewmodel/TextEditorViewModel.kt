@@ -219,8 +219,6 @@ class TextEditorViewModel {
 
     private var transformedText: TransformedText? = null
 
-    private val CONVERSION_LIMIT_LENGTH = 5600
-
     fun visualTransformation(): VisualTransformation {
         if (content.value.text.length > CONVERSION_LIMIT_LENGTH) {
             return VisualTransformation.None
@@ -243,3 +241,5 @@ class TextEditorViewModel {
     }
 
 }
+
+private const val CONVERSION_LIMIT_LENGTH = 5600
