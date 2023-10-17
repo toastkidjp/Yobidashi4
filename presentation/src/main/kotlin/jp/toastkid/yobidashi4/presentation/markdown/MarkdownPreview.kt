@@ -3,15 +3,12 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.ClickableText
@@ -52,7 +49,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.net.URL
@@ -196,8 +192,10 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
 private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     val lastLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val finderTarget = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow() }
-    val annotatedString = annotate(LinkGenerator().invoke(text), MaterialTheme.colors.onSurface, finderTarget.collectAsState(
-        FindOrder.EMPTY).value.target)
+    val annotatedString = annotate(
+        LinkGenerator().invoke(text), finderTarget.collectAsState(
+            FindOrder.EMPTY).value.target
+    )
     ClickableText(
         annotatedString,
         style = textStyle,
@@ -219,7 +217,7 @@ private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier)
     )
 }
 
-private fun annotate(text: String,  normalTextColor: Color, finderTarget: String?) = buildAnnotatedString {
+private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString {
     var lastIndex = 0
     val matcher = internalLinkPattern.matcher(text)
     while (matcher.find()) {
