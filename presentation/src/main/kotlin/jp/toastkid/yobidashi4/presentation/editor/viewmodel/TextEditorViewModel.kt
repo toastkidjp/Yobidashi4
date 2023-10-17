@@ -198,18 +198,6 @@ class TextEditorViewModel {
         return Offset(paragraph.getLineLeft(currentLine), paragraph.getLineTop(currentLine) - verticalScrollState.offset)
     }
 
-    fun dispose() {
-        val currentText = content.value.text
-        if (currentText.isNotEmpty()) {
-            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, verticalScrollState.offset.toDouble(), resetEditing = false)
-        }
-
-        lastParagraph = null
-        transformedText = null
-        content.value = TextFieldValue()
-        lastConversionJob?.cancel()
-    }
-
     fun currentLineHighlightColor(): Color {
         return Color(
             if (mainViewModel.darkMode()) 0xCC666239
@@ -238,6 +226,18 @@ class TextEditorViewModel {
 
     fun makeCharacterCountMessage(count: Int): String {
         return "Character: $count"
+    }
+
+    fun dispose() {
+        val currentText = content.value.text
+        if (currentText.isNotEmpty()) {
+            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, verticalScrollState.offset.toDouble(), resetEditing = false)
+        }
+
+        lastParagraph = null
+        transformedText = null
+        content.value = TextFieldValue()
+        lastConversionJob?.cancel()
     }
 
 }
