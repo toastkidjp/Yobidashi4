@@ -90,26 +90,31 @@ fun TableView(aggregationResult: AggregationResult) {
                                 else Color.Transparent
                             )
 
-                            Text(
-                                item.toString(),
-                                color = if (headerCursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                            Box(
+                                contentAlignment = Alignment.CenterStart,
                                 modifier = Modifier
+                                    .fillParentMaxHeight(0.05f)
                                     .clickable {
                                         val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
                                         lastSorted = index to lastSortOrder.not()
 
                                         sort(lastSortOrder, aggregationResult, index, articleStates)
                                     }
-                                    .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                                     .onPointerEvent(PointerEventType.Enter) {
                                         headerCursorOn.value = true
                                     }
                                     .onPointerEvent(PointerEventType.Exit) {
                                         headerCursorOn.value = false
                                     }
+                                    .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                                     .weight(if (index == 0) 0.4f else 1f)
-                                    .padding(horizontal = 16.dp)
-                            )
+                            ) {
+                                Text(
+                                    item.toString(),
+                                    color = if (headerCursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                )
+                            }
                         }
                     }
                     Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
