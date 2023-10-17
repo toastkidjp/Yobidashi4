@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor
+package jp.toastkid.yobidashi4.presentation.editor.style
 
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.graphics.Color
@@ -6,7 +6,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import jp.toastkid.yobidashi4.presentation.editor.style.EditorStyle
 
 class EditorTheme {
 
