@@ -158,7 +158,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val converted = selected.split("\n").map { line -> "- [ ] $line" }.joinToString("\n")
+                val converted = selected.split("\n").joinToString("\n") { line -> "- [ ] $line" }
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
