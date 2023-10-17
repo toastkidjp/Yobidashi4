@@ -231,7 +231,13 @@ class TextEditorViewModel {
     fun dispose() {
         val currentText = content.value.text
         if (currentText.isNotEmpty()) {
-            mainViewModel.updateEditorContent(tab.path, currentText, content.value.selection.start, verticalScrollState.offset.toDouble(), resetEditing = false)
+            mainViewModel.updateEditorContent(
+                tab.path,
+                currentText,
+                content.value.selection.start,
+                verticalScrollState.offset.toDouble(),
+                resetEditing = false
+            )
         }
 
         lastParagraph = null
