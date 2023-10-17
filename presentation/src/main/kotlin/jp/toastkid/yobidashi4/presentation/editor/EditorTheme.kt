@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor
 
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -44,6 +45,7 @@ class EditorTheme {
 
     fun codeString(str: String, darkTheme: Boolean) = buildAnnotatedString {
         append(str)
+        appendInlineContent("EOF", "[EOF]")
 
         patterns.forEach {
             addStyle(if (darkTheme) it.darkStyle else it.lightStyle, str, it.regex)
