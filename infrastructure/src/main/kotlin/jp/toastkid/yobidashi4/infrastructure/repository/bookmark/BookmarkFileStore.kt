@@ -35,6 +35,10 @@ class BookmarkFileStore : BookmarkRepository {
         Files.write(path, list.map { "${it.title}\t${it.url}" })
     }
 
+    override fun delete(item: Bookmark) {
+        save(list().minus(item))
+    }
+
 }
 
 private val path = Path.of("user/bookmark/list.tsv")
