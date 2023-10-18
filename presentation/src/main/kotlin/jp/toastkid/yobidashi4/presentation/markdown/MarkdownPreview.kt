@@ -248,7 +248,6 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
         )
         lastIndex = endIndex
     }
-    val finalTextStart = length
 
     if (lastIndex >= text.length) {
         return@buildAnnotatedString
