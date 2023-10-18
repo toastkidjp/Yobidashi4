@@ -77,4 +77,14 @@ class BookmarkFileStoreTest {
         verify { Files.createDirectories(any()) }
         verify { Files.write(any(), any<Iterable<String>>()) }
     }
+
+    @Test
+    fun delete() {
+        val item = Bookmark("test", "https://www.yahoo.co.jp")
+        bookmarkFileStore.delete(item)
+
+        verify(inverse = true) { Files.createDirectories(any()) }
+        verify { Files.write(any(), any<Iterable<String>>()) }
+    }
+
 }
