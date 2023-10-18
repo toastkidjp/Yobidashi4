@@ -73,7 +73,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
     val completeItems = remember { mutableStateListOf<FileListItem>() }
