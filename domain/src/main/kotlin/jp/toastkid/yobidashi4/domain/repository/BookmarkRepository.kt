@@ -8,4 +8,6 @@ interface BookmarkRepository {
 
     fun add(item: Bookmark)
 
+    fun delete(item: Bookmark)
+
 }
