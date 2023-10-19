@@ -23,9 +23,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.presentation.editor.style.EditorTheme
 import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
+import jp.toastkid.yobidashi4.presentation.editor.style.EditorTheme
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -113,7 +113,7 @@ class TextEditorViewModel {
         altPressed = it.isAltPressed
 
         if (it.type != KeyEventType.KeyUp) {
-            return@onKeyEvent false
+            return false
         }
 
         return keyEventConsumer(
