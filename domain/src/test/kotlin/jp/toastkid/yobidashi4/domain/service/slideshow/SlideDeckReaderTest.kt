@@ -7,6 +7,7 @@ import io.mockk.unmockkAll
 import java.nio.file.Files
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -64,6 +65,7 @@ result.value = engine.eval(input.value.text).toString()
         assertEquals(6, slides.size)
         assertEquals("https://www.yahoo.co.jp/all", background)
         assertEquals("Title slide", title)
+        assertTrue(slides.any { it.isFront() })
     }
 
 }
