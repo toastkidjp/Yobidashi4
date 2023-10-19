@@ -5,6 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -30,5 +31,7 @@ class SimpleCalculatorTest {
         assertEquals(51.0, calculator.invoke("1500*0.03+6"))
         assertEquals(525.00, calculator.invoke("1500/3 + 25"))
         assertEquals(525.00, calculator.invoke("1,500/3 + 25"))
+        assertNull(calculator.invoke("Good+day"))
+        assertNull(calculator.invoke("11+(2"))
     }
 }
