@@ -239,6 +239,7 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
                 textDecoration = TextDecoration.Underline
             ), start = annotateStart, end = annotateStart + title.length
         )
+
         // attach a string annotation that stores a URL to the text "link"
         addStringAnnotation(
             tag = "URL",
@@ -254,6 +255,17 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
     }
 
     append(text.substring(lastIndex, text.length))
+
+    if (text.contains("~~")) {
+        val m = Pattern.compile("~~(.+?)~~", Pattern.DOTALL).matcher(text)
+        while (m.find()) {
+            addStyle(
+                SpanStyle(textDecoration = TextDecoration.LineThrough),
+                m.start(),
+                m.end()
+            )
+        }
+    }
 
     if (finderTarget.isNullOrBlank().not()) {
         val finderMatcher = Pattern.compile(finderTarget).matcher(text)
