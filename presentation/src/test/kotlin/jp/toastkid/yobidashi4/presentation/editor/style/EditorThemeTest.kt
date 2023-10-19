@@ -19,10 +19,7 @@ class EditorThemeTest {
     fun tearDown() {
     }
 
-    @Test
-    fun codeString() {
-        val codeString = editorTheme.codeString(
-            """
+    private val source = """
 # Title
 Description
 
@@ -35,7 +32,12 @@ Description
 ### List
 - 1tab
 - 2tab
-            """,
+                """
+
+    @Test
+    fun codeString() {
+        val codeString = editorTheme.codeString(
+            source,
             true
         )
         assertTrue(codeString.text.endsWith("[EOF]"))
