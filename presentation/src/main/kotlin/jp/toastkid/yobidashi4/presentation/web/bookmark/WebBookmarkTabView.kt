@@ -58,7 +58,7 @@ import kotlin.io.path.absolutePathString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun WebBookmarkTabView() {
     val koin = object : KoinComponent {
