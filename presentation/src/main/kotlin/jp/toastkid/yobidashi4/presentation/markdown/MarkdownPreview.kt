@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,7 @@ import java.util.regex.Pattern
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
+import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
@@ -75,14 +77,47 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
-    val focusRequester = remember { FocusRequester() }
-    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
+
+    Surface(
+        color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
+        modifier = modifier.focusRequester(focusRequester)
+    ) {
+        MarkdownContent(tab.markdown(), scrollState, modifier)
+
+        LaunchedEffect(tab) {
+            scrollState.scrollTo(tab.scrollPosition())
+
+            focusRequester.requestFocus()
+        }
+
+        DisposableEffect(tab) {
+            onDispose {
+                val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+
+                val indexOf = mainViewModel.tabs.indexOf(tab)
+                if (indexOf == -1) {
+                    return@onDispose
+                }
+                tab.setScrollPosition(scrollState.value)
+                mainViewModel.tabs.set(indexOf, tab)
+            }
+        }
+    }
+}
+
+@Composable
+fun MarkdownContent(
+    content: Markdown,
+    scrollState: ScrollState,
+    modifier: Modifier
+) {
+    val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+    val coroutineScope = rememberCoroutineScope()
     val scrollAction = remember { KeyboardScrollAction(scrollState) }
 
-    val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-
-    Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
+    Box(
         modifier = modifier.onKeyEvent {
             val scrollActionConsumed = scrollAction(coroutineScope, it.key, it.isCtrlPressed)
             if (scrollActionConsumed) {
@@ -102,88 +137,76 @@ fun MarkdownPreview(tab: MarkdownPreviewTab, modifier: Modifier) {
 
             false
         }
-            .focusRequester(focusRequester)
     ) {
-        Box {
-            val content = tab.markdown()
+        SelectionContainer {
+            Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
+                content.lines().forEach { line ->
+                    when (line) {
+                        is TextBlock -> {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                if (line.quote) {
+                                    VerticalDivider(2.dp, Color(0x88CCAAFF), Modifier.padding(start = 4.dp, end = 8.dp))
+                                }
+                                TextLineView(
+                                    line.text,
+                                    TextStyle(
+                                        color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
+                                        fontSize = line.fontSize().sp,
+                                        fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
+                                    ),
+                                    Modifier.padding(bottom = 8.dp)
+                                )
+                            }
+                        }
 
-            SelectionContainer {
-                Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
-                    content.lines().forEach { line ->
-                        when (line) {
-                            is TextBlock -> {
+                        is ListLine -> Column {
+                            line.list.forEachIndexed { index, it ->
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    if (line.quote) {
-                                        VerticalDivider(2.dp, Color(0x88CCAAFF), Modifier.padding(start = 4.dp, end = 8.dp))
+                                    when {
+                                        line.ordered -> DisableSelection {
+                                            Text("${index + 1}. ", fontSize = 14.sp)
+                                        }
+
+                                        line.taskList -> Checkbox(
+                                            checked = it.startsWith("[x]"),
+                                            enabled = false,
+                                            onCheckedChange = {},
+                                            modifier = Modifier.size(32.dp)
+                                        )
+
+                                        else -> DisableSelection {
+                                            Text("・ ", fontSize = 14.sp)
+                                        }
                                     }
                                     TextLineView(
-                                        line.text,
-                                        TextStyle(
-                                            color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
-                                            fontSize = line.fontSize().sp,
-                                            fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
-                                        ),
-                                        Modifier.padding(bottom = 8.dp)
+                                        if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
+                                        TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
+                                        Modifier.padding(bottom = 4.dp)
                                     )
                                 }
                             }
-                            is ListLine -> Column {
-                                line.list.forEachIndexed { index, it ->
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        when {
-                                            line.ordered -> DisableSelection {
-                                                Text("${index + 1}. ", fontSize = 14.sp)
-                                            }
-                                            line.taskList -> Checkbox(checked = it.startsWith("[x]"), enabled = false, onCheckedChange = {}, modifier = Modifier.size(32.dp))
-                                            else -> DisableSelection {
-                                                Text("・ ", fontSize = 14.sp)
-                                            }
-                                        }
-                                        TextLineView(
-                                            if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
-                                            TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
-                                            Modifier.padding(bottom = 4.dp)
-                                        )
-                                    }
-                                }
-                            }
-                            is ImageLine -> Image(
-                                ImageIO.read(URL(line.source)).toComposeImageBitmap(),
-                                contentDescription = line.source,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                            is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
-                            is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                            is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                            else -> Unit
                         }
+
+                        is ImageLine -> Image(
+                            ImageIO.read(URL(line.source)).toComposeImageBitmap(),
+                            contentDescription = line.source,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+
+                        is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
+                        is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                        is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+                        else -> Unit
                     }
                 }
             }
-
-            LaunchedEffect(tab) {
-                scrollState.scrollTo(tab.scrollPosition())
-
-                focusRequester.requestFocus()
-            }
-
-            DisposableEffect(tab) {
-                onDispose {
-                    val indexOf = mainViewModel.tabs.indexOf(tab)
-                    if (indexOf == -1) {
-                        return@onDispose
-                    }
-                    tab.setScrollPosition(scrollState.value)
-                    mainViewModel.tabs.set(indexOf, tab)
-                }
-            }
-
-            VerticalScrollbar(
-                adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                    Alignment.CenterEnd
-                )
-            )
         }
+
+        VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
+                Alignment.CenterEnd
+            )
+        )
     }
 }
 
