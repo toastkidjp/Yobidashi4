@@ -1,26 +1,20 @@
 package jp.toastkid.yobidashi4.presentation.main
 
-import androidx.compose.foundation.ContextMenuArea
-import androidx.compose.foundation.ContextMenuItem
-import androidx.compose.foundation.ContextMenuState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.LocalTextContextMenu
-import androidx.compose.foundation.text.TextContextMenu
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalLocalization
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
-import jp.toastkid.yobidashi4.domain.service.text.TextCountMessageFactory
 import jp.toastkid.yobidashi4.main.AppTheme
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
+import jp.toastkid.yobidashi4.presentation.main.menu.TextContextMenuFactory
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +43,7 @@ fun launchMainApplication() {
                 MainMenu { exitApplication() }
 
                 CompositionLocalProvider(
-                    LocalTextContextMenu provides makeTextContextMenu()
+                    LocalTextContextMenu provides TextContextMenuFactory().invoke()
                 ) {
                     MainScaffold()
                 }
@@ -73,49 +67,6 @@ fun launchMainApplication() {
             withContext(Dispatchers.IO) {
                 mainViewModel.loadBackgroundImage()
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-private fun makeTextContextMenu(): TextContextMenu {
-    val mainViewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
-
-    return object : TextContextMenu {
-        @Composable
-        override fun Area(
-            textManager: TextContextMenu.TextManager,
-            state: ContextMenuState,
-            content: @Composable () -> Unit
-        ) {
-            val localization = LocalLocalization.current
-            mainViewModel.setTextManager(textManager)
-            val items = {
-                listOfNotNull(
-                    textManager.cut?.let {
-                        ContextMenuItem(localization.cut, it)
-                    },
-                    textManager.copy?.let {
-                        ContextMenuItem(localization.copy, it)
-                    },
-                    textManager.paste?.let {
-                        ContextMenuItem(localization.paste, it)
-                    },
-                    textManager.selectAll?.let {
-                        ContextMenuItem(localization.selectAll, it)
-                    },
-                    ContextMenuItem("Search") {
-                        mainViewModel
-                            .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
-                    },
-                    ContextMenuItem("Count") {
-                        mainViewModel
-                            .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
-                    }
-                )
-            }
-
-            ContextMenuArea(items, state, content = content)
         }
     }
 }
