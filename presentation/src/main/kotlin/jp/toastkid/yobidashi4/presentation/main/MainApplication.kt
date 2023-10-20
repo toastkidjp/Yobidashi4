@@ -43,7 +43,7 @@ fun launchMainApplication() {
                 MainMenu { exitApplication() }
 
                 CompositionLocalProvider(
-                    LocalTextContextMenu provides TextContextMenuFactory().invoke()
+                    LocalTextContextMenu provides TextContextMenuFactory(mainViewModel).invoke()
                 ) {
                     MainScaffold()
                 }

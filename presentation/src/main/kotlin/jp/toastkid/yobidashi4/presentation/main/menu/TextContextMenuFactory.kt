@@ -9,15 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLocalization
 import jp.toastkid.yobidashi4.domain.service.text.TextCountMessageFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class TextContextMenuFactory {
+class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
 
     @OptIn(ExperimentalFoundationApi::class)
     operator fun invoke(): TextContextMenu {
-        val mainViewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
-
         return object : TextContextMenu {
             @Composable
             override fun Area(
