@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -19,7 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.presentation.markdown.MarkdownView
+import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
+import jp.toastkid.yobidashi4.presentation.markdown.MarkdownContent
 
 @Composable
 fun EditorTabView(tab: EditorTab) {
@@ -42,7 +44,7 @@ fun EditorTabView(tab: EditorTab) {
                 val showPreview = remember { mutableStateOf(tab.showPreview()) }
 
                 if (showPreview.value) {
-                    MarkdownView(tab, Modifier.widthIn(max = 360.dp))
+                    MarkdownContent(MarkdownParser().invoke(tab.path), rememberScrollState(), Modifier.widthIn(max = 360.dp))
                 }
 
                 LaunchedEffect(tab) {
