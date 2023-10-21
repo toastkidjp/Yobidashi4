@@ -60,11 +60,11 @@ import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorView
 import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
-import jp.toastkid.yobidashi4.presentation.markdown.MarkdownPreview
+import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -164,7 +164,7 @@ internal fun TabsView(modifier: Modifier) {
             is FileTab -> FileListView(currentTab.items, Modifier)
             is TableTab -> TableView(currentTab.items())
             is EditorTab -> EditorTabView(currentTab)
-            is MarkdownPreviewTab -> MarkdownPreview(currentTab, Modifier)
+            is MarkdownPreviewTab -> MarkdownTabView(currentTab, Modifier)
             is EditorSettingTab -> EditorSettingComponent(modifier = Modifier)
             is CalendarTab -> CalendarView()
             is CompoundInterestCalculatorTab -> CompoundInterestCalculatorView()
