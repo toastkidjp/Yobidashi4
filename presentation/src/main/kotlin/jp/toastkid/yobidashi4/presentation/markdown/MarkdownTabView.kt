@@ -19,7 +19,7 @@ import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
+internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
 
