@@ -249,7 +249,7 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
         }
     }
 
-    if (finderTarget.isNullOrBlank().not()) {
+    if (!finderTarget.isNullOrBlank()) {
         val finderMatcher = Pattern.compile(finderTarget).matcher(text)
         while (finderMatcher.find()) {
             addStyle(
