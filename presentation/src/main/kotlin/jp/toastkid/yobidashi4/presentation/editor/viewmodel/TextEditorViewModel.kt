@@ -250,4 +250,4 @@ class TextEditorViewModel {
 
 }
 
-private const val CONVERSION_LIMIT_LENGTH = 5600
+private const val CONVERSION_LIMIT_LENGTH = 4500
