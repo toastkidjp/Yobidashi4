@@ -42,6 +42,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -238,9 +239,17 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
     }
 
     if (text.contains("~~")) {
-        applyStylePattern(text, lastIndex, "~~", SpanStyle(textDecoration = TextDecoration.LineThrough))
+        applyStylePattern(
+            text,
+            lastIndex,
+            lineThroughPattern,
+            "~~",
+            SpanStyle(textDecoration = TextDecoration.LineThrough)
+        )
+    } else if (text.contains("***")) {
+        applyStylePattern(text, lastIndex, italicPattern, "***", SpanStyle(fontStyle = FontStyle.Italic))
     } else if (text.contains("**")) {
-        applyStylePattern(text, lastIndex, "**", SpanStyle(fontWeight = FontWeight.Bold))
+        applyStylePattern(text, lastIndex, boldingPattern, "**", SpanStyle(fontWeight = FontWeight.Bold))
     } else {
         append(text.substring(lastIndex, text.length))
     }
@@ -261,10 +270,11 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
 private fun AnnotatedString.Builder.applyStylePattern(
     text: String,
     lastIndex: Int,
+    pattern: Pattern,
     replacementTarget: String,
     spanStyle: SpanStyle
 ) {
-    val m = lineThroughPattern.matcher(text)
+    val m = pattern.matcher(text)
     append(text.substring(lastIndex, text.length).replace(replacementTarget, ""))
     val offset = replacementTarget.length * 2
     m.results().toList().forEachIndexed { index, matchResult ->
@@ -284,3 +294,6 @@ private val lineThroughPattern =
 
 private val boldingPattern =
     Pattern.compile("\\*\\*(.+?)\\*\\*", Pattern.DOTALL)
+
+private val italicPattern =
+    Pattern.compile("\\*\\*\\*(.+?)\\*\\*\\*", Pattern.DOTALL)
