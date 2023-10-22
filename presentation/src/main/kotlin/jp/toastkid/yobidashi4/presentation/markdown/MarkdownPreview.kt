@@ -246,6 +246,16 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
                 m.end() - 4
             )
         }
+    } else if (text.contains("**")) {
+        val m = Pattern.compile("\\*\\*(.+?)\\*\\*", Pattern.DOTALL).matcher(text)
+        append(text.substring(lastIndex, text.length).replace("**", ""))
+        m.results().toList().forEachIndexed { index, matchResult ->
+            addStyle(
+                SpanStyle(fontWeight = FontWeight.Bold),
+                matchResult.start() - (4 * index),
+                matchResult.end() - (4 * (index + 1))
+            )
+        }
     } else {
         append(text.substring(lastIndex, text.length))
     }
