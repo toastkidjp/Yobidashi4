@@ -236,17 +236,18 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
         return@buildAnnotatedString
     }
 
-    append(text.substring(lastIndex, text.length))
-
     if (text.contains("~~")) {
         val m = Pattern.compile("~~(.+?)~~", Pattern.DOTALL).matcher(text)
         while (m.find()) {
+            append(text.substring(lastIndex, text.length).replace("~~", ""))
             addStyle(
                 SpanStyle(textDecoration = TextDecoration.LineThrough),
                 m.start(),
-                m.end()
+                m.end() - 4
             )
         }
+    } else {
+        append(text.substring(lastIndex, text.length))
     }
 
     if (!finderTarget.isNullOrBlank()) {
