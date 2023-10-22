@@ -247,7 +247,7 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
             )
         }
     } else if (text.contains("**")) {
-        val m = Pattern.compile("\\*\\*(.+?)\\*\\*", Pattern.DOTALL).matcher(text)
+        val m = boldingPattern.matcher(text)
         append(text.substring(lastIndex, text.length).replace("**", ""))
         m.results().toList().forEachIndexed { index, matchResult ->
             addStyle(
@@ -278,3 +278,6 @@ private val internalLinkPattern =
 
 private val lineThroughPattern =
     Pattern.compile("~~(.+?)~~", Pattern.DOTALL)
+
+private val boldingPattern =
+    Pattern.compile("\\*\\*(.+?)\\*\\*", Pattern.DOTALL)
