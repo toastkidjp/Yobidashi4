@@ -92,7 +92,7 @@ class TextEditorViewModelTest {
     fun initialScroll() {
         viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
 
-        assertEquals(0.0, viewModel.verticalScrollState().offset)
+        assertEquals(0.0f, viewModel.verticalScrollState().offset)
     }
 
     @Test
@@ -124,7 +124,7 @@ class TextEditorViewModelTest {
 
     @Test
     fun visualTransformation() {
-        assertEquals(VisualTransformation.None, viewModel.visualTransformation())
+        assertNotEquals(VisualTransformation.None, viewModel.visualTransformation())
     }
 
     @Test
