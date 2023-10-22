@@ -24,7 +24,7 @@ import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownPreview
 
 @Composable
-fun EditorTabView(tab: EditorTab) {
+internal fun EditorTabView(tab: EditorTab) {
     val status = remember { mutableStateOf("") }
     Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
         Column {
