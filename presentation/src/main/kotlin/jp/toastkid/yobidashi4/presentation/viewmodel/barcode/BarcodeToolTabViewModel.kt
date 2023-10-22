@@ -72,8 +72,7 @@ class BarcodeToolTabViewModel {
     fun onClickImage() {
         val image = lastBarcode.value ?: return
         ClipboardPutterService().invoke(image)
-        object : KoinComponent { val vm: MainViewModel by inject() }.vm
-            .showSnackbar("Copy barcode to clipboard.")
+        mainViewModel.showSnackbar("Copy barcode to clipboard.")
     }
 
 }
