@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
-import jp.toastkid.yobidashi4.presentation.markdown.MarkdownContent
+import jp.toastkid.yobidashi4.presentation.markdown.MarkdownPreview
 
 @Composable
 fun EditorTabView(tab: EditorTab) {
@@ -44,7 +44,7 @@ fun EditorTabView(tab: EditorTab) {
                 val showPreview = remember { mutableStateOf(tab.showPreview()) }
 
                 if (showPreview.value) {
-                    MarkdownContent(MarkdownParser().invoke(tab.path), rememberScrollState(), Modifier.widthIn(max = 360.dp))
+                    MarkdownPreview(MarkdownParser().invoke(tab.path), rememberScrollState(), Modifier.widthIn(max = 360.dp))
                 }
 
                 LaunchedEffect(tab) {

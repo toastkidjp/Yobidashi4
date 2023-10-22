@@ -67,7 +67,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Composable
-fun MarkdownContent(
+fun MarkdownPreview(
     content: Markdown,
     scrollState: ScrollState,
     modifier: Modifier

@@ -27,7 +27,7 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
         modifier = modifier.focusRequester(focusRequester)
     ) {
-        MarkdownContent(tab.markdown(), scrollState, modifier)
+        MarkdownPreview(tab.markdown(), scrollState, modifier)
 
         LaunchedEffect(tab) {
             scrollState.scrollTo(tab.scrollPosition())
