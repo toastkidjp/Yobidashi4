@@ -238,12 +238,12 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
 
     if (text.contains("~~")) {
         val m = Pattern.compile("~~(.+?)~~", Pattern.DOTALL).matcher(text)
-        while (m.find()) {
-            append(text.substring(lastIndex, text.length).replace("~~", ""))
+        append(text.substring(lastIndex, text.length).replace("~~", ""))
+        m.results().toList().forEachIndexed { index, matchResult ->
             addStyle(
                 SpanStyle(textDecoration = TextDecoration.LineThrough),
-                m.start(),
-                m.end() - 4
+                matchResult.start() - (4 * index),
+                matchResult.end() - (4 * (index + 1))
             )
         }
     } else if (text.contains("**")) {
