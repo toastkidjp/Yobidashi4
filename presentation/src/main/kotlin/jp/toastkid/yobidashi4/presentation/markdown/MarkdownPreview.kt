@@ -37,6 +37,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -237,25 +238,9 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
     }
 
     if (text.contains("~~")) {
-        val m = lineThroughPattern.matcher(text)
-        append(text.substring(lastIndex, text.length).replace("~~", ""))
-        m.results().toList().forEachIndexed { index, matchResult ->
-            addStyle(
-                SpanStyle(textDecoration = TextDecoration.LineThrough),
-                matchResult.start() - (4 * index),
-                matchResult.end() - (4 * (index + 1))
-            )
-        }
+        applyStylePattern(text, lastIndex, "~~", SpanStyle(textDecoration = TextDecoration.LineThrough))
     } else if (text.contains("**")) {
-        val m = boldingPattern.matcher(text)
-        append(text.substring(lastIndex, text.length).replace("**", ""))
-        m.results().toList().forEachIndexed { index, matchResult ->
-            addStyle(
-                SpanStyle(fontWeight = FontWeight.Bold),
-                matchResult.start() - (4 * index),
-                matchResult.end() - (4 * (index + 1))
-            )
-        }
+        applyStylePattern(text, lastIndex, "**", SpanStyle(fontWeight = FontWeight.Bold))
     } else {
         append(text.substring(lastIndex, text.length))
     }
@@ -270,6 +255,24 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
                 ), start = finderMatcher.start(), end = finderMatcher.end()
             )
         }
+    }
+}
+
+private fun AnnotatedString.Builder.applyStylePattern(
+    text: String,
+    lastIndex: Int,
+    replacementTarget: String,
+    spanStyle: SpanStyle
+) {
+    val m = lineThroughPattern.matcher(text)
+    append(text.substring(lastIndex, text.length).replace(replacementTarget, ""))
+    val offset = replacementTarget.length * 2
+    m.results().toList().forEachIndexed { index, matchResult ->
+        addStyle(
+            spanStyle,
+            matchResult.start() - (offset * index),
+            matchResult.end() - (offset * (index + 1))
+        )
     }
 }
 
