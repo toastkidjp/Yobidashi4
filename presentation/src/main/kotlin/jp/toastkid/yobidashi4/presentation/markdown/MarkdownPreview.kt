@@ -237,7 +237,7 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
     }
 
     if (text.contains("~~")) {
-        val m = Pattern.compile("~~(.+?)~~", Pattern.DOTALL).matcher(text)
+        val m = lineThroughPattern.matcher(text)
         append(text.substring(lastIndex, text.length).replace("~~", ""))
         m.results().toList().forEachIndexed { index, matchResult ->
             addStyle(
@@ -275,3 +275,6 @@ private fun annotate(text: String, finderTarget: String?) = buildAnnotatedString
 
 private val internalLinkPattern =
     Pattern.compile("\\[(.+?)\\]\\((.+?)\\)", Pattern.DOTALL)
+
+private val lineThroughPattern =
+    Pattern.compile("~~(.+?)~~", Pattern.DOTALL)
