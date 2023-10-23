@@ -194,6 +194,15 @@ private fun TabOptionMenu(
             openDropdownMenu.value = false
         }
     ) {
+        DropdownMenuItem(
+            onClick = {
+                ClipboardPutterService().invoke(tab.title())
+                openDropdownMenu.value = false
+            }
+        ) {
+            Text("Copy title")
+        }
+
         if (tab is WebTab) {
             DropdownMenuItem(
                 onClick = {
