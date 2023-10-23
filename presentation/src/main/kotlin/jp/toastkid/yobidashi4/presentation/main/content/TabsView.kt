@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -138,13 +137,11 @@ internal fun TabsView(modifier: Modifier) {
                             LoadIcon(iconPathState.value, Modifier.size(24.dp).padding(start = 4.dp, end = 8.dp))
 
                             val width = if (tab is WebTab) 232.dp else 1000.dp
-                            SelectionContainer {
-                                Text(titleState.value,
-                                    color = MaterialTheme.colors.onPrimary,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1,
-                                    modifier = Modifier.widthIn(max = width).padding(vertical = 8.dp))
-                            }
+                            Text(titleState.value,
+                                color = MaterialTheme.colors.onPrimary,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                modifier = Modifier.widthIn(max = width).padding(vertical = 8.dp))
                             if (tab.closeable()) {
                                 Text("x",
                                     color = MaterialTheme.colors.onPrimary,
