@@ -27,6 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -85,6 +86,9 @@ fun SimpleTextEditor(
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
+                .onPreviewKeyEvent {
+                    viewModel.onPreviewKeyEvent(it)
+                }
                 .onKeyEvent {
                     viewModel.onKeyEvent(it, coroutineScope)
                 }
