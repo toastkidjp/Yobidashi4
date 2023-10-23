@@ -24,7 +24,6 @@ import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.TableFormConverter
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -82,25 +81,6 @@ class KeyEventConsumer(
                     TextFieldValue(
                         newText,
                         content.selection,
-                        content.composition
-                    )
-                )
-                true
-            }
-            it.isCtrlPressed && it.isShiftPressed && it.key == Key.X -> {
-                val textLayoutResult = lastParagraph ?: return false
-                val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
-                val lineStart = textLayoutResult.getLineStart(currentLine)
-                val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                val currentLineText = content.text.substring(lineStart, lineEnd + 1)
-                ClipboardPutterService().invoke(currentLineText)
-                val newText = StringBuilder(content.text)
-                    .delete(lineStart, lineEnd + 1)
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(lineStart),
                         content.composition
                     )
                 )
