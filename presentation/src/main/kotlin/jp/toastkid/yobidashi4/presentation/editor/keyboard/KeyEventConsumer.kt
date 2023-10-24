@@ -34,9 +34,9 @@ class KeyEventConsumer(
     @OptIn(ExperimentalComposeUiApi::class)
     operator fun invoke(
         it: androidx.compose.ui.input.key.KeyEvent,
-        content: androidx.compose.ui.text.input.TextFieldValue,
+        content: TextFieldValue,
         lastParagraph: androidx.compose.ui.text.MultiParagraph?,
-        setNewContent: (androidx.compose.ui.text.input.TextFieldValue) -> kotlin.Unit
+        setNewContent: (TextFieldValue) -> Unit
     ): Boolean {
         val rawSelectionStartIndex = content.selection.start
         val rauSelectionEndIndex = content.selection.end
