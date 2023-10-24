@@ -48,10 +48,6 @@ class KeyEventConsumer(
         val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
 
         return when {
-            it.isCtrlPressed && it.key == Key.S -> {
-                mainViewModel.saveCurrentEditorTab()
-                true
-            }
             it.isCtrlPressed && it.key == Key.D -> {
                 val startIndex = content.selection.start
                 val endIndex = content.selection.end
