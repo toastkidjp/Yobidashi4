@@ -126,11 +126,6 @@ class TextEditorViewModel {
             content.value,
             lastParagraph,
             {
-                coroutineScope.launch {
-                    verticalScrollState.scrollBy(it.sp.value)
-                }
-            },
-            {
                 applyStyle(it)
             }
         )

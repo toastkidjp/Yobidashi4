@@ -2,13 +2,11 @@ package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import java.awt.Desktop
@@ -35,11 +33,10 @@ class KeyEventConsumer(
     
     @OptIn(ExperimentalComposeUiApi::class)
     operator fun invoke(
-        it: KeyEvent,
-        content: TextFieldValue,
-        lastParagraph: MultiParagraph?,
-        scrollBy: (Float) -> Unit,
-        setNewContent: (TextFieldValue) -> Unit
+        it: androidx.compose.ui.input.key.KeyEvent,
+        content: androidx.compose.ui.text.input.TextFieldValue,
+        lastParagraph: androidx.compose.ui.text.MultiParagraph?,
+        setNewContent: (androidx.compose.ui.text.input.TextFieldValue) -> kotlin.Unit
     ): Boolean {
         val rawSelectionStartIndex = content.selection.start
         val rauSelectionEndIndex = content.selection.end
