@@ -114,7 +114,7 @@ class TextEditorViewModel {
 
     fun focusRequester() = focusRequester
 
-    fun onKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+    fun onKeyEvent(it: KeyEvent): Boolean {
         altPressed = it.isAltPressed
 
         if (it.type != KeyEventType.KeyUp) {

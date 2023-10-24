@@ -90,7 +90,7 @@ fun SimpleTextEditor(
                     viewModel.onPreviewKeyEvent(it, coroutineScope)
                 }
                 .onKeyEvent {
-                    viewModel.onKeyEvent(it, coroutineScope)
+                    viewModel.onKeyEvent(it)
                 }
                 .drawBehind {
                     val currentLineOffset = viewModel.currentLineOffset()
