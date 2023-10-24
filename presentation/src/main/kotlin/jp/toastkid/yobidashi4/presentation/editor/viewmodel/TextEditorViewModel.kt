@@ -117,10 +117,6 @@ class TextEditorViewModel {
     fun onKeyEvent(it: KeyEvent): Boolean {
         altPressed = it.isAltPressed
 
-        if (it.type != KeyEventType.KeyUp) {
-            return false
-        }
-
         return keyEventConsumer(
             it,
             content.value,

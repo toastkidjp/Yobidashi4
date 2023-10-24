@@ -2,11 +2,13 @@ package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import java.awt.Desktop
@@ -38,6 +40,10 @@ class KeyEventConsumer(
         lastParagraph: androidx.compose.ui.text.MultiParagraph?,
         setNewContent: (TextFieldValue) -> Unit
     ): Boolean {
+        if (it.type != KeyEventType.KeyUp) {
+            return false
+        }
+
         val rawSelectionStartIndex = content.selection.start
         val rauSelectionEndIndex = content.selection.end
         val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
