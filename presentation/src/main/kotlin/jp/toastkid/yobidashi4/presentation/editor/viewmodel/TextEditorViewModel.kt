@@ -10,27 +10,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.input.getSelectedText
-import androidx.compose.ui.unit.sp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
+import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.style.EditorTheme
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -244,48 +237,20 @@ class TextEditorViewModel {
         content.value = TextFieldValue()
     }
 
-    fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
-        if (it.type != KeyEventType.KeyDown) {
-            return false
-        }
-        when {
-            it.isCtrlPressed && it.key == Key.DirectionUp -> {
-                coroutineScope.launch {
-                    verticalScrollState.scrollBy(-16.sp.value)
-                }
-                return true
-            }
-            it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                coroutineScope.launch {
-                    verticalScrollState.scrollBy(16.sp.value)
-                }
-                return true
-            }
-            it.isCtrlPressed && it.key == Key.X -> {
-                if (content.value.getSelectedText().isNotEmpty()) {
-                    return false
-                }
+    private val previewKeyEventConsumer = PreviewKeyEventConsumer()
 
-                val textLayoutResult = lastParagraph ?: return false
-                val currentLine = textLayoutResult.getLineForOffset(content.value.selection.start)
-                val lineStart = textLayoutResult.getLineStart(currentLine)
-                val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                val currentLineText = content.value.text.substring(lineStart, lineEnd + 1)
-                ClipboardPutterService().invoke(currentLineText)
-                val newText = StringBuilder(content.value.text)
-                    .delete(lineStart, lineEnd + 1)
-                    .toString()
-                content.value = (
-                    TextFieldValue(
-                        newText,
-                        TextRange(lineStart),
-                        content.value.composition
-                    )
-                )
-                return true
+    fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+        return previewKeyEventConsumer.invoke(
+            it,
+            content.value,
+            lastParagraph,
+            { applyStyle(it) },
+            {
+                coroutineScope.launch {
+                    verticalScrollState.scrollBy(it)
+                }
             }
-            else -> return false
-        }
+        )
     }
 
 }
