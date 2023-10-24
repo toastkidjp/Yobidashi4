@@ -11,7 +11,6 @@ import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.sp
 import java.awt.Desktop
 import java.net.URI
 import java.net.URLEncoder
@@ -330,14 +329,6 @@ class KeyEventConsumer(
                     return true
                 }
 
-                true
-            }
-            it.isCtrlPressed && it.key == Key.DirectionUp -> {
-                scrollBy(-16.sp.value)
-                true
-            }
-            it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                scrollBy(16.sp.value)
                 true
             }
             it.isAltPressed && it.key == Key.DirectionRight -> {

@@ -253,11 +253,23 @@ class TextEditorViewModel {
         content.value = TextFieldValue()
     }
 
-    fun onPreviewKeyEvent(it: KeyEvent): Boolean {
+    fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
         if (it.type != KeyEventType.KeyDown) {
             return false
         }
         when {
+            it.isCtrlPressed && it.key == Key.DirectionUp -> {
+                coroutineScope.launch {
+                    verticalScrollState.scrollBy(-16.sp.value)
+                }
+                return true
+            }
+            it.isCtrlPressed && it.key == Key.DirectionDown -> {
+                coroutineScope.launch {
+                    verticalScrollState.scrollBy(16.sp.value)
+                }
+                return true
+            }
             it.isCtrlPressed && it.key == Key.X -> {
                 if (content.value.getSelectedText().isNotEmpty()) {
                     return false

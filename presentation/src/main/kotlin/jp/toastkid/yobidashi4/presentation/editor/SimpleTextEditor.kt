@@ -87,7 +87,7 @@ fun SimpleTextEditor(
             modifier = modifier.focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
                 .onPreviewKeyEvent {
-                    viewModel.onPreviewKeyEvent(it)
+                    viewModel.onPreviewKeyEvent(it, coroutineScope)
                 }
                 .onKeyEvent {
                     viewModel.onKeyEvent(it, coroutineScope)
