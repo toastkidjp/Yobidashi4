@@ -12,9 +12,11 @@ class ListHeadAdderTest {
 - 2nd line
 """.trimIndent()
 
+    private val listHeadAdder = ListHeadAdder()
+
     @Test
     fun test() {
-        assertEquals(expected, ListHeadAdder().invoke(target, "-"))
+        assertEquals(expected, listHeadAdder.invoke(target, "-"))
     }
 
     @Test
@@ -23,7 +25,7 @@ class ListHeadAdderTest {
             """- 1st line
 - 2nd line
 """,
-            ListHeadAdder().invoke(
+            listHeadAdder.invoke(
                 """1st line
 2nd line
 """,
