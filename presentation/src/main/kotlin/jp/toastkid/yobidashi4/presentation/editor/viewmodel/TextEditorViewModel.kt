@@ -125,7 +125,7 @@ class TextEditorViewModel {
             it,
             content.value,
             lastParagraph,
-            { applyStyle(it) },
+            ::applyStyle,
             {
                 coroutineScope.launch {
                     verticalScrollState.scrollBy(it)
