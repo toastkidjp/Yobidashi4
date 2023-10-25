@@ -22,4 +22,18 @@ class NumberedListHeadAdderTest {
     fun testNullCase() {
         assertNull(NumberedListHeadAdder().invoke(null))
     }
+
+    @Test
+    fun test2() {
+        assertEquals(
+            """1. 1st line
+2. 2nd line
+""",
+            NumberedListHeadAdder().invoke(
+                """1st line
+2nd line
+"""
+            )
+        )
+    }
 }
