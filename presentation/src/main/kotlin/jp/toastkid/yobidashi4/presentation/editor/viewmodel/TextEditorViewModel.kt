@@ -49,6 +49,8 @@ class TextEditorViewModel {
 
     private val keyEventConsumer = KeyEventConsumer()
 
+    private val previewKeyEventConsumer = PreviewKeyEventConsumer()
+
     private val theme = EditorTheme()
 
     private val verticalScrollState = TextFieldScrollState(Orientation.Vertical, 0)
@@ -116,6 +118,20 @@ class TextEditorViewModel {
             lastParagraph,
             {
                 applyStyle(it)
+            }
+        )
+    }
+
+    fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+        return previewKeyEventConsumer.invoke(
+            it,
+            content.value,
+            lastParagraph,
+            { applyStyle(it) },
+            {
+                coroutineScope.launch {
+                    verticalScrollState.scrollBy(it)
+                }
             }
         )
     }
@@ -235,22 +251,6 @@ class TextEditorViewModel {
         lastParagraph = null
         transformedText = null
         content.value = TextFieldValue()
-    }
-
-    private val previewKeyEventConsumer = PreviewKeyEventConsumer()
-
-    fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
-        return previewKeyEventConsumer.invoke(
-            it,
-            content.value,
-            lastParagraph,
-            { applyStyle(it) },
-            {
-                coroutineScope.launch {
-                    verticalScrollState.scrollBy(it)
-                }
-            }
-        )
     }
 
 }
