@@ -17,4 +17,19 @@ class ListHeadAdderTest {
         assertEquals(expected, ListHeadAdder().invoke(target, "-"))
     }
 
+    @Test
+    fun test2() {
+        assertEquals(
+            """- 1st line
+- 2nd line
+""",
+            ListHeadAdder().invoke(
+                """1st line
+2nd line
+""",
+                "-"
+            )
+        )
+    }
+
 }
