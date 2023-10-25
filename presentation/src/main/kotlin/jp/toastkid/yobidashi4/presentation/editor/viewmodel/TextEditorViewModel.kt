@@ -125,13 +125,12 @@ class TextEditorViewModel {
             it,
             content.value,
             lastParagraph,
-            ::applyStyle,
-            {
-                coroutineScope.launch {
-                    verticalScrollState.scrollBy(it)
-                }
+            ::applyStyle
+        ) {
+            coroutineScope.launch {
+                verticalScrollState.scrollBy(it)
             }
-        )
+        }
     }
 
     suspend fun adjustLineNumberState() {
