@@ -115,10 +115,9 @@ class TextEditorViewModel {
         return keyEventConsumer(
             it,
             content.value,
-            lastParagraph
-        ) {
-            applyStyle(it)
-        }
+            lastParagraph,
+            ::applyStyle
+        )
     }
 
     fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
