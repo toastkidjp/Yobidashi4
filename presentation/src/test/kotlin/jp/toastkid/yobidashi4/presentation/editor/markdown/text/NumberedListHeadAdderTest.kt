@@ -13,14 +13,16 @@ class NumberedListHeadAdderTest {
 2. 2nd line
 """.trimIndent()
 
+    private val numberedListHeadAdder = NumberedListHeadAdder()
+
     @Test
     fun test() {
-        assertEquals(expected, NumberedListHeadAdder().invoke(target))
+        assertEquals(expected, numberedListHeadAdder.invoke(target))
     }
 
     @Test
     fun testNullCase() {
-        assertNull(NumberedListHeadAdder().invoke(null))
+        assertNull(numberedListHeadAdder.invoke(null))
     }
 
     @Test
@@ -29,7 +31,7 @@ class NumberedListHeadAdderTest {
             """1. 1st line
 2. 2nd line
 """,
-            NumberedListHeadAdder().invoke(
+            numberedListHeadAdder.invoke(
                 """1st line
 2nd line
 """
