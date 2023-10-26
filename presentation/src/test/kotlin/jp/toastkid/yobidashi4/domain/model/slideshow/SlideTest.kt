@@ -12,10 +12,16 @@ class SlideTest {
     @BeforeEach
     fun setUp() {
         slide = Slide()
+        slide.setTitle("test")
         slide.setBackground("https://test.yahoo.co.jp/background.png")
         slide.addLine(ImageLine("https://test.yahoo.co.jp/test.png"))
         slide.addLine(ImageLine("https://test.yahoo.co.jp/test.jpg"))
         slide.addLine(ImageLine("https://test.yahoo.co.jp/test.webp"))
+    }
+
+    @Test
+    fun title() {
+        assertEquals("test", slide.title())
     }
 
     @Test
