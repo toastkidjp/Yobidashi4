@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ListHeadAdderTest {
@@ -12,7 +13,12 @@ class ListHeadAdderTest {
 - 2nd line
 """.trimIndent()
 
-    private val listHeadAdder = ListHeadAdder()
+    private lateinit var listHeadAdder: ListHeadAdder
+
+    @BeforeEach
+    fun setUp() {
+        listHeadAdder = ListHeadAdder()
+    }
 
     @Test
     fun test() {
