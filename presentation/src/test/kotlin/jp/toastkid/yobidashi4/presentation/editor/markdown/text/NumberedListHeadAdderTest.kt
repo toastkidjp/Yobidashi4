@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class NumberedListHeadAdderTest {
@@ -13,7 +14,12 @@ class NumberedListHeadAdderTest {
 2. 2nd line
 """.trimIndent()
 
-    private val numberedListHeadAdder = NumberedListHeadAdder()
+    private lateinit var numberedListHeadAdder: NumberedListHeadAdder
+
+    @BeforeEach
+    fun setUp() {
+        numberedListHeadAdder = NumberedListHeadAdder()
+    }
 
     @Test
     fun test() {
