@@ -41,7 +41,17 @@ Description
             true
         )
         assertTrue(codeString.text.endsWith("[EOF]"))
-        assertEquals(110, codeString.spanStyles.size)
+        assertEquals(114, codeString.spanStyles.size)
+    }
+
+    @Test
+    fun codeStringForLightCase() {
+        val codeString = editorTheme.codeString(
+            source,
+            false
+        )
+        assertTrue(codeString.text.endsWith("[EOF]"))
+        assertEquals(114, codeString.spanStyles.size)
     }
 
 }
