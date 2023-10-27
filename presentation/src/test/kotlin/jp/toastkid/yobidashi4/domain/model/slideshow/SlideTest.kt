@@ -36,4 +36,9 @@ class SlideTest {
         assertEquals(3, slide.lines().size)
     }
 
+    @Test
+    fun background() {
+        assertEquals("https://test.yahoo.co.jp/background.png", slide.background())
+    }
+
 }
