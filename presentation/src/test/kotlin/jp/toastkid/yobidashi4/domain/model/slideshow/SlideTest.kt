@@ -30,4 +30,10 @@ class SlideTest {
 
         assertEquals(4, imageUrls.size)
     }
+
+    @Test
+    fun lines() {
+        assertEquals(3, slide.lines().size)
+    }
+
 }
