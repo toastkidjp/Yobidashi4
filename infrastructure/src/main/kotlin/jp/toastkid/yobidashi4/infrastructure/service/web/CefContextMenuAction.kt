@@ -6,7 +6,6 @@ import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
@@ -41,14 +40,7 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.OPEN_BACKGROUND.id -> {
                 params?.linkUrl?.let {
-                    // TODO
                     viewModel.openUrl(it, true)
-                    val webTab = viewModel.tabs.last() as? WebTab ?: return@let
-                    object : KoinComponent {
-                        val webViewPool: WebViewPool by inject()
-                    }.webViewPool.component(
-                        webTab.id(), webTab.url()
-                    )
                 }
             }
 
