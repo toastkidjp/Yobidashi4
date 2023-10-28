@@ -16,6 +16,7 @@ import java.awt.Desktop
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
@@ -31,7 +32,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class KeyEventConsumer(
-    private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm
+    private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm,
+    private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory()
 ) {
     
     operator fun invoke(
@@ -254,11 +256,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                if (isUrl(selected)) {
-                    mainViewModel.openUrl(selected, false)
-                    return true
-                }
-                mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}", false)
+                mainViewModel.openUrl(searchUrlFactory(selected), false)
                 true
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.O -> {
@@ -267,10 +265,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val url = if (isUrl(selected))
-                    selected
-                else
-                    "https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}"
+                val url = searchUrlFactory(selected)
                 Desktop.getDesktop().browse(URI(url))
                 true
             }
