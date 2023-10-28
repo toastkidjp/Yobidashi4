@@ -254,7 +254,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                if (selected.startsWith("http://") || selected.startsWith("https://")) {
+                if (isUrl(selected)) {
                     mainViewModel.openUrl(selected, false)
                     return true
                 }
@@ -267,7 +267,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val url = if (selected.startsWith("http://") || selected.startsWith("https://"))
+                val url = if (isUrl(selected))
                     selected
                 else
                     "https://search.yahoo.co.jp/search?p=${encodeUtf8(selected)}"
@@ -306,7 +306,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.L -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
-                if (selected.startsWith("http://") || selected.startsWith("https://")) {
+                if (isUrl(selected)) {
                     convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
                         LinkDecoratorService().invoke(selected)
                     }?.let(setNewContent)
@@ -314,7 +314,7 @@ class KeyEventConsumer(
                 }
 
                 val clipped = ClipboardFetcher().invoke() ?: return false
-                if (clipped.startsWith("http://") || clipped.startsWith("https://")) {
+                if (isUrl(clipped)) {
                     val decoratedLink = LinkDecoratorService().invoke(clipped)
                     val newText = StringBuilder(content.text)
                         .insert(
@@ -347,6 +347,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun isUrl(selected: String) = selected.startsWith("http://") || selected.startsWith("https://")
 
     private fun convertSelectedText(
         content: TextFieldValue,
