@@ -28,4 +28,18 @@ class SlideDeckTest {
         Assertions.assertEquals(4, imageUrls.size)
     }
 
+    @Test
+    fun extractImageUrlsNotContainingBackgroundCase() {
+        slides = SlideDeck()
+        slides.background = "https://test.yahoo.co.jp/background.png"
+
+        val slide = Slide()
+        slide.addLine(ImageLine("https://test.yahoo.co.jp/test.png"))
+        slide.addLine(ImageLine("https://test.yahoo.co.jp/test.webp"))
+        slides.slides.add(slide)
+
+        val imageUrls = slides.extractImageUrls()
+        Assertions.assertEquals(3, imageUrls.size)
+    }
+
 }
