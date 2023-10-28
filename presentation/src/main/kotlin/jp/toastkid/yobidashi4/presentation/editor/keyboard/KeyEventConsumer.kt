@@ -348,7 +348,7 @@ class KeyEventConsumer(
         }
     }
 
-    private fun isUrl(selected: String) = selected.startsWith("http://") || selected.startsWith("https://")
+    private fun isUrl(text: String) = text.startsWith("http://") || text.startsWith("https://")
 
     private fun convertSelectedText(
         content: TextFieldValue,
