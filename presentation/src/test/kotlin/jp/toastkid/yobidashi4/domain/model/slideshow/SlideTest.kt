@@ -32,16 +32,6 @@ class SlideTest {
     }
 
     @Test
-    fun lines() {
-        assertEquals(3, slide.lines().size)
-    }
-
-    @Test
-    fun background() {
-        assertEquals("https://test.yahoo.co.jp/background.png", slide.background())
-    }
-
-    @Test
     fun extractImageUrlsNotContainingBackgroundCase() {
         slide = Slide()
         slide.setTitle("test")
@@ -52,6 +42,16 @@ class SlideTest {
         val imageUrls = slide.extractImageUrls()
 
         assertEquals(3, imageUrls.size)
+    }
+
+    @Test
+    fun lines() {
+        assertEquals(3, slide.lines().size)
+    }
+
+    @Test
+    fun background() {
+        assertEquals("https://test.yahoo.co.jp/background.png", slide.background())
     }
 
 }
