@@ -371,6 +371,4 @@ class KeyEventConsumer(
         )
     }
 
-    private fun encodeUtf8(selectedText: String) = URLEncoder.encode(selectedText, StandardCharsets.UTF_8.name())
-
 }
