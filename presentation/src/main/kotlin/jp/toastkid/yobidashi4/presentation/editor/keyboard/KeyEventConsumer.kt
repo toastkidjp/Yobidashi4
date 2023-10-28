@@ -14,8 +14,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import java.awt.Desktop
 import java.net.URI
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
