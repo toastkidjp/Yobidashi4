@@ -65,7 +65,7 @@ result.value = engine.eval(input.value.text).toString()
     fun invoke() {
         val (slides, background, title, footerText) = slideDeckReader.invoke()
 
-        assertEquals(6, slides.size)
+        assertEquals(7, slides.size)
         assertEquals("https://www.yahoo.co.jp/all", background)
         assertEquals("Title slide", title)
         assertTrue(slides.any { it.isFront() })
