@@ -14,7 +14,6 @@ import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import java.awt.Color
@@ -22,7 +21,6 @@ import javax.swing.JDialog
 import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -33,8 +31,6 @@ class WebViewProvider : KoinComponent {
     private val webViewPool: WebViewPool by inject()
 
     private val mainViewModel: MainViewModel by  inject()
-
-    private val webTabViewModel: WebTabViewModel by  inject()
 
     internal var size = IntSize.Zero
 
