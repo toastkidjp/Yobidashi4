@@ -1,11 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.web
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -15,10 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.layout.layout
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import java.awt.Color
 import javax.swing.JDialog
 import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
@@ -45,29 +45,24 @@ class WebViewProvider : KoinComponent {
 
     @Composable
     fun view(id: String, initialUrl: String) {
-        val component = webViewPool.component(id, initialUrl)
+        val background = Color(MaterialTheme.colors.surface.toArgb())
         val focusRequester = remember { FocusRequester() }
 
         Column {
-            Box(
+            SwingPanel(
+                factory = {
+                    val component = webViewPool.component(id, initialUrl)
+                    component.background = background
+                    component.setSize(1281, 1040)
+                    component.requestFocus()
+                    component
+                },
                 modifier = Modifier
                     .fillMaxSize()
-                    .layout { measurable, constraints ->
-                        val placeable = measurable.measure(constraints)
-                        layout(placeable.width, placeable.height) {
-                            placeable.placeRelative(0, 0)
-                        }
-                    }
                     .weight(1f)
                     .focusRequester(focusRequester)
-                    .clickable { focusRequester.requestFocus() }
-            ) {
-                SwingPanel(
-                    factory = {
-                        component
-                    }
-                )
-            }
+            )
+
             Spacer(modifier = Modifier.height(if (mainViewModel.showingSnackbar()) 48.dp else 0.dp))
         }
 
@@ -81,7 +76,7 @@ class WebViewProvider : KoinComponent {
         }
 
         SideEffect {
-            component.requestFocus()
+            focusRequester.requestFocus()
         }
     }
 
