@@ -68,18 +68,6 @@ class WebViewProvider : KoinComponent {
         }
     }
 
-    fun find(id: String, text: String) {
-        webViewPool.find(id, text, true)
-    }
-
-    fun findUp(id: String, text: String) {
-        webViewPool.find(id, text, false)
-    }
-
-    fun reload(id: String) {
-        webViewPool.reload(id)
-    }
-
     fun switchDevTools(id: String) {
         //showDevTool.value = showDevTool.value.not()
         val devToolsDialog = JDialog()
