@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import jp.toastkid.yobidashi4.presentation.web.event.FindEvent
@@ -36,18 +37,20 @@ private suspend fun receiveEvent(
     viewModel: WebTabViewModel,
     webViewProvider: WebViewProvider
 ) {
+    val webViewPool = object : KoinComponent { val pool: WebViewPool by inject() }.pool
+
     viewModel.event().collect {
         when (it) {
             is FindEvent -> {
                 if (it.upward) {
-                    webViewProvider.findUp(it.id, it.text)
+                    webViewPool.find(it.id, it.text, false)
                 } else {
-                    webViewProvider.find(it.id, it.text)
+                    webViewPool.find(it.id, it.text, true)
                 }
             }
 
             is ReloadEvent -> {
-                webViewProvider.reload(it.id)
+                webViewPool.reload(it.id)
             }
 
             is SwitchDeveloperToolEvent -> {
