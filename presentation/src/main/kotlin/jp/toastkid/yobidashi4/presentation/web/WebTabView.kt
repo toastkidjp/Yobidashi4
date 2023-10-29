@@ -3,6 +3,8 @@ package jp.toastkid.yobidashi4.presentation.web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import javax.swing.JDialog
+import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -54,7 +56,11 @@ private suspend fun receiveEvent(
             }
 
             is SwitchDeveloperToolEvent -> {
-                webViewProvider.switchDevTools(it.id)
+                val devToolsDialog = JDialog()
+                devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
+                devToolsDialog.setSize(800, 600)
+                devToolsDialog.add(webViewPool.devTools(it.id))
+                devToolsDialog.isVisible = true
             }
         }
     }

@@ -16,8 +16,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import java.awt.Color
-import javax.swing.JDialog
-import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -66,15 +64,6 @@ class WebViewProvider : KoinComponent {
         SideEffect {
             focusRequester.requestFocus()
         }
-    }
-
-    fun switchDevTools(id: String) {
-        //showDevTool.value = showDevTool.value.not()
-        val devToolsDialog = JDialog()
-        devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
-        devToolsDialog.setSize(800, 600)
-        devToolsDialog.add(webViewPool.devTools(id))
-        devToolsDialog.isVisible = true
     }
 
 }
