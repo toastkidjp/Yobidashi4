@@ -36,8 +36,6 @@ class WebViewProvider : KoinComponent {
 
     private val webTabViewModel: WebTabViewModel by  inject()
 
-    private var location = IntOffset.Zero
-
     internal var size = IntSize.Zero
 
     @Composable
