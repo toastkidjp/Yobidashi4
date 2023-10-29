@@ -14,7 +14,6 @@ import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import java.awt.Color
 import javax.swing.JDialog
@@ -31,8 +30,6 @@ class WebViewProvider : KoinComponent {
     private val webViewPool: WebViewPool by inject()
 
     private val mainViewModel: MainViewModel by  inject()
-
-    internal var size = IntSize.Zero
 
     @Composable
     fun view(id: String, initialUrl: String) {
