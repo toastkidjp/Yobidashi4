@@ -31,13 +31,12 @@ fun WebTabView(tab: WebTab) {
     webViewProvider.view(tab.id(), tab.url())
 
     LaunchedEffect(Unit) {
-        receiveEvent(viewModel, webViewProvider)
+        receiveEvent(viewModel)
     }
 }
 
 private suspend fun receiveEvent(
-    viewModel: WebTabViewModel,
-    webViewProvider: WebViewProvider
+    viewModel: WebTabViewModel
 ) {
     val webViewPool = object : KoinComponent { val pool: WebViewPool by inject() }.pool
 
