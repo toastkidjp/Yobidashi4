@@ -210,6 +210,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         removeTabAt(selected.value)
     }
 
+    override fun closeAllTabs() {
+        _tabs.clear()
+        _selected.value = -1
+        object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.disposeAll()
+    }
+
     override fun addNewArticle(path: Path) {
         _articles.add(0, path)
     }
