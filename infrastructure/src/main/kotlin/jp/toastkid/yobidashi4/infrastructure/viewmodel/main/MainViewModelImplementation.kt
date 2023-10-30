@@ -227,9 +227,11 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun closeAllTabs() {
+        val targetIds = _tabs.filterIsInstance<WebTab>().map { it.id() }
         _tabs.clear()
         _selected.value = -1
-        object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.disposeAll()
+        val webViewPool = object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool
+        targetIds.forEach(webViewPool::dispose)
     }
 
     override fun addNewArticle(path: Path) {
