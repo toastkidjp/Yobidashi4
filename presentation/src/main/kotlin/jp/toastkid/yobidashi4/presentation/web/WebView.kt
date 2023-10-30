@@ -52,9 +52,8 @@ internal fun WebView(id: String, initialUrl: String) {
     }
 
     LaunchedEffect(id) {
-        val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
         withContext(Dispatchers.IO) {
-            viewModel.finderFlow().collect {
+            mainViewModel.finderFlow().collect {
                 webViewPool.find(id, it.target, it.upper.not())
             }
         }
