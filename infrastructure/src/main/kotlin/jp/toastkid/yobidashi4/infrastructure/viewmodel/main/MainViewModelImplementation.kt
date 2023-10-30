@@ -210,6 +210,22 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         removeTabAt(selected.value)
     }
 
+    override fun closeOtherTabs() {
+        val current = currentTab()
+        val iterator = _tabs.iterator()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            if (next == current) {
+                continue
+            }
+            if (next is WebTab) {
+                object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.dispose(next.id())
+            }
+            iterator.remove()
+        }
+        _selected.value = 0
+    }
+
     override fun closeAllTabs() {
         _tabs.clear()
         _selected.value = -1
