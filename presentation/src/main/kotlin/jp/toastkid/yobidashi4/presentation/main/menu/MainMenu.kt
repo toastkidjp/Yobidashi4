@@ -137,7 +137,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
 
             if (viewModel.selected.value >= 0) {
-                Item("Copy tab's title") {
+                Item("Copy tab's title", icon = painterResource("images/icon/ic_clipboard.xml")) {
                     ClipboardPutterService().invoke(viewModel.currentTab()?.title())
                 }
             }
