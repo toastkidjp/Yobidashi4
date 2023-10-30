@@ -43,6 +43,7 @@ interface MainViewModel {
 
     fun removeTabAt(index: Int)
     fun closeCurrent()
+    fun closeOtherTabs()
     fun closeAllTabs()
     fun addNewArticle(path: Path)
     fun saveCurrentEditorTab()
