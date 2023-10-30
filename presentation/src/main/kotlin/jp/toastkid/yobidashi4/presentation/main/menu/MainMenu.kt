@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.min
@@ -133,6 +134,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item("Close other tabs", icon = painterResource("images/icon/ic_clear_form.xml")) {
                 viewModel.closeOtherTabs()
+            }
+
+            if (viewModel.selected.value >= 0) {
+                Item("Copy tab's title") {
+                    ClipboardPutterService().invoke(viewModel.currentTab()?.title())
+                }
             }
 
             when (currentTab) {
