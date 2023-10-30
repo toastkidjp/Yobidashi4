@@ -127,6 +127,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
 
+            Item("Close all tab", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_tab_close.xml")) {
+                viewModel.closeAllTabs()
+            }
+
             when (currentTab) {
                 is EditorTab -> currentTab.path
                 is MarkdownPreviewTab -> currentTab.slideshowSourcePath()
