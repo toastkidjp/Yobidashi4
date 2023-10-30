@@ -24,7 +24,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Composable
-fun WebView(id: String, initialUrl: String) {
+internal fun WebView(id: String, initialUrl: String) {
     val background = Color(MaterialTheme.colors.surface.toArgb())
     val focusRequester = remember { FocusRequester() }
     val mainViewModel = remember {
