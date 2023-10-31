@@ -128,7 +128,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
 
-            Item("Close all tab", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_clear_form.xml")) {
+            Item("Close all tab", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_clean.xml")) {
                 viewModel.closeAllTabs()
             }
 
