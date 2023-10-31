@@ -14,7 +14,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Composable
-fun WebTabView(tab: WebTab) {
+internal fun WebTabView(tab: WebTab) {
     if (tab.isReadableUrl().not()) {
         return
     }
