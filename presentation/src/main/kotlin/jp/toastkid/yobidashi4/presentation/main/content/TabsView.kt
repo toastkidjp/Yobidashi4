@@ -203,6 +203,15 @@ private fun TabOptionMenu(
             Text("Copy title")
         }
 
+        DropdownMenuItem(
+            onClick = {
+                viewModel.closeOtherTabs()
+                openDropdownMenu.value = false
+            }
+        ) {
+            Text("Close other tabs")
+        }
+
         if (tab is WebTab) {
             DropdownMenuItem(
                 onClick = {
