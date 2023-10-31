@@ -132,7 +132,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.closeAllTabs()
             }
 
-            Item("Close other tabs", icon = painterResource("images/icon/ic_clear_form.xml")) {
+            Item("Close other tabs", icon = painterResource("images/icon/ic_close_other_tabs.xml")) {
                 viewModel.closeOtherTabs()
             }
 
