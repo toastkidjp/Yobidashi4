@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.slideshow
 
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -25,7 +25,7 @@ class SlideDeckTest {
     fun extractImageUrls() {
         val imageUrls = slides.extractImageUrls()
 
-        Assertions.assertEquals(4, imageUrls.size)
+        assertEquals(4, imageUrls.size)
     }
 
     @Test
@@ -39,7 +39,7 @@ class SlideDeckTest {
         slides.slides.add(slide)
 
         val imageUrls = slides.extractImageUrls()
-        Assertions.assertEquals(3, imageUrls.size)
+        assertEquals(3, imageUrls.size)
     }
 
 }
