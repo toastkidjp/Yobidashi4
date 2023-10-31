@@ -128,15 +128,14 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 exitApplication()
             }
 
-            Item("Close all tabs", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_clean.xml")) {
-                viewModel.closeAllTabs()
-            }
+            if (viewModel.tabs.isNotEmpty()) {
+                Item("Close all tabs", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_clean.xml")) {
+                    viewModel.closeAllTabs()
+                }
 
-            Item("Close other tabs", icon = painterResource("images/icon/ic_close_other_tabs.xml")) {
-                viewModel.closeOtherTabs()
-            }
-
-            if (viewModel.selected.value >= 0) {
+                Item("Close other tabs", icon = painterResource("images/icon/ic_close_other_tabs.xml")) {
+                    viewModel.closeOtherTabs()
+                }
                 Item("Copy tab's title", icon = painterResource("images/icon/ic_clipboard.xml")) {
                     ClipboardPutterService().invoke(viewModel.currentTab()?.title())
                 }
