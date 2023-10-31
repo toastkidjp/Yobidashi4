@@ -266,7 +266,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             ) {
                 viewModel.toggleFullscreen()
             }
-            Item("Narrow window") {
+            Item("Narrow window", icon = painterResource("images/icon/ic_narrow_window.xml")) {
                 viewModel.toggleNarrowWindow()
             }
             Item(
