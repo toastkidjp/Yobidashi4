@@ -148,11 +148,16 @@ fun MarkdownPreview(
                             }
                         }
 
-                        is ImageLine -> Image(
-                            ImageIO.read(URL(line.source)).toComposeImageBitmap(),
-                            contentDescription = line.source,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
+                        is ImageLine -> {
+                            val read = ImageIO.read(URL(line.source))
+                            if (read != null) {
+                                Image(
+                                    read.toComposeImageBitmap(),
+                                    contentDescription = line.source,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                        }
 
                         is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
                         is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
