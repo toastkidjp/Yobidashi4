@@ -223,6 +223,32 @@ class KeyEventConsumer(
                 }?.let(setNewContent)
                 true
             }
+            it.isCtrlPressed && it.key == Key.LeftBracket -> {
+                if (content.text.length <= selectionStartIndex) {
+                    return false
+                }
+                val nextCharacter = content.text.get(selectionStartIndex)
+                val target = when (nextCharacter) {
+                    '(' -> ')' to true
+                    ')' -> '(' to false
+                    '[' -> ']' to true
+                    ']' -> '[' to false
+                    '{' -> '}' to true
+                    '}' -> '{' to false
+                    '『' -> '』' to true
+                    '』' -> '『' to false
+                    else -> null
+                } ?: return false
+
+                val index = if (target.second) content.text.indexOf(target.first, selectionStartIndex + 1)
+                else content.text.lastIndexOf(target.first, selectionStartIndex - 1)
+                if (index == -1) {
+                    return false
+                }
+
+                setNewContent(content.copy(selection = TextRange(index, index + 1)))
+                true
+            }
             it.isCtrlPressed && it.key == Key.RightBracket -> {
                 convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
                     "「$it」"
