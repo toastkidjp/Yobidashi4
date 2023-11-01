@@ -76,7 +76,7 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
                                     append(lineNumberCount)
                                 }.toString()
                                 Text(
-                                    "$lineNumberText",
+                                    lineNumberText,
                                     modifier = Modifier.padding(horizontal = 8.dp)
                                 )
                             }
