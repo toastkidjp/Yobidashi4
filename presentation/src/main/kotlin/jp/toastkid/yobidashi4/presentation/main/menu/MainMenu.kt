@@ -81,7 +81,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
                 viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
             }
-            Item("Dump latest") {
+            Item("Dump latest", icon = painterResource("images/icon/ic_dump.xml")) {
                 ZipArchiver().invoke(
                     LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
                 )
