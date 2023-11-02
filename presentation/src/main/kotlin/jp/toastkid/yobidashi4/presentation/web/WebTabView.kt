@@ -35,11 +35,7 @@ private suspend fun receiveEvent() {
         .collect {
             when (it) {
                 is FindEvent -> {
-                    if (it.upward) {
-                        webViewPool.find(it.id, it.text, false)
-                    } else {
-                        webViewPool.find(it.id, it.text, true)
-                    }
+                    webViewPool.find(it.id, it.text, !it.upward)
                 }
 
                 is ReloadEvent -> {
