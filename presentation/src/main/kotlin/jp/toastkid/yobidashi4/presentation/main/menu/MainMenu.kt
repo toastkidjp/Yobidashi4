@@ -94,7 +94,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Open article folder", icon = painterResource("images/icon/ic_article_folder.xml"), shortcut = KeyShortcut(Key.O, alt = true)) {
                 Desktop.getDesktop().open(setting.articleFolderPath().toFile())
             }
-            Item("Open user folder", shortcut = KeyShortcut(Key.U, alt = true)) {
+            Item("Open user folder", icon = painterResource("images/icon/ic_user_folder.xml"), shortcut = KeyShortcut(Key.U, alt = true)) {
                 Desktop.getDesktop().open(Path.of("user").toFile())
             }
             Item("Exit", icon = painterResource("images/icon/ic_exit.xml")) {
