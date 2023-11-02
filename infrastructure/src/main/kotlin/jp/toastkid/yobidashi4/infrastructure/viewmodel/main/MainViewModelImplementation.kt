@@ -19,7 +19,6 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import java.awt.Desktop
-import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -51,7 +50,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.slf4j.LoggerFactory
 
 @Single
 class MainViewModelImplementation : MainViewModel, KoinComponent {
@@ -245,30 +243,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         val tab = currentTab() as? EditorTab ?: return
 
         editorTabFileStore(tab)
-    }
-
-    private fun saveToFile(tab: EditorTab) {
-        if (tab.closeable()) {
-            return
-        }
-
-        try {
-            CoroutineScope(Dispatchers.IO).launch {
-                val text = tab.getContent()
-                val textArray = text.toByteArray()
-                if (textArray.isNotEmpty()) {
-                    Files.write(tab.path, textArray)
-                }
-                updateEditorContent(
-                    tab.path,
-                    text,
-                    -1,
-                    resetEditing = true
-                )
-            }
-        } catch (e: IOException) {
-            LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
-        }
     }
 
     override fun saveAllEditorTab() {
