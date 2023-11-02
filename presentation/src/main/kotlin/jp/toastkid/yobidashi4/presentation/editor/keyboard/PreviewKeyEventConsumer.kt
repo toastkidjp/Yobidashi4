@@ -57,6 +57,27 @@ class PreviewKeyEventConsumer {
                 )
                 return true
             }
+            it.isCtrlPressed && it.key == Key.Enter -> {
+                if (content.getSelectedText().isNotEmpty()) {
+                    return true
+                }
+
+                val textLayoutResult = lastParagraph ?: return false
+                val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
+                val lineStart = textLayoutResult.getLineStart(currentLine)
+                val lineEnd = textLayoutResult.getLineEnd(currentLine)
+                val newText = StringBuilder(content.text)
+                    .delete(lineStart, lineEnd + 1)
+                    .toString()
+                setNewContent(
+                    TextFieldValue(
+                        newText,
+                        TextRange(lineStart),
+                        content.composition
+                    )
+                )
+                return true
+            }
             else -> return false
         }
     }
