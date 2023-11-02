@@ -134,6 +134,36 @@ class PreviewKeyEventConsumerTest {
     }
 
     @Test
+    fun cutLineOnSelectedTextCase() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_X,
+            'X'
+        )
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 4
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3", TextRange(1, 3)),
+            multiParagraph,
+            {},
+            scrollBy
+        )
+
+        assertFalse(consumed)
+        verify { scrollBy wasNot called }
+        verify { multiParagraph wasNot called }
+        verify { anyConstructed<ClipboardPutterService>() wasNot called }
+    }
+
+    @Test
     fun deleteLine() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
