@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.mockk.MockKAnnotations
@@ -125,6 +126,33 @@ class PreviewKeyEventConsumerTest {
         verify { multiParagraph.getLineForOffset(any()) }
         verify { multiParagraph.getLineStart(0) }
         verify { multiParagraph.getLineEnd(0) }
+    }
+
+    @Test
+    fun deleteLineOnSelectedText() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_ENTER,
+            'A'
+        )
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 5
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3", TextRange(0, 3)),
+            multiParagraph,
+            {},
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { scrollBy wasNot called }
+        verify { multiParagraph wasNot called }
     }
 
 }
