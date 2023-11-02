@@ -13,8 +13,10 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -97,6 +99,38 @@ class PreviewKeyEventConsumerTest {
 
         assertTrue(consumed)
         verify { scrollBy(-16.dp.value) }
+    }
+
+    @Test
+    fun cutLine() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_X,
+            'X'
+        )
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 4
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3"),
+            multiParagraph,
+            {},
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { scrollBy wasNot called }
+        verify { multiParagraph.getLineForOffset(any()) }
+        verify { multiParagraph.getLineStart(0) }
+        verify { multiParagraph.getLineEnd(0) }
+        verify { anyConstructed<ClipboardPutterService>().invoke("test\n") }
     }
 
     @Test
