@@ -241,6 +241,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun saveCurrentEditorTab() {
         val tab = currentTab() as? EditorTab ?: return
 
+        saveToFile(tab)
+    }
+
+    private fun saveToFile(tab: EditorTab) {
+        if (tab.closeable()) {
+            return
+        }
+
         try {
             CoroutineScope(Dispatchers.IO).launch {
                 val text = tab.getContent()
@@ -258,6 +266,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         } catch (e: IOException) {
             LoggerFactory.getLogger(javaClass).warn("Storing error.", e)
         }
+    }
+
+    override fun saveAllEditorTab() {
+        tabs.filterIsInstance(EditorTab::class.java).forEach { saveToFile(it) }
     }
 
     override fun updateEditorContent(path: Path, text: String, caretPosition: Int, scroll: Double, resetEditing: Boolean) {
