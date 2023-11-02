@@ -91,7 +91,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
                 Desktop.getDesktop().open(File("."))
             }
-            Item("Open article folder", shortcut = KeyShortcut(Key.O, alt = true)) {
+            Item("Open article folder", icon = painterResource("images/icon/ic_article_folder.xml"), shortcut = KeyShortcut(Key.O, alt = true)) {
                 Desktop.getDesktop().open(setting.articleFolderPath().toFile())
             }
             Item("Open user folder", shortcut = KeyShortcut(Key.U, alt = true)) {
