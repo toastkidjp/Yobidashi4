@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
+import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -238,10 +239,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _articles.add(0, path)
     }
 
+    private val editorTabFileStore = EditorTabFileStore()
+
     override fun saveCurrentEditorTab() {
         val tab = currentTab() as? EditorTab ?: return
 
-        saveToFile(tab)
+        editorTabFileStore(tab)
     }
 
     private fun saveToFile(tab: EditorTab) {
@@ -269,7 +272,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun saveAllEditorTab() {
-        tabs.filterIsInstance(EditorTab::class.java).forEach { saveToFile(it) }
+        tabs.filterIsInstance(EditorTab::class.java).forEach { editorTabFileStore(it) }
     }
 
     override fun updateEditorContent(path: Path, text: String, caretPosition: Int, scroll: Double, resetEditing: Boolean) {
