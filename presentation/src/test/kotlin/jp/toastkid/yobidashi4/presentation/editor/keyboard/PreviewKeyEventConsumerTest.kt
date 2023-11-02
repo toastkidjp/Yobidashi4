@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -24,6 +26,9 @@ class PreviewKeyEventConsumerTest {
     private lateinit var previewKeyEventConsumer: PreviewKeyEventConsumer
 
     private lateinit var awtKeyEvent: java.awt.event.KeyEvent
+
+    @MockK
+    private lateinit var multiParagraph: MultiParagraph
 
     @MockK
     private lateinit var scrollBy: (Float) -> Unit
@@ -91,6 +96,35 @@ class PreviewKeyEventConsumerTest {
 
         assertTrue(consumed)
         verify { scrollBy(-16.dp.value) }
+    }
+
+    @Test
+    fun deleteLine() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_ENTER,
+            'A'
+        )
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 5
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3"),
+            multiParagraph,
+            {},
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { scrollBy wasNot called }
+        verify { multiParagraph.getLineForOffset(any()) }
+        verify { multiParagraph.getLineStart(0) }
+        verify { multiParagraph.getLineEnd(0) }
     }
 
 }
