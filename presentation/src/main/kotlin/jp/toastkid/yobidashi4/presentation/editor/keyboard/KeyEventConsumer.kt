@@ -154,6 +154,13 @@ class KeyEventConsumer(
                 )
                 true
             }
+            it.isCtrlPressed && it.key == Key.Four -> {
+                val textLayoutResult = lastParagraph ?: return false
+                val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
+                val lineStart = textLayoutResult.getLineStart(currentLine)
+                setNewContent(content.copy(selection = TextRange(lineStart)))
+                true
+            }
             it.isCtrlPressed && it.key == Key.Comma -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isEmpty()) {
