@@ -27,7 +27,7 @@ data class WebTab(
     }
 
     private fun makeIconPath(): String? {
-        if (url.isNullOrEmpty()) {
+        if (url.isEmpty()) {
             return "images/icon/ic_web.xml"
         }
 
