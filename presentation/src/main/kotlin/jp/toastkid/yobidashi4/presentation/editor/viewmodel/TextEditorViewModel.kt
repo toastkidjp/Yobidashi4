@@ -83,7 +83,8 @@ class TextEditorViewModel {
     }
 
     private fun applyStyle(it: TextFieldValue) {
-        content.value = it
+        val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
+        content.value = newContent
     }
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
