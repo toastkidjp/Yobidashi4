@@ -83,4 +83,13 @@ class EditorTabTest {
         assertTrue(editorTab.showPreview())
     }
 
+    @Test
+    fun switchEditable() {
+        assertTrue(editorTab.editable())
+
+        editorTab.switchEditable()
+
+        assertFalse(editorTab.editable())
+    }
+
 }
