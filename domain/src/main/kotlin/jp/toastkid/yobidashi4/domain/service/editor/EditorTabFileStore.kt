@@ -22,7 +22,7 @@ class EditorTabFileStore {
                 if (textArray.isNotEmpty()) {
                     Files.write(tab.path, textArray)
                 }
-                tab.setContent(text, false)
+                tab.setContent(text, true)
             }
         } catch (e: IOException) {
             e.printStackTrace()
