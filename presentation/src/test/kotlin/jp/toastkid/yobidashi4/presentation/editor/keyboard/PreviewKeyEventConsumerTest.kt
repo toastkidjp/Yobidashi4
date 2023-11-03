@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -175,13 +176,13 @@ class PreviewKeyEventConsumerTest {
         )
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 5
+        every { multiParagraph.getLineEnd(0) } returns 4
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(awtKeyEvent),
             TextFieldValue("test\ntest2\ntest3"),
             multiParagraph,
-            {},
+            { assertEquals("test2\ntest3", it.text) },
             scrollBy
         )
 
@@ -204,7 +205,7 @@ class PreviewKeyEventConsumerTest {
         )
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 5
+        every { multiParagraph.getLineEnd(0) } returns 4
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(awtKeyEvent),
