@@ -18,8 +18,6 @@ data class WebTab(
 
     private val id = UUID.randomUUID().toString()
 
-    private val iconPathState = makeIconPath()
-
     override fun title(): String = title
 
     override fun closeable(): Boolean = true
