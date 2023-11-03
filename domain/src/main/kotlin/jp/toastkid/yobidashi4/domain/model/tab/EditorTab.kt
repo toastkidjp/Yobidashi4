@@ -85,6 +85,14 @@ data class EditorTab(
         content = Files.readString(path)
     }
 
+    private var editable = true
+
+    fun editable() = editable
+
+    fun switchEditable() {
+        editable = !editable
+    }
+
     enum class Preview {
         HALF, CLOSE
     }
