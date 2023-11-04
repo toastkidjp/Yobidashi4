@@ -342,6 +342,15 @@ class KeyEventConsumer(
 
                 true
             }
+            it.isCtrlPressed && it.key == Key.J -> {
+                val index = content.text.indexOf("\n", selectionStartIndex)
+                if (index == -1) {
+                    return false
+                }
+
+                setNewContent(content.copy(content.text.removeRange(index, index + 1)))
+                true
+            }
             it.isCtrlPressed && it.key == Key.L -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (isUrl(selected)) {
