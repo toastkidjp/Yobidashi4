@@ -53,6 +53,17 @@ class EditorTabFileStoreTest {
     }
 
     @Test
+    fun emptyContentCase() {
+        every { tab.getContent() } returns ""
+
+        subject.invoke(tab, Dispatchers.Unconfined)
+
+        verify { tab.closeable() }
+        verify { tab.getContent() }
+        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
+    }
+
+    @Test
     fun closeableCase() {
         every { tab.closeable() } returns true
 
