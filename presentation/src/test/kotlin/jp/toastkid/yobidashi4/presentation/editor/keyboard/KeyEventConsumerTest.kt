@@ -12,7 +12,9 @@ import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -64,6 +66,31 @@ class KeyEventConsumerTest {
         )
 
         assertFalse(consumed)
+    }
+
+
+    @Test
+    fun combineLines() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_RELEASED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_J,
+            'J'
+        )
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("a\nb\nc"),
+            mockk(),
+            { assertEquals("ab\nc", it.text) }
+        )
+
+        assertTrue(consumed)
     }
 
 }
