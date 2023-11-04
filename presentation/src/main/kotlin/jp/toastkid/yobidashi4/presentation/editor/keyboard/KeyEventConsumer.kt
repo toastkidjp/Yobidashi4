@@ -12,6 +12,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.getSelectedText
 import java.awt.Desktop
 import java.net.URI
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -52,20 +53,12 @@ class KeyEventConsumer(
 
         return when {
             it.isCtrlPressed && it.key == Key.D -> {
-                val startIndex = content.selection.start
-                val endIndex = content.selection.end
-                val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
+                val selected = content.getSelectedText()
                 if (selected.isNotEmpty()) {
                     val newText = StringBuilder(content.text)
-                        .insert(max(startIndex, endIndex), selected)
+                        .insert(selectionEndIndex, selected)
                         .toString()
-                    setNewContent(
-                        TextFieldValue(
-                            newText,
-                            TextRange(max(startIndex, endIndex)),
-                            content.composition
-                        )
-                    )
+                    setNewContent(content.copy(newText))
                     return true
                 }
 
