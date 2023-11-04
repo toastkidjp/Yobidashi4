@@ -103,6 +103,29 @@ class PreviewKeyEventConsumerTest {
     }
 
     @Test
+    fun scrollDown() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_DOWN,
+            'A'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            {},
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { scrollBy(16.dp.value) }
+    }
+
+    @Test
     fun cutLine() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
