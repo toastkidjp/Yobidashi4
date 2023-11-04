@@ -80,14 +80,36 @@ class KeyEventConsumerTest {
             'D'
         )
 
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-
         val consumed = subject.invoke(
             KeyEvent(awtKeyEvent),
             TextFieldValue("Angel has fallen.", TextRange(6, 9)),
             mockk(),
             { assertEquals("Angel hashas fallen.", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
+    fun duplicateCurrentLine() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_RELEASED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_D,
+            'D'
+        )
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 17
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.\nHe has gone."),
+            multiParagraph,
+            { assertEquals("Angel has fallen.\nAngel has fallen.\nHe has gone.", it.text) }
         )
 
         assertTrue(consumed)
