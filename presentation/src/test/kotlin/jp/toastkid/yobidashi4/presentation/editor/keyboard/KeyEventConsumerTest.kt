@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -68,6 +69,29 @@ class KeyEventConsumerTest {
         assertFalse(consumed)
     }
 
+    @Test
+    fun duplicateSelectedText() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_RELEASED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_D,
+            'D'
+        )
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.", TextRange(6, 9)),
+            mockk(),
+            { assertEquals("Angel hashas fallen.", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
 
     @Test
     fun combineLines() {
