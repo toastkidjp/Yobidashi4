@@ -28,16 +28,16 @@ data class WebTab(
 
     private fun makeIconPath(): String? {
         if (url.isEmpty()) {
-            return "images/icon/ic_web.xml"
+            return DEFAULT_ICON_PATH
         }
 
         val faviconFolder = WebIcon()
         faviconFolder.makeFolderIfNeed()
-        val iconPath = faviconFolder.find(url) ?: return "images/icon/ic_web.xml"
+        val iconPath = faviconFolder.find(url) ?: return DEFAULT_ICON_PATH
         if (Files.exists(iconPath)) {
             return iconPath.pathString
         }
-        return "images/icon/ic_web.xml"
+        return DEFAULT_ICON_PATH
     }
 
     fun isReadableUrl() =
@@ -69,3 +69,5 @@ data class WebTab(
     }
 
 }
+
+private const val DEFAULT_ICON_PATH = "images/icon/ic_web.xml"
