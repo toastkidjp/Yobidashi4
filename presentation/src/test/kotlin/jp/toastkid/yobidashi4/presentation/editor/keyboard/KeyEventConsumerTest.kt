@@ -49,10 +49,10 @@ class KeyEventConsumerTest {
     }
 
     @Test
-    fun onKeyDown() {
+    fun onKeyUp() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
+            java.awt.event.KeyEvent.KEY_RELEASED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_A,
@@ -73,7 +73,7 @@ class KeyEventConsumerTest {
     fun duplicateSelectedText() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_D,
@@ -94,7 +94,7 @@ class KeyEventConsumerTest {
     fun duplicateCurrentLine() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_D,
@@ -119,7 +119,7 @@ class KeyEventConsumerTest {
     fun noopListConversionIfNotSelectedAnyText() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_MINUS,
@@ -140,7 +140,7 @@ class KeyEventConsumerTest {
     fun listConversion() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_MINUS,
@@ -165,7 +165,7 @@ class KeyEventConsumerTest {
     fun noopOrderedListConversionIfNotSelectedAnyText() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_1,
@@ -186,7 +186,7 @@ class KeyEventConsumerTest {
     fun orderedListConversion() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_1,
@@ -211,7 +211,7 @@ class KeyEventConsumerTest {
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
+            java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_J,
