@@ -79,12 +79,12 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.Minus -> {
-                val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
+                val selected = content.getSelectedText()
                 if (selected.isEmpty()) {
                     return false
                 }
 
-                val converted = ListHeadAdder().invoke(selected, "-") ?: return false
+                val converted = ListHeadAdder().invoke(selected.text, "-") ?: return false
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
