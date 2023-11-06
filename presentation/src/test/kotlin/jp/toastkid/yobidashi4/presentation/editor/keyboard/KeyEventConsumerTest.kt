@@ -116,6 +116,52 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun noopListConversionIfNotSelectedAnyText() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_RELEASED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_MINUS,
+            '-'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.\nHe has gone."),
+            mockk(),
+            {  }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun listConversion() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_RELEASED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_MINUS,
+            '-'
+        )
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 17
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.\nHe has gone.", TextRange(0, 30)),
+            multiParagraph,
+            { assertEquals("- Angel has fallen.\n- He has gone.", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
