@@ -42,7 +42,7 @@ class KeyEventConsumer(
         lastParagraph: MultiParagraph?,
         setNewContent: (TextFieldValue) -> Unit
     ): Boolean {
-        if (it.type != KeyEventType.KeyUp) {
+        if (it.type != KeyEventType.KeyDown) {
             return false
         }
 
