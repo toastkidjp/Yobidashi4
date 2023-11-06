@@ -162,6 +162,27 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun noopOrderedListConversionIfNotSelectedAnyText() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_RELEASED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_1,
+            '1'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.\nHe has gone."),
+            mockk(),
+            {  }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
