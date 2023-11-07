@@ -13,7 +13,7 @@ class AdHostsTest {
 
     @BeforeEach
     fun setUp() {
-        adHosts = AdHosts(setOf("test-ad.info"))
+        adHosts = AdHosts.make()
     }
 
     @AfterEach
@@ -25,6 +25,7 @@ class AdHostsTest {
     fun contains() {
         assertTrue(adHosts.contains("https://test-ad.info/content.txt"))
         assertFalse(adHosts.contains("https://normal-site.com/content.txt"))
+        assertFalse(adHosts.contains(null))
     }
 
 }
