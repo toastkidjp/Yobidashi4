@@ -12,9 +12,11 @@ import io.mockk.verify
 import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.nio.file.Files
+import java.nio.file.attribute.FileTime
 import java.util.stream.Stream
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import org.junit.jupiter.api.AfterEach
@@ -42,6 +44,7 @@ class MainViewModelImplementationTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        mockkStatic(Files::class, ImageIO::class)
 
         startKoin {
             modules(
@@ -109,7 +112,6 @@ class MainViewModelImplementationTest {
     fun loadBackgroundImage() {
         assertNotNull(subject.backgroundImage())
 
-        mockkStatic(Files::class, ImageIO::class)
         every { Files.exists(any()) } returns true
         every { Files.list(any()) } returns Stream.of(mockk())
         val inputStream = mockk<InputStream>()
@@ -152,6 +154,12 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openFileListTab() {
+        every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
+
+        subject.openFileListTab("test", listOf(mockk(), mockk()), true, FileTab.Type.FIND)
+
+        verify { Files.getLastModifiedTime(any()) }
+        assertEquals(1, subject.tabs.size)
     }
 
     @Test
