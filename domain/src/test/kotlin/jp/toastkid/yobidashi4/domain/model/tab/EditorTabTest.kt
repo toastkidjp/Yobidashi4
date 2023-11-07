@@ -92,4 +92,9 @@ class EditorTabTest {
         assertFalse(editorTab.editable())
     }
 
+    @Test
+    fun resetEditable() {
+        editorTab.setContent("", true)
+    }
+
 }
