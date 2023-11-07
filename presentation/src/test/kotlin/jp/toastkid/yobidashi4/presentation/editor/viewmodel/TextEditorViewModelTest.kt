@@ -1,11 +1,15 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +43,8 @@ class TextEditorViewModelTest {
             )
         }
         viewModel = TextEditorViewModel()
+
+        every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
     }
 
     @AfterEach
@@ -110,6 +116,20 @@ class TextEditorViewModelTest {
 
     @Test
     fun dispose() {
+        viewModel.onValueChange(TextFieldValue("test"))
+
+        viewModel.dispose()
+
+        verify { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
+        assertTrue(viewModel.content().text.isEmpty())
+    }
+
+    @Test
+    fun disposeWithEmptyContent() {
+        viewModel.dispose()
+
+        verify(inverse = true) { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
+        assertTrue(viewModel.content().text.isEmpty())
     }
 
     @Test
