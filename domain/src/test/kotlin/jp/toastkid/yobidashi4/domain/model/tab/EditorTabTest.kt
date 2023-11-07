@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.CountDownLatch
@@ -95,6 +96,37 @@ class EditorTabTest {
     @Test
     fun resetEditable() {
         editorTab.setContent("", true)
+    }
+
+    @Test
+    fun iconPath() {
+        assertTrue(editorTab.iconPath().startsWith("images/icon/"))
+    }
+
+    @Test
+    fun caretPosition() {
+        assertEquals(0, editorTab.caretPosition())
+
+        editorTab.setCaretPosition(1)
+
+        assertEquals(1, editorTab.caretPosition())
+    }
+
+    @Test
+    fun scroll() {
+        assertEquals(0.0, editorTab.scroll())
+
+        editorTab.setScroll(0.1)
+
+        assertEquals(0.1, editorTab.scroll())
+    }
+
+    @Test
+    fun loadContent() {
+        editorTab.loadContent()
+
+        verify { Files.readString(any()) }
+        assertEquals("Test strings is good.", editorTab.getContent())
     }
 
 }
