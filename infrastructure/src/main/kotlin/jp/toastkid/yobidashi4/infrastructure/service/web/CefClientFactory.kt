@@ -66,7 +66,7 @@ class CefClientFactory(
 
         CefSettingsApplier().invoke(builder.cefSettings, UserAgent.findByName(appSetting.userAgentName()).text())
 
-        val adHosts = AdHosts()
+        val adHosts = AdHosts.make()
 
         var selectedText = ""
 
