@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import io.mockk.MockKAnnotations
@@ -30,6 +32,9 @@ class TextEditorViewModelTest {
 
     @MockK
     private lateinit var mainViewModel: MainViewModel
+
+    @MockK
+    private lateinit var multiParagraph: MultiParagraph
 
     @BeforeEach
     fun setUp() {
@@ -63,6 +68,18 @@ class TextEditorViewModelTest {
 
     @Test
     fun setMultiParagraph() {
+        assertEquals(Offset.Unspecified, viewModel.currentLineOffset())
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineLeft(any()) } returns 20f
+        every { multiParagraph.getLineTop(any()) } returns 0f
+        every { multiParagraph.lineCount } returns 3
+
+        viewModel.setMultiParagraph(multiParagraph)
+
+        val currentLineOffset = viewModel.currentLineOffset()
+        assertEquals(20f, currentLineOffset.x)
+        assertEquals(0f, currentLineOffset.y)
     }
 
     @Test
@@ -108,10 +125,6 @@ class TextEditorViewModelTest {
 
     @Test
     fun launchTab() {
-    }
-
-    @Test
-    fun currentLineOffset() {
     }
 
     @Test
