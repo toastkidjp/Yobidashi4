@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.editor.keyboard
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
@@ -12,8 +13,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class PreviewKeyEventConsumer {
+class PreviewKeyEventConsumer(
+    private val mainViewModel: MainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+) {
 
     operator fun invoke(
         it: KeyEvent,
@@ -76,6 +82,16 @@ class PreviewKeyEventConsumer {
                         content.composition
                     )
                 )
+                return true
+            }
+            it.isAltPressed && it.key == Key.DirectionRight -> {
+                if (mainViewModel.openArticleList().not()) {
+                    mainViewModel.switchArticleList()
+                }
+                return true
+            }
+            it.isAltPressed && it.key == Key.DirectionLeft -> {
+                mainViewModel.hideArticleList()
                 return true
             }
             else -> return false
