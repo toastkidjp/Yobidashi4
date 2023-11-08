@@ -18,10 +18,6 @@ interface Setting {
     fun setSorting(newValue: Sorting)
 */
 
-    fun setUseInternalEditor(newValue: Boolean)
-
-    fun useInternalEditor(): Boolean
-
     fun userOffDay(): List<Pair<Int, Int>>
 
     fun setUseCaseSensitiveInFinder(use: Boolean)
