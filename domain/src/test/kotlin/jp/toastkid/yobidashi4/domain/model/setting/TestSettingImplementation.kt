@@ -19,14 +19,6 @@ class TestSettingImplementation : Setting {
         return mockk()
     }
 
-    override fun setUseInternalEditor(newValue: Boolean) {
-        TODO("Not yet implemented")
-    }
-
-    override fun useInternalEditor(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun userOffDay(): List<Pair<Int, Int>> {
         return listOf(12 to 29)
     }
