@@ -5,13 +5,19 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.io.BufferedReader
+import java.io.BufferedWriter
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.io.StringWriter
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.exists
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,9 +36,12 @@ class SettingImplementationTest {
         mockkStatic(Path::class)
         every { Path.of(any<String>()) } returns path
         every { path.parent } returns path
+        every { path.exists() } returns true
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.newBufferedReader(any()) } returns BufferedReader(InputStreamReader(InputStream.nullInputStream()))
+        every { Files.createDirectory(any()) } returns path
+        every { Files.newBufferedWriter(any()) } returns BufferedWriter(StringWriter())
 
         subject = SettingImplementation()
     }
@@ -44,26 +53,22 @@ class SettingImplementationTest {
 
     @Test
     fun darkMode() {
-    }
+        assertFalse(subject.darkMode())
 
-    @Test
-    fun setDarkMode() {
+        subject.setDarkMode(true)
+
+        assertTrue(subject.darkMode())
     }
 
     @Test
     fun articleFolder() {
+        assertTrue(subject.articleFolder().isEmpty())
     }
 
     @Test
     fun articleFolderPath() {
-    }
-
-    @Test
-    fun setUseInternalEditor() {
-    }
-
-    @Test
-    fun useInternalEditor() {
+        assertNotNull(subject.articleFolderPath())
+        verify { Path.of(any<String>()) }
     }
 
     @Test
@@ -124,14 +129,27 @@ class SettingImplementationTest {
 
     @Test
     fun save() {
+        subject.save()
+
+        verify(inverse = true) { Files.createDirectory(any()) }
     }
 
     @Test
-    fun wrapLine() {
+    fun saveWithFolderCreation() {
+        every { path.exists() } returns false
+
+        subject.save()
+
+        verify { Files.createDirectory(any()) }
     }
 
     @Test
     fun switchWrapLine() {
+        assertFalse(subject.wrapLine())
+
+        subject.switchWrapLine()
+
+        assertTrue(subject.wrapLine())
     }
 
     @Test
