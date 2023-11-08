@@ -17,6 +17,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -30,6 +31,9 @@ class PreviewKeyEventConsumerTest {
     private lateinit var previewKeyEventConsumer: PreviewKeyEventConsumer
 
     private lateinit var awtKeyEvent: java.awt.event.KeyEvent
+
+    @MockK
+    private lateinit var mainViewModel: MainViewModel
 
     @MockK
     private lateinit var multiParagraph: MultiParagraph
@@ -263,6 +267,90 @@ class PreviewKeyEventConsumerTest {
         )
 
         assertFalse(consumed)
+    }
+
+    @Test
+    fun hideFileList() {
+        every { mainViewModel.switchArticleList() } just Runs
+        every { mainViewModel.hideArticleList() } just Runs
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_LEFT,
+            'A'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            {},
+            mockk()
+        )
+
+        assertTrue(consumed)
+
+        verify(inverse = true) { mainViewModel.switchArticleList() }
+        verify { mainViewModel.hideArticleList() }
+    }
+
+    @Test
+    fun openFileList() {
+        every { mainViewModel.openArticleList() } returns false
+        every { mainViewModel.switchArticleList() } just Runs
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_RIGHT,
+            'A'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            {},
+            mockk()
+        )
+
+        assertTrue(consumed)
+
+        verify { mainViewModel.openArticleList() }
+        verify { mainViewModel.switchArticleList() }
+    }
+
+    @Test
+    fun noopOpenFileList() {
+        every { mainViewModel.openArticleList() } returns true
+        every { mainViewModel.switchArticleList() } just Runs
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_RIGHT,
+            'A'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            {},
+            mockk()
+        )
+
+        assertTrue(consumed)
+
+        verify { mainViewModel.openArticleList() }
+        verify(inverse = true) { mainViewModel.switchArticleList() }
     }
 
 }
