@@ -374,16 +374,6 @@ class KeyEventConsumer(
 
                 true
             }
-            it.isAltPressed && it.key == Key.DirectionRight -> {
-                if (mainViewModel.openArticleList().not()) {
-                    mainViewModel.switchArticleList()
-                }
-                true
-            }
-            it.isAltPressed && it.key == Key.DirectionLeft -> {
-                mainViewModel.hideArticleList()
-                true
-            }
             else -> false
         }
     }
