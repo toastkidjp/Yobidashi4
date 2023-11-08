@@ -37,14 +37,6 @@ class SettingImplementation : Setting {
 
     override fun  articleFolderPath() = Path.of(articleFolder())
 
-    override fun  setUseInternalEditor(newValue: Boolean) {
-        properties.setProperty("use_internal_editor", newValue.toString())
-    }
-
-    override fun  useInternalEditor(): Boolean {
-        return properties.getProperty("use_internal_editor")?.toBoolean() ?: false
-    }
-
     override fun  userOffDay(): List<Pair<Int, Int>> {
         val offDayString = properties.getProperty("user_off_day") ?: return emptyList()
         return offDayString.split(",")
