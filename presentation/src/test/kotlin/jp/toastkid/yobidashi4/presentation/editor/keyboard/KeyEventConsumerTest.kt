@@ -278,6 +278,30 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun moveToLineEnd() {
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 15
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_E,
+            '4'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.\nHe has gone.", TextRange(5)),
+            multiParagraph,
+            { assertEquals(15, it.selection.start) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
