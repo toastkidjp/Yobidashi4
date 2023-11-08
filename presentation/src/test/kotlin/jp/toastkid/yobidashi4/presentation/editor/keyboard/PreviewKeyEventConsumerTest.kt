@@ -243,4 +243,26 @@ class PreviewKeyEventConsumerTest {
         verify { multiParagraph wasNot called }
     }
 
+    @Test
+    fun elseCase() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_UNDEFINED,
+            'A'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            {},
+            scrollBy
+        )
+
+        assertFalse(consumed)
+    }
+
 }
