@@ -73,11 +73,32 @@ class SettingImplementationTest {
     }
 
     @Test
+    fun userOffDayInitial() {
+        assertTrue(subject.userOffDay().isEmpty())
+    }
+
+    @Test
     fun userOffDay() {
+        every { Files.newBufferedReader(any()) } returns BufferedReader(InputStreamReader("""
+user_off_day=12/29,12/30
+        """.trimIndent().byteInputStream()))
+        subject = SettingImplementation()
+
+        val userOffDay = subject.userOffDay()
+        assertEquals(2, userOffDay.size)
+        assertEquals(12, userOffDay.get(0).first)
+        assertEquals(29, userOffDay.get(0).second)
+        assertEquals(12, userOffDay.get(1).first)
+        assertEquals(30, userOffDay.get(1).second)
     }
 
     @Test
     fun setUseCaseSensitiveInFinder() {
+        assertFalse(subject.useCaseSensitiveInFinder())
+
+        subject.setUseCaseSensitiveInFinder(true)
+
+        assertTrue(subject.useCaseSensitiveInFinder())
     }
 
     @Test
@@ -105,23 +126,30 @@ class SettingImplementationTest {
     }
 
     @Test
-    fun setEditorFontFamily() {
-    }
-
-    @Test
     fun editorFontFamily() {
-    }
+        assertNull(subject.editorFontFamily())
 
-    @Test
-    fun setEditorFontSize() {
+        subject.setEditorFontFamily("test")
+
+        assertEquals("test", subject.editorFontFamily())
     }
 
     @Test
     fun editorFontSize() {
+        assertEquals(14, subject.editorFontSize())
+
+        subject.setEditorFontSize(1)
+
+        assertEquals(1, subject.editorFontSize())
+
+        subject.setEditorFontSize(null)
+
+        assertEquals(1, subject.editorFontSize())
     }
 
     @Test
     fun mediaPlayerPath() {
+        assertNull(subject.mediaPlayerPath())
     }
 
     @Test
