@@ -302,6 +302,27 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun commaInsertion() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_COMMA,
+            ','
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("2000000", TextRange(0, "2000000".length)),
+            mockk(),
+            { assertEquals("2,000,000", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
