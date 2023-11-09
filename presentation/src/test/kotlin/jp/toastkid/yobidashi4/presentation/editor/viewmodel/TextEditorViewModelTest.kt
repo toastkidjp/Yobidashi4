@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -69,6 +70,7 @@ class TextEditorViewModelTest {
     @Test
     fun setMultiParagraph() {
         assertEquals(Offset.Unspecified, viewModel.currentLineOffset())
+        assertTrue(viewModel.lineNumbers().isEmpty())
 
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineLeft(any()) } returns 20f
@@ -80,18 +82,18 @@ class TextEditorViewModelTest {
         val currentLineOffset = viewModel.currentLineOffset()
         assertEquals(20f, currentLineOffset.x)
         assertEquals(0f, currentLineOffset.y)
+        assertEquals(3, viewModel.lineNumbers().size)
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Test
     fun verticalScrollState() {
+        assertFalse(viewModel.verticalScrollState().isScrollInProgress)
     }
 
     @Test
     fun scrollbarAdapter() {
-    }
-
-    @Test
-    fun lineNumberScrollState() {
+        assertEquals(0.0, viewModel.scrollbarAdapter().scrollOffset)
     }
 
     @Test
