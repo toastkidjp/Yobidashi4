@@ -15,6 +15,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -108,8 +109,16 @@ class TextEditorViewModelTest {
     fun onKeyEvent() {
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Test
     fun adjustLineNumberState() {
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            viewModel.verticalScrollState().offset = 10f
+
+            viewModel.adjustLineNumberState()
+
+            assertEquals(10, viewModel.lineNumberScrollState().value)
+        }
     }
 
     @OptIn(ExperimentalFoundationApi::class)
