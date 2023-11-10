@@ -54,4 +54,9 @@ internal class UserOffDayServiceTest {
         assertTrue(userOffDayService.invoke(12, 29))
     }
 
+    @Test
+    fun findBy() {
+        assertTrue(userOffDayService.findBy(6).isEmpty())
+    }
+
 }
