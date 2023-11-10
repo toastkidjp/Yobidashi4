@@ -65,14 +65,6 @@ class TextEditorViewModelTest {
     }
 
     @Test
-    fun content() {
-    }
-
-    @Test
-    fun onValueChange() {
-    }
-
-    @Test
     fun setMultiParagraph() {
         assertEquals(Offset.Unspecified, viewModel.currentLineOffset())
         assertTrue(viewModel.lineNumbers().isEmpty())
