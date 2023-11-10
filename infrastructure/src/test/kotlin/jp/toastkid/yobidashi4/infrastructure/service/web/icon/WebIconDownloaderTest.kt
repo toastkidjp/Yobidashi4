@@ -37,7 +37,7 @@ class WebIconDownloaderTest {
 
         every { folder.resolve(any<String>()) } returns imagePath
         mockkStatic(Files::class)
-        every { Files.exists(any()) } returns true
+        every { Files.exists(any()) } returns false
         every { Files.write(any(), any<ByteArray>()) } returns mockk()
 
         url = URL("https://www.yahoo.co.jp/favicon.ico")
@@ -58,6 +58,18 @@ class WebIconDownloaderTest {
         subject.invoke(url, folder, "test")
 
         verify { Files.exists(any()) }
+        verify { Files.write(any(), any<ByteArray>()) }
+    }
+
+    @Test
+    fun existsCase() {
+        every { Files.exists(any()) } returns true
+
+        subject.invoke(url, folder, "test")
+
+        verify { Files.exists(any()) }
+        verify(inverse = true) { subject.urlConnection(any()) }
+        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
 }
