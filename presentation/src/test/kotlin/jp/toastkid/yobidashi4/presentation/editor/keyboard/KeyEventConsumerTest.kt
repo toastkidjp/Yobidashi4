@@ -358,7 +358,7 @@ class KeyEventConsumerTest {
             KeyEvent(awtKeyEvent),
             TextFieldValue("test test", TextRange(0, 6)),
             mockk(),
-            { println(it.text) }
+            { assertEquals("| test | test", it.text) }
         )
 
         assertTrue(consumed)
