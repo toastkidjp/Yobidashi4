@@ -6,6 +6,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.getSelectedText
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -102,6 +103,17 @@ class TextEditorViewModelTest {
 
     @Test
     fun onClickLineNumber() {
+        val text = "Angel has fallen."
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(any()) } returns 0
+        every { multiParagraph.getLineEnd(any()) } returns text.length
+        every { multiParagraph.lineCount } returns 3
+        viewModel.setMultiParagraph(multiParagraph)
+        viewModel.onValueChange(TextFieldValue(text))
+
+        viewModel.onClickLineNumber(0)
+
+        assertEquals(text, viewModel.content().getSelectedText().text)
     }
 
     @Test
