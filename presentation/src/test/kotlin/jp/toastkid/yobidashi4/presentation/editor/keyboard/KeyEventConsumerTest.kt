@@ -344,6 +344,27 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun tableConversion() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_T,
+            'T'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test test", TextRange(0, 6)),
+            mockk(),
+            { println(it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
