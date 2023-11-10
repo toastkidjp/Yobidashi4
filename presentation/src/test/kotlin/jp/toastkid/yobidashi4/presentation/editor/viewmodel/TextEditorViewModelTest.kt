@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -10,6 +11,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -109,6 +111,21 @@ class TextEditorViewModelTest {
 
     @Test
     fun onKeyEvent() {
+        val keyEvent = KeyEvent(
+            java.awt.event.KeyEvent(
+                mockk(),
+                java.awt.event.KeyEvent.KEY_PRESSED,
+                1,
+                java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                java.awt.event.KeyEvent.VK_COMMA,
+                ','
+            )
+        )
+        viewModel = TextEditorViewModel()
+
+        val consumed = viewModel.onKeyEvent(keyEvent)
+
+        assertFalse(consumed)
     }
 
     @OptIn(ExperimentalFoundationApi::class)
