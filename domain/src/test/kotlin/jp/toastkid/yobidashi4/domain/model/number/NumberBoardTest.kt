@@ -62,4 +62,9 @@ class NumberBoardTest {
         assertEquals(2, picked)
     }
 
+    @Test
+    fun makeRandom() {
+        assertFalse(NumberBoard.make().isCorrect(NumberBoard()))
+    }
+
 }
