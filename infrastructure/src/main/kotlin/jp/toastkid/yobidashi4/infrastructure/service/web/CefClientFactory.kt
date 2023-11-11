@@ -42,13 +42,13 @@ import org.koin.core.component.inject
 class CefClientFactory(
     private val latestBrowser: () -> CefBrowser?,
     private val findId: (CefBrowser?) -> String?
-) {
+) : KoinComponent {
+
+    private val appSetting : Setting by inject()
+
+    private val viewModel : MainViewModel by inject()
 
     operator fun invoke(): CefClient {
-        val appSetting = object : KoinComponent { val s: Setting by inject() }.s
-
-        val viewModel = object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel
-
         val builder = CefAppBuilder()
         builder.setInstallDir(File("jcef-bundle")) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
@@ -232,12 +232,12 @@ class CefClientFactory(
         if (text.isBlank()) {
             return
         }
-        val mainViewModel = object : KoinComponent{ val vm: MainViewModel by inject() }.vm
+
         if (text.startsWith("http://") || text.startsWith("https://")) {
-            mainViewModel.openUrl(text, false)
+            viewModel.openUrl(text, false)
             return
         }
-        mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
+        viewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
     }
 
 }
