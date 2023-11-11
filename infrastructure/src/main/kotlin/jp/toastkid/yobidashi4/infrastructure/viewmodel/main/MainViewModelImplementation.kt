@@ -19,6 +19,8 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import java.awt.Desktop
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -170,6 +172,18 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         openTab(newTab)
+    }
+
+    override fun webSearch(query: String?, background: Boolean) {
+        if (query.isNullOrBlank()) {
+            return
+        }
+
+        if (query.startsWith("http://") || query.startsWith("https://")) {
+            openUrl(query, background)
+            return
+        }
+        openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(query, StandardCharsets.UTF_8)}", background)
     }
 
     override fun edit(path: Path, onBackground: Boolean) {
