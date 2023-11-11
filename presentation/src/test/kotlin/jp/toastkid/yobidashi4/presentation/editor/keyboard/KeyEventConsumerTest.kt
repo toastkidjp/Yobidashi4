@@ -364,7 +364,6 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
-
     @Test
     fun caseConversion() {
         awtKeyEvent = java.awt.event.KeyEvent(
@@ -381,6 +380,27 @@ class KeyEventConsumerTest {
             TextFieldValue("test", TextRange(0, 4)),
             mockk(),
             { assertEquals("TEST", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
+    fun caseConversionToLower() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_U,
+            'U'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("TEST", TextRange(0, 4)),
+            mockk(),
+            { assertEquals("test", it.text) }
         )
 
         assertTrue(consumed)
