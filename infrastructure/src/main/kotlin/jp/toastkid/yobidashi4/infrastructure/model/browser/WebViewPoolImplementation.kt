@@ -16,10 +16,7 @@ class WebViewPoolImplementation : WebViewPool {
     private var lastId: String? = null
 
     init {
-        client = CefClientFactory(
-            { latestBrowser() },
-            { id -> browsers.entries.firstOrNull { it.value == id }?.key }
-        ).invoke()
+        client = CefClientFactory { id -> browsers.entries.firstOrNull { it.value == id }?.key }.invoke()
     }
 
 
