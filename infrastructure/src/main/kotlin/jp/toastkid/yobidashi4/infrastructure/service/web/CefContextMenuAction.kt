@@ -84,7 +84,7 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.OPEN_WITH_OTHER_BROWSER.id -> {
-                browsePage(browser, params?.linkUrl ?: params?.sourceUrl ?: selectedText)
+                viewModel.browseUri(params?.linkUrl ?: params?.sourceUrl ?: selectedText)
             }
 
             ContextMenu.SEARCH_WITH_IMAGE.id -> {
