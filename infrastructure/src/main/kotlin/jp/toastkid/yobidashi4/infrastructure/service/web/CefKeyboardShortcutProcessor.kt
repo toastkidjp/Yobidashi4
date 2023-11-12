@@ -31,7 +31,7 @@ class CefKeyboardShortcutProcessor(
         }
 
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_F) {
-            object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchFind()
+            webTabViewModel.switchFind()
             return true
         }
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_W) {
@@ -105,7 +105,7 @@ class CefKeyboardShortcutProcessor(
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN
             && event.windows_key_code == KeyEvent.VK_K) {
             (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
-                object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools(id)
+                webTabViewModel.switchDevTools(id)
             }
             return true
         }
