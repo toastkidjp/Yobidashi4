@@ -18,8 +18,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class CefKeyboardShortcutProcessor(
-    private val selectedText: () -> String,
-    private val browsePage: (String) -> Unit
+    private val selectedText: () -> String
 ) : KoinComponent {
 
     private val viewModel: MainViewModel by inject()

@@ -166,10 +166,7 @@ class CefClientFactory(
 
         client.addKeyboardHandler(object : CefKeyboardHandlerAdapter() {
 
-            private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor(
-                { selectedText },
-                this@CefClientFactory::browsePage
-            )
+            private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor { selectedText }
 
             override fun onKeyEvent(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent?): Boolean {
                 event ?: return false
