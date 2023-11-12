@@ -3,8 +3,6 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import java.awt.Desktop
 import java.io.File
 import java.net.URI
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -225,18 +223,6 @@ class CefClientFactory(
             (viewModel.currentTab() as? WebTab)?.url()
         } ?: return
         Desktop.getDesktop().browse(URI(urlString))
-    }
-
-    private fun search(text: String) {
-        if (text.isBlank()) {
-            return
-        }
-
-        if (text.startsWith("http://") || text.startsWith("https://")) {
-            viewModel.openUrl(text, false)
-            return
-        }
-        viewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
     }
 
 }
