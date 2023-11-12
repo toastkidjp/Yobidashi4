@@ -19,6 +19,7 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import java.awt.Desktop
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -199,6 +200,20 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
         openTab(tab)
+    }
+
+    override fun browseUri(uri: String?) {
+        if (uri.isNullOrBlank()) {
+            return
+        }
+
+        val urlString = if (uri.startsWith("http://") || uri.startsWith("https://")) {
+            uri
+        } else {
+            (currentTab() as? WebTab)?.url()
+        } ?: return
+
+        Desktop.getDesktop().browse(URI(urlString))
     }
 
     private val webHistoryRepository: WebHistoryRepository by inject()

@@ -43,6 +43,8 @@ interface MainViewModel {
 
     fun edit(path: Path, onBackground: Boolean = false)
 
+    fun browseUri(uri: String?)
+
     fun removeTabAt(index: Int)
     fun closeCurrent()
     fun closeOtherTabs()
