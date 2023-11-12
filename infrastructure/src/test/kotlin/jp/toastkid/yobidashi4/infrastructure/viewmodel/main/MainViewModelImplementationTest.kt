@@ -10,6 +10,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.awt.Desktop
 import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.nio.file.Files
@@ -44,6 +45,9 @@ class MainViewModelImplementationTest {
     @MockK
     private lateinit var topArticleLoaderService: TopArticleLoaderService
 
+    @MockK
+    private lateinit var desktop: Desktop
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -59,6 +63,11 @@ class MainViewModelImplementationTest {
         }
         every { setting.darkMode() } returns false
         every { setting.setDarkMode(any()) } just Runs
+
+        mockkStatic(Desktop::class)
+        every { Desktop.getDesktop() } returns desktop
+        every { desktop.open(any()) } just Runs
+        every { desktop.browse(any()) } just Runs
 
         subject = MainViewModelImplementation()
     }
@@ -194,6 +203,21 @@ class MainViewModelImplementationTest {
         val tab = subject.tabs.first() as WebTab
         assertEquals("https://search.yahoo.co.jp/search?p=test", tab.url())
         verify { anyConstructed<SearchUrlFactory>().invoke(any()) }
+    }
+
+    @Test
+    fun noopBrowseUri() {
+        subject.browseUri(null)
+
+        verify(inverse = true) { desktop.browse(any()) }
+    }
+
+    @Test
+    fun browseUri() {
+        subject.browseUri("https://www.yahoo.com")
+
+        verify { Desktop.getDesktop() }
+        verify { desktop.browse(any()) }
     }
 
     @Test
