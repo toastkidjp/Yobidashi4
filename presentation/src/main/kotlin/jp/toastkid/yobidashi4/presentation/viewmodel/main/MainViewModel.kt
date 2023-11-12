@@ -39,7 +39,7 @@ interface MainViewModel {
     fun openPreview(path: Path, onBackground: Boolean = false)
     fun openUrl(url: String, background: Boolean)
 
-    fun webSearch(query: String?, background: Boolean)
+    fun webSearch(query: String?, background: Boolean = false)
 
     fun edit(path: Path, onBackground: Boolean = false)
 
