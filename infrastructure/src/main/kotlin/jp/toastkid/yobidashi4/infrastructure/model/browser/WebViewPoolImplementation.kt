@@ -19,9 +19,6 @@ class WebViewPoolImplementation : WebViewPool {
         client = CefClientFactory { id -> browsers.entries.firstOrNull { it.value == id }?.key }.invoke()
     }
 
-
-    private fun latestBrowser(): CefBrowser? = browsers.get(lastId)
-
     private val browsers = mutableMapOf<String, CefBrowser>()
 
     override fun component(id: String, initialUrl: String): Component {
