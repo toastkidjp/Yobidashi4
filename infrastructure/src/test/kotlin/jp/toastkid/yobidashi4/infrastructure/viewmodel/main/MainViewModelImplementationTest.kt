@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -18,6 +19,8 @@ import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -168,6 +171,29 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openPreview() {
+    }
+
+    @Test
+    fun noopWebSearch() {
+        mockkConstructor(SearchUrlFactory::class)
+        every { anyConstructed<SearchUrlFactory>().invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
+
+        subject.webSearch(null, false)
+
+        assertTrue(subject.tabs.isEmpty())
+        verify(inverse = true) { anyConstructed<SearchUrlFactory>().invoke(any()) }
+    }
+
+    @Test
+    fun webSearch() {
+        mockkConstructor(SearchUrlFactory::class)
+        every { anyConstructed<SearchUrlFactory>().invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
+
+        subject.webSearch("test", false)
+
+        val tab = subject.tabs.first() as WebTab
+        assertEquals("https://search.yahoo.co.jp/search?p=test", tab.url())
+        verify { anyConstructed<SearchUrlFactory>().invoke(any()) }
     }
 
     @Test
