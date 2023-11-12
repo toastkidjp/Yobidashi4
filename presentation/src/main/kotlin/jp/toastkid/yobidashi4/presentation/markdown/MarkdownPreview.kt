@@ -89,10 +89,8 @@ fun MarkdownPreview(
                 return@onKeyEvent false
             }
 
-            val selectedText = mainViewModel.selectedText()
-            if (!selectedText.isNullOrBlank() && it.isCtrlPressed && it.isShiftPressed && it.key == Key.O) {
-                mainViewModel
-                    .openUrl("https://search.yahoo.co.jp/search?p=$selectedText", false)
+            if (it.isCtrlPressed && it.isShiftPressed && it.key == Key.O) {
+                mainViewModel.webSearch(mainViewModel.selectedText())
                 return@onKeyEvent true
             }
 
