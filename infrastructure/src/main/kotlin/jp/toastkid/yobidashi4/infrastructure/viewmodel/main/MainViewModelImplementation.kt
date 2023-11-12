@@ -19,8 +19,6 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import java.awt.Desktop
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -33,6 +31,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
@@ -179,11 +178,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        if (query.startsWith("http://") || query.startsWith("https://")) {
-            openUrl(query, background)
-            return
-        }
-        openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(query, StandardCharsets.UTF_8)}", background)
+        openUrl(SearchUrlFactory().invoke(query), background)
     }
 
     override fun edit(path: Path, onBackground: Boolean) {
