@@ -38,8 +38,7 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                             ContextMenuItem(localization.selectAll, it)
                         },
                         ContextMenuItem("Search") {
-                            mainViewModel
-                                .openUrl("https://search.yahoo.co.jp/search?p=${textManager.selectedText.text}", false)
+                            mainViewModel.webSearch(textManager.selectedText.text)
                         },
                         ContextMenuItem("Count") {
                             mainViewModel
