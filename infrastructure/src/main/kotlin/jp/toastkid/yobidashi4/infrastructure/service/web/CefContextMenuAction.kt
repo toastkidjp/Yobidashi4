@@ -3,8 +3,6 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import java.awt.Desktop
 import java.net.URI
 import java.net.URL
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
@@ -123,15 +121,8 @@ class CefContextMenuAction : KoinComponent {
     }
 
     private fun search(text: String) {
-        if (text.isBlank()) {
-            return
-        }
         val mainViewModel = object : KoinComponent{ val vm: MainViewModel by inject() }.vm
-        if (text.startsWith("http://") || text.startsWith("https://")) {
-            mainViewModel.openUrl(text, false)
-            return
-        }
-        mainViewModel.openUrl("https://search.yahoo.co.jp/search?p=${URLEncoder.encode(text, StandardCharsets.UTF_8)}", false)
+        mainViewModel.webSearch(text)
     }
 
 }
