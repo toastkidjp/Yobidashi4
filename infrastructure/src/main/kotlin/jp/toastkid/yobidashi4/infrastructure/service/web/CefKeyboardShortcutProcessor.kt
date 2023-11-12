@@ -100,7 +100,7 @@ class CefKeyboardShortcutProcessor(
         }
         if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
             && event.windows_key_code == KeyEvent.VK_O) {
-            browsePage(selectedText())
+            viewModel.browseUri(selectedText())
             return true
         }
         if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN
