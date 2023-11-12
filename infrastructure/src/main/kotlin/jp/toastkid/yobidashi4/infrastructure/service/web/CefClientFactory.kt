@@ -169,7 +169,6 @@ class CefClientFactory(
         client.addKeyboardHandler(object : CefKeyboardHandlerAdapter() {
 
             private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor(
-                this@CefClientFactory::search,
                 { selectedText },
                 this@CefClientFactory::browsePage
             )
