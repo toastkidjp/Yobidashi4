@@ -27,7 +27,7 @@ class CefKeyboardShortcutProcessor(
 
     operator fun invoke(
         browser: CefBrowser?,
-        eventType: CefKeyboardHandler.CefKeyEvent.EventType?,
+        eventType: CefKeyboardHandler.CefKeyEvent.EventType,
         modifier: Int,
         keyCode: Int
     ): Boolean {
