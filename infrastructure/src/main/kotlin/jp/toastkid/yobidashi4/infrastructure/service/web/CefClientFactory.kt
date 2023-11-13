@@ -1,11 +1,8 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.awt.Desktop
-import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -210,15 +207,6 @@ class CefClientFactory(
         })
 
         return client
-    }
-
-    private fun browsePage(selectedText: String) {
-        val urlString = if (selectedText.startsWith("http://") || selectedText.startsWith("https://")) {
-            selectedText
-        } else {
-            (viewModel.currentTab() as? WebTab)?.url()
-        } ?: return
-        Desktop.getDesktop().browse(URI(urlString))
     }
 
 }
