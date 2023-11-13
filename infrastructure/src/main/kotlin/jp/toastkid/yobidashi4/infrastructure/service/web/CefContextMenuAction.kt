@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.awt.Desktop
-import java.net.URI
 import java.net.URL
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -109,15 +107,6 @@ class CefContextMenuAction : KoinComponent {
 
             else -> Unit
         }
-    }
-
-    private fun browsePage(browser: CefBrowser?, selectedText: String) {
-        val urlString = if (selectedText.startsWith("http://") || selectedText.startsWith("https://")) {
-            selectedText
-        } else {
-            browser?.url
-        } ?: return
-        Desktop.getDesktop().browse(URI(urlString))
     }
 
     private fun search(text: String) {
