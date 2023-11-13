@@ -47,7 +47,7 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.SEARCH_WITH_SELECTED_TEXT.id -> {
-                search(selectedText)
+                viewModel.webSearch(selectedText)
             }
 
             ContextMenu.RESET_ZOOM.id -> {
