@@ -18,6 +18,7 @@ import java.nio.file.attribute.FileTime
 import java.util.stream.Stream
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -270,6 +271,11 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openingEditor() {
+        assertFalse(subject.openingEditor())
+
+        subject.openTab(mockk<EditorTab>())
+
+        assertTrue(subject.openingEditor())
     }
 
     @Test
