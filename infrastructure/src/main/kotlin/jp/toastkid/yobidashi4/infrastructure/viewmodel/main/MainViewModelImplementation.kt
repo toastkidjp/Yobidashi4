@@ -286,7 +286,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openingEditor(): Boolean {
-        return _tabs[selected.value] is EditorTab
+        return currentTab() is EditorTab
     }
 
     private val _showWebSearch = mutableStateOf(false)
