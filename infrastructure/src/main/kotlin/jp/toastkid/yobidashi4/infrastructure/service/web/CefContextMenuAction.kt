@@ -109,9 +109,4 @@ class CefContextMenuAction : KoinComponent {
         }
     }
 
-    private fun search(text: String) {
-        val mainViewModel = object : KoinComponent{ val vm: MainViewModel by inject() }.vm
-        mainViewModel.webSearch(text)
-    }
-
 }
