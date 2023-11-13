@@ -14,8 +14,8 @@ data class TextBlock(
         3 -> 22
         4 -> 20
         5 -> 18
-        6 -> 12
-        else -> 14
+        6 -> 14
+        else -> 16
     }
 
 }
