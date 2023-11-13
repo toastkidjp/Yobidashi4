@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import java.awt.Desktop
-import java.io.File
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
@@ -48,7 +47,7 @@ class CefClientFactory(
 
     operator fun invoke(): CefClient {
         val builder = CefAppBuilder()
-        builder.setInstallDir(File("jcef-bundle")) //Default
+        builder.setInstallDir(Path.of("jcef-bundle").toFile()) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
         CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {
             override fun onBeforeCommandLineProcessing(processType: String?, commandLine: CefCommandLine?) {
@@ -171,7 +170,7 @@ class CefClientFactory(
             override fun onKeyEvent(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent?): Boolean {
                 event ?: return false
 
-                if (keyboardShortcutProcessor(browser, event)) {
+                if (keyboardShortcutProcessor(browser, event.type, event.modifiers, event.windows_key_code)) {
                     return true
                 }
 
