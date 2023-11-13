@@ -25,58 +25,63 @@ class CefKeyboardShortcutProcessor(
 
     private val webTabViewModel : WebTabViewModel by inject()
 
-    operator fun invoke(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent): Boolean {
-        if (event.type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP) {
+    operator fun invoke(
+        browser: CefBrowser?,
+        eventType: CefKeyboardHandler.CefKeyEvent.EventType?,
+        modifier: Int,
+        keyCode: Int
+    ): Boolean {
+        if (eventType != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP) {
             return false
         }
 
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_F) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_F) {
             webTabViewModel.switchFind()
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_W) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_W) {
             viewModel.closeCurrent()
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_P) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_P) {
             browser?.let {
                 it.printToPDF("${it.identifier}.pdf", null, null)
             }
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_UP) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_UP) {
             browser?.executeJavaScript("window.scrollTo(0, 0);", null, 1)
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_DOWN) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_DOWN) {
             browser?.executeJavaScript("window.scrollTo(0, document.body.scrollHeight);", null, 1)
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_B) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_B) {
             BookmarkInsertion()(null, browser?.url)
             return true
         }
-        if (event.windows_key_code == KeyEvent.VK_F5) {
+        if (keyCode == KeyEvent.VK_F5) {
             browser?.reload()
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == KeyEvent.VK_R) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_R) {
             browser?.reloadIgnoreCache()
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == 187) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == 187) {
             browser?.let {
                 it.zoomLevel = it.zoomLevel + 0.25
             }
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN && event.windows_key_code == 189) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == 189) {
             browser?.let {
                 it.zoomLevel = it.zoomLevel - 0.25
             }
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN && event.windows_key_code == KeyEvent.VK_LEFT) {
+        if (modifier == EventFlags.EVENTFLAG_ALT_DOWN && keyCode == KeyEvent.VK_LEFT) {
             browser?.let {
                 if (it.canGoBack()) {
                     it.goBack()
@@ -84,7 +89,7 @@ class CefKeyboardShortcutProcessor(
             }
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN && event.windows_key_code == KeyEvent.VK_RIGHT) {
+        if (modifier == EventFlags.EVENTFLAG_ALT_DOWN && keyCode == KeyEvent.VK_RIGHT) {
             browser?.let {
                 if (it.canGoForward()) {
                     it.goForward()
@@ -92,25 +97,25 @@ class CefKeyboardShortcutProcessor(
             }
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_SHIFT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
-            && event.windows_key_code == KeyEvent.VK_O) {
+        if (modifier == EventFlags.EVENTFLAG_SHIFT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
+            && keyCode == KeyEvent.VK_O) {
             viewModel.webSearch(selectedText())
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_ALT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
-            && event.windows_key_code == KeyEvent.VK_O) {
+        if (modifier == EventFlags.EVENTFLAG_ALT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN
+            && keyCode == KeyEvent.VK_O) {
             viewModel.browseUri(selectedText())
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_CONTROL_DOWN
-            && event.windows_key_code == KeyEvent.VK_K) {
+        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN
+            && keyCode == KeyEvent.VK_K) {
             (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
                 webTabViewModel.switchDevTools(id)
             }
             return true
         }
-        if (event.modifiers == EventFlags.EVENTFLAG_SHIFT_DOWN
-            && event.windows_key_code == KeyEvent.VK_P) {
+        if (modifier == EventFlags.EVENTFLAG_SHIFT_DOWN
+            && keyCode == KeyEvent.VK_P) {
             val folder = Path.of("user/screenshot")
             if (Files.exists(folder).not()) {
                 Files.createDirectories(folder)
@@ -130,7 +135,7 @@ class CefKeyboardShortcutProcessor(
             return true
         }
 
-        if (event.windows_key_code == KeyEvent.VK_F12) {
+        if (keyCode == KeyEvent.VK_F12) {
             (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
                 webTabViewModel.switchDevTools(id)
             }
