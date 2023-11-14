@@ -39,7 +39,6 @@ import kotlin.math.min
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     val koin = object: KoinComponent {
