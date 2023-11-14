@@ -13,8 +13,6 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
-import java.awt.Desktop
-import java.net.URI
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
@@ -302,7 +300,7 @@ class KeyEventConsumer(
                 }
 
                 val url = searchUrlFactory(selected)
-                Desktop.getDesktop().browse(URI(url))
+                mainViewModel.browseUri(url)
                 true
             }
             it.isCtrlPressed && it.key == Key.Q -> {
