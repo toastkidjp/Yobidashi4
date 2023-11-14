@@ -35,7 +35,7 @@ internal fun EditorTabView(tab: EditorTab) {
                 ) {
                     SimpleTextEditor(
                         tab,
-                        { status.value = it },
+                        { status.value = (if (tab.editable()) "" else "Not editable | ") + it },
                         Modifier
                     )
                 }
