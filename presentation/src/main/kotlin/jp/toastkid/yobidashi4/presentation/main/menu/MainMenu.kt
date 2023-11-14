@@ -9,8 +9,6 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
-import java.awt.Desktop
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -85,17 +83,17 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 ZipArchiver().invoke(
                     LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
                 )
-                Desktop.getDesktop().open(File("."))
+                viewModel.openFile(Path.of("."))
             }
             Item("Dump all") {
                 ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
-                Desktop.getDesktop().open(File("."))
+                viewModel.openFile(Path.of("."))
             }
             Item("Open article folder", icon = painterResource("images/icon/ic_article_folder.xml"), shortcut = KeyShortcut(Key.O, alt = true)) {
-                Desktop.getDesktop().open(setting.articleFolderPath().toFile())
+                viewModel.openFile(setting.articleFolderPath())
             }
             Item("Open user folder", icon = painterResource("images/icon/ic_user_folder.xml"), shortcut = KeyShortcut(Key.U, alt = true)) {
-                Desktop.getDesktop().open(Path.of("user").toFile())
+                viewModel.openFile(Path.of("user"))
             }
             Item("Exit", icon = painterResource("images/icon/ic_exit.xml")) {
                 exitApplication()
@@ -287,7 +285,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item("Open article template", icon = painterResource("images/icon/ic_user_template.xml")) {
                 val path = Path.of("user/article_template.txt")
-                Desktop.getDesktop().open(path.toFile())
+                viewModel.openFile(path)
             }
             Item(
                 if (viewModel.openMemoryUsageBox()) "Close memory usage" else "Memory usage",
