@@ -43,8 +43,11 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -158,6 +161,9 @@ internal fun WebSearchBox() {
                     }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                visualTransformation = {
+                    TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
+                },
                 trailingIcon = {
                     Icon(
                         painterResource("images/icon/ic_clear_form.xml"),
