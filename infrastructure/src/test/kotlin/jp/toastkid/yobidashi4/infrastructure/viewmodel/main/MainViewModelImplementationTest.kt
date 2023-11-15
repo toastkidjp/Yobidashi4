@@ -288,11 +288,12 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun showAggregationBox() {
-    }
-
-    @Test
     fun switchAggregationBox() {
+        assertFalse(subject.showAggregationBox())
+
+        subject.switchAggregationBox(true)
+
+        assertTrue(subject.showAggregationBox())
     }
 
     @Test
