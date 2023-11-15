@@ -102,15 +102,10 @@ user_off_day=12/29,12/30
     }
 
     @Test
-    fun useCaseSensitiveInFinder() {
-    }
-
-    @Test
     fun setEditorBackgroundColor() {
-    }
+        assertEquals(java.awt.Color(225, 225, 225, 255),  subject.editorBackgroundColor())
 
-    @Test
-    fun editorBackgroundColor() {
+        subject.setEditorBackgroundColor(java.awt.Color.BLACK)
     }
 
     @Test
