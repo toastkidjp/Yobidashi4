@@ -45,9 +45,7 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.awt.Desktop
 import java.net.MalformedURLException
-import java.net.URI
 import java.net.URL
 import java.time.Instant
 import java.time.LocalDateTime
@@ -193,7 +191,7 @@ fun WebHistoryView() {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    Desktop.getDesktop().browse(URI(bookmark.url))
+                                    viewModel.browseUri(bookmark.url)
                                     openOption.value = false
                                 }
                             ) {
