@@ -162,7 +162,7 @@ class TextEditorViewModel {
 
     fun launchTab(tab: EditorTab) {
         this.tab = tab
-        focusRequester.requestFocus()
+        focusRequester().requestFocus()
 
         val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
