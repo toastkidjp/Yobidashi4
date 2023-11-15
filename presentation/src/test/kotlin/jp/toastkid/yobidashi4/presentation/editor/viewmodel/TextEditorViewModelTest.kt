@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
@@ -13,11 +14,14 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -53,6 +57,7 @@ class TextEditorViewModelTest {
                 }
             )
         }
+
         viewModel = TextEditorViewModel()
 
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
@@ -159,6 +164,22 @@ class TextEditorViewModelTest {
 
     @Test
     fun launchTab() {
+        val tab = mockk<EditorTab>()
+        every { tab.getContent() } returns "test"
+        every { tab.caretPosition() } returns 3
+        every { tab.editable() } returns true
+        every { mainViewModel.finderFlow() } returns emptyFlow()
+        viewModel = spyk(viewModel)
+        val focusRequester = mockk<FocusRequester>()
+        every { viewModel.focusRequester() } returns focusRequester
+        every { focusRequester.requestFocus() } just Runs
+
+        viewModel.launchTab(tab)
+
+        verify { tab.getContent() }
+        verify { tab.caretPosition() }
+        verify { tab.editable() }
+        verify { focusRequester.requestFocus() }
     }
 
     @Test
