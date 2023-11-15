@@ -219,7 +219,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.I -> {
                 convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
-                    "```\n$it```"
+                    "***\n$it***"
                 }?.let(setNewContent)
                 true
             }
