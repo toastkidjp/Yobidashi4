@@ -4,6 +4,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.getSelectedText
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -467,6 +468,44 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+    }
+
+    @Test
+    fun findBrace() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_OPEN_BRACKET,
+            '{'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("{test}", TextRange(0)),
+            mockk(),
+            {
+                assertEquals("}", it.getSelectedText().text)
+                assertEquals(5, it.selection.start)
+                assertEquals(6, it.selection.end)
+            }
+        )
+
+        assertTrue(consumed)
+
+        val consumed2 = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("{test}", TextRange(5, 6)),
+            mockk(),
+            {
+                assertEquals("{", it.getSelectedText().text)
+                assertEquals(0, it.selection.start)
+                assertEquals(1, it.selection.end)
+            }
+        )
+
+        assertTrue(consumed2)
     }
 
     @Test
