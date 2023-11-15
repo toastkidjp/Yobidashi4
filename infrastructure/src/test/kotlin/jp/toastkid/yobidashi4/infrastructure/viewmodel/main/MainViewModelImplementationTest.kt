@@ -279,11 +279,12 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun showWebSearch() {
-    }
-
-    @Test
     fun setShowWebSearch() {
+        assertFalse(subject.showWebSearch())
+
+        subject.setShowWebSearch(true)
+
+        assertTrue(subject.showWebSearch())
     }
 
     @Test
