@@ -73,6 +73,13 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun passBrowserNull() {
+        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYDOWN, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_F)
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun elseCase() {
         val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_CIRCUMFLEX)
 
