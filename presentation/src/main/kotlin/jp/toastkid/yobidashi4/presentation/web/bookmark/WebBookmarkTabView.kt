@@ -45,8 +45,6 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.awt.Desktop
-import java.net.URI
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
@@ -206,7 +204,7 @@ private fun WebBookmarkItemRow(
             }
             DropdownMenuItem(
                 onClick = {
-                    Desktop.getDesktop().browse(URI(bookmark.url))
+                    mainViewModel.browseUri(bookmark.url)
                     openOption.value = false
                 }
             ) {
