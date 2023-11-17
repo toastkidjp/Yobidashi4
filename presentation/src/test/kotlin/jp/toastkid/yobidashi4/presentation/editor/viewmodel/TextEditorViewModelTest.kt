@@ -137,6 +137,25 @@ class TextEditorViewModelTest {
         assertFalse(consumed)
     }
 
+    @Test
+    fun onPreviewKeyEvent() {
+        val keyEvent = KeyEvent(
+            java.awt.event.KeyEvent(
+                mockk(),
+                java.awt.event.KeyEvent.KEY_PRESSED,
+                1,
+                java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                java.awt.event.KeyEvent.VK_ENTER,
+                ','
+            )
+        )
+        viewModel = TextEditorViewModel()
+
+        val consumed = viewModel.onPreviewKeyEvent(keyEvent, CoroutineScope(Dispatchers.Unconfined))
+
+        assertFalse(consumed)
+    }
+
     @OptIn(ExperimentalFoundationApi::class)
     @Test
     fun adjustLineNumberState() {
