@@ -298,10 +298,11 @@ class MainViewModelImplementationTest {
 
     @Test
     fun initialAggregationType() {
-    }
+        assertEquals(0, subject.initialAggregationType())
 
-    @Test
-    fun setInitialAggregationType() {
+        subject.setInitialAggregationType(2)
+
+        assertEquals(2, subject.initialAggregationType())
     }
 
     @Test
