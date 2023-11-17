@@ -110,10 +110,11 @@ user_off_day=12/29,12/30
 
     @Test
     fun setEditorForegroundColor() {
-    }
+        assertNull(subject.editorForegroundColor())
 
-    @Test
-    fun editorForegroundColor() {
+        subject.setEditorForegroundColor(java.awt.Color.WHITE)
+
+        assertEquals(java.awt.Color.WHITE,  subject.editorForegroundColor())
     }
 
     @Test
