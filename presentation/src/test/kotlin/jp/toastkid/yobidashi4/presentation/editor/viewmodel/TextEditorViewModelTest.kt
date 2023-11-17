@@ -114,6 +114,25 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun noopOnValueChange() {
+        val keyEvent = KeyEvent(
+            java.awt.event.KeyEvent(
+                mockk(),
+                java.awt.event.KeyEvent.KEY_PRESSED,
+                1,
+                java.awt.event.KeyEvent.ALT_DOWN_MASK,
+                java.awt.event.KeyEvent.VK_ALT,
+                'A'
+            )
+        )
+        viewModel.onKeyEvent(keyEvent)
+
+        viewModel.onValueChange(TextFieldValue("Alt pressed"))
+
+        assertTrue(viewModel.content().text.isEmpty())
+    }
+
+    @Test
     fun focusRequester() {
         assertNotNull(viewModel.focusRequester())
     }
