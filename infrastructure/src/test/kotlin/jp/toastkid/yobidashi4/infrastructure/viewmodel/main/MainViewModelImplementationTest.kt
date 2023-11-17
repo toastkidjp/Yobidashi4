@@ -306,11 +306,21 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun showInputBox() {
-    }
-
-    @Test
     fun setShowInputBox() {
+        assertFalse(subject.showInputBox())
+
+        subject.setShowInputBox(null)
+
+        assertFalse(subject.showInputBox())
+        subject.invokeInputAction("test")
+
+        val action = mockk<(String) -> Unit>()
+        every { action.invoke(any()) } just Runs
+        subject.setShowInputBox(action)
+
+        assertTrue(subject.showInputBox())
+        subject.invokeInputAction("test")
+        verify { action.invoke("test") }
     }
 
     @Test
