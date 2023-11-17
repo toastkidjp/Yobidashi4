@@ -26,6 +26,13 @@ class NumberPlaceGameTest {
     }
 
     @Test
+    fun placeSolved() {
+        numberPlaceGame.initialize(0)
+
+        numberPlaceGame.place(0, 0, 1, {  })
+    }
+
+    @Test
     fun setCorrect() {
         numberPlaceGame.setCorrect()
 
