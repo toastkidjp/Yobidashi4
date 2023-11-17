@@ -52,9 +52,9 @@ class WebIconLoaderServiceImplementationTest {
     fun iconUrlsIsEmptyCase() {
         every { anyConstructed<IconUrlFinder>().invoke(any()) } returns emptyList()
 
-        subject.invoke("", "f://www.yahoo.co.jp")
+        subject.invoke("", "https://www.yahoo.co.jp")
 
-        verify(inverse = true) { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+        verify { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
     }
 
 }
