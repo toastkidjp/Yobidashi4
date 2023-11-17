@@ -149,7 +149,6 @@ class TextEditorViewModelTest {
                 ','
             )
         )
-        viewModel = TextEditorViewModel()
 
         val consumed = viewModel.onKeyEvent(keyEvent)
 
