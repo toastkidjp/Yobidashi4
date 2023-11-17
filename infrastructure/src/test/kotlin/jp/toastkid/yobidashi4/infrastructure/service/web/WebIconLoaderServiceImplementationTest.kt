@@ -57,4 +57,13 @@ class WebIconLoaderServiceImplementationTest {
         verify { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
     }
 
+    @Test
+    fun pluralIconUrlCase() {
+        every { anyConstructed<IconUrlFinder>().invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg", "https://www.yahoo.co.jp/icon.ico", "/test.png")
+
+        subject.invoke("", "https://www.yahoo.co.jp")
+
+        verify { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+    }
+
 }
