@@ -521,9 +521,9 @@ class KeyEventConsumerTest {
 
         val consumed = subject.invoke(
             KeyEvent(awtKeyEvent),
-            TextFieldValue("test", TextRange(0)),
+            TextFieldValue("test", TextRange(0, 4)),
             mockk(),
-            { assertEquals("{test}", it.getSelectedText().text) }
+            { assertEquals("「test」", it.getSelectedText().text) }
         )
 
         assertTrue(consumed)
