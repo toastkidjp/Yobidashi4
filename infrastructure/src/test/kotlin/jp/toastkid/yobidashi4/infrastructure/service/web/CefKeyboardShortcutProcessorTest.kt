@@ -173,4 +173,16 @@ class CefKeyboardShortcutProcessorTest {
         verify { browser.goBack() }
     }
 
+    @Test
+    fun forward() {
+        every { browser.canGoForward() } returns true
+        every { browser.goForward() } just Runs
+
+        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_ALT_DOWN, KeyEvent.VK_RIGHT)
+
+        assertTrue(consumed)
+        verify { browser.canGoForward() }
+        verify { browser.goForward() }
+    }
+
 }
