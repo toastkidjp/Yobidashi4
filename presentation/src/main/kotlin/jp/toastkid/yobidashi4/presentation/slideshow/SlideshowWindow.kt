@@ -10,7 +10,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
-import jp.toastkid.yobidashi4.main.AppTheme
+import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
 import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
 
 class SlideshowWindow {

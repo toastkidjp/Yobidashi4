@@ -10,11 +10,11 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
-import jp.toastkid.yobidashi4.main.AppTheme
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
 import jp.toastkid.yobidashi4.presentation.main.menu.TextContextMenuFactory
+import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
