@@ -1,5 +1,9 @@
 package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowPlacement
+import androidx.compose.ui.window.WindowPosition
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -324,19 +328,23 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun invokeInputAction() {
-    }
-
-    @Test
     fun windowState() {
-    }
+        val initialWindowState = subject.windowState()
+        assertTrue(initialWindowState.size.width > 600.dp)
+        assertTrue(initialWindowState.size.height > 600.dp)
+        assertEquals(WindowPosition(Alignment.Center), initialWindowState.position)
+        assertEquals(WindowPlacement.Floating, initialWindowState.placement)
+        assertEquals("Full screen", subject.toggleFullscreenLabel())
 
-    @Test
-    fun toggleFullscreen() {
-    }
+        subject.toggleFullscreen()
 
-    @Test
-    fun toggleFullscreenLabel() {
+        assertEquals(WindowPlacement.Maximized, initialWindowState.placement)
+        assertEquals("Exit full screen", subject.toggleFullscreenLabel())
+
+        subject.toggleFullscreen()
+
+        assertEquals(WindowPlacement.Floating, initialWindowState.placement)
+        assertEquals("Full screen", subject.toggleFullscreenLabel())
     }
 
     @Test
