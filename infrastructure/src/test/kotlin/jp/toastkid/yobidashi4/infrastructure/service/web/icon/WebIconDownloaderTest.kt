@@ -72,4 +72,15 @@ class WebIconDownloaderTest {
         verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
+    @Test
+    fun connectionIsNullCase() {
+        every { subject.urlConnection(any()) } returns null
+
+        subject.invoke(url, folder, "test")
+
+        verify { Files.exists(any()) }
+        verify { subject.urlConnection(any()) }
+        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
+    }
+
 }
