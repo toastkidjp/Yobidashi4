@@ -8,15 +8,20 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.Image
+import java.awt.image.BufferedImage
+import java.net.URL
+import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeDecoder
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -55,6 +60,7 @@ class BarcodeToolTabViewModelTest {
         every { mainViewModel.showSnackbar(any()) } just Runs
         every { mainViewModel.openUrl(any(), any()) } just Runs
         every { barcodeEncoder.invoke(any(), any(), any()) } returns mockk()
+        every { barcodeDecoder.invoke(any()) } returns "https://www.yahoo.co.jp"
 
         barcodeToolTabViewModel = BarcodeToolTabViewModel()
     }
@@ -87,6 +93,24 @@ class BarcodeToolTabViewModelTest {
         barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("test"))
 
         assertEquals("test", barcodeToolTabViewModel.decodeInputValue().text)
+    }
+
+    @Test
+    fun setDecodeInputValueIfReadImageSuccessful() {
+        mockkStatic(ImageIO::class)
+        val image = mockk<BufferedImage>()
+        every { ImageIO.read(any<URL>()) } returns image
+        every { image.width } returns 1
+        every { image.height } returns 1
+        every { image.getRGB(any(), any()) } returns 1
+
+        assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
+
+        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("https://www.yahoo.co.jp"))
+
+        verify { barcodeDecoder.invoke(any()) }
+        assertEquals("https://www.yahoo.co.jp", barcodeToolTabViewModel.decodeInputValue().text)
+        assertNotNull(barcodeToolTabViewModel.barcodeImage())
     }
 
     @Test
