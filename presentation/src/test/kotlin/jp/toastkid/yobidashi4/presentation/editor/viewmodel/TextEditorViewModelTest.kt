@@ -5,6 +5,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.getSelectedText
@@ -61,6 +63,7 @@ class TextEditorViewModelTest {
         viewModel = TextEditorViewModel()
 
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
+        every { mainViewModel.darkMode() } returns true
     }
 
     @AfterEach
@@ -249,7 +252,12 @@ class TextEditorViewModelTest {
 
     @Test
     fun visualTransformation() {
-        assertNotEquals(VisualTransformation.None, viewModel.visualTransformation())
+        val visualTransformation = viewModel.visualTransformation()
+        assertNotEquals(VisualTransformation.None, visualTransformation)
+
+        val transformedText = visualTransformation.filter(buildAnnotatedString { append("test") })
+        assertEquals("test[EOF]", transformedText.text.text)
+        assertNotEquals(OffsetMapping.Identity, transformedText.offsetMapping)
     }
 
     @Test
