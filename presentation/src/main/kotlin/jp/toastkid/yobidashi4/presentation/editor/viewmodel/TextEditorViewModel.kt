@@ -142,6 +142,7 @@ class TextEditorViewModel {
         coroutineScope.launch {
             delay(ms)
             adapter.scrollTo(tab.scroll())
+            focusRequester().requestFocus()
         }
     }
 
@@ -162,7 +163,6 @@ class TextEditorViewModel {
 
     fun launchTab(tab: EditorTab) {
         this.tab = tab
-        focusRequester().requestFocus()
 
         val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
