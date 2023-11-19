@@ -13,7 +13,11 @@ class WebIconDownloader {
         faviconFolder: Path,
         targetHost: String?
     ) {
-        val fileExtension = iconUrl.path.split(".").lastOrNull() ?: "png"
+        val fileExtension = (
+                if (iconUrl.path.contains(".") && iconUrl.path.endsWith(".").not())
+                    iconUrl.path.split(".").lastOrNull()
+                else null
+                ) ?: "png"
 
         val iconPath = faviconFolder.resolve("$targetHost.$fileExtension")
         if (Files.exists(iconPath)) {
