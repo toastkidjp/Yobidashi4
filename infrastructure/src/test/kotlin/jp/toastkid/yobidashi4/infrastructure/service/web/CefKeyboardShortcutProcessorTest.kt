@@ -209,4 +209,21 @@ class CefKeyboardShortcutProcessorTest {
         verify(inverse = true) { browser.goForward() }
     }
 
+    @Test
+    fun webSearch() {
+        every { viewModel.webSearch(any()) } just Runs
+        every { selectedText.invoke() } returns "text"
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_SHIFT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_O
+        )
+
+        assertTrue(consumed)
+        verify { viewModel.webSearch(any()) }
+        verify { selectedText.invoke() }
+    }
+
 }
