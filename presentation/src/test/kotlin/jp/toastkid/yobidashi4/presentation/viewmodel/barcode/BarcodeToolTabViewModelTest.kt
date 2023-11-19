@@ -98,6 +98,26 @@ class BarcodeToolTabViewModelTest {
     }
 
     @Test
+    fun setDecodeInputValueIfDecoderReturnsNull() {
+        every { barcodeDecoder.invoke(any()) } returns null
+        mockkStatic(ImageIO::class)
+        val image = mockk<BufferedImage>()
+        every { ImageIO.read(any<URL>()) } returns image
+        every { image.width } returns 1
+        every { image.height } returns 1
+        every { image.getRGB(any(), any()) } returns 1
+
+        assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
+
+        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("https://www.yahoo.co.jp"))
+
+        verify { barcodeDecoder.invoke(any()) }
+        assertEquals("https://www.yahoo.co.jp", barcodeToolTabViewModel.decodeInputValue().text)
+        assertNotNull(barcodeToolTabViewModel.barcodeImage())
+        assertTrue(barcodeToolTabViewModel.decodeResult().isEmpty())
+    }
+
+    @Test
     fun setDecodeInputValueIfReadImageSuccessful() {
         mockkStatic(ImageIO::class)
         val image = mockk<BufferedImage>()
