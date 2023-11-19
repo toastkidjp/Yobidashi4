@@ -192,9 +192,15 @@ class TextEditorViewModelTest {
     @OptIn(ExperimentalFoundationApi::class)
     @Test
     fun initialScroll() {
+        val focusRequester = mockk<FocusRequester>()
+        every { focusRequester.requestFocus() } just Runs
+        viewModel = spyk(viewModel)
+        every { viewModel.focusRequester() } returns focusRequester
+
         viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
 
         assertEquals(0.0f, viewModel.verticalScrollState().offset)
+        verify { focusRequester.requestFocus() }
     }
 
     @Test
@@ -209,17 +215,12 @@ class TextEditorViewModelTest {
         every { tab.caretPosition() } returns 3
         every { tab.editable() } returns true
         every { mainViewModel.finderFlow() } returns emptyFlow()
-        viewModel = spyk(viewModel)
-        val focusRequester = mockk<FocusRequester>()
-        every { viewModel.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
 
         viewModel.launchTab(tab)
 
         verify { tab.getContent() }
         verify { tab.caretPosition() }
         verify { tab.editable() }
-        verify { focusRequester.requestFocus() }
     }
 
     @Test
