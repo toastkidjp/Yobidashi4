@@ -30,4 +30,5 @@ dependencies {
     ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
 
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
+    testImplementation(compose.desktop.uiTestJUnit4)
 }
