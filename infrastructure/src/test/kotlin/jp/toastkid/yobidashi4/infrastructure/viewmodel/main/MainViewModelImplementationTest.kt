@@ -349,6 +349,14 @@ class MainViewModelImplementationTest {
 
     @Test
     fun toggleNarrowWindow() {
+        val size = subject.windowState().size
+        assertEquals(1100.dp, size.width)
+        val height = size.height
+
+        subject.toggleNarrowWindow()
+
+        assertEquals(520.dp, subject.windowState().size.width)
+        assertEquals(height, subject.windowState().size.height)
     }
 
     @Test
