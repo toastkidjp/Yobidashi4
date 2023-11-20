@@ -222,7 +222,7 @@ class CefKeyboardShortcutProcessorTest {
         )
 
         assertTrue(consumed)
-        verify { viewModel.webSearch(any()) }
+        verify { viewModel.webSearch("text") }
         verify { selectedText.invoke() }
     }
 
