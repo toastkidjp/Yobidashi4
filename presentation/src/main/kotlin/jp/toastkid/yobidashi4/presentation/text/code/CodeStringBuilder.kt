@@ -54,12 +54,6 @@ class CodeStringBuilder {
             addStyle(value, str, "true")
             addStyle(value, str, "false")
             addStyle(value, str, Regex("[0-9]*"))
-            addStyle(header, str, Regex("\\n#.*"))
-            addStyle(table, str, Regex("\\n\\|.*"))
-            addStyle(quote, str, Regex("\\n>.*"))
-            addStyle(quote, str, Regex("\\n-.*"))
-            addStyle(annotation, str, Regex("^@[a-zA-Z_]*"))
-            addStyle(comment, str, Regex("^\\s*//.*"))
         }
     }
 
