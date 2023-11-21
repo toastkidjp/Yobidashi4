@@ -226,4 +226,21 @@ class CefKeyboardShortcutProcessorTest {
         verify { selectedText.invoke() }
     }
 
+    @Test
+    fun browseUri() {
+        every { viewModel.browseUri(any()) } just Runs
+        every { selectedText.invoke() } returns "text"
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_ALT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_O
+        )
+
+        assertTrue(consumed)
+        verify { viewModel.browseUri(any()) }
+        verify { selectedText.invoke() }
+    }
+
 }
