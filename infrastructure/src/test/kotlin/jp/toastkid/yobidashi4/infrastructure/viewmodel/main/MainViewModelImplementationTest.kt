@@ -377,15 +377,20 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun openArticleList() {
-    }
-
-    @Test
     fun switchArticleList() {
-    }
+        assertFalse(subject.openArticleList())
 
-    @Test
-    fun hideArticleList() {
+        subject.switchArticleList()
+
+        assertTrue(subject.openArticleList())
+
+        subject.hideArticleList()
+
+        assertFalse(subject.openArticleList())
+
+        subject.hideArticleList()
+
+        assertFalse(subject.openArticleList())
     }
 
     @Test
