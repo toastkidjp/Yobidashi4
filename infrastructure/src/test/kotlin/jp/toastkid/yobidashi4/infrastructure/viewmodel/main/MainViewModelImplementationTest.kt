@@ -19,6 +19,8 @@ import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.attribute.FileTime
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -32,6 +34,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -360,19 +363,17 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun openTab() {
-    }
-
-    @Test
-    fun snackbarHostState() {
-    }
-
-    @Test
     fun showingSnackbar() {
-    }
+        assertFalse(subject.showingSnackbar())
+        assertNull(subject.snackbarHostState().currentSnackbarData)
 
-    @Test
-    fun showSnackbar() {
+        val countDownLatch = CountDownLatch(1)
+        subject.showSnackbar("test", "Test", { countDownLatch.countDown() })
+        subject.snackbarHostState().currentSnackbarData?.performAction()
+        countDownLatch.await(1, TimeUnit.SECONDS)
+
+        assertTrue(subject.showingSnackbar())
+        assertNotNull(subject.snackbarHostState().currentSnackbarData)
     }
 
     @Test
