@@ -6,10 +6,12 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.event.KeyEvent
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
@@ -57,6 +59,7 @@ class CefKeyboardShortcutProcessorTest {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.webSearch(any(), any()) } just Runs
         every { viewModel.browseUri(any()) } just Runs
+        every { webTabViewModel.switchDevTools(any()) } just Runs
     }
 
     @AfterEach
@@ -241,6 +244,23 @@ class CefKeyboardShortcutProcessorTest {
         assertTrue(consumed)
         verify { viewModel.browseUri(any()) }
         verify { selectedText.invoke() }
+    }
+
+    @Test
+    fun switchDevTools() {
+        val webTab = mockk<WebTab>()
+        every { viewModel.currentTab() } returns webTab
+        every { webTab.id() } returns "test-id"
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_K
+        )
+
+        assertTrue(consumed)
+        verify { webTabViewModel.switchDevTools(any()) }
     }
 
 }
