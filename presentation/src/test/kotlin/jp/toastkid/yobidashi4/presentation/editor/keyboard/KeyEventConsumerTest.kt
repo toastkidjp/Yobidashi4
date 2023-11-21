@@ -6,11 +6,15 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -590,6 +594,33 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+    }
+
+    @Test
+    fun switchEditable() {
+        val editorTab = mockk<EditorTab>()
+        every { editorTab.switchEditable() } just Runs
+        every { mainViewModel.currentTab() } returns editorTab
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_N,
+            'N'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("1+2", TextRange(0, 3)),
+            mockk(),
+            {  }
+        )
+
+        assertTrue(consumed)
+        verify { editorTab.switchEditable() }
+        verify { mainViewModel.currentTab() }
     }
 
     @Test
