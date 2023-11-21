@@ -260,7 +260,7 @@ class CefKeyboardShortcutProcessorTest {
         )
 
         assertTrue(consumed)
-        verify { webTabViewModel.switchDevTools(any()) }
+        verify { webTabViewModel.switchDevTools("test-id") }
     }
 
 }
