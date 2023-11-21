@@ -1,12 +1,15 @@
 package jp.toastkid.yobidashi4.presentation.main.drop
 
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.presentation.composable.callComposable
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
@@ -28,6 +31,9 @@ class TextFileReceiverTest {
     @MockK
     private lateinit var path: Path
 
+    @MockK
+    private lateinit var path2: Path
+
     @BeforeEach
     fun setUp() {
         startKoin {
@@ -39,9 +45,11 @@ class TextFileReceiverTest {
         }
 
         MockKAnnotations.init(this)
-        every { mainViewModel.droppedPathFlow() } returns flowOf(path)
+        every { mainViewModel.droppedPathFlow() } returns flowOf(path, path2)
         every { path.fileName } returns path
         every { path.toString() } returns "test.txt"
+        every { path2.fileName } returns path2
+        every { path2.toString() } returns "test.exe"
 
         textFileReceiver = TextFileReceiver(Dispatchers.Unconfined)
     }
@@ -52,12 +60,17 @@ class TextFileReceiverTest {
         clearAllMocks()
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun launch() {
-        callComposable {
-            textFileReceiver.launch()
+        every { mainViewModel.edit(any(), any()) } just Runs
 
-            verify { mainViewModel.droppedPathFlow() }
+        runDesktopComposeUiTest {
+            setContent {
+                textFileReceiver.launch()
+
+                verify { mainViewModel.droppedPathFlow() }
+            }
         }
     }
 
