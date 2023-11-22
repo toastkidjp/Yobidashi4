@@ -128,6 +128,9 @@ class CefKeyboardShortcutProcessor(
                 val region = browser.uiComponent.bounds
                 region.x = p.x
                 region.y = p.y
+                if (region.x == 0 || region.y == 0) {
+                    return true
+                }
 
                 val screenshot = Robot().createScreenCapture(region)
                 ImageIO.write(screenshot, "png", it)
