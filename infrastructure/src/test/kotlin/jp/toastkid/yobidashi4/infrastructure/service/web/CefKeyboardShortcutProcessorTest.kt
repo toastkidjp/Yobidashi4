@@ -9,9 +9,17 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.awt.Component
 import java.awt.event.KeyEvent
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
+import java.nio.file.Files
+import java.nio.file.Path
+import javax.imageio.ImageIO
+import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -280,6 +288,32 @@ class CefKeyboardShortcutProcessorTest {
 
         assertTrue(consumed)
         verify { webTabViewModel wasNot Called }
+    }
+
+    @Test
+    fun printPdf() {
+        mockkStatic(Path::class, Files::class, SwingUtilities::class, ImageIO::class)
+        val path = mockk<Path>()
+        every { Path.of(any<String>()) } returns path
+        every { path.resolve(any<String>()) } returns path
+        every { Files.exists(any()) } returns true
+        every { Files.createDirectories(any()) } returns mockk()
+        every { Files.newOutputStream(any()) } returns ByteArrayOutputStream()
+        every { SwingUtilities.convertPointToScreen(any(), any()) } just Runs
+        every { ImageIO.write(any(), any(), any<OutputStream>()) } returns true
+        val component = mockk<Component>()
+        every { browser.uiComponent } returns component
+        every { component.bounds } returns mockk()
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_SHIFT_DOWN,
+            KeyEvent.VK_P
+        )
+
+        assertTrue(consumed)
+        verify(inverse = true) { ImageIO.write(any(), any<String>(), any<OutputStream>()) }
     }
 
 }
