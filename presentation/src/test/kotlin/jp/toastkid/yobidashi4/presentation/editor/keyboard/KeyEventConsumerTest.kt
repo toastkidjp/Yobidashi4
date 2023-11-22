@@ -673,6 +673,30 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun browseUri() {
+        every { mainViewModel.browseUri(any()) } just Runs
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_O,
+            'O'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test", TextRange(0, 4)),
+            mockk(),
+            {  }
+        )
+
+        assertTrue(consumed)
+        verify { mainViewModel.browseUri(any()) }
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
