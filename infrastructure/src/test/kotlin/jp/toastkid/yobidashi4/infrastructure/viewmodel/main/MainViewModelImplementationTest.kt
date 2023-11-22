@@ -71,6 +71,7 @@ class MainViewModelImplementationTest {
         }
         every { setting.darkMode() } returns false
         every { setting.setDarkMode(any()) } just Runs
+        every { topArticleLoaderService.invoke() } returns listOf(mockk(), mockk())
 
         mockkStatic(Desktop::class)
         every { Desktop.getDesktop() } returns desktop
@@ -395,10 +396,17 @@ class MainViewModelImplementationTest {
 
     @Test
     fun articles() {
+        val articles = subject.articles()
+
+        assertTrue(articles.isEmpty())
     }
 
     @Test
     fun reloadAllArticle() {
+        subject.reloadAllArticle()
+
+        val articles = subject.articles()
+        assertEquals(2, articles.size)
     }
 
     @Test
