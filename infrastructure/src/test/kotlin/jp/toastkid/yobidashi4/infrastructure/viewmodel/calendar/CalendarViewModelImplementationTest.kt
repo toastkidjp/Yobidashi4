@@ -33,6 +33,17 @@ class CalendarViewModelImplementationTest {
     }
 
     @Test
+    fun plusMonths12() {
+        val year = viewModel.localDate().year
+        val localDate = viewModel.localDate().month
+
+        viewModel.plusMonths(12)
+
+        assertEquals(localDate, viewModel.localDate().month)
+        assertEquals(year + 1, viewModel.localDate().year)
+    }
+
+    @Test
     fun setYear() {
         viewModel.setYear(2022)
 
