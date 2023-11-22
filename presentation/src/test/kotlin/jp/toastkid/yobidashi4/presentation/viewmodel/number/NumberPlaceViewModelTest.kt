@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.viewmodel.number
 import androidx.compose.runtime.mutableStateOf
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -109,6 +110,17 @@ class NumberPlaceViewModelTest {
 
         verify { anyConstructed<GameFileProvider>().invoke() }
         verify { repository.delete(any()) }
+    }
+
+    @Test
+    fun deleteGameProvidedNullCase() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns null
+
+        numberPlaceViewModel.deleteGame()
+
+        verify { anyConstructed<GameFileProvider>().invoke() }
+        verify { repository wasNot called }
     }
 
 }
