@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
+import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -11,6 +12,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.event.KeyEvent
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
@@ -262,6 +264,22 @@ class CefKeyboardShortcutProcessorTest {
         assertTrue(consumed)
         verify { webTabViewModel.switchDevTools("test-id") }
         verify { webTab.id() }
+    }
+
+    @Test
+    fun noopSwitchDevTools() {
+        val webTab = mockk<Tab>()
+        every { viewModel.currentTab() } returns webTab
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_K
+        )
+
+        assertTrue(consumed)
+        verify { webTabViewModel wasNot Called }
     }
 
 }
