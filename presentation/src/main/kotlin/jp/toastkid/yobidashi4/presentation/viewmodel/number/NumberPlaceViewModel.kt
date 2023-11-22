@@ -84,4 +84,11 @@ class NumberPlaceViewModel : KoinComponent {
         return _game.value.pickSolving(rowIndex, columnIndex)
     }
 
+    fun deleteGame() {
+        val file = GameFileProvider().invoke()
+        file?.let {
+            gameRepository.delete(file)
+        }
+    }
+
 }
