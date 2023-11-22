@@ -7,6 +7,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -621,6 +622,30 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
         verify { editorTab.switchEditable() }
         verify { mainViewModel.currentTab() }
+    }
+
+    @Test
+    fun openUrl() {
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_O,
+            'O'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test", TextRange(0, 4)),
+            mockk(),
+            {  }
+        )
+
+        assertTrue(consumed)
+        verify { mainViewModel.openUrl(any(), any()) }
     }
 
     @Test
