@@ -41,6 +41,7 @@ class NumberPlaceViewModelTest {
         }
 
         every { repository.save(any(), any()) } just Runs
+        every { repository.delete(any()) } just Runs
 
         numberPlaceViewModel = NumberPlaceViewModel()
         numberPlaceViewModel.initialize(20)
@@ -98,4 +99,16 @@ class NumberPlaceViewModelTest {
     fun pickSolving() {
         numberPlaceViewModel.pickSolving(0, 0)
     }
+
+    @Test
+    fun deleteGame() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+
+        numberPlaceViewModel.deleteGame()
+
+        every { anyConstructed<GameFileProvider>().invoke() }
+        every { repository.delete(any()) }
+    }
+
 }
