@@ -121,7 +121,7 @@ fun NumberPlaceView() {
                     .verticalScroll(rememberScrollState())
                     .padding(8.dp)
             ) {
-                AppBarContent(setting, fontSize, renewGame)
+                AppBarContent(setting, fontSize, { viewModel.deleteGame() }, renewGame)
 
                 HorizontalDivider(0)
 
@@ -150,7 +150,7 @@ fun NumberPlaceView() {
                                         open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
                                             showMessageSnackbar(koin.mainViewModel, done) {
-                                                deleteGame()
+                                                viewModel.deleteGame()
                                                 viewModel.initializeSolving()
                                                 viewModel.initialize(setting.getMaskingCount())
                                                 viewModel.saveCurrentGame()
@@ -241,13 +241,6 @@ fun NumberPlaceView() {
     })
 }
 
-private fun deleteGame() {
-    val file = GameFileProvider().invoke()
-    file?.let {
-        object : KoinComponent{ val repo: GameRepository by inject() }.repo.delete(file)
-    }
-}
-
 private fun showMessageSnackbar(
     mainViewModel: MainViewModel?,
     done: Boolean,
@@ -281,6 +274,7 @@ private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.d
 private fun AppBarContent(
     setting: Setting,
     fontSize: TextUnit,
+    deleteGame: () -> Unit,
     renewGame: () -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
