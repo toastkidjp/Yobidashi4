@@ -107,8 +107,8 @@ class NumberPlaceViewModelTest {
 
         numberPlaceViewModel.deleteGame()
 
-        every { anyConstructed<GameFileProvider>().invoke() }
-        every { repository.delete(any()) }
+        verify { anyConstructed<GameFileProvider>().invoke() }
+        verify { repository.delete(any()) }
     }
 
 }
