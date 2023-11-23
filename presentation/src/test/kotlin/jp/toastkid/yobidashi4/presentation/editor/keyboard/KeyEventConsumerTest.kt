@@ -742,4 +742,26 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun quoteSelectedText() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_Q,
+            'Q'
+        )
+
+        val text = "test\ntest2"
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(text, TextRange(0, text.length)),
+            mockk(),
+            { assertEquals("> test\n> test2", it.getSelectedText().text) }
+        )
+
+        assertTrue(consumed)
+    }
+
 }
