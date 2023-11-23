@@ -790,4 +790,28 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun noopQuoteInsertion() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns null
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_Q,
+            'Q'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("", TextRange(0)),
+            mockk(),
+            {  }
+        )
+
+        assertFalse(consumed)
+    }
+
 }
