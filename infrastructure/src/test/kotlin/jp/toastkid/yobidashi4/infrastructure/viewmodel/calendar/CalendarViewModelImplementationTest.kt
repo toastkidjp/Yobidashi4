@@ -93,4 +93,14 @@ class CalendarViewModelImplementationTest {
 
         assertEquals("2023", viewModel.yearInput().text)
     }
+
+    @Test
+    fun setYearInputIrregularCase() {
+        val year = viewModel.localDate().year
+
+        viewModel.setYearInput(TextFieldValue("TEST"))
+
+        assertEquals(year, viewModel.localDate().year)
+    }
+
 }
