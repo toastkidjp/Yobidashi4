@@ -107,13 +107,6 @@ class CefKeyboardShortcutProcessor(
             viewModel.browseUri(selectedText())
             return true
         }
-        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN
-            && keyCode == KeyEvent.VK_K) {
-            (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
-                webTabViewModel.switchDevTools(id)
-            }
-            return true
-        }
         if (modifier == EventFlags.EVENTFLAG_SHIFT_DOWN
             && keyCode == KeyEvent.VK_P) {
             val folder = Path.of("user/screenshot")
