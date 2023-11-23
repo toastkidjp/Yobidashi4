@@ -67,6 +67,17 @@ class CalendarViewModelImplementationTest {
     }
 
     @Test
+    fun moveToCurrentMonthWhichContainsMoveYear() {
+        viewModel.moveMonth(1)
+        viewModel.plusMonths(-1)
+        val localDate = viewModel.localDate().year
+
+        viewModel.moveToCurrentMonth()
+
+        assertEquals(localDate + 1, viewModel.localDate().year)
+    }
+
+    @Test
     fun getFirstDay() {
         assertEquals(1, viewModel.getFirstDay().dayOfMonth)
     }
