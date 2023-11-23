@@ -13,10 +13,12 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -759,6 +761,30 @@ class KeyEventConsumerTest {
             TextFieldValue(text, TextRange(0, text.length)),
             mockk(),
             { assertEquals("> test\n> test2", it.getSelectedText().text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
+    fun quoteInsertion() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_Q,
+            'Q'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("", TextRange(0)),
+            mockk(),
+            { assertEquals("> test", it.text) }
         )
 
         assertTrue(consumed)
