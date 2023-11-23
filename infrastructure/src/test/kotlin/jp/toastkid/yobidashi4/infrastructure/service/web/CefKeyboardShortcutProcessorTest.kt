@@ -257,24 +257,6 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
-    fun switchDevTools() {
-        val webTab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns webTab
-        every { webTab.id() } returns "test-id"
-
-        val consumed = subject.invoke(
-            browser,
-            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
-            EventFlags.EVENTFLAG_CONTROL_DOWN,
-            KeyEvent.VK_K
-        )
-
-        assertTrue(consumed)
-        verify { webTabViewModel.switchDevTools("test-id") }
-        verify { webTab.id() }
-    }
-
-    @Test
     fun noopSwitchDevTools() {
         val webTab = mockk<Tab>()
         every { viewModel.currentTab() } returns webTab
@@ -314,6 +296,24 @@ class CefKeyboardShortcutProcessorTest {
 
         assertTrue(consumed)
         verify(inverse = true) { ImageIO.write(any(), any<String>(), any<OutputStream>()) }
+    }
+
+    @Test
+    fun switchDevTools() {
+        val webTab = mockk<WebTab>()
+        every { viewModel.currentTab() } returns webTab
+        every { webTab.id() } returns "test-id"
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_F12
+        )
+
+        assertTrue(consumed)
+        verify { webTabViewModel.switchDevTools("test-id") }
+        verify { webTab.id() }
     }
 
 }
