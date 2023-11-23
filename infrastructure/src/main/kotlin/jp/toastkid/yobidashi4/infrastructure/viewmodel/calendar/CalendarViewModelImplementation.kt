@@ -2,9 +2,18 @@ package jp.toastkid.yobidashi4.infrastructure.viewmodel.calendar
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
+import java.time.DayOfWeek
 import java.time.LocalDate
+import jp.toastkid.yobidashi4.domain.model.calendar.Week
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
+import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.annotation.Single
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @Single
 class CalendarViewModelImplementation : CalendarViewModel {
@@ -56,6 +65,56 @@ class CalendarViewModelImplementation : CalendarViewModel {
         textFieldValue.text.toIntOrNull()?.let {
             setYear(it)
         }
+    }
+
+    override fun isToday(date: Int): Boolean {
+        val value = localDate()
+        return value.year == LocalDate.now().year && value.month == LocalDate.now().month && LocalDate.now().dayOfMonth == date
+    }
+
+    override fun openDateArticle(date: Int, onBackground: Boolean) {
+        val koin = object : KoinComponent {
+            val viewModel: MainViewModel by inject()
+            val setting: Setting by inject()
+        }
+        koin.viewModel.edit(
+            koin.setting.articleFolderPath().resolve(
+                "${ArticleTitleGenerator().invoke(localDate().withDayOfMonth(date))}.md"
+            ),
+            onBackground
+        )
+    }
+
+    override fun makeMonth(week: Array<DayOfWeek>): MutableList<Week> {
+        val firstDay = localDateState.value.withDayOfMonth(1)
+
+        val userOffDayService = object : KoinComponent { val userOffDayService: UserOffDayService by inject() }.userOffDayService
+        val offDayFinderService = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
+
+        var hasStarted1 = false
+        var current1 = firstDay
+        val weeks = mutableListOf<Week>()
+        for (i in 0..5) {
+            val w = Week()
+            week.forEach { dayOfWeek ->
+                if (hasStarted1.not() && dayOfWeek != firstDay.dayOfWeek) {
+                    w.addEmpty()
+                    return@forEach
+                }
+                hasStarted1 = true
+
+                if (firstDay.month != current1.month) {
+                    w.addEmpty()
+                } else {
+                    w.add(current1, offDayFinderService.find { it.month == current1.month.value && it.day == current1.dayOfMonth })
+                }
+                current1 = current1.plusDays(1L)
+            }
+            if (w.anyApplicableDate()) {
+                weeks.add(w)
+            }
+        }
+        return weeks
     }
 
 }
