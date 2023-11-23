@@ -1,9 +1,13 @@
 package jp.toastkid.yobidashi4.infrastructure.viewmodel.calendar
 
 import androidx.compose.ui.text.input.TextFieldValue
+import java.time.LocalDate
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -101,6 +105,23 @@ class CalendarViewModelImplementationTest {
         viewModel.setYearInput(TextFieldValue("TEST"))
 
         assertEquals(year, viewModel.localDate().year)
+    }
+
+    @Test
+    fun isToday() {
+        assertAll(
+            { assertTrue(viewModel.isToday(LocalDate.now().dayOfMonth)) },
+            { assertFalse(viewModel.isToday(LocalDate.now().plusDays(1).dayOfMonth)) },
+            {
+                viewModel.plusMonths(1)
+                assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
+            },
+            {
+                viewModel.moveToCurrentMonth()
+                viewModel.setYear(2020)
+                assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
+            }
+        )
     }
 
 }
