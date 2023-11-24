@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.aggregation
 
 class CompoundInterestCalculationResult : AggregationResult {
 
-    private val items = mutableListOf<Triple<Int, Int, Int>>()
+    private val items = mutableListOf<Triple<Int, Long, Long>>()
 
     override fun header(): Array<Any> {
         return arrayOf("Year", "Single", "Compound")
@@ -13,6 +13,9 @@ class CompoundInterestCalculationResult : AggregationResult {
     }
 
     override fun columnClass(columnIndex: Int): Class<out Any> {
+        if (columnIndex == 1 || columnIndex == 2) {
+            return Long::class.java
+        }
         return Int::class.java
     }
 
@@ -24,11 +27,11 @@ class CompoundInterestCalculationResult : AggregationResult {
         return items.isEmpty()
     }
 
-    fun get(year: Int): Triple<Int, Int, Int>? {
+    fun get(year: Int): Triple<Int, Long, Long>? {
         return items.firstOrNull { it.first == year }
     }
 
-    fun put(year: Int, singleCase: Int, compoundCase: Int) {
+    fun put(year: Int, singleCase: Long, compoundCase: Long) {
         items.add(Triple(year, singleCase, compoundCase))
     }
 
