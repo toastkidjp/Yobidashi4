@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.domain.service.tool.compound
 
 import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
 import kotlin.math.pow
-import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class CompoundInterestCalculatorService {
 
@@ -22,7 +22,7 @@ class CompoundInterestCalculatorService {
                     if (compound.isNaN()) {
                         return@forEachIndexed
                     }
-                    result.put(index + 1, single.toInt(), compound.roundToInt())
+                    result.put(index + 1, single.toLong(), compound.roundToLong())
                 }
         return result
     }
