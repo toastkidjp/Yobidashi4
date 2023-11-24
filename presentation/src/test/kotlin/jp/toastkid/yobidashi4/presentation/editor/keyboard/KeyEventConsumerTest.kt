@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -812,6 +813,32 @@ class KeyEventConsumerTest {
         )
 
         assertFalse(consumed)
+    }
+
+    @Test
+    fun pasteDecoratedLink() {
+        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
+        val decoratedLink = "[test](https://test.yahoo.com)"
+        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_L,
+            'L'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("", TextRange(0)),
+            mockk(),
+            { assertEquals(decoratedLink, it.text) }
+        )
+
+        assertTrue(consumed)
     }
 
 }
