@@ -21,7 +21,7 @@ internal class CompoundInterestCalculatorServiceTest {
         val result = compoundInterestCalculatorService.invoke(120000, 0.01, 10)
         assertEquals(3, result.header().size)
         assertEquals(10, result.itemArrays().size)
-        assertEquals(Int::class.java, result.columnClass(1))
+        assertEquals(Long::class.java, result.columnClass(1))
         assertNotNull(result.title())
         assertFalse(result.isEmpty())
 
