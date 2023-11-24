@@ -52,7 +52,7 @@ internal fun CompoundInterestCalculatorView() {
                     firstInput.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Installment") },
+                    label = { Text("Installment", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
@@ -78,7 +78,7 @@ internal fun CompoundInterestCalculatorView() {
                     secondInput.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Annual interest") },
+                    label = { Text("Annual interest", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
@@ -103,7 +103,7 @@ internal fun CompoundInterestCalculatorView() {
                     thirdInput.value,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Year") },
+                    label = { Text("Year", color = MaterialTheme.colors.secondary) },
                     onValueChange = { newValue ->
                         thirdInput.value = TextFieldValue(newValue.text, newValue.selection, newValue.composition)
 
