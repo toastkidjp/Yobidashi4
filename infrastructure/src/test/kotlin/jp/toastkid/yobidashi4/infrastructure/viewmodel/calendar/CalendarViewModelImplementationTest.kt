@@ -12,6 +12,7 @@ import io.mockk.verify
 import java.nio.file.Path
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
@@ -36,6 +37,9 @@ class CalendarViewModelImplementationTest {
     @MockK
     private lateinit var setting: Setting
 
+    @MockK
+    private lateinit var userOffDayService: UserOffDayService
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -44,6 +48,7 @@ class CalendarViewModelImplementationTest {
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier=null) { setting } bind(Setting::class)
+                    single(qualifier=null) { userOffDayService } bind(UserOffDayService::class)
                 }
             )
         }
@@ -51,6 +56,7 @@ class CalendarViewModelImplementationTest {
         val path = mockk<Path>()
         every { setting.articleFolderPath() } returns path
         every { path.resolve(any<String>()) } returns mockk()
+        every { userOffDayService.findBy(any()) } returns emptySet()
 
         viewModel = CalendarViewModelImplementation()
     }
@@ -177,6 +183,12 @@ class CalendarViewModelImplementationTest {
                 verify { mainViewModel.edit(any(), false) }
             }
         )
+    }
+
+    @Test
+    fun makeMonth() {
+        assertTrue(viewModel.makeMonth(emptyArray()).isEmpty())
+        verify { userOffDayService.findBy(any()) }
     }
 
 }
