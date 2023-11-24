@@ -60,6 +60,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     private val topArticleLoaderService: TopArticleLoaderService by inject()
 
+    private val webViewPool: WebViewPool by inject()
+
     private val _darkMode = mutableStateOf(setting.darkMode())
 
     override fun darkMode(): Boolean {
@@ -151,7 +153,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _selected.value = max(0, _selected.value - 1)
 
         if (targetTab is WebTab) {
-            object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.dispose(targetTab.id())
+            webViewPool.dispose(targetTab.id())
         }
     }
 
@@ -242,7 +244,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
                 continue
             }
             if (next is WebTab) {
-                object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool.dispose(next.id())
+                webViewPool.dispose(next.id())
             }
             iterator.remove()
         }
@@ -253,7 +255,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         val targetIds = _tabs.filterIsInstance<WebTab>().map { it.id() }
         _tabs.clear()
         _selected.value = -1
-        val webViewPool = object : KoinComponent { val webViewPool: WebViewPool by inject() }.webViewPool
         targetIds.forEach(webViewPool::dispose)
     }
 
