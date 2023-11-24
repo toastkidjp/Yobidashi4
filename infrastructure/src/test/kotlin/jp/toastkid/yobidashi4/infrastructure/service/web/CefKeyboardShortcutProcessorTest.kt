@@ -265,7 +265,7 @@ class CefKeyboardShortcutProcessorTest {
             browser,
             CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
             EventFlags.EVENTFLAG_CONTROL_DOWN,
-            KeyEvent.VK_K
+            KeyEvent.VK_F12
         )
 
         assertTrue(consumed)
