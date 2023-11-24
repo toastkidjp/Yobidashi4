@@ -23,10 +23,12 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
@@ -56,6 +58,9 @@ class MainViewModelImplementationTest {
     @MockK
     private lateinit var desktop: Desktop
 
+    @MockK
+    private lateinit var webViewPool: WebViewPool
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -66,12 +71,14 @@ class MainViewModelImplementationTest {
                 module {
                     single(qualifier = null) { setting } bind(Setting::class)
                     single(qualifier = null) { topArticleLoaderService } bind(TopArticleLoaderService::class)
+                    single(qualifier = null) { webViewPool } bind(WebViewPool::class)
                 }
             )
         }
         every { setting.darkMode() } returns false
         every { setting.setDarkMode(any()) } just Runs
         every { topArticleLoaderService.invoke() } returns listOf(mockk(), mockk())
+        every { webViewPool.dispose(any()) } just Runs
 
         mockkStatic(Desktop::class)
         every { Desktop.getDesktop() } returns desktop
@@ -231,6 +238,28 @@ class MainViewModelImplementationTest {
 
     @Test
     fun removeTabAt() {
+        val tab = mockk<Tab>()
+        every { tab.closeable() } returns false
+        subject.openTab(tab)
+        val webTab = mockk<WebTab>()
+        every { webTab.closeable() } returns true
+        every { webTab.id() } returns "test"
+        subject.openTab(webTab)
+        subject.openTab(mockk<EditorTab>())
+
+        subject.removeTabAt(0)
+
+        assertEquals(3, subject.tabs.size)
+
+        subject.setSelectedIndex(2)
+        subject.removeTabAt(1)
+
+        assertEquals(2, subject.tabs.size)
+        assertEquals(1, subject.selected.value)
+        assertTrue(subject.currentTab() is EditorTab)
+        verify { tab.closeable() }
+        verify { webTab.closeable() }
+        verify { webViewPool.dispose("test") }
     }
 
     @Test
