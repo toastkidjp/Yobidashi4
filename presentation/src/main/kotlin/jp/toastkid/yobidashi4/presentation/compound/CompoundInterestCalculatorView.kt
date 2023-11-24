@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -134,9 +135,11 @@ internal fun CompoundInterestCalculatorView() {
                     }
 
                     items(result.value.itemArrays().toList()) { columns ->
-                        Row(modifier = Modifier.animateItemPlacement()) {
-                            columns.forEach {
-                                Text(it.toString(), modifier = Modifier.weight(1f))
+                        SelectionContainer {
+                            Row(modifier = Modifier.animateItemPlacement()) {
+                                columns.forEach {
+                                    Text(it.toString(), modifier = Modifier.weight(1f))
+                                }
                             }
                         }
                     }
