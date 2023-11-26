@@ -77,6 +77,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun backgroundImage(): ImageBitmap = backgroundImage.value
 
+    override fun showBackgroundImage(): Boolean {
+        return backgroundImage().height != 0
+    }
+
     override fun loadBackgroundImage() {
         val imageFolder = Path.of("user/background")
         if (Files.exists(imageFolder).not()) {

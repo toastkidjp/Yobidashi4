@@ -29,7 +29,7 @@ fun MainScaffold() {
         }
     ) {
         Box {
-            if (mainViewModel.backgroundImage().height != 0) {
+            if (mainViewModel.showBackgroundImage()) {
                 Image(
                     mainViewModel.backgroundImage(),
                     "Background image",

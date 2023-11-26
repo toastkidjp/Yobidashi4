@@ -31,6 +31,7 @@ interface MainViewModel {
 
     fun switchDarkMode()
     fun backgroundImage(): ImageBitmap
+    fun showBackgroundImage(): Boolean
     fun loadBackgroundImage()
     fun setSelectedIndex(newIndex: Int)
     fun openTab(tab: Tab)
