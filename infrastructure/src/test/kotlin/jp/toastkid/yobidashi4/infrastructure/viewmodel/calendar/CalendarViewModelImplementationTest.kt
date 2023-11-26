@@ -10,6 +10,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Path
+import java.time.DayOfWeek
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
@@ -186,8 +187,14 @@ class CalendarViewModelImplementationTest {
     }
 
     @Test
-    fun makeMonth() {
+    fun makeMonthPassedEmpty() {
         assertTrue(viewModel.makeMonth(emptyArray()).isEmpty())
+        verify { userOffDayService.findBy(any()) }
+    }
+
+    @Test
+    fun makeMonth() {
+        assertTrue(viewModel.makeMonth(DayOfWeek.values()).isNotEmpty())
         verify { userOffDayService.findBy(any()) }
     }
 
