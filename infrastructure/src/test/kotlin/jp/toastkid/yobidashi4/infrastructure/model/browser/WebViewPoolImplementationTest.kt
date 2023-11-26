@@ -129,4 +129,19 @@ class WebViewPoolImplementationTest {
         verify(exactly = 3) { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
     }
+
+    @Test
+    fun noopDisposeAll() {
+        every { CefApp.getState() } returns CefApp.CefAppState.NONE
+
+        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+        browserPoolImplementation.component("2", "https://www.yahoo.co.jp")
+        browserPoolImplementation.component("3", "https://www.yahoo.co.jp")
+
+        browserPoolImplementation.disposeAll()
+
+        verify(inverse = true) { cefBrowser.close(any()) }
+        verify(inverse = true) { CefApp.getInstance().dispose() }
+    }
+
 }
