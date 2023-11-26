@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.tool.compound
 
 import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
-import kotlin.math.pow
 import kotlin.math.roundToLong
 
 class CompoundInterestCalculatorService {
@@ -10,15 +9,17 @@ class CompoundInterestCalculatorService {
      *
      * @param annualInterest If you want to calculate 5%, you should pass 0.05
      */
-    operator fun invoke(installment: Int, annualInterest: Double, year: Int): CompoundInterestCalculationResult {
+    operator fun invoke(input: CompoundInterestCalculatorInput): CompoundInterestCalculationResult {
+        val (capital, installment, annualInterest, year) = input
         val result = CompoundInterestCalculationResult()
-        var single = 0.0
+        var single = capital
+        var compound = capital
         (1 .. year)
                 .map { installment to installment }
                 .forEachIndexed { index, _ ->
-                    single += (installment * (1 + annualInterest))
-                    val coefficient = ((1 + annualInterest).pow(index + 1) - 1) / annualInterest
-                    val compound =  (installment.toDouble()) * coefficient
+                    single += (installment * (1 + annualInterest)) + (capital * annualInterest)
+                    compound += installment + (compound * annualInterest)
+
                     if (compound.isNaN()) {
                         return@forEachIndexed
                     }

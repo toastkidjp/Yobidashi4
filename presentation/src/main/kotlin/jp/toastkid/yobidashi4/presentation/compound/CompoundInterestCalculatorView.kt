@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
+import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -42,6 +43,7 @@ internal fun CompoundInterestCalculatorView() {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
+        val capitalInput = remember { mutableStateOf(TextFieldValue("0")) }
         val firstInput = remember { mutableStateOf(TextFieldValue("40000")) }
         val secondInput = remember { mutableStateOf(TextFieldValue("0.03")) }
         val thirdInput = remember { mutableStateOf(TextFieldValue("20")) }
@@ -49,6 +51,32 @@ internal fun CompoundInterestCalculatorView() {
         Row {
             Column {
                 Text("Compound Interest calculator", modifier = Modifier.padding(8.dp))
+
+                TextField(
+                    capitalInput.value,
+                    maxLines = 1,
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    label = { Text("Installment", color = MaterialTheme.colors.secondary) },
+                    onValueChange = {
+                        capitalInput.value = TextFieldValue(it.text, it.selection, it.composition)
+
+                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
+                            result.value = calculator.invoke(it)
+                        }
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painterResource("images/icon/ic_clear_form.xml"),
+                            contentDescription = "Clear input.",
+                            tint = MaterialTheme.colors.primary,
+                            modifier = Modifier.clickable {
+                                firstInput.value = TextFieldValue()
+                            }
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+
                 TextField(
                     firstInput.value,
                     maxLines = 1,
@@ -57,9 +85,8 @@ internal fun CompoundInterestCalculatorView() {
                     onValueChange = {
                         firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        convert(firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let { converted ->
-                            val (installment, annualRate, year) = converted
-                            result.value = calculator.invoke(installment, annualRate, year)
+                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
+                            result.value = calculator.invoke(it)
                         }
                     },
                     trailingIcon = {
@@ -83,9 +110,8 @@ internal fun CompoundInterestCalculatorView() {
                     onValueChange = {
                         secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
 
-                        convert(firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            val (installment, annualRate, year) = it
-                            result.value = calculator.invoke(installment, annualRate, year)
+                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
+                            result.value = calculator.invoke(it)
                         }
                     },
                     trailingIcon = {
@@ -108,9 +134,8 @@ internal fun CompoundInterestCalculatorView() {
                     onValueChange = { newValue ->
                         thirdInput.value = TextFieldValue(newValue.text, newValue.selection, newValue.composition)
 
-                        convert(firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            val (installment, annualRate, year) = it
-                            result.value = calculator.invoke(installment, annualRate, year)
+                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
+                            result.value = calculator.invoke(it)
                         }
                     },
                     trailingIcon = {
@@ -151,17 +176,3 @@ internal fun CompoundInterestCalculatorView() {
     }
 
 }
-
-private fun convert(
-    first: String?,
-    second: String?,
-    third: String?,
-): Triple<Int, Double, Int>? {
-    val installment = first?.replace(REPLACE_TARGET, "")?.toIntOrNull() ?: return null
-    val annualInterest = second?.replace(REPLACE_TARGET, "")?.toDoubleOrNull() ?: return null
-    val year = third?.replace(REPLACE_TARGET, "")?.toIntOrNull() ?: return null
-
-    return Triple(installment, annualInterest, year)
-}
-
-private const val REPLACE_TARGET = ","
