@@ -457,6 +457,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun switchFind() {
         openFind.value = openFind.value.not()
+
+        findInput.value = TextFieldValue()
     }
 
     override fun inputValue() = findInput.value
