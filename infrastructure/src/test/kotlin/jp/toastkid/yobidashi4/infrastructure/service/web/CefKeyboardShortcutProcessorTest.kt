@@ -347,4 +347,20 @@ class CefKeyboardShortcutProcessorTest {
         verify { browser.zoomLevel = 0.25 }
     }
 
+    @Test
+    fun zoomOut() {
+        every { browser.zoomLevel } returns 0.25
+        every { browser.zoomLevel = any() } just Runs
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            189
+        )
+
+        assertTrue(consumed)
+        verify { browser.zoomLevel = 0.0 }
+    }
+
 }
