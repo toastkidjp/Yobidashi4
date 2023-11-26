@@ -17,9 +17,7 @@ class CompoundInterestCalculatorViewModel {
     fun setCapitalInput(value: TextFieldValue) {
         capitalInput.value = value
 
-        CompoundInterestCalculatorInput.from(capitalInput.value.text,  installmentInput.value.text, annualInterestInput.value.text, yearInput.value.text)?.let {
-            result.value = calculator.invoke(it)
-        }
+        calculate()
     }
 
     private val installmentInput = mutableStateOf(TextFieldValue("40000"))
@@ -29,9 +27,7 @@ class CompoundInterestCalculatorViewModel {
     fun setInstallmentInput(value: TextFieldValue) {
         installmentInput.value = value
 
-        CompoundInterestCalculatorInput.from(capitalInput.value.text,  installmentInput.value.text, annualInterestInput.value.text, yearInput.value.text)?.let {
-            result.value = calculator.invoke(it)
-        }
+        calculate()
     }
 
     private val annualInterestInput = mutableStateOf(TextFieldValue("0.03"))
@@ -41,9 +37,7 @@ class CompoundInterestCalculatorViewModel {
     fun setAnnualInterestInput(value: TextFieldValue) {
         annualInterestInput.value = value
 
-        CompoundInterestCalculatorInput.from(capitalInput.value.text,  installmentInput.value.text, annualInterestInput.value.text, yearInput.value.text)?.let {
-            result.value = calculator.invoke(it)
-        }
+        calculate()
     }
 
     private val yearInput = mutableStateOf(TextFieldValue("20"))
@@ -53,13 +47,22 @@ class CompoundInterestCalculatorViewModel {
     fun setYearInput(value: TextFieldValue) {
         yearInput.value = value
 
-        CompoundInterestCalculatorInput.from(capitalInput.value.text,  installmentInput.value.text, annualInterestInput.value.text, yearInput.value.text)?.let {
-            result.value = calculator.invoke(it)
-        }
+        calculate()
     }
 
     private val result = mutableStateOf(CompoundInterestCalculationResult())
 
     fun result() = result.value
+
+    private fun calculate() {
+        CompoundInterestCalculatorInput.from(
+            capitalInput.value.text,
+            installmentInput.value.text,
+            annualInterestInput.value.text,
+            yearInput.value.text
+        )?.let {
+            result.value = calculator.invoke(it)
+        }
+    }
 
 }
