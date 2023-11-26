@@ -21,7 +21,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,39 +29,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
-import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
-import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
+import jp.toastkid.yobidashi4.presentation.compound.viewmodel.CompoundInterestCalculatorViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CompoundInterestCalculatorView() {
-    val calculator = remember { CompoundInterestCalculatorService() }
+    val viewModel = remember { CompoundInterestCalculatorViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val capitalInput = remember { mutableStateOf(TextFieldValue("0")) }
-        val firstInput = remember { mutableStateOf(TextFieldValue("40000")) }
-        val secondInput = remember { mutableStateOf(TextFieldValue("0.03")) }
-        val thirdInput = remember { mutableStateOf(TextFieldValue("20")) }
-        val result = remember { mutableStateOf(CompoundInterestCalculationResult()) }
         Row {
             Column {
                 Text("Compound Interest calculator", modifier = Modifier.padding(8.dp))
 
                 TextField(
-                    capitalInput.value,
+                    viewModel.capitalInput(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Installment", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        capitalInput.value = TextFieldValue(it.text, it.selection, it.composition)
-
-                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            result.value = calculator.invoke(it)
-                        }
+                        viewModel.setCapitalInput(TextFieldValue(it.text, it.selection, it.composition))
                     },
                     trailingIcon = {
                         Icon(
@@ -70,7 +58,7 @@ internal fun CompoundInterestCalculatorView() {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                firstInput.value = TextFieldValue()
+                                viewModel.setCapitalInput(TextFieldValue())
                             }
                         )
                     },
@@ -78,16 +66,12 @@ internal fun CompoundInterestCalculatorView() {
                 )
 
                 TextField(
-                    firstInput.value,
+                    viewModel.installmentInput(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Installment", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
-
-                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            result.value = calculator.invoke(it)
-                        }
+                        viewModel.setInstallmentInput(TextFieldValue(it.text, it.selection, it.composition))
                     },
                     trailingIcon = {
                         Icon(
@@ -95,7 +79,7 @@ internal fun CompoundInterestCalculatorView() {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                firstInput.value = TextFieldValue()
+                                viewModel.setInstallmentInput(TextFieldValue())
                             }
                         )
                     },
@@ -103,16 +87,12 @@ internal fun CompoundInterestCalculatorView() {
                 )
 
                 TextField(
-                    secondInput.value,
+                    viewModel.annualInterestInput(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Annual interest", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        secondInput.value = TextFieldValue(it.text, it.selection, it.composition)
-
-                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            result.value = calculator.invoke(it)
-                        }
+                        viewModel.setAnnualInterestInput(TextFieldValue(it.text, it.selection, it.composition))
                     },
                     trailingIcon = {
                         Icon(
@@ -120,23 +100,19 @@ internal fun CompoundInterestCalculatorView() {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                secondInput.value = TextFieldValue()
+                                viewModel.setAnnualInterestInput(TextFieldValue())
                             }
                         )
                     }
                 )
 
                 TextField(
-                    thirdInput.value,
+                    viewModel.yearInput(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Year", color = MaterialTheme.colors.secondary) },
                     onValueChange = { newValue ->
-                        thirdInput.value = TextFieldValue(newValue.text, newValue.selection, newValue.composition)
-
-                        CompoundInterestCalculatorInput.from(capitalInput.value.text,  firstInput.value.text, secondInput.value.text, thirdInput.value.text)?.let {
-                            result.value = calculator.invoke(it)
-                        }
+                        viewModel.setYearInput(TextFieldValue(newValue.text, newValue.selection, newValue.composition))
                     },
                     trailingIcon = {
                         Icon(
@@ -144,7 +120,7 @@ internal fun CompoundInterestCalculatorView() {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                thirdInput.value = TextFieldValue()
+                                viewModel.setYearInput(TextFieldValue())
                             }
                         )
                     },
@@ -159,7 +135,7 @@ internal fun CompoundInterestCalculatorView() {
                         Text("Result")
                     }
 
-                    items(result.value.itemArrays().toList()) { columns ->
+                    items(viewModel.result().itemArrays().toList()) { columns ->
                         SelectionContainer {
                             Row(modifier = Modifier.animateItemPlacement()) {
                                 columns.forEach {
