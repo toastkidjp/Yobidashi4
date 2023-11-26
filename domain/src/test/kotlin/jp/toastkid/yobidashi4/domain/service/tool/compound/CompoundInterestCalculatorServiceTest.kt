@@ -18,7 +18,8 @@ internal class CompoundInterestCalculatorServiceTest {
 
     @Test
     fun test() {
-        val result = compoundInterestCalculatorService.invoke(120000, 0.01, 10)
+        val input = CompoundInterestCalculatorInput.from("0.0", "120000", "0.01", "10") ?: return fail()
+        val result = compoundInterestCalculatorService.invoke(input)
         assertEquals(3, result.header().size)
         assertEquals(10, result.itemArrays().size)
         assertEquals(Long::class.java, result.columnClass(1))
