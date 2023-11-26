@@ -316,4 +316,19 @@ class CefKeyboardShortcutProcessorTest {
         verify { webTab.id() }
     }
 
+    @Test
+    fun reloadIgnoreCache() {
+        every { browser.reloadIgnoreCache() } just Runs
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_R
+        )
+
+        assertTrue(consumed)
+        verify { browser.reloadIgnoreCache() }
+    }
+
 }
