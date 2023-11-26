@@ -53,6 +53,19 @@ class SettingImplementationTest {
     }
 
     @Test
+    fun makeFolderIfNeed() {
+        every { Files.exists(any()) } returns false
+        every { Files.createDirectory(any()) } returns path
+        every { Files.createFile(any()) } returns path
+
+        subject = SettingImplementation()
+
+        verify { Files.exists(any()) }
+        verify { Files.createDirectory(any()) }
+        verify { Files.createFile(any()) }
+    }
+
+    @Test
     fun darkMode() {
         assertFalse(subject.darkMode())
 
