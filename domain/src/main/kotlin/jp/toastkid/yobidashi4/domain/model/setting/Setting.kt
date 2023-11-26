@@ -58,6 +58,10 @@ interface Setting {
 
     fun setUserAgentName(newValue: String)
 
+    fun useBackground(): Boolean
+
+    fun switchUseBackground()
+
     fun save()
 
 }

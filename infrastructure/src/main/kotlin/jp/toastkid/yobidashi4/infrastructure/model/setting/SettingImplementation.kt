@@ -128,6 +128,13 @@ class SettingImplementation : Setting {
         properties.setProperty("user_agent_name", newValue)
     }
 
+    override fun useBackground(): Boolean =
+        properties.getProperty("use_background")?.toBooleanStrictOrNull() ?: true
+
+    override fun switchUseBackground() {
+        properties.setProperty("use_background", useBackground().not().toString())
+    }
+
 }
 
 private const val PATH = "user/setting.properties"
