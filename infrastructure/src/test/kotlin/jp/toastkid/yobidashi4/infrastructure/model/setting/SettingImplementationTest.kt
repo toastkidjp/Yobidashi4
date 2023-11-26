@@ -214,4 +214,14 @@ user_off_day=12/29,12/30
 
         assertEquals("test", subject.userAgentName())
     }
+
+    @Test
+    fun switchUseBackground() {
+        assertTrue(subject.useBackground())
+
+        subject.switchUseBackground()
+
+        assertFalse(subject.useBackground())
+    }
+
 }
