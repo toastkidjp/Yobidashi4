@@ -99,6 +99,14 @@ class TestSettingImplementation : Setting {
         TODO("Not yet implemented")
     }
 
+    override fun useBackground(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun switchUseBackground() {
+        TODO("Not yet implemented")
+    }
+
     override fun save() {
         TODO("Not yet implemented")
     }
