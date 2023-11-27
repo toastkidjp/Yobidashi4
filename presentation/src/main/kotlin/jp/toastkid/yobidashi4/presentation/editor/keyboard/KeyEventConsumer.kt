@@ -241,6 +241,8 @@ class KeyEventConsumer(
                     ']' -> '[' to false
                     '{' -> '}' to true
                     '}' -> '{' to false
+                    '「' -> '」' to true
+                    '」' -> '「' to false
                     '『' -> '』' to true
                     '』' -> '『' to false
                     else -> null
