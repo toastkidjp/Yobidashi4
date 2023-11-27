@@ -58,7 +58,7 @@ class CefKeyboardShortcutProcessor(
             return true
         }
         if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_B) {
-            BookmarkInsertion()(null, browser?.url)
+            BookmarkInsertion()(latestUrl = browser?.url)
             return true
         }
         if (keyCode == KeyEvent.VK_F5) {
