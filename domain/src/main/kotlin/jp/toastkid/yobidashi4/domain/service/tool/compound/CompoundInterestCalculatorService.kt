@@ -7,7 +7,7 @@ class CompoundInterestCalculatorService {
 
     /**
      *
-     * @param annualInterest If you want to calculate 5%, you should pass 0.05
+     * @param input If you want to calculate 5%, you should pass 0.05
      */
     operator fun invoke(input: CompoundInterestCalculatorInput): CompoundInterestCalculationResult {
         val (capital, installment, annualInterest, year) = input
