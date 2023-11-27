@@ -22,12 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -35,45 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.text.DecimalFormat
-import jp.toastkid.yobidashi4.domain.model.loan.Factor
-import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
-import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
-import kotlin.math.roundToInt
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import org.slf4j.LoggerFactory
+import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorView() {
-    var result by rememberSaveable {
-        mutableStateOf("")
-    }
-    var loanAmount by remember {
-        mutableStateOf("35,000,000")
-    }
-    var loanTerm by remember {
-        mutableStateOf("35")
-    }
-    var interestRate by remember {
-        mutableStateOf("1.0")
-    }
-    var downPayment by remember {
-        mutableStateOf("1,000,000")
-    }
-    var managementFee by remember {
-        mutableStateOf("10,000")
-    }
-    var renovationReserves by remember {
-        mutableStateOf("10,000")
-    }
-
-    val scheduleState = remember { mutableStateListOf<PaymentDetail>() }
-
-    val inputChannel: Channel<String> = Channel()
+    val viewModel = remember { LoanCalculatorViewModel() }
 
     Surface(elevation = 4.dp, color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
         Row {
@@ -83,13 +45,12 @@ fun LoanCalculatorView() {
                     .verticalScroll(rememberScrollState())
             ) {
                 SelectionContainer {
-                    Text(text = result, fontSize = 18.sp)
+                    Text(text = viewModel.result(), fontSize = 18.sp)
                 }
                 OutlinedTextField(
-                    value = loanAmount,
+                    value = viewModel.loanAmount(),
                     onValueChange = {
-                        loanAmount = format(it)
-                        onChange(inputChannel, it)
+                        viewModel.setLoanAmount(it)
                     },
                     label = { Text(text = "ローン総額") },
                     colors = TextFieldDefaults.textFieldColors(
@@ -101,10 +62,9 @@ fun LoanCalculatorView() {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = loanTerm,
+                    value = viewModel.loanTerm(),
                     onValueChange = {
-                        loanTerm = format(it)
-                        onChange(inputChannel, it)
+                        viewModel.setLoanTerm(it)
                     },
                     label = { Text(text = "Loan term") },
                     colors = TextFieldDefaults.textFieldColors(
@@ -116,10 +76,9 @@ fun LoanCalculatorView() {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = interestRate,
+                    value = viewModel.interestRate(),
                     onValueChange = {
-                        interestRate = it
-                        onChange(inputChannel, it)
+                        viewModel.setInterestRate(it)
                     },
                     label = { Text(text = "Interest rate") },
                     colors = TextFieldDefaults.textFieldColors(
@@ -131,10 +90,9 @@ fun LoanCalculatorView() {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = downPayment,
+                    value = viewModel.downPayment(),
                     onValueChange = {
-                        downPayment = format(it)
-                        onChange(inputChannel, it)
+                        viewModel.setDownPayment(it)
                     },
                     label = { Text(text = "Down payment") },
                     colors = TextFieldDefaults.textFieldColors(
@@ -146,10 +104,9 @@ fun LoanCalculatorView() {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = managementFee,
+                    value = viewModel.managementFee(),
                     onValueChange = {
-                        managementFee = format(it)
-                        onChange(inputChannel, it)
+                        viewModel.setManagementFee(it)
                     },
                     label = { Text(text = "Management fee (Monthly)") },
                     colors = TextFieldDefaults.textFieldColors(
@@ -161,10 +118,9 @@ fun LoanCalculatorView() {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
-                    value = renovationReserves,
+                    value = viewModel.renovationReserves(),
                     onValueChange = {
-                        renovationReserves = format(it)
-                        onChange(inputChannel, it)
+                        viewModel.setRenovationReserves(it)
                     },
                     label = { Text(text = "Renovation reserves (Monthly)") },
                     colors = TextFieldDefaults.textFieldColors(
@@ -177,7 +133,7 @@ fun LoanCalculatorView() {
                 )
             }
 
-            if (scheduleState.isNotEmpty()) {
+            if (viewModel.scheduleState().isNotEmpty()) {
                 Box (modifier = Modifier.weight(0.5f)) {
                     val scrollState = rememberLazyListState()
                     val color =
@@ -198,14 +154,14 @@ fun LoanCalculatorView() {
                                 Text("残金", modifier = Modifier.weight(1f))
                             }
                         }
-                        itemsIndexed(scheduleState) { index, it ->
+                        itemsIndexed(viewModel.scheduleState()) { index, it ->
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.animateItemPlacement()) {
                                 Text(
                                     "${index + 1} (${(index / 12) + 1}/${(index % 12) + 1})",
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text(roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
-                                Text(roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
+                                Text(viewModel.roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
+                                Text(viewModel.roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
                                 Text(it.amount.toString(), modifier = Modifier.weight(1f))
                             }
                         }
@@ -219,63 +175,7 @@ fun LoanCalculatorView() {
         }
     }
 
-
     LaunchedEffect(Unit) {
-        DebouncedCalculatorService(
-            inputChannel,
-            {
-                Factor(
-                    extractLong(loanAmount),
-                    extractInt(loanTerm),
-                    extractDouble(interestRate),
-                    extractInt(downPayment),
-                    extractInt(managementFee),
-                    extractInt(renovationReserves)
-                )
-            },
-            {
-                result = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment,
-                    it.paymentSchedule.sumOf { paymentDetail -> paymentDetail.interest }.toLong()
-                )
-                scheduleState.clear()
-                scheduleState.addAll(it.paymentSchedule)
-            }
-        ).invoke()
+        viewModel.launch()
     }
 }
-
-private fun roundToIntSafely(d: Double) =
-    if (d.isNaN()) "0" else d.roundToInt().toString()
-
-private fun onChange(inputChannel: Channel<String>, text: String) {
-    CoroutineScope(Dispatchers.IO).launch {
-        inputChannel.send(text)
-    }
-}
-
-private val formatter = DecimalFormat("#,###.##")
-
-private fun format(input: String?): String {
-    if (input.isNullOrBlank()) {
-        return "0"
-    }
-
-    val formatted = try {
-        formatter.format(
-            input.filter { it.isDigit() || it == '.' }.trim().toBigDecimalOrNull()
-        )
-    } catch (e: IllegalArgumentException) {
-        LoggerFactory.getLogger("LoanCalculator").debug("Illegal input", e)
-        input
-    }
-    return formatted
-}
-
-private fun extractLong(editText: String) =
-    editText.replace(",", "").toLongOrNull() ?: 0
-
-private fun extractInt(editText: String) =
-    editText.replace(",", "").toIntOrNull() ?: 0
-
-private fun extractDouble(editText: String) =
-    editText.replace(",", "").toDoubleOrNull() ?: 0.0
