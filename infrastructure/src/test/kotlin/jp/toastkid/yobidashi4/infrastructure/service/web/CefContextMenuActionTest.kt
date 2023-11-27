@@ -104,6 +104,11 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopReload() {
+        subject.invoke(null, param, "test", ContextMenu.RELOAD.id)
+    }
+
+    @Test
     fun noopOpenOtherTab() {
         every { param.linkUrl } returns null
 
