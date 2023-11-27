@@ -107,6 +107,7 @@ class MainViewModelImplementationTest {
     fun loadBackgroundImageIfFileDoesNotExists() {
         assertNotNull(subject.backgroundImage())
 
+        every { setting.useBackground() } returns true
         mockkStatic(Files::class, ImageIO::class)
         every { Files.exists(any()) } returns false
         every { Files.list(any()) } returns Stream.empty()
@@ -124,6 +125,7 @@ class MainViewModelImplementationTest {
     fun loadBackgroundImageIfListIsEmpty() {
         assertNotNull(subject.backgroundImage())
 
+        every { setting.useBackground() } returns true
         mockkStatic(Files::class, ImageIO::class)
         every { Files.exists(any()) } returns true
         every { Files.list(any()) } returns Stream.empty()
@@ -140,6 +142,7 @@ class MainViewModelImplementationTest {
     fun loadBackgroundImage() {
         assertNotNull(subject.backgroundImage())
 
+        every { setting.useBackground() } returns true
         every { Files.exists(any()) } returns true
         every { Files.list(any()) } returns Stream.of(mockk())
         val inputStream = mockk<InputStream>()
