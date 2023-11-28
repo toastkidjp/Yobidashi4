@@ -854,4 +854,31 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun toDecoratedLink() {
+        val selected = "https://test.yahoo.com"
+        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns selected
+        val decoratedLink = "[test]($selected)"
+        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
+
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_L,
+            'L'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(selected, TextRange(0, selected.length)),
+            mockk(),
+            { assertEquals(decoratedLink, it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
 }
