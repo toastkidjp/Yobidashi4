@@ -540,6 +540,19 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed4)
+
+        assertTrue(
+            subject.invoke(
+                KeyEvent(awtKeyEvent),
+                TextFieldValue("『test』", TextRange(0)),
+                mockk(),
+                {
+                    assertEquals("』", it.getSelectedText().text)
+                    assertEquals(5, it.selection.start)
+                    assertEquals(6, it.selection.end)
+                }
+            )
+        )
     }
 
     @Test
