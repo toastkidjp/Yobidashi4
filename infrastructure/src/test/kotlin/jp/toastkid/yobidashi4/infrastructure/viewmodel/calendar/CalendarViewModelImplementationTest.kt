@@ -182,6 +182,12 @@ class CalendarViewModelImplementationTest {
 
                 verify { setting.articleFolderPath() }
                 verify { mainViewModel.edit(any(), false) }
+            },
+            {
+                viewModel.openDateArticle(20)
+
+                verify { setting.articleFolderPath() }
+                verify { mainViewModel.edit(any(), false) }
             }
         )
     }
