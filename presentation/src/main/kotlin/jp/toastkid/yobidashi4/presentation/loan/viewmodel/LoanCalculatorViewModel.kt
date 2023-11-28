@@ -19,10 +19,6 @@ class LoanCalculatorViewModel {
 
     fun result() = result.value
 
-    fun setResult(value: String) {
-        result.value = value
-    }
-
     private val loanAmount = mutableStateOf("35,000,000")
 
     fun loanAmount() = loanAmount.value
