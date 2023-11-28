@@ -442,11 +442,12 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun openMemoryUsageBox() {
-    }
-
-    @Test
     fun switchMemoryUsageBox() {
+        assertFalse(subject.openMemoryUsageBox())
+
+        subject.switchMemoryUsageBox()
+
+        assertTrue(subject.openMemoryUsageBox())
     }
 
     @Test
