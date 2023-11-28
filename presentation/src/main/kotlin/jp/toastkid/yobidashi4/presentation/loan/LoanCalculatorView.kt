@@ -52,7 +52,7 @@ fun LoanCalculatorView() {
                     onValueChange = {
                         viewModel.setLoanAmount(it)
                     },
-                    label = { Text(text = "ローン総額") },
+                    label = { Text(text = "Loan amount") },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = MaterialTheme.colors.onSurface,
                         backgroundColor = Color.Transparent,
