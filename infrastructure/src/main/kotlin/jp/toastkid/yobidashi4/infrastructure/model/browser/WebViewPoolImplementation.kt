@@ -35,6 +35,10 @@ class WebViewPoolImplementation : WebViewPool {
         getBrowser(id, "").find(text, forward, true, true)
     }
 
+    override fun clearFind(id: String) {
+        getBrowser(id, "").stopFinding(true)
+    }
+
     private fun getBrowser(id: String, initialUrl: String): CefBrowser {
         val browser = browsers.getOrElse(id) { client.createBrowser(initialUrl, false, false) }
         browsers.put(id, browser)
