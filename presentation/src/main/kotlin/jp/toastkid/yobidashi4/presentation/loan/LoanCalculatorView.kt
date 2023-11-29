@@ -146,12 +146,12 @@ fun LoanCalculatorView() {
                                     .drawBehind { drawRect(color) }
                             ) {
                                 Text(
-                                    "回数",
+                                    "Count",
                                     modifier = Modifier.weight(0.4f)
                                 )
-                                Text("元本", modifier = Modifier.weight(1f))
-                                Text("利息", modifier = Modifier.weight(1f))
-                                Text("残金", modifier = Modifier.weight(1f))
+                                Text("Amount", modifier = Modifier.weight(1f))
+                                Text("Interest", modifier = Modifier.weight(1f))
+                                Text("Remaining", modifier = Modifier.weight(1f))
                             }
                         }
                         itemsIndexed(viewModel.scheduleState()) { index, it ->
