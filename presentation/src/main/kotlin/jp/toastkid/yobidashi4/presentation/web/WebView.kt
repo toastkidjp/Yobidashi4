@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import java.awt.Color
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -54,7 +55,11 @@ internal fun WebView(id: String, initialUrl: String) {
     LaunchedEffect(id) {
         withContext(Dispatchers.IO) {
             mainViewModel.finderFlow().collect {
-                webViewPool.find(id, it.target, it.upper.not())
+                if (it == FindOrder.EMPTY) {
+                    webViewPool.clearFind(id)
+                } else {
+                    webViewPool.find(id, it.target, it.upper.not())
+                }
             }
         }
     }
