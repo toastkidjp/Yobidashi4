@@ -8,5 +8,8 @@ interface WebViewPool {
     fun dispose(id: String)
     fun disposeAll()
     fun find(id: String, text: String, forward: Boolean)
+
+    fun clearFind(id: String)
+
     fun reload(id: String)
 }
