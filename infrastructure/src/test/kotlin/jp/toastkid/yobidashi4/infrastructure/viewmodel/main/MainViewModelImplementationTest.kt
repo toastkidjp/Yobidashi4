@@ -451,11 +451,12 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun openFind() {
-    }
-
-    @Test
     fun switchFind() {
+        assertFalse(subject.openFind())
+
+        subject.switchFind()
+
+        assertTrue(subject.openFind())
     }
 
     @Test
