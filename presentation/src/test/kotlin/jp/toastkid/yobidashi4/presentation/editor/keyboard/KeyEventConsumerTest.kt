@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -389,6 +390,27 @@ class KeyEventConsumerTest {
             TextFieldValue("test", TextRange(0, 4)),
             mockk(),
             { assertEquals("TEST", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
+    fun noopCaseConversion() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_U,
+            'U'
+        )
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test"),
+            mockk(),
+            { assertNull(it) }
         )
 
         assertTrue(consumed)
