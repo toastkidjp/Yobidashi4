@@ -33,6 +33,9 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -461,15 +464,6 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun replaceInputValue() {
-
-    }
-
-    @Test
-    fun finderFlow() {
-    }
-
-    @Test
     fun onFindInputChange() {
         assertTrue(subject.inputValue().text.isEmpty())
 
@@ -480,10 +474,28 @@ class MainViewModelImplementationTest {
 
     @Test
     fun onReplaceInputChange() {
+        assertTrue(subject.replaceInputValue().text.isEmpty())
+
+        subject.onReplaceInputChange(TextFieldValue("test"))
+
+        assertEquals("test", subject.replaceInputValue().text)
     }
 
     @Test
     fun findUp() {
+        val countDownLatch = CountDownLatch(1)
+
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.finderFlow().collect {
+                assertTrue(it.upper)
+                countDownLatch.countDown()
+            }
+        }
+
+        subject.findUp()
+
+        countDownLatch.await(1, TimeUnit.SECONDS)
+        job.cancel()
     }
 
     @Test
