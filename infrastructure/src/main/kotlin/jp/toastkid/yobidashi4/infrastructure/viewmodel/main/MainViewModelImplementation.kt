@@ -459,6 +459,11 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openFind.value = openFind.value.not()
 
         findInput.value = TextFieldValue()
+        if (openFind.value.not()) {
+            CoroutineScope(Dispatchers.Unconfined).launch {
+                _finderFlow.emit(FindOrder.EMPTY)
+            }
+        }
     }
 
     override fun inputValue() = findInput.value
