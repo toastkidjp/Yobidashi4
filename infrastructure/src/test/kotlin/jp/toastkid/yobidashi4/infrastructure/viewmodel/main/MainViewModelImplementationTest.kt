@@ -504,6 +504,19 @@ class MainViewModelImplementationTest {
 
     @Test
     fun findDown() {
+        val countDownLatch = CountDownLatch(1)
+
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.finderFlow().collect {
+                assertFalse(it.upper)
+                countDownLatch.countDown()
+            }
+        }
+
+        subject.findUp()
+
+        countDownLatch.await(1, TimeUnit.SECONDS)
+        job.cancel()
     }
 
     @Test
