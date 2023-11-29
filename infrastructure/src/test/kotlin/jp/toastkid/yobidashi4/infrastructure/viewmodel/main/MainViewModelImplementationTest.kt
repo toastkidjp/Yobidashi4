@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
@@ -460,11 +461,8 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun inputValue() {
-    }
-
-    @Test
     fun replaceInputValue() {
+
     }
 
     @Test
@@ -473,6 +471,11 @@ class MainViewModelImplementationTest {
 
     @Test
     fun onFindInputChange() {
+        assertTrue(subject.inputValue().text.isEmpty())
+
+        subject.onFindInputChange(TextFieldValue("test"))
+
+        assertEquals("test", subject.inputValue().text)
     }
 
     @Test
