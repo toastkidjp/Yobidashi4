@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -143,10 +142,11 @@ private fun rename(
         Files.copy(p, p.resolveSibling("${baseName}_${i + 1}.${p.extension}"))
     }
 
-    object : KoinComponent { val vm: MainViewModel by inject() }.vm
+    val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+    mainViewModel
         .showSnackbar(
             "Rename completed!",
             "Open folder",
-            { Desktop.getDesktop().open(paths.first().parent.toFile()) }
+            { mainViewModel.openFile(paths.first().parent, false) }
         )
 }
