@@ -537,11 +537,12 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun setFindStatus() {
-    }
-
-    @Test
     fun findStatus() {
+        assertTrue(subject.findStatus().isEmpty())
+
+        subject.setFindStatus("test")
+
+        assertEquals("test", subject.findStatus())
     }
 
     @Test
