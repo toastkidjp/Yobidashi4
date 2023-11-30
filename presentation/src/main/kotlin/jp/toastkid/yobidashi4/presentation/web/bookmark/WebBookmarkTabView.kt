@@ -94,7 +94,7 @@ internal fun WebBookmarkTabView() {
                     WebBookmarkItemRow(
                         bookmark,
                         {
-                            object : KoinComponent { val repo: BookmarkRepository by inject() }.repo.delete(bookmark)
+                            koin.repo.delete(bookmark)
                             bookmarks.remove(bookmark)
                         },
                         Modifier.animateItemPlacement()
