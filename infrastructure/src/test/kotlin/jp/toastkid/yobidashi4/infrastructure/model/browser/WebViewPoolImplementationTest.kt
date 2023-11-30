@@ -144,4 +144,13 @@ class WebViewPoolImplementationTest {
         verify(inverse = true) { CefApp.getInstance().dispose() }
     }
 
+    @Test
+    fun clearFind() {
+        every { cefBrowser.stopFinding(any()) } just Runs
+
+        browserPoolImplementation.clearFind("test")
+
+        verify { cefBrowser.stopFinding(any()) }
+    }
+
 }
