@@ -53,8 +53,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.awt.Desktop
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -111,7 +109,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
                         if (keyEvent.isCtrlPressed && keyEvent.key == Key.Z) {
                             ZipArchiver().invoke(articleStates.filter { it.selected }.map { it.path })
-                            Desktop.getDesktop().open(File("."))
+                            viewModel.openFile(Path.of("."))
                             return@onKeyEvent true
                         }
                         if (keyEvent.key == Key.DirectionUp) {
