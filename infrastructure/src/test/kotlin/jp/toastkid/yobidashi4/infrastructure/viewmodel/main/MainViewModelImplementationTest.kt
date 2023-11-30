@@ -33,14 +33,17 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -461,6 +464,20 @@ class MainViewModelImplementationTest {
         subject.switchFind()
 
         assertTrue(subject.openFind())
+
+        subject.onFindInputChange(TextFieldValue("test"))
+        val countDownLatch = CountDownLatch(1)
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.finderFlow().collectLatest {
+                assertSame(it, FindOrder.EMPTY)
+                countDownLatch.countDown()
+            }
+        }
+        subject.switchFind()
+
+        assertTrue(subject.inputValue().text.isEmpty())
+        job.cancel()
+        countDownLatch.await(1, TimeUnit.SECONDS)
     }
 
     @Test
