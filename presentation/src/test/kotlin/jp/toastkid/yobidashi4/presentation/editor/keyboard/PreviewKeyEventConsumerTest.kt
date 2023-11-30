@@ -248,6 +248,28 @@ class PreviewKeyEventConsumerTest {
     }
 
     @Test
+    fun deleteLineOnParagraphIsNull() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_ENTER,
+            'A'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3"),
+            null,
+            {},
+            scrollBy
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun elseCase() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
