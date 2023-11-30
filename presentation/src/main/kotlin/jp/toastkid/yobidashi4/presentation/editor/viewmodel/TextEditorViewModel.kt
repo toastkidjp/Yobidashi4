@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
@@ -170,6 +171,10 @@ class TextEditorViewModel {
         var selected = -1
         CoroutineScope(Dispatchers.IO).launch {
             mainViewModel.finderFlow().collect {
+                if (it == FindOrder.EMPTY) {
+                    return@collect
+                }
+
                 if (it.invokeReplace) {
                     content.value = TextFieldValue(content.value.text.replace(it.target, it.replace, it.caseSensitive.not()))
                     return@collect
