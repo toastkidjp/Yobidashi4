@@ -262,6 +262,19 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun visualTransformationOverLimit() {
+        val text = (0..20_000).map { it.toString() }.joinToString()
+        viewModel.onValueChange(TextFieldValue(text))
+
+        val visualTransformation = viewModel.visualTransformation()
+        assertEquals(VisualTransformation.None, visualTransformation)
+
+        val transformedText = visualTransformation.filter(buildAnnotatedString { append("test") })
+        assertFalse(transformedText.text.text.endsWith("[EOF]"))
+        assertEquals(OffsetMapping.Identity, transformedText.offsetMapping)
+    }
+
+    @Test
     fun makeCharacterCountMessage() {
         assertEquals("Character: 200", viewModel.makeCharacterCountMessage(200))
     }
