@@ -458,8 +458,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun switchFind() {
         openFind.value = openFind.value.not()
 
-        findInput.value = TextFieldValue()
         if (openFind.value.not()) {
+            findInput.value = TextFieldValue()
             CoroutineScope(Dispatchers.Unconfined).launch {
                 _finderFlow.emit(FindOrder.EMPTY)
             }
