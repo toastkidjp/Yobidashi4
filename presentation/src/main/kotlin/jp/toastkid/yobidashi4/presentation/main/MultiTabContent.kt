@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
@@ -51,7 +52,7 @@ fun MultiTabContent() {
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            ArticleListView()
+            ArticleListView(viewModel.openArticleList(), viewModel.articles())
 
             TabsView(modifier = Modifier.fillMaxHeight().weight(1f))
         }
@@ -65,14 +66,12 @@ fun MultiTabContent() {
 }
 
 @Composable
-private fun ArticleListView() {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
+    val width = animateDpAsState(if (openArticleList) 330.dp else 0.dp)
 
-    val width = animateDpAsState(if (viewModel.openArticleList()) 330.dp else 0.dp)
-
-    if (viewModel.articles().isNotEmpty()) {
+    if (articles.isNotEmpty()) {
         FileListView(
-            viewModel.articles(),
+            articles,
             modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)
         )
     }
