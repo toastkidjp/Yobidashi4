@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -240,6 +241,20 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun noopShiftControl() {
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_SHIFT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_CIRCUMFLEX
+        )
+
+        assertFalse(consumed)
+        verify { viewModel wasNot called }
+        verify { selectedText wasNot called }
+    }
+
+    @Test
     fun browseUri() {
         every { viewModel.browseUri(any()) } just Runs
         every { selectedText.invoke() } returns "text"
@@ -254,22 +269,6 @@ class CefKeyboardShortcutProcessorTest {
         assertTrue(consumed)
         verify { viewModel.browseUri(any()) }
         verify { selectedText.invoke() }
-    }
-
-    @Test
-    fun noopSwitchDevTools() {
-        val webTab = mockk<Tab>()
-        every { viewModel.currentTab() } returns webTab
-
-        val consumed = subject.invoke(
-            browser,
-            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
-            EventFlags.EVENTFLAG_CONTROL_DOWN,
-            KeyEvent.VK_F12
-        )
-
-        assertTrue(consumed)
-        verify { webTabViewModel wasNot Called }
     }
 
     @Test
@@ -314,6 +313,22 @@ class CefKeyboardShortcutProcessorTest {
         assertTrue(consumed)
         verify { webTabViewModel.switchDevTools("test-id") }
         verify { webTab.id() }
+    }
+
+    @Test
+    fun noopSwitchDevToolsWhenPassedOtherTab() {
+        val webTab = mockk<Tab>()
+        every { viewModel.currentTab() } returns webTab
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_F12
+        )
+
+        assertTrue(consumed)
+        verify { webTabViewModel wasNot Called }
     }
 
     @Test
