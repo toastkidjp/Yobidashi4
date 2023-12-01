@@ -98,11 +98,8 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.DEVELOPER_TOOL.id -> {
-                (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
-                    object : KoinComponent {
-                        val viewModel: WebTabViewModel by inject()
-                    }.viewModel.switchDevTools(id)
-                }
+                val webTabId = (viewModel.currentTab() as? WebTab)?.id() ?: return
+                object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools(webTabId)
             }
 
             else -> Unit
