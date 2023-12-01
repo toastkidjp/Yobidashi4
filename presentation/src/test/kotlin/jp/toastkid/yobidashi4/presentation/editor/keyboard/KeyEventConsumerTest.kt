@@ -588,6 +588,18 @@ class KeyEventConsumerTest {
                 }
             )
         )
+
+        assertFalse(
+            subject.invoke(
+                KeyEvent(awtKeyEvent),
+                TextFieldValue("『test』", TextRange(1)),
+                mockk(),
+                {
+                    assertTrue(it.getSelectedText().text.isEmpty())
+                    assertEquals(1, it.selection.start)
+                }
+            )
+        )
     }
 
     @Test
