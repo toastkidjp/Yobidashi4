@@ -517,6 +517,18 @@ class MainViewModelImplementationTest {
 
     @Test
     fun replaceAll() {
+        val countDownLatch = CountDownLatch(1)
+
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.finderFlow().collect {
+                assertTrue(it.invokeReplace)
+                countDownLatch.countDown()
+            }
+        }
+        subject.replaceAll()
+
+        countDownLatch.await(1, TimeUnit.SECONDS)
+        job.cancel()
     }
 
     @Test
