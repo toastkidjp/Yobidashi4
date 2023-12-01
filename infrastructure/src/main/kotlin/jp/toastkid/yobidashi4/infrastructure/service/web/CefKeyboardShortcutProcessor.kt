@@ -132,9 +132,8 @@ class CefKeyboardShortcutProcessor(
         }
 
         if (keyCode == KeyEvent.VK_F12) {
-            (viewModel.currentTab() as? WebTab)?.id()?.let { id ->
-                webTabViewModel.switchDevTools(id)
-            }
+            val webTab = viewModel.currentTab() as? WebTab ?: return false
+            webTabViewModel.switchDevTools(webTab.id())
             return true
         }
 
