@@ -307,4 +307,13 @@ class CefContextMenuActionTest {
         verify { webTabViewModel.switchDevTools(any()) }
     }
 
+    @Test
+    fun noopSwitchDevTools() {
+        every { viewModel.currentTab() } returns null
+
+        subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
+
+        verify { webTabViewModel wasNot called }
+    }
+
 }
