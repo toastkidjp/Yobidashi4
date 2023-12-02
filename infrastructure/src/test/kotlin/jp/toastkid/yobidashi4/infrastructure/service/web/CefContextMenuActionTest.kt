@@ -109,6 +109,13 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopOpenOtherTabWhenPassedParamsNull() {
+        subject.invoke(browser, null, "test", ContextMenu.OPEN_OTHER_TAB.id)
+
+        verify(inverse = true) { viewModel.openUrl(any(), any()) }
+    }
+
+    @Test
     fun noopOpenOtherTab() {
         every { param.linkUrl } returns null
 
