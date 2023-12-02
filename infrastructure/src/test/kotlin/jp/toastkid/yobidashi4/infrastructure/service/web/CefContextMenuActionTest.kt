@@ -134,6 +134,13 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopOpenOtherTabOnBackgroundWhenPassedNull() {
+        subject.invoke(browser, null, "test", ContextMenu.OPEN_BACKGROUND.id)
+
+        verify(inverse = true) { viewModel.openUrl(any(), any()) }
+    }
+
+    @Test
     fun noopOpenOtherTabOnBackground() {
         every { param.linkUrl } returns null
 
