@@ -327,7 +327,7 @@ class CefKeyboardShortcutProcessorTest {
             KeyEvent.VK_F12
         )
 
-        assertTrue(consumed)
+        assertFalse(consumed)
         verify { webTabViewModel wasNot Called }
     }
 
