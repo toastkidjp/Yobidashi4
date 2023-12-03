@@ -290,6 +290,11 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopDownload() {
+        subject.invoke(null, param, "test", ContextMenu.DOWNLOAD.id)
+    }
+
+    @Test
     fun addBookmark() {
         mockkConstructor(BookmarkInsertion::class)
         every { anyConstructed<BookmarkInsertion>().invoke(any(), any()) } just Runs
