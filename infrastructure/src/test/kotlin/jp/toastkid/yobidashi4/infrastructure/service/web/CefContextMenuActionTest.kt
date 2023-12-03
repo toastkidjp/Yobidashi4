@@ -336,6 +336,16 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopClipImageWithNullParam() {
+        mockkStatic(ImageIO::class)
+        every { ImageIO.read(any<URL>()) } returns null
+
+        subject.invoke(browser, null, "test", ContextMenu.CLIP_IMAGE.id)
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<Image>()) }
+    }
+
+    @Test
     fun clipImage() {
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } returns mockk()
