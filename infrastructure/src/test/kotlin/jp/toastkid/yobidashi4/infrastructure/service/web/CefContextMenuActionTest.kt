@@ -305,7 +305,28 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun addBookmarkPassedNull() {
+        mockkConstructor(BookmarkInsertion::class)
+        every { anyConstructed<BookmarkInsertion>().invoke(any(), any()) } just Runs
+
+        subject.invoke(null, param, "test", ContextMenu.ADD_BOOKMARK.id)
+
+        verify { anyConstructed<BookmarkInsertion>().invoke(any(), any()) }
+    }
+
+    @Test
     fun noopClipImage() {
+        mockkStatic(ImageIO::class)
+        every { ImageIO.read(any<URL>()) } returns null
+
+        subject.invoke(browser, param, "test", ContextMenu.CLIP_IMAGE.id)
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<Image>()) }
+    }
+
+    @Test
+    fun noopClipImageWithSourceUrlIsNull() {
+        every { param.sourceUrl } returns null
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } returns null
 
