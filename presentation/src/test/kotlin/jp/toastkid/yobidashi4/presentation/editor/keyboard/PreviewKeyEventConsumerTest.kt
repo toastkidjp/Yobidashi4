@@ -162,6 +162,32 @@ class PreviewKeyEventConsumerTest {
     }
 
     @Test
+    fun noopCutLine() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_X,
+            'X'
+        )
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3"),
+            null,
+            {},
+            scrollBy
+        )
+
+        assertFalse(consumed)
+        verify { scrollBy wasNot called }
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke("test\n") }
+    }
+
+    @Test
     fun cutLineOnSelectedTextCase() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
