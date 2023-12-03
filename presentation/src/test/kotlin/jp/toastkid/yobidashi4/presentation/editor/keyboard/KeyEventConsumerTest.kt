@@ -20,6 +20,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -217,6 +218,33 @@ class KeyEventConsumerTest {
             TextFieldValue("Angel has fallen.\nHe has gone."),
             mockk(),
             {  }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun noopOrderedListConversionWhenReturnsNullConversionResult() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_1,
+            '1'
+        )
+
+        mockkConstructor(NumberedListHeadAdder::class)
+        every { anyConstructed<NumberedListHeadAdder>().invoke(any()) } returns null
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 17
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("Angel has fallen.\nHe has gone.", TextRange(0, 30)),
+            multiParagraph,
+            { fail() }
         )
 
         assertFalse(consumed)
