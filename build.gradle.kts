@@ -68,7 +68,8 @@ allprojects {
         jvmArgs(
             "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
             "--add-opens", "java.base/java.time=ALL-UNNAMED",
-            "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
+            "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens", "java.desktop/java.awt.dnd=ALL-UNNAMED"
         )
     }
 }
@@ -80,7 +81,7 @@ koverReport {
         excludes {
             // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
             classes("jp.toastkid.yobidashi4.infrastructure.di.*")
-            classes("jp.toastkid.yobidashi4.*.ComposableSingletons")
+            classes("*.ComposableSingletons")
             packages("org.koin.ksp.generated")
         }
     }
