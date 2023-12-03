@@ -298,6 +298,18 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun noopPrintPdf() {
+        val consumed = subject.invoke(
+            null,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_SHIFT_DOWN,
+            KeyEvent.VK_P
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun switchDevTools() {
         val webTab = mockk<WebTab>()
         every { viewModel.currentTab() } returns webTab
