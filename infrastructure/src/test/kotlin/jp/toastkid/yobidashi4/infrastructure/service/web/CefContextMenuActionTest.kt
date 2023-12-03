@@ -276,6 +276,11 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopResetZoom() {
+        subject.invoke(null, param, "test", ContextMenu.RESET_ZOOM.id)
+    }
+
+    @Test
     fun download() {
         every { browser.startDownload(any()) } just Runs
 
