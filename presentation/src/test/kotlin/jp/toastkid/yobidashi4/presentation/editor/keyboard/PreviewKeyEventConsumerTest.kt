@@ -401,4 +401,26 @@ class PreviewKeyEventConsumerTest {
         verify(inverse = true) { mainViewModel.switchArticleList() }
     }
 
+    @Test
+    fun noopAltCombination() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_CIRCUMFLEX,
+            '^'
+        )
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            {},
+            mockk()
+        )
+
+        assertFalse(consumed)
+    }
+
 }
