@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.10"
-    id("org.jetbrains.compose") version "1.5.3"
+    id("org.jetbrains.compose") version "1.5.11"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
@@ -27,7 +27,7 @@ dependencies {
     implementation(project(path = ":presentation"))
     implementation(project(path = ":infrastructure"))
 
-    implementation("org.jetbrains.compose.runtime:runtime:1.5.3")
+    implementation("org.jetbrains.compose.runtime:runtime:1.5.11")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
 
