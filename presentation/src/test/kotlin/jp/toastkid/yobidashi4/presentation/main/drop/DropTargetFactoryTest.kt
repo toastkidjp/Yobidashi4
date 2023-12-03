@@ -12,6 +12,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.datatransfer.Transferable
+import java.awt.datatransfer.UnsupportedFlavorException
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
 import java.io.File
@@ -66,6 +67,19 @@ class DropTargetFactoryTest {
 
         verify { anyConstructed<DropTarget>().addDropTargetListener(any()) }
         verify { consumer wasNot called }
+    }
+
+    @Test
+    fun unsupportedFlavorException() {
+        every { event.isDataFlavorSupported(any()) } throws UnsupportedFlavorException(null)
+
+        val target = dropTargetFactory.invoke(consumer)
+        target.drop(event)
+
+        verify { anyConstructed<DropTarget>().addDropTargetListener(any()) }
+        verify { consumer wasNot called }
+        verify(inverse = true) { event.dropComplete(any()) }
+        verify { event.rejectDrop() }
     }
 
 }
