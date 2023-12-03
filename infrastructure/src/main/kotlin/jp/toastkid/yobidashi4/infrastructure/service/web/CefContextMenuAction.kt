@@ -65,7 +65,8 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.CLIP_IMAGE.id -> {
-                val image = ImageIO.read(URL(params?.sourceUrl)) ?: return
+                val sourceUrl = params?.sourceUrl ?: return
+                val image = ImageIO.read(URL(sourceUrl)) ?: return
                 ClipboardPutterService().invoke(image)
             }
 
