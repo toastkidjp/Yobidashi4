@@ -1,18 +1,23 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
-import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import java.net.MalformedURLException
 import java.net.URL
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class LinkDecoratorServiceTest {
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
+    }
 
     @Test
     fun test() {
@@ -25,7 +30,6 @@ internal class LinkDecoratorServiceTest {
             "[Yahoo! JAPAN](https://www.yahoo.co.jp)",
             LinkDecoratorService().invoke("https://www.yahoo.co.jp")
         )
-        clearAllMocks()
     }
 
     @Test
