@@ -19,6 +19,7 @@ import java.awt.Desktop
 import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.attribute.FileTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -558,11 +559,19 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun droppedPathFlow() {
-    }
-
-    @Test
     fun emitDroppedPath() {
+        val countDownLatch = CountDownLatch(1)
+        val path = mockk<Path>()
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.droppedPathFlow().collect {
+                assertSame(path, it)
+                countDownLatch.countDown()
+            }
+        }
+
+        subject.emitDroppedPath(listOf(path))
+
+        job.cancel()
     }
 
     @Test
