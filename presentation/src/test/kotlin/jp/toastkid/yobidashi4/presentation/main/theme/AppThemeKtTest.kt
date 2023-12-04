@@ -8,7 +8,7 @@ class AppThemeKtTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun appTheme() {
+    fun lightModeCase() {
         runDesktopComposeUiTest {
             setContent {
                 AppTheme(darkTheme = false) {
