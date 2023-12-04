@@ -2,12 +2,14 @@ package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +64,12 @@ class LinkBehaviorServiceTest {
         every { viewModel.showSnackbar(any()) } just Runs
     }
 
+    @AfterEach
+    fun tearDown() {
+        stopKoin()
+        unmockkAll()
+    }
+
     @Test
     fun testNullUrl() {
         linkBehaviorService.invoke(null)
@@ -81,22 +89,22 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testArticleUrlDoesNotExists() {
-        coEvery { exists(any()) }.answers { false }
+        every { exists(any()) }.answers { false }
 
         linkBehaviorService.invoke("internal-article://yahoo")
     }
 
     @Test
     fun testArticleUrl() {
-        coEvery { exists(any()) }.answers { true }
+        every { exists(any()) }.answers { true }
+        val article = mockk<Article>()
+        every { articleFactory.withTitle(any()) } returns article
+        every { article.path() } returns mockk()
 
         linkBehaviorService.invoke("internal-article://yahoo")
-    }
 
-    @AfterEach
-    fun tearDown() {
-        stopKoin()
-        unmockkAll()
+        verify { exists(any()) }
+        verify { articleFactory.withTitle(any()) }
     }
 
 }
