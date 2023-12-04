@@ -71,7 +71,8 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.CLIP_PAGE_LINK.id -> {
-                ClipboardPutterService().invoke(params?.linkUrl ?: params?.sourceUrl ?: params?.pageUrl)
+                val link = params?.linkUrl ?: params?.sourceUrl ?: params?.pageUrl ?: return
+                ClipboardPutterService().invoke(link)
             }
 
             ContextMenu.CLIP_AS_MARKDOWN_LINK.id -> {
