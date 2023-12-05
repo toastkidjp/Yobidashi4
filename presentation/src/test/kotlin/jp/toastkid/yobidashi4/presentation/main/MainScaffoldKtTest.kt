@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi4.presentation.main
 
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -11,7 +13,10 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
+import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -26,6 +31,12 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
+    @MockK
+    private lateinit var keywordArticleFinder: KeywordArticleFinder
+
+    @MockK
+    private lateinit var articlesReaderService: ArticlesReaderService
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -34,6 +45,8 @@ class MainScaffoldKtTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { keywordArticleFinder } bind(KeywordArticleFinder::class)
+                    single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                 }
             )
         }
@@ -67,6 +80,28 @@ class MainScaffoldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainScaffold() {
+        runDesktopComposeUiTest {
+            setContent {
+                MainScaffold()
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun useOptionalComponents() {
+        every { mainViewModel.backgroundImage() } returns ImageBitmap(1, 1)
+        every { mainViewModel.showBackgroundImage() } returns true
+        every { mainViewModel.showWebSearch() } returns true
+        every { mainViewModel.showAggregationBox() } returns true
+        every { mainViewModel.openFind() } returns true
+        every { mainViewModel.showInputBox() } returns true
+        every { mainViewModel.openMemoryUsageBox() } returns true
+        every { mainViewModel.currentTab() } returns mockk<MarkdownPreviewTab>()
+        every { mainViewModel.initialAggregationType() } returns 0
+        every { mainViewModel.inputValue() } returns TextFieldValue("search")
+        every { mainViewModel.findStatus() } returns "test"
+
         runDesktopComposeUiTest {
             setContent {
                 MainScaffold()
