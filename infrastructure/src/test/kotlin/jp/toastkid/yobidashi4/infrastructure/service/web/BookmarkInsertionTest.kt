@@ -120,4 +120,17 @@ class BookmarkInsertionTest {
         assertEquals("Add bookmark: Bookmark(title=tab, url=, favicon=, parent=root, folder=false)", slot.captured)
     }
 
+    @Test
+    fun bothNullCase() {
+        val slot = slot<String>()
+        every { mainViewModel.showSnackbar(capture(slot)) } just Runs
+        every { params.linkUrl } returns null
+        every { params.sourceUrl } returns null
+        every { params.pageUrl } returns "https://www.yahoo.co.jp"
+
+        bookmarkInsertion.invoke(null, null)
+
+        assertEquals("Add bookmark: Bookmark(title=tab, url=, favicon=, parent=root, folder=false)", slot.captured)
+    }
+
 }
