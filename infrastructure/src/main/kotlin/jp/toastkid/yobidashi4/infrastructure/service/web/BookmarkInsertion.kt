@@ -15,11 +15,13 @@ class BookmarkInsertion : KoinComponent {
 
     operator fun invoke(params: CefContextMenuParams? = null, latestUrl: String?) {
         val item = when {
-            params?.linkUrl != null && params.linkUrl.isNotBlank() ->
+            params == null ->
+                Bookmark(mainViewModel.currentTab()?.title() ?: "", url = latestUrl ?: "")
+            params.linkUrl != null && params.linkUrl.isNotBlank() ->
                 makeBookmarkItemWithUrl(params.linkUrl)
-            params?.sourceUrl != null && params.sourceUrl.isNotBlank() ->
+            params.sourceUrl != null && params.sourceUrl.isNotBlank() ->
                 makeBookmarkItemWithUrl(params.sourceUrl)
-            params?.pageUrl != null && params.pageUrl.isNotBlank() ->
+            params.pageUrl != null && params.pageUrl.isNotBlank() ->
                 Bookmark(mainViewModel.currentTab()?.title() ?: "", url = params.pageUrl)
             else ->
                 Bookmark(mainViewModel.currentTab()?.title() ?: "", url = latestUrl ?: "")
