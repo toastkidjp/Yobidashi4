@@ -3,12 +3,12 @@ package jp.toastkid.yobidashi4.infrastructure.service.article
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
-import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
@@ -55,7 +55,7 @@ class ArticleOpenerTest {
     @AfterEach
     fun tearDown() {
         stopKoin()
-        clearAllMocks()
+        unmockkAll()
     }
 
     @Test
