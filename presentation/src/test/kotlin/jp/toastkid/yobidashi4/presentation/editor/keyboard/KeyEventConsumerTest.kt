@@ -887,6 +887,30 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun noopCombineLines() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_J,
+            'J'
+        )
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+
+        val consumed = subject.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("nc"),
+            mockk(),
+            { fail() }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun combineLines() {
         awtKeyEvent = java.awt.event.KeyEvent(
             mockk(),
