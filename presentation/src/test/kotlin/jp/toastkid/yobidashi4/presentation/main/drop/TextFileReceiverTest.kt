@@ -4,10 +4,10 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -57,7 +57,7 @@ class TextFileReceiverTest {
     @AfterEach
     fun tearDown() {
         stopKoin()
-        clearAllMocks()
+        unmockkAll()
     }
 
     @OptIn(ExperimentalTestApi::class)
