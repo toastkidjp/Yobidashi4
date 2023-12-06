@@ -309,6 +309,15 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopDownloadWithNullParam() {
+        every { browser.startDownload(any()) } just Runs
+
+        subject.invoke(browser, null, "test", ContextMenu.DOWNLOAD.id)
+
+        verify(inverse = true) { browser.startDownload(any()) }
+    }
+
+    @Test
     fun noopDownloadWithNullSourceUrl() {
         every { browser.startDownload(any()) } just Runs
         every { param.sourceUrl } returns null
