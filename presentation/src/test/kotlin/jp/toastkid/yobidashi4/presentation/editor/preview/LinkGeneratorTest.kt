@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -29,6 +30,7 @@ class LinkGeneratorTest {
 
     @AfterEach
     fun tearDown() {
+        unmockkAll()
     }
 
     @Test
