@@ -582,10 +582,10 @@ class MainViewModelImplementationTest {
         subject.slideshow(path)
 
         assertSame(path, subject.slideshowPath())
-    }
 
-    @Test
-    fun closeSlideshow() {
+        subject.closeSlideshow()
+
+        assertNull(subject.slideshowPath())
     }
 
     @Test
