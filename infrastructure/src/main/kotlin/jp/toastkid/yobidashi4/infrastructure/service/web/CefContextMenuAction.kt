@@ -57,7 +57,8 @@ class CefContextMenuAction : KoinComponent {
             }
 
             ContextMenu.DOWNLOAD.id -> {
-                browser?.startDownload(params?.sourceUrl)
+                val sourceUrl = params?.sourceUrl ?: return
+                browser?.startDownload(sourceUrl)
             }
 
             ContextMenu.ADD_BOOKMARK.id -> {
