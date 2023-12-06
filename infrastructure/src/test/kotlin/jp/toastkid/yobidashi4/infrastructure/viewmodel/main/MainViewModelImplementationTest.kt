@@ -575,11 +575,13 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun slideshowPath() {
-    }
-
-    @Test
     fun slideshow() {
+        assertNull(subject.slideshowPath())
+
+        val path = mockk<Path>()
+        subject.slideshow(path)
+
+        assertSame(path, subject.slideshowPath())
     }
 
     @Test
