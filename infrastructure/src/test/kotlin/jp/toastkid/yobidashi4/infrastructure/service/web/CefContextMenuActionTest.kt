@@ -309,6 +309,17 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopDownloadWithNullSourceUrl() {
+        every { browser.startDownload(any()) } just Runs
+        every { param.sourceUrl } returns null
+
+        subject.invoke(browser, param, "test", ContextMenu.DOWNLOAD.id)
+
+        verify(inverse = true) { browser.startDownload(any()) }
+        verify { param.sourceUrl }
+    }
+
+    @Test
     fun addBookmark() {
         mockkConstructor(BookmarkInsertion::class)
         every { anyConstructed<BookmarkInsertion>().invoke(any(), any()) } just Runs
