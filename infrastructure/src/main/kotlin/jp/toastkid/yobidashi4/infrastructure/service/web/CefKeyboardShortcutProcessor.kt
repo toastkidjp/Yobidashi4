@@ -44,9 +44,8 @@ class CefKeyboardShortcutProcessor(
             return true
         }
         if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_P) {
-            browser?.let {
-                it.printToPDF("${it.identifier}.pdf", null, null)
-            }
+            browser ?: return true
+            browser.printToPDF("${browser.identifier}.pdf", null, null)
             return true
         }
         if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_UP) {
