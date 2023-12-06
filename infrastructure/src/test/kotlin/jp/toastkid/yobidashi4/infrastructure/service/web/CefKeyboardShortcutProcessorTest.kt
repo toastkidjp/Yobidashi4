@@ -133,6 +133,13 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun noopPageUp() {
+        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_UP)
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun pageUp() {
         every { browser.executeJavaScript(any(), any(), any()) } just Runs
 
