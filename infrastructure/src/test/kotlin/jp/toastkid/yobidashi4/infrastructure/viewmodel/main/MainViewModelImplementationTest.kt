@@ -335,6 +335,24 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun updateEditorContentFilterOutCase() {
+        val path = mockk<Path>()
+        val tab = mockk<EditorTab>()
+        every { tab.path } returns mockk()
+        every { tab.setContent(any(), any()) } just Runs
+        every { tab.setCaretPosition(any()) } just Runs
+        every { tab.setScroll(any()) } just Runs
+        subject.tabs.add(tab)
+
+        subject.updateEditorContent(path, "test", 1, 1.0, true)
+
+        verify { tab.path }
+        verify(inverse = true) { tab.setContent(any(), any()) }
+        verify(inverse = true) { tab.setCaretPosition(any()) }
+        verify(inverse = true) { tab.setScroll(any()) }
+    }
+
+    @Test
     fun openingEditor() {
         assertFalse(subject.openingEditor())
 
