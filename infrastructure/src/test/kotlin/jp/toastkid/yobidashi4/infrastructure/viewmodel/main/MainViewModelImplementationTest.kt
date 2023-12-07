@@ -1,6 +1,9 @@
 package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
@@ -588,12 +591,18 @@ class MainViewModelImplementationTest {
         assertNull(subject.slideshowPath())
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Test
     fun setTextManager() {
-    }
+        assertNull(subject.selectedText())
 
-    @Test
-    fun selectedText() {
+        val textManager = mockk<TextContextMenu.TextManager>()
+        val annotatedString = mockk<AnnotatedString>()
+        every { textManager.selectedText } returns annotatedString
+        every { annotatedString.text } returns "test"
+
+        subject.setTextManager(textManager)
+        assertEquals("test", subject.selectedText())
     }
 
 }
