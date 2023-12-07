@@ -318,6 +318,20 @@ class MainViewModelImplementationTest {
 
     @Test
     fun updateEditorContent() {
+        val path = mockk<Path>()
+        val tab = mockk<EditorTab>()
+        every { tab.path } returns path
+        every { tab.setContent(any(), any()) } just Runs
+        every { tab.setCaretPosition(any()) } just Runs
+        every { tab.setScroll(any()) } just Runs
+        subject.tabs.add(tab)
+
+        subject.updateEditorContent(path, "test", 1, 1.0, true)
+
+        verify { tab.path }
+        verify { tab.setContent(any(), any()) }
+        verify { tab.setCaretPosition(any()) }
+        verify { tab.setScroll(any()) }
     }
 
     @Test
