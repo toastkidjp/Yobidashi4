@@ -75,4 +75,16 @@ class BarcodeToolTabViewKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun nullImage() {
+        every { anyConstructed<BarcodeToolTabViewModel>().barcodeImage() } returns null
+
+        runDesktopComposeUiTest {
+            setContent {
+                BarcodeToolTabView()
+            }
+        }
+    }
+
 }
