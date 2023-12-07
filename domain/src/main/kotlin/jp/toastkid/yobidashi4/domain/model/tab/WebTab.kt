@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.model.tab
 import java.nio.file.Files
 import java.util.UUID
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
+import jp.toastkid.yobidashi4.domain.service.text.MarkdownLinkGenerator
 import kotlin.io.path.pathString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +68,8 @@ data class WebTab(
             _updateFlow.emit(System.currentTimeMillis())
         }
     }
+
+    fun markdownLink() = MarkdownLinkGenerator().invoke(title, url)
 
 }
 
