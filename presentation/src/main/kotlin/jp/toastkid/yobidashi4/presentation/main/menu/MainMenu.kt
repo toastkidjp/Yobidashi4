@@ -144,6 +144,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     Item("Copy tab's URL", icon = painterResource("images/icon/ic_clipboard.xml")) {
                         ClipboardPutterService().invoke(currentTab.url())
                     }
+                    Item("Copy tab's markdown link", icon = painterResource("images/icon/ic_clipboard.xml")) {
+                        ClipboardPutterService().invoke(currentTab.markdownLink())
+                    }
                 }
             }
 
