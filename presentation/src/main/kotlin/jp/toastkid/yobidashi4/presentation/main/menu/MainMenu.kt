@@ -28,6 +28,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
@@ -137,6 +138,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
                 Item("Copy tab's title", icon = painterResource("images/icon/ic_clipboard.xml")) {
                     ClipboardPutterService().invoke(viewModel.currentTab()?.title())
+                }
+
+                if (currentTab is WebTab) {
+                    Item("Copy tab's URL", icon = painterResource("images/icon/ic_clipboard.xml")) {
+                        ClipboardPutterService().invoke(currentTab.url())
+                    }
                 }
             }
 
