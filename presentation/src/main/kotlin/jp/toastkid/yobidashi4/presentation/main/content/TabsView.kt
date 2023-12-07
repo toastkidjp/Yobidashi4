@@ -33,7 +33,6 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.awt.Desktop
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -239,7 +238,7 @@ private fun TabOptionMenu(
                 openDropdownMenu.value = false
                 TableContentExporter().invoke(tab.items())
                 viewModel.showSnackbar("Done export.", "Open") {
-                    Desktop.getDesktop().open(Path.of(TableContentExporter.exportTo()).toFile())
+                    viewModel.openFile(Path.of(TableContentExporter.exportTo()), false)
                 }
             }) {
                 Text("Export table")
