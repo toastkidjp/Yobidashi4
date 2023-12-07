@@ -124,4 +124,9 @@ class WebTabTest {
         countDownLatch.await(5, TimeUnit.SECONDS)
     }
 
+    @Test
+    fun markdownLink() {
+        println(webTab.markdownLink())
+    }
+
 }
