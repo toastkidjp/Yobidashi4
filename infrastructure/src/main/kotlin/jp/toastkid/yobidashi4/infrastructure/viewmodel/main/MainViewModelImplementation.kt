@@ -293,14 +293,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun updateEditorContent(path: Path, text: String, caretPosition: Int, scroll: Double, resetEditing: Boolean) {
-        val editorTab = tabs.filterIsInstance(EditorTab::class.java).firstOrNull { it.path == path }
-        editorTab?.setContent(text, resetEditing)
+        val editorTab = tabs.filterIsInstance(EditorTab::class.java).firstOrNull { it.path == path } ?: return
+        editorTab.setContent(text, resetEditing)
         if (caretPosition != -1) {
-            editorTab?.setCaretPosition(caretPosition)
+            editorTab.setCaretPosition(caretPosition)
         }
 
         if (scroll >= 0) {
-            editorTab?.setScroll(scroll)
+            editorTab.setScroll(scroll)
         }
     }
 
