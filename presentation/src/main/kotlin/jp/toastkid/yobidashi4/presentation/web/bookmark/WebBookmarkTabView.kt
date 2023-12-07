@@ -242,7 +242,7 @@ private fun WebBookmarkItemRow(
                 }
             ) {
                 Text(
-                    "Clip internal link",
+                    "Clip markdown link",
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
