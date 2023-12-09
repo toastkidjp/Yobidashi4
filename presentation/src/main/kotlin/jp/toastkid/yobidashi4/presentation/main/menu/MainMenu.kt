@@ -32,10 +32,14 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
+import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.min
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -263,6 +267,14 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     setting.save()
                     current.value = it
                     viewModel.showSnackbar("Please would you restart this app?")
+                }
+            }
+        }
+
+        Menu("Notification") {
+            Item("Restart") {
+                CoroutineScope(Dispatchers.IO).launch {
+                    object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
                 }
             }
         }
