@@ -364,13 +364,14 @@ class PreviewKeyEventConsumerTest {
             TextFieldValue(),
             mockk(),
             {},
-            mockk()
+            scrollBy
         )
 
         assertTrue(consumed)
 
         verify { mainViewModel.openArticleList() }
         verify { mainViewModel.switchArticleList() }
+        verify { scrollBy wasNot called }
     }
 
     @Test
@@ -392,13 +393,14 @@ class PreviewKeyEventConsumerTest {
             TextFieldValue(),
             mockk(),
             {},
-            mockk()
+            scrollBy
         )
 
         assertTrue(consumed)
 
         verify { mainViewModel.openArticleList() }
         verify(inverse = true) { mainViewModel.switchArticleList() }
+        verify { scrollBy wasNot called }
     }
 
     @Test
