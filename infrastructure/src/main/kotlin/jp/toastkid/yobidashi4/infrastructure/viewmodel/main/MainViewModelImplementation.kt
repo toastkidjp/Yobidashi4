@@ -470,6 +470,15 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun replaceInputValue() = replaceInput.value
 
+    private val caseSensitive = mutableStateOf(setting.useCaseSensitiveInFinder())
+
+    override fun caseSensitive() = caseSensitive.value
+
+    override fun switchCaseSensitive() {
+        caseSensitive.value = caseSensitive.value.not()
+        setting.setUseCaseSensitiveInFinder(caseSensitive.value)
+    }
+
     private val _finderFlow = MutableSharedFlow<FindOrder>(1)
 
     override fun finderFlow(): Flow<FindOrder> {
@@ -487,19 +496,19 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun findUp() {
         CoroutineScope(Dispatchers.Default).launch {
-            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = true))
+            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = true, caseSensitive = caseSensitive()))
         }
     }
 
     override fun replaceAll() {
         CoroutineScope(Dispatchers.Default).launch {
-            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, invokeReplace = true))
+            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, invokeReplace = true, caseSensitive = caseSensitive()))
         }
     }
 
     override fun findDown() {
         CoroutineScope(Dispatchers.Default).launch {
-            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = false))
+            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = false, caseSensitive = caseSensitive()))
         }
     }
 
