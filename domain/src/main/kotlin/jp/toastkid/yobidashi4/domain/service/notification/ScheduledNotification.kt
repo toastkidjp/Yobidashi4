@@ -7,6 +7,6 @@ interface ScheduledNotification {
 
     fun notificationFlow(): SharedFlow<NotificationEvent>
 
-    suspend fun start()
+    suspend fun start(delay: Long = 10_000)
 
 }
