@@ -187,6 +187,7 @@ class TextEditorViewModel {
                 mainViewModel.setFindStatus(finderMessageFactory(it.target, foundCount))
 
                 if (selected == -1) {
+                    content.value = content.value.copy(selection = TextRange(content.value.selection.start))
                     return@collect
                 }
 
