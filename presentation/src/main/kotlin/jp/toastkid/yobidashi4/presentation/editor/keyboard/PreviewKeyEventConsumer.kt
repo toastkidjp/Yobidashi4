@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.math.min
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -49,10 +50,11 @@ class PreviewKeyEventConsumer(
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
                 val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                val currentLineText = content.text.substring(lineStart, lineEnd + 1)
+                val targetEnd = min(content.text.length, lineEnd + 1)
+                val currentLineText = content.text.substring(lineStart, targetEnd)
                 ClipboardPutterService().invoke(currentLineText)
                 val newText = StringBuilder(content.text)
-                    .delete(lineStart, lineEnd + 1)
+                    .delete(lineStart, targetEnd)
                     .toString()
                 setNewContent(
                     TextFieldValue(
