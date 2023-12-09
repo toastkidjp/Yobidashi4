@@ -23,7 +23,7 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
 
     override fun notificationFlow() = _notificationFlow.asSharedFlow()
 
-    override suspend fun start() {
+    override suspend fun start(delay: Long) {
         notificationEvents.addAll(notificationEventReader.invoke())
         if (running) {
             return
@@ -39,7 +39,7 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
                 _notificationFlow.emit(event)
                 iterator.remove()
             }
-            delay(10_000)
+            delay(delay)
         }
         running = false
     }
