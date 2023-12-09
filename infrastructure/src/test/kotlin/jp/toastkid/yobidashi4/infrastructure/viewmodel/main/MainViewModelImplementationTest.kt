@@ -88,6 +88,8 @@ class MainViewModelImplementationTest {
         }
         every { setting.darkMode() } returns false
         every { setting.setDarkMode(any()) } just Runs
+        every { setting.setUseCaseSensitiveInFinder(any()) } just Runs
+        every { setting.useCaseSensitiveInFinder() } returns false
         every { topArticleLoaderService.invoke() } returns listOf(mockk(), mockk())
         every { webViewPool.dispose(any()) } just Runs
 
@@ -653,6 +655,17 @@ class MainViewModelImplementationTest {
 
         subject.setTextManager(textManager)
         assertEquals("test", subject.selectedText())
+    }
+
+    @Test
+    fun caseSensitive() {
+        assertFalse(subject.caseSensitive())
+
+        subject.switchCaseSensitive()
+
+        assertTrue(subject.caseSensitive())
+        verify { setting.useCaseSensitiveInFinder() }
+        verify { setting.setUseCaseSensitiveInFinder(true) }
     }
 
 }
