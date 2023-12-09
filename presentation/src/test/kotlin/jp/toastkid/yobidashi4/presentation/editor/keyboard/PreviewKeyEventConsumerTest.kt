@@ -425,4 +425,36 @@ class PreviewKeyEventConsumerTest {
         assertFalse(consumed)
     }
 
+    @Test
+    fun lastLine() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_X,
+            'X'
+        )
+        every { multiParagraph.getLineForOffset(any()) } returns 2
+        every { multiParagraph.getLineStart(2) } returns 11
+        every { multiParagraph.getLineEnd(2) } returns 16
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue("test\ntest2\ntest3"),
+            multiParagraph,
+            {},
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { scrollBy wasNot called }
+        verify { multiParagraph.getLineForOffset(any()) }
+        verify { multiParagraph.getLineStart(2) }
+        verify { multiParagraph.getLineEnd(2) }
+        verify { anyConstructed<ClipboardPutterService>().invoke("test3") }
+    }
+
 }
