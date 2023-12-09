@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -81,6 +82,15 @@ internal fun FindInPageBox() {
                         )
                 )
             }
+
+            Checkbox(
+                viewModel.caseSensitive(),
+                onCheckedChange = {
+                    viewModel.switchCaseSensitive()
+                }
+            )
+
+            Text("Case sensitive")
 
             Text(
                 "↑",
