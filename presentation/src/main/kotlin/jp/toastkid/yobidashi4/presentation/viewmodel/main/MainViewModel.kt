@@ -85,6 +85,10 @@ interface MainViewModel {
 
     fun replaceInputValue(): TextFieldValue
 
+    fun caseSensitive(): Boolean
+
+    fun switchCaseSensitive()
+
     fun finderFlow(): Flow<FindOrder>
 
     fun onFindInputChange(value: TextFieldValue)
