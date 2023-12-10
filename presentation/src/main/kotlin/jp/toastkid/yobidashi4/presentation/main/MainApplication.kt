@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
 import jp.toastkid.yobidashi4.presentation.main.menu.TextContextMenuFactory
 import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
+import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +55,7 @@ fun launchMainApplication() {
                 onCloseRequest = {
                     exitApplication()
                 },
-                title = "Yobidashi 4",
+                title = "Yobidashi 4 ${LauncherJarTimestampReader().invoke() ?: ""}",
                 state = mainViewModel.windowState(),
                 icon = painterResource("images/icon.png")
             ) {
