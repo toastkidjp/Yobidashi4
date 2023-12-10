@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.Reloadable
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
@@ -66,6 +67,7 @@ import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
+import jp.toastkid.yobidashi4.presentation.tool.notification.NotificationListTabView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
@@ -176,6 +178,7 @@ internal fun TabsView(modifier: Modifier) {
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
             is ConverterToolTab -> ConverterToolTabView()
             is BarcodeToolTab -> BarcodeToolTabView()
+            is NotificationListTab -> NotificationListTabView()
             else -> Unit
         }
     }
