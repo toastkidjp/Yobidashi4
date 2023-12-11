@@ -80,32 +80,13 @@ fun NotificationListTabView() {
             ) {
                 stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        listOf("Title", "Message", "DateTime").forEach {
-                            val headerCursorOn = remember { mutableStateOf(false) }
-                            val headerColumnBackgroundColor = animateColorAsState(
-                                if (headerCursorOn.value) MaterialTheme.colors.primary
-                                else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface
-                                else Color.Transparent
-                            )
-
-                            Box(
-                                contentAlignment = Alignment.CenterStart,
-                                modifier = Modifier
-                                    .fillParentMaxHeight(0.05f)
-                                    .onPointerEvent(PointerEventType.Enter) {
-                                        headerCursorOn.value = true
-                                    }
-                                    .onPointerEvent(PointerEventType.Exit) {
-                                        headerCursorOn.value = false
-                                    }
-                                    .drawBehind { drawRect(headerColumnBackgroundColor.value) }
-                            ) {
-                                Text(
-                                    it,
-                                    color = if (headerCursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                )
-                            }
+                        Button(onClick = {
+                            val new = NotificationEvent.makeDefault()
+                            object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository
+                                .add(new)
+                            notificationEvents.add(new)
+                        }) {
+                            Text("Add")
                         }
                     }
                 }
