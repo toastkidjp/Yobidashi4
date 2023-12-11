@@ -145,6 +145,17 @@ fun NotificationListTabView() {
                         }) {
                             Text("Update")
                         }
+                        Button(onClick = {
+                            object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository
+                                .deleteAt(index)
+                            notificationEvents.removeAt(index)
+                            object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                                .showSnackbar("Delete notification event.")
+                        },
+                            modifier = Modifier.padding(start = 4.dp)
+                        ) {
+                            Text("x")
+                        }
                     }
                 }
             }
