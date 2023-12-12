@@ -64,6 +64,7 @@ fun NotificationListTabView() {
     val scrollAction = remember { KeyboardScrollAction(state) }
 
     val notificationEvents = remember { mutableStateListOf<NotificationEvent>() }
+    val repository = remember { object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -81,7 +82,7 @@ fun NotificationListTabView() {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Button(onClick = {
                             val new = NotificationEvent.makeDefault()
-                            object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository
+                            repository
                                 .add(new)
                             notificationEvents.add(new)
                         }) {
@@ -118,7 +119,7 @@ fun NotificationListTabView() {
                         }
 
                         Button(onClick = {
-                            object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository
+                            repository
                                 .update(index, notificationEvent)
                             object : KoinComponent { val vm: MainViewModel by inject() }.vm
                                 .showSnackbar("Update notification event.")
@@ -126,7 +127,7 @@ fun NotificationListTabView() {
                             Text("Update")
                         }
                         Button(onClick = {
-                            object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository
+                            repository
                                 .deleteAt(index)
                             notificationEvents.removeAt(index)
                             object : KoinComponent { val vm: MainViewModel by inject() }.vm
@@ -144,7 +145,7 @@ fun NotificationListTabView() {
 
             LaunchedEffect(Unit) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    notificationEvents.addAll(object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository.readAll())
+                    notificationEvents.addAll(repository.readAll())
                 }
                 focusRequester.requestFocus()
             }
