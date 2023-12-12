@@ -47,7 +47,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
-import jp.toastkid.yobidashi4.domain.service.notification.NotificationEventReader
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -145,7 +144,7 @@ fun NotificationListTabView() {
 
             LaunchedEffect(Unit) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    notificationEvents.addAll(NotificationEventReader().invoke())
+                    notificationEvents.addAll(object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository.readAll())
                 }
                 focusRequester.requestFocus()
             }
