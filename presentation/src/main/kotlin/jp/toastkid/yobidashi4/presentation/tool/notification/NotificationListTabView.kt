@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,7 +24,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,11 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -46,70 +41,55 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
-import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
+import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NotificationListTabView() {
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember { FocusRequester() }
-    val state = rememberLazyListState()
-    val scrollAction = remember { KeyboardScrollAction(state) }
-
-    val notificationEvents = remember { mutableStateListOf<NotificationEvent>() }
-    val repository = remember { object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository }
-    val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() } }
+    val viewModel = remember { NotificationListTabViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            scrollAction.invoke(coroutineScope, it.key, it.isCtrlPressed)
-        }.focusRequester(focusRequester).focusable(true)
+            return@onKeyEvent viewModel.onKeyEvent(coroutineScope, it)
+        }.focusRequester(viewModel.focusRequester()).focusable(true)
     ) {
         Box {
             LazyColumn(
-                state = state,
+                state = viewModel.listState(),
                 userScrollEnabled = true
             ) {
                 stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Button(onClick = {
-                            val new = NotificationEvent.makeDefault()
-                            repository
-                                .add(new)
-                            notificationEvents.add(new)
+                            viewModel.add()
                         }) {
                             Text("Add")
                         }
                     }
                 }
 
-                itemsIndexed(notificationEvents) { index, item ->
+                itemsIndexed(viewModel.items()) { index, item ->
                     Row(modifier = Modifier.fillMaxWidth()) {
                         var notificationEvent = item
-                        NotificationEventRow(item.title, state.firstVisibleItemIndex != 0) {
+                        NotificationEventRow(item.title, viewModel.listState().firstVisibleItemIndex != 0) {
                             if (it.composition != null) {
                                 return@NotificationEventRow
                             }
 
                             notificationEvent = notificationEvent.copy(title = it.text)
                         }
-                        NotificationEventRow(item.text, state.firstVisibleItemIndex != 0) {
+                        NotificationEventRow(item.text, viewModel.listState().firstVisibleItemIndex != 0) {
                             if (it.composition != null) {
                                 return@NotificationEventRow
                             }
 
                             notificationEvent = notificationEvent.copy(text = it.text)
                         }
-                        NotificationEventRow(item.dateTimeString(), state.firstVisibleItemIndex != 0) {
+                        NotificationEventRow(item.dateTimeString(), viewModel.listState().firstVisibleItemIndex != 0) {
                             if (it.composition != null) {
                                 return@NotificationEventRow
                             }
@@ -120,19 +100,12 @@ fun NotificationListTabView() {
                         }
 
                         Button(onClick = {
-                            repository
-                                .update(index, notificationEvent)
-                            mainViewModel.vm
-                                .showSnackbar("Update notification event.")
+                            viewModel.update(index, notificationEvent)
                         }) {
                             Text("Update")
                         }
                         Button(onClick = {
-                            repository
-                                .deleteAt(index)
-                            notificationEvents.removeAt(index)
-                            mainViewModel.vm
-                                .showSnackbar("Delete notification event.")
+                            viewModel.deleteAt(index)
                         },
                             modifier = Modifier.padding(start = 4.dp)
                         ) {
@@ -141,14 +114,11 @@ fun NotificationListTabView() {
                     }
                 }
             }
-            VerticalScrollbar(adapter = rememberScrollbarAdapter(state), modifier = Modifier.fillMaxHeight().align(
+            VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(
                 Alignment.CenterEnd))
 
             LaunchedEffect(Unit) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    notificationEvents.addAll(repository.readAll())
-                }
-                focusRequester.requestFocus()
+                viewModel.start(Dispatchers.IO)
             }
         }
     }
@@ -161,7 +131,8 @@ private fun NotificationEventRow(
     firstVisible: Boolean,
     onValueChange: (TextFieldValue) -> Unit
 ) {
-    val input = mutableStateOf(TextFieldValue(initialInput))
+    val input = remember { mutableStateOf(TextFieldValue()) }
+    input.value = TextFieldValue(initialInput)
 
     val headerCursorOn = mutableStateOf(false)
     val headerColumnBackgroundColor = animateColorAsState(
