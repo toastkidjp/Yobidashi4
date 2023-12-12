@@ -2,20 +2,21 @@ package jp.toastkid.yobidashi4.infrastructure.service.notification
 
 import java.time.LocalDateTime
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
-import jp.toastkid.yobidashi4.domain.service.notification.NotificationEventReader
+import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @Single
 class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent {
 
     private val _notificationFlow = MutableSharedFlow<NotificationEvent>()
 
-    private val notificationEventReader = NotificationEventReader()
+    private val repository: NotificationEventRepository by inject()
 
     private var running = false
 
@@ -24,7 +25,7 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
     override fun notificationFlow() = _notificationFlow.asSharedFlow()
 
     override suspend fun start(delay: Long) {
-        notificationEvents.addAll(notificationEventReader.invoke())
+        notificationEvents.addAll(repository.readAll())
         if (running) {
             return
         }
