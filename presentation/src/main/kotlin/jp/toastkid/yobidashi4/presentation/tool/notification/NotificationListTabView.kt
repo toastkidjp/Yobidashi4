@@ -65,6 +65,7 @@ fun NotificationListTabView() {
 
     val notificationEvents = remember { mutableStateListOf<NotificationEvent>() }
     val repository = remember { object : KoinComponent { val repository: NotificationEventRepository by inject() }.repository }
+    val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() } }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -121,7 +122,7 @@ fun NotificationListTabView() {
                         Button(onClick = {
                             repository
                                 .update(index, notificationEvent)
-                            object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                            mainViewModel.vm
                                 .showSnackbar("Update notification event.")
                         }) {
                             Text("Update")
@@ -130,7 +131,7 @@ fun NotificationListTabView() {
                             repository
                                 .deleteAt(index)
                             notificationEvents.removeAt(index)
-                            object : KoinComponent { val vm: MainViewModel by inject() }.vm
+                            mainViewModel.vm
                                 .showSnackbar("Delete notification event.")
                         },
                             modifier = Modifier.padding(start = 4.dp)
