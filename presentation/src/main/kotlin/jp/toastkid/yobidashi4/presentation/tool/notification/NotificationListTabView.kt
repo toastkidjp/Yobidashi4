@@ -160,9 +160,9 @@ private fun NotificationEventRow(
     firstVisible: Boolean,
     onValueChange: (TextFieldValue) -> Unit
 ) {
-    val input = remember { mutableStateOf(TextFieldValue(initialInput)) }
+    val input = mutableStateOf(TextFieldValue(initialInput))
 
-    val headerCursorOn = remember { mutableStateOf(false) }
+    val headerCursorOn = mutableStateOf(false)
     val headerColumnBackgroundColor = animateColorAsState(
         if (headerCursorOn.value) MaterialTheme.colors.primary
         else if (firstVisible) MaterialTheme.colors.surface
