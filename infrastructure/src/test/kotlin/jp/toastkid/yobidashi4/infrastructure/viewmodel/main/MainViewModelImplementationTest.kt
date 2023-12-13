@@ -15,6 +15,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -33,6 +34,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
+import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
@@ -223,7 +225,14 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun openPreview() {
+    fun openPreviewOnBackground() {
+        mockkObject(MarkdownPreviewTab)
+        every { MarkdownPreviewTab.with(any()) } returns mockk()
+
+        subject.openPreview(mockk(), true)
+
+        verify { MarkdownPreviewTab.with(any()) }
+        assertEquals(0, subject.selected.value)
     }
 
     @Test
