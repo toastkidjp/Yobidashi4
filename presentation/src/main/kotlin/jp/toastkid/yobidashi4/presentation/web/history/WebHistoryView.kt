@@ -66,7 +66,7 @@ import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun WebHistoryView() {
+internal fun WebHistoryView() {
     val viewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
     val favicons = remember { WebIcon().readAll() }
