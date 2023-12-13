@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -15,10 +14,6 @@ class LoanCalculatorViewModelTest {
         subject = LoanCalculatorViewModel()
 
         subject.launch()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test
@@ -70,7 +65,7 @@ class LoanCalculatorViewModelTest {
 
     @Test
     fun roundToIntSafely() {
-        println(subject.roundToIntSafely(Double.NaN))
+        assertEquals("0", subject.roundToIntSafely(Double.NaN))
         assertEquals("2", subject.roundToIntSafely(2.2))
         assertEquals("5", subject.roundToIntSafely(4.5))
     }
