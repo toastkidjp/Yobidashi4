@@ -73,7 +73,7 @@ fun NotificationListTabView() {
                 }
 
                 itemsIndexed(viewModel.items()) { index, item ->
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth().animateItemPlacement()) {
                         var notificationEvent = item
                         NotificationEventRow(item.title, viewModel.listState().firstVisibleItemIndex != 0) {
                             if (it.composition != null) {
