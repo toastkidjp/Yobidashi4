@@ -132,7 +132,6 @@ private fun NotificationEventRow(
     onValueChange: (TextFieldValue) -> Unit
 ) {
     val input = remember { mutableStateOf(TextFieldValue()) }
-    input.value = TextFieldValue(initialInput)
 
     val headerCursorOn = mutableStateOf(false)
     val headerColumnBackgroundColor = animateColorAsState(
@@ -181,5 +180,9 @@ private fun NotificationEventRow(
                 )
             }
         )
+
+        LaunchedEffect(onValueChange) {
+            input.value = TextFieldValue(initialInput)
+        }
     }
 }
