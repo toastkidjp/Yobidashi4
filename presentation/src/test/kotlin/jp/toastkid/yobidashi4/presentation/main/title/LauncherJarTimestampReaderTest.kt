@@ -39,4 +39,20 @@ class LauncherJarTimestampReaderTest {
         assertEquals("2023-12-10(Sun) 09:55:56", lastUpdated)
     }
 
+    @Test
+    fun jarFileDoesNotExists() {
+        every { Files.exists(any()) } returns false
+
+        val lastUpdated = subject.invoke("fantastic.jar")
+
+        assertNull(lastUpdated)
+    }
+
+    @Test
+    fun mainCase() {
+        val lastUpdated = subject.invoke()
+
+        assertNull(lastUpdated)
+    }
+
 }
