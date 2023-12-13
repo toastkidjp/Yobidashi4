@@ -46,7 +46,7 @@ import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NotificationListTabView() {
+internal fun NotificationListTabView() {
     val coroutineScope = rememberCoroutineScope()
     val viewModel = remember { NotificationListTabViewModel() }
 
