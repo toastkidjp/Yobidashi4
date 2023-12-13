@@ -59,8 +59,8 @@ class WebViewPoolImplementation : WebViewPool {
             return
         }
 
-        browsers.keys.forEach {
-            browsers.get(it)?.close(true)
+        browsers.keys.mapNotNull { browsers.get(it) }.forEach {
+            it.close(true)
         }
         browsers.clear()
         CefApp.getInstance().dispose()
