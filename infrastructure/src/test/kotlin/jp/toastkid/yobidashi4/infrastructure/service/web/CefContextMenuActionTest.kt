@@ -235,6 +235,13 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopClipMarkdownLinkWithParamIsNull() {
+        subject.invoke(browser, null, "test", ContextMenu.CLIP_AS_MARKDOWN_LINK.id)
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun noopClipPageLink() {
         every { param.linkUrl } returns null
         every { param.sourceUrl } returns null
