@@ -76,7 +76,14 @@ Test3
         val slot = slot<Iterable<String>>()
         every { Files.write(any(), capture(slot)) } returns mockk()
 
-        subject.update(1, NotificationEvent("Updated", "This notification-event has updated.", LocalDateTime.of(2024, 1, 1, 2,3)))
+        subject.update(
+            1,
+            NotificationEvent(
+                "Updated",
+                "This notification-event has updated.",
+                LocalDateTime.of(2024, 1, 1, 2,3)
+            )
+        )
 
         verify { Files.write(any(), any<Iterable<String>>()) }
         val toList = slot.captured.toList()
