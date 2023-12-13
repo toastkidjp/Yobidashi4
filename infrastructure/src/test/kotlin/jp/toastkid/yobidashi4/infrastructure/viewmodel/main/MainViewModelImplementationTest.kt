@@ -172,6 +172,18 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun switchUseBackground() {
+        every { setting.switchUseBackground() } just Runs
+        every { setting.useBackground() } returns true
+        every { Files.exists(any()) } returns false
+
+        subject.switchUseBackground()
+
+        verify { setting.switchUseBackground() }
+        verify { setting.useBackground() }
+    }
+
+    @Test
     fun setSelectedIndex() {
         subject.openTab(LoanCalculatorTab())
         subject.openTab(LoanCalculatorTab())
