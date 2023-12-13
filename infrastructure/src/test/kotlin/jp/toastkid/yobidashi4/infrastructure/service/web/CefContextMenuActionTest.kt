@@ -177,6 +177,13 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopClipTextWithNullParam() {
+        subject.invoke(browser, null, "test", ContextMenu.CLIP_TEXT.id)
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun noopClipText() {
         every { param.selectionText } returns null
 
