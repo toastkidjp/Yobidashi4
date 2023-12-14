@@ -421,6 +421,13 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun openWithOtherBrowserUseSelectedText() {
+        subject.invoke(browser, null, "test", ContextMenu.OPEN_WITH_OTHER_BROWSER.id)
+
+        verify { viewModel.browseUri(any()) }
+    }
+
+    @Test
     fun switchDevTools() {
         subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
 
