@@ -50,7 +50,9 @@ class WebViewPoolImplementation : WebViewPool {
     }
 
     override fun dispose(id: String) {
-        browsers.get(id)?.close(true)
+        val browser = browsers.get(id) ?: return
+        browser.close(true)
+        browser.uiComponent.setSize(1, 1)
         browsers.remove(id)
     }
 
