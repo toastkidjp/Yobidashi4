@@ -236,6 +236,17 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun openPreview() {
+        mockkObject(MarkdownPreviewTab)
+        every { MarkdownPreviewTab.with(any()) } returns mockk()
+
+        subject.openPreview(mockk(), false)
+
+        verify { MarkdownPreviewTab.with(any()) }
+        assertEquals(0, subject.selected.value)
+    }
+
+    @Test
     fun noopWebSearch() {
         mockkConstructor(SearchUrlFactory::class)
         every { anyConstructed<SearchUrlFactory>().invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
