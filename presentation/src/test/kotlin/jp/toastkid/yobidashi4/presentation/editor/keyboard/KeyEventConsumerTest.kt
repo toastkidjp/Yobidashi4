@@ -282,8 +282,8 @@ class KeyEventConsumerTest {
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_2,
-            '2'
+            java.awt.event.KeyEvent.VK_0,
+            '0'
         )
 
         val consumed = subject.invoke(
@@ -303,8 +303,8 @@ class KeyEventConsumerTest {
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
             java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_2,
-            '2'
+            java.awt.event.KeyEvent.VK_0,
+            '0'
         )
 
         every { multiParagraph.getLineForOffset(any()) } returns 0
