@@ -122,7 +122,7 @@ class KeyEventConsumer(
                 )
                 true
             }
-            it.isCtrlPressed && it.key == Key.Two -> {
+            it.isCtrlPressed && it.key == Key.Zero -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isEmpty()) {
                     return false
