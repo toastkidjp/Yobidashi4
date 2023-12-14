@@ -242,6 +242,16 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopClipLinkWithNullTab() {
+        every { viewModel.currentTab() } returns null
+
+        subject.invoke(browser, param, "test", ContextMenu.CLIP_AS_MARKDOWN_LINK.id)
+
+        verify { viewModel.currentTab() }
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun noopClipPageLink() {
         every { param.linkUrl } returns null
         every { param.sourceUrl } returns null
