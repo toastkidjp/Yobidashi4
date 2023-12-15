@@ -312,6 +312,9 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openTextFile() {
+        subject.openTextFile(mockk())
+
+        assertEquals(1, subject.tabs.size)
     }
 
     @Test
