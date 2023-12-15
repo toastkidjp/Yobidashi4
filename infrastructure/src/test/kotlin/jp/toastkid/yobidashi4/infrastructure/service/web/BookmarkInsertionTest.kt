@@ -8,6 +8,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.slot
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -133,16 +134,18 @@ class BookmarkInsertionTest {
     }
 
     @Test
-    fun bothNullCase() {
+    fun currentTabIsNull() {
+        every { mainViewModel.currentTab() } returns tab
         val slot = slot<String>()
         every { mainViewModel.showSnackbar(capture(slot)) } just Runs
-        every { params.linkUrl } returns null
-        every { params.sourceUrl } returns null
-        every { params.pageUrl } returns "https://www.yahoo.co.jp"
+        every { params.linkUrl } returns "https://www.yahoo.co.jp"
 
-        bookmarkInsertion.invoke(null, null)
+        bookmarkInsertion.invoke(params, null)
 
-        assertEquals("Add bookmark: Bookmark(title=tab, url=, favicon=, parent=root, folder=false)", slot.captured)
+        verify { mainViewModel.currentTab() }
+        verify { mainViewModel.showSnackbar(capture(slot)) }
+        verify { params.linkUrl }
+        assertEquals("Add bookmark: Bookmark(title=https://www.yahoo.co.jp, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
     }
 
 }
