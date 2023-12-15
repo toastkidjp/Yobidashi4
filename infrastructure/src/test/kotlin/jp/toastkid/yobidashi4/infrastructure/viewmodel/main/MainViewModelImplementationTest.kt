@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
+import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -99,6 +100,9 @@ class MainViewModelImplementationTest {
         every { Desktop.getDesktop() } returns desktop
         every { desktop.open(any()) } just Runs
         every { desktop.browse(any()) } just Runs
+
+        mockkConstructor(EditorTabFileStore::class)
+        every { anyConstructed<EditorTabFileStore>().invoke(any(), any()) } just Runs
 
         subject = MainViewModelImplementation()
     }
@@ -351,6 +355,14 @@ class MainViewModelImplementationTest {
 
     @Test
     fun saveAllEditorTab() {
+
+    }
+
+    @Test
+    fun noopSaveAllEditorTab() {
+        subject.saveAllEditorTab()
+
+        verify(inverse = true) { anyConstructed<EditorTabFileStore>().invoke(any(), any()) }
     }
 
     @Test
