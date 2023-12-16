@@ -355,7 +355,13 @@ class MainViewModelImplementationTest {
 
     @Test
     fun saveAllEditorTab() {
+        subject.openTab(mockk<EditorTab>())
+        subject.openTab(mockk())
+        subject.openTab(mockk<EditorTab>())
 
+        subject.saveAllEditorTab()
+
+        verify(exactly = 2) { anyConstructed<EditorTabFileStore>().invoke(any(), any()) }
     }
 
     @Test
