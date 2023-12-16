@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.main
+package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateListOf

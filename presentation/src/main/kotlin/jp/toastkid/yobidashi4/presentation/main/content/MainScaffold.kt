@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.main
+package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

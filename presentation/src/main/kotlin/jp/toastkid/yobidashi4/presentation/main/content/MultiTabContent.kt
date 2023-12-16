@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.main
+package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Column
@@ -18,8 +18,6 @@ import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
 import jp.toastkid.yobidashi4.presentation.main.component.MemoryUsageBox
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBox
-import jp.toastkid.yobidashi4.presentation.main.content.FileListView
-import jp.toastkid.yobidashi4.presentation.main.content.TabsView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

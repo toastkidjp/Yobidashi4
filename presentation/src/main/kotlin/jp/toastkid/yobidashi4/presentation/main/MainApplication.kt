@@ -14,6 +14,7 @@ import androidx.compose.ui.window.rememberTrayState
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
+import jp.toastkid.yobidashi4.presentation.main.content.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
