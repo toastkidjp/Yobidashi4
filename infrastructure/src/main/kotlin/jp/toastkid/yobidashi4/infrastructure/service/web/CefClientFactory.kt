@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
+import java.awt.event.KeyEvent
 import java.nio.file.Files
 import java.nio.file.Path
+import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
@@ -30,6 +32,7 @@ import org.cef.handler.CefRequestHandlerAdapter
 import org.cef.handler.CefResourceRequestHandler
 import org.cef.handler.CefResourceRequestHandlerAdapter
 import org.cef.misc.BoolRef
+import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -171,7 +174,26 @@ class CefClientFactory(
                     return true
                 }
 
-                return super.onKeyEvent(browser, event)
+                val windowForComponent = SwingUtilities.windowForComponent(browser?.uiComponent)
+                val modifiers = when (event.modifiers) {
+                    EventFlags.EVENTFLAG_CONTROL_DOWN -> KeyEvent.CTRL_DOWN_MASK
+                    EventFlags.EVENTFLAG_SHIFT_DOWN -> KeyEvent.SHIFT_DOWN_MASK
+                    EventFlags.EVENTFLAG_ALT_DOWN -> KeyEvent.ALT_DOWN_MASK
+                    else -> null
+                } ?: return super.onKeyEvent(browser, event)
+
+                windowForComponent.dispatchEvent(
+                    KeyEvent(
+                        browser?.uiComponent,
+                        KeyEvent.KEY_PRESSED,
+                        1,
+                        modifiers,
+                        event.windows_key_code,
+                        'A'
+                    )
+                )
+
+                return true
             }
         })
         client.addContextMenuHandler(object : CefContextMenuHandlerAdapter() {
