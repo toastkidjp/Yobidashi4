@@ -350,6 +350,15 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun saveCurrentEditorTab() {
+        subject.openTab(mockk<EditorTab>())
+
+        subject.saveCurrentEditorTab()
+
+        verify { anyConstructed<EditorTabFileStore>().invoke(any(), any()) }
+    }
+
+    @Test
     fun noopSaveCurrentEditorTab() {
         subject.saveCurrentEditorTab()
 
