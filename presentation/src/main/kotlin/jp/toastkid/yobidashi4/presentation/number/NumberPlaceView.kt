@@ -70,7 +70,7 @@ fun NumberPlaceView() {
         val gameRepository: GameRepository by inject()
     }
 
-    val setting = koin.setting
+    val setting = remember { koin.setting }
     val viewModel = remember { NumberPlaceViewModel() }
     val renewGame = {
         val game = NumberPlaceGame()
