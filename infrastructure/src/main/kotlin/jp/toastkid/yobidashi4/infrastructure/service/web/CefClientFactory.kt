@@ -174,6 +174,10 @@ class CefClientFactory(
                     return true
                 }
 
+                if (event.type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_RAWKEYDOWN) {
+                    return false
+                }
+
                 val windowForComponent = SwingUtilities.windowForComponent(browser?.uiComponent)
                 val modifiers = when (event.modifiers) {
                     EventFlags.EVENTFLAG_CONTROL_DOWN -> KeyEvent.CTRL_DOWN_MASK

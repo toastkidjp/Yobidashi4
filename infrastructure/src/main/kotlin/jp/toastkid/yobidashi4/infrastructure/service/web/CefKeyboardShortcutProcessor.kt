@@ -35,14 +35,6 @@ class CefKeyboardShortcutProcessor(
             return false
         }
 
-        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_F) {
-            webTabViewModel.switchFind()
-            return true
-        }
-        if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_W) {
-            viewModel.closeCurrent()
-            return true
-        }
         if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == KeyEvent.VK_P) {
             browser ?: return true
             browser.printToPDF("${browser.identifier}.pdf", null, null)
