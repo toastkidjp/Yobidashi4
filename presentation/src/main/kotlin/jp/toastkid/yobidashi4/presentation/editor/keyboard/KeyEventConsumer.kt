@@ -223,6 +223,12 @@ class KeyEventConsumer(
                 }?.let(setNewContent)
                 true
             }
+            it.isCtrlPressed && it.key == Key.Two -> {
+                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                    "\"$it\""
+                }?.let(setNewContent)
+                true
+            }
             it.isCtrlPressed && it.key == Key.Eight -> {
                 convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
                     "($it)"
