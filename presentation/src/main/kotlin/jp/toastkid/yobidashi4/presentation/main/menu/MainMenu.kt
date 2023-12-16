@@ -11,6 +11,7 @@ import androidx.compose.ui.window.MenuBar
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
@@ -31,6 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
+import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
@@ -285,6 +287,28 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 val path = Path.of("user/notification/list.tsv")
                 viewModel.openFile(path)
             }
+            Item("Export") {
+                viewModel.showSnackbar("Done export.", "Open") {
+                    val path = Path.of(
+                        "notification${
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss"))
+                        }.tsv"
+                    )
+                    Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
+                    viewModel.openFile(Path.of("."), false)
+                }
+            }
+            /*
+             DropdownMenuItem(onClick = {
+                openDropdownMenu.value = false
+                TableContentExporter().invoke(tab.items())
+                viewModel.showSnackbar("Done export.", "Open") {
+                    viewModel.openFile(Path.of(TableContentExporter.exportTo()), false)
+                }
+            }) {
+                Text("Export table")
+            }
+             */
         }
 
         Menu("Window") {
