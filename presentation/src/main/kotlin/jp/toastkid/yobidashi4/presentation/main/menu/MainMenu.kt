@@ -298,17 +298,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     viewModel.openFile(Path.of("."), false)
                 }
             }
-            /*
-             DropdownMenuItem(onClick = {
-                openDropdownMenu.value = false
-                TableContentExporter().invoke(tab.items())
-                viewModel.showSnackbar("Done export.", "Open") {
-                    viewModel.openFile(Path.of(TableContentExporter.exportTo()), false)
-                }
-            }) {
-                Text("Export table")
-            }
-             */
         }
 
         Menu("Window") {
