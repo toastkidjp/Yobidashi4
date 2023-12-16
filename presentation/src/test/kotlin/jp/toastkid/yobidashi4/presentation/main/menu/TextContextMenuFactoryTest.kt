@@ -70,4 +70,24 @@ class TextContextMenuFactoryTest {
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun nullCase() {
+        every { textManager.cut } returns null
+        every { textManager.copy } returns null
+        every { textManager.paste } returns null
+        every { textManager.selectAll } returns null
+
+        val textContextMenu = textContextMenuFactory.invoke()
+        assertNotNull(textContextMenu)
+
+        runDesktopComposeUiTest {
+            setContent {
+                textContextMenu.Area(textManager, state) {
+
+                }
+            }
+        }
+    }
+
 }
