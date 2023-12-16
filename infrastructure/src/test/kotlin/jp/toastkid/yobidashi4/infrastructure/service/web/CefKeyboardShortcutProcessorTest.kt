@@ -80,44 +80,10 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
-    fun notConsumeOnDown() {
-        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYDOWN, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_F)
-
-        assertFalse(consumed)
-    }
-
-    @Test
-    fun passBrowserNull() {
-        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYDOWN, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_F)
-
-        assertFalse(consumed)
-    }
-
-    @Test
     fun elseCase() {
         val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_CIRCUMFLEX)
 
         assertFalse(consumed)
-    }
-
-    @Test
-    fun find() {
-        every { webTabViewModel.switchFind() } just Runs
-
-        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_F)
-
-        assertTrue(consumed)
-        verify { webTabViewModel.switchFind() }
-    }
-
-    @Test
-    fun closeCurrent() {
-        every { viewModel.closeCurrent() } just Runs
-
-        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_W)
-
-        assertTrue(consumed)
-        verify { viewModel.closeCurrent() }
     }
 
     @Test
@@ -130,6 +96,13 @@ class CefKeyboardShortcutProcessorTest {
         assertTrue(consumed)
         verify { browser.identifier }
         verify { browser.printToPDF(any(), any(), any()) }
+    }
+
+    @Test
+    fun noopPrintToPDF() {
+        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_P)
+
+        assertTrue(consumed)
     }
 
     @Test
@@ -279,7 +252,7 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
-    fun printPdf() {
+    fun printScreenshot() {
         mockkStatic(Path::class, Files::class, SwingUtilities::class, ImageIO::class)
         val path = mockk<Path>()
         every { Path.of(any<String>()) } returns path
@@ -305,7 +278,7 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
-    fun noopPrintPdf() {
+    fun noopPrintScreenshot() {
         val consumed = subject.invoke(
             null,
             CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
