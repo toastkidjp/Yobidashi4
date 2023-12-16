@@ -350,7 +350,10 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun saveCurrentEditorTab() {
+    fun noopSaveCurrentEditorTab() {
+        subject.saveCurrentEditorTab()
+
+        verify(inverse = true) { anyConstructed<EditorTabFileStore>().invoke(any(), any()) }
     }
 
     @Test
