@@ -86,13 +86,13 @@ class PreviewKeyEventConsumer(
                 )
                 return true
             }
-            it.isAltPressed && it.key == Key.DirectionRight -> {
+            it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionRight -> {
                 if (mainViewModel.openArticleList().not()) {
                     mainViewModel.switchArticleList()
                 }
                 return true
             }
-            it.isAltPressed && it.key == Key.DirectionLeft -> {
+            it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionLeft -> {
                 mainViewModel.hideArticleList()
                 return true
             }
