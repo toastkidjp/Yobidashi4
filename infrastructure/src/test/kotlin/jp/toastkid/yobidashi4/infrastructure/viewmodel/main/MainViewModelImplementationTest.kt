@@ -347,6 +347,11 @@ class MainViewModelImplementationTest {
 
     @Test
     fun addNewArticle() {
+        assertTrue(subject.articles().isEmpty())
+
+        subject.addNewArticle(mockk())
+
+        assertEquals(1, subject.articles().size)
     }
 
     @Test
