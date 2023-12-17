@@ -71,20 +71,20 @@ class TextEditorViewModel {
             return
         }
 
-        if (content.value.text != it.text) {
-            mainViewModel.updateEditorContent(
-                tab.path,
-                it.text,
-                -1,
-                resetEditing = false
-            )
-        }
-
         applyStyle(it)
     }
 
     private fun applyStyle(it: TextFieldValue) {
         val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
+        if (content.value.text != newContent.text) {
+            mainViewModel.updateEditorContent(
+                tab.path,
+                newContent.text,
+                -1,
+                resetEditing = false
+            )
+        }
+
         content.value = newContent
     }
 
