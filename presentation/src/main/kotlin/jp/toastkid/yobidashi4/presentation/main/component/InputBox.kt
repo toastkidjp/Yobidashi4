@@ -93,6 +93,12 @@ internal fun InputBox() {
                         ) {
                             viewModel.invokeInputAction(query.value.text)
                             viewModel.setShowInputBox()
+                            return@onKeyEvent true
+                        }
+
+                        if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
+                            viewModel.setShowInputBox(null)
+                            return@onKeyEvent true
                         }
                         true
                     }
