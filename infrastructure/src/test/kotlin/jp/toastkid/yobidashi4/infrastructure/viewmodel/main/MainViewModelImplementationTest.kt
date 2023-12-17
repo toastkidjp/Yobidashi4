@@ -339,6 +339,20 @@ class MainViewModelImplementationTest {
 
     @Test
     fun closeOtherTabs() {
+        val tab = mockk<WebTab>()
+        every { tab.id() } returns "test"
+        subject.openTab(mockk())
+        subject.openTab(tab)
+        val keep = mockk<EditorTab>()
+        subject.openTab(keep)
+        subject.openTab(mockk())
+        subject.setSelectedIndex(2)
+
+        subject.closeOtherTabs()
+
+        assertEquals(0, subject.selected.value)
+        assertSame(keep, subject.currentTab())
+        verify(exactly = 1) { webViewPool.dispose(any()) }
     }
 
     @Test
