@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.snackbar
 
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,6 +34,7 @@ class MainSnackbarKtTest {
 
                 rememberCoroutineScope().launch {
                     snackbarHostState.showSnackbar("test")
+                    snackbarHostState.showSnackbar("test", "OK")
                 }
             }
         }
