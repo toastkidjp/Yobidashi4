@@ -185,7 +185,15 @@ internal fun WebSearchBox() {
                                 viewModel.openUrl(uri.toString(), false)
                             }
                             viewModel.setShowWebSearch(false)
+
+                            return@onKeyEvent true
                         }
+
+                        if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
+                            viewModel.setShowWebSearch(false)
+                            return@onKeyEvent true
+                        }
+
                         true
                     }
             )
