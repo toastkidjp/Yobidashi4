@@ -23,6 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -38,7 +43,13 @@ internal fun FindInPageBox() {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().onKeyEvent {
+            if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
+                viewModel.switchFind()
+                return@onKeyEvent true
+            }
+            return@onKeyEvent false
+        }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("x", modifier = Modifier
