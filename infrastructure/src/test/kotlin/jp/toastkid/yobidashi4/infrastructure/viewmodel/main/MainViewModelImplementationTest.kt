@@ -356,6 +356,15 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun closeOtherTabsOnEmptyCase() {
+        subject.closeOtherTabs()
+
+        assertEquals(0, subject.selected.value)
+        assertNull(subject.currentTab())
+        verify { webViewPool wasNot called }
+    }
+
+    @Test
     fun closeAllTabs() {
         val tab = mockk<WebTab>()
         every { tab.id() } returns "test"
