@@ -88,9 +88,11 @@ internal fun InputBox() {
                 },
                 modifier = Modifier.focusRequester(focusRequester)
                     .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
+                        if (it.type == KeyEventType.KeyUp && it.key == Key.Enter
                             && query.value.composition == null
+                            && query.value.text.isNotBlank()
                         ) {
+                            println("invoking key event")
                             viewModel.invokeInputAction(query.value.text)
                             viewModel.setShowInputBox()
                             return@onKeyEvent true
