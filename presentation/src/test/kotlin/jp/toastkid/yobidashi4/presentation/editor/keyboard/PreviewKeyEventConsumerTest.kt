@@ -326,7 +326,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_LEFT,
             'A'
         )
@@ -354,7 +354,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_RIGHT,
             'A'
         )
@@ -383,7 +383,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_RIGHT,
             'A'
         )
@@ -409,7 +409,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK,
+            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_CIRCUMFLEX,
             '^'
         )
