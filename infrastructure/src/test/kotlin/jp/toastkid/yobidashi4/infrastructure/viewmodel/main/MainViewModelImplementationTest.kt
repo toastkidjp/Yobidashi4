@@ -10,6 +10,7 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -323,6 +324,25 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openUrl() {
+        /*
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            showSnackbar("Invalid URL. $url")
+            return
+        }
+
+        val newTab = WebTab(title = url, url = url)
+        if (background) {
+            _tabs.add(newTab)
+            return
+        }
+
+        openTab(newTab)
+         */
+        subject.openTab(mockk())
+
+        subject.openUrl("https://www.yahoo.co.jp", false)
+
+        assertTrue(subject.currentTab() is WebTab)
     }
 
     @Test
