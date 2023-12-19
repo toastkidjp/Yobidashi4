@@ -346,6 +346,13 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun noopOpenUrl() {
+        subject.openUrl("ftp://www.yahoo.co.jp", false)
+
+        assertTrue(subject.tabs.isEmpty())
+    }
+
+    @Test
     fun edit() {
     }
 
