@@ -353,6 +353,15 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun openUrlOnBackground() {
+        subject.openTab(mockk())
+
+        subject.openUrl("https://www.yahoo.co.jp", true)
+
+        assertFalse(subject.currentTab() is WebTab)
+    }
+
+    @Test
     fun edit() {
     }
 
