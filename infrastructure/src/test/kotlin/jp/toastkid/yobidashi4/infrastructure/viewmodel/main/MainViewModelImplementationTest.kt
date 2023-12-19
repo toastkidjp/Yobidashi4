@@ -324,20 +324,6 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openUrl() {
-        /*
-        if (!url.startsWith("https://") && !url.startsWith("http://")) {
-            showSnackbar("Invalid URL. $url")
-            return
-        }
-
-        val newTab = WebTab(title = url, url = url)
-        if (background) {
-            _tabs.add(newTab)
-            return
-        }
-
-        openTab(newTab)
-         */
         subject.openTab(mockk())
 
         subject.openUrl("https://www.yahoo.co.jp", false)
