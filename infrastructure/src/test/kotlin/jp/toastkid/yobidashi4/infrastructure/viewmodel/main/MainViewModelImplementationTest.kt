@@ -348,7 +348,13 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun edit() {
+    fun noopEditWhenFileDoesNotExists() {
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns false
+
+        subject.edit(mockk())
+
+        assertTrue(subject.tabs.isEmpty())
     }
 
     @Test
