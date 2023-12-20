@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.main.menu
 import androidx.compose.foundation.ContextMenuState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
@@ -58,6 +59,23 @@ class TextContextMenuFactoryTest {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun invoke() {
+        val textContextMenu = textContextMenuFactory.invoke()
+        assertNotNull(textContextMenu)
+
+        runDesktopComposeUiTest {
+            setContent {
+                textContextMenu.Area(textManager, state) {
+
+                }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun openCase() {
+        every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
+
         val textContextMenu = textContextMenuFactory.invoke()
         assertNotNull(textContextMenu)
 
