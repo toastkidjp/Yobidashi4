@@ -35,6 +35,7 @@ class MainSnackbarKtTest {
                 rememberCoroutineScope().launch {
                     snackbarHostState.showSnackbar("test")
                     snackbarHostState.showSnackbar("test", "OK")
+                    snackbarHostState.showSnackbar("test", "OK", SnackbarDuration.Long)
                 }
             }
         }
