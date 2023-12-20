@@ -99,7 +99,7 @@ internal fun InputBox() {
                         }
 
                         if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
-                            viewModel.setShowInputBox(null)
+                            viewModel.setShowInputBox()
                             return@onKeyEvent true
                         }
                         true
