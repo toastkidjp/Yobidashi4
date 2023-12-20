@@ -87,4 +87,16 @@ class BarcodeToolTabViewKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun decodeResultBlankCase() {
+        every { anyConstructed<BarcodeToolTabViewModel>().decodeResult() } returns "  "
+
+        runDesktopComposeUiTest {
+            setContent {
+                BarcodeToolTabView()
+            }
+        }
+    }
+
 }
