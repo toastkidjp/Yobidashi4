@@ -121,6 +121,19 @@ class BookmarkInsertionTest {
     }
 
     @Test
+    fun elseCase() {
+        val slot = slot<String>()
+        every { mainViewModel.showSnackbar(capture(slot)) } just Runs
+        every { params.linkUrl } returns null
+        every { params.sourceUrl } returns null
+        every { params.pageUrl } returns null
+
+        bookmarkInsertion.invoke(params, "")
+
+        assertEquals("Add bookmark: Bookmark(title=tab, url=, favicon=, parent=root, folder=false)", slot.captured)
+    }
+
+    @Test
     fun paramsIsNullCase() {
         val slot = slot<String>()
         every { mainViewModel.showSnackbar(capture(slot)) } just Runs
