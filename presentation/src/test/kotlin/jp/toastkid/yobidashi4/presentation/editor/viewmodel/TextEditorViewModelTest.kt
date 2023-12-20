@@ -20,10 +20,11 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -214,13 +215,20 @@ class TextEditorViewModelTest {
         every { tab.getContent() } returns "test"
         every { tab.caretPosition() } returns 3
         every { tab.editable() } returns true
-        every { mainViewModel.finderFlow() } returns emptyFlow()
+        every { tab.path } returns mockk()
+        every { mainViewModel.setFindStatus(any()) } just Runs
+        every { mainViewModel.finderFlow() } returns flowOf(
+            FindOrder.EMPTY,
+            FindOrder("test", ""),
+            FindOrder("test", "", true, true, false)
+        )
 
         viewModel.launchTab(tab)
 
         verify { tab.getContent() }
         verify { tab.caretPosition() }
         verify { tab.editable() }
+        verify { mainViewModel.setFindStatus(any()) }
     }
 
     @Test
