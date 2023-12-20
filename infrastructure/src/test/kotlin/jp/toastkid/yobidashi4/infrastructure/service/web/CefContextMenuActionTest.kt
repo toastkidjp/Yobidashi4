@@ -421,6 +421,16 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun openWithOtherBrowserWithSourceUrl() {
+        every { param.linkUrl } returns null
+        every { param.sourceUrl } returns "https://source.com"
+
+        subject.invoke(browser, param, "test", ContextMenu.OPEN_WITH_OTHER_BROWSER.id)
+
+        verify { viewModel.browseUri(any()) }
+    }
+
+    @Test
     fun openWithOtherBrowserWithParamWhichDoesNotHasLinks() {
         every { param.linkUrl } returns null
         every { param.sourceUrl } returns null
