@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import java.time.Month
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -47,6 +48,14 @@ class NotificationEventTest {
         assertNull(NotificationEvent.parse("2022-12-30 2:33:44"))
         assertNull(NotificationEvent.parse("test"))
         assertNull(NotificationEvent.parse(""))
+    }
+
+    @Test
+    fun makeDefault() {
+        val (title, text, date) = NotificationEvent.makeDefault()
+        assertEquals("New", title)
+        assertEquals("New notification's message", text)
+        assertTrue(LocalDateTime.now().isAfter(date))
     }
 
 }
