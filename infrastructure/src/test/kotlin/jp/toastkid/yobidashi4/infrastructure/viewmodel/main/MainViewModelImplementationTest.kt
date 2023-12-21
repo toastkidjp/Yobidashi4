@@ -358,6 +358,18 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun edit() {
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
+        every { Files.readString(any()) } returns "test"
+
+        subject.edit(mockk(), true)
+
+        assertEquals(1, subject.tabs.size)
+        verify { Files.readString(any()) }
+    }
+
+    @Test
     fun updateWebTab() {
     }
 
