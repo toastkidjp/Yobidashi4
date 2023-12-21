@@ -6,4 +6,6 @@ class CompoundInterestCalculatorTab : Tab {
         return "Compound interest"
     }
 
+    override fun iconPath() = "images/icon/ic_elevation.xml"
+
 }
