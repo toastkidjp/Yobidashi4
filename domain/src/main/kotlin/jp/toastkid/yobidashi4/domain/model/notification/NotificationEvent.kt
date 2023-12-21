@@ -22,6 +22,9 @@ data class NotificationEvent(
                 null
             }
         }
+
+        fun makeDefault() = NotificationEvent("New", "New notification's message", LocalDateTime.now())
+
     }
 
 }
