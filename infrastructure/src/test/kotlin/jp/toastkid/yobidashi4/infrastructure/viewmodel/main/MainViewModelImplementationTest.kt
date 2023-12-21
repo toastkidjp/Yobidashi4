@@ -370,6 +370,23 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun editWhenTabsHasAlreadyOpened() {
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
+        every { Files.readString(any()) } returns "test"
+        val path = mockk<Path>()
+        val tab = mockk<EditorTab>()
+        every { tab.path } returns path
+        subject.openTab(tab)
+
+        subject.edit(path, true)
+
+        assertEquals(1, subject.tabs.size)
+        assertEquals(0, subject.selected.value)
+        verify(inverse = true) { Files.readString(any()) }
+    }
+
+    @Test
     fun updateWebTab() {
     }
 
