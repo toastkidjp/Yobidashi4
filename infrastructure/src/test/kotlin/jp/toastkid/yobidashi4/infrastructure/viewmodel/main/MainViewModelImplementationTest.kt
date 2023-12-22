@@ -586,7 +586,7 @@ class MainViewModelImplementationTest {
     fun setShowInputBox() {
         assertFalse(subject.showInputBox())
 
-        subject.setShowInputBox(null)
+        subject.setShowInputBox()
 
         assertFalse(subject.showInputBox())
         subject.invokeInputAction("test")
