@@ -556,6 +556,15 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun setShowWebSearchWithDefaultParameter() {
+        assertFalse(subject.showWebSearch())
+
+        subject.setShowWebSearch()
+
+        assertTrue(subject.showWebSearch())
+    }
+
+    @Test
     fun switchAggregationBox() {
         assertFalse(subject.showAggregationBox())
 
