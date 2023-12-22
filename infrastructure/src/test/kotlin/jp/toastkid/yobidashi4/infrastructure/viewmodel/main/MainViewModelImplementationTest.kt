@@ -633,6 +633,21 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun showingSnackbarWithDefaultParameter() {
+        assertFalse(subject.showingSnackbar())
+        assertNull(subject.snackbarHostState().currentSnackbarData)
+
+        val countDownLatch = CountDownLatch(1)
+        subject.showSnackbar("test")
+        subject.snackbarHostState().currentSnackbarData?.performAction()
+        countDownLatch.await(1, TimeUnit.SECONDS)
+
+        assertTrue(subject.showingSnackbar())
+        assertNotNull(subject.snackbarHostState().currentSnackbarData)
+        assertNull(subject.snackbarHostState().currentSnackbarData?.actionLabel)
+    }
+
+    @Test
     fun showingSnackbar() {
         assertFalse(subject.showingSnackbar())
         assertNull(subject.snackbarHostState().currentSnackbarData)
