@@ -243,8 +243,9 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     private val webHistoryRepository: WebHistoryRepository by inject()
 
     override fun updateWebTab(id: String, title: String, url: String?) {
-        val updated = _tabs.firstOrNull { it is WebTab && it.id() == id } as? WebTab
-        updated?.updateTitleAndUrl(title, url)
+        val updated = _tabs.firstOrNull { it is WebTab && it.id() == id } as? WebTab ?: return
+
+        updated.updateTitleAndUrl(title, url)
 
         url?.let {
             CoroutineScope(Dispatchers.IO).launch {
