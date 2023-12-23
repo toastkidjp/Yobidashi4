@@ -392,6 +392,9 @@ class MainViewModelImplementationTest {
 
     @Test
     fun closeCurrent() {
+        subject.closeCurrent()
+
+        assertTrue(subject.tabs.isEmpty())
     }
 
     @Test
