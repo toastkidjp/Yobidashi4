@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
@@ -76,6 +77,9 @@ class MainViewModelImplementationTest {
     @MockK
     private lateinit var webViewPool: WebViewPool
 
+    @MockK
+    private lateinit var webHistoryRepository: WebHistoryRepository
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -87,6 +91,7 @@ class MainViewModelImplementationTest {
                     single(qualifier = null) { setting } bind(Setting::class)
                     single(qualifier = null) { topArticleLoaderService } bind(TopArticleLoaderService::class)
                     single(qualifier = null) { webViewPool } bind(WebViewPool::class)
+                    single(qualifier = null) { webHistoryRepository } bind(WebHistoryRepository::class)
                 }
             )
         }
@@ -388,6 +393,11 @@ class MainViewModelImplementationTest {
 
     @Test
     fun updateWebTab() {
+        every { webHistoryRepository.add(any(), any()) } just Runs
+
+        subject.updateWebTab("test", "New title", "https://www.newtitle.co.jp")
+
+        verify { webHistoryRepository wasNot called }
     }
 
     @Test
