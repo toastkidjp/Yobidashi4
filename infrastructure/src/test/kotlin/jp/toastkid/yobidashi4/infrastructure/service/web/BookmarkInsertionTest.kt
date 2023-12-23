@@ -148,7 +148,7 @@ class BookmarkInsertionTest {
 
     @Test
     fun currentTabIsNull() {
-        every { mainViewModel.currentTab() } returns tab
+        every { mainViewModel.currentTab() } returns null
         val slot = slot<String>()
         every { mainViewModel.showSnackbar(capture(slot)) } just Runs
         every { params.linkUrl } returns "https://www.yahoo.co.jp"
