@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
@@ -25,7 +24,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
@@ -47,9 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
-import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
@@ -59,43 +54,27 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun WebBookmarkTabView() {
-    val koin = object : KoinComponent {
-        val viewModel: MainViewModel by inject()
-        val repo: BookmarkRepository by inject()
-    }
-    val viewModel = remember { koin.viewModel }
-
-    val bookmarks = remember {
-        val list = mutableStateListOf<Bookmark>()
-        val repository = koin.repo
-        repository.list().forEach { list.add(it) }
-        list
-    }
-
-    val state = rememberLazyListState()
+    val viewModel = remember { WebBookmarkTabViewModel() }
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember { FocusRequester() }
-    val scrollAction = remember { KeyboardScrollAction(state) }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            return@onKeyEvent scrollAction(coroutineScope, it.key, it.isCtrlPressed)
-        }.focusRequester(focusRequester).focusable(true)
+            return@onKeyEvent viewModel.scrollAction(coroutineScope, it.key, it.isCtrlPressed)
+        }.focusRequester(viewModel.focusRequester()).focusable(true)
     ) {
         Box {
             LazyColumn(
-                state = state,
+                state = viewModel.listState(),
                 userScrollEnabled = true,
                 modifier = Modifier.padding(end = 16.dp)
             ) {
-                items(bookmarks) { bookmark ->
+                items(viewModel.bookmarks()) { bookmark ->
                     WebBookmarkItemRow(
                         bookmark,
                         {
-                            koin.repo.delete(bookmark)
-                            bookmarks.remove(bookmark)
+                            viewModel.delete(bookmark)
                         },
                         Modifier.animateItemPlacement()
                             .combinedClickable(
@@ -112,12 +91,12 @@ internal fun WebBookmarkTabView() {
             }
 
             VerticalScrollbar(
-                adapter = rememberScrollbarAdapter(state),
+                adapter = rememberScrollbarAdapter(viewModel.listState()),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
 
             LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
+                viewModel.launch()
             }
         }
     }
