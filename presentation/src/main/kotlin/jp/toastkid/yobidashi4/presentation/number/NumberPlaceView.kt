@@ -46,52 +46,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import java.nio.file.Files
-import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
-import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NumberPlaceView() {
-    val fontSize = 32.sp
-
-    val koin = object : KoinComponent {
-        val setting: Setting by inject()
-        val mainViewModel: MainViewModel by inject()
-        val gameRepository: GameRepository by inject()
-    }
-
-    val setting = remember { koin.setting }
     val viewModel = remember { NumberPlaceViewModel() }
-    val renewGame = {
-        val game = NumberPlaceGame()
-        game.initialize(setting.getMaskingCount())
-        viewModel.setGame(game)
-        viewModel.initializeSolving()
-        viewModel.initialize(setting.getMaskingCount())
-        viewModel.saveCurrentGame()
-    }
+
     LaunchedEffect(key1 = viewModel, block = {
-        val file = GameFileProvider().invoke()
-        if (file != null && Files.size(file) != 0L) {
-            val game = koin.gameRepository.load(file)
-            if (game != null) {
-                viewModel.setGame(game)
-                return@LaunchedEffect
-            }
-        }
-        withContext(Dispatchers.IO) {
-            viewModel.initialize(setting.getMaskingCount())
-            viewModel.saveCurrentGame()
-        }
+        viewModel.start()
     })
 
     val numberStates = mutableListOf<MutableState<String>>()
@@ -120,7 +82,7 @@ fun NumberPlaceView() {
                     .verticalScroll(rememberScrollState())
                     .padding(8.dp)
             ) {
-                AppBarContent(setting, fontSize, { viewModel.deleteGame() }, renewGame)
+                AppBarContent(viewModel, { viewModel.deleteGame() }, viewModel::renewGame)
 
                 HorizontalDivider(0)
 
@@ -148,15 +110,12 @@ fun NumberPlaceView() {
                                         number.value = "$it"
                                         open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
-                                            showMessageSnackbar(koin.mainViewModel, done) {
-                                                viewModel.deleteGame()
-                                                viewModel.initializeSolving()
-                                                viewModel.initialize(setting.getMaskingCount())
-                                                viewModel.saveCurrentGame()
+                                            viewModel.showMessageSnackbar(done) {
+                                                viewModel.startNewGame()
                                             }
                                         }
                                     },
-                                    fontSize,
+                                    viewModel.fontSize(),
                                     modifier = Modifier
                                         .weight(1f)
                                         .combinedClickable(
@@ -164,25 +123,14 @@ fun NumberPlaceView() {
                                                 open.value = true
                                             },
                                             onLongClick = {
-                                                koin.mainViewModel.showSnackbar(
-                                                    "Would you like to use hint?",
-                                                    "Use"
-                                                ) {
-                                                    viewModel.useHint(
-                                                        rowIndex,
-                                                        columnIndex,
-                                                        number
-                                                    ) { done ->
-                                                        showMessageSnackbar(koin.mainViewModel, done)
-                                                    }
-                                                }
+                                                viewModel.onCellLongClick(rowIndex, columnIndex, number)
                                             }
                                         )
                                 )
                             } else {
                                 Text(
                                     cellValue.toString(),
-                                    fontSize = fontSize,
+                                    fontSize = viewModel.fontSize(),
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.weight(1f)
                                 )
@@ -205,7 +153,7 @@ fun NumberPlaceView() {
         ) {
             DropdownMenuItem(
                 onClick = {
-                    renewGame()
+                    viewModel.renewGame()
                     openOption.value = false
                 }
             ) {
@@ -240,19 +188,6 @@ fun NumberPlaceView() {
     })
 }
 
-private fun showMessageSnackbar(
-    mainViewModel: MainViewModel?,
-    done: Boolean,
-    onAction: () -> Unit = {}
-) {
-    mainViewModel?.showSnackbar(
-        if (done) "Well done!" else "Incorrect...",
-        if (done) "Next game" else ""
-    ) {
-        onAction()
-    }
-}
-
 @Composable
 private fun VerticalDivider(columnIndex: Int) {
     Divider(
@@ -271,14 +206,13 @@ private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.d
 
 @Composable
 private fun AppBarContent(
-    setting: Setting,
-    fontSize: TextUnit,
+    viewModel: NumberPlaceViewModel,
     deleteGame: () -> Unit,
     renewGame: () -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         val openMaskingCount = remember { mutableStateOf(false) }
-        val maskingCount = remember { mutableStateOf("${setting.getMaskingCount()}") }
+        val maskingCount = remember { mutableStateOf("${viewModel.getMaskingCount()}") }
 
         Button(
             onClick = {
@@ -306,7 +240,7 @@ private fun AppBarContent(
             Text(
                 maskingCount.value,
                 textAlign = TextAlign.Center,
-                fontSize = fontSize
+                fontSize = viewModel.fontSize()
             )
             DropdownMenu(
                 openMaskingCount.value,
@@ -316,14 +250,14 @@ private fun AppBarContent(
                         onClick = {
                         maskingCount.value = "$it"
                         openMaskingCount.value = false
-                            setting.setMaskingCount(it)
+                            viewModel.setMaskingCount(it)
                             deleteGame()
                         renewGame()
                         //contentViewModel?.nextRoute("tool/number/place")
                     }) {
                         Text(
                             text = "$it",
-                            fontSize = fontSize,
+                            fontSize = viewModel.fontSize(),
                             textAlign = TextAlign.Center
                         )
                     }
