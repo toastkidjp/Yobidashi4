@@ -10,11 +10,19 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import jp.toastkid.yobidashi4.domain.service.web.event.ReloadEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.SwitchDeveloperToolEvent
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -81,6 +89,21 @@ class WebViewPoolImplementationTest {
         subject.reload("1")
 
         verify { cefBrowser.reload() }
+    }
+
+    @Test
+    fun reloadViaFlow() {
+        val countDownLatch = CountDownLatch(1)
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.event().collect {
+                Assertions.assertTrue(it is ReloadEvent)
+                countDownLatch.countDown()
+            }
+        }
+
+        subject.reload("1")
+
+        countDownLatch.await(5, TimeUnit.SECONDS)
     }
 
     @Test
@@ -151,6 +174,21 @@ class WebViewPoolImplementationTest {
         subject.clearFind("test")
 
         verify { cefBrowser.stopFinding(any()) }
+    }
+
+    @Test
+    fun switchDevTools() {
+        val countDownLatch = CountDownLatch(1)
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.event().collect {
+                Assertions.assertTrue(it is SwitchDeveloperToolEvent)
+                countDownLatch.countDown()
+            }
+        }
+
+        subject.switchDevTools("test")
+
+        countDownLatch.await(5, TimeUnit.SECONDS)
     }
 
 }
