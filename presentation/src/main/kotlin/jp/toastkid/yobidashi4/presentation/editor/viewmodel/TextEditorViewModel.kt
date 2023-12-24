@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.style.EditorTheme
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -162,14 +163,14 @@ class TextEditorViewModel {
         }
     }
 
-    fun launchTab(tab: EditorTab) {
+    fun launchTab(tab: EditorTab, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         this.tab = tab
 
         val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
 
         var selected = -1
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             mainViewModel.finderFlow().collect {
                 if (it == FindOrder.EMPTY) {
                     return@collect
