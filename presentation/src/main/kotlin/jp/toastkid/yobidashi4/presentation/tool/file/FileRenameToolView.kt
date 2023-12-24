@@ -22,37 +22,22 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import java.nio.file.Files
-import java.nio.file.Path
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun FileRenameToolView() {
-    val viewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-    val paths = remember { mutableStateListOf<Path>() }
-    val firstInput = remember { mutableStateOf(TextFieldValue("img_")) }
+    val viewModel = remember { FileRenameToolViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -60,12 +45,12 @@ fun FileRenameToolView() {
     ) {
         Column {
             TextField(
-                firstInput.value,
+                viewModel.input(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 label = { Text("Base file name") },
                 onValueChange = {
-                    firstInput.value = TextFieldValue(it.text, it.selection, it.composition)
+                    viewModel.onValueChange(it)
                 },
                 trailingIcon = {
                     Icon(
@@ -73,26 +58,20 @@ fun FileRenameToolView() {
                         contentDescription = "Clear input.",
                         tint = MaterialTheme.colors.primary,
                         modifier = Modifier.clickable {
-                            firstInput.value = TextFieldValue()
+                            viewModel.clearInput()
                         }
                     )
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.onKeyEvent {
-                    if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
-                        && firstInput.value.composition == null
-                        && firstInput.value.text.isNotBlank()
-                    ) {
-                        rename(paths, firstInput.value.text)
-                    }
-                    true
+                    viewModel.onKeyEvent(it)
                 }
             )
 
             Row {
                 Button(
                     onClick = {
-                        paths.clear()
+                        viewModel.clearPaths()
                     },
                     modifier = Modifier.padding(8.dp)
                 ) {
@@ -100,7 +79,7 @@ fun FileRenameToolView() {
                 }
                 Button(
                     onClick = {
-                        rename(paths, firstInput.value.text)
+                        viewModel.rename()
                     },
                     modifier = Modifier.padding(8.dp)
                 ) {
@@ -111,7 +90,7 @@ fun FileRenameToolView() {
             Box {
                 val verticalScrollState = rememberLazyListState()
                 LazyColumn(state = verticalScrollState) {
-                    items(paths) { path ->
+                    items(viewModel.items()) { path ->
                         Text(path.fileName.toString())
                     }
                 }
@@ -121,32 +100,9 @@ fun FileRenameToolView() {
         }
     }
 
-    LaunchedEffect(viewModel.droppedPathFlow()) {
+    LaunchedEffect(viewModel.launchedEffectKey()) {
         withContext(Dispatchers.IO) {
-            viewModel.droppedPathFlow().collect {
-                paths.add(it)
-            }
+            viewModel.collectDroppedPaths()
         }
     }
-}
-
-private fun rename(
-    paths: List<Path>,
-    baseName: String
-) {
-    if (paths.isEmpty()) {
-        return
-    }
-
-    paths.forEachIndexed { i, p ->
-        Files.copy(p, p.resolveSibling("${baseName}_${i + 1}.${p.extension}"))
-    }
-
-    val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-    mainViewModel
-        .showSnackbar(
-            "Rename completed!",
-            "Open folder",
-            { mainViewModel.openFile(paths.first().parent, false) }
-        )
 }
