@@ -64,7 +64,7 @@ internal fun WebHistoryView() {
                 userScrollEnabled = true,
                 modifier = Modifier.padding(end = 16.dp)
             ) {
-                items(viewModel.list()) { bookmark ->
+                items(viewModel.list()) { webHistory ->
                     val cursorOn = remember { mutableStateOf(false) }
                     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
                     val openOption = remember { mutableStateOf(false) }
@@ -93,15 +93,15 @@ internal fun WebHistoryView() {
                                     cursorOn.value = false
                                 }
                         ) {
-                            LoadIcon(viewModel.findIconPath(bookmark), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
+                            LoadIcon(viewModel.findIconPath(webHistory), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
                             Column(modifier = Modifier
                                 .combinedClickable(
                                     enabled = true,
                                     onClick = {
-                                        viewModel.openUrl(bookmark.url, false)
+                                        viewModel.openUrl(webHistory.url, false)
                                     },
                                     onLongClick = {
-                                        viewModel.openUrl(bookmark.url, true)
+                                        viewModel.openUrl(webHistory.url, true)
                                     }
                                 )
                                 .padding(horizontal = 16.dp)
@@ -109,10 +109,10 @@ internal fun WebHistoryView() {
                             ) {
                                 val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
 
-                                Text(bookmark.title, color = textColor)
-                                Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
+                                Text(webHistory.title, color = textColor)
+                                Text(webHistory.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
                                 Text(
-                                    viewModel.dateTimeString(bookmark),
+                                    viewModel.dateTimeString(webHistory),
                                     color = textColor,
                                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
@@ -127,7 +127,7 @@ internal fun WebHistoryView() {
                         ) {
                             DropdownMenuItem(
                                 onClick = {
-                                    viewModel.openUrl(bookmark.url, false)
+                                    viewModel.openUrl(webHistory.url, false)
                                     openOption.value = false
                                 }
                             ) {
@@ -139,7 +139,7 @@ internal fun WebHistoryView() {
 
                             DropdownMenuItem(
                                 onClick = {
-                                    viewModel.openUrl(bookmark.url, true)
+                                    viewModel.openUrl(webHistory.url, true)
                                     openOption.value = false
                                 }
                             ) {
@@ -150,7 +150,7 @@ internal fun WebHistoryView() {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    viewModel.browseUri(bookmark.url)
+                                    viewModel.browseUri(webHistory.url)
                                     openOption.value = false
                                 }
                             ) {
@@ -161,7 +161,7 @@ internal fun WebHistoryView() {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    ClipboardPutterService().invoke(bookmark.title)
+                                    ClipboardPutterService().invoke(webHistory.title)
                                     openOption.value = false
                                 }
                             ) {
@@ -172,7 +172,7 @@ internal fun WebHistoryView() {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    ClipboardPutterService().invoke(bookmark.url)
+                                    ClipboardPutterService().invoke(webHistory.url)
                                     openOption.value = false
                                 }
                             ) {
@@ -183,7 +183,7 @@ internal fun WebHistoryView() {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    ClipboardPutterService().invoke("[${bookmark.title}](${bookmark.url})")
+                                    ClipboardPutterService().invoke("[${webHistory.title}](${webHistory.url})")
                                     openOption.value = false
                                 }
                             ) {
