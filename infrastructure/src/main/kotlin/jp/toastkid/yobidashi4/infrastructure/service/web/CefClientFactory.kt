@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.swing.SwingUtilities
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
@@ -37,9 +38,7 @@ import org.cef.network.CefRequest
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class CefClientFactory(
-    private val findId: (CefBrowser?) -> String?
-) : KoinComponent {
+class CefClientFactory : KoinComponent {
 
     private val appSetting : Setting by inject()
 
@@ -141,8 +140,9 @@ class CefClientFactory(
         client.addDisplayHandler(object : CefDisplayHandlerAdapter() {
             override fun onTitleChange(browser: CefBrowser?, title: String?) {
                 title ?: return
-                val id = findId(browser) ?: return
-                viewModel.updateWebTab(id, title, browser?.url)
+                browser ?: return
+                val id = object : KoinComponent { val pool: WebViewPool by inject() }.pool.findId(browser) ?: return
+                viewModel.updateWebTab(id, title, browser.url)
             }
         })
         client.addDownloadHandler(object : CefDownloadHandlerAdapter() {
