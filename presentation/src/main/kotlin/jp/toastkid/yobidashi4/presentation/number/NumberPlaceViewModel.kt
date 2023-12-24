@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi4.presentation.viewmodel.number
+package jp.toastkid.yobidashi4.presentation.number
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State

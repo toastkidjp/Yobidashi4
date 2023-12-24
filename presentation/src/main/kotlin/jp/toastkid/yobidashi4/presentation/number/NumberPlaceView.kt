@@ -53,7 +53,6 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
 import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.number.NumberPlaceViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent

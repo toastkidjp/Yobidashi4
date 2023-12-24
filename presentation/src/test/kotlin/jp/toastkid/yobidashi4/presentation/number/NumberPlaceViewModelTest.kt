@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.viewmodel.number
+package jp.toastkid.yobidashi4.presentation.number
 
 import androidx.compose.runtime.mutableStateOf
 import io.mockk.MockKAnnotations
@@ -13,6 +13,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
 import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
+import jp.toastkid.yobidashi4.presentation.number.NumberPlaceViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
