@@ -392,12 +392,25 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun updateWebTab() {
+    fun noopUpdateWebTab() {
         every { webHistoryRepository.add(any(), any()) } just Runs
 
         subject.updateWebTab("test", "New title", "https://www.newtitle.co.jp")
 
         verify { webHistoryRepository wasNot called }
+    }
+
+    @Test
+    fun updateWebTab() {
+        val tab = mockk<WebTab>()
+        every { tab.id() } returns "test"
+        every { tab.updateTitleAndUrl(any(), any()) } just Runs
+        subject.openTab(tab)
+        every { webHistoryRepository.add(any(), any()) } just Runs
+
+        subject.updateWebTab("test", "New title", "https://www.newtitle.co.jp")
+
+        verify { tab.updateTitleAndUrl(any(), any()) }
     }
 
     @Test
