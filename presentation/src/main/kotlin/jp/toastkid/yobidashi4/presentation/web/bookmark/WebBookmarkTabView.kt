@@ -74,6 +74,9 @@ internal fun WebBookmarkTabView() {
                     WebBookmarkItemRow(
                         bookmark,
                         {
+                            viewModel.openUrl(bookmark.url, it)
+                        },
+                        {
                             viewModel.delete(bookmark)
                         },
                         Modifier.animateItemPlacement()
@@ -106,6 +109,7 @@ internal fun WebBookmarkTabView() {
 @OptIn(ExperimentalComposeUiApi::class)
 private fun WebBookmarkItemRow(
     bookmark: Bookmark,
+    openUrl: (Boolean) -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier
 ) {
@@ -160,7 +164,7 @@ private fun WebBookmarkItemRow(
         ) {
             DropdownMenuItem(
                 onClick = {
-                    mainViewModel.openUrl(bookmark.url, false)
+                    openUrl(false)
                     openOption.value = false
                 }
             ) {
@@ -172,7 +176,7 @@ private fun WebBookmarkItemRow(
 
             DropdownMenuItem(
                 onClick = {
-                    mainViewModel.openUrl(bookmark.url, true)
+                    openUrl(true)
                     openOption.value = false
                 }
             ) {
