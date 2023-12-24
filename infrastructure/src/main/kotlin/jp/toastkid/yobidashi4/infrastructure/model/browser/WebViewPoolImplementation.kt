@@ -18,13 +18,9 @@ import org.koin.core.annotation.Single
 @Single
 class WebViewPoolImplementation : WebViewPool {
 
-    private val client: CefClient
+    private val client: CefClient = CefClientFactory().invoke()
 
     private var lastId: String? = null
-
-    init {
-        client = CefClientFactory { id -> browsers.entries.firstOrNull { it.value == id }?.key }.invoke()
-    }
 
     private val browsers = mutableMapOf<String, CefBrowser>()
 
@@ -82,6 +78,14 @@ class WebViewPoolImplementation : WebViewPool {
         }
         browsers.clear()
         CefApp.getInstance().dispose()
+    }
+
+    override fun findId(browser: Any): String? {
+        if (browser !is CefBrowser) {
+            return null
+        }
+
+        return browsers.entries.firstOrNull { it.value == browser }?.key
     }
 
 }
