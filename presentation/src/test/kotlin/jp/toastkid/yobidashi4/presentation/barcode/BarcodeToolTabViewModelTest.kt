@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.viewmodel.barcode
+package jp.toastkid.yobidashi4.presentation.barcode
 
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations

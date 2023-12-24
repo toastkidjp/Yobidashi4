@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.viewmodel.barcode
+package jp.toastkid.yobidashi4.presentation.barcode
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toComposeImageBitmap

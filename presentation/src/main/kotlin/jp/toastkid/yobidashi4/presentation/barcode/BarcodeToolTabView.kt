@@ -19,7 +19,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.toastkid.yobidashi4.presentation.viewmodel.barcode.BarcodeToolTabViewModel
 
 @Composable
 internal fun BarcodeToolTabView() {
