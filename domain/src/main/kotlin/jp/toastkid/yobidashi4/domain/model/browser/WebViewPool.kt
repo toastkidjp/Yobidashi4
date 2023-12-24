@@ -19,4 +19,6 @@ interface WebViewPool {
 
     fun switchDevTools(id: String)
 
+    fun findId(browser: Any): String?
+
 }
