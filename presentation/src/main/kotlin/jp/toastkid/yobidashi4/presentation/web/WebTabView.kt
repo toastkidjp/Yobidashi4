@@ -9,7 +9,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.web.event.FindEvent
 import jp.toastkid.yobidashi4.domain.service.web.event.ReloadEvent
 import jp.toastkid.yobidashi4.domain.service.web.event.SwitchDeveloperToolEvent
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -29,8 +28,7 @@ internal fun WebTabView(tab: WebTab) {
 private suspend fun receiveEvent() {
     val webViewPool = object : KoinComponent { val pool: WebViewPool by inject() }.pool
 
-    object : KoinComponent { val webTabViewModel: WebTabViewModel by inject() }
-        .webTabViewModel
+    webViewPool
         .event()
         .collect {
             when (it) {

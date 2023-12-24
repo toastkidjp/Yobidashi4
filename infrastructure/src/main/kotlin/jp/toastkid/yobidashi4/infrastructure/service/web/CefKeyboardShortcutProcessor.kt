@@ -8,9 +8,9 @@ import java.nio.file.Path
 import java.util.UUID
 import javax.imageio.ImageIO
 import javax.swing.SwingUtilities
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
 import org.cef.handler.CefKeyboardHandler
 import org.cef.misc.EventFlags
@@ -23,7 +23,7 @@ class CefKeyboardShortcutProcessor(
 
     private val viewModel: MainViewModel by inject()
 
-    private val webTabViewModel : WebTabViewModel by inject()
+    private val pool : WebViewPool by inject()
 
     operator fun invoke(
         browser: CefBrowser?,
@@ -124,7 +124,7 @@ class CefKeyboardShortcutProcessor(
 
         if (keyCode == KeyEvent.VK_F12) {
             val webTab = viewModel.currentTab() as? WebTab ?: return false
-            webTabViewModel.switchDevTools(webTab.id())
+            pool.switchDevTools(webTab.id())
             return true
         }
 

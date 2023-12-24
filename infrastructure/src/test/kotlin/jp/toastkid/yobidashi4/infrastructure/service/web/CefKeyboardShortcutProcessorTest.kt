@@ -21,10 +21,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
 import javax.swing.SwingUtilities
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
 import org.cef.handler.CefKeyboardHandler
 import org.cef.misc.EventFlags
@@ -50,7 +50,7 @@ class CefKeyboardShortcutProcessorTest {
     private lateinit var viewModel: MainViewModel
 
     @MockK
-    private lateinit var webTabViewModel: WebTabViewModel
+    private lateinit var pool: WebViewPool
 
     @MockK
     private lateinit var browser: CefBrowser
@@ -61,7 +61,7 @@ class CefKeyboardShortcutProcessorTest {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { webTabViewModel } bind(WebTabViewModel::class)
+                    single(qualifier = null) { pool } bind(WebViewPool::class)
                 }
             )
         }
@@ -70,7 +70,7 @@ class CefKeyboardShortcutProcessorTest {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.webSearch(any(), any()) } just Runs
         every { viewModel.browseUri(any()) } just Runs
-        every { webTabViewModel.switchDevTools(any()) } just Runs
+        every { pool.switchDevTools(any()) } just Runs
     }
 
     @AfterEach
@@ -303,7 +303,7 @@ class CefKeyboardShortcutProcessorTest {
         )
 
         assertTrue(consumed)
-        verify { webTabViewModel.switchDevTools("test-id") }
+        verify { pool.switchDevTools("test-id") }
         verify { webTab.id() }
     }
 
@@ -320,7 +320,7 @@ class CefKeyboardShortcutProcessorTest {
         )
 
         assertFalse(consumed)
-        verify { webTabViewModel wasNot Called }
+        verify { pool wasNot Called }
     }
 
     @Test

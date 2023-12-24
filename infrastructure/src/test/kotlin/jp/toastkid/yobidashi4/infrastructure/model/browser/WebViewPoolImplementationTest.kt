@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 
 class WebViewPoolImplementationTest {
 
-    private lateinit var browserPoolImplementation: WebViewPoolImplementation
+    private lateinit var subject: WebViewPoolImplementation
 
     @MockK
     private lateinit var cefClient: CefClient
@@ -46,7 +46,7 @@ class WebViewPoolImplementationTest {
         every { CefApp.getInstance().dispose() }.just(Runs)
         every { CefApp.getState() }.returns(CefApp.CefAppState.INITIALIZED)
 
-        browserPoolImplementation = WebViewPoolImplementation()
+        subject = WebViewPoolImplementation()
     }
 
     @AfterEach
@@ -57,7 +57,7 @@ class WebViewPoolImplementationTest {
 
     @Test
     fun devTools() {
-        browserPoolImplementation.devTools("test")
+        subject.devTools("test")
 
         verify { cefBrowser.devTools.uiComponent }
     }
@@ -65,10 +65,10 @@ class WebViewPoolImplementationTest {
     @Test
     fun find() {
         every { cefBrowser.find(any(), any(), any(), any()) } just Runs
-        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+        subject.component("1", "https://www.yahoo.co.jp")
 
-        browserPoolImplementation.find("1", "test", true)
-        browserPoolImplementation.find("1", "test", false)
+        subject.find("1", "test", true)
+        subject.find("1", "test", false)
 
         verify { cefBrowser.find(any(), true, any(), any()) }
         verify { cefBrowser.find(any(), false, any(), any()) }
@@ -76,34 +76,34 @@ class WebViewPoolImplementationTest {
 
     @Test
     fun reload() {
-        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+        subject.component("1", "https://www.yahoo.co.jp")
 
-        browserPoolImplementation.reload("1")
+        subject.reload("1")
 
         verify { cefBrowser.reload() }
     }
 
     @Test
     fun disposeDoNothingIfBrowsersIsNone() {
-        browserPoolImplementation.dispose("1")
+        subject.dispose("1")
 
         verify(inverse = true) { cefBrowser.close(any()) }
     }
 
     @Test
     fun dispose() {
-        val component = browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
+        val component = subject.component("1", "https://www.yahoo.co.jp")
 
         assertNotNull(component)
 
-        browserPoolImplementation.dispose("1")
+        subject.dispose("1")
 
         verify { cefBrowser.close(any()) }
     }
 
     @Test
     fun disposeAllNoneCase() {
-        browserPoolImplementation.disposeAll()
+        subject.disposeAll()
 
         verify(inverse = true) { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
@@ -111,8 +111,8 @@ class WebViewPoolImplementationTest {
 
     @Test
     fun disposeAll() {
-        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
-        browserPoolImplementation.disposeAll()
+        subject.component("1", "https://www.yahoo.co.jp")
+        subject.disposeAll()
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
@@ -120,11 +120,11 @@ class WebViewPoolImplementationTest {
 
     @Test
     fun disposeAllPluralCase() {
-        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
-        browserPoolImplementation.component("2", "https://www.yahoo.co.jp")
-        browserPoolImplementation.component("3", "https://www.yahoo.co.jp")
+        subject.component("1", "https://www.yahoo.co.jp")
+        subject.component("2", "https://www.yahoo.co.jp")
+        subject.component("3", "https://www.yahoo.co.jp")
 
-        browserPoolImplementation.disposeAll()
+        subject.disposeAll()
 
         verify(exactly = 3) { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
@@ -134,11 +134,11 @@ class WebViewPoolImplementationTest {
     fun noopDisposeAll() {
         every { CefApp.getState() } returns CefApp.CefAppState.NONE
 
-        browserPoolImplementation.component("1", "https://www.yahoo.co.jp")
-        browserPoolImplementation.component("2", "https://www.yahoo.co.jp")
-        browserPoolImplementation.component("3", "https://www.yahoo.co.jp")
+        subject.component("1", "https://www.yahoo.co.jp")
+        subject.component("2", "https://www.yahoo.co.jp")
+        subject.component("3", "https://www.yahoo.co.jp")
 
-        browserPoolImplementation.disposeAll()
+        subject.disposeAll()
 
         verify(inverse = true) { cefBrowser.close(any()) }
         verify(inverse = true) { CefApp.getInstance().dispose() }
@@ -148,7 +148,7 @@ class WebViewPoolImplementationTest {
     fun clearFind() {
         every { cefBrowser.stopFinding(any()) } just Runs
 
-        browserPoolImplementation.clearFind("test")
+        subject.clearFind("test")
 
         verify { cefBrowser.stopFinding(any()) }
     }

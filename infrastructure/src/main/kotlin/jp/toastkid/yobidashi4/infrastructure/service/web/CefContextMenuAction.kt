@@ -2,12 +2,12 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import java.net.URL
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
 import org.cef.callback.CefContextMenuParams
 import org.koin.core.component.KoinComponent
@@ -102,7 +102,7 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.DEVELOPER_TOOL.id -> {
                 val webTabId = (viewModel.currentTab() as? WebTab)?.id() ?: return
-                object : KoinComponent { val viewModel: WebTabViewModel by inject() }.viewModel.switchDevTools(webTabId)
+                object : KoinComponent { val pool: WebViewPool by inject() }.pool.switchDevTools(webTabId)
             }
 
             else -> Unit

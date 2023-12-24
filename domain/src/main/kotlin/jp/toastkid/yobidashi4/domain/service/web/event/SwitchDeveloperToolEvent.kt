@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.web.event
+package jp.toastkid.yobidashi4.domain.service.web.event
 
 class SwitchDeveloperToolEvent(val id: String) : WebTabEvent {
 }

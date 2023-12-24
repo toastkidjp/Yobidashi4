@@ -3,8 +3,8 @@ package jp.toastkid.yobidashi4.infrastructure.viewmodel.browser
 import io.mockk.unmockkAll
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import jp.toastkid.yobidashi4.presentation.web.event.ReloadEvent
-import jp.toastkid.yobidashi4.presentation.web.event.SwitchDeveloperToolEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.ReloadEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.SwitchDeveloperToolEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

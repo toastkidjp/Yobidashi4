@@ -15,11 +15,11 @@ import io.mockk.verify
 import java.awt.Image
 import java.net.URL
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import org.cef.browser.CefBrowser
 import org.cef.callback.CefContextMenuParams
 import org.junit.jupiter.api.AfterEach
@@ -39,7 +39,7 @@ class CefContextMenuActionTest {
     private lateinit var viewModel: MainViewModel
 
     @MockK
-    private lateinit var webTabViewModel: WebTabViewModel
+    private lateinit var pool: WebViewPool
 
     @MockK
     private lateinit var browser: CefBrowser
@@ -56,7 +56,7 @@ class CefContextMenuActionTest {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { webTabViewModel } bind(WebTabViewModel::class)
+                    single(qualifier = null) { pool } bind(WebViewPool::class)
                 }
             )
         }
@@ -73,7 +73,7 @@ class CefContextMenuActionTest {
         every { param.pageUrl } returns "https://www.yahoo.com"
         every { param.selectionText } returns "selectionText"
         every { browser.url } returns "https://www.yahoo.com"
-        every { webTabViewModel.switchDevTools(any()) } just Runs
+        every { pool.switchDevTools(any()) } just Runs
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
@@ -451,7 +451,7 @@ class CefContextMenuActionTest {
     fun switchDevTools() {
         subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
 
-        verify { webTabViewModel.switchDevTools(any()) }
+        verify { pool.switchDevTools(any()) }
     }
 
     @Test
@@ -460,7 +460,7 @@ class CefContextMenuActionTest {
 
         subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
 
-        verify { webTabViewModel wasNot called }
+        verify { pool wasNot called }
     }
 
 }

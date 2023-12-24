@@ -12,7 +12,6 @@ import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
@@ -29,9 +28,6 @@ class WebTabViewKtTest {
     private lateinit var webViewPool: WebViewPool
 
     @MockK
-    private lateinit var webTabViewModel: WebTabViewModel
-
-    @MockK
     private lateinit var mainViewModel: MainViewModel
 
     @BeforeEach
@@ -42,13 +38,12 @@ class WebTabViewKtTest {
             modules(
                 module {
                     single(qualifier = null) { webViewPool } bind(WebViewPool::class)
-                    single(qualifier = null) { webTabViewModel } bind(WebTabViewModel::class)
                     single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
                 }
             )
         }
 
-        every { webTabViewModel.event() } returns MutableSharedFlow()
+        every { webViewPool.event() } returns MutableSharedFlow()
         every { webViewPool.find(any(), any(), any()) } just Runs
         every { webViewPool.reload(any()) } just Runs
         every { webViewPool.clearFind(any()) } just Runs

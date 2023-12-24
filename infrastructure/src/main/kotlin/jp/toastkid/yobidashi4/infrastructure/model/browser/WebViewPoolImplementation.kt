@@ -2,7 +2,14 @@ package jp.toastkid.yobidashi4.infrastructure.model.browser
 
 import java.awt.Component
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.service.web.event.SwitchDeveloperToolEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.WebTabEvent
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
@@ -47,6 +54,16 @@ class WebViewPoolImplementation : WebViewPool {
 
     override fun reload(id: String) {
         getBrowser(id, "").reload()
+    }
+
+    private val _event = MutableSharedFlow<WebTabEvent>()
+
+    override fun event() = _event.asSharedFlow()
+
+    override fun switchDevTools(id: String) {
+        CoroutineScope(Dispatchers.Default).launch {
+            _event.emit(SwitchDeveloperToolEvent(id))
+        }
     }
 
     override fun dispose(id: String) {
