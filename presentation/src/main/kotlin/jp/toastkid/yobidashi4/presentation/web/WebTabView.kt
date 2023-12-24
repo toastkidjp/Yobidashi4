@@ -6,10 +6,10 @@ import javax.swing.JDialog
 import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.service.web.event.FindEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.ReloadEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.SwitchDeveloperToolEvent
 import jp.toastkid.yobidashi4.presentation.viewmodel.web.WebTabViewModel
-import jp.toastkid.yobidashi4.presentation.web.event.FindEvent
-import jp.toastkid.yobidashi4.presentation.web.event.ReloadEvent
-import jp.toastkid.yobidashi4.presentation.web.event.SwitchDeveloperToolEvent
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

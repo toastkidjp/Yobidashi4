@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.viewmodel.web
 
-import jp.toastkid.yobidashi4.presentation.web.event.WebTabEvent
+import jp.toastkid.yobidashi4.domain.service.web.event.WebTabEvent
 import kotlinx.coroutines.flow.SharedFlow
 
 interface WebTabViewModel {
