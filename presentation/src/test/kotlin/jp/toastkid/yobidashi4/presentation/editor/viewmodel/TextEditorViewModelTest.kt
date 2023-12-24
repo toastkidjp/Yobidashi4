@@ -223,7 +223,7 @@ class TextEditorViewModelTest {
             FindOrder("test", "", true, true, false)
         )
 
-        viewModel.launchTab(tab)
+        viewModel.launchTab(tab, Dispatchers.Unconfined)
 
         verify { tab.getContent() }
         verify { tab.caretPosition() }
