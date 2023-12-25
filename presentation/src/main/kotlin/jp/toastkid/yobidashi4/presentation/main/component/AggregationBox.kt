@@ -26,89 +26,27 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.model.tab.TableTab
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
-import jp.toastkid.yobidashi4.domain.service.aggregation.MovieMemoSubtitleExtractor
-import jp.toastkid.yobidashi4.domain.service.aggregation.Nikkei225AggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.OutgoAggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
-import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
-import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
-import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Composable
 internal fun AggregationBox() {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-    val keywordSearch = remember { object : KoinComponent { val vm: KeywordArticleFinder by inject() }.vm }
-    val articlesReaderService = remember { object : KoinComponent { val vm: ArticlesReaderService by inject() }.vm }
-    val focusRequester = remember { FocusRequester() }
-    val focusingModifier = Modifier.focusRequester(focusRequester)
+    val viewModel = remember { AggregationBoxViewModel() }
 
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth().onKeyEvent {
-            if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
-                viewModel.switchAggregationBox(false)
-                return@onKeyEvent true
-            }
-            return@onKeyEvent false
+            return@onKeyEvent viewModel.onKeyEvent(it)
         },
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val keyword = remember { mutableStateOf(TextFieldValue()) }
-
-        val aggregations = remember {
-            mapOf<String, (String) -> AggregationResult>(
-                "Movies" to { MovieMemoSubtitleExtractor(articlesReaderService).invoke(it) },
-                "Stock" to { StocksAggregatorService(articlesReaderService).invoke(it) },
-                "Outgo" to { OutgoAggregatorService(articlesReaderService).invoke(it) },
-                "Eat out" to { EatingOutCounterService(articlesReaderService).invoke(it) },
-                "Article length" to { ArticleLengthAggregatorService(articlesReaderService).invoke(it) },
-                "Steps" to { StepsAggregatorService(articlesReaderService).invoke(it) },
-                "Nikkei 225" to { Nikkei225AggregatorService(articlesReaderService).invoke(it) },
-                "Find article" to { keywordSearch.invoke(keyword.value.text, it) }
-            )
-        }
-        val selectedSite = remember {
-            val ordinal = when {
-                viewModel.initialAggregationType() < 0 -> 0
-                viewModel.initialAggregationType() >= aggregations.size -> aggregations.size - 1
-                else -> viewModel.initialAggregationType()
-            }
-            mutableStateOf(aggregations.entries.toList().get(ordinal))
-        }
-        val query = remember {
-            val defaultInput = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
-            mutableStateOf(TextFieldValue(defaultInput, TextRange(defaultInput.length)))
-        }
-        val openDropdown = remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
@@ -122,7 +60,7 @@ internal fun AggregationBox() {
             )
 
             Box(
-                modifier = Modifier.clickable { openDropdown.value = true }
+                modifier = Modifier.clickable { viewModel.openChooser() }
             ) {
                 Surface(elevation = 4.dp) {
                     /*Image(
@@ -130,19 +68,18 @@ internal fun AggregationBox() {
                         contentDescription = selectedSite.value.siteName,
                         modifier = Modifier.size(64.dp).padding(8.dp)
                     )*/
-                    Text(selectedSite.value.key, modifier = Modifier.padding(start = 8.dp))
+                    Text(viewModel.selectedCategoryName(), modifier = Modifier.padding(start = 8.dp))
                 }
 
-                val currentTab = viewModel.currentTab()
-                val swingContent = currentTab is WebTab || currentTab is EditorTab
+                val swingContent = viewModel.isCurrentSwingContent()
                 DropdownMenu(
-                    expanded = openDropdown.value,
+                    expanded = viewModel.isOpeningChooser(),
                     offset = DpOffset(0.dp, if (swingContent) (-80).dp else 0.dp),
-                    onDismissRequest = { openDropdown.value = false }
+                    onDismissRequest = { viewModel.closeChooser() }
                 ) {
                     if (swingContent) {
                         LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
-                            items(aggregations.entries.toList()) {
+                            items(viewModel.items()) {
                                /* Image(
                                     painterResource(it.iconPath()),
                                     contentDescription = it.siteName,
@@ -152,19 +89,17 @@ internal fun AggregationBox() {
                                     }
                                 )*/
                                 Text(it.key, modifier = Modifier.padding(horizontal = 8.dp).clickable {
-                                        openDropdown.value = false
-                                        selectedSite.value = it
+                                    viewModel.choose(it)
                                     }
                                 )
                             }
                         }
                         return@DropdownMenu
                     }
-                    aggregations.forEach {
+                    viewModel.categories().forEach {
                         DropdownMenuItem(
                             onClick = {
-                                openDropdown.value = false
-                                selectedSite.value = it
+                                viewModel.choose(it)
                             }
                         ) {
                             /*Image(
@@ -178,9 +113,9 @@ internal fun AggregationBox() {
                 }
             }
 
-            if (selectedSite.value.key == "Find article") {
+            if (viewModel.requireSecondInput()) {
                 TextField(
-                    keyword.value,
+                    viewModel.keyword(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
@@ -188,12 +123,11 @@ internal fun AggregationBox() {
                     ),
                     label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        keyword.value = TextFieldValue(it.text, it.selection, it.composition)
+                        viewModel.onKeywordValueChange(it)
                     },
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
-                            viewModel.switchAggregationBox(false)
+                            viewModel.onSearch()
                         }
                     ),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -203,16 +137,16 @@ internal fun AggregationBox() {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.secondary,
                             modifier = Modifier.clickable {
-                                keyword.value = TextFieldValue()
+                                viewModel.clearKeywordInput()
                             }
                         )
                     },
-                    modifier = focusingModifier
+                    modifier = viewModel.focusingModifier()
                 )
             }
 
             TextField(
-                query.value,
+                viewModel.dateInput(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
@@ -220,12 +154,11 @@ internal fun AggregationBox() {
                 ),
                 label = { Text("Article name filter", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
-                    query.value = TextFieldValue(it.text, it.selection, it.composition)
+                    viewModel.onDateInputValueChange(it)
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
-                        viewModel.switchAggregationBox(false)
+                        viewModel.onSearch()
                     }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -235,16 +168,16 @@ internal fun AggregationBox() {
                         contentDescription = "Clear input.",
                         tint = MaterialTheme.colors.secondary,
                         modifier = Modifier.clickable {
-                            query.value = TextFieldValue()
+                            viewModel.clearDateInput()
                         }
                     )
                 },
-                modifier = (if (selectedSite.value.key == "Find article") Modifier else focusingModifier)
+                modifier = viewModel.dateInputModifier()
             )
 
             Button(
                 onClick = {
-                    invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
+                    viewModel.onSearch()
                 }
             ) {
                 Text("Start")
@@ -253,28 +186,6 @@ internal fun AggregationBox() {
     }
 
     LaunchedEffect(viewModel.showAggregationBox()) {
-        if (viewModel.showAggregationBox()) {
-            focusRequester.requestFocus()
-        }
+        viewModel.start()
     }
-}
-
-private fun invokeAggregation(
-    viewModel: MainViewModel,
-    query: String,
-    aggregator: (String) -> AggregationResult
-) {
-    if (query.isBlank()) {
-        return
-    }
-
-    val result = aggregator.invoke(query)
-    if (result.isEmpty()) {
-        viewModel.showSnackbar("Finding by \"$query\" has not get any result.")
-        return
-    }
-
-    viewModel.openTab(TableTab(result.title(), result, true, { invokeAggregation(viewModel, query, aggregator) }))
-
-    viewModel.switchAggregationBox(false)
 }
