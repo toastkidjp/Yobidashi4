@@ -11,6 +11,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
 import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
@@ -140,6 +141,19 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.setMaskingCount(30)
 
         verify { setting.setMaskingCount(30) }
+    }
+
+    @Test
+    fun renewGame() {
+        mockkConstructor(NumberPlaceGame::class, GameFileProvider::class)
+        every { anyConstructed<NumberPlaceGame>().initialize(any()) } just Runs
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        every { setting.getMaskingCount() } returns 20
+
+        numberPlaceViewModel.renewGame()
+
+        verify { anyConstructed<NumberPlaceGame>().initialize(any()) }
+        verify { anyConstructed<GameFileProvider>().invoke() }
     }
 
 }
