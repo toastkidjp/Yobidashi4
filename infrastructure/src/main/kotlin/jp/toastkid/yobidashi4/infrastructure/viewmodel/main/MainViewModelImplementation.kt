@@ -24,6 +24,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -41,6 +42,7 @@ import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlin.io.path.inputStream
+import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +63,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     private val topArticleLoaderService: TopArticleLoaderService by inject()
 
     private val webViewPool: WebViewPool by inject()
+
+    private val articleFactory: ArticleFactory by inject()
 
     private val _darkMode = mutableStateOf(setting.darkMode())
 
@@ -279,6 +283,23 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _tabs.clear()
         _selected.value = -1
         targetIds.forEach(webViewPool::dispose)
+    }
+
+    override fun makeNewArticle() {
+        setShowInputBox { input ->
+            if (existsArticle(input, setting.articleFolderPath())) {
+                return@setShowInputBox
+            }
+
+            val article = articleFactory.withTitle(input)
+            article.makeFile { "# ${article.getTitle()}" }
+            addNewArticle(article.path())
+            edit(article.path())
+        }
+    }
+
+    private fun existsArticle(input: String, articleFolderPath: Path): Boolean {
+        return Files.list(articleFolderPath).anyMatch { it.nameWithoutExtension == input }
     }
 
     override fun addNewArticle(path: Path) {
