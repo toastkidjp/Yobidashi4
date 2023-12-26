@@ -156,4 +156,15 @@ class NumberPlaceViewModelTest {
         verify { anyConstructed<GameFileProvider>().invoke() }
     }
 
+    @Test
+    fun startNewGame() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        every { setting.getMaskingCount() } returns 20
+
+        numberPlaceViewModel.startNewGame()
+
+        verify { anyConstructed<GameFileProvider>().invoke() }
+    }
+
 }
