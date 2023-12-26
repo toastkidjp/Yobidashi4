@@ -175,6 +175,19 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun onDateValueChange() {
+        assertTrue(subject.dateInput().text.isNotEmpty())
+
+        subject.onDateInputValueChange(TextFieldValue("2023-12"))
+
+        assertEquals("2023-12", subject.dateInput().text)
+
+        subject.clearDateInput()
+
+        assertTrue(subject.dateInput().text.isEmpty())
+    }
+
+    @Test
     fun choose() {
         subject.choose(subject.categories().entries.last())
 
