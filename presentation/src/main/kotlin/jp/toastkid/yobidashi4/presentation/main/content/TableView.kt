@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -25,16 +24,13 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
@@ -45,36 +41,25 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun TableView(aggregationResult: AggregationResult) {
-    val articleStates = mutableStateListOf<Array<Any>>()
-    articleStates.addAll(aggregationResult.itemArrays())
-
-    var lastSorted = remember { -1 to false }
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember { FocusRequester() }
-    val state = rememberLazyListState()
-    val scrollAction = remember { KeyboardScrollAction(state) }
+    val viewModel = remember { TableViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            scrollAction.invoke(coroutineScope, it.key, it.isCtrlPressed)
-        }.focusRequester(focusRequester).focusable(true)
+            viewModel.scrollAction(coroutineScope, it.key, it.isCtrlPressed)
+        }.focusRequester(viewModel.focusRequester()).focusable(true)
     ) {
         Box {
             val horizontalScrollState = rememberScrollState()
             LazyColumn(
-                state = state,
+                state = viewModel.listState(),
                 userScrollEnabled = true
             ) {
                 stickyHeader {
@@ -86,7 +71,7 @@ fun TableView(aggregationResult: AggregationResult) {
                             val headerCursorOn = remember { mutableStateOf(false) }
                             val headerColumnBackgroundColor = animateColorAsState(
                                 if (headerCursorOn.value) MaterialTheme.colors.primary
-                                else if (state.firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+                                else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
                                 else Color.Transparent
                             )
 
@@ -95,10 +80,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                 modifier = Modifier
                                     .fillParentMaxHeight(0.05f)
                                     .clickable {
-                                        val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
-                                        lastSorted = index to lastSortOrder.not()
-
-                                        sort(lastSortOrder, aggregationResult, index, articleStates)
+                                        viewModel.sort(index, aggregationResult)
                                     }
                                     .onPointerEvent(PointerEventType.Enter) {
                                         headerCursorOn.value = true
@@ -120,7 +102,7 @@ fun TableView(aggregationResult: AggregationResult) {
                     Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                 }
 
-                items(articleStates) { article ->
+                items(viewModel.items()) { article ->
                     SelectionContainer {
                         Column(modifier = Modifier.animateItemPlacement()) {
                             val cursorOn = remember { mutableStateOf(false) }
@@ -145,12 +127,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                     modifier = Modifier.padding(vertical = 4.dp)
                                         .padding(start = 8.dp)
                                         .clickable {
-                                            val koin = object : KoinComponent {
-                                                val articleFactory: ArticleFactory by inject()
-                                                val vm: MainViewModel by inject()
-                                            }
-                                            val nextArticle = koin.articleFactory.withTitle(article[0].toString())
-                                            koin.vm.openPreview(nextArticle.path())
+                                            viewModel.openMarkdownPreview(article[0].toString())
                                         }
                                 )
 
@@ -161,12 +138,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                     modifier = Modifier.padding(vertical = 4.dp)
                                         .padding(start = 4.dp)
                                         .clickable {
-                                            val koin = object : KoinComponent {
-                                                val articleFactory: ArticleFactory by inject()
-                                                val vm: MainViewModel by inject()
-                                            }
-                                            val nextArticle = koin.articleFactory.withTitle(article[0].toString())
-                                            koin.vm.edit(nextArticle.path())
+                                            viewModel.edit(article[0].toString())
                                         }
                                 )
 
@@ -201,40 +173,13 @@ fun TableView(aggregationResult: AggregationResult) {
                     }
                 }
             }
-            VerticalScrollbar(adapter = rememberScrollbarAdapter(state), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+            VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
             HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
                 Alignment.BottomCenter))
 
             LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
+                viewModel.start(aggregationResult)
             }
         }
     }
-}
-
-private fun sort(
-    lastSortOrder: Boolean,
-    aggregationResult: AggregationResult,
-    index: Int,
-    articleStates: SnapshotStateList<Array<Any>>
-) {
-    val swap = if (lastSortOrder)
-        if (aggregationResult.columnClass(index) == Int::class.java) {
-            articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
-        } else if (aggregationResult.columnClass(index) == Double::class.java) {
-            articleStates.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
-        } else {
-            articleStates.sortedBy { it[index].toString() }
-        }
-    else
-        if (aggregationResult.columnClass(index) == Int::class.java) {
-            articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
-        } else if (aggregationResult.columnClass(index) == Double::class.java) {
-            articleStates.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
-        } else {
-            articleStates.sortedByDescending { it[index].toString() }
-        }
-
-    articleStates.clear()
-    articleStates.addAll(swap)
 }
