@@ -18,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.Desktop
@@ -30,6 +31,8 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -80,6 +83,9 @@ class MainViewModelImplementationTest {
     @MockK
     private lateinit var webHistoryRepository: WebHistoryRepository
 
+    @MockK
+    private lateinit var articleFactory: ArticleFactory
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -92,6 +98,7 @@ class MainViewModelImplementationTest {
                     single(qualifier = null) { topArticleLoaderService } bind(TopArticleLoaderService::class)
                     single(qualifier = null) { webViewPool } bind(WebViewPool::class)
                     single(qualifier = null) { webHistoryRepository } bind(WebHistoryRepository::class)
+                    single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
                 }
             )
         }
@@ -101,6 +108,11 @@ class MainViewModelImplementationTest {
         every { setting.useCaseSensitiveInFinder() } returns false
         every { topArticleLoaderService.invoke() } returns listOf(mockk(), mockk())
         every { webViewPool.dispose(any()) } just Runs
+        val article = mockk<Article>()
+        every { articleFactory.withTitle(any()) } returns article
+        every { article.makeFile(any()) } just Runs
+        every { article.getTitle() } returns "title"
+        every { article.path() } returns mockk()
 
         mockkStatic(Desktop::class)
         every { Desktop.getDesktop() } returns desktop
@@ -464,6 +476,24 @@ class MainViewModelImplementationTest {
         subject.closeAllTabs()
 
         verify(exactly = 1) { webViewPool.dispose(any()) }
+    }
+
+    @Test
+    fun makeNewArticle() {
+        every { setting.articleFolderPath() } returns mockk()
+        every { Files.list(any()) } returns Stream.empty()
+        subject = spyk(subject)
+        every { subject.addNewArticle(any()) } just Runs
+        every { subject.edit(any()) } just Runs
+
+        subject.makeNewArticle()
+
+        assertTrue(subject.showInputBox())
+
+        subject.invokeInputAction("test")
+
+        verify { subject.addNewArticle(any()) }
+        verify { subject.edit(any()) }
     }
 
     @Test
