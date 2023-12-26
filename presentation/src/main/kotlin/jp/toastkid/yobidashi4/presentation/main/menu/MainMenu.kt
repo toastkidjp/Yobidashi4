@@ -12,7 +12,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -38,7 +37,6 @@ import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.nameWithoutExtension
 import kotlin.math.min
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +49,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     val koin = object: KoinComponent {
         val viewModel: MainViewModel by inject()
         val setting: Setting by inject()
-        val articleFactory: ArticleFactory by inject()
     }
     val viewModel = koin.viewModel
     val setting = koin.setting
@@ -59,16 +56,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
     MenuBar {
         Menu("File") {
             Item("Make new", shortcut = KeyShortcut(Key.N, ctrl = true), icon = painterResource("images/icon/ic_new_article.xml")) {
-                viewModel.setShowInputBox { input ->
-                    if (existsArticle(input, setting.articleFolderPath())) {
-                        return@setShowInputBox
-                    }
-
-                    val article = koin.articleFactory.withTitle(input)
-                    article.makeFile { "# ${article.getTitle()}" }
-                    viewModel.addNewArticle(article.path())
-                    viewModel.edit(article.path())
-                }
+                viewModel.makeNewArticle()
             }
 
             Item(
@@ -347,6 +335,3 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
     }
 }
-
-private fun existsArticle(title: String, folder: Path) =
-    Files.list(folder).anyMatch { it.nameWithoutExtension == title }
