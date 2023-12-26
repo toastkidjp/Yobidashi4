@@ -167,4 +167,13 @@ class NumberPlaceViewModelTest {
         verify { anyConstructed<GameFileProvider>().invoke() }
     }
 
+    @Test
+    fun showMessageSnackbar() {
+        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+
+        numberPlaceViewModel.showMessageSnackbar(true, {})
+
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
+    }
+
 }
