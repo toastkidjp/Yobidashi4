@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -128,6 +129,21 @@ class MainMenuKtTest {
         every { editorTab.showPreview() } returns true
         every { editorTab.switchPreview() } just Runs
         every { editorTab.path } returns mockk()
+
+        runDesktopComposeUiTest {
+            setContent {
+                Window({}, visible = false) {
+                    MainMenu {  }
+                }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun currentIsWebTab() {
+        val tab = mockk<WebTab>()
+        every { viewModel.currentTab() } returns tab
 
         runDesktopComposeUiTest {
             setContent {
