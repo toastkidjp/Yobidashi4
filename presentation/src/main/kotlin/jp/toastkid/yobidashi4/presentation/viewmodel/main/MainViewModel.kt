@@ -51,6 +51,9 @@ interface MainViewModel {
     fun closeCurrent()
     fun closeOtherTabs()
     fun closeAllTabs()
+
+    fun makeNewArticle()
+
     fun addNewArticle(path: Path)
     fun saveCurrentEditorTab()
     fun saveAllEditorTab()
