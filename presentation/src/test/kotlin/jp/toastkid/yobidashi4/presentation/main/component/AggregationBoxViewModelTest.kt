@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -14,6 +15,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -151,6 +153,19 @@ class AggregationBoxViewModelTest {
     @Test
     fun categories() {
         assertFalse(subject.categories().isEmpty())
+    }
+
+    @Test
+    fun onKeywordValueChange() {
+        assertTrue(subject.keyword().text.isEmpty())
+
+        subject.onKeywordValueChange(TextFieldValue("new text"))
+
+        assertEquals("new text", subject.keyword().text)
+
+        subject.clearKeywordInput()
+
+        assertTrue(subject.keyword().text.isEmpty())
     }
 
 }
