@@ -206,4 +206,13 @@ class AggregationBoxViewModelTest {
         verify { mainViewModel.switchAggregationBox(false) }
     }
 
+    @Test
+    fun showWithShowAggregationBoxIsFalse() {
+        every { mainViewModel.showAggregationBox() } returns false
+
+        subject.start()
+
+        verify { mainViewModel.showAggregationBox() }
+    }
+
 }
