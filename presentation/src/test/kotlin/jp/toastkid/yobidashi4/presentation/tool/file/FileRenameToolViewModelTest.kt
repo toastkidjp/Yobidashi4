@@ -9,6 +9,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
@@ -82,7 +83,11 @@ class FileRenameToolViewModelTest {
         val value = mockk<Path>()
         every { value.resolveSibling(any<String>()) } returns mockk()
         every { value.extension } returns "png"
+        every { value.parent } returns value
         every { mainViewModel.droppedPathFlow() } returns flowOf(value, value)
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+        every { mainViewModel.openFile(any(), any()) } just Runs
 
         runBlocking {
             subject.collectDroppedPaths()
@@ -91,6 +96,10 @@ class FileRenameToolViewModelTest {
 
             verify(exactly = 2) { Files.copy(any<Path>(), any<Path>()) }
             verify(exactly = 1) { mainViewModel.showSnackbar(any(), any(), any()) }
+            assertTrue(slot.isCaptured)
+
+            slot.captured.invoke()
+            verify { mainViewModel.openFile(any(), false) }
         }
     }
 
