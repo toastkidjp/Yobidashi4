@@ -148,4 +148,9 @@ class AggregationBoxViewModelTest {
         assertFalse(subject.items().isEmpty())
     }
 
+    @Test
+    fun categories() {
+        assertFalse(subject.categories().isEmpty())
+    }
+
 }
