@@ -46,6 +46,7 @@ import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
+import kotlin.io.path.extension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -494,6 +495,27 @@ class MainViewModelImplementationTest {
 
         verify { subject.addNewArticle(any()) }
         verify { subject.edit(any()) }
+    }
+
+    @Test
+    fun noopMakeNewArticleIfExistsPath() {
+        val extension = "png"
+        val path = mockk<Path>()
+        every { setting.articleFolderPath() } returns path
+        every { path.extension } returns extension
+        every { Files.list(any()) } returns Stream.of(path)
+        subject = spyk(subject)
+        every { subject.addNewArticle(any()) } just Runs
+        every { subject.edit(any()) } just Runs
+
+        subject.makeNewArticle()
+
+        assertTrue(subject.showInputBox())
+
+        subject.invokeInputAction(extension)
+
+        verify(inverse = true) { subject.addNewArticle(any()) }
+        verify(inverse = true) { subject.edit(any()) }
     }
 
     @Test
