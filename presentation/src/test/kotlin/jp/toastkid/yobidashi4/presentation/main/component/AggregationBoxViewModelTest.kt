@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
@@ -19,6 +20,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -201,6 +203,7 @@ class AggregationBoxViewModelTest {
 
         subject.onSearch()
 
+        assertSame(Modifier, subject.dateInputModifier())
         verify { keywordSearch.invoke(any(), any()) }
         verify { mainViewModel.openTab(any()) }
         verify { mainViewModel.switchAggregationBox(false) }
