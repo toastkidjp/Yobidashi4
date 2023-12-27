@@ -165,21 +165,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             if (viewModel.tabs.size > 1) {
                 Item("Move previous tab", icon = painterResource("images/icon/ic_back.xml"), shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
-                    if (viewModel.tabs.isEmpty()) {
-                        return@Item
-                    }
-
-                    val nextIndex = if (viewModel.selected.value == 0) viewModel.tabs.size - 1 else viewModel.selected.value - 1
-                    viewModel.setSelectedIndex(nextIndex)
+                    viewModel.moveTabIndex(-1)
                 }
 
                 Item("Move next tab", icon = painterResource("images/icon/ic_forward.xml"), shortcut = KeyShortcut(Key.PageDown, ctrl = true)) {
-                    if (viewModel.tabs.isEmpty()) {
-                        return@Item
-                    }
-
-                    val nextIndex = if (viewModel.selected.value == viewModel.tabs.size - 1) 0 else viewModel.selected.value + 1
-                    viewModel.setSelectedIndex(nextIndex)
+                    viewModel.moveTabIndex(1)
                 }
             }
 
