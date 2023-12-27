@@ -34,7 +34,10 @@ interface MainViewModel {
     fun showBackgroundImage(): Boolean
     fun switchUseBackground()
     fun loadBackgroundImage()
+
     fun setSelectedIndex(newIndex: Int)
+
+    fun moveTabIndex(moveBy: Int)
     fun openTab(tab: Tab)
     fun openFileListTab(title: String, items: Collection<Path>, closeable: Boolean, type: FileTab.Type)
     fun openFile(path: Path, onBackground: Boolean = false)
