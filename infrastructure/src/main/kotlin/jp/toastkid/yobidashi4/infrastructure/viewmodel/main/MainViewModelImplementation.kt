@@ -124,6 +124,22 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _selected.value = newIndex
     }
 
+    override fun moveTabIndex(moveBy: Int) {
+        if (tabs.isEmpty()) {
+            return
+        }
+
+        val nextIndexCandidate = selected.value + moveBy
+        val nextIndex = if (nextIndexCandidate >= _tabs.size) {
+            0
+        } else if (nextIndexCandidate < 0) {
+            _tabs.lastIndex
+        } else {
+            nextIndexCandidate
+        }
+        setSelectedIndex(nextIndex)
+    }
+
     private val _tabs = mutableStateListOf<Tab>()
 
     override val tabs: SnapshotStateList<Tab> = _tabs
