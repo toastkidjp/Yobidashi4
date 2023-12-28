@@ -105,4 +105,14 @@ class WebBookmarkTabViewModelTest {
 
         verify { viewModel.openUrl(any(), any()) }
     }
+
+    @Test
+    fun browseUri() {
+        every { viewModel.browseUri(any()) } just Runs
+
+        subject.browseUri("https://www.yahoo.co.jp")
+
+        verify { viewModel.browseUri(any()) }
+    }
+
 }
