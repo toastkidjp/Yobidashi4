@@ -49,4 +49,8 @@ class WebBookmarkTabViewModel : KoinComponent {
         viewModel.openUrl(url, onBackground)
     }
 
+    fun browseUri(url: String) {
+        viewModel.browseUri(url)
+    }
+
 }
