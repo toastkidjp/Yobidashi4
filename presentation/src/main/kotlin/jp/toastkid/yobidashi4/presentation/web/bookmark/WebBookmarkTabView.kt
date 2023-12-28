@@ -46,10 +46,7 @@ import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -75,6 +72,9 @@ internal fun WebBookmarkTabView() {
                         bookmark,
                         {
                             viewModel.openUrl(bookmark.url, it)
+                        },
+                        {
+                            viewModel.browseUri(bookmark.url)
                         },
                         {
                             viewModel.delete(bookmark)
@@ -110,14 +110,13 @@ internal fun WebBookmarkTabView() {
 private fun WebBookmarkItemRow(
     bookmark: Bookmark,
     openUrl: (Boolean) -> Unit,
+    browseUri: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier
 ) {
     val cursorOn = remember { mutableStateOf(false) }
     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
     val openOption = remember { mutableStateOf(false) }
-
-    val mainViewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
 
     Box {
         Row(
@@ -187,7 +186,7 @@ private fun WebBookmarkItemRow(
             }
             DropdownMenuItem(
                 onClick = {
-                    mainViewModel.browseUri(bookmark.url)
+                    browseUri()
                     openOption.value = false
                 }
             ) {
