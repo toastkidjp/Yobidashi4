@@ -9,13 +9,16 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
 import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -174,6 +177,23 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.showMessageSnackbar(true, {})
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
+    }
+
+    @Test
+    fun start() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        mockkStatic(Files::class)
+        every { Files.size(any()) } returns 1L
+        val game = mockk<NumberPlaceGame>()
+        every { game.masked() } returns mockk()
+        every { repository.load(any()) } returns game
+
+        runBlocking {
+            numberPlaceViewModel.start()
+
+            verify(inverse = true) { setting.getMaskingCount() }
+        }
     }
 
 }
