@@ -226,6 +226,16 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun noopMoveTabIndexIfTabsIsEmpty() {
+        subject = spyk(subject)
+        every { subject.setSelectedIndex(any()) } just Runs
+
+        subject.moveTabIndex(1)
+
+        verify(inverse = true) { subject.setSelectedIndex(any()) }
+    }
+
+    @Test
     fun getTabs() {
         subject.openTab(LoanCalculatorTab())
         subject.openTab(LoanCalculatorTab())
