@@ -246,6 +246,17 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun moveTabIndexUnderCase() {
+        subject.openTab(mockk())
+        subject.openTab(mockk())
+        subject.setSelectedIndex(0)
+
+        subject.moveTabIndex(-1)
+
+        assertEquals(1, subject.selected.value)
+    }
+
+    @Test
     fun getTabs() {
         subject.openTab(LoanCalculatorTab())
         subject.openTab(LoanCalculatorTab())
