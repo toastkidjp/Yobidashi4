@@ -402,6 +402,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun windowState() = window
 
+    override fun windowVisible() = true
+
     override fun toggleFullscreen() {
         window.placement = if (window.placement == WindowPlacement.Maximized) {
             WindowPlacement.Floating
