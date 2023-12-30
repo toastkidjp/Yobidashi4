@@ -1,42 +1,14 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
-import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
-import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
-import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
-import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
-import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
-import jp.toastkid.yobidashi4.domain.model.tab.FileTab
-import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
-import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
-import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
-import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
-import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
-import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
-import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
-import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.min
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,12 +18,7 @@ import org.koin.core.component.inject
 
 @Composable
 fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
-    val koin = object: KoinComponent {
-        val viewModel: MainViewModel by inject()
-        val setting: Setting by inject()
-    }
-    val viewModel = koin.viewModel
-    val setting = koin.setting
+    val viewModel = remember { MainMenuViewModel() }
 
     MenuBar {
         Menu("File") {
@@ -60,44 +27,37 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
 
             Item(
-                if (viewModel.openArticleList()) "Close article list" else "Open article list",
-                icon = painterResource("images/icon/ic_left_panel_${if (viewModel.openArticleList()) "close" else "open"}.xml"),
-                shortcut = KeyShortcut(if (viewModel.openArticleList()) Key.DirectionLeft else Key.DirectionRight, ctrl = true, alt = true)
+                viewModel.switchArticleListLabel(),
+                icon = painterResource(viewModel.switchArticleListIconPath()),
+                shortcut = viewModel.switchArticleListShortcut()
             ) {
                 viewModel.switchArticleList()
             }
 
             Item("Find", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, alt = true)) {
-                if (viewModel.showAggregationBox().not()) {
-                    viewModel.setInitialAggregationType(7)
-                }
-                viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
+                viewModel.switchFind()
             }
             Item("Dump latest", icon = painterResource("images/icon/ic_dump.xml")) {
-                ZipArchiver().invoke(
-                    LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
-                )
-                viewModel.openFile(Path.of("."))
+                viewModel.dumpLatest()
             }
             Item("Dump all") {
-                ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
-                viewModel.openFile(Path.of("."))
+                viewModel.dumpAll()
             }
             Item("Open article folder", icon = painterResource("images/icon/ic_article_folder.xml"), shortcut = KeyShortcut(Key.O, alt = true)) {
-                viewModel.openFile(setting.articleFolderPath())
+                viewModel.openArticleFolder()
             }
             Item("Open user folder", icon = painterResource("images/icon/ic_user_folder.xml"), shortcut = KeyShortcut(Key.U, alt = true)) {
-                viewModel.openFile(Path.of("user"))
+                viewModel.openUserFolder()
             }
             Item("Exit", icon = painterResource("images/icon/ic_exit.xml")) {
                 exitApplication()
             }
         }
-        val currentTab = viewModel.currentTab()
-        if (currentTab is EditorTab) {
+
+        if (viewModel.useEditorMenu()) {
             Menu("Edit") {
-                Item(if (currentTab.showPreview()) "Hide preview" else "Show preview", shortcut = KeyShortcut(Key.M, ctrl = true), icon = painterResource("images/icon/ic_markdown.xml")) {
-                    currentTab.switchPreview()
+                Item(viewModel.switchPreviewLabel(), shortcut = KeyShortcut(Key.M, ctrl = true), icon = painterResource("images/icon/ic_markdown.xml")) {
+                    viewModel.switchPreview()
                 }
                 Item("Save", shortcut = KeyShortcut(Key.S, ctrl = true), icon = painterResource("images/icon/ic_save.xml")) {
                     viewModel.saveCurrentEditorTab()
@@ -109,21 +69,17 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     viewModel.switchFind()
                 }
                 Item("Editor's Color & Font") {
-                    viewModel.openTab(EditorSettingTab())
+                    viewModel.openEditorSetting()
                 }
             }
         }
 
         Menu("Tab") {
             Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true), icon = painterResource("images/icon/ic_tab_close.xml")) {
-                if (viewModel.tabs.size != 0) {
-                    viewModel.closeCurrent()
-                    return@Item
-                }
-                exitApplication()
+                viewModel.closeCurrentTab { exitApplication() }
             }
 
-            if (viewModel.tabs.isNotEmpty()) {
+            if (viewModel.useAdditionalTabMenu()) {
                 Item("Close all tabs", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_clean.xml")) {
                     viewModel.closeAllTabs()
                 }
@@ -132,24 +88,20 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     viewModel.closeOtherTabs()
                 }
                 Item("Copy tab's title", icon = painterResource("images/icon/ic_clipboard.xml")) {
-                    ClipboardPutterService().invoke(viewModel.currentTab()?.title())
+                    viewModel.copyTabsTitle()
                 }
 
-                if (currentTab is WebTab) {
+                if (viewModel.currentIsWebTab()) {
                     Item("Copy tab's URL", icon = painterResource("images/icon/ic_clipboard.xml")) {
-                        ClipboardPutterService().invoke(currentTab.url())
+                        viewModel.copyTabsUrl()
                     }
                     Item("Copy tab's markdown link", icon = painterResource("images/icon/ic_clipboard.xml")) {
-                        ClipboardPutterService().invoke(currentTab.markdownLink())
+                        viewModel.copyTabsUrlAsMarkdownLink()
                     }
                 }
             }
 
-            when (currentTab) {
-                is EditorTab -> currentTab.path
-                is MarkdownPreviewTab -> currentTab.slideshowSourcePath()
-                else -> null
-            }?.let { slideshowSourcePath ->
+            viewModel.findSlideshowPath()?.let { slideshowSourcePath ->
                 Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource("images/icon/ic_slideshow.xml")) {
                     viewModel.slideshow(slideshowSourcePath)
                 }
@@ -163,7 +115,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.switchFind()
             }
 
-            if (viewModel.tabs.size > 1) {
+            if (viewModel.canMoveTab()) {
                 Item("Move previous tab", icon = painterResource("images/icon/ic_back.xml"), shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
                     viewModel.moveTabIndex(-1)
                 }
@@ -173,7 +125,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
             }
 
-            (1 .. min(10, viewModel.tabs.size)).forEach {
+            (1 .. min(10, viewModel.tabCount())).forEach {
                 Item("Tab $it", shortcut = KeyShortcut(when (it) {
                     1 -> Key.One
                     2 -> Key.Two
@@ -194,67 +146,54 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
         Menu("Tool") {
             Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
-                viewModel.openTab(WebBookmarkTab())
+                viewModel.openBookmarkTab()
             }
             Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true), icon = painterResource("images/icon/ic_calendar.xml")) {
-                viewModel.openTab(CalendarTab())
+                viewModel.openCalendarTab()
             }
             Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true), icon = painterResource("images/icon/ic_aggregation.xml")) {
-                if (viewModel.showAggregationBox().not()) {
-                    viewModel.setInitialAggregationType(0)
-                }
-                viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
+                viewModel.openAggregationBox()
             }
             Item("Web history", shortcut = KeyShortcut(Key.H, alt = true), icon = painterResource("images/icon/ic_history.xml")) {
-                viewModel.openTab(WebHistoryTab())
+                viewModel.openWebHistoryTab()
             }
             Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
-                viewModel.setShowWebSearch(viewModel.showWebSearch().not())
+                viewModel.switchWebSearchBox()
             }
             Item("Barcode tool", icon = painterResource("images/icon/ic_barcode.xml")) {
-                viewModel.openTab(BarcodeToolTab())
+                viewModel.openBarcodeToolTab()
             }
             Item("Converter", icon = painterResource("images/icon/ic_converter.xml")) {
-                viewModel.openTab(ConverterToolTab())
+                viewModel.openConverterToolTab()
             }
             Item("File rename", icon = painterResource("images/icon/ic_rename.xml")) {
-                viewModel.openTab(FileRenameToolTab())
+                viewModel.openFileRenameToolTab()
             }
             Item("Compound interest calculator", icon = painterResource("images/icon/ic_elevation.xml")) {
-                viewModel.openTab(CompoundInterestCalculatorTab())
+                viewModel.openCompoundInterestCalculatorTab()
             }
             Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
-                viewModel.openTab(LoanCalculatorTab())
+                viewModel.openLoanCalculatorTab()
             }
             Item("Number place", shortcut = KeyShortcut(Key.N, alt = true), icon = painterResource("images/icon/ic_number_place.xml")) {
-                viewModel.openTab(NumberPlaceGameTab())
+                viewModel.openNumberPlaceTab()
             }
             Item("Music player", shortcut = KeyShortcut(Key.M, alt = true), icon = painterResource("images/icon/ic_music.xml")) {
-                val mediaFileFolderPath = setting.mediaFolderPath() ?: return@Item
-                viewModel.openFileListTab(
-                    "Music",
-                    MediaFileFinder().invoke(mediaFileFolderPath),
-                    true,
-                    FileTab.Type.MUSIC
-                )
+                viewModel.openMusicPlayerTab()
             }
         }
 
         Menu("User agent") {
-            val current = remember { mutableStateOf(UserAgent.findByName(setting.userAgentName())) }
             UserAgent.values().forEach {
-                RadioButtonItem(it.title(), selected = (it == current.value)) {
-                    setting.setUserAgentName(it.name)
-                    setting.save()
-                    current.value = it
-                    viewModel.showSnackbar("Please would you restart this app?")
+                RadioButtonItem(it.title(), selected = viewModel.isSelectedUserAgent(it)) {
+                    viewModel.chooseUserAgent(it)
                 }
             }
         }
 
         Menu("Notification") {
             Item("List") {
-                viewModel.openTab(NotificationListTab())
+                viewModel.openNotificationList()
             }
             Item("Restart") {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -262,19 +201,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
             }
             Item("Open file", icon = painterResource("images/icon/ic_user_template.xml")) {
-                val path = Path.of("user/notification/list.tsv")
-                viewModel.openFile(path)
+                viewModel.openNotificationFile()
             }
             Item("Export") {
-                viewModel.showSnackbar("Done export.", "Open") {
-                    val path = Path.of(
-                        "notification${
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss"))
-                        }.tsv"
-                    )
-                    Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
-                    viewModel.openFile(Path.of("."), false)
-                }
+                viewModel.exportNotifications()
             }
         }
 
@@ -309,18 +239,16 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 viewModel.switchDarkMode()
             }
             Item("Open article template", icon = painterResource("images/icon/ic_user_template.xml")) {
-                val path = Path.of("user/article_template.txt")
-                viewModel.openFile(path)
+                viewModel.openArticleTemplate()
             }
             Item(
-                if (viewModel.openMemoryUsageBox()) "Close memory usage" else "Memory usage",
+                viewModel.switchMemoryUsageBoxLabel(),
                 icon = painterResource("images/icon/ic_memory.xml")
             ) {
                 viewModel.switchMemoryUsageBox()
             }
             Item("Show log", icon = painterResource("images/icon/ic_log.xml")) {
-                val logFilePath = Path.of("temporary/logs/app.log")
-                viewModel.openTextFile(logFilePath)
+                viewModel.openLogViewerTab()
             }
         }
     }
