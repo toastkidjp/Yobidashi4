@@ -114,7 +114,6 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             notification
                 .notificationFlow()
                 .collect {
-                    println("receive ${it.date}")
                     trayState.sendNotification(Notification(it.title, it.text, Notification.Type.Info))
                 }
         }
