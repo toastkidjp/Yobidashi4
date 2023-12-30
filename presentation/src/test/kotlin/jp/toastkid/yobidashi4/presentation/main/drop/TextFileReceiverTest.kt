@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.drop
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -11,8 +10,8 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -51,7 +50,7 @@ class TextFileReceiverTest {
         every { path2.fileName } returns path2
         every { path2.toString() } returns "test.exe"
 
-        textFileReceiver = TextFileReceiver(Dispatchers.Unconfined)
+        textFileReceiver = TextFileReceiver()
     }
 
     @AfterEach
@@ -65,12 +64,10 @@ class TextFileReceiverTest {
     fun launch() {
         every { mainViewModel.edit(any(), any()) } just Runs
 
-        runDesktopComposeUiTest {
-            setContent {
-                textFileReceiver.launch()
+        runBlocking {
+            textFileReceiver.launch()
 
-                verify { mainViewModel.droppedPathFlow() }
-            }
+            verify { mainViewModel.droppedPathFlow() }
         }
     }
 
