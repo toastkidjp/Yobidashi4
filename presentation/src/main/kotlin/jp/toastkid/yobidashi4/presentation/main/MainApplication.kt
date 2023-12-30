@@ -34,18 +34,18 @@ import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 
 @OptIn(ExperimentalFoundationApi::class)
-fun launchMainApplication() {
+fun launchMainApplication(exitProcessOnExit: Boolean = true) {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
 
-    application {
+    application(exitProcessOnExit) {
         Application(LocalTextContextMenu)
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-internal fun ApplicationScope.Application(LocalTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
+private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
     val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
     val trayState = rememberTrayState()
 
@@ -117,6 +117,12 @@ internal fun ApplicationScope.Application(LocalTextContextMenu: ProvidableCompos
                     println("receive ${it.date}")
                     trayState.sendNotification(Notification(it.title, it.text, Notification.Type.Info))
                 }
+        }
+    }
+
+    LaunchedEffect(mainViewModel.windowVisible()) {
+        if (mainViewModel.windowVisible().not()) {
+            exitApplication()
         }
     }
 }
