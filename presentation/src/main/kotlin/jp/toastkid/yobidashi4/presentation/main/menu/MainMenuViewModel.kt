@@ -62,7 +62,7 @@ class MainMenuViewModel : KoinComponent {
         viewModel.switchArticleList()
     }
 
-    fun switchFind() {
+    fun switchFindArticle() {
         if (viewModel.showAggregationBox().not()) {
             viewModel.setInitialAggregationType(7)
         }
@@ -107,6 +107,10 @@ class MainMenuViewModel : KoinComponent {
 
     fun saveAllEditorTab() {
         viewModel.saveAllEditorTab()
+    }
+
+    fun switchFind() {
+        viewModel.switchFind()
     }
 
     fun openEditorSetting() {
@@ -270,17 +274,14 @@ class MainMenuViewModel : KoinComponent {
         }
     }
 
-    // TODO Move here
     fun toggleFullscreenLabel(): String {
         return viewModel.toggleFullscreenLabel()
     }
 
-    // TODO Move here
     fun toggleFullscreen() {
         viewModel.toggleFullscreen()
     }
 
-    // TODO Move
     fun toggleNarrowWindow() {
         viewModel.toggleNarrowWindow()
     }
