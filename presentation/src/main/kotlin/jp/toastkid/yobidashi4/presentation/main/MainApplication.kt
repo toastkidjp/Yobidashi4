@@ -81,7 +81,12 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             }
 
             window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
-            TextFileReceiver().launch()
+
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.IO) {
+                    TextFileReceiver().launch()
+                }
+            }
         }
 
         mainViewModel.slideshowPath()?.let { path ->
