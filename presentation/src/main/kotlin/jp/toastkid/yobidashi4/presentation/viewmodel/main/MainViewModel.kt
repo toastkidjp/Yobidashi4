@@ -66,6 +66,9 @@ interface MainViewModel {
     fun showingSnackbar(): Boolean
     fun updateWebTab(id: String, title: String, url: String?)
     fun windowState(): WindowState
+
+    fun windowVisible(): Boolean
+
     fun toggleFullscreen()
     fun toggleFullscreenLabel(): String
     fun toggleNarrowWindow()
