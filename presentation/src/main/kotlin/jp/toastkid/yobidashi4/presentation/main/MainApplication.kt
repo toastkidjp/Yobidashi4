@@ -2,10 +2,14 @@ package jp.toastkid.yobidashi4.presentation.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.LocalTextContextMenu
+import androidx.compose.foundation.text.TextContextMenu
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Notification
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
@@ -35,75 +39,84 @@ fun launchMainApplication() {
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
 
     application {
-        val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
-        val trayState = rememberTrayState()
+        Application(LocalTextContextMenu)
+    }
+}
 
-        AppTheme(darkTheme = mainViewModel.darkMode()) {
-            Tray(
-                state = trayState,
-                icon = painterResource("images/icon.png"),
-                menu = {
-                    Item(
-                        "Exit",
-                        onClick = {
-                            exitApplication()
-                        }
-                    )
-                }
-            )
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+internal fun ApplicationScope.Application(LocalTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
+    val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
+    val trayState = rememberTrayState()
 
-            Window(
-                onCloseRequest = {
-                    exitApplication()
-                },
-                title = "Yobidashi 4 ${LauncherJarTimestampReader().invoke() ?: ""}",
-                state = mainViewModel.windowState(),
-                icon = painterResource("images/icon.png")
-            ) {
-                MainMenu { exitApplication() }
-
-                CompositionLocalProvider(
-                    LocalTextContextMenu provides TextContextMenuFactory(mainViewModel).invoke()
-                ) {
-                    MainScaffold()
-                }
-
-                window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
-                TextFileReceiver().launch()
-            }
-
-            mainViewModel.slideshowPath()?.let { path ->
-                SlideshowWindow().openWindow(path, mainViewModel::closeSlideshow)
-            }
-        }
-
-        val notification = object : KoinComponent { val notification: ScheduledNotification by inject() }.notification
-
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                notification.start()
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
-                override fun uncaughtException(t: Thread?, e: Throwable?) {
-                    LoggerFactory.getLogger(javaClass).error(t?.name, e)
-                }
-            })
-
-            withContext(Dispatchers.IO) {
-                mainViewModel.loadBackgroundImage()
-            }
-
-            withContext(Dispatchers.IO) {
-                notification
-                    .notificationFlow()
-                    .collect {
-                        println("receive ${it.date}")
-                        trayState.sendNotification(Notification(it.title, it.text, Notification.Type.Info))
+    AppTheme(darkTheme = mainViewModel.darkMode()) {
+        Tray(
+            state = trayState,
+            icon = painterResource("images/icon.png"),
+            menu = {
+                Item(
+                    "Exit",
+                    onClick = {
+                        exitApplication()
                     }
+                )
             }
+        )
+
+        Window(
+            onCloseRequest = {
+                exitApplication()
+            },
+            title = "Yobidashi 4 ${LauncherJarTimestampReader().invoke() ?: ""}",
+            state = mainViewModel.windowState(),
+            visible = mainViewModel.windowVisible(),
+            icon = painterResource("images/icon.png")
+        ) {
+            MainMenu { exitApplication() }
+
+            CompositionLocalProvider(
+                LocalTextContextMenu provides TextContextMenuFactory(mainViewModel).invoke()
+            ) {
+                MainScaffold()
+            }
+
+            window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
+            TextFileReceiver().launch()
+        }
+
+        mainViewModel.slideshowPath()?.let { path ->
+            SlideshowWindow().openWindow(path, mainViewModel::closeSlideshow)
+        }
+    }
+
+    val notification = object : KoinComponent {
+        val notification: ScheduledNotification by inject()
+    }.notification
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            notification.start()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        Thread.setDefaultUncaughtExceptionHandler(object : Thread.UncaughtExceptionHandler {
+            override fun uncaughtException(t: Thread?, e: Throwable?) {
+                LoggerFactory.getLogger(javaClass).error(t?.name, e)
+            }
+        })
+
+        withContext(Dispatchers.IO) {
+            mainViewModel.loadBackgroundImage()
+        }
+
+        withContext(Dispatchers.IO) {
+            notification
+                .notificationFlow()
+                .collect {
+                    println("receive ${it.date}")
+                    trayState.sendNotification(Notification(it.title, it.text, Notification.Type.Info))
+                }
         }
     }
 }
