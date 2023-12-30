@@ -1,12 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text.LocalTextContextMenu
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -21,6 +19,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -51,6 +50,7 @@ class MainApplicationKtTest {
         every { mainViewModel.slideshowPath() } returns null
         every { mainViewModel.droppedPathFlow() } returns emptyFlow()
         coEvery { notification.start(any()) } just Runs
+        every { notification.notificationFlow() } returns MutableSharedFlow()
 
         mockMainMenu(setting)
 
@@ -134,9 +134,6 @@ class MainApplicationKtTest {
     @OptIn(ExperimentalTestApi::class, ExperimentalFoundationApi::class)
     @Test
     fun test() {
-        application(false) {
-            Application(LocalTextContextMenu)
-            exitApplication()
-        }
+        launchMainApplication(false)
     }
 }
