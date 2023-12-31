@@ -98,6 +98,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     Item("Copy tab's markdown link", icon = painterResource("images/icon/ic_clipboard.xml")) {
                         viewModel.copyTabsUrlAsMarkdownLink()
                     }
+                    Item("Add bookmark") {
+                        viewModel.addWebBookmark()
+                    }
                 }
             }
 
