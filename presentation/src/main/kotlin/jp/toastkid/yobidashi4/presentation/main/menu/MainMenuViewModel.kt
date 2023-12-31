@@ -25,7 +25,9 @@ import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
+import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
@@ -39,6 +41,8 @@ class MainMenuViewModel : KoinComponent {
     private val viewModel: MainViewModel by inject()
 
     private val setting: Setting by inject()
+
+    private val webBookmarkRepository: BookmarkRepository by inject()
 
     private val currentUserAgent = mutableStateOf(UserAgent.findByName(setting.userAgentName()))
 
@@ -153,6 +157,11 @@ class MainMenuViewModel : KoinComponent {
     fun copyTabsUrlAsMarkdownLink() {
         val tab = viewModel.currentTab() as? WebTab ?: return
         ClipboardPutterService().invoke(tab.markdownLink())
+    }
+
+    fun addWebBookmark() {
+        val webTab = viewModel.currentTab() as? WebTab ?: return
+        webBookmarkRepository.add(Bookmark.fromWebTab(webTab))
     }
 
     fun findSlideshowPath(): Path? {
