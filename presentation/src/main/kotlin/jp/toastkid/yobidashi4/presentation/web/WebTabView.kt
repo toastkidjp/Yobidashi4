@@ -1,16 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.web
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import javax.swing.JDialog
-import javax.swing.WindowConstants
-import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.service.web.event.FindEvent
-import jp.toastkid.yobidashi4.domain.service.web.event.ReloadEvent
-import jp.toastkid.yobidashi4.domain.service.web.event.SwitchDeveloperToolEvent
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Composable
 internal fun WebTabView(tab: WebTab) {
@@ -19,34 +10,4 @@ internal fun WebTabView(tab: WebTab) {
     }
 
     WebView(tab.id(), tab.url())
-
-    LaunchedEffect(Unit) {
-        receiveEvent()
-    }
-}
-
-private suspend fun receiveEvent() {
-    val webViewPool = object : KoinComponent { val pool: WebViewPool by inject() }.pool
-
-    webViewPool
-        .event()
-        .collect {
-            when (it) {
-                is FindEvent -> {
-                    webViewPool.find(it.id, it.text, !it.upward)
-                }
-
-                is ReloadEvent -> {
-                    webViewPool.reload(it.id)
-                }
-
-                is SwitchDeveloperToolEvent -> {
-                    val devToolsDialog = JDialog()
-                    devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
-                    devToolsDialog.setSize(800, 600)
-                    devToolsDialog.add(webViewPool.devTools(it.id))
-                    devToolsDialog.isVisible = true
-                }
-            }
-        }
 }
