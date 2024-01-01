@@ -236,6 +236,15 @@ private fun TabOptionMenu(
             }
         }
 
+        if (tab is MarkdownPreviewTab) {
+            DropdownMenuItem(onClick = {
+                openDropdownMenu.value = false
+                viewModel.edit(tab.slideshowSourcePath())
+            }) {
+                Text("Edit")
+            }
+        }
+
         if (tab is TableTab) {
             DropdownMenuItem(onClick = {
                 openDropdownMenu.value = false
