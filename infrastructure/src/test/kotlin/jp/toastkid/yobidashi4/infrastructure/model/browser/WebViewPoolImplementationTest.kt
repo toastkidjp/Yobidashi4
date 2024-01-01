@@ -23,7 +23,9 @@ import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -96,7 +98,11 @@ class WebViewPoolImplementationTest {
         val countDownLatch = CountDownLatch(1)
         CoroutineScope(Dispatchers.Unconfined).launch {
             subject.event().collect {
-                Assertions.assertTrue(it is ReloadEvent)
+                if (it !is ReloadEvent) {
+                    fail<Unit>("Unexpected event type.")
+                    return@collect
+                }
+                assertEquals("1", it.id)
                 countDownLatch.countDown()
             }
         }
