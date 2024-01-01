@@ -153,6 +153,16 @@ internal fun WebSearchBox() {
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
+                        if (query.value.text.isBlank() || query.value.composition != null) {
+                            return@KeyboardActions
+                        }
+
+                        if (query.value.text.startsWith("https://")) {
+                            viewModel.openUrl(query.value.text, false)
+                            viewModel.setShowWebSearch(false)
+                            return@KeyboardActions
+                        }
+
                         selectedSite.value.make(query.value.text).let {
                             viewModel.openUrl(it.toString(), false)
                         }
@@ -175,26 +185,12 @@ internal fun WebSearchBox() {
                 },
                 modifier = Modifier.focusRequester(focusRequester)
                     .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
-                            && query.value.composition == null) {
-                            if (query.value.text.startsWith("https://")) {
-                                viewModel.openUrl(query.value.text, false)
-                                return@onKeyEvent true
-                            }
-                            selectedSite.value.make(query.value.text).let { uri ->
-                                viewModel.openUrl(uri.toString(), false)
-                            }
-                            viewModel.setShowWebSearch(false)
-
-                            return@onKeyEvent true
-                        }
-
                         if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
                             viewModel.setShowWebSearch(false)
                             return@onKeyEvent true
                         }
 
-                        true
+                        false
                     }
             )
 
