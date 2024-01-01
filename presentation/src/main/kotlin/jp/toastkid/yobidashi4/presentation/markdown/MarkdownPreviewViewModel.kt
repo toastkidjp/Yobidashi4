@@ -83,21 +83,7 @@ class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
             return@buildAnnotatedString
         }
 
-        if (text.contains("~~")) {
-            applyStylePattern(
-                text,
-                lastIndex,
-                lineThroughPattern,
-                "~~",
-                SpanStyle(textDecoration = TextDecoration.LineThrough)
-            )
-        } else if (text.contains("***")) {
-            applyStylePattern(text, lastIndex, italicPattern, "***", SpanStyle(fontStyle = FontStyle.Italic))
-        } else if (text.contains("**")) {
-            applyStylePattern(text, lastIndex, boldingPattern, "**", SpanStyle(fontWeight = FontWeight.Bold))
-        } else {
-            append(text.substring(lastIndex, text.length))
-        }
+        appendStyleIfNeed(text, lastIndex)
 
         if (!finderTarget.isNullOrBlank()) {
             val finderMatcher = Pattern.compile(finderTarget).matcher(text)
@@ -110,6 +96,31 @@ class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
                 )
             }
         }
+    }
+
+    private fun AnnotatedString.Builder.appendStyleIfNeed(text: String, lastIndex: Int) {
+        if (text.contains("~~")) {
+            applyStylePattern(
+                text,
+                lastIndex,
+                lineThroughPattern,
+                "~~",
+                SpanStyle(textDecoration = TextDecoration.LineThrough)
+            )
+            return
+        }
+
+        if (text.contains("***")) {
+            applyStylePattern(text, lastIndex, italicPattern, "***", SpanStyle(fontStyle = FontStyle.Italic))
+            return
+        }
+
+        if (text.contains("**")) {
+            applyStylePattern(text, lastIndex, boldingPattern, "**", SpanStyle(fontWeight = FontWeight.Bold))
+            return
+        }
+
+        append(text.substring(lastIndex, text.length))
     }
 
     private fun AnnotatedString.Builder.applyStylePattern(
