@@ -1,8 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.browser
 
 import java.awt.Component
-import jp.toastkid.yobidashi4.domain.service.web.event.WebTabEvent
-import kotlinx.coroutines.flow.SharedFlow
 
 interface WebViewPool {
     fun component(id: String, initialUrl: String): Component
@@ -14,8 +12,6 @@ interface WebViewPool {
     fun clearFind(id: String)
 
     fun reload(id: String)
-
-    fun event(): SharedFlow<WebTabEvent>
 
     fun switchDevTools(id: String)
 

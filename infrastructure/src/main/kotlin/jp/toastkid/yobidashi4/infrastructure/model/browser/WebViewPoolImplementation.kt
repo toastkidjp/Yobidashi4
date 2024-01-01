@@ -4,10 +4,7 @@ import java.awt.Component
 import javax.swing.JDialog
 import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
-import jp.toastkid.yobidashi4.domain.service.web.event.WebTabEvent
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
@@ -49,10 +46,6 @@ class WebViewPoolImplementation : WebViewPool {
     override fun reload(id: String) {
         getBrowser(id, "").reload()
     }
-
-    private val _event = MutableSharedFlow<WebTabEvent>()
-
-    override fun event() = _event.asSharedFlow()
 
     override fun switchDevTools(id: String) {
         val devToolsDialog = JDialog()
