@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -75,6 +76,15 @@ internal fun InputBox() {
                 onValueChange = {
                     query.value = TextFieldValue(it.text, it.selection, it.composition)
                 },
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        if (query.value.text.isBlank()) {
+                            return@KeyboardActions
+                        }
+                        viewModel.invokeInputAction(query.value.text)
+                        viewModel.setShowInputBox()
+                    }
+                ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 trailingIcon = {
                     Icon(
@@ -88,21 +98,11 @@ internal fun InputBox() {
                 },
                 modifier = Modifier.focusRequester(focusRequester)
                     .onKeyEvent {
-                        if (it.type == KeyEventType.KeyUp && it.key == Key.Enter
-                            && query.value.composition == null
-                            && query.value.text.isNotBlank()
-                        ) {
-                            println("invoking key event")
-                            viewModel.invokeInputAction(query.value.text)
-                            viewModel.setShowInputBox()
-                            return@onKeyEvent true
-                        }
-
                         if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
                             viewModel.setShowInputBox()
                             return@onKeyEvent true
                         }
-                        true
+                        false
                     }
             )
 
