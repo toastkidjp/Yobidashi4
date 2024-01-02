@@ -67,10 +67,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun switchFindArticle() {
-        if (viewModel.showAggregationBox().not()) {
-            viewModel.setInitialAggregationType(7)
-        }
-        viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
+        switchAggregationBox(7)
     }
 
     fun dumpLatest() {
@@ -201,8 +198,12 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openAggregationBox() {
+        switchAggregationBox(0)
+    }
+
+    private fun switchAggregationBox(initialChoosed: Int) {
         if (viewModel.showAggregationBox().not()) {
-            viewModel.setInitialAggregationType(0)
+            viewModel.setInitialAggregationType(initialChoosed)
         }
         viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
     }
