@@ -141,6 +141,11 @@ class TextEditorViewModel {
     }
 
     fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 500) {
+        if (tab.scroll() <= 0.0) {
+            focusRequester().requestFocus()
+            return
+        }
+
         coroutineScope.launch {
             delay(ms)
             adapter.scrollTo(tab.scroll())
