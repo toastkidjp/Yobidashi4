@@ -104,21 +104,21 @@ fun SimpleTextEditor(
                 }
         )
 
+        DisposableEffect(tab.path) {
+            viewModel.launchTab(tab)
+            viewModel.initialScroll(coroutineScope)
+
+            setStatus(viewModel.makeCharacterCountMessage(tab.getContent().length))
+
+            onDispose {
+                viewModel.dispose()
+            }
+        }
+
         VerticalScrollbar(adapter = viewModel.scrollbarAdapter(), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
     }
 
     LaunchedEffect(viewModel.verticalScrollState().offset) {
         viewModel.adjustLineNumberState()
-    }
-
-    DisposableEffect(tab.path) {
-        viewModel.launchTab(tab)
-        viewModel.initialScroll(coroutineScope)
-
-        setStatus(viewModel.makeCharacterCountMessage(tab.getContent().length))
-
-        onDispose {
-            viewModel.dispose()
-        }
     }
 }
