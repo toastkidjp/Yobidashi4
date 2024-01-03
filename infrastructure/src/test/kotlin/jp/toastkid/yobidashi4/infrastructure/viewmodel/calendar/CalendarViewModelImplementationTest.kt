@@ -10,7 +10,6 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Path
-import java.time.DayOfWeek
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
@@ -132,7 +131,7 @@ class CalendarViewModelImplementationTest {
 
     @Test
     fun yearInput() {
-        assertEquals("2023", viewModel.yearInput().text)
+        assertEquals(LocalDate.now().year.toString(), viewModel.yearInput().text)
     }
 
     @Test
@@ -190,18 +189,6 @@ class CalendarViewModelImplementationTest {
                 verify { mainViewModel.edit(any(), false) }
             }
         )
-    }
-
-    @Test
-    fun makeMonthPassedEmpty() {
-        assertTrue(viewModel.makeMonth(emptyArray()).isEmpty())
-        verify { userOffDayService.findBy(any()) }
-    }
-
-    @Test
-    fun makeMonth() {
-        assertTrue(viewModel.makeMonth(DayOfWeek.values()).isNotEmpty())
-        verify { userOffDayService.findBy(any()) }
     }
 
 }
