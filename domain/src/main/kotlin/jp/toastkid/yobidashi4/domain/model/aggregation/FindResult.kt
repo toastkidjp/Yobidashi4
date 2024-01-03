@@ -23,4 +23,7 @@ class FindResult(private val keyword: String) : AggregationResult {
     fun add(fileName: String, filteredList: List<String>) {
         items.put(fileName, filteredList)
     }
+
+    fun keyword() = keyword
+
 }
