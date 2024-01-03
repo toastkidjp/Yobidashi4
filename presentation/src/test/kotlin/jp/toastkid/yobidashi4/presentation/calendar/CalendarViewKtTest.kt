@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
+import java.time.DayOfWeek
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
@@ -36,7 +37,16 @@ class CalendarViewKtTest {
             )
         }
 
-        every { calendarViewModel.makeMonth(any()) } returns mutableListOf(Week().also { it.add(LocalDate.now()) })
+        every { calendarViewModel.month() } returns mutableListOf(Week().also { it.add(LocalDate.now()) })
+        every { calendarViewModel.dayOfWeeks() } returns listOf(
+            DayOfWeek.SUNDAY,
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+            DayOfWeek.FRIDAY,
+            DayOfWeek.SATURDAY
+        )
         every { calendarViewModel.isToday(any()) } returns false
         every { calendarViewModel.openDateArticle(any(), any()) } just Runs
         every { calendarViewModel.plusMonths(any()) } just Runs
