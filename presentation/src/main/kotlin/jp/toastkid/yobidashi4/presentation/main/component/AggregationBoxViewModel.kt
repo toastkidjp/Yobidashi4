@@ -121,7 +121,6 @@ class AggregationBoxViewModel : KoinComponent {
 
     fun onSearch() {
         invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
-        viewModel.switchAggregationBox(false)
     }
 
     fun clearKeywordInput() {
