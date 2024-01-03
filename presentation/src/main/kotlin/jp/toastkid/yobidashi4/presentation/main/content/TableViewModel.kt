@@ -8,6 +8,7 @@ import androidx.compose.ui.input.key.Key
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
+import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
@@ -28,6 +29,8 @@ class TableViewModel : KoinComponent {
     private val state = LazyListState()
 
     private val scrollAction = KeyboardScrollAction(state)
+
+    private val highlighter = KeywordHighlighter()
 
     fun items() = articleStates
 
@@ -87,5 +90,7 @@ class TableViewModel : KoinComponent {
         articleStates.clear()
         articleStates.addAll(swap)
     }
+
+    fun highlight(text: String, keyword: String?) = highlighter(text, keyword)
 
 }
