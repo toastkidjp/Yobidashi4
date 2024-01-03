@@ -266,10 +266,7 @@ private fun TabOptionMenu(
                     ClipboardPutterService().invoke("[[${tab.path.nameWithoutExtension}]]")
                 }
             ) {
-                Text(
-                    "Clip internal link",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+                Text("Clip internal link")
             }
         }
     }
