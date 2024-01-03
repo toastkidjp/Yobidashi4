@@ -41,6 +41,7 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -48,6 +49,8 @@ import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 fun TableView(aggregationResult: AggregationResult) {
     val coroutineScope = rememberCoroutineScope()
     val viewModel = remember { TableViewModel() }
+
+    val query = (aggregationResult as? FindResult)?.keyword()
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -149,8 +152,9 @@ fun TableView(aggregationResult: AggregationResult) {
                                     if (any is Collection<*>) {
                                         Column(modifier = Modifier.weight(1f)) {
                                             any.forEach { line ->
+                                                val highlight = viewModel.highlight(line.toString(), query)
                                                 Text(
-                                                    line.toString(),
+                                                    highlight,
                                                     modifier = Modifier
                                                         .padding(horizontal = 16.dp)
                                                 )
