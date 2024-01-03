@@ -46,24 +46,21 @@ import org.koin.core.component.inject
 fun CalendarView() {
     val calendarViewModel = remember { object : KoinComponent { val vm: CalendarViewModel by inject() }.vm }
 
-    val week = arrayOf(
-        DayOfWeek.SUNDAY,
-        DayOfWeek.MONDAY,
-        DayOfWeek.TUESDAY,
-        DayOfWeek.WEDNESDAY,
-        DayOfWeek.THURSDAY,
-        DayOfWeek.FRIDAY,
-        DayOfWeek.SATURDAY
-    )
-
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
         Column {
-            TopComponent(calendarViewModel)
+            TopComponent(
+                calendarViewModel.yearInput(),
+                calendarViewModel.localDate().month.value,
+                { calendarViewModel.setYearInput(it) },
+                { calendarViewModel.plusMonths(it) },
+                { calendarViewModel.moveToCurrentMonth() },
+                calendarViewModel::moveMonth
+            )
             Row {
-                week.forEach { dayOfWeek ->
+                calendarViewModel.dayOfWeeks().forEach { dayOfWeek ->
                     Surface(modifier = Modifier.weight(1f)) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
@@ -81,7 +78,7 @@ fun CalendarView() {
                 }
             }
 
-            calendarViewModel.makeMonth(week).forEach { w ->
+            calendarViewModel.month().forEach { w ->
                 Row {
                     w.days().forEach { day ->
                         DayLabelView(day.date, day.dayOfWeek, day.label, day.offDay,
@@ -90,15 +87,9 @@ fun CalendarView() {
                                 .combinedClickable(
                                     enabled = day.date != -1,
                                     onClick = {
-                                        if (day.date == -1) {
-                                            return@combinedClickable
-                                        }
                                         calendarViewModel.openDateArticle(day.date)
                                     },
                                     onLongClick = {
-                                        if (day.date == -1) {
-                                            return@combinedClickable
-                                        }
                                         calendarViewModel.openDateArticle(day.date, true)
                                     }
                                 )
@@ -112,14 +103,21 @@ fun CalendarView() {
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
-private fun TopComponent(calendarViewModel: CalendarViewModel) {
+private fun TopComponent(
+    yearInput: TextFieldValue,
+    currentMonth: Int,
+    setYearInput: (TextFieldValue) -> Unit,
+    plusMonths: (Long) -> Unit,
+    moveToCurrentMonth: () -> Unit,
+    moveMonth: (Int) -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.padding(8.dp)
     ) {
         Button(onClick = {
-            calendarViewModel.plusMonths(-1)
+            plusMonths(-1)
         }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionLeft }) {
             Text("<", modifier = Modifier.padding(8.dp))
         }
@@ -128,13 +126,13 @@ private fun TopComponent(calendarViewModel: CalendarViewModel) {
             val openYearChooser = remember { mutableStateOf(false) }
             Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
                 TextField(
-                    calendarViewModel.yearInput(),
+                    yearInput,
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Installment") },
                     textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
                     onValueChange = {
-                        calendarViewModel.setYearInput(TextFieldValue(it.text, it.selection, it.composition))
+                        setYearInput(it)
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.widthIn(100.dp)
@@ -147,11 +145,11 @@ private fun TopComponent(calendarViewModel: CalendarViewModel) {
         Surface(modifier = Modifier.padding(8.dp)) {
             val openMonthChooser = remember { mutableStateOf(false) }
             Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
-                Text("${calendarViewModel.localDate().month.value}", fontSize = 16.sp)
+                Text("$currentMonth", fontSize = 16.sp)
                 DropdownMenu(expanded = openMonthChooser.value, onDismissRequest = { openMonthChooser.value = false }) {
                     Month.values().forEach {
                         DropdownMenuItem(onClick = {
-                            calendarViewModel.moveMonth(it.value)
+                            moveMonth(it.value)
                             openMonthChooser.value = false
                         }) {
                             Text("${it.value}")
@@ -162,13 +160,13 @@ private fun TopComponent(calendarViewModel: CalendarViewModel) {
         }
 
         Button(onClick = {
-            calendarViewModel.plusMonths(1)
+            plusMonths(1)
         }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionRight }) {
             Text(">", modifier = Modifier.padding(8.dp))
         }
 
         Button(onClick = {
-            calendarViewModel.moveToCurrentMonth()
+            moveToCurrentMonth()
         }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionLeft }) {
             Text("Current month", modifier = Modifier.padding(8.dp))
         }
