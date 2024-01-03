@@ -18,6 +18,16 @@ import org.koin.core.component.inject
 @Single
 class CalendarViewModelImplementation : CalendarViewModel {
 
+    private val week = listOf(
+        DayOfWeek.SUNDAY,
+        DayOfWeek.MONDAY,
+        DayOfWeek.TUESDAY,
+        DayOfWeek.WEDNESDAY,
+        DayOfWeek.THURSDAY,
+        DayOfWeek.FRIDAY,
+        DayOfWeek.SATURDAY
+    )
+
     private val localDateState =  mutableStateOf(LocalDate.now())
 
     override fun localDate(): LocalDate = localDateState.value
@@ -73,6 +83,10 @@ class CalendarViewModelImplementation : CalendarViewModel {
     }
 
     override fun openDateArticle(date: Int, onBackground: Boolean) {
+        if (date == -1) {
+            return
+        }
+
         val koin = object : KoinComponent {
             val viewModel: MainViewModel by inject()
             val setting: Setting by inject()
@@ -85,7 +99,11 @@ class CalendarViewModelImplementation : CalendarViewModel {
         )
     }
 
-    override fun makeMonth(week: Array<DayOfWeek>): MutableList<Week> {
+    override fun dayOfWeeks() = week
+
+    override fun month() = makeMonth(week)
+
+    private fun makeMonth(week: Iterable<DayOfWeek>): MutableList<Week> {
         val firstDay = localDateState.value.withDayOfMonth(1)
 
         val userOffDayService = object : KoinComponent { val userOffDayService: UserOffDayService by inject() }.userOffDayService
