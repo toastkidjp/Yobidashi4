@@ -22,6 +22,8 @@ interface CalendarViewModel {
 
     fun openDateArticle(date: Int, onBackground: Boolean = false)
 
-    fun makeMonth(week: Array<DayOfWeek>): MutableList<Week>
+    fun dayOfWeeks(): Iterable<DayOfWeek>
+
+    fun month(): Iterable<Week>
 
 }
