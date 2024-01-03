@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -72,6 +73,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
+import kotlin.io.path.nameWithoutExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -254,6 +256,20 @@ private fun TabOptionMenu(
                 }
             }) {
                 Text("Export table")
+            }
+        }
+
+        if (tab is EditorTab) {
+            DropdownMenuItem(
+                onClick = {
+                    openDropdownMenu.value = false
+                    ClipboardPutterService().invoke("[[${tab.path.nameWithoutExtension}]]")
+                }
+            ) {
+                Text(
+                    "Clip internal link",
+                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                )
             }
         }
     }
