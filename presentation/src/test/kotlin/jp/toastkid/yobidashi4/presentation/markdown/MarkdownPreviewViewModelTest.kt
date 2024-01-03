@@ -108,4 +108,20 @@ class MarkdownPreviewViewModelTest {
         assertEquals("It longs to make it.", annotate.text)
     }
 
+    @Test
+    fun annotate2() {
+        val annotate = subject.annotate("It **longs** to make it.", "long")
+
+        assertEquals(2, annotate.spanStyles.size)
+        assertEquals("It longs to make it.", annotate.text)
+    }
+
+    @Test
+    fun annotate3() {
+        val annotate = subject.annotate("It longs ***to*** make it.", "long")
+
+        assertEquals(2, annotate.spanStyles.size)
+        assertEquals("It longs to make it.", annotate.text)
+    }
+
 }
