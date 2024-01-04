@@ -82,7 +82,8 @@ koverReport {
         excludes {
             // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
             classes("jp.toastkid.yobidashi4.infrastructure.di.*")
-            classes("*.ComposableSingletons")
+            classes("*ComposableSingletons*")
+            classes("*\$inject\$*")
             packages("org.koin.ksp.generated")
         }
     }
