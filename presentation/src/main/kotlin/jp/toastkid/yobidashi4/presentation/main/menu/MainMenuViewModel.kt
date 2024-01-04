@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
+import jp.toastkid.yobidashi4.domain.model.tab.RouletteToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -226,6 +227,10 @@ class MainMenuViewModel : KoinComponent {
 
     fun openFileRenameToolTab() {
         viewModel.openTab(FileRenameToolTab())
+    }
+
+    fun openRouletteToolTab() {
+        viewModel.openTab(RouletteToolTab())
     }
 
     fun openCompoundInterestCalculatorTab() {
