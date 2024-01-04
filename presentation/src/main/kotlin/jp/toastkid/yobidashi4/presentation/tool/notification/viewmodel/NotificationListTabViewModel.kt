@@ -8,10 +8,12 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
+import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -47,7 +49,11 @@ class NotificationListTabViewModel : KoinComponent {
         repository
             .update(index, notificationEvent)
         mainViewModel
-            .showSnackbar("Update notification event.")
+            .showSnackbar("Update notification event.", "Reload") {
+                CoroutineScope(Dispatchers.IO).launch {
+                    object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
+                }
+            }
     }
 
     fun deleteAt(index: Int) {
