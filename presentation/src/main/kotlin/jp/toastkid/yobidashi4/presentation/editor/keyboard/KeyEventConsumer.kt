@@ -128,7 +128,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val converted = selected.split("\n").joinToString("\n") { line -> "- [ ] $line" }
+                val converted = ListHeadAdder().invoke(selected, "- [ ]") ?: return false
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
