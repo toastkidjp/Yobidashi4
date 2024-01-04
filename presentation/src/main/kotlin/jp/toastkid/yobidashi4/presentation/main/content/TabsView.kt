@@ -6,7 +6,6 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,6 +47,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.Reloadable
+import jp.toastkid.yobidashi4.domain.model.tab.RouletteToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
@@ -69,6 +69,7 @@ import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.tool.notification.NotificationListTabView
+import jp.toastkid.yobidashi4.presentation.tool.roulette.RouletteToolTabView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
@@ -172,6 +173,7 @@ internal fun TabsView(modifier: Modifier) {
             is CalendarTab -> CalendarView()
             is CompoundInterestCalculatorTab -> CompoundInterestCalculatorView()
             is FileRenameToolTab -> FileRenameToolView()
+            is RouletteToolTab -> RouletteToolTabView()
             is WebTab -> WebTabView(currentTab)
             is WebBookmarkTab -> WebBookmarkTabView()
             is WebHistoryTab -> WebHistoryView()
