@@ -161,7 +161,7 @@ private fun NotificationEventRow(
             ),
             label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
             onValueChange = {
-                input.value = TextFieldValue(it.text, it.selection, it.composition)
+                input.value = it
                 onValueChange(it)
             },
             keyboardActions = KeyboardActions(
