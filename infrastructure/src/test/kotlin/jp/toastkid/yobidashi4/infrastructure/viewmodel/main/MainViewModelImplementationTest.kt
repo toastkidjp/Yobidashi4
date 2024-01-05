@@ -13,11 +13,13 @@ import io.mockk.Runs
 import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -510,14 +512,20 @@ class MainViewModelImplementationTest {
 
     @Test
     fun closeAllTabs() {
+        subject = spyk(subject)
+        val slot = slot<() -> Unit>()
+        every { subject.showSnackbar(any(), any(), capture(slot)) } just Runs
         val tab = mockk<WebTab>()
         every { tab.id() } returns "test"
         subject.openTab(mockk())
         subject.openTab(tab)
 
         subject.closeAllTabs()
+        slot.invoke()
 
         verify(exactly = 1) { webViewPool.dispose(any()) }
+        assertEquals(2, subject.tabs.size)
+        assertEquals(1, subject.selected.value)
     }
 
     @Test
