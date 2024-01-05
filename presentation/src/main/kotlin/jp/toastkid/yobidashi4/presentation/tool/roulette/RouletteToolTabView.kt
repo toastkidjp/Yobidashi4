@@ -32,7 +32,7 @@ fun RouletteToolTabView() {
     ) {
         Column {
             if (viewModel.result().isNotBlank()) {
-                Row {
+                Row(modifier = Modifier.padding(8.dp)) {
                     SelectionContainer {
                         Text(viewModel.result())
                     }
@@ -40,17 +40,21 @@ fun RouletteToolTabView() {
                     Icon(
                         painterResource("images/icon/ic_clipboard.xml"),
                         "Clip result",
-                        Modifier.clickable {
-                            viewModel.clipResult()
-                        }
+                        Modifier
+                            .clickable {
+                                viewModel.clipResult()
+                            }
                             .padding(start = 8.dp)
                     )
                 }
             }
 
-            Button({
-                viewModel.roulette()
-            }) {
+            Button(
+                {
+                    viewModel.roulette()
+                },
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
                 Text("Start")
             }
 
