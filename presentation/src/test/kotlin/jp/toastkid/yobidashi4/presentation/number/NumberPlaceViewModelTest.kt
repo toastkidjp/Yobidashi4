@@ -196,4 +196,20 @@ class NumberPlaceViewModelTest {
         }
     }
 
+    @Test
+    fun startWhenLoadedGameIsNull() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        mockkStatic(Files::class)
+        every { Files.size(any()) } returns 1L
+        every { repository.load(any()) } returns null
+        every { setting.getMaskingCount() } returns 1
+
+        runBlocking {
+            numberPlaceViewModel.start()
+
+            verify { setting.getMaskingCount() }
+        }
+    }
+
 }
