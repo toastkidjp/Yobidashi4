@@ -80,7 +80,7 @@ class LoanCalculatorViewModel {
 
     private val scheduleState = mutableStateListOf<PaymentDetail>()
 
-    fun scheduleState() = scheduleState
+    fun scheduleState(): List<PaymentDetail> = scheduleState
 
     private val inputChannel: Channel<String> = Channel()
 
