@@ -11,6 +11,10 @@ class CefContextMenuFactory {
         params: CefContextMenuParams?,
         model: CefMenuModel?
     ) {
+        if (model == null) {
+            return
+        }
+
         ContextMenu.values().filter {
             return@filter when (it.context) {
                 Context.IMAGE -> params?.sourceUrl.isNullOrBlank().not()
@@ -19,7 +23,7 @@ class CefContextMenuFactory {
                 else -> return@filter true
             }
         }.forEach {
-            model?.addItem(it.id, it.text)
+            model.addItem(it.id, it.text)
         }
     }
 
