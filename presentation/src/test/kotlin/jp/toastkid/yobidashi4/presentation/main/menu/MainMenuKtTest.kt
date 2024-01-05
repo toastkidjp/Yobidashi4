@@ -13,8 +13,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import jp.toastkid.yobidashi4.domain.model.article.Article
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
@@ -37,9 +35,6 @@ class MainMenuKtTest {
     @MockK
     private lateinit var  setting: Setting
 
-    @MockK
-    private lateinit var  articleFactory: ArticleFactory
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -48,7 +43,6 @@ class MainMenuKtTest {
                 module {
                     single(qualifier=null) { viewModel } bind(MainViewModel::class)
                     single(qualifier=null) { setting } bind(Setting::class)
-                    single(qualifier=null) { articleFactory } bind(ArticleFactory::class)
                 }
             )
         }
@@ -94,10 +88,6 @@ class MainMenuKtTest {
         every { setting.userAgentName() } returns "test"
         every { setting.setUserAgentName(any()) } just Runs
         every { setting.save() } just Runs
-
-        val article = mockk<Article>()
-        every { articleFactory.withTitle(any()) } returns article
-        every { article.makeFile(any()) } just Runs
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
