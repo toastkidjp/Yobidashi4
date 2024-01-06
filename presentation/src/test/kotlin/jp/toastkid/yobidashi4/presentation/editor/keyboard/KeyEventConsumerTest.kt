@@ -313,9 +313,9 @@ class KeyEventConsumerTest {
 
         val consumed = subject.invoke(
             KeyEvent(awtKeyEvent),
-            TextFieldValue("Angel has fallen.\nHe has gone.", TextRange(0, 30)),
+            TextFieldValue("Angel has fallen.\nHe has gone.\n", TextRange(0, 30)),
             multiParagraph,
-            { assertEquals("- [ ] Angel has fallen.\n- [ ] He has gone.", it.text) }
+            { assertEquals("- [ ] Angel has fallen.\n- [ ] He has gone.\n", it.text) }
         )
 
         assertTrue(consumed)
