@@ -10,6 +10,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
@@ -210,6 +212,20 @@ class NumberPlaceViewModelTest {
 
             verify { setting.getMaskingCount() }
         }
+    }
+
+    @Test
+    fun onCellLongClick() {
+        numberPlaceViewModel = spyk(numberPlaceViewModel)
+        every { numberPlaceViewModel.useHint(any(), any(), any(), any()) } just Runs
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+
+        numberPlaceViewModel.onCellLongClick(1, 1, mutableStateOf(""))
+        slot.captured.invoke()
+
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
+        verify { numberPlaceViewModel.useHint(any(), any(), any(), any()) }
     }
 
 }
