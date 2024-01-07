@@ -174,11 +174,16 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun showMessageSnackbar() {
-        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+        val onAction = mockk<() -> Unit>()
+        every { onAction.invoke() } just Runs
 
-        numberPlaceViewModel.showMessageSnackbar(true, {})
+        numberPlaceViewModel.showMessageSnackbar(true, onAction)
+        slot.captured.invoke()
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
+        verify { onAction.invoke() }
     }
 
     @Test
