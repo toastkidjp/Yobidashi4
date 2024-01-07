@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
+import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -58,6 +59,9 @@ class MainMenuViewModelTest {
     @MockK
     private lateinit var setting: Setting
 
+    @MockK
+    private lateinit var webBookmarkRepository: BookmarkRepository
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -67,6 +71,7 @@ class MainMenuViewModelTest {
                 module {
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
                     single(qualifier = null) { setting } bind (Setting::class)
+                    single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
                 }
             )
         }
@@ -381,6 +386,19 @@ class MainMenuViewModelTest {
         subject.copyTabsUrlAsMarkdownLink()
 
         verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
+    fun addWebBookmark() {
+        every { webBookmarkRepository.add(any()) } just Runs
+        val webTab = mockk<WebTab>()
+        every { mainViewModel.currentTab() } returns webTab
+        every { webTab.title() } returns "test"
+        every { webTab.url() } returns "test"
+
+        subject.addWebBookmark()
+
+        verify { webBookmarkRepository.add(any()) }
     }
 
     @Test
