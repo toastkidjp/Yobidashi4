@@ -209,7 +209,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Open file", icon = painterResource("images/icon/ic_user_template.xml")) {
                 viewModel.openNotificationFile()
             }
-            Item("Export") {
+            Item("Export", icon = painterResource("images/icon/ic_export.xml")) {
                 viewModel.exportNotifications()
             }
         }
