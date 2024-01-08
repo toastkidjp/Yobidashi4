@@ -10,10 +10,15 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.nio.file.Files
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -33,6 +38,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
+import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -63,6 +69,9 @@ class MainMenuViewModelTest {
     @MockK
     private lateinit var webBookmarkRepository: BookmarkRepository
 
+    @MockK
+    private lateinit var notificationEventRepository: NotificationEventRepository
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -73,6 +82,7 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
+                    single(qualifier = null) { notificationEventRepository } bind (NotificationEventRepository::class)
                 }
             )
         }
@@ -651,14 +661,22 @@ class MainMenuViewModelTest {
         verify { mainViewModel.openFile(any()) }
     }
 
-    // TODO check callback
     @Test
     fun exportNotifications() {
-        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+        mockkStatic(Path::class, Files::class)
+        every { Path.of(any<String>()) } returns mockk()
+        every { Files.write(any(), any<Iterable<String>>()) } returns mockk()
+        every { notificationEventRepository.readAll() } returns listOf(NotificationEvent.makeDefault())
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+        every { mainViewModel.openFile(any(), any()) } just Runs
 
         subject.exportNotifications()
+        slot.captured.invoke()
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
+        verify { mainViewModel.openFile(any(), any()) }
+        verify { notificationEventRepository.readAll() }
     }
 
     @Test
