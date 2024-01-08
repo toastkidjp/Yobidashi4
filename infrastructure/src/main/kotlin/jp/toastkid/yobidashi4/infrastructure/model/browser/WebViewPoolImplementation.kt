@@ -58,6 +58,7 @@ class WebViewPoolImplementation : WebViewPool {
     override fun dispose(id: String) {
         val browser = browsers.get(id) ?: return
         browser.close(true)
+        client.doClose(browser)
         browsers.remove(id)
     }
 
@@ -68,6 +69,7 @@ class WebViewPoolImplementation : WebViewPool {
 
         browsers.keys.mapNotNull { browsers.get(it) }.forEach {
             it.close(true)
+            client.doClose(it)
         }
         browsers.clear()
         CefApp.getInstance().dispose()
