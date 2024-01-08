@@ -374,6 +374,17 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun noopCopyTabsTitle() {
+        every { mainViewModel.currentTab() } returns null
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        subject.copyTabsTitle()
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun copyTabsUrl() {
         val tab = mockk<WebTab>()
         every { tab.url() } returns "https://test"
