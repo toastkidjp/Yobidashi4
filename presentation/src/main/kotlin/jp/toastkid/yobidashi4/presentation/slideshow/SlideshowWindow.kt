@@ -39,6 +39,7 @@ class SlideshowWindow {
                 },
                 undecorated = true,
                 state = viewModel.windowState(),
+                visible = viewModel.windowVisible(),
                 title = deck.title,
             ) {
                 val focusRequester = remember { FocusRequester() }
