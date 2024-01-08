@@ -411,6 +411,17 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun noopCopyTabsUrlAsMarkdownLink() {
+        every { mainViewModel.currentTab() } returns null
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        subject.copyTabsUrlAsMarkdownLink()
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun addWebBookmark() {
         every { webBookmarkRepository.add(any()) } just Runs
         val webTab = mockk<WebTab>()
