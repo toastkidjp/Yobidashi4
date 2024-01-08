@@ -435,6 +435,15 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun noopAddWebBookmark() {
+        every { mainViewModel.currentTab() } returns null
+
+        subject.addWebBookmark()
+
+        verify { webBookmarkRepository wasNot called }
+    }
+
+    @Test
     fun findSlideshowPathWhenCurrentTabIsEditorTab() {
         val tab = mockk<EditorTab>()
         every { mainViewModel.currentTab() } returns tab
