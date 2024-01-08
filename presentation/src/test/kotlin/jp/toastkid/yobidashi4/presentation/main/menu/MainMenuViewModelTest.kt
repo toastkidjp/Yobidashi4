@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
+import jp.toastkid.yobidashi4.domain.model.tab.RouletteToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
@@ -554,6 +555,15 @@ class MainMenuViewModelTest {
         subject.openFileRenameToolTab()
 
         verify { mainViewModel.openTab(any<FileRenameToolTab>()) }
+    }
+
+    @Test
+    fun openRouletteToolTab() {
+        every { mainViewModel.openTab(any()) } just Runs
+
+        subject.openRouletteToolTab()
+
+        verify { mainViewModel.openTab(any<RouletteToolTab>()) }
     }
 
     @Test
