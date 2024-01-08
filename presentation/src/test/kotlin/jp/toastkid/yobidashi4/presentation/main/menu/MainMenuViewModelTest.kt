@@ -490,8 +490,15 @@ class MainMenuViewModelTest {
 
     @Test
     fun canMoveTab() {
+        assertFalse(subject.canMoveTab())
+
+        every { mainViewModel.tabs } returns mutableStateListOf(mockk())
 
         assertFalse(subject.canMoveTab())
+
+        every { mainViewModel.tabs } returns mutableStateListOf(mockk(), mockk())
+
+        assertTrue(subject.canMoveTab())
     }
 
     @Test
