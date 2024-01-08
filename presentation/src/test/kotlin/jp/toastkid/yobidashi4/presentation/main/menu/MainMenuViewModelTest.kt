@@ -264,6 +264,15 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun noopSwitchPreview() {
+        every { mainViewModel.currentTab() } returns null
+
+        subject.switchPreview()
+
+        verify { mainViewModel.currentTab() }
+    }
+
+    @Test
     fun saveCurrentEditorTab() {
         every { mainViewModel.saveCurrentEditorTab() } just Runs
 
