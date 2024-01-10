@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
@@ -135,10 +134,9 @@ fun LoanCalculatorView() {
 
             if (viewModel.scheduleState().isNotEmpty()) {
                 Box (modifier = Modifier.weight(0.5f)) {
-                    val scrollState = rememberLazyListState()
                     val color =
-                        if (scrollState.firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
-                    LazyColumn(state = scrollState) {
+                        if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface else Color.Transparent
+                    LazyColumn(state = viewModel.listState()) {
                         stickyHeader {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -167,7 +165,7 @@ fun LoanCalculatorView() {
                         }
                     }
                     VerticalScrollbar(
-                        adapter = rememberScrollbarAdapter(scrollState),
+                        adapter = rememberScrollbarAdapter(viewModel.listState()),
                         modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
                     )
                 }
