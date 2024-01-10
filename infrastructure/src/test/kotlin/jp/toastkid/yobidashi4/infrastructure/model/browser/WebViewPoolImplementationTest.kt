@@ -36,6 +36,7 @@ class WebViewPoolImplementationTest {
         MockKAnnotations.init(this)
 
         every { cefClient.createBrowser(any(), any(), any()) }.returns(cefBrowser)
+        every { cefClient.doClose(any()) } returns true
         every { cefBrowser.uiComponent }.returns(mockk())
         every { cefBrowser.devTools.uiComponent }.returns(mockk())
         every { cefBrowser.close(any()) }.just(Runs)
@@ -101,6 +102,7 @@ class WebViewPoolImplementationTest {
         subject.dispose("1")
 
         verify { cefBrowser.close(any()) }
+        verify { cefClient.doClose(any()) }
     }
 
     @Test
@@ -108,6 +110,7 @@ class WebViewPoolImplementationTest {
         subject.disposeAll()
 
         verify(inverse = true) { cefBrowser.close(any()) }
+        verify(inverse = true) { cefClient.doClose(any()) }
         verify { CefApp.getInstance().dispose() }
     }
 
@@ -118,6 +121,7 @@ class WebViewPoolImplementationTest {
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
+        verify { cefClient.doClose(any()) }
     }
 
     @Test
