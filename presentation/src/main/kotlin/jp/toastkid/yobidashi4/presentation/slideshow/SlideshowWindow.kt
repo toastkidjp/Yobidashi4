@@ -60,7 +60,3 @@ class SlideshowWindow {
     }
 
 }
-
-fun main(args: Array<String>) {
-    SlideshowWindow().show(Path.of(args[0]))
-}
