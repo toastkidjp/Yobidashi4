@@ -728,6 +728,17 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun invokeInputActionWithEmpty() {
+        val action = mockk<(String) -> Unit>()
+        every { action.invoke(any()) } just Runs
+        subject.setShowInputBox(action)
+
+        subject.invokeInputAction("")
+
+        verify { action wasNot called }
+    }
+
+    @Test
     fun windowState() {
         val initialWindowState = subject.windowState()
         assertTrue(initialWindowState.size.width > 600.dp)
