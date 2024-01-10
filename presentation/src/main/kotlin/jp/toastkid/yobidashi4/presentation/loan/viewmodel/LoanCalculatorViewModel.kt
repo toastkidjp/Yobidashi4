@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import java.text.DecimalFormat
@@ -14,6 +15,8 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 class LoanCalculatorViewModel {
+
+    private val scrollState = LazyListState(0)
 
     private val result = mutableStateOf("")
 
@@ -144,5 +147,7 @@ class LoanCalculatorViewModel {
 
     fun roundToIntSafely(d: Double) =
         if (d.isNaN()) "0" else d.roundToInt().toString()
-    
+
+    fun listState() = scrollState
+
 }
