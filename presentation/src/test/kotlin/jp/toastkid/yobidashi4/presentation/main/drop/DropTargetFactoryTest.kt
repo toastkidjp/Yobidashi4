@@ -16,6 +16,7 @@ import java.awt.datatransfer.UnsupportedFlavorException
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetDropEvent
 import java.io.File
+import java.io.IOException
 import java.nio.file.Path
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -72,6 +73,19 @@ class DropTargetFactoryTest {
     @Test
     fun unsupportedFlavorException() {
         every { event.isDataFlavorSupported(any()) } throws UnsupportedFlavorException(null)
+
+        val target = dropTargetFactory.invoke(consumer)
+        target.drop(event)
+
+        verify { anyConstructed<DropTarget>().addDropTargetListener(any()) }
+        verify { consumer wasNot called }
+        verify(inverse = true) { event.dropComplete(any()) }
+        verify { event.rejectDrop() }
+    }
+
+    @Test
+    fun ioException() {
+        every { event.isDataFlavorSupported(any()) } throws IOException()
 
         val target = dropTargetFactory.invoke(consumer)
         target.drop(event)
