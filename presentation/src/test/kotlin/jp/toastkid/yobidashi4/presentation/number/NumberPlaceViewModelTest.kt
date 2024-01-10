@@ -197,6 +197,17 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
+    fun showMessageSnackbarDefaultArgs() {
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+
+        numberPlaceViewModel.showMessageSnackbar(true)
+        slot.captured.invoke()
+
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
+    }
+
+    @Test
     fun start() {
         mockkConstructor(GameFileProvider::class)
         every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
