@@ -113,6 +113,16 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
+    fun saveCurrentGameOnProvideNull() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns null
+
+        numberPlaceViewModel.saveCurrentGame()
+
+        verify { repository wasNot called }
+    }
+
+    @Test
     fun pickSolving() {
         numberPlaceViewModel.pickSolving(0, 0)
     }
