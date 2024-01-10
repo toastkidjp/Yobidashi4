@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.loan
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.Runs
@@ -30,6 +31,7 @@ class LoanCalculatorViewKtTest {
         every { anyConstructed<LoanCalculatorViewModel>().renovationReserves() } returns "0"
         every { anyConstructed<LoanCalculatorViewModel>().roundToIntSafely(any()) } returns "0"
         every { anyConstructed<LoanCalculatorViewModel>().launch() } just Runs
+        every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(0)
     }
 
     @AfterEach
@@ -46,4 +48,17 @@ class LoanCalculatorViewKtTest {
             }
         }
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun firstVisibleItemIndexIsNotZero() {
+        every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(1)
+
+        runDesktopComposeUiTest {
+            setContent {
+                LoanCalculatorView()
+            }
+        }
+    }
+
 }
