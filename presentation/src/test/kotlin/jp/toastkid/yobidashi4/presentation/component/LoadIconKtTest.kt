@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -58,6 +59,21 @@ class LoadIconKtTest {
                 LoadIcon("images/icon/ic_web.xml", Modifier)
 
                 verify { anyConstructed<LoadIconViewModel>().useIcon() }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun bitmapIsNotNull() {
+        every { anyConstructed<LoadIconViewModel>().loadBitmap() } returns ImageBitmap(1, 1)
+
+        runDesktopComposeUiTest {
+            setContent {
+                LoadIcon("images/icon/ic_web.xml", Modifier)
+
+                verify { anyConstructed<LoadIconViewModel>().useIcon() }
+                verify { anyConstructed<LoadIconViewModel>().loadBitmap() }
             }
         }
     }
