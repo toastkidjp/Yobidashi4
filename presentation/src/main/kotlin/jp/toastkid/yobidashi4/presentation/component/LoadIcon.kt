@@ -4,45 +4,38 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.painterResource
-import java.nio.file.Path
-import kotlin.io.path.inputStream
 
 @Composable
 internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
-    iconPath ?: return
-    val path = Path.of(iconPath)
-    if (iconPath.contains("temporary").not()) {
+    if (iconPath == null) {
+        return
+    }
+
+    val viewModel = remember { LoadIconViewModel(iconPath) }
+    if (viewModel.useIcon()) {
         Icon(
             painterResource(iconPath),
-            contentDescription = "Icon",
+            contentDescription = viewModel.contentDescription(),
             tint = MaterialTheme.colors.onPrimary,
             modifier = modifier
         )
         return
     }
 
-    val bitmap = path.inputStream().use { inputStream ->
-        try {
-            loadImageBitmap(inputStream)
-        } catch (e: IllegalArgumentException) {
-            //LoggerFactory.getLogger("LoadIcon").debug("IllegalArgumentException by $path", e)
-            null
-        }
-    }
-
+    val bitmap = viewModel.loadBitmap()
     if (bitmap != null) {
         Image(
             bitmap,
-            contentDescription = "Icon",
+            contentDescription = viewModel.contentDescription(),
             modifier = modifier
         )
     } else {
         Icon(
-            painterResource("images/icon/ic_web.xml"),
-            contentDescription = "Icon",
+            painterResource(viewModel.defaultIconPath()),
+            contentDescription = viewModel.contentDescription(),
             tint = MaterialTheme.colors.onPrimary,
             modifier = modifier
         )
