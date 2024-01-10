@@ -58,6 +58,17 @@ class EditorSettingViewModelTest {
     }
 
     @Test
+    fun useDefaultColor() {
+        every { setting.editorBackgroundColor() } returns null
+        every { setting.editorForegroundColor() } returns null
+
+        subject = EditorSettingViewModel()
+
+        assertEquals(androidx.compose.ui.graphics.Color.LightGray, subject.currentBackgroundColor())
+        assertEquals(androidx.compose.ui.graphics.Color.Black, subject.currentFontColor())
+    }
+
+    @Test
     fun currentBackgroundColor() {
         assertEquals(Color.BLACK.rgb, subject.currentBackgroundColor().toArgb())
     }
