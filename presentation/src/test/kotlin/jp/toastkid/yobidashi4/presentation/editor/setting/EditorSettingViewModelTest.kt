@@ -125,6 +125,13 @@ class EditorSettingViewModelTest {
     }
 
     @Test
+    fun setEditorFontSizePassingOtherClass() {
+        subject.setEditorFontSize("12")
+
+        verify(inverse = true) { setting.setEditorFontSize(any()) }
+    }
+
+    @Test
     fun reset() {
         subject.reset()
 
