@@ -7,6 +7,7 @@ import io.mockk.verify
 import java.io.InputStream
 import java.nio.file.Files
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -33,6 +34,13 @@ class LoadIconViewModelTest {
     @Test
     fun useIcon() {
         assertTrue(subject.useIcon())
+    }
+
+    @Test
+    fun useIconDoesNotExistsCase() {
+        every { Files.exists(any()) } returns false
+
+        assertFalse(subject.useIcon())
     }
 
     @Test
