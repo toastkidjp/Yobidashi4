@@ -49,9 +49,7 @@ class FileListViewModel : KoinComponent {
 
     fun start(paths: List<Path>) {
         articleStates.clear()
-        val editableExtensions = setOf("md", "txt")
         paths.map {
-            println(it.extension)
             FileListItem(it, editable = editableExtensions.contains(it.extension)) }.forEach { articleStates.add(it) }
         completeItems.addAll(articleStates)
     }
@@ -146,3 +144,5 @@ class FileListViewModel : KoinComponent {
     }
 
 }
+
+private val editableExtensions = setOf("md", "txt")
