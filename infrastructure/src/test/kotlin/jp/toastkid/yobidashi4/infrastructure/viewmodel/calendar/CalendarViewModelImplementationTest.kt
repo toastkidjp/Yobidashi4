@@ -191,4 +191,14 @@ class CalendarViewModelImplementationTest {
         )
     }
 
+    @Test
+    fun month() {
+        viewModel.moveMonth(2)
+
+        val month = viewModel.month()
+
+        assertEquals(5, month.size)
+        assertTrue(month.flatMap { it.days() }.any { it.offDay })
+    }
+
 }
