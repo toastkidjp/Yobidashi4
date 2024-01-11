@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
@@ -30,7 +28,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,10 +36,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.isShiftPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -50,43 +43,25 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.file.Files
 import java.nio.file.Path
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
 import kotlin.io.path.nameWithoutExtension
-import kotlin.math.max
-import kotlin.math.min
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
-    val completeItems = remember { mutableStateListOf<FileListItem>() }
-    val articleStates = remember { mutableStateListOf<FileListItem>() }
+    val viewModel = remember { FileListViewModel() }
 
     LaunchedEffect(paths.size) {
-        articleStates.clear()
-        val editableExtensions = setOf("md", "txt")
-        paths.map { FileListItem(it, editable = editableExtensions.contains(it.extension)) }.forEach { articleStates.add(it) }
-        completeItems.addAll(articleStates)
+        viewModel.start(paths)
     }
 
-    val dateTimeFormatter = remember { DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH) }
-
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
     val coroutineScope = rememberCoroutineScope()
 
     Surface(
@@ -95,59 +70,26 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Box(modifier = Modifier) {
-            val state = rememberLazyListState()
-            val horizontalScrollState = rememberScrollState()
-            var controlPressing = false
-            var shiftPressing = false
             LazyColumn(
-                state = state,
+                state = viewModel.listState(),
                 userScrollEnabled = true,
                 modifier = Modifier
                     .onKeyEvent { keyEvent ->
-                        controlPressing = keyEvent.isCtrlPressed
-                        shiftPressing = keyEvent.isShiftPressed
-
-                        if (keyEvent.isCtrlPressed && keyEvent.key == Key.Z) {
-                            ZipArchiver().invoke(articleStates.filter { it.selected }.map { it.path })
-                            viewModel.openFile(Path.of("."))
-                            return@onKeyEvent true
-                        }
-                        if (keyEvent.key == Key.DirectionUp) {
-                            coroutineScope.launch {
-                                state.scrollToItem(max(0, state.firstVisibleItemIndex - 1), 0)
-                            }
-                            return@onKeyEvent true
-                        }
-                        if (keyEvent.key == Key.DirectionDown) {
-                            coroutineScope.launch {
-                                state.scrollToItem(min(articleStates.size - 1, state.firstVisibleItemIndex + 1), 0)
-                            }
-                            return@onKeyEvent true
-                        }
-                        false
+                        viewModel.onKeyEvent(coroutineScope, keyEvent)
                     }
             ) {
                 stickyHeader {
-                    val keyword = remember { mutableStateOf(TextFieldValue()) }
                     TextField(
-                        keyword.value,
+                        viewModel.keyword(),
                         maxLines = 1,
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = if (state.firstVisibleItemIndex == 0) Color.Transparent
+                            backgroundColor = if (viewModel.currentIsTop()) Color.Transparent
                             else MaterialTheme.colors.surface.copy(alpha = 0.75f) ,
                             cursorColor = MaterialTheme.colors.secondary
                         ),
                         label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
                         onValueChange = {
-                            keyword.value = TextFieldValue(it.text, it.selection, it.composition)
-                            if (keyword.value.composition == null) {
-                                articleStates.clear()
-                                articleStates.addAll(
-                                    if (keyword.value.text.isNotBlank()) completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(keyword.value.text.lowercase()) }
-                                    else completeItems
-                                )
-                                return@TextField
-                            }
+                            viewModel.onValueChange(it)
                         },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                         trailingIcon = {
@@ -156,74 +98,40 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                 contentDescription = "Clear input.",
                                 tint = MaterialTheme.colors.secondary,
                                 modifier = Modifier.clickable {
-                                    keyword.value = TextFieldValue()
-                                    articleStates.clear()
-                                    articleStates.addAll(completeItems)
+                                    viewModel.clearInput()
                                 }
                             )
                         }
                     )
                 }
 
-                itemsIndexed(articleStates) { index, fileListItem ->
+                itemsIndexed(viewModel.items()) { index, fileListItem ->
                     FileListItemRow(
                         fileListItem,
                         index,
-                        dateTimeFormatter,
-                        { articleStates.filter { it.selected }.map { it.path } },
+                        { viewModel.items().filter { it.selected }.map { it.path } },
                         modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
                                 onClick = {
-                                    val clickedIndex = articleStates.indexOf(fileListItem)
-
-                                    if (shiftPressing) {
-                                        val startIndex = articleStates.indexOfFirst { it.selected }
-                                        val range =
-                                            if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
-                                        range.forEach { targetIndex ->
-                                            articleStates.set(targetIndex, articleStates.get(targetIndex).reverseSelection())
-                                        }
-                                        return@combinedClickable
-                                    }
-
-                                    if (controlPressing.not() && shiftPressing.not()) {
-                                        articleStates.mapIndexed { i, fileListItem ->
-                                            i to fileListItem
-                                        }
-                                            .filter { it.second.selected }
-                                            .forEach {
-                                                articleStates.set(it.first, it.second.unselect())
-                                            }
-                                    }
-
-                                    articleStates.set(clickedIndex, fileListItem.reverseSelection())
+                                    viewModel.onSingleClick(fileListItem)
                                 },
                                 onLongClick = {
-                                    if (fileListItem.editable) {
-                                        viewModel.edit(fileListItem.path, true)
-                                    } else {
-                                        viewModel.openFile(fileListItem.path, true)
-                                    }
+                                    viewModel.onLongClick(fileListItem)
                                 },
                                 onDoubleClick = {
-                                    if (fileListItem.editable) {
-                                        viewModel.hideArticleList()
-                                        viewModel.edit(fileListItem.path)
-                                    } else {
-                                        viewModel.openFile(fileListItem.path)
-                                    }
+                                    viewModel.onDoubleClick(fileListItem)
                                 }
                             )
                     )
                 }
             }
             VerticalScrollbar(
-                adapter = rememberScrollbarAdapter(state),
+                adapter = rememberScrollbarAdapter(viewModel.listState()),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
             HorizontalScrollbar(
-                adapter = rememberScrollbarAdapter(horizontalScrollState),
+                adapter = rememberScrollbarAdapter(viewModel.horizontalScrollState()),
                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
             )
         }
@@ -235,7 +143,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 private fun FileListItemRow(
     fileListItem: FileListItem,
     index: Int,
-    dateTimeFormatter: DateTimeFormatter?,
     selectedFiles: () -> List<Path>,
     modifier: Modifier
 ) {
@@ -279,13 +186,9 @@ private fun FileListItemRow(
                 overflow = TextOverflow.Ellipsis,
                 color = textColor
             )
-            if (Files.exists(fileListItem.path)) {
+            fileListItem.subText()?.let {
                 Text(
-                    "${Files.size(fileListItem.path) / 1000} KB | ${
-                        LocalDateTime
-                            .ofInstant(Files.getLastModifiedTime(fileListItem.path).toInstant(), ZoneId.systemDefault())
-                            .format(dateTimeFormatter)
-                    }",
+                    it,
                     color = textColor
                 )
             }
