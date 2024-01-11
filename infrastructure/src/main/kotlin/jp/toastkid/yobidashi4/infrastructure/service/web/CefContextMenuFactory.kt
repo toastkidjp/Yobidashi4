@@ -15,11 +15,15 @@ class CefContextMenuFactory {
             return
         }
 
+        val enableSourceUrl = params?.sourceUrl.isNullOrBlank().not()
+        val enablePageUrl = params?.pageUrl.isNullOrBlank().not()
+        val usePlainTextMenu = params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()
+
         ContextMenu.values().filter {
             return@filter when (it.context) {
-                Context.IMAGE -> params?.sourceUrl.isNullOrBlank().not()
-                Context.LINK -> params?.pageUrl.isNullOrBlank().not()
-                Context.PLAIN_TEXT -> params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()
+                Context.IMAGE -> enableSourceUrl
+                Context.LINK -> enablePageUrl
+                Context.PLAIN_TEXT -> usePlainTextMenu
                 else -> return@filter true
             }
         }.forEach {
