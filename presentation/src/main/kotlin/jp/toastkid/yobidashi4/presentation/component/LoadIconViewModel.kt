@@ -9,7 +9,7 @@ class LoadIconViewModel(private val iconPath: String) {
 
     private val path = if (iconPath.isBlank()) null else Path.of(iconPath)
 
-    fun useIcon() = iconPath.contains("temporary").not()
+    fun useIcon() = Files.exists(path) && iconPath.contains("temporary").not()
 
     fun defaultIconPath(): String {
         return "images/icon/ic_web.xml"
