@@ -7,7 +7,7 @@ import java.util.stream.Collectors
 class AdHosts(private val adHosts: Set<String>) {
 
     fun contains(url: String?): Boolean {
-        return adHosts.any { url?.contains(it) == true }
+        return url != null && adHosts.any { url.contains(it) }
     }
 
     companion object {
