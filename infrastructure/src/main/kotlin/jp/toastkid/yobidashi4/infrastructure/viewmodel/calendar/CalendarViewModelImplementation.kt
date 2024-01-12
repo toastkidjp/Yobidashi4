@@ -16,7 +16,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Single
-class CalendarViewModelImplementation : CalendarViewModel {
+class CalendarViewModelImplementation : CalendarViewModel, KoinComponent {
+
+    private val userOffDayService: UserOffDayService by inject()
 
     private val week = listOf(
         DayOfWeek.SUNDAY,
@@ -106,7 +108,6 @@ class CalendarViewModelImplementation : CalendarViewModel {
     private fun makeMonth(week: Iterable<DayOfWeek>): MutableList<Week> {
         val firstDay = localDateState.value.withDayOfMonth(1)
 
-        val userOffDayService = object : KoinComponent { val userOffDayService: UserOffDayService by inject() }.userOffDayService
         val offDayFinderService = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
 
         var hasStarted1 = false
