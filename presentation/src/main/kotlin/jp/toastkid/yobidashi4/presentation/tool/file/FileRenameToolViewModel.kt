@@ -28,7 +28,7 @@ class FileRenameToolViewModel : KoinComponent {
     fun input() = input.value
 
     fun onValueChange(it: TextFieldValue) {
-        input.value = TextFieldValue(it.text, it.selection, it.composition)
+        input.value = it
     }
 
     fun rename() {
