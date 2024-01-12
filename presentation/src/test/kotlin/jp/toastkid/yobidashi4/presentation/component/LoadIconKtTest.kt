@@ -78,4 +78,21 @@ class LoadIconKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun bitmapIsNull() {
+        every { anyConstructed<LoadIconViewModel>().loadBitmap() } returns null
+        every { anyConstructed<LoadIconViewModel>().defaultIconPath() } returns "images/icon/ic_web.xml"
+
+        runDesktopComposeUiTest {
+            setContent {
+                LoadIcon("images/icon/ic_web.xml", Modifier)
+
+                verify { anyConstructed<LoadIconViewModel>().useIcon() }
+                verify { anyConstructed<LoadIconViewModel>().loadBitmap() }
+                verify { anyConstructed<LoadIconViewModel>().defaultIconPath() }
+            }
+        }
+    }
+
 }
