@@ -59,7 +59,11 @@ class AppCloserThreadFactoryTest {
 
     @Test
     fun invoke() {
-        subject.invoke().start()
+        val thread = subject.invoke()
+        thread.start()
+        while (thread.state != Thread.State.TERMINATED) {
+            Thread.sleep(100L)
+        }
 
         verify { setting.save() }
         verify { webViewPool.disposeAll() }
