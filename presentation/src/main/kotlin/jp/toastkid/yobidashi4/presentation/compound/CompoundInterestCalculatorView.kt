@@ -50,7 +50,7 @@ internal fun CompoundInterestCalculatorView() {
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Installment", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        viewModel.setCapitalInput(TextFieldValue(it.text, it.selection, it.composition))
+                        viewModel.setCapitalInput(it)
                     },
                     trailingIcon = {
                         Icon(
@@ -71,7 +71,7 @@ internal fun CompoundInterestCalculatorView() {
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Installment", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        viewModel.setInstallmentInput(TextFieldValue(it.text, it.selection, it.composition))
+                        viewModel.setInstallmentInput(it)
                     },
                     trailingIcon = {
                         Icon(
@@ -92,7 +92,7 @@ internal fun CompoundInterestCalculatorView() {
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text("Annual interest", color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        viewModel.setAnnualInterestInput(TextFieldValue(it.text, it.selection, it.composition))
+                        viewModel.setAnnualInterestInput(it)
                     },
                     trailingIcon = {
                         Icon(
