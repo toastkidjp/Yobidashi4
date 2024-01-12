@@ -29,52 +29,32 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.tab.Tab
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
-import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun WebSearchBox() {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-    val focusRequester = remember { FocusRequester() }
+    val viewModel = remember { WebSearchBoxViewModel() }
+
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val selectedSite = remember { mutableStateOf(SearchSite.getDefault()) }
-        val query = remember { mutableStateOf(TextFieldValue())}
-        val openDropdown = remember { mutableStateOf(false) }
-
-        val calculator = remember { SimpleCalculator() }
-        val result = remember { mutableStateOf("") }
-
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
@@ -88,21 +68,21 @@ internal fun WebSearchBox() {
             )
 
             Box(
-                modifier = Modifier.clickable { openDropdown.value = true }
+                modifier = Modifier.clickable { viewModel.setOpenDropdown() }
             ) {
                 Surface(elevation = 4.dp) {
                     Image(
-                        painterResource(selectedSite.value.iconPath()),
-                        contentDescription = selectedSite.value.siteName,
+                        painterResource(viewModel.currentIconPath()),
+                        contentDescription = viewModel.currentSiteName(),
                         modifier = Modifier.size(64.dp).padding(8.dp)
                     )
                 }
 
-                val swingContent = containsSwingContent(viewModel.currentTab())
+                val swingContent = viewModel.containsSwingContent()
                 DropdownMenu(
-                    expanded = openDropdown.value,
+                    expanded = viewModel.openingDropdown(),
                     offset = DpOffset(0.dp, if (swingContent) (-80).dp else 0.dp),
-                    onDismissRequest = { openDropdown.value = false }
+                    onDismissRequest = { viewModel.closeDropdown() }
                 ) {
                     if (swingContent) {
                         LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
@@ -111,8 +91,7 @@ internal fun WebSearchBox() {
                                     painterResource(it.iconPath()),
                                     contentDescription = it.siteName,
                                     modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
-                                        openDropdown.value = false
-                                        selectedSite.value = it
+                                        viewModel.choose(it)
                                     }
                                 )
                             }
@@ -122,8 +101,7 @@ internal fun WebSearchBox() {
                     SearchSite.values().forEach {
                         DropdownMenuItem(
                             onClick = {
-                                openDropdown.value = false
-                                selectedSite.value = it
+                                viewModel.choose(it)
                             }
                         ) {
                             Image(
@@ -137,36 +115,16 @@ internal fun WebSearchBox() {
                 }
             }
             TextField(
-                query.value,
+                viewModel.query(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
                 label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
-                    query.value = TextFieldValue(it.text, it.selection, it.composition)
-                    val calculatorResult = calculator.invoke(query.value.text)
-                    val toString = calculatorResult?.toString()
-                    result.value = when {
-                        toString == null -> ""
-                        toString.endsWith(".0") -> toString.substring(0, toString.lastIndexOf("."))
-                        else -> toString
-                    }
+                    viewModel.onValueChange(it)
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        if (query.value.text.isBlank() || query.value.composition != null) {
-                            return@KeyboardActions
-                        }
-
-                        if (query.value.text.startsWith("https://")) {
-                            viewModel.openUrl(query.value.text, false)
-                            viewModel.setShowWebSearch(false)
-                            return@KeyboardActions
-                        }
-
-                        selectedSite.value.make(query.value.text).let {
-                            viewModel.openUrl(it.toString(), false)
-                        }
-                        viewModel.setShowWebSearch(false)
+                        viewModel.invokeSearch()
                     }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -179,55 +137,33 @@ internal fun WebSearchBox() {
                         contentDescription = "Clear input.",
                         tint = MaterialTheme.colors.secondary,
                         modifier = Modifier.clickable {
-                            query.value = TextFieldValue()
+                            viewModel.clearInput()
                         }
                     )
                 },
-                modifier = Modifier.focusRequester(focusRequester)
+                modifier = Modifier.focusRequester(viewModel.focusRequester())
                     .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
-                            viewModel.setShowWebSearch(false)
-                            return@onKeyEvent true
-                        }
-
-                        false
+                        viewModel.onKeyEvent(it)
                     }
             )
 
             Button(
                 onClick = {
-                    if (query.value.text.startsWith("https://")) {
-                        viewModel.openUrl(query.value.text, false)
-                        return@Button
-                    }
-                    selectedSite.value.make(query.value.text).let {
-                        viewModel.openUrl(it.toString(), false)
-                    }
-                    viewModel.setShowWebSearch(false)
+                    viewModel.invokeSearch()
                 }
             ) {
                 Text("Search")
             }
 
-            if (result.value.isNotBlank()) {
+            if (viewModel.existsResult()) {
                 SelectionContainer {
-                    Text(result.value)
+                    Text(viewModel.result())
                 }
             }
 
             LaunchedEffect(viewModel.showWebSearch()) {
-                if (viewModel.showWebSearch()) {
-                    focusRequester.requestFocus()
-                }
-                query.value = TextFieldValue(
-                    (viewModel.currentTab() as? WebTab)?.url() ?: ""
-                )
+                viewModel.start()
             }
         }
     }
-}
-
-private fun containsSwingContent(currentTab: Tab?): Boolean {
-    val swingContent = currentTab is WebTab
-    return swingContent
 }
