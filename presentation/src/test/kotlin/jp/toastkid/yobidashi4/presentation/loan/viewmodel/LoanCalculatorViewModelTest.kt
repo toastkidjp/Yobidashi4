@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -69,4 +70,24 @@ class LoanCalculatorViewModelTest {
         assertEquals("2", subject.roundToIntSafely(2.2))
         assertEquals("5", subject.roundToIntSafely(4.5))
     }
+
+    @Test
+    fun inputChannel() {
+        assertNotNull(subject.inputChannel())
+    }
+
+    @Test
+    fun setEmpty() {
+        subject.setRenovationReserves("")
+
+        assertEquals("0", subject.renovationReserves())
+    }
+
+    @Test
+    fun setIncludingComma() {
+        subject.setRenovationReserves("10,000")
+
+        assertEquals("10,000", subject.renovationReserves())
+    }
+
 }
