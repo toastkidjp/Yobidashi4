@@ -14,8 +14,9 @@ internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
         return
     }
 
-    val viewModel = remember { LoadIconViewModel(iconPath) }
-    if (viewModel.useIcon()) {
+    val viewModel = remember { LoadIconViewModel() }
+
+    if (viewModel.useIcon(iconPath)) {
         Icon(
             painterResource(iconPath),
             contentDescription = viewModel.contentDescription(),
@@ -25,7 +26,7 @@ internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
         return
     }
 
-    val bitmap = viewModel.loadBitmap()
+    val bitmap = viewModel.loadBitmap(iconPath)
     if (bitmap != null) {
         Image(
             bitmap,

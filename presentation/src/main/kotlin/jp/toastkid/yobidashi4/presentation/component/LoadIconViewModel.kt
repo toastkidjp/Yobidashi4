@@ -5,11 +5,11 @@ import androidx.compose.ui.res.loadImageBitmap
 import java.nio.file.Files
 import java.nio.file.Path
 
-class LoadIconViewModel(private val iconPath: String) {
+class LoadIconViewModel {
 
-    private val path = if (iconPath.isBlank()) null else Path.of(iconPath)
-
-    fun useIcon() = Files.exists(path) && iconPath.contains("temporary").not()
+    fun useIcon(pathString: String?): Boolean {
+        return pathString != null && pathString.contains("images/icon/")
+    }
 
     fun defaultIconPath(): String {
         return "images/icon/ic_web.xml"
@@ -19,8 +19,9 @@ class LoadIconViewModel(private val iconPath: String) {
         return "Icon"
     }
 
-    fun loadBitmap(): ImageBitmap? {
-        if (path == null || Files.exists(path).not()) {
+    fun loadBitmap(pathString: String?): ImageBitmap? {
+        val path = Path.of(pathString)
+        if (pathString == null || Files.exists(path).not()) {
             return null
         }
 
