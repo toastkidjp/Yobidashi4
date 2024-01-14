@@ -31,7 +31,7 @@ class LoadIconKtTest {
         every { Files.newInputStream(any()) } returns "".byteInputStream()
 
         mockkConstructor(LoadIconViewModel::class)
-        every { anyConstructed<LoadIconViewModel>().useIcon() } returns false
+        every { anyConstructed<LoadIconViewModel>().useIcon(any()) } returns false
     }
 
     @AfterEach
@@ -52,13 +52,13 @@ class LoadIconKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun useIcon() {
-        every { anyConstructed<LoadIconViewModel>().useIcon() } returns true
+        every { anyConstructed<LoadIconViewModel>().useIcon(any()) } returns true
 
         runDesktopComposeUiTest {
             setContent {
                 LoadIcon("images/icon/ic_web.xml", Modifier)
 
-                verify { anyConstructed<LoadIconViewModel>().useIcon() }
+                verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
             }
         }
     }
@@ -66,14 +66,14 @@ class LoadIconKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun bitmapIsNotNull() {
-        every { anyConstructed<LoadIconViewModel>().loadBitmap() } returns ImageBitmap(1, 1)
+        every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
 
         runDesktopComposeUiTest {
             setContent {
                 LoadIcon("images/icon/ic_web.xml", Modifier)
 
-                verify { anyConstructed<LoadIconViewModel>().useIcon() }
-                verify { anyConstructed<LoadIconViewModel>().loadBitmap() }
+                verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
+                verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
             }
         }
     }
@@ -81,15 +81,15 @@ class LoadIconKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun bitmapIsNull() {
-        every { anyConstructed<LoadIconViewModel>().loadBitmap() } returns null
+        every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns null
         every { anyConstructed<LoadIconViewModel>().defaultIconPath() } returns "images/icon/ic_web.xml"
 
         runDesktopComposeUiTest {
             setContent {
                 LoadIcon("images/icon/ic_web.xml", Modifier)
 
-                verify { anyConstructed<LoadIconViewModel>().useIcon() }
-                verify { anyConstructed<LoadIconViewModel>().loadBitmap() }
+                verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
+                verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
                 verify { anyConstructed<LoadIconViewModel>().defaultIconPath() }
             }
         }
