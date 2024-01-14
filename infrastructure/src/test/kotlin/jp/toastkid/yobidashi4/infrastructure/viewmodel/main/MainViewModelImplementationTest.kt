@@ -533,7 +533,6 @@ class MainViewModelImplementationTest {
         every { setting.articleFolderPath() } returns mockk()
         every { Files.list(any()) } returns Stream.empty()
         subject = spyk(subject)
-        every { subject.addNewArticle(any()) } just Runs
         every { subject.edit(any()) } just Runs
 
         subject.makeNewArticle()
@@ -542,7 +541,6 @@ class MainViewModelImplementationTest {
 
         subject.invokeInputAction("test")
 
-        verify { subject.addNewArticle(any()) }
         verify { subject.edit(any()) }
     }
 
@@ -554,7 +552,6 @@ class MainViewModelImplementationTest {
         every { path.extension } returns extension
         every { Files.list(any()) } returns Stream.of(path)
         subject = spyk(subject)
-        every { subject.addNewArticle(any()) } just Runs
         every { subject.edit(any()) } just Runs
 
         subject.makeNewArticle()
@@ -563,17 +560,7 @@ class MainViewModelImplementationTest {
 
         subject.invokeInputAction(extension)
 
-        verify(inverse = true) { subject.addNewArticle(any()) }
         verify(inverse = true) { subject.edit(any()) }
-    }
-
-    @Test
-    fun addNewArticle() {
-        assertTrue(subject.articles().isEmpty())
-
-        subject.addNewArticle(mockk())
-
-        assertEquals(1, subject.articles().size)
     }
 
     @Test
