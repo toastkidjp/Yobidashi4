@@ -67,7 +67,6 @@ class MainApplicationKtTest {
 
     private fun mockMainMenu(setting: Setting) {
         every { mainViewModel.setShowInputBox(any()) } just Runs
-        every { mainViewModel.addNewArticle(mockk()) } just Runs
         every { mainViewModel.edit(any()) } just Runs
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.switchArticleList() } just Runs
