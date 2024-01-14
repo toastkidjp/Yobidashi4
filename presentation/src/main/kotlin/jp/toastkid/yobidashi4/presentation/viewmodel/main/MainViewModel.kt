@@ -57,7 +57,6 @@ interface MainViewModel {
 
     fun makeNewArticle()
 
-    fun addNewArticle(path: Path)
     fun saveCurrentEditorTab()
     fun saveAllEditorTab()
     fun updateEditorContent(path: Path, text: String, caretPosition: Int = -1, scroll: Double = -1.0, resetEditing: Boolean)
