@@ -41,15 +41,17 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
                         )
                     ).also {
                         if (year == 2020 || year == 2021) {
-                            Holiday(
-                                SPORTS_DAY.title,
-                                month,
-                                when (year) {
-                                    2020 -> 24
-                                    2021 -> 23
-                                    else -> -1
-                                },
-                                HolidayCalendar.JAPAN.flag
+                            it.add(
+                                Holiday(
+                                    SPORTS_DAY.title,
+                                    month,
+                                    when (year) {
+                                        2020 -> 24
+                                        2021 -> 23
+                                        else -> -1
+                                    },
+                                    HolidayCalendar.JAPAN.flag
+                                )
                             )
                         }
                     }
