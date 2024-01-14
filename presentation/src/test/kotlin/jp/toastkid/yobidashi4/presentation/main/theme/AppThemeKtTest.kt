@@ -18,4 +18,16 @@ class AppThemeKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun darkModeCase() {
+        runDesktopComposeUiTest {
+            setContent {
+                AppTheme(darkTheme = true) {
+
+                }
+            }
+        }
+    }
+
 }
