@@ -92,4 +92,15 @@ class MainDropTargetListenerTest {
         verify { event.rejectDrop() }
     }
 
+    @Test
+    fun passNull() {
+        every { event.isDataFlavorSupported(any()) } throws IOException()
+
+        subject.drop(null)
+
+        verify { consumer wasNot called }
+        verify(inverse = true) { event.dropComplete(any()) }
+        verify(inverse = true) { event.rejectDrop() }
+    }
+
 }
