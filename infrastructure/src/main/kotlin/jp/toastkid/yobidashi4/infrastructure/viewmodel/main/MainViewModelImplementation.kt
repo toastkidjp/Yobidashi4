@@ -324,7 +324,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         return Files.list(articleFolderPath).anyMatch { it.nameWithoutExtension == input }
     }
 
-    override fun addNewArticle(path: Path) {
+    private fun addNewArticle(path: Path) {
         _articles.add(0, path)
     }
 
