@@ -19,40 +19,27 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun InputBox() {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-    val focusRequester = remember { FocusRequester() }
+    val viewModel = remember { InputBoxViewModel() }
+
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val query = remember { mutableStateOf(TextFieldValue()) }
-
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
@@ -66,7 +53,7 @@ internal fun InputBox() {
             )
 
             TextField(
-                query.value,
+                viewModel.query(),
                 maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
@@ -74,15 +61,11 @@ internal fun InputBox() {
                 ),
                 label = { Text("Please would you input file name?", color = MaterialTheme.colors.secondary) },
                 onValueChange = {
-                    query.value = TextFieldValue(it.text, it.selection, it.composition)
+                    viewModel.onValueChange(it)
                 },
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        if (query.value.text.isBlank()) {
-                            return@KeyboardActions
-                        }
-                        viewModel.invokeInputAction(query.value.text)
-                        viewModel.setShowInputBox()
+                        viewModel.invokeAction()
                     }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -92,34 +75,26 @@ internal fun InputBox() {
                         contentDescription = "Clear input.",
                         tint = MaterialTheme.colors.secondary,
                         modifier = Modifier.clickable {
-                            query.value = TextFieldValue()
+                            viewModel.clearInput()
                         }
                     )
                 },
-                modifier = Modifier.focusRequester(focusRequester)
+                modifier = Modifier.focusRequester(viewModel.focusRequester())
                     .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
-                            viewModel.setShowInputBox()
-                            return@onKeyEvent true
-                        }
-                        false
+                        viewModel.onKeyEvent(it)
                     }
             )
 
             Button(
                 onClick = {
-                    viewModel.invokeInputAction(query.value.text)
-                    viewModel.setShowInputBox()
+                    viewModel.invokeAction()
                 }
             ) {
                 Text("Done")
             }
 
             LaunchedEffect(viewModel.showInputBox()) {
-                if (viewModel.showInputBox()) {
-                    focusRequester.requestFocus()
-                }
-                query.value = TextFieldValue((viewModel.currentTab() as? WebTab)?.url() ?: "")
+                viewModel.start()
             }
         }
     }
