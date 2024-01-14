@@ -48,7 +48,6 @@ class MainMenuKtTest {
         }
 
         every { viewModel.setShowInputBox(any()) } just Runs
-        every { viewModel.addNewArticle(mockk()) } just Runs
         every { viewModel.edit(any()) } just Runs
         every { viewModel.openArticleList() } returns false
         every { viewModel.switchArticleList() } just Runs
