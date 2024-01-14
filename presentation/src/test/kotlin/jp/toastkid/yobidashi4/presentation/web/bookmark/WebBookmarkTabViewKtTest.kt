@@ -3,8 +3,10 @@ package jp.toastkid.yobidashi4.presentation.web.bookmark
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -39,6 +41,8 @@ class WebBookmarkTabViewKtTest {
         every { repository.list() } returns listOf(Bookmark("test", "https://www.yahoo.co.jp"))
         mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
+        every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
+        every { anyConstructed<WebIcon>().find(any()) } returns null
     }
 
     @AfterEach
