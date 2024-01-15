@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
@@ -796,12 +797,17 @@ class KeyEventConsumerTest {
             java.awt.event.KeyEvent.VK_C,
             'C'
         )
+        mockkConstructor(ExpressionTextCalculatorService::class)
+        every { anyConstructed<ExpressionTextCalculatorService>().invoke(any()) } returns "3"
 
         val consumed = subject.invoke(
             KeyEvent(awtKeyEvent),
             TextFieldValue("1+2", TextRange(0, 3)),
             mockk(),
-            { assertEquals("3.0", it.getSelectedText().text) }
+            {
+                assertEquals("3", it.getSelectedText().text)
+                verify { anyConstructed<ExpressionTextCalculatorService>().invoke("1+2") }
+            }
         )
 
         assertTrue(consumed)
