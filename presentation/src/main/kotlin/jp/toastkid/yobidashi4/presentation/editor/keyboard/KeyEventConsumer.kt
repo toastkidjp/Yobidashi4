@@ -15,9 +15,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
-import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
@@ -283,8 +283,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
                 convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
-                    val appendLineBreakIfNeed = if (it.endsWith("\n")) "\n" else ""
-                    "${SimpleCalculator().invoke(it.trimEnd())?.toString()}$appendLineBreakIfNeed"
+                    ExpressionTextCalculatorService().invoke(it)
                 }?.let(setNewContent)
                 true
             }
