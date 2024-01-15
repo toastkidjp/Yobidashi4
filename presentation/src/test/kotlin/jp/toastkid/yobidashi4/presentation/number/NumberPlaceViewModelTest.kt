@@ -208,6 +208,17 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
+    fun showMessageSnackbarWithFalse() {
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+
+        numberPlaceViewModel.showMessageSnackbar(false)
+        slot.captured.invoke()
+
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
+    }
+
+    @Test
     fun start() {
         mockkConstructor(GameFileProvider::class)
         every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
@@ -243,15 +254,19 @@ class NumberPlaceViewModelTest {
     @Test
     fun onCellLongClick() {
         numberPlaceViewModel = spyk(numberPlaceViewModel)
-        every { numberPlaceViewModel.useHint(any(), any(), any(), any()) } just Runs
+        val innerSlot = slot<(Boolean) -> Unit>()
+        every { numberPlaceViewModel.useHint(any(), any(), any(), capture(innerSlot)) } just Runs
+        every { numberPlaceViewModel.showMessageSnackbar(any(), any()) } just Runs
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
 
         numberPlaceViewModel.onCellLongClick(1, 1, mutableStateOf(""))
         slot.captured.invoke()
+        innerSlot.captured.invoke(true)
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
         verify { numberPlaceViewModel.useHint(any(), any(), any(), any()) }
+        verify { numberPlaceViewModel.showMessageSnackbar(true, any()) }
     }
 
 }
