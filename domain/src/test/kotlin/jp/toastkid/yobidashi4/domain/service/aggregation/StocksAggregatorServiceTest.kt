@@ -63,4 +63,25 @@ _
         verify(exactly = 1) { articlesReaderService.invoke() }
     }
 
+    @Test
+    fun irregularInputCase() {
+        val lines = """
+_
+評価額はxxx円、評価損益はyyyy円(+zz%)だった。
+_
+""".split("_").map { it.trim() }
+        every { Files.readAllLines(any()) }.returns(lines)
+
+        val outgoAggregationResult = stocksAggregatorService.invoke("file")
+
+        outgoAggregationResult.itemArrays().firstOrNull()?.let {
+            Assertions.assertEquals("file", it[0])
+            Assertions.assertEquals(0, it[1])
+            Assertions.assertEquals(0, it[2])
+            Assertions.assertEquals(0.0, it[3])
+        }
+        verify(exactly = 1) { Files.readAllLines(any()) }
+        verify(exactly = 1) { articlesReaderService.invoke() }
+    }
+
 }
