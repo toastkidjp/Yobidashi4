@@ -12,38 +12,32 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 
 @Composable
 fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
+    val viewModel = remember { TwoValueConverterBoxViewModel(unixTimeConverterService) }
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        val firstInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultFirstInputValue())) }
-        val secondInput = remember { mutableStateOf(TextFieldValue(unixTimeConverterService.defaultSecondInputValue())) }
         Row {
             Column {
                 Text(unixTimeConverterService.title(), modifier = Modifier.padding(8.dp))
                 TextField(
-                    firstInput.value,
+                    viewModel.firstInput(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text(unixTimeConverterService.firstInputLabel(), color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        firstInput.value = it
-
-                        unixTimeConverterService.firstInputAction(firstInput.value.text)?.let { newValue ->
-                            secondInput.value = TextFieldValue(newValue)
-                        }
+                        viewModel.onFirstValueChange(it)
                     },
                     trailingIcon = {
                         Icon(
@@ -51,7 +45,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                firstInput.value = TextFieldValue()
+                                viewModel.clearFirstInput()
                             }
                         )
                     },
@@ -59,16 +53,12 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                 )
 
                 TextField(
-                    secondInput.value,
+                    viewModel.secondInput(),
                     maxLines = 1,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     label = { Text(unixTimeConverterService.secondInputLabel(), color = MaterialTheme.colors.secondary) },
                     onValueChange = {
-                        secondInput.value = it
-
-                        unixTimeConverterService.secondInputAction(secondInput.value.text)?.let { input ->
-                            firstInput.value = TextFieldValue(input)
-                        }
+                        viewModel.onSecondValueChange(it)
                     },
                     trailingIcon = {
                         Icon(
@@ -76,7 +66,7 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                             contentDescription = "Clear input.",
                             tint = MaterialTheme.colors.primary,
                             modifier = Modifier.clickable {
-                                secondInput.value = TextFieldValue()
+                                viewModel.clearSecondInput()
                             }
                         )
                     }
