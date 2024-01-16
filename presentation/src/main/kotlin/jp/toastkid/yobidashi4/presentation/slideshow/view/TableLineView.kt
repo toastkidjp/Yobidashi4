@@ -13,7 +13,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,9 +33,7 @@ import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
-    var lastSorted = remember { -1 to false }
-
-    val tableData = remember { mutableStateOf(line.table) }
+    val viewModel = remember { TableLineViewModel() }
 
     Column(modifier = modifier) {
         DisableSelection {
@@ -59,10 +57,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                             .weight(1f)
                             .padding(horizontal = 16.dp)
                             .clickable {
-                                val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
-                                lastSorted = index to lastSortOrder.not()
-
-                                sort(lastSortOrder, index, tableData)
+                                viewModel.clickHeaderColumn(index)
                             }
                             .onPointerEvent(PointerEventType.Enter) {
                                 headerCursorOn.value = true
@@ -78,9 +73,13 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
-        tableData.value.forEach { itemRow ->
+        viewModel.tableData().forEach { itemRow ->
             TableRow(itemRow, fontSize)
         }
+    }
+
+    LaunchedEffect(line.table) {
+        viewModel.start(line.table)
     }
 }
 
@@ -116,31 +115,4 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
         }
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
     }
-}
-
-private fun sort(
-    lastSortOrder: Boolean,
-    index: Int,
-    articleStates: MutableState<List<List<Any>>>
-) {
-    val first = articleStates.value.firstOrNull() ?: return
-    val snapshot = articleStates.value
-    val swap = if (lastSortOrder)
-        if (first[index].toString().toDoubleOrNull() != null) {
-            snapshot.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
-        } else if (first[index].toString().toIntOrNull() != null) {
-            snapshot.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
-        } else {
-            snapshot.sortedBy { it[index].toString() }
-        }
-    else
-        if (first[index].toString().toDoubleOrNull() != null) {
-            snapshot.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
-        } else if (first[index].toString().toIntOrNull() != null) {
-            snapshot.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
-        } else {
-            snapshot.sortedByDescending { it[index].toString() }
-        }
-
-    articleStates.value = swap
 }
