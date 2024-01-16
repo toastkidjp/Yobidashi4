@@ -21,4 +21,6 @@ class SlideshowViewModel {
 
     fun isFloatingWindow() = windowState.placement == WindowPlacement.Floating
 
+    fun windowVisible() = true
+
 }
