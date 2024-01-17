@@ -55,13 +55,14 @@ _
     fun testInvoke() {
         val outgoAggregationResult = stepsAggregatorService.invoke("file")
 
+        assertEquals(String::class.java, outgoAggregationResult.columnClass(0))
+        assertEquals(Int::class.java, outgoAggregationResult.columnClass(1))
+        assertEquals(Int::class.java, outgoAggregationResult.columnClass(2))
+
         outgoAggregationResult.itemArrays().firstOrNull()?.let {
             assertTrue(outgoAggregationResult.title().isNotBlank())
             assertFalse(outgoAggregationResult.isEmpty())
             assertEquals(3, outgoAggregationResult.header().size)
-            assertEquals(String::class.java, outgoAggregationResult.columnClass(0))
-            assertEquals(Int::class.java, outgoAggregationResult.columnClass(1))
-            assertEquals(Int::class.java, outgoAggregationResult.columnClass(2))
             assertEquals("file", it[0])
             assertEquals(4122, it[1])
             assertEquals(143, it[2])
