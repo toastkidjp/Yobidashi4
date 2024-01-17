@@ -14,6 +14,7 @@ import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -48,6 +49,8 @@ internal class MovieMemoSubtitleExtractorTest {
     @Test
     fun testInvoke() {
         val movieMemoExtractorResult = movieMemoSubtitleExtractor.invoke("file")
+        assertEquals(2, movieMemoExtractorResult.header().size)
+        assertFalse(movieMemoExtractorResult.isEmpty())
 
         val first = movieMemoExtractorResult.itemArrays().first()
         assertEquals("file", first[0])
