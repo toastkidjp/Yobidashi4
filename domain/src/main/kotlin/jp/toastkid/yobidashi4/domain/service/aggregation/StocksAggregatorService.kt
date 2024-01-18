@@ -13,7 +13,7 @@ class StocksAggregatorService(private val articlesReaderService: ArticlesReaderS
         articlesReaderService.invoke()
             .parallel()
             .map { it.nameWithoutExtension to Files.readAllLines(it) }
-            .filter { it.first.startsWith(keyword) && it.first.endsWith("n)").not() }
+            .filter { it.first.startsWith(keyword) }
             .forEach {
                 it.second.filter { line -> line.contains(TARGET) }
                     .forEach { line ->
