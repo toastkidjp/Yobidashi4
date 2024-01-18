@@ -37,6 +37,8 @@ class EatingOutCounterServiceTest {
 
         every { Files.readAllLines(any()) }.returns(
             """
+## Text
+
 ## 家計簿
 | 品目 | 金額 |
 |:---|:---|
@@ -44,6 +46,8 @@ class EatingOutCounterServiceTest {
 | 玉ねぎ8 | 218円
 | にんじん | 129円
 | いちごジャム | 118円
+| Irregular Input | 18
+| Empty Input | 円
 | (外食) マッシュルームとひき肉のスパゲッティ | 1100円
 | ユニバースターゴールド | 268円
 """.split("\n").map { it.trim() }
