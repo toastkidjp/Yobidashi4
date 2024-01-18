@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 data class WebTab(
     private var title: String = "",
     private var url: String = ""
-) : Tab, Reloadable {
+) : Tab {
 
     private val id = UUID.randomUUID().toString()
 
@@ -52,13 +52,6 @@ data class WebTab(
 
     override fun update(): Flow<Long> {
         return _updateFlow.asSharedFlow()
-    }
-
-    override fun reload() {
-        /*object : KoinComponent {
-            val vm: WebTabViewModel by inject()
-        }
-            .vm.reload(id)*/
     }
 
     fun updateTitleAndUrl(title: String?, url: String?) {
