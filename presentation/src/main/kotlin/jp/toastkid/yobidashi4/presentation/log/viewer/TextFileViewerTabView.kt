@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -16,67 +15,39 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Composable
 internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
-    val scrollState = rememberLazyListState()
-    val textState = remember { mutableStateListOf<String>() }
+    val viewModel = remember { TextFileViewerTabViewModel() }
 
-    LaunchedEffect(tab.path()) {
-        if (Files.exists(tab.path()).not()) {
-            return@LaunchedEffect
-        }
-
-        withContext(Dispatchers.IO) {
-            Files.readAllLines(tab.path()).forEach { textState.add(it) }
-        }
-    }
-
-    val keyboardScrollAction = remember { KeyboardScrollAction(scrollState) }
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember { FocusRequester() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
+            viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
         }
-            .focusRequester(focusRequester)
+            .focusRequester(viewModel.focusRequester())
     ) {
         Box() {
             SelectionContainer {
-                LazyColumn(state = scrollState) {
-                    itemsIndexed(textState) { index, line ->
+                LazyColumn(state = viewModel.listState()) {
+                    itemsIndexed(viewModel.textState()) { index, line ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             DisableSelection {
-                                val length = textState.size.toString().length
-                                val lineNumberCount = index + 1
-                                val fillCount = length - lineNumberCount.toString().length
-                                val lineNumberText = with(StringBuilder()) {
-                                    repeat(fillCount) {
-                                        append(" ")
-                                    }
-                                    append(lineNumberCount)
-                                }.toString()
                                 Text(
-                                    lineNumberText,
+                                    viewModel.lineNumber(index),
                                     modifier = Modifier.padding(horizontal = 8.dp)
                                 )
                             }
@@ -88,11 +59,11 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
                     }
                 }
             }
-            VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
+            VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(
                 Alignment.CenterEnd))
 
-            LaunchedEffect(tab) {
-                focusRequester.requestFocus()
+            LaunchedEffect(tab.path()) {
+                viewModel.launch(tab.path())
             }
         }
     }
