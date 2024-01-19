@@ -6,7 +6,10 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 
-class EatingOutCounterService(private val articlesReaderService: ArticlesReaderService) {
+class EatingOutCounterService(
+    private val articlesReaderService: ArticlesReaderService,
+    private val additionalLineFilter: (String) -> Boolean = { it.contains(TARGET_LINE_LABEL).not() }
+) {
 
     operator fun invoke(keyword: String): OutgoAggregationResult {
         val aggregationResult = OutgoAggregationResult(keyword)
@@ -21,7 +24,7 @@ class EatingOutCounterService(private val articlesReaderService: ArticlesReaderS
                         isOutGoLine = true
                     }
 
-                    if (!isOutGoLine || !line.startsWith("|") || line.contains(TARGET_LINE_LABEL).not()) {
+                    if (!isOutGoLine || !line.startsWith("|") || additionalLineFilter(line)) {
                         continue
                     }
 
