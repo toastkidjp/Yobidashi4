@@ -8,12 +8,14 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +57,8 @@ class TableViewModelTest {
         val article = mockk<Article>()
         every { article.path() } returns mockk()
         every { articleFactory.withTitle(any()) } returns article
+        mockkConstructor(KeywordHighlighter::class)
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns mockk()
 
         subject = TableViewModel()
     }
@@ -93,10 +97,6 @@ class TableViewModelTest {
     }
 
     @Test
-    fun sort() {
-    }
-
-    @Test
     fun openMarkdownPreview() {
         subject.openMarkdownPreview("test")
 
@@ -110,6 +110,13 @@ class TableViewModelTest {
 
         verify { articleFactory.withTitle(any()) }
         verify { mainViewModel.edit(any()) }
+    }
+
+    @Test
+    fun highlight() {
+        subject.highlight("It longs to get them.", "get")
+
+        verify { anyConstructed<KeywordHighlighter>().invoke(any(), any()) }
     }
 
 }
