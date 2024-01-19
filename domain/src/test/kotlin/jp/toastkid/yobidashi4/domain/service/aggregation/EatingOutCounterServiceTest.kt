@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.domain.service.aggregation
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.Test
 
 class EatingOutCounterServiceTest {
 
-    @InjectMockKs
     private lateinit var aggregatorService: EatingOutCounterService
 
     @MockK
@@ -55,6 +53,8 @@ class EatingOutCounterServiceTest {
 
         MockKAnnotations.init(this)
         every { articlesReaderService.invoke() }.returns(Stream.of(path))
+
+        aggregatorService = EatingOutCounterService(articlesReaderService)
     }
 
     @AfterEach
