@@ -5,7 +5,7 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 
 class OutgoAggregatorService(private val articlesReaderService: ArticlesReaderService) {
 
-    private val service = EatingOutCounterService(articlesReaderService, { false })
+    private val service = OutgoCalculationBehavior(articlesReaderService, { false })
 
     operator fun invoke(keyword: String): OutgoAggregationResult {
         return service.invoke(keyword)
