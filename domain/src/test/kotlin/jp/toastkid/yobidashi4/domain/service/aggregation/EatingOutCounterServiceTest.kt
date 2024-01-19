@@ -46,6 +46,7 @@ class EatingOutCounterServiceTest {
 | いちごジャム | 118円
 | Irregular Input | 18
 | Empty Input | 円
+| |
 | (外食) マッシュルームとひき肉のスパゲッティ | 1100円
 | ユニバースターゴールド | 268円
 """.split("\n").map { it.trim() }
