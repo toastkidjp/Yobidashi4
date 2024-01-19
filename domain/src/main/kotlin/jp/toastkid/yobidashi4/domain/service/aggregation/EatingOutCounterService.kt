@@ -20,7 +20,7 @@ class EatingOutCounterService(
             .map {
                 var isOutGoLine = false
                 for (line in it.second) {
-                    if (line.startsWith("#") && line.endsWith("家計簿")) {
+                    if (line.startsWith("#") && line.endsWith(SECTION_TITLE)) {
                         isOutGoLine = true
                     }
 
@@ -43,6 +43,8 @@ class EatingOutCounterService(
     }
 
 }
+
+private const val SECTION_TITLE = "家計簿"
 
 private const val TARGET_LINE_LABEL = "(外食)"
 
