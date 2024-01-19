@@ -16,7 +16,7 @@ class OozumoTemplateTest {
     }
 
     @Test
-    fun invoke() {
+    fun test() {
         assertNull(subject.invoke(LocalDate.of(2024, 1, 9)))
         assertTrue(subject.invoke(LocalDate.of(2024, 1, 14))?.startsWith("## 大相撲一月場所 初日") ?: false)
         assertTrue(subject.invoke(LocalDate.of(2024, 1, 22))?.startsWith("## 大相撲一月場所 九日目") ?: false)
