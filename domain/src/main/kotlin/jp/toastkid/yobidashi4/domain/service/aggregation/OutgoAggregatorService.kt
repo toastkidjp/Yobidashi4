@@ -11,8 +11,4 @@ class OutgoAggregatorService(private val articlesReaderService: ArticlesReaderSe
         return service.invoke(keyword)
     }
 
-    companion object {
-        private const val YEN_UNIT = "円"
-    }
-
 }
