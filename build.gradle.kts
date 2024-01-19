@@ -84,7 +84,6 @@ koverReport {
             classes("jp.toastkid.yobidashi4.infrastructure.di.*")
             classes("*ComposableSingletons*")
             classes("*\$inject\$*")
-            classes("*\$inlined\$*")
             packages("org.koin.ksp.generated")
         }
     }
