@@ -13,6 +13,8 @@ import java.awt.Color
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -129,6 +131,32 @@ class EditorSettingViewModelTest {
         subject.setEditorFontSize("12")
 
         verify(inverse = true) { setting.setEditorFontSize(any()) }
+    }
+
+    @Test
+    fun openFontFamily() {
+        assertFalse(subject.isOpenFontFamily())
+
+        subject.openFontFamily()
+
+        assertTrue(subject.isOpenFontFamily())
+
+        subject.closeFontFamily()
+
+        assertFalse(subject.isOpenFontFamily())
+    }
+
+    @Test
+    fun openFontSize() {
+        assertFalse(subject.isOpenFontSize())
+
+        subject.openFontSize()
+
+        assertTrue(subject.isOpenFontSize())
+
+        subject.closeFontSize()
+
+        assertFalse(subject.isOpenFontSize())
     }
 
     @Test
