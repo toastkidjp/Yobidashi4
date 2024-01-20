@@ -13,7 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -57,30 +56,32 @@ internal fun EditorSettingComponent(modifier: Modifier) {
                 Text("Commit colors")
             }
 
-            val openFontFamily = remember { mutableStateOf(false) }
             EditorSettingDropdown(
                 GraphicsEnvironment.getLocalGraphicsEnvironment().availableFontFamilyNames.toList(),
                 "Font family: ${viewModel.editorFontFamily()}",
-                openFontFamily.value,
+                viewModel.isOpenFontFamily(),
                 {
-                    openFontFamily.value = it
+                    viewModel.closeFontFamily()
                 },
                 {
                     viewModel.setEditorFontFamily(it.toString())
+                },
+                Modifier.clickable {
+                    viewModel.openFontFamily()
                 }
             )
 
-            val openFontSize = remember { mutableStateOf(false) }
             EditorSettingDropdown(
                 (12 .. 24).toList(),
                 "Font Size: ${viewModel.editorFontSize()}",
-                openFontSize.value,
+                viewModel.isOpenFontSize(),
                 {
-                    openFontSize.value = it
+                    viewModel.closeFontSize()
                 },
                 {
                     viewModel.setEditorFontSize(it)
-                }
+                },
+                Modifier.clickable { viewModel.openFontSize() }
             )
 
             Text("Reset color setting", modifier = Modifier.clickable {
@@ -95,23 +96,22 @@ private fun EditorSettingDropdown(
     items: Collection<Any>,
     displayText: String,
     open: Boolean,
-    onChangeState: (Boolean) -> Unit,
-    onSelectValue: (Any) -> Unit
+    onClose: () -> Unit,
+    onSelectValue: (Any) -> Unit,
+    modifier: Modifier
 ) {
     Box(
-        modifier = Modifier.clickable {
-            onChangeState(true)
-        }
+        modifier = modifier
     ) {
         Text(displayText)
         DropdownMenu(
             open,
-            onDismissRequest = {  onChangeState(false) }
+            onDismissRequest = {  onClose() }
         ) {
             items.forEach {
                 DropdownMenuItem(
                     onClick = {
-                        onChangeState(false)
+                        onClose()
                         onSelectValue(it)
                     }
                 ) {
