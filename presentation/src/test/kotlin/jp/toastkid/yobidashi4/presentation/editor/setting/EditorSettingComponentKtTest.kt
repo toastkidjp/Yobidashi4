@@ -4,8 +4,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import java.awt.Color
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -30,6 +33,13 @@ class EditorSettingComponentKtTest {
         every { setting.editorFontSize() } returns 16
         every { setting.editorFontFamily() } returns "Monospace"
         every { setting.editorForegroundColor() } returns Color.BLACK
+
+        mockkConstructor(EditorSettingViewModel::class)
+        every { anyConstructed<EditorSettingViewModel>().isOpenFontFamily() } returns true
+        every { anyConstructed<EditorSettingViewModel>().isOpenFontSize() } returns true
+        every { anyConstructed<EditorSettingViewModel>().editorFontFamily() } returns "test"
+        every { anyConstructed<EditorSettingViewModel>().editorFontSize() } returns 15
+        every { anyConstructed<EditorSettingViewModel>().reset() } just Runs
 
         startKoin {
             modules(
