@@ -54,12 +54,36 @@ class EditorSettingViewModel : KoinComponent {
         )
     }
 
+    private val openFontFamily = mutableStateOf(false)
+
+    fun isOpenFontFamily() = openFontFamily.value
+
+    fun openFontFamily() {
+        openFontFamily.value = true
+    }
+
+    fun closeFontFamily() {
+        openFontFamily.value = false
+    }
+
     fun editorFontFamily(): String? {
         return setting.editorFontFamily()
     }
 
     fun setEditorFontFamily(toString: String) {
         setting.setEditorFontFamily(toString)
+    }
+
+    private val openFontSize = mutableStateOf(false)
+
+    fun isOpenFontSize() = openFontSize.value
+
+    fun openFontSize() {
+        openFontSize.value = true
+    }
+
+    fun closeFontSize() {
+        openFontSize.value = false
     }
 
     fun editorFontSize(): Int {
