@@ -156,12 +156,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openFile(path: Path, onBackground: Boolean) {
-        if (path.extension == "m4a" || path.extension == "mp3") {
-            MediaPlayerInvokerImplementation().invoke(path)
+        if (Files.exists(path).not()) {
             return
         }
 
-        if (Files.exists(path).not()) {
+        if (path.extension == "m4a" || path.extension == "mp3") {
+            MediaPlayerInvokerImplementation().invoke(path)
             return
         }
 
