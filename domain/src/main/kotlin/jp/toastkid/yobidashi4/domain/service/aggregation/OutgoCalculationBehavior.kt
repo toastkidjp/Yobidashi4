@@ -6,7 +6,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 
-class OutgoCalculationBehavior(
+internal class OutgoCalculationBehavior(
     private val articlesReaderService: ArticlesReaderService,
     private val additionalLineFilter: (String) -> Boolean
 ) {
