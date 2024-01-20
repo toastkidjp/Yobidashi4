@@ -47,6 +47,7 @@ import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
+import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
 import kotlin.io.path.extension
 import kotlinx.coroutines.CoroutineScope
@@ -300,6 +301,21 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openFile() {
+        mockkStatic(Files::class, Desktop::class)
+        every { Files.exists(any()) } returns true
+        val desktop = mockk<Desktop>()
+        every { Desktop.getDesktop() } returns desktop
+        every { desktop.open(any()) } just Runs
+        mockkConstructor(MediaPlayerInvokerImplementation::class)
+        every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
+        val path = mockk<Path>()
+        every { path.extension } returns "test.m4a"
+
+        subject.openFile(path)
+
+        verify { Files.exists(any()) }
+        verify { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
+        verify(inverse = true) { Desktop.getDesktop() }
     }
 
     @Test
