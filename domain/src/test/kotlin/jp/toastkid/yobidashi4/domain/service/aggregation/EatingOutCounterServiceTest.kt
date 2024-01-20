@@ -30,9 +30,6 @@ class EatingOutCounterServiceTest {
         every { path.nameWithoutExtension }.returns("test.md")
 
         mockkStatic(Files::class)
-        every { Files.readAllLines(any()) }.returns(listOf("test content"))
-        val lines =
-
         every { Files.readAllLines(any()) }.returns(
             """
 ## Text
