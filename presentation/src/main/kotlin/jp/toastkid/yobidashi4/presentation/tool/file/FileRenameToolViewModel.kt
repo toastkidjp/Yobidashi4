@@ -44,7 +44,7 @@ class FileRenameToolViewModel : KoinComponent {
             .showSnackbar(
                 "Rename completed!",
                 "Open folder",
-                { viewModel.openFile(paths.first().parent, false) }
+                { viewModel.openFile(paths.first().parent) }
             )
     }
 
