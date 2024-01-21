@@ -99,7 +99,7 @@ class FileRenameToolViewModelTest {
             assertTrue(slot.isCaptured)
 
             slot.captured.invoke()
-            verify { mainViewModel.openFile(any(), false) }
+            verify { mainViewModel.openFile(any()) }
         }
     }
 
