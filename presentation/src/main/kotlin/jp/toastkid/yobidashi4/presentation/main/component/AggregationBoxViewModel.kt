@@ -116,7 +116,7 @@ class AggregationBoxViewModel : KoinComponent {
     fun keyword() = keyword.value
 
     fun onKeywordValueChange(it: TextFieldValue) {
-        keyword.value = TextFieldValue(it.text, it.selection, it.composition)
+        keyword.value = it
     }
 
     fun onSearch() {
