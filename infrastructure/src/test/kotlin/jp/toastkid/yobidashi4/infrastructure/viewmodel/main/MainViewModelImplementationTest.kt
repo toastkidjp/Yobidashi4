@@ -413,6 +413,14 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun browseUriWithCurrentTabIsNotWebTab() {
+        subject.browseUri("test")
+
+        verify(inverse = true) { Desktop.getDesktop() }
+        verify(inverse = true) { desktop.browse(any()) }
+    }
+
+    @Test
     fun removeTabAt() {
         val tab = mockk<Tab>()
         every { tab.closeable() } returns false
