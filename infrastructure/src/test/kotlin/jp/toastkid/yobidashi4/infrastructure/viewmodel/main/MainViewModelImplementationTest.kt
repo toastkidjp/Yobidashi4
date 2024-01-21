@@ -400,6 +400,19 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun browseUriWithCurrentTabsUrl() {
+        val webTab = mockk<WebTab>()
+        every { webTab.url() } returns "https://www.yahoo.com"
+        subject.openTab(webTab)
+
+        subject.browseUri("test")
+
+        verify { webTab.url() }
+        verify { Desktop.getDesktop() }
+        verify { desktop.browse(any()) }
+    }
+
+    @Test
     fun removeTabAt() {
         val tab = mockk<Tab>()
         every { tab.closeable() } returns false
