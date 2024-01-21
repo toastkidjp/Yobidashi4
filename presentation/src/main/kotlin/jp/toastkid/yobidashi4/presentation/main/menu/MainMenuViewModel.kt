@@ -286,7 +286,7 @@ class MainMenuViewModel : KoinComponent {
                 }.tsv"
             )
             Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
-            viewModel.openFile(Path.of("."), false)
+            viewModel.openFile(Path.of("."))
         }
     }
 
