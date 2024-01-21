@@ -300,7 +300,7 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun openFile() {
+    fun openFileWithMusicFile() {
         mockkStatic(Files::class, Desktop::class)
         every { Files.exists(any()) } returns true
         val desktop = mockk<Desktop>()
@@ -316,6 +316,27 @@ class MainViewModelImplementationTest {
         verify { Files.exists(any()) }
         verify { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
         verify(inverse = true) { Desktop.getDesktop() }
+    }
+
+    @Test
+    fun openFile() {
+        mockkStatic(Files::class, Desktop::class)
+        every { Files.exists(any()) } returns true
+        val desktop = mockk<Desktop>()
+        every { Desktop.getDesktop() } returns desktop
+        every { desktop.open(any()) } just Runs
+        mockkConstructor(MediaPlayerInvokerImplementation::class)
+        every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
+        val path = mockk<Path>()
+        every { path.extension } returns "test.txt"
+        every { path.toFile() } returns mockk()
+
+        subject.openFile(path)
+
+        verify { Files.exists(any()) }
+        verify(inverse = true) { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
+        verify { Desktop.getDesktop() }
+        verify { desktop.open(any()) }
     }
 
     @Test
