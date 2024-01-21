@@ -242,7 +242,7 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
-                        viewModel.openFile(fileListItem.path, true)
+                        viewModel.openFile(fileListItem.path)
                         openOption.value = false
                     }
                 ) {
