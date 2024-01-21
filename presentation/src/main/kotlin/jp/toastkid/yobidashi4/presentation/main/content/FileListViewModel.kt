@@ -130,7 +130,7 @@ class FileListViewModel : KoinComponent {
         if (fileListItem.editable) {
             viewModel.edit(fileListItem.path, true)
         } else {
-            viewModel.openFile(fileListItem.path, true)
+            viewModel.openFile(fileListItem.path)
         }
     }
 
