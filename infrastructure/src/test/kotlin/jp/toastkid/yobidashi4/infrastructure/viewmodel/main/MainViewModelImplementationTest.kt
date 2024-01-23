@@ -340,6 +340,27 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun openFileWhenFileIsNotFound() {
+        mockkStatic(Files::class, Desktop::class)
+        every { Files.exists(any()) } returns false
+        val desktop = mockk<Desktop>()
+        every { Desktop.getDesktop() } returns desktop
+        every { desktop.open(any()) } just Runs
+        mockkConstructor(MediaPlayerInvokerImplementation::class)
+        every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
+        val path = mockk<Path>()
+        every { path.extension } returns "test.txt"
+        every { path.toFile() } returns mockk()
+
+        subject.openFile(path)
+
+        verify { Files.exists(any()) }
+        verify(inverse = true) { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
+        verify(inverse = true) { Desktop.getDesktop() }
+        verify(inverse = true) { desktop.open(any()) }
+    }
+
+    @Test
     fun openPreviewOnBackground() {
         mockkObject(MarkdownPreviewTab)
         every { MarkdownPreviewTab.with(any()) } returns mockk()
