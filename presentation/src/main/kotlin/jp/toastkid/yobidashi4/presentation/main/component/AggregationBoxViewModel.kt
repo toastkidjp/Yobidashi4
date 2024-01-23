@@ -160,7 +160,7 @@ class AggregationBoxViewModel : KoinComponent {
     fun dateInput() = query.value
 
     fun onDateInputValueChange(it: TextFieldValue) {
-        query.value = TextFieldValue(it.text, it.selection, it.composition)
+        query.value = it
     }
 
     fun dateInputModifier(): Modifier {
