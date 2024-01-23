@@ -5,23 +5,16 @@ import java.nio.file.Files
 import java.nio.file.Path
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
-import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
-import me.friwi.jcefmaven.CefAppBuilder
-import me.friwi.jcefmaven.impl.progress.ConsoleProgressHandler
-import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.cef.browser.CefFrame
 import org.cef.callback.CefBeforeDownloadCallback
-import org.cef.callback.CefCommandLine
 import org.cef.callback.CefContextMenuParams
 import org.cef.callback.CefDownloadItem
 import org.cef.callback.CefMenuModel
-import org.cef.handler.CefAppHandlerAdapter
 import org.cef.handler.CefContextMenuHandlerAdapter
 import org.cef.handler.CefDisplayHandlerAdapter
 import org.cef.handler.CefDownloadHandlerAdapter
@@ -40,34 +33,16 @@ import org.koin.core.component.inject
 
 class CefClientFactory : KoinComponent {
 
-    private val appSetting : Setting by inject()
-
     private val viewModel : MainViewModel by inject()
 
+    private val cefAppFactory: CefAppFactory by inject()
+
+    private val adHosts = AdHosts.make()
+
     operator fun invoke(): CefClient {
-        val builder = CefAppBuilder()
-        builder.setInstallDir(Path.of("jcef-bundle").toFile()) //Default
-        builder.setProgressHandler(ConsoleProgressHandler()) //Default
-        CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {
-            override fun onBeforeCommandLineProcessing(processType: String?, commandLine: CefCommandLine?) {
-                if (processType.isNullOrEmpty()) {
-                    commandLine?.appendSwitchWithValue("enable-media-stream", "true")
-                    if (appSetting.darkMode()) {
-                        commandLine?.appendSwitchWithValue("blink-settings", "forceDarkModeInversionAlgorithm=1,forceDarkModeEnabled=true")
-                    }
-                }
-                super.onBeforeCommandLineProcessing(processType, commandLine)
-            }
-        })
-
-        CefSettingsApplier().invoke(builder.cefSettings, UserAgent.findByName(appSetting.userAgentName()).text())
-
-        val adHosts = AdHosts.make()
-
         var selectedText = ""
 
-        val cefApp = builder.build()
-        val client = cefApp.createClient()
+        val client = cefAppFactory.invoke().createClient()
         client.addLoadHandler(object : CefLoadHandlerAdapter() {
 
             private val webIconLoaderService = WebIconLoaderServiceImplementation()
