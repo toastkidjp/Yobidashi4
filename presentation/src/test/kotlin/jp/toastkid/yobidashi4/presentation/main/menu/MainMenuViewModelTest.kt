@@ -727,13 +727,13 @@ class MainMenuViewModelTest {
         every { notificationEventRepository.readAll() } returns listOf(NotificationEvent.makeDefault())
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
-        every { mainViewModel.openFile(any(), any()) } just Runs
+        every { mainViewModel.openFile(any()) } just Runs
 
         subject.exportNotifications()
         slot.captured.invoke()
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
-        verify { mainViewModel.openFile(any(), any()) }
+        verify { mainViewModel.openFile(any()) }
         verify { notificationEventRepository.readAll() }
     }
 
