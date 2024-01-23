@@ -155,7 +155,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, closeable, type))
     }
 
-    override fun openFile(path: Path, onBackground: Boolean) {
+    override fun openFile(path: Path) {
         if (Files.exists(path).not()) {
             return
         }
