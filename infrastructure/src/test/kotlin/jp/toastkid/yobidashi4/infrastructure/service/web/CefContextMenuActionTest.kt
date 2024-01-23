@@ -355,21 +355,21 @@ class CefContextMenuActionTest {
     @Test
     fun addBookmark() {
         mockkConstructor(BookmarkInsertion::class)
-        every { anyConstructed<BookmarkInsertion>().invoke(any(), any()) } just Runs
+        every { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) } just Runs
 
         subject.invoke(browser, param, "test", ContextMenu.ADD_BOOKMARK.id)
 
-        verify { anyConstructed<BookmarkInsertion>().invoke(any(), any()) }
+        verify { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) }
     }
 
     @Test
     fun addBookmarkPassedNull() {
         mockkConstructor(BookmarkInsertion::class)
-        every { anyConstructed<BookmarkInsertion>().invoke(any(), any()) } just Runs
+        every { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) } just Runs
 
         subject.invoke(null, param, "test", ContextMenu.ADD_BOOKMARK.id)
 
-        verify { anyConstructed<BookmarkInsertion>().invoke(any(), any()) }
+        verify { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) }
     }
 
     @Test
