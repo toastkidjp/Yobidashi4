@@ -32,9 +32,6 @@ class CefClientFactoryTest {
     private lateinit var subject: CefClientFactory
 
     @MockK
-    private lateinit var findId: (CefBrowser?) -> String?
-
-    @MockK
     private lateinit var cefAppFactory: CefAppFactory
 
     @MockK
