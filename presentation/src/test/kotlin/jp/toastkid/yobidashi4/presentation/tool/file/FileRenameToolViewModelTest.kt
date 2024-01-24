@@ -87,7 +87,7 @@ class FileRenameToolViewModelTest {
         every { mainViewModel.droppedPathFlow() } returns flowOf(value, value)
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
-        every { mainViewModel.openFile(any(), any()) } just Runs
+        every { mainViewModel.openFile(any()) } just Runs
 
         runBlocking {
             subject.collectDroppedPaths()
