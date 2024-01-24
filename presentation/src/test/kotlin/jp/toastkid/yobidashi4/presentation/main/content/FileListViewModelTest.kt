@@ -58,7 +58,7 @@ class FileListViewModelTest {
             )
         }
 
-        every { mainViewModel.openFile(any(), any()) } just Runs
+        every { mainViewModel.openFile(any()) } just Runs
         every { mainViewModel.edit(any(), any()) } just Runs
         every { mainViewModel.hideArticleList() } just Runs
 
@@ -189,7 +189,7 @@ class FileListViewModelTest {
         println(fileListItem)
         subject.onLongClick(fileListItem)
 
-        verify(inverse = true) { mainViewModel.openFile(any(), any()) }
+        verify(inverse = true) { mainViewModel.openFile(any()) }
         verify { mainViewModel.edit(any(), any()) }
     }
 
@@ -201,7 +201,7 @@ class FileListViewModelTest {
 
         subject.onLongClick(subject.items().first())
 
-        verify { mainViewModel.openFile(any(), any()) }
+        verify { mainViewModel.openFile(any()) }
         verify(inverse = true) { mainViewModel.edit(any(), any()) }
     }
 
@@ -213,7 +213,7 @@ class FileListViewModelTest {
 
         subject.onDoubleClick(subject.items().first())
 
-        verify(inverse = true) { mainViewModel.openFile(any(), any()) }
+        verify(inverse = true) { mainViewModel.openFile(any()) }
         verify { mainViewModel.hideArticleList() }
         verify { mainViewModel.edit(any(), any()) }
     }
@@ -226,7 +226,7 @@ class FileListViewModelTest {
 
         subject.onDoubleClick(subject.items().first())
 
-        verify { mainViewModel.openFile(any(), any()) }
+        verify { mainViewModel.openFile(any()) }
         verify(inverse = true) { mainViewModel.hideArticleList() }
         verify(inverse = true) { mainViewModel.edit(any(), any()) }
     }
