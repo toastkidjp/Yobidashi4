@@ -172,4 +172,22 @@ class CefClientFactoryTest {
         verify { viewModel wasNot called }
     }
 
+    @Test
+    fun checkAddDisplayHandlerNotFoundIdCase() {
+        val handlerSlot = slot<CefDisplayHandler>()
+        every { client.addDisplayHandler(capture(handlerSlot)) } returns client
+        every { webViewPool.findId(any()) } returns null
+        every { viewModel.updateWebTab(any(), any(), any()) } just Runs
+        val browser = mockk<CefBrowser>()
+        every { browser.url } returns "https://www.yahoo.co.jp"
+
+        val client = subject.invoke()
+        handlerSlot.captured.onTitleChange(browser, "test")
+
+        assertNotNull(client)
+        verify { client.addDisplayHandler(any()) }
+        verify { webViewPool.findId(any()) }
+        verify { viewModel wasNot called }
+    }
+
 }
