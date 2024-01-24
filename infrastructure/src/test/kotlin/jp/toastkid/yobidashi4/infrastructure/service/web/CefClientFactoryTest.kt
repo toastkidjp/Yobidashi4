@@ -60,8 +60,7 @@ class CefClientFactoryTest {
         }
         every { cefAppFactory.invoke() } returns cefApp
 
-        mockkConstructor(CefSettingsApplier::class, WebIconLoaderServiceImplementation::class)
-        every { anyConstructed<CefSettingsApplier>().invoke(any(), any()) } just Runs
+        mockkConstructor(WebIconLoaderServiceImplementation::class)
         every { anyConstructed<WebIconLoaderServiceImplementation>().invoke(any(), any()) } just Runs
         every { cefApp.createClient() } returns client
         every { client.addLoadHandler(any()) } returns client
