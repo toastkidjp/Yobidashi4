@@ -11,8 +11,6 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import me.friwi.jcefmaven.CefAppBuilder
 import org.cef.CefApp
@@ -41,9 +39,6 @@ class CefClientFactoryTest {
     private lateinit var cefAppFactory: CefAppFactory
 
     @MockK
-    private lateinit var appSetting : Setting
-
-    @MockK
     private lateinit var viewModel: MainViewModel
 
     @MockK
@@ -60,13 +55,10 @@ class CefClientFactoryTest {
             modules(
                 module {
                     single(qualifier = null) { cefAppFactory } bind(CefAppFactory::class)
-                    single(qualifier = null) { appSetting } bind(Setting::class)
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
                 }
             )
         }
-        every { appSetting.darkMode() } returns true
-        every { appSetting.userAgentName() } returns UserAgent.DEFAULT.name
         every { cefAppFactory.invoke() } returns cefApp
 
         mockkConstructor(CefSettingsApplier::class, CefAppBuilder::class, WebIconLoaderServiceImplementation::class)
