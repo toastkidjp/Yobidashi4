@@ -212,4 +212,23 @@ class CefClientFactoryTest {
         verify { downloadCallback.Continue(any(), any()) }
     }
 
+    @Test
+    fun checkAddDownloadHandlerWithoutSuggestedNameCase() {
+        val handlerSlot = slot<CefDownloadHandler>()
+        every { client.addDownloadHandler(capture(handlerSlot)) } returns client
+        val downloadCallback = mockk<CefBeforeDownloadCallback>()
+        every { downloadCallback.Continue(any(), any()) } just Runs
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
+        every { Files.createDirectories(any()) } returns mockk()
+
+        val client = subject.invoke()
+        handlerSlot.captured.onBeforeDownload(mockk(), mockk(), null, downloadCallback)
+
+        assertNotNull(client)
+        verify { client.addDownloadHandler(any()) }
+        verify(inverse = true) { Files.createDirectories(any()) }
+        verify { downloadCallback wasNot called }
+    }
+
 }
