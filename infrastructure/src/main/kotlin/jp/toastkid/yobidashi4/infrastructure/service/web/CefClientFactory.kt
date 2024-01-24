@@ -127,6 +127,8 @@ class CefClientFactory : KoinComponent {
                 suggestedName: String?,
                 callback: CefBeforeDownloadCallback?
             ) {
+                callback ?: return
+
                 val downloadFolder = Path.of("user/download")
                 if (Files.exists(downloadFolder).not()) {
                     Files.createDirectories(downloadFolder)
@@ -134,7 +136,7 @@ class CefClientFactory : KoinComponent {
                 if (suggestedName == null) {
                     return
                 }
-                callback?.Continue(downloadFolder.resolve(suggestedName).absolutePathString(), false)
+                callback.Continue(downloadFolder.resolve(suggestedName).absolutePathString(), false)
             }
         })
 
