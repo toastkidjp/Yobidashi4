@@ -12,13 +12,16 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
+import org.cef.callback.CefBeforeDownloadCallback
 import org.cef.callback.CefStringVisitor
 import org.cef.handler.CefDisplayHandler
+import org.cef.handler.CefDownloadHandler
 import org.cef.handler.CefLifeSpanHandler
 import org.cef.handler.CefLoadHandler
 import org.junit.jupiter.api.AfterEach
@@ -188,6 +191,25 @@ class CefClientFactoryTest {
         verify { client.addDisplayHandler(any()) }
         verify { webViewPool.findId(any()) }
         verify { viewModel wasNot called }
+    }
+
+    @Test
+    fun checkAddDownloadHandler() {
+        val handlerSlot = slot<CefDownloadHandler>()
+        every { client.addDownloadHandler(capture(handlerSlot)) } returns client
+        val downloadCallback = mockk<CefBeforeDownloadCallback>()
+        every { downloadCallback.Continue(any(), any()) } just Runs
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns false
+        every { Files.createDirectories(any()) } returns mockk()
+
+        val client = subject.invoke()
+        handlerSlot.captured.onBeforeDownload(mockk(), mockk(), "test", downloadCallback)
+
+        assertNotNull(client)
+        verify { client.addDownloadHandler(any()) }
+        verify { Files.createDirectories(any()) }
+        verify { downloadCallback.Continue(any(), any()) }
     }
 
 }
