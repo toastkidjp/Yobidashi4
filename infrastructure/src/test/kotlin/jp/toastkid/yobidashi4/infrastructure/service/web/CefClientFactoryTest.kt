@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -135,6 +136,23 @@ class CefClientFactoryTest {
         verify { client.addDisplayHandler(any()) }
         verify { webViewPool.findId(any()) }
         verify { viewModel.updateWebTab(any(), any(), any()) }
+    }
+
+    @Test
+    fun checkAddDisplayHandlerWithNullTitleCase() {
+        val handlerSlot = slot<CefDisplayHandler>()
+        every { client.addDisplayHandler(capture(handlerSlot)) } returns client
+        every { viewModel.updateWebTab(any(), any(), any()) } just Runs
+        val browser = mockk<CefBrowser>()
+        every { browser.url } returns "https://www.yahoo.co.jp"
+
+        val client = subject.invoke()
+        handlerSlot.captured.onTitleChange(browser, null)
+
+        assertNotNull(client)
+        verify { client.addDisplayHandler(any()) }
+        verify { webViewPool wasNot called }
+        verify { viewModel wasNot called }
     }
 
 }
