@@ -12,7 +12,6 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import me.friwi.jcefmaven.CefAppBuilder
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
@@ -61,12 +60,8 @@ class CefClientFactoryTest {
         }
         every { cefAppFactory.invoke() } returns cefApp
 
-        mockkConstructor(CefSettingsApplier::class, CefAppBuilder::class, WebIconLoaderServiceImplementation::class)
+        mockkConstructor(CefSettingsApplier::class, WebIconLoaderServiceImplementation::class)
         every { anyConstructed<CefSettingsApplier>().invoke(any(), any()) } just Runs
-        every { anyConstructed<CefAppBuilder>().setInstallDir(any()) } just Runs
-        every { anyConstructed<CefAppBuilder>().setProgressHandler(any()) } just Runs
-        every { anyConstructed<CefAppBuilder>().cefSettings } returns mockk()
-        every { anyConstructed<CefAppBuilder>().build() } returns cefApp
         every { anyConstructed<WebIconLoaderServiceImplementation>().invoke(any(), any()) } just Runs
         every { cefApp.createClient() } returns client
         every { client.addLoadHandler(any()) } returns client
