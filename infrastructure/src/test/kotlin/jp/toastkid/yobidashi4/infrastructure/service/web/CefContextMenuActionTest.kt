@@ -169,6 +169,16 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun noopSearchWithImageWithNullParam() {
+        every { param.sourceUrl } returns null
+
+        subject.invoke(browser, null, "test", ContextMenu.SEARCH_WITH_IMAGE.id)
+
+        verify { param.sourceUrl }
+        verify(inverse = true) { viewModel.openUrl(any(), any()) }
+    }
+
+    @Test
     fun searchWithImage() {
         subject.invoke(browser, param, "test", ContextMenu.SEARCH_WITH_IMAGE.id)
 
