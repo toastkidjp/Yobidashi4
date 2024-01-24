@@ -11,11 +11,13 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.cef.callback.CefStringVisitor
+import org.cef.handler.CefDisplayHandler
 import org.cef.handler.CefLifeSpanHandler
 import org.cef.handler.CefLoadHandler
 import org.junit.jupiter.api.AfterEach
@@ -38,6 +40,9 @@ class CefClientFactoryTest {
     private lateinit var viewModel: MainViewModel
 
     @MockK
+    private lateinit var webViewPool: WebViewPool
+
+    @MockK
     private lateinit var cefApp: CefApp
 
     @MockK
@@ -51,11 +56,13 @@ class CefClientFactoryTest {
             modules(
                 module {
                     single(qualifier = null) { cefAppFactory } bind(CefAppFactory::class)
+                    single(qualifier = null) { webViewPool } bind(WebViewPool::class)
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
                 }
             )
         }
         every { cefAppFactory.invoke() } returns cefApp
+        every { webViewPool.findId(any()) } returns "test-id"
 
         mockkConstructor(WebIconLoaderServiceImplementation::class)
         every { anyConstructed<WebIconLoaderServiceImplementation>().invoke(any(), any()) } just Runs
@@ -111,6 +118,23 @@ class CefClientFactoryTest {
         assertNotNull(client)
         verify { client.addLifeSpanHandler(any()) }
         verify { viewModel.openUrl(any(), any()) }
+    }
+
+    @Test
+    fun checkAddDisplayHandler() {
+        val handlerSlot = slot<CefDisplayHandler>()
+        every { client.addDisplayHandler(capture(handlerSlot)) } returns client
+        every { viewModel.updateWebTab(any(), any(), any()) } just Runs
+        val browser = mockk<CefBrowser>()
+        every { browser.url } returns "https://www.yahoo.co.jp"
+
+        val client = subject.invoke()
+        handlerSlot.captured.onTitleChange(browser, "test")
+
+        assertNotNull(client)
+        verify { client.addDisplayHandler(any()) }
+        verify { webViewPool.findId(any()) }
+        verify { viewModel.updateWebTab(any(), any(), any()) }
     }
 
 }
