@@ -19,7 +19,10 @@ import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.cef.callback.CefBeforeDownloadCallback
+import org.cef.callback.CefContextMenuParams
+import org.cef.callback.CefMenuModel
 import org.cef.callback.CefStringVisitor
+import org.cef.handler.CefContextMenuHandler
 import org.cef.handler.CefDisplayHandler
 import org.cef.handler.CefDownloadHandler
 import org.cef.handler.CefLifeSpanHandler
@@ -246,6 +249,27 @@ class CefClientFactoryTest {
         verify { client.addDownloadHandler(any()) }
         verify(inverse = true) { Files.exists(any()) }
         verify(inverse = true) { Files.createDirectories(any()) }
+    }
+
+    @Test
+    fun checkAddContextMenuHandler() {
+        val handlerSlot = slot<CefContextMenuHandler>()
+        every { client.addContextMenuHandler(capture(handlerSlot)) } returns client
+        val params = mockk<CefContextMenuParams>()
+        every { params.selectionText } returns "test"
+        val model = mockk<CefMenuModel>()
+        mockkConstructor(CefContextMenuFactory::class, CefContextMenuAction::class)
+        every { anyConstructed<CefContextMenuFactory>().invoke(any(), any()) } just Runs
+        every { anyConstructed<CefContextMenuAction>().invoke(any(), any(), any(), any()) } just Runs
+
+        val client = subject.invoke()
+        handlerSlot.captured.onBeforeContextMenu(mockk(), mockk(), params, model)
+        handlerSlot.captured.onContextMenuCommand(mockk(), mockk(), params, 1, 1)
+
+        assertNotNull(client)
+        verify { client.addContextMenuHandler(any()) }
+        verify { anyConstructed<CefContextMenuFactory>().invoke(any(), any()) }
+        verify { anyConstructed<CefContextMenuAction>().invoke(any(), any(), any(), any()) }
     }
 
 }
