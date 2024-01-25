@@ -8,12 +8,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.CefApp
 import org.cef.CefClient
@@ -27,6 +29,8 @@ import org.cef.handler.CefDisplayHandler
 import org.cef.handler.CefDownloadHandler
 import org.cef.handler.CefLifeSpanHandler
 import org.cef.handler.CefLoadHandler
+import org.cef.handler.CefRequestHandler
+import org.cef.network.CefRequest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -288,6 +292,33 @@ class CefClientFactoryTest {
         verify { client.addContextMenuHandler(any()) }
         verify { anyConstructed<CefContextMenuFactory>().invoke(any(), any()) }
         verify { anyConstructed<CefContextMenuAction>().invoke(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun checkAddRequestHandler() {
+        val handlerSlot = slot<CefRequestHandler>()
+        every { client.addRequestHandler(capture(handlerSlot)) } returns client
+        val request = mockk<CefRequest>()
+        every { request.url } returns "https://www.ad.com"
+        every { request.dispose() } just Runs
+        every { viewModel.openUrl(any(), any()) } just Runs
+        mockkObject(AdHosts)
+        val adHosts = mockk<AdHosts>()
+        every { AdHosts.make() } returns adHosts
+        every { adHosts.contains(any()) } returns true
+        subject = CefClientFactory()
+
+        val client = subject.invoke()
+        val resourceRequestHandler = handlerSlot.captured
+            .getResourceRequestHandler(mockk(), mockk(), request, true, true, "test", mockk())
+        resourceRequestHandler.onBeforeResourceLoad(mockk(), mockk(), request)
+        val result = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(), "https://www.yahoo.co.jp", true)
+
+        assertNotNull(client)
+        assertTrue(result)
+        verify { client.addRequestHandler(any()) }
+        verify { request.dispose() }
+        verify { viewModel.openUrl(any(), any()) }
     }
 
 }
