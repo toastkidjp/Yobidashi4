@@ -130,6 +130,21 @@ class CefClientFactoryTest {
     }
 
     @Test
+    fun checkAddLifeSpanHandlerWithoutTargetUrl() {
+        val loadHandlerSlot = slot<CefLifeSpanHandler>()
+        every { client.addLifeSpanHandler(capture(loadHandlerSlot)) } returns client
+        every { viewModel.openUrl(any(), any()) } just Runs
+
+        val client = subject.invoke()
+        val result = loadHandlerSlot.captured.onBeforePopup(mockk(), mockk(), null, "test")
+
+        assertNotNull(client)
+        assertTrue(result)
+        verify { client.addLifeSpanHandler(any()) }
+        verify { viewModel wasNot called }
+    }
+
+    @Test
     fun checkAddDisplayHandler() {
         val handlerSlot = slot<CefDisplayHandler>()
         every { client.addDisplayHandler(capture(handlerSlot)) } returns client
