@@ -29,6 +29,7 @@ import org.cef.handler.CefLifeSpanHandler
 import org.cef.handler.CefLoadHandler
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -120,9 +121,10 @@ class CefClientFactoryTest {
         every { viewModel.openUrl(any(), any()) } just Runs
 
         val client = subject.invoke()
-        loadHandlerSlot.captured.onBeforePopup(mockk(), mockk(), "https://www.yahoo.co.jp", "test")
+        val result = loadHandlerSlot.captured.onBeforePopup(mockk(), mockk(), "https://www.yahoo.co.jp", "test")
 
         assertNotNull(client)
+        assertTrue(result)
         verify { client.addLifeSpanHandler(any()) }
         verify { viewModel.openUrl(any(), any()) }
     }
