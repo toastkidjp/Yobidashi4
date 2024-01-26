@@ -131,4 +131,7 @@ class CefKeyboardShortcutProcessor(
         return false
     }
 
+    fun shouldNotCascadeEventType(type: CefKeyboardHandler.CefKeyEvent.EventType): Boolean =
+        type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_RAWKEYDOWN
+
 }

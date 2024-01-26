@@ -151,7 +151,7 @@ class CefClientFactory : KoinComponent {
                     return true
                 }
 
-                if (event.type != CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_RAWKEYDOWN) {
+                if (keyboardShortcutProcessor.shouldNotCascadeEventType(event.type)) {
                     return false
                 }
 
