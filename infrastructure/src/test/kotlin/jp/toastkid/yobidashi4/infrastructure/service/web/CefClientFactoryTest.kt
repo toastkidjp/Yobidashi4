@@ -27,6 +27,7 @@ import org.cef.callback.CefStringVisitor
 import org.cef.handler.CefContextMenuHandler
 import org.cef.handler.CefDisplayHandler
 import org.cef.handler.CefDownloadHandler
+import org.cef.handler.CefKeyboardHandler
 import org.cef.handler.CefLifeSpanHandler
 import org.cef.handler.CefLoadHandler
 import org.cef.handler.CefRequestHandler
@@ -344,6 +345,21 @@ class CefClientFactoryTest {
         assertFalse(result)
         verify { client.addRequestHandler(any()) }
         verify(inverse = true) { request.dispose() }
+    }
+
+    @Test
+    fun checkAddKeyboardHandlerIfPassedNullEvent() {
+        mockkConstructor(CefKeyboardShortcutProcessor::class)
+        val handlerSlot = slot<CefKeyboardHandler>()
+        every { client.addKeyboardHandler(capture(handlerSlot)) } returns client
+        every { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) } returns true
+
+        val client = subject.invoke()
+        handlerSlot.captured.onKeyEvent(mockk(), null)
+
+        assertNotNull(client)
+        verify { client.addKeyboardHandler(any()) }
+        verify(inverse = true) { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
     }
 
 }
