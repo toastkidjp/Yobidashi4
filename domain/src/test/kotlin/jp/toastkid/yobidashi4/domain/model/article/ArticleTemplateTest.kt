@@ -53,6 +53,18 @@ test
     }
 
     @Test
+    fun testDoesNotContainsWorkDay() {
+        mockkConstructor(UserTemplateStreamReader::class)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+            {{workday}}
+test
+            {{/workday}}
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2024, 1, 27), offDayFinderService).invoke("test")
+        assertTrue(content.trim().isEmpty())
+    }
+
+    @Test
     fun testContainsBeltDay() {
         mockkConstructor(UserTemplateStreamReader::class)
         every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
