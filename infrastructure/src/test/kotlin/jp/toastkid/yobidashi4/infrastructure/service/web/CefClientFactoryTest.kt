@@ -32,6 +32,7 @@ import org.cef.handler.CefLoadHandler
 import org.cef.handler.CefRequestHandler
 import org.cef.network.CefRequest
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -319,6 +320,30 @@ class CefClientFactoryTest {
         verify { client.addRequestHandler(any()) }
         verify { request.dispose() }
         verify { viewModel.openUrl(any(), any()) }
+    }
+
+    @Test
+    fun checkAddRequestHandlerWithoutAdUrl() {
+        val handlerSlot = slot<CefRequestHandler>()
+        every { client.addRequestHandler(capture(handlerSlot)) } returns client
+        val request = mockk<CefRequest>()
+        every { request.url } returns "https://www.ad.com"
+        every { request.dispose() } just Runs
+        mockkObject(AdHosts)
+        val adHosts = mockk<AdHosts>()
+        every { AdHosts.make() } returns adHosts
+        every { adHosts.contains(any()) } returns false
+        subject = CefClientFactory()
+
+        val client = subject.invoke()
+        val resourceRequestHandler = handlerSlot.captured
+            .getResourceRequestHandler(mockk(), mockk(), request, true, true, "test", mockk())
+        val result = resourceRequestHandler.onBeforeResourceLoad(mockk(), mockk(), request)
+
+        assertNotNull(client)
+        assertFalse(result)
+        verify { client.addRequestHandler(any()) }
+        verify(inverse = true) { request.dispose() }
     }
 
 }
