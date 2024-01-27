@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.browser.CefBrowser
+import org.cef.callback.CefContextMenuParams
 import org.cef.handler.CefKeyboardHandler
 import org.cef.misc.EventFlags
 import org.junit.jupiter.api.AfterEach
@@ -135,14 +136,14 @@ class CefKeyboardShortcutProcessorTest {
     @Test
     fun bookmark() {
         mockkConstructor(BookmarkInsertion::class)
-        every { anyConstructed<BookmarkInsertion>().invoke(any(), any()) } just Runs
+        every { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) } just Runs
         every { browser.url } returns "https://www.yahoo.co.jp"
 
         val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_B)
 
         assertTrue(consumed)
         verify { browser.url }
-        verify { anyConstructed<BookmarkInsertion>().invoke(any(), any()) }
+        verify { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) }
     }
 
     @Test
