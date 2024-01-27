@@ -358,9 +358,10 @@ class CefClientFactoryTest {
         every { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) } returns true
 
         val client = subject.invoke()
-        handlerSlot.captured.onKeyEvent(mockk(), null)
+        val consumed = handlerSlot.captured.onKeyEvent(mockk(), null)
 
         assertNotNull(client)
+        assertFalse(consumed)
         verify { client.addKeyboardHandler(any()) }
         verify(inverse = true) { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
     }
