@@ -367,6 +367,36 @@ class CefClientFactoryTest {
     }
 
     @Test
+    fun checkAddKeyboardHandlerWhenEventHasBeenConsumedKeyboardShortcutProcessor() {
+        mockkConstructor(CefKeyboardShortcutProcessor::class)
+        val handlerSlot = slot<CefKeyboardHandler>()
+        every { client.addKeyboardHandler(capture(handlerSlot)) } returns client
+        every { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) } returns true
+        mockkStatic(SwingUtilities::class)
+        every { SwingUtilities.windowForComponent(any()) } returns mockk()
+        val kClass = CefKeyEvent::class.java
+        kClass.declaredFields.forEach { p ->
+            try {
+                p.isAccessible = true
+            } catch (e:Throwable) {
+                e.printStackTrace()
+            }
+        }
+        val constructor = kClass.declaredConstructors[0]
+        constructor.isAccessible = true
+        val event = constructor.newInstance(EventType.KEYEVENT_CHAR, 1, 1, 1, false, 'A', 'A', false) as CefKeyEvent
+
+        val client = subject.invoke()
+        val consumed = handlerSlot.captured.onKeyEvent(mockk(), event)
+
+        assertNotNull(client)
+        assertTrue(consumed)
+        verify { client.addKeyboardHandler(any()) }
+        verify { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
+        verify(inverse = true) { SwingUtilities.windowForComponent(any()) }
+    }
+
+    @Test
     fun checkAddKeyboardHandlerIfNotKeyDown() {
         mockkConstructor(CefKeyboardShortcutProcessor::class)
         val handlerSlot = slot<CefKeyboardHandler>()
