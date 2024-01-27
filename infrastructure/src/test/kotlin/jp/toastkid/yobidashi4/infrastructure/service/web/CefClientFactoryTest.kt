@@ -35,6 +35,7 @@ import org.cef.handler.CefKeyboardHandler.CefKeyEvent.EventType
 import org.cef.handler.CefLifeSpanHandler
 import org.cef.handler.CefLoadHandler
 import org.cef.handler.CefRequestHandler
+import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -461,6 +462,51 @@ class CefClientFactoryTest {
         verify { browser.uiComponent }
         verify { SwingUtilities.windowForComponent(any()) }
         verify(inverse = true) { window.dispatchEvent(any()) }
+    }
+
+    @Test
+    fun checkAddKeyboardHandlerIfCascadeEventToWindow() {
+        mockkConstructor(CefKeyboardShortcutProcessor::class)
+        val handlerSlot = slot<CefKeyboardHandler>()
+        every { client.addKeyboardHandler(capture(handlerSlot)) } returns client
+        every { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) } returns false
+        mockkStatic(SwingUtilities::class)
+        val window = mockk<Window>()
+        every { window.dispatchEvent(any()) } just Runs
+        every { SwingUtilities.windowForComponent(any()) } returns window
+        val browser = mockk<CefBrowser>()
+        every { browser.uiComponent } returns mockk()
+        val kClass = CefKeyEvent::class.java
+        kClass.declaredFields.forEach { p ->
+            try {
+                p.isAccessible = true
+            } catch (e:Throwable) {
+                e.printStackTrace()
+            }
+        }
+        val constructor = kClass.declaredConstructors[0]
+        constructor.isAccessible = true
+        val event = constructor.newInstance(
+            EventType.KEYEVENT_RAWKEYDOWN,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            1,
+            1,
+            false,
+            'A',
+            'A',
+            false
+        ) as CefKeyEvent
+
+        val client = subject.invoke()
+        val consumed = handlerSlot.captured.onKeyEvent(browser, event)
+
+        assertNotNull(client)
+        assertTrue(consumed)
+        verify { client.addKeyboardHandler(any()) }
+        verify { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
+        verify { browser.uiComponent }
+        verify { SwingUtilities.windowForComponent(any()) }
+        verify { window.dispatchEvent(any()) }
     }
 
 }
