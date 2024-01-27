@@ -8,6 +8,7 @@ import io.mockk.unmockkAll
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
 import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
+import jp.toastkid.yobidashi4.domain.service.article.OozumoTemplate
 import jp.toastkid.yobidashi4.domain.service.article.UserTemplateStreamReader
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -134,6 +135,17 @@ test
         """.trimIndent().byteInputStream())
         val content = ArticleTemplate(LocalDate.of(2023, 2, 19), offDayFinderService).invoke("test")
         assertTrue(content.contains("test").not())
+    }
+
+    @Test
+    fun testContainsOozumoDay() {
+        mockkConstructor(UserTemplateStreamReader::class, OozumoTemplate::class)
+        every { anyConstructed<OozumoTemplate>().invoke(any()) }.returns("Oozumo")
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+            {{oozumo}}
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2024, 1, 26), offDayFinderService).invoke("test")
+        assertTrue(content.contains("Oozumo"))
     }
 
 }
