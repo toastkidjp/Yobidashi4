@@ -99,10 +99,8 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val 
                     }
 
                     if (line.contains("{{oozumo}}")) {
-                        OozumoTemplate().invoke(now)?.let {
-                            append(it)
-                            return@forEach
-                        }
+                        append(OozumoTemplate().invoke(now) ?: "")
+                        return@forEach
                     }
 
                     append(line).append("\n")
