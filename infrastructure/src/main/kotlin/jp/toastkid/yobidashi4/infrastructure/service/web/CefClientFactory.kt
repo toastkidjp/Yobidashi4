@@ -157,7 +157,7 @@ class CefClientFactory : KoinComponent {
                     return false
                 }
 
-                val windowForComponent = SwingUtilities.windowForComponent(browser?.uiComponent)
+                val windowForComponent = SwingUtilities.windowForComponent(browser.uiComponent)
                 val modifiers = when (event.modifiers) {
                     EventFlags.EVENTFLAG_CONTROL_DOWN -> KeyEvent.CTRL_DOWN_MASK
                     EventFlags.EVENTFLAG_SHIFT_DOWN -> KeyEvent.SHIFT_DOWN_MASK
