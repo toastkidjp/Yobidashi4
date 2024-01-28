@@ -35,7 +35,7 @@ class InputBoxViewModel : KoinComponent {
     }
 
     fun onValueChange(it: TextFieldValue) {
-        query.value = TextFieldValue(it.text, it.selection, it.composition)
+        query.value = it
     }
 
     fun query() = query.value
