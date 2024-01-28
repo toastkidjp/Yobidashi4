@@ -18,6 +18,10 @@ class InternalLinkSchemeTest {
     @Test
     fun makeLink() {
         assertEquals(
+            "[null](https://internal/null)",
+            internalLinkScheme.makeLink(null)
+        )
+        assertEquals(
             "[tomato](https://internal/tomato)",
             internalLinkScheme.makeLink("tomato")
         )
