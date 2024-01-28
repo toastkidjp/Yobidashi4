@@ -181,7 +181,7 @@ fun TableView(aggregationResult: AggregationResult) {
             HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
                 Alignment.BottomCenter))
 
-            LaunchedEffect(Unit) {
+            LaunchedEffect(aggregationResult) {
                 viewModel.start(aggregationResult)
             }
         }
