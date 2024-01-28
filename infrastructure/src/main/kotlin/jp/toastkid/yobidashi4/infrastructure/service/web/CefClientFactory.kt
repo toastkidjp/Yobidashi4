@@ -145,7 +145,9 @@ class CefClientFactory : KoinComponent {
             private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor { selectedText }
 
             override fun onKeyEvent(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent?): Boolean {
-                event ?: return false
+                if (browser == null || event == null) {
+                    return false
+                }
 
                 if (keyboardShortcutProcessor(browser, event.type, event.modifiers, event.windows_key_code)) {
                     return true
