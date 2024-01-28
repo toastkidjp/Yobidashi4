@@ -194,8 +194,6 @@ class CefClientFactoryTest {
         val handlerSlot = slot<CefDisplayHandler>()
         every { client.addDisplayHandler(capture(handlerSlot)) } returns client
         every { viewModel.updateWebTab(any(), any(), any()) } just Runs
-        val browser = mockk<CefBrowser>()
-        every { browser.url } returns "https://www.yahoo.co.jp"
 
         val client = subject.invoke()
         handlerSlot.captured.onTitleChange(null, "test")
