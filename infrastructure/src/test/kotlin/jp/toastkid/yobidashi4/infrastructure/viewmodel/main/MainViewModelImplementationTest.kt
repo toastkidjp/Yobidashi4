@@ -1073,4 +1073,9 @@ class MainViewModelImplementationTest {
         verify { setting.setUseCaseSensitiveInFinder(true) }
     }
 
+    @Test
+    fun windowVisible() {
+        assertTrue(subject.windowVisible())
+    }
+
 }
