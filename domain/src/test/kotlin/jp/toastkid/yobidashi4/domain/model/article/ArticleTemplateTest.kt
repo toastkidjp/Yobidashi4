@@ -138,6 +138,18 @@ test
     }
 
     @Test
+    fun testContainsStockDayButOnMonday() {
+        mockkConstructor(UserTemplateStreamReader::class)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+            {{stock}}
+test
+            {{/stock}}
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2024, 1, 29), offDayFinderService).invoke("test")
+        assertTrue(content.trimIndent().isEmpty())
+    }
+
+    @Test
     fun testContainsOozumoDay() {
         mockkConstructor(UserTemplateStreamReader::class, OozumoTemplate::class)
         every { anyConstructed<OozumoTemplate>().invoke(any()) }.returns("Oozumo")
