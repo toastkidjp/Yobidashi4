@@ -289,6 +289,7 @@ class CefClientFactoryTest {
         every { anyConstructed<CefContextMenuAction>().invoke(any(), any(), any(), any()) } just Runs
 
         val client = subject.invoke()
+        handlerSlot.captured.onBeforeContextMenu(null, null, null, null)
         handlerSlot.captured.onBeforeContextMenu(mockk(), mockk(), null, model)
         handlerSlot.captured.onBeforeContextMenu(mockk(), mockk(), params, model)
         handlerSlot.captured.onContextMenuCommand(mockk(), mockk(), params, 1, 1)
