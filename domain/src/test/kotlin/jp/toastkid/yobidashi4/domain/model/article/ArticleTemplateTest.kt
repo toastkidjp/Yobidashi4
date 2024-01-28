@@ -169,4 +169,15 @@ test
         assertTrue(content.contains("Oozumo"))
     }
 
+    @Test
+    fun testDoesNotContainsOozumoDay() {
+        mockkConstructor(UserTemplateStreamReader::class, OozumoTemplate::class)
+        every { anyConstructed<OozumoTemplate>().invoke(any()) }.returns(null)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+            {{oozumo}}
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2024, 2, 26), offDayFinderService).invoke("test")
+        assertTrue(content.trimIndent().isEmpty())
+    }
+
 }
