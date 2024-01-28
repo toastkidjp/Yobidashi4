@@ -167,7 +167,7 @@ class CefClientFactory : KoinComponent {
 
                 windowForComponent.dispatchEvent(
                     KeyEvent(
-                        browser?.uiComponent,
+                        browser.uiComponent,
                         KeyEvent.KEY_PRESSED,
                         1,
                         modifiers,
