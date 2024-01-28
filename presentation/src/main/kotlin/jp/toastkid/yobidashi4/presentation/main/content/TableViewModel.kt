@@ -43,6 +43,7 @@ class TableViewModel : KoinComponent {
     }
 
     fun start(aggregationResult: AggregationResult) {
+        articleStates.clear()
         articleStates.addAll(aggregationResult.itemArrays())
         focusRequester().requestFocus()
     }
