@@ -9,16 +9,18 @@ import java.time.LocalDate
 class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val offDayFinderService: OffDayFinderService) {
     operator fun invoke(header: String): String {
         val inputStream = UserTemplateStreamReader().invoke() ?: return ""
+
+        val workday = isWorkDay()
+        val belt = isWeekDay()
+        val market = isMarketDay()
+        val stockDay = isStockDay()
+
         val text = BufferedReader(InputStreamReader(inputStream, StandardCharsets.UTF_8)).use {
             with(StringBuilder()) {
                 var inWorkdayBlock = false
                 var inBeltBlock = false
                 var inMarketBlock = false
                 var inStockBlock = false
-                val workday = isWorkDay()
-                val belt = isWeekDay()
-                val market = isMarketDay()
-                val stockDay = isStockDay()
 
                 it.readLines().forEach { line ->
                     if (line.contains("{{title}}")) {
