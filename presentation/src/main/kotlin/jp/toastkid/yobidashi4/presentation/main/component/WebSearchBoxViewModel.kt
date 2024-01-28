@@ -63,7 +63,7 @@ class WebSearchBoxViewModel : KoinComponent {
     }
 
     fun onValueChange(it: TextFieldValue) {
-        query.value = TextFieldValue(it.text, it.selection, it.composition)
+        query.value = it
         val calculatorResult = calculator.invoke(query.value.text)
         val toString = calculatorResult?.toString()
         result.value = when {
