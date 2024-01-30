@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class InternalLinkSchemeTest {
 
@@ -17,17 +18,25 @@ class InternalLinkSchemeTest {
 
     @Test
     fun makeLink() {
-        assertEquals(
-            "[null](https://internal/null)",
-            internalLinkScheme.makeLink(null)
-        )
-        assertEquals(
-            "[tomato](https://internal/tomato)",
-            internalLinkScheme.makeLink("tomato")
-        )
-        assertEquals(
-            "[tomato 33](https://internal/tomato%2033)",
-            internalLinkScheme.makeLink("tomato 33")
+        assertAll(
+            {
+                assertEquals(
+                    "[null](https://internal/null)",
+                    internalLinkScheme.makeLink(null)
+                )
+            },
+            {
+                assertEquals(
+                    "[tomato](https://internal/tomato)",
+                    internalLinkScheme.makeLink("tomato")
+                )
+            },
+            {
+                assertEquals(
+                    "[tomato 33](https://internal/tomato%2033)",
+                    internalLinkScheme.makeLink("tomato 33")
+                )
+            }
         )
     }
 
