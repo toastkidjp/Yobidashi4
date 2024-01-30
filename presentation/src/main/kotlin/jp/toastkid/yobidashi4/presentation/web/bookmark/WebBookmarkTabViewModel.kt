@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.web.bookmark
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
@@ -51,6 +52,18 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     fun browseUri(url: String) {
         viewModel.browseUri(url)
+    }
+
+    private val currentDropdownItem = mutableStateOf<Bookmark?>(null)
+
+    fun openingDropdown(item: Bookmark) = currentDropdownItem.value == item
+
+    fun openDropdown(item: Bookmark) {
+        currentDropdownItem.value = item
+    }
+
+    fun closeDropdown() {
+        currentDropdownItem.value = null
     }
 
 }
