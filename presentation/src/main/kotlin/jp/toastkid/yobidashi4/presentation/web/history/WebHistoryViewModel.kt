@@ -59,8 +59,9 @@ class WebHistoryViewModel : KoinComponent {
     }
 
     fun findIconPath(history: WebHistory): String? {
+        val host = extractHost(history) ?: return null
+
         return favicons.firstOrNull {
-            val host = extractHost(history) ?: return@firstOrNull false
             val startsWith = it.fileName.pathString.startsWith(host)
             startsWith
         }?.absolutePathString()
