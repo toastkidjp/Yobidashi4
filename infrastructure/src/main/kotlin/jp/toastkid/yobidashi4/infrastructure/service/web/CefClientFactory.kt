@@ -35,7 +35,7 @@ class CefClientFactory : KoinComponent {
 
     private val viewModel : MainViewModel by inject()
 
-    private val cefAppFactory: CefAppFactory by inject()
+    private val cefAppFactory = CefAppFactory()
 
     private val adHosts = AdHosts.make()
 
