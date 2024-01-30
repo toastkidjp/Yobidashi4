@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -120,11 +121,13 @@ class WebHistoryViewModelTest {
 
     @Test
     fun findIconPathNotFoundCase() {
-        subject.findIconPath(
-            WebHistory(
-                "test",
-                "test",
-                1697462064796
+        assertNull(
+            subject.findIconPath(
+                WebHistory(
+                    "test",
+                    "test",
+                    1697462064796
+                )
             )
         )
     }
