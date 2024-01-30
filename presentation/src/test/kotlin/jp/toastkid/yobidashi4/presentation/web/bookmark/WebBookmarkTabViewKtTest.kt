@@ -61,4 +61,17 @@ class WebBookmarkTabViewKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun webBookmarkTabViewWithDropdown() {
+        mockkConstructor(WebBookmarkTabViewModel::class)
+        every { anyConstructed<WebBookmarkTabViewModel>().openingDropdown(any()) } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                WebBookmarkTabView()
+            }
+        }
+    }
+
 }
