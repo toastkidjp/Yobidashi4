@@ -11,12 +11,14 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -113,6 +115,22 @@ class WebBookmarkTabViewModelTest {
         subject.browseUri("https://www.yahoo.co.jp")
 
         verify { viewModel.browseUri(any()) }
+    }
+
+    @Test
+    fun dropdown() {
+        assertFalse(subject.openingDropdown(mockk()))
+
+        val item = mockk<Bookmark>()
+        subject.openDropdown(item)
+
+        assertFalse(subject.openingDropdown(mockk()))
+        assertTrue(subject.openingDropdown(item))
+
+        subject.closeDropdown()
+
+        assertFalse(subject.openingDropdown(mockk()))
+        assertFalse(subject.openingDropdown(item))
     }
 
 }
