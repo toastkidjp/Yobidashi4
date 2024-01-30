@@ -53,9 +53,6 @@ class CefClientFactoryTest {
     private lateinit var subject: CefClientFactory
 
     @MockK
-    private lateinit var cefAppFactory: CefAppFactory
-
-    @MockK
     private lateinit var viewModel: MainViewModel
 
     @MockK
@@ -74,17 +71,17 @@ class CefClientFactoryTest {
         startKoin {
             modules(
                 module {
-                    single(qualifier = null) { cefAppFactory } bind(CefAppFactory::class)
                     single(qualifier = null) { webViewPool } bind(WebViewPool::class)
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
                 }
             )
         }
-        every { cefAppFactory.invoke() } returns cefApp
-        every { webViewPool.findId(any()) } returns "test-id"
 
-        mockkConstructor(WebIconLoaderServiceImplementation::class)
+        mockkConstructor(CefAppFactory::class, WebIconLoaderServiceImplementation::class)
+        every { anyConstructed<CefAppFactory>().invoke() } returns cefApp
         every { anyConstructed<WebIconLoaderServiceImplementation>().invoke(any(), any()) } just Runs
+
+        every { webViewPool.findId(any()) } returns "test-id"
         every { cefApp.createClient() } returns client
         every { client.addLoadHandler(any()) } returns client
         every { client.addLifeSpanHandler(any()) } returns client
