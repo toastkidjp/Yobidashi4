@@ -48,7 +48,7 @@ import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlin.io.path.absolutePathString
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun WebBookmarkTabView() {
     val viewModel = remember { WebBookmarkTabViewModel() }
@@ -79,6 +79,10 @@ internal fun WebBookmarkTabView() {
                         {
                             viewModel.delete(bookmark)
                         },
+                        viewModel.openingDropdown(bookmark),
+                        {
+                            viewModel.closeDropdown()
+                        },
                         Modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
@@ -89,6 +93,17 @@ internal fun WebBookmarkTabView() {
                                     viewModel.openUrl(bookmark.url, true)
                                 }
                             )
+                            .pointerInput(Unit) {
+                                awaitEachGesture {
+                                    val awaitPointerEvent = awaitPointerEvent()
+                                    if (awaitPointerEvent.type == PointerEventType.Press
+                                        && viewModel.openingDropdown(bookmark).not()
+                                        && awaitPointerEvent.button == PointerButton.Secondary
+                                    ) {
+                                        viewModel.openDropdown(bookmark)
+                                    }
+                                }
+                            }
                     )
                 }
             }
@@ -112,11 +127,12 @@ private fun WebBookmarkItemRow(
     openUrl: (Boolean) -> Unit,
     browseUri: () -> Unit,
     onDelete: () -> Unit,
+    openingDropdown: Boolean,
+    closeDropdown: () -> Unit,
     modifier: Modifier
 ) {
     val cursorOn = remember { mutableStateOf(false) }
     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
-    val openOption = remember { mutableStateOf(false) }
 
     Box {
         Row(
@@ -128,17 +144,6 @@ private fun WebBookmarkItemRow(
                 }
                 .onPointerEvent(PointerEventType.Exit) {
                     cursorOn.value = false
-                }
-                .pointerInput(Unit) {
-                    awaitEachGesture {
-                        val awaitPointerEvent = awaitPointerEvent()
-                        if (awaitPointerEvent.type == PointerEventType.Press
-                            && !openOption.value
-                            && awaitPointerEvent.button == PointerButton.Secondary
-                        ) {
-                            openOption.value = true
-                        }
-                    }
                 }
         ) {
             val faviconFolder = WebIcon()
@@ -156,15 +161,15 @@ private fun WebBookmarkItemRow(
         }
 
         DropdownMenu(
-            expanded = openOption.value,
+            expanded = openingDropdown,
             onDismissRequest = {
-                openOption.value = false
+                closeDropdown()
             }
         ) {
             DropdownMenuItem(
                 onClick = {
                     openUrl(false)
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
@@ -176,7 +181,7 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     openUrl(true)
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
@@ -187,7 +192,7 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     browseUri()
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
@@ -198,7 +203,7 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     ClipboardPutterService().invoke(bookmark.title)
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
@@ -209,7 +214,7 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     ClipboardPutterService().invoke(bookmark.url)
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
@@ -220,7 +225,7 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     ClipboardPutterService().invoke("[${bookmark.title}](${bookmark.url})")
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
@@ -231,7 +236,7 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     onDelete()
-                    openOption.value = false
+                    closeDropdown()
                 }
             ) {
                 Text(
