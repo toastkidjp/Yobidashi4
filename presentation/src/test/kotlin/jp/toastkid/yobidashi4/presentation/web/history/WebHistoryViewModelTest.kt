@@ -12,10 +12,13 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.pathString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -116,7 +119,7 @@ class WebHistoryViewModelTest {
     }
 
     @Test
-    fun findIconPath() {
+    fun findIconPathNotFoundCase() {
         subject.findIconPath(
             WebHistory(
                 "test",
@@ -124,6 +127,27 @@ class WebHistoryViewModelTest {
                 1697462064796
             )
         )
+    }
+
+    @Test
+    fun findIconPath() {
+        mockkConstructor(WebIcon::class)
+        val path = mockk<Path>()
+        every { path.fileName } returns path
+        every { path.pathString } returns "www.test.co.jp.webp"
+        every { anyConstructed<WebIcon>().readAll() } returns listOf(path)
+        every { path.absolutePathString() } returns "OK"
+        subject = WebHistoryViewModel()
+
+        val result = subject.findIconPath(
+            WebHistory(
+                "test",
+                "https://www.test.co.jp/index.html",
+                1697462064796
+            )
+        )
+
+        assertEquals("OK", result)
     }
 
     @Test
