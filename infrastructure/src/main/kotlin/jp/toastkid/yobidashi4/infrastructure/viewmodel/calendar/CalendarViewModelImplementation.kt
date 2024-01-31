@@ -136,4 +136,18 @@ class CalendarViewModelImplementation : CalendarViewModel, KoinComponent {
         return weeks
     }
 
+    private val openMonthChooser = mutableStateOf(false)
+
+    override fun openingMonthChooser(): Boolean {
+        return openMonthChooser.value
+    }
+
+    override fun openMonthChooser() {
+        openMonthChooser.value = true
+    }
+
+    override fun closeMonthChooser() {
+        openMonthChooser.value = false
+    }
+
 }
