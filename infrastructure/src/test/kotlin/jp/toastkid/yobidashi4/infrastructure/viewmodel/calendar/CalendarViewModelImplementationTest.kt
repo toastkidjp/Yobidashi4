@@ -201,4 +201,17 @@ class CalendarViewModelImplementationTest {
         assertTrue(month.flatMap { it.days() }.any { it.offDay })
     }
 
+    @Test
+    fun monthChooserState() {
+        assertFalse(viewModel.openingMonthChooser())
+
+        viewModel.openMonthChooser()
+
+        assertTrue(viewModel.openingMonthChooser())
+
+        viewModel.closeMonthChooser()
+
+        assertFalse(viewModel.openingMonthChooser())
+    }
+
 }
