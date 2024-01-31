@@ -54,6 +54,9 @@ fun CalendarView() {
             TopComponent(
                 calendarViewModel.yearInput(),
                 calendarViewModel.localDate().month.value,
+                calendarViewModel.openingMonthChooser(),
+                calendarViewModel::openMonthChooser,
+                calendarViewModel::closeMonthChooser,
                 { calendarViewModel.setYearInput(it) },
                 { calendarViewModel.plusMonths(it) },
                 { calendarViewModel.moveToCurrentMonth() },
@@ -106,6 +109,9 @@ fun CalendarView() {
 private fun TopComponent(
     yearInput: TextFieldValue,
     currentMonth: Int,
+    openingMonthChooser: Boolean,
+    openMonthChooser: () -> Unit,
+    closeMonthChooser: () -> Unit,
     setYearInput: (TextFieldValue) -> Unit,
     plusMonths: (Long) -> Unit,
     moveToCurrentMonth: () -> Unit,
@@ -143,14 +149,13 @@ private fun TopComponent(
         Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
 
         Surface(modifier = Modifier.padding(8.dp)) {
-            val openMonthChooser = remember { mutableStateOf(false) }
-            Box(modifier = Modifier.clickable { openMonthChooser.value = true }) {
+            Box(modifier = Modifier.clickable { openMonthChooser() }) {
                 Text("$currentMonth", fontSize = 16.sp)
-                DropdownMenu(expanded = openMonthChooser.value, onDismissRequest = { openMonthChooser.value = false }) {
+                DropdownMenu(expanded = openingMonthChooser, onDismissRequest = { closeMonthChooser() }) {
                     Month.values().forEach {
                         DropdownMenuItem(onClick = {
                             moveMonth(it.value)
-                            openMonthChooser.value = false
+                            closeMonthChooser()
                         }) {
                             Text("${it.value}")
                         }
