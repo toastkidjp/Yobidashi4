@@ -56,4 +56,18 @@ class WebHistoryViewKtTest {
             }
         }
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun useDropdown() {
+        mockkConstructor(WebHistoryViewModel::class)
+        every { anyConstructed<WebHistoryViewModel>().openingDropdown(any()) } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                WebHistoryView()
+            }
+        }
+    }
+
 }
