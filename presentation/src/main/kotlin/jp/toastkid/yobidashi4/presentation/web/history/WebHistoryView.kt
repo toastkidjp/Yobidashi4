@@ -67,17 +67,16 @@ internal fun WebHistoryView() {
                 items(viewModel.list()) { webHistory ->
                     val cursorOn = remember { mutableStateOf(false) }
                     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
-                    val openOption = remember { mutableStateOf(false) }
 
                     Box(
                         Modifier.pointerInput(Unit) {
                             awaitEachGesture {
                                 val awaitPointerEvent = awaitPointerEvent()
                                 if (awaitPointerEvent.type == PointerEventType.Press
-                                    && !openOption.value
+                                    && !viewModel.openingDropdown(webHistory)
                                     && awaitPointerEvent.button == PointerButton.Secondary
                                 ) {
-                                    openOption.value = true
+                                    viewModel.openDropdown(webHistory)
                                 }
                             }
                         }
@@ -120,15 +119,15 @@ internal fun WebHistoryView() {
                         }
 
                         DropdownMenu(
-                            expanded = openOption.value,
+                            expanded = viewModel.openingDropdown(webHistory),
                             onDismissRequest = {
-                                openOption.value = false
+                                viewModel.closeDropdown()
                             }
                         ) {
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.openUrl(webHistory.url, false)
-                                    openOption.value = false
+                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -140,7 +139,7 @@ internal fun WebHistoryView() {
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.openUrl(webHistory.url, true)
-                                    openOption.value = false
+                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -151,7 +150,7 @@ internal fun WebHistoryView() {
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.browseUri(webHistory.url)
-                                    openOption.value = false
+                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -162,7 +161,7 @@ internal fun WebHistoryView() {
                             DropdownMenuItem(
                                 onClick = {
                                     ClipboardPutterService().invoke(webHistory.title)
-                                    openOption.value = false
+                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -173,7 +172,7 @@ internal fun WebHistoryView() {
                             DropdownMenuItem(
                                 onClick = {
                                     ClipboardPutterService().invoke(webHistory.url)
-                                    openOption.value = false
+                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -184,7 +183,7 @@ internal fun WebHistoryView() {
                             DropdownMenuItem(
                                 onClick = {
                                     ClipboardPutterService().invoke("[${webHistory.title}](${webHistory.url})")
-                                    openOption.value = false
+                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
