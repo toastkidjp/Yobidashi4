@@ -26,4 +26,10 @@ interface CalendarViewModel {
 
     fun month(): Iterable<Week>
 
+    fun openingMonthChooser(): Boolean
+
+    fun openMonthChooser()
+
+    fun closeMonthChooser()
+
 }
