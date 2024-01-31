@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -175,4 +176,21 @@ class WebHistoryViewModelTest {
 
         verify { viewModel.browseUri(any()) }
     }
+
+    @Test
+    fun dropdown() {
+        val item = mockk<WebHistory>()
+        assertFalse(subject.openingDropdown(item))
+
+        subject.openDropdown(item)
+
+        assertTrue(subject.openingDropdown(item))
+        assertFalse(subject.openingDropdown(mockk()))
+
+        subject.closeDropdown()
+
+        assertFalse(subject.openingDropdown(item))
+        assertFalse(subject.openingDropdown(mockk()))
+    }
+
 }
