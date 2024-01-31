@@ -55,6 +55,7 @@ class CalendarViewKtTest {
         every { calendarViewModel.moveMonth(any()) } just Runs
         every { calendarViewModel.moveToCurrentMonth() } just Runs
         every { calendarViewModel.localDate() } returns LocalDate.now()
+        every { calendarViewModel.openingMonthChooser() } returns false
     }
 
     @AfterEach
@@ -72,4 +73,17 @@ class CalendarViewKtTest {
             }
         }
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun withChooser() {
+        every { calendarViewModel.openingMonthChooser() } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                CalendarView()
+            }
+        }
+    }
+
 }
