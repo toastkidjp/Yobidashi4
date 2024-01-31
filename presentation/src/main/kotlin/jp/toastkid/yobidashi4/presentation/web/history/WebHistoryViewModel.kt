@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.web.history
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import java.net.MalformedURLException
@@ -83,6 +84,18 @@ class WebHistoryViewModel : KoinComponent {
 
     fun browseUri(url: String) {
         viewModel.browseUri(url)
+    }
+
+    private val currentDropdownItem = mutableStateOf<WebHistory?>(null)
+
+    fun openingDropdown(item: WebHistory) = item == currentDropdownItem.value
+
+    fun openDropdown(item: WebHistory) {
+        currentDropdownItem.value = item
+    }
+
+    fun closeDropdown() {
+        currentDropdownItem.value = null
     }
 
 }
