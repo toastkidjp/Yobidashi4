@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import io.mockk.MockKAnnotations
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -52,6 +53,13 @@ class CefContextMenuFactoryTest {
         ContextMenu.values().filter { it.context == Context.PLAIN_TEXT }.forEach {
             verify(exactly = 1) { model.addItem(it.id, it.text) }
         }
+    }
+
+    @Test
+    fun modelIsNull() {
+        cefContextMenuFactory.invoke(params, null)
+
+        verify { params wasNot called }
     }
 
 }
