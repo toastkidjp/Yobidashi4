@@ -107,4 +107,16 @@ class LinkBehaviorServiceTest {
         verify { articleFactory.withTitle(any()) }
     }
 
+    @Test
+    fun testArticleUrlWithDefaultExistsCallback() {
+        val article = mockk<Article>()
+        every { articleFactory.withTitle(any()) } returns article
+        every { article.path() } returns mockk()
+        linkBehaviorService = LinkBehaviorService(internalLinkScheme = internalLinkScheme, ioDispatcher = ioDispatcher, mainDispatcher = mainDispatcher)
+
+        linkBehaviorService.invoke("internal-article://yahoo")
+
+        verify { articleFactory.withTitle(any()) }
+    }
+
 }
