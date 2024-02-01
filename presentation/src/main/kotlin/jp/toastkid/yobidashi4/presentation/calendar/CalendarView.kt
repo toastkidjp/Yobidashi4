@@ -19,7 +19,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -129,21 +128,18 @@ private fun TopComponent(
         }
 
         Surface(modifier = Modifier.padding(8.dp)) {
-            val openYearChooser = remember { mutableStateOf(false) }
-            Box(modifier = Modifier.clickable { openYearChooser.value = true }) {
-                TextField(
-                    yearInput,
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Installment") },
-                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
-                    onValueChange = {
-                        setYearInput(it)
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.widthIn(100.dp)
-                )
-            }
+            TextField(
+                yearInput,
+                maxLines = 1,
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                label = { Text("Installment") },
+                textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
+                onValueChange = {
+                    setYearInput(it)
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.widthIn(100.dp)
+            )
         }
 
         Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
