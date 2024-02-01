@@ -5,15 +5,19 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.test.ExperimentalTestApi
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
+import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +42,9 @@ class NotificationListTabViewModelTest {
     @MockK
     private lateinit var repository: NotificationEventRepository
 
+    @MockK
+    private lateinit var notification: ScheduledNotification
+
     @BeforeEach
     fun setUp() {
         startKoin {
@@ -45,6 +52,7 @@ class NotificationListTabViewModelTest {
                 module {
                     single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier = null) { repository } bind(NotificationEventRepository::class)
+                    single(qualifier = null) { notification } bind(ScheduledNotification::class)
                 }
             )
         }
@@ -109,10 +117,15 @@ class NotificationListTabViewModelTest {
     @Test
     fun update() {
         every { repository.update(any(), any()) } just Runs
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+        coEvery { notification.start(any()) } just Runs
 
         subject.update(1, NotificationEvent.makeDefault())
+        slot.invoke()
 
         verify { repository.update(1, any()) }
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
     }
 
     @Test
