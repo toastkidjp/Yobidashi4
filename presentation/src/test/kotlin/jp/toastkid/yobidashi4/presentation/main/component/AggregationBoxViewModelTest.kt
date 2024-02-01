@@ -210,6 +210,26 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun onSearchWithBlankQuery() {
+        subject.onDateInputValueChange(TextFieldValue("  "))
+
+        subject.onSearch()
+
+        verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
+        verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
+    }
+
+    @Test
+    fun onSearchReturnsEmptyResult() {
+        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+
+        subject.onSearch()
+
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
+        verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
+    }
+
+    @Test
     fun showWithShowAggregationBoxIsFalse() {
         every { mainViewModel.showAggregationBox() } returns false
 
