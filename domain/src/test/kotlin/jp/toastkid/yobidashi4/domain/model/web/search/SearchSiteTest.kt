@@ -14,6 +14,10 @@ class SearchSiteTest {
             SearchSite.SEARCH_WITH_IMAGE.make("test").toString()
         )
         assertEquals(
+            "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:http%3A%2F%2Fwww.yahoo.co.jp%2Ffavicon.ico",
+            SearchSite.SEARCH_WITH_IMAGE.make("http://www.yahoo.co.jp/favicon.ico").toString()
+        )
+        assertEquals(
             "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=imgurl:https%3A%2F%2Fwww.yahoo.co.jp%2Ffavicon.ico",
             SearchSite.SEARCH_WITH_IMAGE.make("https://www.yahoo.co.jp/favicon.ico").toString()
         )
