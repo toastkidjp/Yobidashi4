@@ -83,7 +83,7 @@ internal fun WebSearchBox() {
                     onDismissRequest = { viewModel.closeDropdown() }
                 ) {
                     if (swingContent) {
-                        LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
+                        LazyRow(modifier = Modifier.width(600.dp).height(60.dp)) {
                             items(SearchSite.values()) {
                                 Image(
                                     painterResource(it.iconPath()),
