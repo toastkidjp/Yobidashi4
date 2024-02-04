@@ -178,6 +178,20 @@ class WebHistoryViewModelTest {
     }
 
     @Test
+    fun delete() {
+        every { repository.delete(any(), any()) } just Runs
+        val webHistory = mockk<WebHistory>()
+        every { webHistory.title } returns "test"
+        every { webHistory.url } returns "test"
+
+        subject.delete(webHistory)
+
+        verify { webHistory.title }
+        verify { webHistory.url }
+        verify { repository.delete(any(), any()) }
+    }
+
+    @Test
     fun dropdown() {
         val item = mockk<WebHistory>()
         assertFalse(subject.openingDropdown(item))
