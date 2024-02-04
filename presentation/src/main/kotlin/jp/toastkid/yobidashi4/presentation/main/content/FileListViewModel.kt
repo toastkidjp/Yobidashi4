@@ -143,6 +143,30 @@ class FileListViewModel : KoinComponent {
         }
     }
 
+    private val currentFocusItem = mutableStateOf<FileListItem?>(null)
+
+    fun focusingItem(item: FileListItem) = currentFocusItem.value == item
+
+    fun focusItem(item: FileListItem) {
+        currentFocusItem.value = item
+    }
+
+    fun unFocusItem() {
+        currentFocusItem.value = null
+    }
+
+    private val currentDropdownItem = mutableStateOf<FileListItem?>(null)
+
+    fun openingDropdown(item: FileListItem) = currentDropdownItem.value == item
+
+    fun openDropdown(item: FileListItem) {
+        currentDropdownItem.value = item
+    }
+
+    fun closeDropdown() {
+        currentDropdownItem.value = null
+    }
+
 }
 
 private val editableExtensions = setOf("md", "txt")
