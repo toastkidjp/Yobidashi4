@@ -88,7 +88,7 @@ class WebSearchBoxViewModel : KoinComponent {
             return
         }
 
-        selectedSite.value.make(query.value.text).let {
+        selectedSite.value.make(query.value.text, (viewModel.currentTab() as? WebTab)?.url()).let {
             viewModel.openUrl(it.toString(), false)
         }
         viewModel.setShowWebSearch(false)
