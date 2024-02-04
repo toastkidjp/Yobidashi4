@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.model.web.search
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.util.Formatter
 
 enum class SearchSite(val siteName: String, private val searchUrlBase: String, private val imageFileName: String = "") {
     YAHOO_JAPAN("Yahoo! JAPAN", "https://search.yahoo.co.jp/search?p=", "ic_yahoo_japan_logo.xml"),
@@ -15,9 +16,14 @@ enum class SearchSite(val siteName: String, private val searchUrlBase: String, p
     AMAZON("Amazon", "https://www.amazon.co.jp/s?k=", "ic_amazon.xml"),
     GITHUB("GitHub", "https://github.com/search?utf8=%E2%9C%93&type=&q=", "ic_github.xml"),
     SEARCH_WITH_IMAGE("Search with image", "https://www.bing.com/images/search?view=detailv2&iss=sbi&q=", "ic_image.xml"),
+    SITE_SEARCH("Site Search", "https://www.google.com/search?q=", "ic_site_search.xml"),
     ;
 
-    fun make(rawQuery: String): URI {
+    fun make(rawQuery: String, currentSiteUrl: String? = null): URI {
+        if (this == SITE_SEARCH && currentSiteUrl != null) {
+            return URI(Formatter().format("https://www.google.com/search?as_dt=i&as_sitesearch=%s&as_q=%s", URI(currentSiteUrl).host, rawQuery).toString())
+        }
+
         val additional = if (this == SEARCH_WITH_IMAGE
             && (rawQuery.startsWith("https://") || rawQuery.startsWith("http://"))) "imgurl:" else ""
         return URI("$searchUrlBase$additional${URLEncoder.encode(rawQuery, StandardCharsets.UTF_8.name())}")
