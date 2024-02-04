@@ -49,8 +49,13 @@ class WebHistoryViewModel : KoinComponent {
         scrollAction.invoke(coroutineScope, key, controlDown)
 
     fun launch() {
-        repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach { list.add(it) }
+        reloadItems()
         focusRequester().requestFocus()
+    }
+
+    private fun reloadItems() {
+        list.clear()
+        repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach { list.add(it) }
     }
 
     fun list() = list
@@ -84,6 +89,11 @@ class WebHistoryViewModel : KoinComponent {
 
     fun browseUri(url: String) {
         viewModel.browseUri(url)
+    }
+
+    fun delete(item: WebHistory) {
+        repository.delete(item)
+        reloadItems()
     }
 
     private val currentDropdownItem = mutableStateOf<WebHistory?>(null)
