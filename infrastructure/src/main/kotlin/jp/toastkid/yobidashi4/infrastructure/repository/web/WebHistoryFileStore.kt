@@ -26,10 +26,10 @@ class WebHistoryFileStore : WebHistoryRepository {
         Files.write(getPath(), newList.map { it.toTsv() })
     }
 
-    override fun delete(title: String, url: String) {
+    override fun delete(item: WebHistory) {
         Files.write(
             getPath(),
-            readAll().dropWhile { it.title == title && it.url == url }.map { it.toTsv() }
+            readAll().minus(item).map { it.toTsv() }
         )
     }
 
