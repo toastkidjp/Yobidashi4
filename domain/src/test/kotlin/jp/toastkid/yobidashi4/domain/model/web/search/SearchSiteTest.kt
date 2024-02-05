@@ -1,11 +1,21 @@
 package jp.toastkid.yobidashi4.domain.model.web.search
 
+import io.mockk.every
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
+import jp.toastkid.yobidashi4.domain.service.web.SiteSearchUrlGenerator
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class SearchSiteTest {
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
+    }
 
     @Test
     fun make() {
@@ -22,6 +32,16 @@ class SearchSiteTest {
             SearchSite.SEARCH_WITH_IMAGE.make("https://www.yahoo.co.jp/favicon.ico").toString()
         )
         assertEquals("https://filmarks.com/search/movies?q=Up", SearchSite.FILMARKS.make("Up").toString())
+    }
+
+    @Test
+    fun siteSearchCase() {
+        mockkConstructor(SiteSearchUrlGenerator::class)
+        every { anyConstructed<SiteSearchUrlGenerator>().invoke(any(), any()) } returns "https://test.site.search.com"
+
+        val uri = SearchSite.SITE_SEARCH.make("test", "https://www.yahoo.co.jp")
+
+        assertEquals("https://test.site.search.com", uri.toString())
     }
 
     @Test
