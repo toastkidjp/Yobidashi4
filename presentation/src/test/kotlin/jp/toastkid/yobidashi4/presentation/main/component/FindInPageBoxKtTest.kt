@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -55,6 +56,10 @@ class FindInPageBoxKtTest {
         runDesktopComposeUiTest {
             setContent {
                 FindInPageBox()
+
+                verify { mainViewModel.currentTab() }
+                verify { mainViewModel.findStatus() }
+                verify { mainViewModel.openFind() }
             }
         }
     }
