@@ -28,7 +28,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -53,7 +52,7 @@ import kotlin.io.path.nameWithoutExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
     val viewModel = remember { FileListViewModel() }
@@ -106,9 +105,18 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 }
 
                 itemsIndexed(viewModel.items()) { index, fileListItem ->
+                    val underlay = if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                    else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f)
+                    else Color.Transparent
+                    val cursorOn = viewModel.focusingItem(fileListItem)
+                    val backgroundColor = animateColorAsState(if (cursorOn) MaterialTheme.colors.primary else Color.Transparent)
+
                     FileListItemRow(
                         fileListItem,
-                        index,
+                        backgroundColor.value,
+                        viewModel.openingDropdown(fileListItem),
+                        cursorOn,
+                        { viewModel.closeDropdown() },
                         { viewModel.items().filter { it.selected }.map { it.path } },
                         modifier.animateItemPlacement()
                             .combinedClickable(
@@ -123,6 +131,24 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                     viewModel.onDoubleClick(fileListItem)
                                 }
                             )
+                            .drawBehind { drawRect(underlay) }
+                            .onPointerEvent(PointerEventType.Enter) {
+                                viewModel.focusItem(fileListItem)
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                viewModel.unFocusItem()
+                            }
+                            .pointerInput(Unit) {
+                                awaitEachGesture {
+                                    val awaitPointerEvent = awaitPointerEvent()
+                                    if (awaitPointerEvent.type == PointerEventType.Press
+                                        && !viewModel.openingDropdown(fileListItem)
+                                        && awaitPointerEvent.button == PointerButton.Secondary
+                                    ) {
+                                        viewModel.openDropdown(fileListItem)
+                                    }
+                                }
+                            }
                     )
                 }
             }
@@ -142,44 +168,23 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 private fun FileListItemRow(
     fileListItem: FileListItem,
-    index: Int,
+    backgroundColor: Color,
+    openOption: Boolean,
+    cursorOn: Boolean,
+    closeOption: () -> Unit,
     selectedFiles: () -> List<Path>,
     modifier: Modifier
 ) {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-    val openOption = remember { mutableStateOf(false) }
-    val cursorOn = remember { mutableStateOf(false) }
-
-    val underlay = if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f)
-    else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f)
-    else Color.Transparent
-    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
     Box(
-        modifier = modifier.drawBehind { drawRect(underlay) }
-            .onPointerEvent(PointerEventType.Enter) {
-                cursorOn.value = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                cursorOn.value = false
-            }
+        modifier = modifier
     ) {
         Column(modifier = Modifier
-            .pointerInput(Unit) {
-                awaitEachGesture {
-                    val awaitPointerEvent = awaitPointerEvent()
-                    if (awaitPointerEvent.type == PointerEventType.Press
-                        && !openOption.value
-                        && awaitPointerEvent.button == PointerButton.Secondary
-                    ) {
-                        openOption.value = true
-                    }
-                }
-            }
-            .drawBehind { drawRect(backgroundColor.value) }
+            .drawBehind { drawRect(backgroundColor) }
             .padding(horizontal = 16.dp)
         ) {
-            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+            val textColor = if (cursorOn) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
             Text(
                 fileListItem.path.nameWithoutExtension,
                 maxLines = 1,
@@ -196,15 +201,15 @@ private fun FileListItemRow(
         }
 
         DropdownMenu(
-            openOption.value,
-            onDismissRequest = { openOption.value = false }
+            openOption,
+            onDismissRequest = { closeOption() }
         ) {
             DropdownMenuItem(
                 onClick = {
                     selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
                         viewModel.openFile(it)
                     }
-                    openOption.value = false
+                    closeOption()
                 }
             ) {
                 Text(
@@ -219,7 +224,7 @@ private fun FileListItemRow(
                         selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
                             viewModel.edit(it)
                         }
-                        openOption.value = false
+                        closeOption()
                     }
                 ) {
                     Text(
@@ -232,7 +237,7 @@ private fun FileListItemRow(
                         selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
                             viewModel.openPreview(it)
                         }
-                        openOption.value = false
+                        closeOption()
                     }
                 ) {
                     Text(
@@ -243,7 +248,7 @@ private fun FileListItemRow(
                 DropdownMenuItem(
                     onClick = {
                         viewModel.openFile(fileListItem.path)
-                        openOption.value = false
+                        closeOption()
                     }
                 ) {
                     Text(
@@ -254,7 +259,7 @@ private fun FileListItemRow(
                 DropdownMenuItem(
                     onClick = {
                         viewModel.slideshow(fileListItem.path)
-                        openOption.value = false
+                        closeOption()
                     }
                 ) {
                     Text(
@@ -265,7 +270,7 @@ private fun FileListItemRow(
                 DropdownMenuItem(
                     onClick = {
                         ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
-                        openOption.value = false
+                        closeOption()
                     }
                 ) {
                     Text(
@@ -276,7 +281,7 @@ private fun FileListItemRow(
                 DropdownMenuItem(
                     onClick = {
                         ClipboardPutterService().invoke("[[${fileListItem.path.nameWithoutExtension}]]")
-                        openOption.value = false
+                        closeOption()
                     }
                 ) {
                     Text(
