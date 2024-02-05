@@ -179,16 +179,24 @@ class WebHistoryViewModelTest {
 
     @Test
     fun delete() {
-        every { repository.delete(any(), any()) } just Runs
+        every { repository.delete(any()) } just Runs
         val webHistory = mockk<WebHistory>()
         every { webHistory.title } returns "test"
         every { webHistory.url } returns "test"
+        every { webHistory.lastVisitedTime } returns -1
+        every { webHistory.visitingCount } returns 1
+        every { repository.readAll() } returns listOf(
+            WebHistory(
+                "test",
+                "test",
+                1697462064796
+            ),
+            webHistory
+        )
 
         subject.delete(webHistory)
 
-        verify { webHistory.title }
-        verify { webHistory.url }
-        verify { repository.delete(any(), any()) }
+        verify { repository.delete(any()) }
     }
 
     @Test
