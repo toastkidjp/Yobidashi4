@@ -112,6 +112,7 @@ class WebSearchBoxViewModelTest {
     fun invokeSearch() {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.setShowWebSearch(any()) } just Runs
+        every { viewModel.currentTab() } returns mockk()
         subject.onValueChange(TextFieldValue("test"))
 
         subject.invokeSearch()
