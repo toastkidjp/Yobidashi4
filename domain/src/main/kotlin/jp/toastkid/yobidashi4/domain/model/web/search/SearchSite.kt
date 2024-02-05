@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi4.domain.model.web.search
 import java.net.URI
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import java.util.Formatter
+import jp.toastkid.yobidashi4.domain.service.web.SiteSearchUrlGenerator
 
 enum class SearchSite(val siteName: String, private val searchUrlBase: String, private val imageFileName: String = "") {
     YAHOO_JAPAN("Yahoo! JAPAN", "https://search.yahoo.co.jp/search?p=", "ic_yahoo_japan_logo.xml"),
@@ -21,7 +21,7 @@ enum class SearchSite(val siteName: String, private val searchUrlBase: String, p
 
     fun make(rawQuery: String, currentSiteUrl: String? = null): URI {
         if (this == SITE_SEARCH && currentSiteUrl != null) {
-            return URI(Formatter().format("https://www.google.com/search?as_dt=i&as_sitesearch=%s&as_q=%s", URI(currentSiteUrl).host, rawQuery).toString())
+            return URI(SiteSearchUrlGenerator().invoke(rawQuery, currentSiteUrl))
         }
 
         val additional = if (this == SEARCH_WITH_IMAGE
