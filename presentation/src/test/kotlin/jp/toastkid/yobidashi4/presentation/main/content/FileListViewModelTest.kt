@@ -19,6 +19,7 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlin.io.path.nameWithoutExtension
@@ -229,6 +230,38 @@ class FileListViewModelTest {
         verify { mainViewModel.openFile(any()) }
         verify(inverse = true) { mainViewModel.hideArticleList() }
         verify(inverse = true) { mainViewModel.edit(any(), any()) }
+    }
+
+    @Test
+    fun dropdown() {
+        assertFalse(subject.openingDropdown(mockk()))
+
+        val item = mockk<FileListItem>()
+        subject.openDropdown(item)
+
+        assertFalse(subject.openingDropdown(mockk()))
+        assertTrue(subject.openingDropdown(item))
+
+        subject.closeDropdown()
+
+        assertFalse(subject.openingDropdown(mockk()))
+        assertFalse(subject.openingDropdown(item))
+    }
+
+    @Test
+    fun focus() {
+        assertFalse(subject.focusingItem(mockk()))
+
+        val item = mockk<FileListItem>()
+        subject.focusItem(item)
+
+        assertFalse(subject.focusingItem(mockk()))
+        assertTrue(subject.focusingItem(item))
+
+        subject.unFocusItem()
+
+        assertFalse(subject.focusingItem(mockk()))
+        assertFalse(subject.focusingItem(item))
     }
 
 }
