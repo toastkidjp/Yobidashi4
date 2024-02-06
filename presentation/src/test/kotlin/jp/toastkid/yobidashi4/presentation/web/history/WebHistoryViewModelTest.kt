@@ -196,7 +196,7 @@ class WebHistoryViewModelTest {
 
         subject.delete(webHistory)
 
-        verify { repository.delete(any()) }
+        verify { repository.delete(webHistory) }
     }
 
     @Test
