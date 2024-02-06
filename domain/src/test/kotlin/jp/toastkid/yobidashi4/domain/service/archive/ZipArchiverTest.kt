@@ -1,14 +1,17 @@
 package jp.toastkid.yobidashi4.domain.service.archive
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
@@ -56,4 +59,28 @@ class ZipArchiverTest {
         verify { path.fileName }
         verify { fileName.toString() }
     }
+
+    @Test
+    fun exceptionCase() {
+        val mockk = mockk<IOException>()
+        every { mockk.printStackTrace() } just Runs
+        every { Files.getLastModifiedTime(any()) } throws mockk
+
+        zipArchiver.invoke(listOf(path))
+
+        verify { Files.getLastModifiedTime(any()) }
+        verify { mockk.printStackTrace() }
+    }
+
+    @Test
+    fun exceptionWithNullZipStreamCase() {
+        val mockk = mockk<IOException>()
+        every { mockk.printStackTrace() } just Runs
+        every { Files.newOutputStream(any()) } throws mockk
+
+        zipArchiver.invoke(listOf(path))
+
+        verify { mockk.printStackTrace() }
+    }
+
 }
