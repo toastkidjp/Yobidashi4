@@ -45,6 +45,16 @@ class SearchSiteTest {
     }
 
     @Test
+    fun workaroundSiteSearchCase() {
+        mockkConstructor(SiteSearchUrlGenerator::class)
+        every { anyConstructed<SiteSearchUrlGenerator>().invoke(any(), any()) } returns "https://test.site.search.com"
+
+        val uri = SearchSite.SITE_SEARCH.make("test", null)
+
+        assertEquals("https://www.google.com/search?q=test", uri.toString())
+    }
+
+    @Test
     fun iconPath() {
         SearchSite.values().forEach { assertTrue(it.iconPath().isNotBlank()) }
     }
