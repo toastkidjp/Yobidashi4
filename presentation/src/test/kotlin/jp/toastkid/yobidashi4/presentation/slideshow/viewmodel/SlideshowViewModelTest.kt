@@ -46,4 +46,9 @@ class SlideshowViewModelTest {
         assertTrue(viewModel.isFloatingWindow())
     }
 
+    @Test
+    fun windowVisible() {
+        assertTrue(viewModel.windowVisible())
+    }
+
 }
