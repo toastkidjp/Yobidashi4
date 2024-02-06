@@ -66,7 +66,7 @@ class WebHistoryFileStoreTest {
         val slot = slot<Iterable<CharSequence>>()
         every { Files.write(any(), capture(slot)) } returns path
 
-        webHistoryFileStore.delete("Yahoo! JAPAN Test", "https://www.yahoo.co.jp")
+        webHistoryFileStore.delete(webHistoryFileStore.readAll().first())
 
         assertTrue(slot.captured.toMutableList().isEmpty())
         verify { Files.write(any(), slot.captured)  }
@@ -77,6 +77,18 @@ class WebHistoryFileStoreTest {
         val readAll = webHistoryFileStore.readAll()
 
         assertEquals(1, readAll.size)
+    }
+
+    @Test
+    fun readAllNotExists() {
+        every { Files.exists(parent) } returns true
+        every { Files.exists(path) } returns false
+
+        val readAll = webHistoryFileStore.readAll()
+
+        assertTrue(readAll.isEmpty())
+        verify(exactly = 1) { Files.exists(parent) }
+        verify(inverse = true) { Files.createDirectories(any()) }
     }
 
     @Test
