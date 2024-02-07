@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
@@ -140,13 +139,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             }
                             .pointerInput(Unit) {
                                 awaitEachGesture {
-                                    val awaitPointerEvent = awaitPointerEvent()
-                                    if (awaitPointerEvent.type == PointerEventType.Press
-                                        && !viewModel.openingDropdown(fileListItem)
-                                        && awaitPointerEvent.button == PointerButton.Secondary
-                                    ) {
-                                        viewModel.openDropdown(fileListItem)
-                                    }
+                                    viewModel.onPointerEvent(awaitPointerEvent(), fileListItem)
                                 }
                             }
                     )
