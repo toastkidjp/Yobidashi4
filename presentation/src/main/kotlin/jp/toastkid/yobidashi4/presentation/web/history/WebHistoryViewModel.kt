@@ -3,8 +3,12 @@ package jp.toastkid.yobidashi4.presentation.web.history
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Instant
@@ -106,6 +110,16 @@ class WebHistoryViewModel : KoinComponent {
 
     fun closeDropdown() {
         currentDropdownItem.value = null
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    fun onPointerEvent(awaitPointerEvent: PointerEvent, webHistory: WebHistory) {
+        if (awaitPointerEvent.type == PointerEventType.Press
+            && !openingDropdown(webHistory)
+            && awaitPointerEvent.button == PointerButton.Secondary
+        ) {
+            openDropdown(webHistory)
+        }
     }
 
 }
