@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -100,4 +101,10 @@ class WebTabViewModelTest {
             verify { focusRequester.requestFocus() }
         }
     }
+
+    @Test
+    fun focusRequester() {
+        assertNotNull(subject.focusRequester())
+    }
+
 }
