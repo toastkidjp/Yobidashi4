@@ -1,7 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.web.bookmark
 
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -131,6 +136,22 @@ class WebBookmarkTabViewModelTest {
 
         assertFalse(subject.openingDropdown(mockk()))
         assertFalse(subject.openingDropdown(item))
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun onPointerEvent() {
+        val bookmark = mockk<Bookmark>()
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+
+        subject.onPointerEvent(pointerEvent, bookmark)
+
+        assertTrue(subject.openingDropdown(bookmark))
     }
 
 }
