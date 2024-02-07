@@ -71,13 +71,7 @@ internal fun WebHistoryView() {
                     Box(
                         Modifier.pointerInput(Unit) {
                             awaitEachGesture {
-                                val awaitPointerEvent = awaitPointerEvent()
-                                if (awaitPointerEvent.type == PointerEventType.Press
-                                    && !viewModel.openingDropdown(webHistory)
-                                    && awaitPointerEvent.button == PointerButton.Secondary
-                                ) {
-                                    viewModel.openDropdown(webHistory)
-                                }
+                                viewModel.onPointerEvent(awaitPointerEvent(), webHistory)
                             }
                         }
                     ) {
