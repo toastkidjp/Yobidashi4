@@ -3,8 +3,12 @@ package jp.toastkid.yobidashi4.presentation.web.bookmark
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
@@ -64,6 +68,16 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     fun closeDropdown() {
         currentDropdownItem.value = null
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    fun onPointerEvent(awaitPointerEvent: PointerEvent, bookmark: Bookmark) {
+        if (awaitPointerEvent.type == PointerEventType.Press
+            && openingDropdown(bookmark).not()
+            && awaitPointerEvent.button == PointerButton.Secondary
+        ) {
+            openDropdown(bookmark)
+        }
     }
 
 }
