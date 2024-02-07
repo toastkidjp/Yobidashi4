@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
@@ -95,13 +94,7 @@ internal fun WebBookmarkTabView() {
                             )
                             .pointerInput(Unit) {
                                 awaitEachGesture {
-                                    val awaitPointerEvent = awaitPointerEvent()
-                                    if (awaitPointerEvent.type == PointerEventType.Press
-                                        && viewModel.openingDropdown(bookmark).not()
-                                        && awaitPointerEvent.button == PointerButton.Secondary
-                                    ) {
-                                        viewModel.openDropdown(bookmark)
-                                    }
+                                    viewModel.onPointerEvent(awaitPointerEvent(), bookmark)
                                 }
                             }
                     )
