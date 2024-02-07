@@ -1,6 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextRange
@@ -12,6 +17,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.event.KeyEvent
@@ -262,6 +268,22 @@ class FileListViewModelTest {
 
         assertFalse(subject.focusingItem(mockk()))
         assertFalse(subject.focusingItem(item))
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun onPointerEvent() {
+        val bookmark = mockk<FileListItem>()
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+
+        subject.onPointerEvent(pointerEvent, bookmark)
+
+        assertTrue(subject.openingDropdown(bookmark))
     }
 
 }
