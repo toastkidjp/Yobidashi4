@@ -4,11 +4,15 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
@@ -165,6 +169,16 @@ class FileListViewModel : KoinComponent {
 
     fun closeDropdown() {
         currentDropdownItem.value = null
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    fun onPointerEvent(awaitPointerEvent: PointerEvent, fileListItem: FileListItem) {
+        if (awaitPointerEvent.type == PointerEventType.Press
+            && !openingDropdown(fileListItem)
+            && awaitPointerEvent.button == PointerButton.Secondary
+        ) {
+            openDropdown(fileListItem)
+        }
     }
 
 }
