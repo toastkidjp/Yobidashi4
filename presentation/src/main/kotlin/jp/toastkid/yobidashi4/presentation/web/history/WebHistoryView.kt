@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
@@ -114,9 +113,7 @@ internal fun WebHistoryView() {
 
                         DropdownMenu(
                             expanded = viewModel.openingDropdown(webHistory),
-                            onDismissRequest = {
-                                viewModel.closeDropdown()
-                            }
+                            onDismissRequest = viewModel::closeDropdown
                         ) {
                             DropdownMenuItem(
                                 onClick = {
