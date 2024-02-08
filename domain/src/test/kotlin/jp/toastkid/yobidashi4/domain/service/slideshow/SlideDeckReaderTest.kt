@@ -30,6 +30,8 @@ test
 ## Background
 ![background](https://www.yahoo.co.jp)
 
+[footer](Footer text)
+
 ## Image
 ![image](https://www.yahoo.co.jp)
 
