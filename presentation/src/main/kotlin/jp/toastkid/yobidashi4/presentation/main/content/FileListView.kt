@@ -195,7 +195,7 @@ private fun FileListItemRow(
 
         DropdownMenu(
             openOption,
-            onDismissRequest = { closeOption() }
+            onDismissRequest = closeOption
         ) {
             DropdownMenuItem(
                 onClick = {
