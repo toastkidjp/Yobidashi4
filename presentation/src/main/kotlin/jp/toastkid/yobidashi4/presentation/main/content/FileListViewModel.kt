@@ -172,10 +172,10 @@ class FileListViewModel : KoinComponent {
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
-    fun onPointerEvent(awaitPointerEvent: PointerEvent, fileListItem: FileListItem) {
-        if (awaitPointerEvent.type == PointerEventType.Press
+    fun onPointerEvent(pointerEvent: PointerEvent, fileListItem: FileListItem) {
+        if (pointerEvent.type == PointerEventType.Press
             && !openingDropdown(fileListItem)
-            && awaitPointerEvent.button == PointerButton.Secondary
+            && pointerEvent.button == PointerButton.Secondary
         ) {
             openDropdown(fileListItem)
         }
