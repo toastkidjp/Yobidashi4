@@ -155,9 +155,7 @@ private fun WebBookmarkItemRow(
 
         DropdownMenu(
             expanded = openingDropdown,
-            onDismissRequest = {
-                closeDropdown()
-            }
+            onDismissRequest = closeDropdown
         ) {
             DropdownMenuItem(
                 onClick = {
