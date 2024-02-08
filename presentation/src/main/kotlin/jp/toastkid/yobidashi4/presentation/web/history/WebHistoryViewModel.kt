@@ -113,10 +113,10 @@ class WebHistoryViewModel : KoinComponent {
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
-    fun onPointerEvent(awaitPointerEvent: PointerEvent, webHistory: WebHistory) {
-        if (awaitPointerEvent.type == PointerEventType.Press
+    fun onPointerEvent(pointerEvent: PointerEvent, webHistory: WebHistory) {
+        if (pointerEvent.type == PointerEventType.Press
             && !openingDropdown(webHistory)
-            && awaitPointerEvent.button == PointerButton.Secondary
+            && pointerEvent.button == PointerButton.Secondary
         ) {
             openDropdown(webHistory)
         }
