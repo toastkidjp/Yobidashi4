@@ -71,10 +71,10 @@ class WebBookmarkTabViewModel : KoinComponent {
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
-    fun onPointerEvent(awaitPointerEvent: PointerEvent, bookmark: Bookmark) {
-        if (awaitPointerEvent.type == PointerEventType.Press
+    fun onPointerEvent(pointerEvent: PointerEvent, bookmark: Bookmark) {
+        if (pointerEvent.type == PointerEventType.Press
             && openingDropdown(bookmark).not()
-            && awaitPointerEvent.button == PointerButton.Secondary
+            && pointerEvent.button == PointerButton.Secondary
         ) {
             openDropdown(bookmark)
         }
