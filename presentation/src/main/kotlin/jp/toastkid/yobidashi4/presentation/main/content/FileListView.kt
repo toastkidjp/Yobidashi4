@@ -139,7 +139,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             }
                             .pointerInput(Unit) {
                                 awaitEachGesture {
-                                    viewModel.onPointerEvent(awaitPointerEvent(), fileListItem)
+                                    viewModel.onPointerEvent(awaitPointerEvent(), viewModel.items()[index])
                                 }
                             }
                     )
