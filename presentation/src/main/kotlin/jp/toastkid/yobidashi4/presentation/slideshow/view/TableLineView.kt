@@ -43,9 +43,8 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                         VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
                     }
 
-                    val headerCursorOn = remember { mutableStateOf(false) }
                     val headerColumnBackgroundColor = animateColorAsState(
-                        if (headerCursorOn.value) MaterialTheme.colors.primary
+                        if (viewModel.onCursorOnHeader()) MaterialTheme.colors.primary
                         else MaterialTheme.colors.surface
                     )
 
@@ -60,10 +59,10 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                                 viewModel.clickHeaderColumn(index)
                             }
                             .onPointerEvent(PointerEventType.Enter) {
-                                headerCursorOn.value = true
+                                viewModel.setCursorOnHeader()
                             }
                             .onPointerEvent(PointerEventType.Exit) {
-                                headerCursorOn.value = false
+                                viewModel.setCursorOffHeader()
                             }
                             .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     )
@@ -74,7 +73,17 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         viewModel.tableData().forEach { itemRow ->
-            TableRow(itemRow, fontSize)
+            val cursorOn = remember { mutableStateOf(false) }
+            val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
+            val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+
+            TableRow(itemRow, fontSize, textColor, Modifier.drawBehind { drawRect(backgroundColor.value) }
+                .onPointerEvent(PointerEventType.Enter) {
+                    cursorOn.value = true
+                }
+                .onPointerEvent(PointerEventType.Exit) {
+                    cursorOn.value = false
+                })
         }
     }
 
@@ -85,19 +94,11 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
+private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, modifier: Modifier) {
     Column {
-        val cursorOn = remember { mutableStateOf(false) }
-        val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.drawBehind { drawRect(backgroundColor.value) }
-            .onPointerEvent(PointerEventType.Enter) {
-                cursorOn.value = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                cursorOn.value = false
-            }
+            modifier = modifier
         ) {
             itemRow.forEachIndexed { index, any ->
                 if (index != 0) {
@@ -105,7 +106,7 @@ private fun TableRow(itemRow: List<Any>, fontSize: TextUnit) {
                 }
                 Text(
                     any.toString(),
-                    color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                    color = textColor,
                     fontSize = fontSize,
                     modifier = Modifier
                         .weight(1f)
