@@ -21,19 +21,15 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.PointerButton
-import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
@@ -54,7 +50,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.barcode.BarcodeToolTabView
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
@@ -70,29 +65,26 @@ import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.tool.notification.NotificationListTabView
 import jp.toastkid.yobidashi4.presentation.tool.roulette.RouletteToolTabView
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
 import kotlin.io.path.nameWithoutExtension
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun TabsView(modifier: Modifier) {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+    val viewModel = remember { TabsViewModel() }
 
-    if (viewModel.tabs.isEmpty()) {
+    if (viewModel.tabIsEmpty()) {
         return
     }
 
     Column(modifier = modifier) {
         ScrollableTabRow(
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f),
-            selectedTabIndex = viewModel.selected.value,
+            selectedTabIndex = viewModel.selectedTabIndex(),
             indicator = { tabPositions ->
-                val currentTabIndex = if (viewModel.selected.value == tabPositions.size) 0 else viewModel.selected.value
+                val currentTabIndex = viewModel.currentTabIndex(tabPositions.size)
                 if (currentTabIndex >= tabPositions.size) {
                     return@ScrollableTabRow
                 }
@@ -106,8 +98,7 @@ internal fun TabsView(modifier: Modifier) {
                 )
             }
         ) {
-            viewModel.tabs.forEachIndexed { index, tab ->
-                val openDropdownMenu = remember { mutableStateOf(false) }
+            viewModel.tabs().forEachIndexed { index, tab ->
                 val titleState = remember { mutableStateOf(tab.title()) }
                 val iconPathState = remember { mutableStateOf(tab.iconPath()) }
                 LaunchedEffect("${index}_${tab.hashCode()}") {
@@ -121,31 +112,24 @@ internal fun TabsView(modifier: Modifier) {
                 }
 
                 Tab(
-                    selected = viewModel.selected.value == index,
+                    selected = viewModel.isSelectedIndex(index),
                     onClick = { viewModel.setSelectedIndex(index) },
                     modifier = Modifier
                         .pointerInput(Unit) {
                             awaitEachGesture {
-                                val awaitPointerEvent = awaitPointerEvent()
-                                if (awaitPointerEvent.type == PointerEventType.Press
-                                    && !openDropdownMenu.value
-                                    && awaitPointerEvent.button == PointerButton.Secondary) {
-                                    openDropdownMenu.value = true
-                                }
+                                viewModel.onPointerEvent(awaitPointerEvent(), tab)
                             }
                         }
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-
                             LoadIcon(iconPathState.value, Modifier.size(24.dp).padding(start = 4.dp))
 
-                            val width = if (tab is WebTab) 232.dp else 1000.dp
                             Text(titleState.value,
                                 color = MaterialTheme.colors.onPrimary,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1,
-                                modifier = Modifier.widthIn(max = width).padding(vertical = 8.dp).padding(start = 8.dp))
+                                modifier = Modifier.widthIn(max = viewModel.calculateTabWidth(tab)).padding(vertical = 8.dp).padding(start = 8.dp))
                             if (tab.closeable()) {
                                 Text("x",
                                     color = MaterialTheme.colors.onPrimary,
@@ -158,7 +142,22 @@ internal fun TabsView(modifier: Modifier) {
                             }
                         }
 
-                        TabOptionMenu(openDropdownMenu, tab, viewModel)
+                        TabOptionMenu(
+                            viewModel.openingDropdown(tab),
+                            tab,
+                            {
+                                viewModel.closeOtherTabs()
+                            },
+                            {
+                                ClipboardPutterService().invoke(it)
+                            },
+                            {
+                                viewModel.edit(it.slideshowSourcePath())
+                            },
+                            {
+                                viewModel.exportTable(it.items())
+                            }
+                        ) { viewModel.closeDropdown() }
                     }
                 }
             }
@@ -190,20 +189,22 @@ internal fun TabsView(modifier: Modifier) {
 
 @Composable
 private fun TabOptionMenu(
-    openDropdownMenu: MutableState<Boolean>,
+    openingDropdownMenu: Boolean,
     tab: Tab,
-    viewModel: MainViewModel
+    closeOtherTabs: () -> Unit,
+    clipText: (String) -> Unit,
+    edit: (MarkdownPreviewTab) -> Unit,
+    exportTable: (TableTab) -> Unit,
+    close: () -> Unit
 ) {
     DropdownMenu(
-        expanded = openDropdownMenu.value,
-        onDismissRequest = {
-            openDropdownMenu.value = false
-        }
+        expanded = openingDropdownMenu,
+        onDismissRequest = close
     ) {
         DropdownMenuItem(
             onClick = {
-                ClipboardPutterService().invoke(tab.title())
-                openDropdownMenu.value = false
+                clipText(tab.title())
+                close()
             }
         ) {
             Text("Copy title")
@@ -211,8 +212,8 @@ private fun TabOptionMenu(
 
         DropdownMenuItem(
             onClick = {
-                viewModel.closeOtherTabs()
-                openDropdownMenu.value = false
+                closeOtherTabs()
+                close()
             }
         ) {
             Text("Close other tabs")
@@ -221,8 +222,8 @@ private fun TabOptionMenu(
         if (tab is WebTab) {
             DropdownMenuItem(
                 onClick = {
-                    ClipboardPutterService().invoke(tab.url())
-                    openDropdownMenu.value = false
+                    clipText(tab.url())
+                    close()
                 }
             ) {
                 Text("Copy URL")
@@ -233,7 +234,7 @@ private fun TabOptionMenu(
             DropdownMenuItem(
                 onClick = {
                     tab.reload()
-                    openDropdownMenu.value = false
+                    close()
                 }
             ) {
                 Text("Reload")
@@ -242,8 +243,8 @@ private fun TabOptionMenu(
 
         if (tab is MarkdownPreviewTab) {
             DropdownMenuItem(onClick = {
-                openDropdownMenu.value = false
-                viewModel.edit(tab.slideshowSourcePath())
+                edit(tab)
+                close()
             }) {
                 Text("Edit")
             }
@@ -251,11 +252,8 @@ private fun TabOptionMenu(
 
         if (tab is TableTab) {
             DropdownMenuItem(onClick = {
-                openDropdownMenu.value = false
-                TableContentExporter().invoke(tab.items())
-                viewModel.showSnackbar("Done export.", "Open") {
-                    viewModel.openFile(Path.of(TableContentExporter.exportTo()))
-                }
+                exportTable(tab)
+                close()
             }) {
                 Text("Export table")
             }
@@ -264,8 +262,8 @@ private fun TabOptionMenu(
         if (tab is EditorTab) {
             DropdownMenuItem(
                 onClick = {
-                    openDropdownMenu.value = false
-                    ClipboardPutterService().invoke("[[${tab.path.nameWithoutExtension}]]")
+                    clipText("[[${tab.path.nameWithoutExtension}]]")
+                    close()
                 }
             ) {
                 Text("Clip internal link")
