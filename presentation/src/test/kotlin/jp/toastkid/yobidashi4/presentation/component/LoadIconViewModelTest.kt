@@ -47,6 +47,11 @@ class LoadIconViewModelTest {
     }
 
     @Test
+    fun useIconPassingIncorrectCase() {
+        assertFalse(subject.useIcon("test"))
+    }
+
+    @Test
     fun defaultIconPath() {
         assertTrue(subject.defaultIconPath().startsWith("images/icon"))
     }
