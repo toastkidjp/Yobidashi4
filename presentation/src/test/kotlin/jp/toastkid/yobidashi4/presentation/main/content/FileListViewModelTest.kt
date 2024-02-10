@@ -254,6 +254,34 @@ class FileListViewModelTest {
     }
 
     @Test
+    fun onSingleClickWithShift() {
+        subject.onKeyEvent(
+            mockk(),
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_PRESSED,
+                    1,
+                    KeyEvent.SHIFT_DOWN_MASK,
+                    KeyEvent.VK_Q,
+                    'Q'
+                )
+            )
+        )
+
+        subject.start(
+            listOf(
+                mockk<Path>().also { every { it.extension } returns "md" },
+                mockk<Path>().also { every { it.extension } returns "txt" },
+                mockk<Path>().also { every { it.extension } returns "exe" },
+                mockk<Path>().also { every { it.extension } returns "html" }
+            )
+        )
+
+        subject.onSingleClick(subject.items().first())
+    }
+
+    @Test
     fun onLongClick() {
         val path = mockk<Path>()
         every { path.fileName.toString() } returns "test.md"
