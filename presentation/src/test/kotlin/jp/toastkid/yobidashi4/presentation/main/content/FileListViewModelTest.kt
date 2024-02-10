@@ -212,6 +212,25 @@ class FileListViewModelTest {
     }
 
     @Test
+    fun onValueChangeWithEmpty() {
+        subject.start(
+            listOf(
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "TEST.md"
+                },
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "GUeST.md"
+                }
+            )
+        )
+
+        subject.onValueChange(TextFieldValue())
+        assertEquals(2, subject.items().size)
+    }
+
+    @Test
     fun onValueChangeWithComposition() {
         subject.onValueChange(TextFieldValue("test", composition = TextRange.Zero))
 
