@@ -252,4 +252,37 @@ class WebHistoryViewModelTest {
         assertFalse(subject.openingDropdown(webHistory))
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerEventOnOpeningDropdown() {
+        val bookmark = mockk<WebHistory>()
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+        subject.openDropdown(bookmark)
+
+        subject.onPointerEvent(pointerEvent, bookmark)
+
+        assertTrue(subject.openingDropdown(bookmark))
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerEventWithOtherButton() {
+        val bookmark = mockk<WebHistory>()
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Primary
+
+        subject.onPointerEvent(pointerEvent, bookmark)
+
+        assertFalse(subject.openingDropdown(bookmark))
+    }
+
 }
