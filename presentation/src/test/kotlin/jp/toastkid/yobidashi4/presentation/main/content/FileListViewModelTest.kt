@@ -113,6 +113,30 @@ class FileListViewModelTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
+    fun onDirectionUpKeyEvent() {
+        runDesktopComposeUiTest {
+            setContent {
+                val consumed = subject.onKeyEvent(
+                    rememberCoroutineScope(),
+                    androidx.compose.ui.input.key.KeyEvent(
+                        KeyEvent(
+                            mockk(),
+                            KeyEvent.KEY_PRESSED,
+                            1,
+                            -1,
+                            KeyEvent.VK_UP,
+                            '↑'
+                        )
+                    )
+                )
+
+                assertTrue(consumed)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
     fun unConsumedOnKeyEvent() {
         runDesktopComposeUiTest {
             setContent {
