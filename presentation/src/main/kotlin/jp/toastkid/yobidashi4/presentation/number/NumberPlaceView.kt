@@ -40,8 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerButton
-import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
@@ -57,20 +55,13 @@ fun NumberPlaceView() {
     })
 
     val numberStates = mutableListOf<MutableState<String>>()
-    val openOption = remember { mutableStateOf(false) }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(0.5f),
         elevation = 4.dp,
         modifier = Modifier.pointerInput(Unit) {
             awaitEachGesture {
-                val awaitPointerEvent = awaitPointerEvent()
-                if (awaitPointerEvent.type == PointerEventType.Press
-                    && !openOption.value
-                    && awaitPointerEvent.button == PointerButton.Secondary
-                ) {
-                    openOption.value = true
-                }
+                viewModel.onPointerEvent(awaitPointerEvent())
             }
         }
     ) {
@@ -148,23 +139,17 @@ fun NumberPlaceView() {
             }
         }
         DropdownMenu(
-            openOption.value,
-            onDismissRequest = { openOption.value = false }
+            viewModel.openingDropdown(),
+            onDismissRequest = viewModel::closeDropdown
         ) {
             DropdownMenuItem(
-                onClick = {
-                    viewModel.renewGame()
-                    openOption.value = false
-                }
+                onClick = viewModel::renewGame
             ) {
                 Text("Other board")
             }
 
             DropdownMenuItem(
-                onClick = {
-                    viewModel.setCorrect()
-                    openOption.value = false
-                }
+                onClick = viewModel::setCorrect
             ) {
                 Text("Set answer")
             }
@@ -173,7 +158,6 @@ fun NumberPlaceView() {
                 onClick = {
                     viewModel.initializeSolving()
                     numberStates.forEach { it.value = "_" }
-                    openOption.value = false
                 }
             ) {
                 Text("Clear")
