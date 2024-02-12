@@ -11,6 +11,10 @@ package jp.toastkid.yobidashi4.presentation.number
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.unit.sp
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.number.NumberBoard
@@ -54,6 +58,7 @@ class NumberPlaceViewModel : KoinComponent {
         _game.value.initializeSolving()
         _mask.value = _game.value.masked()
         _loading.value = false
+        closeDropdown()
     }
 
     fun setGame(game: NumberPlaceGame) {
@@ -68,6 +73,7 @@ class NumberPlaceViewModel : KoinComponent {
         _game.value.setCorrect()
         _mask.value = _game.value.masked()
         _loading.value = false
+        closeDropdown()
     }
 
     fun masked() = _mask.value
@@ -112,6 +118,7 @@ class NumberPlaceViewModel : KoinComponent {
         initializeSolving()
         initialize(setting.getMaskingCount())
         saveCurrentGame()
+        closeDropdown()
     }
 
     fun startNewGame() {
@@ -172,5 +179,24 @@ class NumberPlaceViewModel : KoinComponent {
         }
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
+    fun onPointerEvent(awaitPointerEvent: PointerEvent) {
+        if (awaitPointerEvent.type == PointerEventType.Press
+            && !openOption.value
+            && awaitPointerEvent.button == PointerButton.Secondary
+        ) {
+            openOption.value = true
+        }
+    }
+
+    fun openingDropdown() = openOption.value
+
+    fun openDropdown() {
+        openOption.value = true
+    }
+
+    fun closeDropdown() {
+        openOption.value = false
+    }
 
 }
