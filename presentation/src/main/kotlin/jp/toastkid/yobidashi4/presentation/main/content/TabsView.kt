@@ -169,7 +169,7 @@ internal fun TabsView(modifier: Modifier) {
             is EditorTab -> EditorTabView(currentTab)
             is MarkdownPreviewTab -> MarkdownTabView(currentTab, Modifier)
             is EditorSettingTab -> EditorSettingComponent(modifier = Modifier)
-            is CalendarTab -> CalendarView()
+            is CalendarTab -> CalendarView(currentTab)
             is CompoundInterestCalculatorTab -> CompoundInterestCalculatorView()
             is FileRenameToolTab -> FileRenameToolView()
             is RouletteToolTab -> RouletteToolTabView()
