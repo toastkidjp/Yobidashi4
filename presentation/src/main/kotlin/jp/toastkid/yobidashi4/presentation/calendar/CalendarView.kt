@@ -20,7 +20,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -105,10 +104,9 @@ fun CalendarView(tab: CalendarTab) {
         }
     }
 
-    LaunchedEffect(tab) {
-        calendarViewModel.launch(tab.localDate())
-    }
     DisposableEffect(tab) {
+        calendarViewModel.launch(tab.localDate())
+
         onDispose {
             object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateCalendarTab(tab, calendarViewModel.localDate().year, calendarViewModel.localDate().month.value)
         }
