@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.WindowState
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
@@ -64,6 +65,7 @@ interface MainViewModel {
     fun setShowWebSearch(newState: Boolean = true)
     fun showingSnackbar(): Boolean
     fun updateWebTab(id: String, title: String, url: String?)
+    fun updateCalendarTab(tab: CalendarTab, year: Int, month: Int)
     fun windowState(): WindowState
 
     fun windowVisible(): Boolean

@@ -27,6 +27,7 @@ import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
@@ -272,6 +273,15 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
                 webHistoryRepository.add(title, url)
             }
         }
+    }
+
+    override fun updateCalendarTab(tab: CalendarTab, year: Int, month: Int) {
+        val indexOf = tabs.indexOf(tab)
+        if (indexOf == -1) {
+            return
+        }
+
+        tabs.set(indexOf, CalendarTab(year, month))
     }
 
     override fun closeCurrent() {
