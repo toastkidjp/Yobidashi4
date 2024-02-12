@@ -19,6 +19,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -36,14 +38,15 @@ import java.time.DayOfWeek
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
-import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarView() {
-    val calendarViewModel = remember { object : KoinComponent { val vm: CalendarViewModel by inject() }.vm }
+fun CalendarView(tab: CalendarTab) {
+    val calendarViewModel = remember { CalendarViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -99,6 +102,15 @@ fun CalendarView() {
                     }
                 }
             }
+        }
+    }
+
+    LaunchedEffect(tab) {
+        calendarViewModel.launch(tab.localDate())
+    }
+    DisposableEffect(tab) {
+        onDispose {
+            object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateCalendarTab(tab, calendarViewModel.localDate().year, calendarViewModel.localDate().month.value)
         }
     }
 }
