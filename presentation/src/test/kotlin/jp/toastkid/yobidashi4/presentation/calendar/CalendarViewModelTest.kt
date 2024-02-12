@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -203,6 +204,17 @@ class CalendarViewModelTest {
         viewModel.closeMonthChooser()
 
         Assertions.assertFalse(viewModel.openingMonthChooser())
+    }
+
+    @Test
+    fun launch() {
+        val localDate = LocalDate.of(2024, 2, 12)
+
+        viewModel.launch(localDate)
+
+        assertEquals(localDate.year, viewModel.localDate().year)
+        assertEquals(localDate.dayOfYear, viewModel.localDate().dayOfYear)
+        assertEquals("2024", viewModel.yearInput().text)
     }
 
 }
