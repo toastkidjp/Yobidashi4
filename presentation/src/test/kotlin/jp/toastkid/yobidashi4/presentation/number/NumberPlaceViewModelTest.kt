@@ -1,6 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.number
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.pointer.PointerButton
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -22,6 +27,7 @@ import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -267,6 +273,83 @@ class NumberPlaceViewModelTest {
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
         verify { numberPlaceViewModel.useHint(any(), any(), any(), any()) }
         verify { numberPlaceViewModel.showMessageSnackbar(true, any()) }
+    }
+
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun onPointerEvent() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+
+        numberPlaceViewModel.onPointerEvent(pointerEvent)
+
+        Assertions.assertTrue(numberPlaceViewModel.openingDropdown())
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerEventOnOpeningDropdown() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+        numberPlaceViewModel.openDropdown()
+
+        numberPlaceViewModel.onPointerEvent(pointerEvent)
+
+        Assertions.assertTrue(numberPlaceViewModel.openingDropdown())
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerEventWithPrimaryButton() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Primary
+
+        numberPlaceViewModel.onPointerEvent(pointerEvent)
+
+        assertFalse(numberPlaceViewModel.openingDropdown())
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerEventWithBackButton() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Back
+
+        numberPlaceViewModel.onPointerEvent(pointerEvent)
+
+        assertFalse(numberPlaceViewModel.openingDropdown())
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerEvent() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns false
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+
+        numberPlaceViewModel.onPointerEvent(pointerEvent)
+
+        assertFalse(numberPlaceViewModel.openingDropdown())
     }
 
 }
