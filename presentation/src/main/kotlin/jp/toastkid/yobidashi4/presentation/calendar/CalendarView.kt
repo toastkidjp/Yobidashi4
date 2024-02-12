@@ -38,9 +38,6 @@ import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -108,7 +105,7 @@ fun CalendarView(tab: CalendarTab) {
         calendarViewModel.launch(tab.localDate())
 
         onDispose {
-            object : KoinComponent { val vm: MainViewModel by inject() }.vm.updateCalendarTab(tab, calendarViewModel.localDate().year, calendarViewModel.localDate().month.value)
+            calendarViewModel.onDispose(tab)
         }
     }
 }
