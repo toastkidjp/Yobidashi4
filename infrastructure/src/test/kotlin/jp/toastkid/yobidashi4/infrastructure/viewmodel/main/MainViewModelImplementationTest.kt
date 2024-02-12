@@ -29,6 +29,7 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
+import java.time.Month
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
@@ -37,6 +38,7 @@ import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
@@ -558,6 +560,18 @@ class MainViewModelImplementationTest {
         subject.updateWebTab("test", "New title", "https://www.newtitle.co.jp")
 
         verify { tab.updateTitleAndUrl(any(), any()) }
+    }
+
+    @Test
+    fun updateCalendarTab() {
+        val tab = mockk<CalendarTab>()
+        subject.openTab(tab)
+
+        subject.updateCalendarTab(tab, 2024, 2)
+
+        val updatedTab = subject.tabs[0] as CalendarTab
+        assertEquals(2024, updatedTab.localDate().year)
+        assertEquals(Month.FEBRUARY, updatedTab.localDate().month)
     }
 
     @Test
