@@ -7,6 +7,7 @@ import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -150,6 +151,11 @@ class CalendarViewModel : KoinComponent {
     fun launch(date: LocalDate) {
         localDateState.value = date
         yearInput.value = TextFieldValue("${localDate().year}")
+    }
+
+    fun onDispose(tab: CalendarTab) {
+        object : KoinComponent { val vm: MainViewModel by inject() }.vm
+            .updateCalendarTab(tab, localDate().year, localDate().month.value)
     }
 
 }
