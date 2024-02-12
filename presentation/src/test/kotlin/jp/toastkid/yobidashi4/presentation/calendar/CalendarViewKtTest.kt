@@ -8,11 +8,15 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.time.DayOfWeek
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
-import jp.toastkid.yobidashi4.presentation.viewmodel.calendar.CalendarViewModel
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,9 +26,12 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 class CalendarViewKtTest {
+    
+    @MockK
+    private lateinit var userOffDayService: UserOffDayService
 
     @MockK
-    private lateinit var calendarViewModel: CalendarViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     @BeforeEach
     fun setUp() {
@@ -32,13 +39,17 @@ class CalendarViewKtTest {
         startKoin {
             modules(
                 module {
-                    single(qualifier=null) { calendarViewModel } bind(CalendarViewModel::class)
+                    single(qualifier=null) { userOffDayService } bind(UserOffDayService::class)
+                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
                 }
             )
         }
+        every { userOffDayService.findBy(any()) } returns emptySet()
+        every { mainViewModel.updateCalendarTab(any(), any(), any()) } just Runs
 
-        every { calendarViewModel.month() } returns mutableListOf(Week().also { it.add(LocalDate.now()) })
-        every { calendarViewModel.dayOfWeeks() } returns listOf(
+        mockkConstructor(CalendarViewModel::class)
+        every { anyConstructed<CalendarViewModel>().month() } returns mutableListOf(Week().also { it.add(LocalDate.now()) })
+        every { anyConstructed<CalendarViewModel>().dayOfWeeks() } returns listOf(
             DayOfWeek.SUNDAY,
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,
@@ -47,15 +58,15 @@ class CalendarViewKtTest {
             DayOfWeek.FRIDAY,
             DayOfWeek.SATURDAY
         )
-        every { calendarViewModel.isToday(any()) } returns false
-        every { calendarViewModel.openDateArticle(any(), any()) } just Runs
-        every { calendarViewModel.plusMonths(any()) } just Runs
-        every { calendarViewModel.yearInput() } returns TextFieldValue()
-        every { calendarViewModel.setYearInput(any()) } just Runs
-        every { calendarViewModel.moveMonth(any()) } just Runs
-        every { calendarViewModel.moveToCurrentMonth() } just Runs
-        every { calendarViewModel.localDate() } returns LocalDate.now()
-        every { calendarViewModel.openingMonthChooser() } returns false
+        every { anyConstructed<CalendarViewModel>().isToday(any()) } returns false
+        every { anyConstructed<CalendarViewModel>().openDateArticle(any(), any()) } just Runs
+        every { anyConstructed<CalendarViewModel>().plusMonths(any()) } just Runs
+        every { anyConstructed<CalendarViewModel>().yearInput() } returns TextFieldValue()
+        every { anyConstructed<CalendarViewModel>().setYearInput(any()) } just Runs
+        every { anyConstructed<CalendarViewModel>().moveMonth(any()) } just Runs
+        every { anyConstructed<CalendarViewModel>().moveToCurrentMonth() } just Runs
+        every { anyConstructed<CalendarViewModel>().localDate() } returns LocalDate.now()
+        every { anyConstructed<CalendarViewModel>().openingMonthChooser() } returns false
     }
 
     @AfterEach
@@ -69,21 +80,27 @@ class CalendarViewKtTest {
     fun calendarView() {
         runDesktopComposeUiTest {
             setContent {
-                CalendarView()
+                CalendarView(CalendarTab())
             }
         }
+
+        verify { userOffDayService.findBy(any()) }
+        verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun withChooser() {
-        every { calendarViewModel.openingMonthChooser() } returns true
+        every { anyConstructed<CalendarViewModel>().openingMonthChooser() } returns true
 
         runDesktopComposeUiTest {
             setContent {
-                CalendarView()
+                CalendarView(CalendarTab())
             }
         }
+
+        verify { userOffDayService.findBy(any()) }
+        verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
     }
 
 }
