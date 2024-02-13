@@ -199,4 +199,13 @@ class NumberPlaceViewModel : KoinComponent {
         openOption.value = false
     }
 
+    fun addNumber(number: MutableState<String>) {
+        numberStates.add(number)
+    }
+
+    fun clear() {
+        initializeSolving()
+        numberStates.forEach { it.value = "_" }
+    }
+
 }
