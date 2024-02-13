@@ -54,8 +54,6 @@ fun NumberPlaceView() {
         viewModel.start()
     })
 
-    val numberStates = mutableListOf<MutableState<String>>()
-
     Surface(
         color = MaterialTheme.colors.surface.copy(0.5f),
         elevation = 4.dp,
@@ -87,7 +85,7 @@ fun NumberPlaceView() {
                             if (cellValue == -1) {
                                 val open = remember { mutableStateOf(false) }
                                 val number = remember { mutableStateOf("_") }
-                                numberStates.add(number)
+                                viewModel.addNumber(number)
 
                                 val solving = viewModel.pickSolving(rowIndex, columnIndex)
                                 if (solving != -1) {
@@ -156,8 +154,7 @@ fun NumberPlaceView() {
 
             DropdownMenuItem(
                 onClick = {
-                    viewModel.initializeSolving()
-                    numberStates.forEach { it.value = "_" }
+                    viewModel.clear()
                 }
             ) {
                 Text("Clear")
