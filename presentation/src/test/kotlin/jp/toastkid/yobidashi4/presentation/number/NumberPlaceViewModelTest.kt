@@ -364,4 +364,9 @@ class NumberPlaceViewModelTest {
         assertFalse(numberPlaceViewModel.openingDropdown())
     }
 
+    @Test
+    fun addNumber() {
+        numberPlaceViewModel.addNumber(mutableStateOf("1"))
+    }
+
 }
