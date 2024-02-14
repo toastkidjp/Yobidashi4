@@ -18,6 +18,8 @@ class CalendarViewModel : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
+    private val setting: Setting by inject()
+
     private val userOffDayService: UserOffDayService by inject()
 
     private val week = listOf(
@@ -89,11 +91,8 @@ class CalendarViewModel : KoinComponent {
             return
         }
 
-        val koin = object : KoinComponent {
-            val setting: Setting by inject()
-        }
         mainViewModel.edit(
-            koin.setting.articleFolderPath().resolve(
+            setting.articleFolderPath().resolve(
                 "${ArticleTitleGenerator().invoke(localDate().withDayOfMonth(date))}.md"
             ),
             onBackground
