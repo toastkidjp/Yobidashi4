@@ -575,6 +575,13 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun noopUpdateCalendarTab() {
+        subject.updateCalendarTab(mockk(), 2024, 2)
+
+        assertTrue(subject.tabs.isEmpty())
+    }
+
+    @Test
     fun closeCurrent() {
         subject.closeCurrent()
 
