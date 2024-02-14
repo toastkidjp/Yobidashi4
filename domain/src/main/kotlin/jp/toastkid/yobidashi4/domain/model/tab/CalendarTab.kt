@@ -19,6 +19,6 @@ class CalendarTab(
         return "images/icon/ic_calendar.xml"
     }
 
-    fun localDate() = LocalDate.of(year, month, 1)
+    fun localDate(): LocalDate = LocalDate.of(year, month, 1)
 
 }
