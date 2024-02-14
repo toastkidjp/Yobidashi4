@@ -369,4 +369,9 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.addNumber(mutableStateOf("1"))
     }
 
+    @Test
+    fun clear() {
+        numberPlaceViewModel.clear()
+    }
+
 }
