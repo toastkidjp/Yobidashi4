@@ -46,6 +46,10 @@ class NumberPlaceViewModel : KoinComponent {
 
     private val openOption = mutableStateOf(false)
 
+    private val openMaskingCount = mutableStateOf(false)
+
+    private val maskingCount = mutableStateOf("")
+
     fun initialize(maskingCount: Int) {
         _loading.value = true
         _game.value.initialize(maskingCount)
@@ -141,6 +145,7 @@ class NumberPlaceViewModel : KoinComponent {
         withContext(Dispatchers.IO) {
             initialize(setting.getMaskingCount())
             saveCurrentGame()
+            maskingCount.value = "${getMaskingCount()}"
         }
     }
 
@@ -206,6 +211,16 @@ class NumberPlaceViewModel : KoinComponent {
     fun clear() {
         initializeSolving()
         numberStates.forEach { it.value = "_" }
+    }
+
+    fun openingMaskingCount() = openMaskingCount.value
+
+    fun openMaskingCount() {
+        openMaskingCount.value = true
+    }
+
+    fun closeMaskingCount() {
+        openMaskingCount.value = false
     }
 
 }
