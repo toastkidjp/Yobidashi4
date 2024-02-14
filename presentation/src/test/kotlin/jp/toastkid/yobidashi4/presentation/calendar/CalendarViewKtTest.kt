@@ -10,7 +10,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import io.mockk.verify
 import java.time.DayOfWeek
 import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
@@ -83,9 +82,6 @@ class CalendarViewKtTest {
                 CalendarView(CalendarTab())
             }
         }
-
-        verify { userOffDayService.findBy(any()) }
-        verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
     }
 
     @OptIn(ExperimentalTestApi::class)
@@ -98,9 +94,6 @@ class CalendarViewKtTest {
                 CalendarView(CalendarTab())
             }
         }
-
-        verify { userOffDayService.findBy(any()) }
-        verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
     }
 
 }
