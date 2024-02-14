@@ -16,6 +16,8 @@ import org.koin.core.component.inject
 
 class CalendarViewModel : KoinComponent {
 
+    private val mainViewModel: MainViewModel by inject()
+
     private val userOffDayService: UserOffDayService by inject()
 
     private val week = listOf(
@@ -88,10 +90,9 @@ class CalendarViewModel : KoinComponent {
         }
 
         val koin = object : KoinComponent {
-            val viewModel: MainViewModel by inject()
             val setting: Setting by inject()
         }
-        koin.viewModel.edit(
+        mainViewModel.edit(
             koin.setting.articleFolderPath().resolve(
                 "${ArticleTitleGenerator().invoke(localDate().withDayOfMonth(date))}.md"
             ),
@@ -154,8 +155,7 @@ class CalendarViewModel : KoinComponent {
     }
 
     fun onDispose(tab: CalendarTab) {
-        object : KoinComponent { val vm: MainViewModel by inject() }.vm
-            .updateCalendarTab(tab, localDate().year, localDate().month.value)
+        mainViewModel.updateCalendarTab(tab, localDate().year, localDate().month.value)
     }
 
 }
