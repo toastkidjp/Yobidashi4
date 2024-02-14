@@ -71,7 +71,7 @@ fun NumberPlaceView() {
                     .verticalScroll(rememberScrollState())
                     .padding(8.dp)
             ) {
-                AppBarContent(viewModel, { viewModel.deleteGame() }, viewModel::renewGame)
+                AppBarContent(viewModel, { viewModel.deleteGame() }, viewModel::renewGame, viewModel.getMaskingCount(), { viewModel.setMaskingCount(it) }, viewModel.openingMaskingCount(), { viewModel.openMaskingCount() }, { viewModel.closeMaskingCount() })
 
                 HorizontalDivider(0)
 
@@ -189,12 +189,14 @@ private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.d
 private fun AppBarContent(
     viewModel: NumberPlaceViewModel,
     deleteGame: () -> Unit,
-    renewGame: () -> Unit
+    renewGame: () -> Unit,
+    maskingCount: Int,
+    setMaskingCount: (Int) -> Unit,
+    openingMaskingCount: Boolean,
+    openMaskingCount: () -> Unit,
+    closeMaskingCount: () -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        val openMaskingCount = remember { mutableStateOf(false) }
-        val maskingCount = remember { mutableStateOf("${viewModel.getMaskingCount()}") }
-
         Button(
             onClick = {
                 deleteGame()
@@ -215,22 +217,22 @@ private fun AppBarContent(
             modifier = Modifier
                 .padding(start = 4.dp)
                 .clickable {
-                    openMaskingCount.value = true
+                    openMaskingCount()
                 }
         ) {
             Text(
-                maskingCount.value,
+                "$maskingCount",
                 textAlign = TextAlign.Center,
                 fontSize = viewModel.fontSize()
             )
             DropdownMenu(
-                openMaskingCount.value,
-                onDismissRequest = { openMaskingCount.value = false }) {
+                openingMaskingCount,
+                onDismissRequest = { closeMaskingCount() }) {
                 (1..64).forEach {
                     DropdownMenuItem(
                         onClick = {
-                        maskingCount.value = "$it"
-                        openMaskingCount.value = false
+                            setMaskingCount(it)
+                        closeMaskingCount()
                             viewModel.setMaskingCount(it)
                             deleteGame()
                         renewGame()
