@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
+import java.time.Month
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -28,4 +29,16 @@ class CalendarTabTest {
     fun iconPath() {
         assertTrue(calendarTab.iconPath().startsWith("images/icon/"))
     }
+
+    @Test
+    fun localDate() {
+        val tab = CalendarTab(2024, 2)
+
+        val localDate = tab.localDate()
+
+        assertEquals(2024, localDate.year)
+        assertEquals(Month.FEBRUARY, localDate.month)
+        assertEquals(1, localDate.dayOfMonth)
+    }
+
 }
