@@ -374,4 +374,17 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.clear()
     }
 
+    @Test
+    fun openMaskingCount() {
+        assertFalse(numberPlaceViewModel.openingMaskingCount())
+
+        numberPlaceViewModel.openMaskingCount()
+
+        assertTrue(numberPlaceViewModel.openingMaskingCount())
+
+        numberPlaceViewModel.closeMaskingCount()
+
+        assertFalse(numberPlaceViewModel.openingMaskingCount())
+    }
+
 }
