@@ -30,6 +30,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -348,6 +349,17 @@ class NumberPlaceViewModelTest {
         every { pointerEvent.button } returns PointerButton.Secondary
 
         numberPlaceViewModel.onPointerEvent(pointerEvent)
+
+        assertFalse(numberPlaceViewModel.openingDropdown())
+    }
+
+    @Test
+    fun closeDropdown() {
+        numberPlaceViewModel.openDropdown()
+
+        assertTrue(numberPlaceViewModel.openingDropdown())
+
+        numberPlaceViewModel.closeDropdown()
 
         assertFalse(numberPlaceViewModel.openingDropdown())
     }
