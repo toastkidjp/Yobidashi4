@@ -217,4 +217,13 @@ class CalendarViewModelTest {
         assertEquals("2024", viewModel.yearInput().text)
     }
 
+    @Test
+    fun onDispose() {
+        every { mainViewModel.updateCalendarTab(any(), any(), any()) } just Runs
+
+        viewModel.onDispose(mockk())
+
+        verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
+    }
+
 }
