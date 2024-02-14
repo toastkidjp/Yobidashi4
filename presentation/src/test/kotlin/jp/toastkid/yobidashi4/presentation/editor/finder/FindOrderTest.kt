@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.finder
 
+import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals

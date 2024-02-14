@@ -14,7 +14,7 @@ import java.awt.Color
 import java.awt.Panel
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrder
+import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking

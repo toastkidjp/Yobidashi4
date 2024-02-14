@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.editor.finder
+package jp.toastkid.yobidashi4.domain.model.find
 
 data class FindOrder(
     val target: String,
