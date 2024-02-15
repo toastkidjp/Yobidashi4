@@ -259,6 +259,22 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
+    fun startWhenFileSizeIsZero() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        mockkStatic(Files::class)
+        every { Files.size(any()) } returns 0L
+        every { repository.load(any()) } returns mockk()
+        every { setting.getMaskingCount() } returns 1
+
+        runBlocking {
+            numberPlaceViewModel.start()
+
+            verify { setting.getMaskingCount() }
+        }
+    }
+
+    @Test
     fun onCellLongClick() {
         numberPlaceViewModel = spyk(numberPlaceViewModel)
         val innerSlot = slot<(Boolean) -> Unit>()
