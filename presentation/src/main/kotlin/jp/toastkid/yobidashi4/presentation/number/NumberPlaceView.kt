@@ -83,7 +83,8 @@ fun NumberPlaceView() {
                     { viewModel.setMaskingCount(it) },
                     viewModel.openingMaskingCount(),
                     { viewModel.openMaskingCount() },
-                    { viewModel.closeMaskingCount() }
+                    { viewModel.closeMaskingCount() },
+                    viewModel.fontSize()
                 )
 
                 HorizontalDivider(0)
@@ -207,7 +208,8 @@ private fun AppBarContent(
     setMaskingCount: (Int) -> Unit,
     openingMaskingCount: Boolean,
     openMaskingCount: () -> Unit,
-    closeMaskingCount: () -> Unit
+    closeMaskingCount: () -> Unit,
+    fontSize: TextUnit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Button(
@@ -236,7 +238,7 @@ private fun AppBarContent(
             Text(
                 "$maskingCount",
                 textAlign = TextAlign.Center,
-                fontSize = viewModel.fontSize()
+                fontSize = fontSize
             )
             DropdownMenu(
                 openingMaskingCount,
@@ -257,7 +259,7 @@ private fun AppBarContent(
                                 }) {
                                 Text(
                                     text = "$count",
-                                    fontSize = viewModel.fontSize(),
+                                    fontSize = fontSize,
                                     textAlign = TextAlign.Center
                                 )
                             }
