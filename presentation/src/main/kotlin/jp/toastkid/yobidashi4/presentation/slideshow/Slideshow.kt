@@ -47,7 +47,12 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun Slideshow(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit, modifier: Modifier) {
+fun Slideshow(
+    deck: SlideDeck,
+    onEscapeKeyReleased: () -> Unit,
+    onFullscreenKeyReleased: () -> Unit,
+    modifier: Modifier
+) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState { deck.slides.size }
     val viewModel = remember { SlideshowViewModel() }
