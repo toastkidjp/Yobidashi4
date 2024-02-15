@@ -13,6 +13,7 @@ import java.net.URL
 import java.nio.file.Files
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -77,6 +78,21 @@ result.value = engine.eval(input.value.text).toString()
             setContent {
                 Slideshow(
                     slideDeck,
+                    {},
+                    {},
+                    Modifier
+                )
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun otherPage() {
+        runComposeUiTest {
+            setContent {
+                Slideshow(
+                    SlideDeck(slideDeck.slides.filter { it.lines().any { l -> l is ImageLine } }.toMutableList()),
                     {},
                     {},
                     Modifier
