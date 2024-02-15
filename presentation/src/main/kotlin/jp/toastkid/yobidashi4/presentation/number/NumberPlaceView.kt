@@ -76,13 +76,13 @@ fun NumberPlaceView() {
                     .padding(8.dp)
             ) {
                 AppBarContent(
-                    { viewModel.deleteGame() },
+                    viewModel::deleteGame,
                     viewModel::renewGame,
                     viewModel.getMaskingCount(),
-                    { viewModel.setMaskingCount(it) },
+                    viewModel::setMaskingCount,
                     viewModel.openingMaskingCount(),
-                    { viewModel.openMaskingCount() },
-                    { viewModel.closeMaskingCount() },
+                    viewModel::openMaskingCount,
+                    viewModel::closeMaskingCount,
                     viewModel.fontSize()
                 )
 
