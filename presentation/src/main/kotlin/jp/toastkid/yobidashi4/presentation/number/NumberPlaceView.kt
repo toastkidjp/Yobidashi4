@@ -75,7 +75,16 @@ fun NumberPlaceView() {
                     .verticalScroll(rememberScrollState())
                     .padding(8.dp)
             ) {
-                AppBarContent(viewModel, { viewModel.deleteGame() }, viewModel::renewGame, viewModel.getMaskingCount(), { viewModel.setMaskingCount(it) }, viewModel.openingMaskingCount(), { viewModel.openMaskingCount() }, { viewModel.closeMaskingCount() })
+                AppBarContent(
+                    viewModel,
+                    { viewModel.deleteGame() },
+                    viewModel::renewGame,
+                    viewModel.getMaskingCount(),
+                    { viewModel.setMaskingCount(it) },
+                    viewModel.openingMaskingCount(),
+                    { viewModel.openMaskingCount() },
+                    { viewModel.closeMaskingCount() }
+                )
 
                 HorizontalDivider(0)
 
