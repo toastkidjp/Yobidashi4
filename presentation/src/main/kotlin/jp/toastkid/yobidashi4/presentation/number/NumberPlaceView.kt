@@ -76,7 +76,6 @@ fun NumberPlaceView() {
                     .padding(8.dp)
             ) {
                 AppBarContent(
-                    viewModel,
                     { viewModel.deleteGame() },
                     viewModel::renewGame,
                     viewModel.getMaskingCount(),
@@ -201,7 +200,6 @@ private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.d
 
 @Composable
 private fun AppBarContent(
-    viewModel: NumberPlaceViewModel,
     deleteGame: () -> Unit,
     renewGame: () -> Unit,
     maskingCount: Int,
@@ -252,7 +250,6 @@ private fun AppBarContent(
                                 onClick = {
                                     setMaskingCount(count)
                                     closeMaskingCount()
-                                    viewModel.setMaskingCount(count)
                                     deleteGame()
                                     renewGame()
                                     //contentViewModel?.nextRoute("tool/number/place")
