@@ -50,9 +50,7 @@ fun RouletteToolTabView() {
             }
 
             Button(
-                {
-                    viewModel.roulette()
-                },
+                viewModel::roulette,
                 modifier = Modifier.padding(start = 8.dp)
             ) {
                 Text("Start")
