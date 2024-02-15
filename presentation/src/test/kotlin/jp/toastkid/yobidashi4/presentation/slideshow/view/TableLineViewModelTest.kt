@@ -35,7 +35,11 @@ class TableLineViewModelTest {
         subject.clickHeaderColumn(0)
         subject.clickHeaderColumn(2)
         subject.clickHeaderColumn(1)
+        subject.clickHeaderColumn(1)
         subject.clickHeaderColumn(0)
+        subject.clickHeaderColumn(0)
+        subject.clickHeaderColumn(0)
+        subject.clickHeaderColumn(2)
         subject.clickHeaderColumn(2)
     }
 
