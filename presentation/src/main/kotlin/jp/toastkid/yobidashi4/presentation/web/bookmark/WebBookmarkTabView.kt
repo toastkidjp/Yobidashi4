@@ -47,7 +47,7 @@ import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlin.io.path.absolutePathString
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun WebBookmarkTabView() {
     val viewModel = remember { WebBookmarkTabViewModel() }
