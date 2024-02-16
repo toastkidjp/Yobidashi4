@@ -240,7 +240,7 @@ private fun AppBarContent(
             )
             DropdownMenu(
                 openingMaskingCount,
-                onDismissRequest = { closeMaskingCount() }) {
+                onDismissRequest = closeMaskingCount) {
                 val lazyListState = rememberLazyListState()
                 Box(modifier = Modifier.width(100.dp).height(600.dp)) {
                     LazyColumn(state = lazyListState) {
