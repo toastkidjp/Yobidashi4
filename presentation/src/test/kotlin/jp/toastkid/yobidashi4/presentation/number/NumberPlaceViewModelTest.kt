@@ -6,6 +6,7 @@ import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
+import androidx.compose.ui.unit.dp
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -28,6 +29,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -401,6 +403,19 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.closeMaskingCount()
 
         assertFalse(numberPlaceViewModel.openingMaskingCount())
+    }
+
+    @Test
+    fun calculateThickness() {
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(0))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(1))
+        assertEquals(2.dp, numberPlaceViewModel.calculateThickness(2))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(3))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(4))
+        assertEquals(2.dp, numberPlaceViewModel.calculateThickness(5))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(6))
+        assertEquals(1.dp, numberPlaceViewModel.calculateThickness(7))
+        assertEquals(2.dp, numberPlaceViewModel.calculateThickness(8))
     }
 
 }
