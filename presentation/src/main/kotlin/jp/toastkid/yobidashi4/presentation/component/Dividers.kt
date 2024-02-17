@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -18,7 +17,7 @@ internal fun VerticalDivider(
     modifier: Modifier
 ) {
     Box(
-        modifier = modifier.heightIn(28.dp)
+        modifier = modifier
             .width(thickness)
             .background(color)
     )
