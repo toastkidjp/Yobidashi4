@@ -51,6 +51,13 @@ class CodeBlockViewModelTest {
     }
 
     @Test
+    fun lineNumberTexts() {
+        subject.onValueChange(TextFieldValue("test\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest"))
+
+        assertEquals(14, subject.lineNumberTexts().size)
+    }
+
+    @Test
     fun start() {
         subject.start("test")
 
