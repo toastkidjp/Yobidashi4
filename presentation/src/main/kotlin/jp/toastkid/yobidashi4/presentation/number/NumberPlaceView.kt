@@ -245,8 +245,10 @@ private fun AppBarContent(
                             }
                         }
                     }
-                    VerticalScrollbar(adapter = rememberScrollbarAdapter(lazyListState), modifier = Modifier.fillMaxHeight().align(
-                        Alignment.CenterEnd))
+                    VerticalScrollbar(
+                        adapter = rememberScrollbarAdapter(lazyListState),
+                        modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+                    )
                 }
             }
         }
