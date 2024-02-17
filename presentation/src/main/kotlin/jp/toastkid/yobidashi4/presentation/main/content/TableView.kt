@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -69,7 +71,7 @@ fun TableView(aggregationResult: AggregationResult) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         aggregationResult.header().forEachIndexed { index, item ->
                             if (index != 0) {
-                                VerticalDivider(modifier = Modifier.fillMaxHeight().padding(vertical = 1.dp))
+                                VerticalDivider(modifier = Modifier.height(32.dp).padding(vertical = 1.dp))
                             }
                             val headerCursorOn = remember { mutableStateOf(false) }
                             val headerColumnBackgroundColor = animateColorAsState(
@@ -147,7 +149,7 @@ fun TableView(aggregationResult: AggregationResult) {
 
                                 article.forEachIndexed { index, any ->
                                     if (index != 0) {
-                                        VerticalDivider(modifier = Modifier.fillMaxHeight().padding(vertical = 1.dp))
+                                        VerticalDivider(modifier = Modifier.heightIn(min = 36.dp).padding(vertical = 1.dp))
                                     }
                                     if (any is Collection<*>) {
                                         Column(modifier = Modifier.weight(1f)) {
