@@ -167,9 +167,7 @@ fun NumberPlaceView() {
             }
 
             DropdownMenuItem(
-                onClick = {
-                    viewModel.clear()
-                }
+                onClick = viewModel::clear
             ) {
                 Text("Clear")
             }
