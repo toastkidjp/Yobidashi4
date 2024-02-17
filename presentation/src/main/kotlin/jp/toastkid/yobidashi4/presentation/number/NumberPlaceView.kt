@@ -48,6 +48,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -86,13 +87,13 @@ fun NumberPlaceView() {
                     viewModel.fontSize()
                 )
 
-                HorizontalDivider(0)
+                Divider(thickness = viewModel.calculateThickness(0))
 
                 viewModel.masked().rows().forEachIndexed { rowIndex, row ->
                     Row(
                         modifier = Modifier.height(IntrinsicSize.Min)
                     ) {
-                        VerticalDivider(0)
+                        VerticalDivider(thickness = viewModel.calculateThickness(0), modifier = Modifier.height(44.dp))
 
                         row.forEachIndexed { columnIndex, cellValue ->
                             if (cellValue == -1) {
@@ -138,10 +139,10 @@ fun NumberPlaceView() {
                                 )
                             }
 
-                            VerticalDivider(columnIndex)
+                            VerticalDivider(thickness = viewModel.calculateThickness(columnIndex), modifier = Modifier.height(44.dp))
                         }
                     }
-                    HorizontalDivider(rowIndex)
+                    Divider(thickness = viewModel.calculateThickness(rowIndex))
                 }
             }
 
@@ -181,22 +182,6 @@ fun NumberPlaceView() {
         }
     })
 }
-
-@Composable
-private fun VerticalDivider(columnIndex: Int) {
-    Divider(
-        modifier = Modifier
-            .fillMaxHeight()
-            .width(calculateThickness(columnIndex))
-    )
-}
-
-@Composable
-private fun HorizontalDivider(rowIndex: Int) {
-    Divider(thickness = calculateThickness(rowIndex))
-}
-
-private fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.dp else 1.dp
 
 @Composable
 private fun AppBarContent(
