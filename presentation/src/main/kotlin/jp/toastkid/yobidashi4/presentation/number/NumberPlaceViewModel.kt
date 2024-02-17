@@ -15,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.number.NumberBoard
@@ -222,5 +223,7 @@ class NumberPlaceViewModel : KoinComponent {
     fun closeMaskingCount() {
         openMaskingCount.value = false
     }
+
+    fun calculateThickness(columnIndex: Int) = if (columnIndex % 3 == 2) 2.dp else 1.dp
 
 }
