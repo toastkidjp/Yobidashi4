@@ -146,7 +146,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override val tabs: SnapshotStateList<Tab> = _tabs
 
     override fun currentTab(): Tab? {
-        if (tabs.isEmpty() || selected.value < 0 || tabs.size <= selected.value) {
+        if (tabs.isEmpty()) {
             return null
         }
         return tabs.get(selected.value)
