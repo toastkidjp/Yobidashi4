@@ -176,9 +176,7 @@ internal fun AggregationBox() {
             )
 
             Button(
-                onClick = {
-                    viewModel.onSearch()
-                }
+                onClick = viewModel::onSearch
             ) {
                 Text("Start")
             }
