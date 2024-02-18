@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import org.koin.core.annotation.Single
 
-private val VALUE_DELIMITER = "\t"
+private const val VALUE_DELIMITER = "\t"
 
 @Single
 class WebHistoryFileStore : WebHistoryRepository {
