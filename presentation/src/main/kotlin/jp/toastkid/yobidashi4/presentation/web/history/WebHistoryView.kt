@@ -193,6 +193,17 @@ internal fun WebHistoryView() {
                                     modifier = Modifier.padding(8.dp).fillMaxSize()
                                 )
                             }
+                            DropdownMenuItem(
+                                onClick = {
+                                    viewModel.clear()
+                                    viewModel.closeDropdown()
+                                }
+                            ) {
+                                Text(
+                                    "Clear",
+                                    modifier = Modifier.padding(8.dp).fillMaxSize()
+                                )
+                            }
                         }
                     }
                 }

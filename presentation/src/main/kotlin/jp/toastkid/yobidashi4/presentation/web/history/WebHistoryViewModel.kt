@@ -122,4 +122,8 @@ class WebHistoryViewModel : KoinComponent {
         }
     }
 
+    fun clear() {
+        repository.clear()
+    }
+
 }
