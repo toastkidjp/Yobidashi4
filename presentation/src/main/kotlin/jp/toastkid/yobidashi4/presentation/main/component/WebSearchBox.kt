@@ -146,9 +146,7 @@ internal fun WebSearchBox() {
             )
 
             Button(
-                onClick = {
-                    viewModel.invokeSearch()
-                }
+                onClick = viewModel::invokeSearch
             ) {
                 Text("Search")
             }
