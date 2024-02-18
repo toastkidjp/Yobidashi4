@@ -9,8 +9,6 @@ import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import org.koin.core.annotation.Single
 
-private const val VALUE_DELIMITER = "\t"
-
 @Single
 class WebHistoryFileStore : WebHistoryRepository {
 
@@ -78,3 +76,5 @@ class WebHistoryFileStore : WebHistoryRepository {
 }
 
 private const val PATH_TO_HISTORY = "temporary/web/history.tsv"
+
+private const val VALUE_DELIMITER = "\t"
