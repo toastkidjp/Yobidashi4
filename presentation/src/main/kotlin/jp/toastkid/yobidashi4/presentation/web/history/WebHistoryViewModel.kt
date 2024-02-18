@@ -132,12 +132,11 @@ class WebHistoryViewModel : KoinComponent {
 
         viewModel.showSnackbar(
             "Done!",
-            "Undo",
-            {
-                repository.storeAll(current)
-                reloadItems()
-            }
-        )
+            "Undo"
+        ) {
+            repository.storeAll(current)
+            reloadItems()
+        }
     }
 
 }
