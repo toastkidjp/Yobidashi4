@@ -130,10 +130,7 @@ class WebHistoryViewModel : KoinComponent {
         list.clear()
         repository.clear()
 
-        viewModel.showSnackbar(
-            "Done!",
-            "Undo"
-        ) {
+        viewModel.showSnackbar("Done!", "Undo") {
             repository.storeAll(current)
             reloadItems()
         }
