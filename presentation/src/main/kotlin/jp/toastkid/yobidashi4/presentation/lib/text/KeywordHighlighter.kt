@@ -41,7 +41,7 @@ class KeywordHighlighter {
                 start = annotateStart,
                 end = annotateStart + title.length
             )
-            lastIndex = annotateStart + title.length
+            lastIndex = if (matcher.find()) annotateStart else endIndex + title.length
         }
 
         if (lastIndex >= text.length) {
