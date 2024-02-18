@@ -6,6 +6,8 @@ interface WebHistoryRepository {
 
     fun add(title: String, url: String)
 
+    fun storeAll(items: List<WebHistory>)
+
     fun delete(item: WebHistory)
 
     fun readAll(): List<WebHistory>
