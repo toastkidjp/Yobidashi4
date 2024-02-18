@@ -14,6 +14,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -283,6 +284,23 @@ class WebHistoryViewModelTest {
         subject.onPointerEvent(pointerEvent, bookmark)
 
         assertFalse(subject.openingDropdown(bookmark))
+    }
+
+    @Test
+    fun clear() {
+        every { repository.clear() } just Runs
+        every { repository.storeAll(any()) } just Runs
+        every { repository.readAll() } returns listOf()
+        val slot = slot<() -> Unit>()
+        every { viewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+
+        subject.clear()
+        slot.captured.invoke()
+
+        verify { repository.clear() }
+        verify { viewModel.showSnackbar(any(), any(), any()) }
+        verify { repository.storeAll(any()) }
+        verify { repository.readAll() }
     }
 
 }
