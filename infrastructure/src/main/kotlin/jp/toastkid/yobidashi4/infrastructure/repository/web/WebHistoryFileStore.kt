@@ -46,7 +46,8 @@ class WebHistoryFileStore : WebHistoryRepository {
 
         return BufferedReader(InputStreamReader(Files.newInputStream(path), StandardCharsets.UTF_8)).use { reader ->
             reader.readLines()
-                .filter { it.isNotBlank() }.map {
+                .filter { it.isNotBlank() }
+                .map {
                     val split = it.split("\t")
                     WebHistory(
                         split[0],
