@@ -9,6 +9,8 @@ import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import org.koin.core.annotation.Single
 
+private val VALUE_DELIMITER = "\t"
+
 @Single
 class WebHistoryFileStore : WebHistoryRepository {
 
@@ -48,7 +50,7 @@ class WebHistoryFileStore : WebHistoryRepository {
             reader.readLines()
                 .filter { it.isNotBlank() }
                 .map {
-                    val split = it.split("\t")
+                    val split = it.split(VALUE_DELIMITER)
                     WebHistory(
                         split[0],
                         if (split.size >= 2) split[1] else "",
