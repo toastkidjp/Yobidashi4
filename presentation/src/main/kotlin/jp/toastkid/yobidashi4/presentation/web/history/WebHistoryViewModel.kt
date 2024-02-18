@@ -123,7 +123,21 @@ class WebHistoryViewModel : KoinComponent {
     }
 
     fun clear() {
+        val current = mutableListOf<WebHistory>().also {
+            it.addAll(list)
+        }
+
+        list.clear()
         repository.clear()
+
+        viewModel.showSnackbar(
+            "Done!",
+            "Undo",
+            {
+                repository.storeAll(current)
+                reloadItems()
+            }
+        )
     }
 
 }
