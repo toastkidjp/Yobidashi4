@@ -42,7 +42,7 @@ class WebHistoryFileStoreTest {
         every { Files.exists(path) } returns true
         every { Files.exists(parent) } returns true
         every { Files.createDirectories(any()) } returns parent
-        every { Files.readAllLines(any()) } returns listOf("Yahoo! JAPAN Test\thttps://www.yahoo.co.jp\t\t")
+        every { Files.newInputStream(any()) } returns "Yahoo! JAPAN Test\thttps://www.yahoo.co.jp\t\t".byteInputStream()
     }
 
     @AfterEach
@@ -105,7 +105,7 @@ class WebHistoryFileStoreTest {
     @Test
     fun readAllWithInsufficientInput() {
         every { Files.exists(parent) } returns false
-        every { Files.readAllLines(any()) } returns listOf("Yahoo! JAPAN Test\thttps://www.yahoo.co.jp")
+        every { Files.newInputStream(any()) } returns "Yahoo! JAPAN Test\thttps://www.yahoo.co.jp".byteInputStream()
 
         val readAll = webHistoryFileStore.readAll()
 
@@ -121,7 +121,7 @@ class WebHistoryFileStoreTest {
     @Test
     fun readAllWithInsufficientInputOnlyTitleCase() {
         every { Files.exists(parent) } returns false
-        every { Files.readAllLines(any()) } returns listOf("Yahoo! JAPAN Test")
+        every { Files.newInputStream(any()) } returns "Yahoo! JAPAN Test".byteInputStream()
 
         val readAll = webHistoryFileStore.readAll()
 
@@ -163,4 +163,5 @@ class WebHistoryFileStoreTest {
 
         verify { Files.delete(any()) }
     }
+
 }
