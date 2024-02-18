@@ -60,9 +60,7 @@ fun RouletteToolTabView() {
                 viewModel.input(),
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 label = { Text("Base file name") },
-                onValueChange = {
-                    viewModel.onValueChange(it)
-                },
+                onValueChange = viewModel::onValueChange,
                 trailingIcon = {
                     Icon(
                         painterResource("images/icon/ic_clear_form.xml"),
