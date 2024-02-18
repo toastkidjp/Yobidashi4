@@ -1,5 +1,8 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.web
 
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
@@ -41,14 +44,17 @@ class WebHistoryFileStore : WebHistoryRepository {
             return emptyList()
         }
 
-        return Files.readAllLines(path).filter { it.isNotBlank() }.map {
-            val split = it.split("\t")
-            WebHistory(
-                split[0],
-                if (split.size >= 2) split[1] else "",
-                if (split.size >= 3) split[2].toLongOrNull() ?: 0 else 0,
-                if (split.size >= 4) split[3].toIntOrNull() ?: 0 else 0
-            )
+        return BufferedReader(InputStreamReader(Files.newInputStream(path), StandardCharsets.UTF_8)).use { reader ->
+            reader.readLines()
+                .filter { it.isNotBlank() }.map {
+                    val split = it.split("\t")
+                    WebHistory(
+                        split[0],
+                        if (split.size >= 2) split[1] else "",
+                        if (split.size >= 3) split[2].toLongOrNull() ?: 0 else 0,
+                        if (split.size >= 4) split[3].toIntOrNull() ?: 0 else 0
+                    )
+                }
         }
     }
 
