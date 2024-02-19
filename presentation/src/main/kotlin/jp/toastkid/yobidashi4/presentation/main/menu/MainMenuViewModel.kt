@@ -187,6 +187,22 @@ class MainMenuViewModel : KoinComponent {
         return viewModel.tabs.size
     }
 
+    fun makeTabIndexShortcut(index: Int): KeyShortcut {
+        return  KeyShortcut(when (index) {
+            1 -> Key.One
+            2 -> Key.Two
+            3 -> Key.Three
+            4 -> Key.Four
+            5 -> Key.Five
+            6 -> Key.Six
+            7 -> Key.Seven
+            8 -> Key.Eight
+            9 -> Key.Nine
+            10 -> Key.Zero
+            else -> Key.One
+        }, alt = true)
+    }
+
     fun setSelectedIndex(i: Int) {
         viewModel.setSelectedIndex(i)
     }
