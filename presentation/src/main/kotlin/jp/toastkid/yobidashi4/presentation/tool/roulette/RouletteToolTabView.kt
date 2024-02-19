@@ -41,9 +41,7 @@ fun RouletteToolTabView() {
                         painterResource("images/icon/ic_clipboard.xml"),
                         "Clip result",
                         Modifier
-                            .clickable {
-                                viewModel.clipResult()
-                            }
+                            .clickable(onClick = viewModel::clipResult)
                             .padding(start = 8.dp)
                     )
                 }
