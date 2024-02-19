@@ -527,6 +527,13 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun makeTabIndexShortcut() {
+        (1 .. 11).forEach {
+            assertNotNull(subject.makeTabIndexShortcut(it))
+        }
+    }
+
+    @Test
     fun setSelectedIndex() {
         every { mainViewModel.setSelectedIndex(any()) } just Runs
 
