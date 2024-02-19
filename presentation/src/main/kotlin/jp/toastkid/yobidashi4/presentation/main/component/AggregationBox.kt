@@ -122,9 +122,7 @@ internal fun AggregationBox() {
                         cursorColor = MaterialTheme.colors.secondary
                     ),
                     label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.onKeywordValueChange(it)
-                    },
+                    onValueChange = viewModel::onKeywordValueChange,
                     keyboardActions = KeyboardActions(
                         onSearch = {
                             viewModel.onSearch()
