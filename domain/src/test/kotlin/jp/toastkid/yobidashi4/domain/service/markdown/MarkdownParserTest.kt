@@ -86,9 +86,7 @@ println("Hello")
 | First | 422
 | Second | 123
 | Third | 3442
-| Tax | 121
-
-        """.split("\n").stream()
+| Tax | 121""".split("\n").stream()
     }
     
     @AfterEach
