@@ -153,9 +153,7 @@ internal fun AggregationBox() {
                     cursorColor = MaterialTheme.colors.secondary
                 ),
                 label = { Text("Article name filter", color = MaterialTheme.colors.secondary) },
-                onValueChange = {
-                    viewModel.onDateInputValueChange(it)
-                },
+                onValueChange = viewModel::onDateInputValueChange,
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         viewModel.onSearch()
