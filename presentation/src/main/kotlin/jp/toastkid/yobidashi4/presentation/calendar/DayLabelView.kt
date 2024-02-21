@@ -19,7 +19,9 @@ fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, label: String?, offDay: Boolea
     val viewModel = remember { DayLabelViewModel() }
 
     Surface(
-        color = if (today) MaterialTheme.colors.primary.copy(alpha = 0.5f) else if (offDay || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) Color.White.copy(alpha = 0.8f) else MaterialTheme.colors.surface,
+        color = if (today) MaterialTheme.colors.primary.copy(alpha = 0.5f)
+        else if (offDay || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) Color.White.copy(alpha = 0.8f)
+        else MaterialTheme.colors.surface,
         modifier = modifier
     ) {
         Column (
