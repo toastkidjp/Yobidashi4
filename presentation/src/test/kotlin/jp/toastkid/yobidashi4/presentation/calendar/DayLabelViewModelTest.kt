@@ -7,6 +7,7 @@ import io.mockk.unmockkAll
 import java.time.DayOfWeek
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -62,6 +63,15 @@ class DayLabelViewModelTest {
     @Test
     fun labelColor() {
         assertNotNull(subject.labelColor())
+    }
+
+    @Test
+    fun useOffDayBackground() {
+        assertTrue(subject.useOffDayBackground(true, DayOfWeek.SUNDAY))
+        assertTrue(subject.useOffDayBackground(true, DayOfWeek.MONDAY))
+        assertTrue(subject.useOffDayBackground(false, DayOfWeek.SATURDAY))
+        assertTrue(subject.useOffDayBackground(false, DayOfWeek.SUNDAY))
+        assertFalse(subject.useOffDayBackground(false, DayOfWeek.TUESDAY))
     }
 
 }
