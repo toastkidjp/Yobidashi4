@@ -56,7 +56,7 @@ fun CalendarView(tab: CalendarTab) {
                 calendarViewModel::openMonthChooser,
                 calendarViewModel::closeMonthChooser,
                 calendarViewModel::setYearInput,
-                { calendarViewModel.plusMonths(it) },
+                calendarViewModel::plusMonths,
                 { calendarViewModel.moveToCurrentMonth() },
                 calendarViewModel::moveMonth
             )
