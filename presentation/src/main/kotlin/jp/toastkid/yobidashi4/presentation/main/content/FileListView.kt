@@ -46,10 +46,7 @@ import androidx.compose.ui.unit.dp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.nameWithoutExtension
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -117,6 +114,10 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         cursorOn,
                         { viewModel.closeDropdown() },
                         { viewModel.items().filter { it.selected }.map { it.path } },
+                        { viewModel.openFile(it) },
+                        { viewModel.edit(fileListItem.path) },
+                        { viewModel.preview(fileListItem.path) },
+                        { viewModel.slideshow(fileListItem.path) },
                         modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
@@ -166,10 +167,12 @@ private fun FileListItemRow(
     cursorOn: Boolean,
     closeOption: () -> Unit,
     selectedFiles: () -> List<Path>,
+    openFile: (Path) -> Unit,
+    edit: () -> Unit,
+    preview: () -> Unit,
+    slideshow: () -> Unit,
     modifier: Modifier
 ) {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-
     Box(
         modifier = modifier
     ) {
@@ -200,7 +203,7 @@ private fun FileListItemRow(
             DropdownMenuItem(
                 onClick = {
                     selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                        viewModel.openFile(it)
+                        openFile(it)
                     }
                     closeOption()
                 }
@@ -214,9 +217,7 @@ private fun FileListItemRow(
             if (fileListItem.editable) {
                 DropdownMenuItem(
                     onClick = {
-                        selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                            viewModel.edit(it)
-                        }
+                        edit()
                         closeOption()
                     }
                 ) {
@@ -227,9 +228,7 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
-                        selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                            viewModel.openPreview(it)
-                        }
+                        preview()
                         closeOption()
                     }
                 ) {
@@ -240,7 +239,7 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
-                        viewModel.openFile(fileListItem.path)
+                        openFile(fileListItem.path)
                         closeOption()
                     }
                 ) {
@@ -251,7 +250,7 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
-                        viewModel.slideshow(fileListItem.path)
+                        slideshow()
                         closeOption()
                     }
                 ) {
