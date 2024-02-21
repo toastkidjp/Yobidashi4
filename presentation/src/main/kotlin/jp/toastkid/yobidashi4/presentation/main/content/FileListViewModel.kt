@@ -181,6 +181,28 @@ class FileListViewModel : KoinComponent {
         }
     }
 
+    fun openFile(path: Path) {
+        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(path) }.forEach {
+            viewModel.openFile(it)
+        }
+    }
+
+    fun edit(path: Path) {
+        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(path) }.forEach {
+            viewModel.edit(it)
+        }
+    }
+
+    fun preview(path: Path) {
+        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(path) }.forEach {
+            viewModel.openPreview(it)
+        }
+    }
+
+    fun slideshow(path: Path) {
+        viewModel.slideshow(path)
+    }
+
 }
 
 private val editableExtensions = setOf("md", "txt")
