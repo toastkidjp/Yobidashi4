@@ -430,4 +430,40 @@ class FileListViewModelTest {
         assertFalse(subject.openingDropdown(bookmark))
     }
 
+    @Test
+    fun openFile() {
+        every { mainViewModel.openFile(any()) } just Runs
+
+        subject.openFile(mockk())
+
+        verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun edit() {
+        every { mainViewModel.edit(any()) } just Runs
+
+        subject.edit(mockk())
+
+        verify { mainViewModel.edit(any()) }
+    }
+
+    @Test
+    fun preview() {
+        every { mainViewModel.openPreview(any()) } just Runs
+
+        subject.preview(mockk())
+
+        verify { mainViewModel.openPreview(any()) }
+    }
+
+    @Test
+    fun slideshow() {
+        every { mainViewModel.slideshow(any()) } just Runs
+
+        subject.slideshow(mockk())
+
+        verify { mainViewModel.slideshow(any()) }
+    }
+
 }
