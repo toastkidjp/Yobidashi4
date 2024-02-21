@@ -3,11 +3,6 @@ package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 class BlockQuotation {
 
     /**
-     * Line separator.
-     */
-    private val lineSeparator = "\n"
-
-    /**
      * Invoke quotation function.
      *
      * @param text Nullable [CharSequence]
@@ -23,3 +18,8 @@ class BlockQuotation {
         return if (text.endsWith(lineSeparator)) converted.plus(lineSeparator) else converted
     }
 }
+
+/**
+ * Line separator.
+ */
+private val lineSeparator = "\n"
