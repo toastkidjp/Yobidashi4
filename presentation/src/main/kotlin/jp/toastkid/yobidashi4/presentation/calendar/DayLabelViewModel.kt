@@ -25,6 +25,10 @@ class DayLabelViewModel {
         return OFF_DAY_FG
     }
 
+    fun useOffDayBackground(offDay: Boolean, dayOfWeek: DayOfWeek): Boolean {
+        return offDay || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY
+    }
+
 }
 
 private val OFF_DAY_FG:  Color = Color(220, 50, 55)
