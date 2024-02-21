@@ -9,6 +9,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.io.IOException
 import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +62,18 @@ class EditorTabFileStoreTest {
         verify { tab.closeable() }
         verify { tab.getContent() }
         verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
+    }
+
+    @Test
+    fun exceptionCase() {
+        every { Files.write(any(), any<ByteArray>()) } throws IOException()
+
+        subject.invoke(tab, Dispatchers.Unconfined)
+
+        verify { tab.closeable() }
+        verify { tab.getContent() }
+        verify { Files.write(any(), any<ByteArray>()) }
+        verify(inverse = true) { tab.setContent(any(), any()) }
     }
 
     @Test
