@@ -64,9 +64,7 @@ fun RouletteToolTabView() {
                         painterResource("images/icon/ic_clear_form.xml"),
                         contentDescription = "Clear input.",
                         tint = MaterialTheme.colors.primary,
-                        modifier = Modifier.clickable {
-                            viewModel.clearInput()
-                        }
+                        modifier = Modifier.clickable(onClick = viewModel::clearInput)
                     )
                 },
                 keyboardActions = KeyboardActions(
