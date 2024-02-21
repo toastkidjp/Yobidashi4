@@ -9,6 +9,7 @@ import io.mockk.unmockkAll
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
+import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
@@ -107,6 +108,23 @@ println("Hello")
             { assertEquals(2, lines.count { it is TableLine }) },
             { assertTrue(lines.any { it is ImageLine }) },
         )
+    }
+
+    @Test
+    fun endWithListLineCase() {
+        every { Files.lines(path) } returns """
+# Title
+First description
+
+## List
+- Aaron
+- Beck
+- Chief""".split("\n").stream()
+
+        val markdown = markdownParser.invoke(path)
+
+        assertTrue(markdown.lines().last() is ListLine)
+        assertEquals(4, markdown.lines().size)
     }
 
 }
