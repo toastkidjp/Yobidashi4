@@ -161,7 +161,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 private fun FileListItemRow(
     fileListItem: FileListItem,
     backgroundColor: Color,
