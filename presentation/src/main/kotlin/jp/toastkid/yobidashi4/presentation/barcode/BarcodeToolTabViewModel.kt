@@ -14,7 +14,13 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class BarcodeToolTabViewModel {
+class BarcodeToolTabViewModel : KoinComponent {
+
+    private val mainViewModel: MainViewModel by inject()
+
+    private val barcodeEncoder: BarcodeEncoder by inject()
+
+    private val barcodeDecoder: BarcodeDecoder by inject()
 
     private val lastBarcode = mutableStateOf<BufferedImage?>(null)
 
@@ -23,12 +29,6 @@ class BarcodeToolTabViewModel {
     private val decodeInput = mutableStateOf(TextFieldValue())
 
     private val decodeResult = mutableStateOf("")
-
-    private val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-
-    private val barcodeEncoder = object : KoinComponent { val it: BarcodeEncoder by inject() }.it
-
-    private val barcodeDecoder = object : KoinComponent { val it: BarcodeDecoder by inject() }.it
 
     fun barcodeImage() =
         lastBarcode.value?.toComposeImageBitmap()
