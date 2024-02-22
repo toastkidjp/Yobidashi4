@@ -26,4 +26,15 @@ class JapaneseOffDayFinderServiceTest {
         assertEquals(9, japaneseOffDayFinderService.invoke(2021, 8).firstOrNull()?.day)
         assertEquals(11, japaneseOffDayFinderService.invoke(2022, 8).firstOrNull()?.day)
     }
+
+    @Test
+    fun march() {
+        assertEquals(20, japaneseOffDayFinderService.invoke(2024, 3).first().day)
+    }
+
+    @Test
+    fun september() {
+        assertEquals(23, japaneseOffDayFinderService.invoke(2024, 9).first().day)
+    }
+
 }
