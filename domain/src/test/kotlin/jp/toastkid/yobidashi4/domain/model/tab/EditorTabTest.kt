@@ -54,6 +54,13 @@ class EditorTabTest {
     }
 
     @Test
+    fun titleWithEditingMark() {
+        editorTab.setContent("test2", false)
+
+        assertEquals("test * ", editorTab.title())
+    }
+
+    @Test
     fun closeable() {
         assertTrue(editorTab.closeable())
     }
