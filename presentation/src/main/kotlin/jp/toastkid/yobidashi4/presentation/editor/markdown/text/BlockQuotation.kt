@@ -22,4 +22,4 @@ class BlockQuotation {
 /**
  * Line separator.
  */
-private val lineSeparator = "\n"
+private const val lineSeparator = "\n"
