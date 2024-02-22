@@ -1,11 +1,16 @@
 package jp.toastkid.yobidashi4.domain.service.markdown
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
@@ -125,6 +130,17 @@ First description
 
         assertTrue(markdown.lines().last() is ListLine)
         assertEquals(4, markdown.lines().size)
+    }
+
+    @Test
+    fun exceptionCase() {
+        val ioException = mockk<IOException>()
+        every { ioException.printStackTrace() } just Runs
+        every { Files.lines(path) } throws ioException
+
+        markdownParser.invoke(path)
+
+        verify { ioException.printStackTrace() }
     }
 
 }
