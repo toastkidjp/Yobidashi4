@@ -28,8 +28,12 @@ fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, label: String?, offDay: Boolea
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.padding(vertical = 16.dp)
         ) {
-            Text(viewModel.makeText(date), fontSize = 16.sp, color = viewModel.textColor(dayOfWeek, offDay, today) ?: MaterialTheme.colors.onSurface,
-                modifier = Modifier.padding(bottom = 4.dp))
+            Text(
+                viewModel.makeText(date),
+                fontSize = 16.sp,
+                color = viewModel.textColor(dayOfWeek, offDay, today) ?: MaterialTheme.colors.onSurface,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
             Text(label ?: "", fontSize = viewModel.labelSize(label), color = viewModel.labelColor())
         }
     }
