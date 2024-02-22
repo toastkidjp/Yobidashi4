@@ -15,17 +15,20 @@ class EditorTabFileStore {
             return
         }
 
-        try {
-            CoroutineScope(dispatcher).launch {
-                val text = tab.getContent()
-                val textArray = text.toByteArray()
-                if (textArray.isNotEmpty()) {
-                    Files.write(tab.path, textArray)
-                }
-                tab.setContent(text, true)
+        CoroutineScope(dispatcher).launch {
+            val text = tab.getContent()
+            val textArray = text.toByteArray()
+
+            if (textArray.isEmpty()) {
+                return@launch
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
+
+            try {
+                Files.write(tab.path, textArray)
+                tab.setContent(text, true)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
     }
 
