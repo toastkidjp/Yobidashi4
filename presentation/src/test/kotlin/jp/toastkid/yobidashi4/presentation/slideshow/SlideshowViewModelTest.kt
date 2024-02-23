@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -172,6 +173,32 @@ class SlideshowViewModelTest {
                 )
 
                 verify { onEscapeKeyReleased.invoke() }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun otherKeyEvent() {
+        runDesktopComposeUiTest {
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onKeyEvent(
+                    coroutineScope,
+                    KeyEvent(
+                        java.awt.event.KeyEvent(
+                            mockk(),
+                            java.awt.event.KeyEvent.KEY_PRESSED,
+                            1,
+                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                            java.awt.event.KeyEvent.VK_ESCAPE,
+                            'A'
+                        )
+                    ),
+                    mockk()
+                )
+
+                assertFalse(consumed)
             }
         }
     }
