@@ -7,23 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
 import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
 
 class SlideshowWindow {
-
-    fun show(path: Path, exitApplicationOnCloseRequest: Boolean = true) {
-        application(false) {
-            openWindow(path, {
-                if (exitApplicationOnCloseRequest) {
-                    exitApplication()
-                }
-            })
-        }
-    }
 
     @Composable
     fun openWindow(
