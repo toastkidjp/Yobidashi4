@@ -89,6 +89,10 @@ class EditorTabTest {
         editorTab.switchPreview()
 
         assertTrue(editorTab.showPreview())
+
+        editorTab.switchPreview()
+
+        assertFalse(editorTab.showPreview())
     }
 
     @Test
