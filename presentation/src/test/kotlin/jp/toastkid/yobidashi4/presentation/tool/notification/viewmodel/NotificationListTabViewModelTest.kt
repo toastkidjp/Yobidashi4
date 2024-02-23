@@ -47,6 +47,8 @@ class NotificationListTabViewModelTest {
 
     @BeforeEach
     fun setUp() {
+        MockKAnnotations.init(this)
+
         startKoin {
             modules(
                 module {
@@ -57,7 +59,6 @@ class NotificationListTabViewModelTest {
             )
         }
 
-        MockKAnnotations.init(this)
         every { mainViewModel.showSnackbar(any()) } just Runs
 
         subject = NotificationListTabViewModel()
