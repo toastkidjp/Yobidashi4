@@ -20,6 +20,8 @@ import org.koin.core.component.inject
 
 class NotificationListTabViewModel : KoinComponent {
 
+    private val notification: ScheduledNotification by inject()
+
     private val focusRequester = FocusRequester()
     fun focusRequester() = focusRequester
 
@@ -51,7 +53,7 @@ class NotificationListTabViewModel : KoinComponent {
         mainViewModel
             .showSnackbar("Update notification event.", "Reload") {
                 CoroutineScope(Dispatchers.IO).launch {
-                    object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
+                    notification.start()
                 }
             }
     }
