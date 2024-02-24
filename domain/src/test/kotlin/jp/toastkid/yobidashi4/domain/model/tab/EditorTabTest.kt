@@ -110,6 +110,11 @@ class EditorTabTest {
     }
 
     @Test
+    fun attemptToSetNull() {
+        editorTab.setContent(null, false)
+    }
+
+    @Test
     fun iconPath() {
         assertTrue(editorTab.iconPath().startsWith("images/icon/"))
     }
