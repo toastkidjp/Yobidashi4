@@ -32,6 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -282,6 +283,15 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         tabs.set(indexOf, CalendarTab(year, month))
+    }
+
+    override fun updateScrollableTab(tab: ScrollableContentTab, scrollPosition: Int) {
+        val indexOf = tabs.indexOf(tab)
+        if (indexOf == -1) {
+            return
+        }
+
+        tabs.set(indexOf, tab.withNewPosition(scrollPosition))
     }
 
     override fun closeCurrent() {
