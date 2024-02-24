@@ -23,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
@@ -49,7 +51,7 @@ import kotlin.io.path.absolutePathString
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun WebBookmarkTabView() {
+internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
     val viewModel = remember { WebBookmarkTabViewModel() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -106,8 +108,13 @@ internal fun WebBookmarkTabView() {
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
 
-            LaunchedEffect(Unit) {
-                viewModel.launch()
+            LaunchedEffect(tab) {
+                viewModel.launch(coroutineScope, tab.scrollPosition())
+            }
+            DisposableEffect(tab) {
+                onDispose {
+                    viewModel.update(tab)
+                }
             }
         }
     }

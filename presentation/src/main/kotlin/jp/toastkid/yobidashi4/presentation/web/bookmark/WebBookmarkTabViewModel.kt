@@ -9,11 +9,13 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
+import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -40,9 +42,12 @@ class WebBookmarkTabViewModel : KoinComponent {
     fun scrollAction(coroutineScope: CoroutineScope, key: Key, controlDown: Boolean) =
         scrollAction.invoke(coroutineScope, key, controlDown)
 
-    fun launch() {
+    fun launch(coroutineScope: CoroutineScope, scrollPosition: Int) {
         repository.list().forEach { bookmarks.add(it) }
         focusRequester().requestFocus()
+        coroutineScope.launch {
+            state.scrollToItem(scrollPosition)
+        }
     }
 
     fun delete(bookmark: Bookmark) {
@@ -78,6 +83,10 @@ class WebBookmarkTabViewModel : KoinComponent {
         ) {
             openDropdown(bookmark)
         }
+    }
+
+    fun update(tab: WebBookmarkTab) {
+        viewModel.updateScrollableTab(tab, state.firstVisibleItemIndex)
     }
 
 }
