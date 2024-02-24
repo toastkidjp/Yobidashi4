@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -143,6 +144,20 @@ class EditorTabTest {
 
         verify { Files.readString(any()) }
         assertEquals("Test strings is good.", editorTab.getContent())
+    }
+
+    @Test
+    fun checkGuard() {
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            editorTab.update().collect {
+                fail("Never be called this line in this test case.")
+            }
+        }
+
+        editorTab.setContent("test", false)
+        editorTab.setContent("test", false)
+
+        job.cancel()
     }
 
 }
