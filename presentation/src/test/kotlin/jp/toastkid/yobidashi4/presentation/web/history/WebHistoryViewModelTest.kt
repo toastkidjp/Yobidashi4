@@ -19,6 +19,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
@@ -110,8 +111,10 @@ class WebHistoryViewModelTest {
                 1697462064797
             )
         )
+        val tab = mockk<WebHistoryTab>()
+        every { tab.scrollPosition() } returns 0
 
-        subject.launch()
+        subject.launch(CoroutineScope(Dispatchers.Unconfined), tab)
 
         verify { repository.readAll() }
         assertEquals(2, subject.list().size)
