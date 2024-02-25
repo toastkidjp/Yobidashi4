@@ -7,6 +7,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -19,6 +20,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -81,6 +83,26 @@ class MarkdownPreviewViewModelTest {
                 assertTrue(consumed)
             }
         }
+    }
+
+    @Test
+    fun noopOnKeyEventWithWebSearchShortcutWithKeyPressed() {
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_O,
+                    '-'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        verify { mainViewModel wasNot called }
     }
 
     @Test
