@@ -10,6 +10,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
@@ -27,13 +28,19 @@ class WebBookmarkTabViewKtTest {
     @MockK
     private lateinit var repository: BookmarkRepository
 
+    @MockK
+    private lateinit var mainViewModel: MainViewModel
+
+    @MockK
+    private lateinit var webBookmarkTab: WebBookmarkTab
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
         startKoin {
             modules(
                 module {
-                    single(qualifier = null) { mockk<MainViewModel>() } bind (MainViewModel::class)
+                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
                     single(qualifier = null) { repository } bind (BookmarkRepository::class)
                 }
             )
@@ -43,6 +50,9 @@ class WebBookmarkTabViewKtTest {
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
         every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
         every { anyConstructed<WebIcon>().find(any()) } returns null
+        every { webBookmarkTab.scrollPosition() } returns 0
+        every { webBookmarkTab.withNewPosition(any()) } returns mockk()
+        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
     }
 
     @AfterEach
@@ -56,7 +66,7 @@ class WebBookmarkTabViewKtTest {
     fun webBookmarkTabView() {
         runDesktopComposeUiTest {
             setContent {
-                WebBookmarkTabView()
+                WebBookmarkTabView(webBookmarkTab)
             }
         }
     }
@@ -69,7 +79,7 @@ class WebBookmarkTabViewKtTest {
 
         runDesktopComposeUiTest {
             setContent {
-                WebBookmarkTabView()
+                WebBookmarkTabView(webBookmarkTab)
             }
         }
     }
