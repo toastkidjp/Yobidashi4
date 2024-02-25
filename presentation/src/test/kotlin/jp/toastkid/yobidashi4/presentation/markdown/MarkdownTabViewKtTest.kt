@@ -1,12 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import java.nio.file.Files
@@ -94,7 +95,7 @@ println("Hello")
         every { tab.markdown() } returns MarkdownParser().invoke(path)
         every { tab.scrollPosition() } returns 0
         every { mainViewModel.finderFlow() } returns emptyFlow()
-        every { mainViewModel.tabs } returns mutableStateListOf()
+        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
 
         startKoin {
             modules(
