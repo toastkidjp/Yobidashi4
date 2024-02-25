@@ -973,9 +973,10 @@ class MainViewModelImplementationTest {
         subject.onFindInputChange(TextFieldValue("test"))
         val countDownLatch = CountDownLatch(1)
         val job = CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.finderFlow().collectLatest {
-                assertSame(it, FindOrder.EMPTY)
-                countDownLatch.countDown()
+            subject.finderFlow().collect {
+                if (it == FindOrder.EMPTY) {
+                    countDownLatch.countDown()
+                }
             }
         }
         subject.switchFind()
@@ -983,6 +984,7 @@ class MainViewModelImplementationTest {
         assertTrue(subject.inputValue().text.isEmpty())
         job.cancel()
         countDownLatch.await(1, TimeUnit.SECONDS)
+        assertEquals(0, countDownLatch.count)
     }
 
     @Test
