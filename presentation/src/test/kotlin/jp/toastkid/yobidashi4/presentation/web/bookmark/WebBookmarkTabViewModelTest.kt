@@ -219,4 +219,13 @@ class WebBookmarkTabViewModelTest {
         assertFalse(subject.openingDropdown(bookmark))
     }
 
+    @Test
+    fun update() {
+        every { viewModel.updateScrollableTab(any(), any()) } just Runs
+
+        subject.update(mockk())
+
+        verify { viewModel.updateScrollableTab(any(), any()) }
+    }
+
 }
