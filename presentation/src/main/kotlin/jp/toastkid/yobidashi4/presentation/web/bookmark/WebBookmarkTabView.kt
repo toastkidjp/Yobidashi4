@@ -24,7 +24,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -108,10 +107,9 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
 
-            LaunchedEffect(tab) {
-                viewModel.launch(coroutineScope, tab.scrollPosition())
-            }
             DisposableEffect(tab) {
+                viewModel.launch(coroutineScope, tab.scrollPosition())
+
                 onDispose {
                     viewModel.update(tab)
                 }
