@@ -23,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,12 +42,13 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-internal fun WebHistoryView() {
+internal fun WebHistoryView(tab: WebHistoryTab) {
     val viewModel = remember { WebHistoryViewModel() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -214,8 +216,13 @@ internal fun WebHistoryView() {
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
 
-            LaunchedEffect(Unit) {
-                viewModel.launch()
+            LaunchedEffect(tab) {
+                viewModel.launch(coroutineScope, tab)
+            }
+            DisposableEffect(tab) {
+                onDispose {
+                    viewModel.onDispose(tab)
+                }
             }
         }
     }
