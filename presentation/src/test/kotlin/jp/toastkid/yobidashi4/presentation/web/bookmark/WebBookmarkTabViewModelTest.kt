@@ -89,7 +89,7 @@ class WebBookmarkTabViewModelTest {
         every { focusRequester.requestFocus() } just Runs
         every { repository.list() } returns listOf(mockk(), mockk())
 
-        subject.launch()
+        subject.launch(CoroutineScope(Dispatchers.Unconfined), 20)
 
         verify { repository.list() }
         assertEquals(2, subject.bookmarks().size)
