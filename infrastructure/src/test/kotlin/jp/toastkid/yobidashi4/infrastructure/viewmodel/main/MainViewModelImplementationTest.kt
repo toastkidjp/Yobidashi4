@@ -1047,7 +1047,7 @@ class MainViewModelImplementationTest {
             }
         }
 
-        subject.findUp()
+        subject.findDown()
 
         countDownLatch.await(1, TimeUnit.SECONDS)
         job.cancel()
