@@ -175,7 +175,7 @@ internal fun TabsView(modifier: Modifier) {
             is RouletteToolTab -> RouletteToolTabView()
             is WebTab -> WebTabView(currentTab)
             is WebBookmarkTab -> WebBookmarkTabView(currentTab)
-            is WebHistoryTab -> WebHistoryView()
+            is WebHistoryTab -> WebHistoryView(currentTab)
             is NumberPlaceGameTab -> NumberPlaceView()
             is LoanCalculatorTab -> LoanCalculatorView()
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
