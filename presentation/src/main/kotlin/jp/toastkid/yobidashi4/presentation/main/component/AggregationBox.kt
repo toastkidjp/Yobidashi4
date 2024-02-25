@@ -161,9 +161,7 @@ internal fun AggregationBox() {
                         painterResource("images/icon/ic_clear_form.xml"),
                         contentDescription = "Clear input.",
                         tint = MaterialTheme.colors.secondary,
-                        modifier = Modifier.clickable {
-                            viewModel.clearDateInput()
-                        }
+                        modifier = Modifier.clickable(onClick = viewModel::clearDateInput)
                     )
                 },
                 modifier = viewModel.dateInputModifier()
