@@ -44,7 +44,9 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
@@ -577,6 +579,27 @@ class MainViewModelImplementationTest {
     @Test
     fun noopUpdateCalendarTab() {
         subject.updateCalendarTab(mockk(), 2024, 2)
+
+        assertTrue(subject.tabs.isEmpty())
+    }
+
+    @Test
+    fun updateScrollableTab() {
+        val tab = mockk<WebBookmarkTab>()
+        val newTab = mockk<WebBookmarkTab>()
+        every { tab.withNewPosition(any()) } returns newTab
+        subject.openTab(tab)
+
+        subject.updateScrollableTab(tab, 20)
+
+        val updatedTab = subject.tabs[0] as ScrollableContentTab
+        verify { tab.withNewPosition(any()) }
+        assertSame(newTab, updatedTab)
+    }
+
+    @Test
+    fun noopUpdateScrollableTab() {
+        subject.updateScrollableTab(mockk(), 20)
 
         assertTrue(subject.tabs.isEmpty())
     }
