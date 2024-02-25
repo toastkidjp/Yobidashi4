@@ -11,13 +11,14 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,6 +46,9 @@ class MarkdownPreviewViewModelTest {
         }
         every { mainViewModel.webSearch(any()) } just Runs
         every { mainViewModel.selectedText() } returns "test"
+
+        mockkConstructor(KeywordHighlighter::class)
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns mockk()
 
         subject = MarkdownPreviewViewModel(ScrollState(0))
     }
@@ -102,26 +106,9 @@ class MarkdownPreviewViewModelTest {
 
     @Test
     fun annotate() {
-        val annotate = subject.annotate("It longs to ~~make~~ it.", "long")
+        subject.annotate("It longs to ~~make~~ it.", "long")
 
-        assertEquals(2, annotate.spanStyles.size)
-        assertEquals("It longs to make it.", annotate.text)
-    }
-
-    @Test
-    fun annotate2() {
-        val annotate = subject.annotate("It **longs** to make it.", "long")
-
-        assertEquals(2, annotate.spanStyles.size)
-        assertEquals("It longs to make it.", annotate.text)
-    }
-
-    @Test
-    fun annotate3() {
-        val annotate = subject.annotate("It longs ***to*** make it.", "long")
-
-        assertEquals(2, annotate.spanStyles.size)
-        assertEquals("It longs to make it.", annotate.text)
+        verify { anyConstructed<KeywordHighlighter>().invoke(any(), any()) }
     }
 
 }
