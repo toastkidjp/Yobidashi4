@@ -3,8 +3,10 @@ package jp.toastkid.yobidashi4.presentation.web.history
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -39,6 +41,9 @@ class WebHistoryViewKtTest {
         every { repository.readAll() } returns listOf(WebHistory("test", "https://www.yahoo.co.jp"))
         mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
+        mockkConstructor(WebHistoryViewModel::class)
+        every { anyConstructed<WebHistoryViewModel>().launch(any(), any()) } just Runs
+        every { anyConstructed<WebHistoryViewModel>().onDispose(any()) } just Runs
     }
 
     @AfterEach
@@ -52,7 +57,7 @@ class WebHistoryViewKtTest {
     fun webHistoryView() {
         runDesktopComposeUiTest {
             setContent {
-                WebHistoryView()
+                WebHistoryView(mockk())
             }
         }
     }
@@ -60,12 +65,11 @@ class WebHistoryViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun useDropdown() {
-        mockkConstructor(WebHistoryViewModel::class)
         every { anyConstructed<WebHistoryViewModel>().openingDropdown(any()) } returns true
 
         runDesktopComposeUiTest {
             setContent {
-                WebHistoryView()
+                WebHistoryView(mockk())
             }
         }
     }
