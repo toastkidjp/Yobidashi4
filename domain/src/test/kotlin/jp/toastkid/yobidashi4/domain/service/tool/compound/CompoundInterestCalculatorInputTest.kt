@@ -11,6 +11,7 @@ class CompoundInterestCalculatorInputTest {
         assertNull(CompoundInterestCalculatorInput.from("", null, null, null))
         assertNull(CompoundInterestCalculatorInput.from("", "", null, null))
         assertNull(CompoundInterestCalculatorInput.from("", "", "", null))
+        assertNull(CompoundInterestCalculatorInput.from("", "", "", ""))
     }
 
 }
