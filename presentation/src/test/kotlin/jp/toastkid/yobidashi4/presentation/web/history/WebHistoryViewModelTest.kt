@@ -306,4 +306,13 @@ class WebHistoryViewModelTest {
         verify { repository.readAll() }
     }
 
+    @Test
+    fun onDispose() {
+        every { viewModel.updateScrollableTab(any(), any()) } just Runs
+
+        subject.onDispose(mockk())
+
+        verify { viewModel.updateScrollableTab(any(), any()) }
+    }
+
 }
