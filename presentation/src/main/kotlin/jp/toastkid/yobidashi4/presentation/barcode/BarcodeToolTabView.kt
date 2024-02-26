@@ -62,9 +62,7 @@ internal fun BarcodeToolTabView() {
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 label = { Text("Barcode image URL", color = MaterialTheme.colors.secondary) },
                 textStyle = TextStyle(fontSize = 16.sp),
-                onValueChange = {
-                    viewModel.setDecodeInputValue(it)
-                },
+                onValueChange = viewModel::setDecodeInputValue,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
