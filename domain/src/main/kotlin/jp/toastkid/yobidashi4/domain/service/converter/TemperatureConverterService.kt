@@ -41,11 +41,13 @@ class TemperatureConverterService : TwoStringConverterService {
     }
 
     override fun firstInputAction(input: String): String? {
-        return fToC(input.toDoubleOrNull() ?: 0.0).toString()
+        val parsed = input.toDoubleOrNull() ?: return null
+        return fToC( parsed).toString()
     }
 
     override fun secondInputAction(input: String): String? {
-        return cToF(input.toDoubleOrNull() ?: 0.0).toString()
+        val parsed = input.toDoubleOrNull() ?: return null
+        return cToF(parsed).toString()
     }
 
 }
