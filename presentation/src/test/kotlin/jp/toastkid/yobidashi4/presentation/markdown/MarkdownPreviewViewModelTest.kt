@@ -127,6 +127,26 @@ class MarkdownPreviewViewModelTest {
     }
 
     @Test
+    fun elseCaseOnKeyEventWithWebSearchShortcut() {
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_RELEASED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_Q,
+                    '-'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        verify { mainViewModel wasNot called }
+    }
+
+    @Test
     fun annotate() {
         subject.annotate("It longs to ~~make~~ it.", "long")
 
