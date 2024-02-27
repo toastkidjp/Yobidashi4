@@ -4,7 +4,7 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 class ScheduledNotificationTest {
@@ -20,7 +20,7 @@ class ScheduledNotificationTest {
         runBlocking {
             subject.start()
         }
-        Assertions.assertNotNull(subject)
+        assertNotNull(subject)
     }
 
 }
