@@ -59,7 +59,8 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile>() {
-        kotlinOptions.jvmTarget = org.jetbrains.kotlin.config.JvmTarget.JVM_11.description
+        kotlinOptions.jvmTarget = org.jetbrains.kotlin.config.JvmTarget.JVM_17.description
+        kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=all")
     }
 
     tasks.test {
