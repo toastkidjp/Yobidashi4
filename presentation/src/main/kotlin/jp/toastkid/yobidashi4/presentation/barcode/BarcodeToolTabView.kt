@@ -36,9 +36,7 @@ internal fun BarcodeToolTabView() {
                     it,
                     "Generated barcode",
                     modifier = Modifier.sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
-                        .clickable {
-                            viewModel.onClickImage()
-                        }
+                        .clickable(onClick = viewModel::onClickImage)
                 )
             }
 
