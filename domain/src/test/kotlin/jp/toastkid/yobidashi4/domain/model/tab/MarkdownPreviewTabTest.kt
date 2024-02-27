@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -60,6 +61,14 @@ class MarkdownPreviewTabTest {
         tab.setScrollPosition(10)
 
         assertEquals(10, tab.scrollPosition())
+    }
+
+    @Test
+    fun withNewPosition() {
+        val withNewPosition = tab.withNewPosition(20)
+
+        assertNotSame(withNewPosition, tab)
+        assertEquals(20, withNewPosition.scrollPosition())
     }
 
     @Test
