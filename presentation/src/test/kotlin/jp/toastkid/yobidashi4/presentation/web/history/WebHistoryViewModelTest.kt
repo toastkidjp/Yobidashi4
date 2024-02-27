@@ -309,10 +309,11 @@ class WebHistoryViewModelTest {
     @Test
     fun onDispose() {
         every { viewModel.updateScrollableTab(any(), any()) } just Runs
+        val tab = mockk<WebHistoryTab>()
 
-        subject.onDispose(mockk())
+        subject.onDispose(tab)
 
-        verify { viewModel.updateScrollableTab(any(), any()) }
+        verify { viewModel.updateScrollableTab(tab, any()) }
     }
 
 }
