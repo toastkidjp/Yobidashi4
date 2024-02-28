@@ -67,7 +67,7 @@ class WebHistoryViewModel : KoinComponent {
         repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach { list.add(it) }
     }
 
-    fun list() = list
+    fun list(): List<WebHistory> = list
 
     fun openUrl(url: String, onBackground: Boolean) {
         viewModel.openUrl(url, onBackground)
