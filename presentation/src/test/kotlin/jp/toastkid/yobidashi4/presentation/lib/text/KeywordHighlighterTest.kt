@@ -37,4 +37,12 @@ class KeywordHighlighterTest {
         Assertions.assertEquals("It longs to make it.", annotate.text)
     }
 
+    @Test
+    fun noopWithNull() {
+        val annotate = subject.invoke("It longs to ~~make~~ it.", null)
+
+        Assertions.assertEquals(1, annotate.spanStyles.size)
+        Assertions.assertEquals("It longs to make it.", annotate.text)
+    }
+
 }
