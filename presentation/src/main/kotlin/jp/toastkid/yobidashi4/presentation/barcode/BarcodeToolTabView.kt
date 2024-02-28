@@ -70,9 +70,7 @@ internal fun BarcodeToolTabView() {
                 ) {
                     Text(
                         viewModel.decodeResult(),
-                        modifier = Modifier.clickable {
-                            viewModel.onClickDecodeResult()
-                        }
+                        modifier = Modifier.clickable(onClick = viewModel::onClickDecodeResult)
                     )
                 }
             }
