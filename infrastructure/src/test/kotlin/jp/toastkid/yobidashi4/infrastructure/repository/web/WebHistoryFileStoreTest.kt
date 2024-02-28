@@ -155,15 +155,18 @@ class WebHistoryFileStoreTest {
     @Test
     fun readAllWithContainingBlankLineCase() {
         every { Files.exists(parent) } returns false
-        every { Files.readAllLines(any()) } returns listOf(
+        every { Files.newInputStream(any()) } returns listOf(
             "   ",
             "",
-            "Yahoo! JAPAN Test\thttps://www.yahoo.co.jp"
-        )
+            "Yahoo! JAPAN Test\thttps://www.yahoo.co.jp",
+            "Yahoo! JAPAN Test2\thttps://www.yahoo.co.jp\t1\t2",
+            "Yahoo! JAPAN Test3\thttps://www.yahoo.co.jp\t\t",
+            "Yahoo! JAPAN Test4\thttps://www.yahoo.co.jp\t",
+        ).joinToString("\n").byteInputStream()
 
         val readAll = webHistoryFileStore.readAll()
 
-        assertEquals(1, readAll.size)
+        assertEquals(4, readAll.size)
         verify(exactly = 1) { Files.exists(parent) }
         verify(exactly = 1) { Files.createDirectories(any()) }
         readAll.first().also {
