@@ -203,6 +203,18 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun loadBackgroundImageIfUseBackgroundReturnsFalse() {
+        assertNotNull(subject.backgroundImage())
+
+        every { setting.useBackground() } returns false
+        every { Files.exists(any()) } returns true
+
+        subject.loadBackgroundImage()
+
+        verify(inverse = true) { Files.exists(any()) }
+    }
+
+    @Test
     fun switchUseBackground() {
         every { setting.switchUseBackground() } just Runs
         every { setting.useBackground() } returns true
