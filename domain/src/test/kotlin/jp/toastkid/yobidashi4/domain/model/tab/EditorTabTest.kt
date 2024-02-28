@@ -67,7 +67,7 @@ class EditorTabTest {
     }
 
     @Test
-    fun test() {
+    fun callingUpdate() {
         val countDownLatch = CountDownLatch(1)
         val job = CoroutineScope(Dispatchers.Unconfined).launch {
             editorTab.update().collect {
