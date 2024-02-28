@@ -80,9 +80,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                             viewModel.delete(bookmark)
                         },
                         viewModel.openingDropdown(bookmark),
-                        {
-                            viewModel.closeDropdown()
-                        },
+                        viewModel::closeDropdown,
                         Modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
