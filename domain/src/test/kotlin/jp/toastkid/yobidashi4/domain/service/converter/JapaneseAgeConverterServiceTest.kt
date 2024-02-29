@@ -58,14 +58,18 @@ class JapaneseAgeConverterServiceTest {
 
     @Test
     fun firstInputAction() {
-        assertNull(japaneseAgeConverterService.firstInputAction("大正"))
-        assertNull(japaneseAgeConverterService.firstInputAction("1984"))
-        assertNull(japaneseAgeConverterService.firstInputAction("大正浪漫"))
         assertEquals("35", japaneseAgeConverterService.firstInputAction("昭和63"))
         assertEquals("33", japaneseAgeConverterService.firstInputAction("平成2"))
         assertEquals("4", japaneseAgeConverterService.firstInputAction("令和1"))
         assertEquals("113", japaneseAgeConverterService.firstInputAction("明治43"))
         assertEquals("99", japaneseAgeConverterService.firstInputAction("大正13"))
+    }
+
+    @Test
+    fun firstInputActionIrregularCase() {
+        assertNull(japaneseAgeConverterService.firstInputAction("大正"))
+        assertNull(japaneseAgeConverterService.firstInputAction("1984"))
+        assertNull(japaneseAgeConverterService.firstInputAction("大正浪漫"))
     }
 
     @Test
