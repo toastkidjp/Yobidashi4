@@ -499,6 +499,15 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun openUrlWithHttpUrl() {
+        subject.openTab(mockk())
+
+        subject.openUrl("http://www.yahoo.co.jp", false)
+
+        assertTrue(subject.currentTab() is WebTab)
+    }
+
+    @Test
     fun noopOpenUrl() {
         subject.openUrl("ftp://www.yahoo.co.jp", false)
 
@@ -510,6 +519,15 @@ class MainViewModelImplementationTest {
         subject.openTab(mockk())
 
         subject.openUrl("https://www.yahoo.co.jp", true)
+
+        assertFalse(subject.currentTab() is WebTab)
+    }
+
+    @Test
+    fun openUrlOnBackgroundWithHttpUrl() {
+        subject.openTab(mockk())
+
+        subject.openUrl("http://www.yahoo.co.jp", true)
 
         assertFalse(subject.currentTab() is WebTab)
     }
