@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import java.util.regex.Pattern
+import kotlin.math.min
 
 class KeywordHighlighter {
 
@@ -41,7 +42,7 @@ class KeywordHighlighter {
                 start = annotateStart,
                 end = annotateStart + title.length
             )
-            lastIndex = if (matcher.find()) annotateStart else endIndex + title.length
+            lastIndex = if (matcher.find()) annotateStart else endIndex
         }
 
         if (lastIndex >= text.length) {
@@ -51,7 +52,8 @@ class KeywordHighlighter {
         appendStyleIfNeed(text, lastIndex)
 
         if (!finderTarget.isNullOrBlank()) {
-            val finderMatcher = Pattern.compile(finderTarget).matcher(text)
+            val buildString = toAnnotatedString().text
+            val finderMatcher = Pattern.compile(finderTarget).matcher(buildString)
             while (finderMatcher.find()) {
                 addStyle(
                     style = SpanStyle(
@@ -64,10 +66,11 @@ class KeywordHighlighter {
     }
 
     private fun AnnotatedString.Builder.appendStyleIfNeed(text: String, lastIndex: Int) {
+        val end = min(lastIndex, text.length)
         if (text.contains("~~")) {
             applyStylePattern(
                 text,
-                lastIndex,
+                end,
                 lineThroughPattern,
                 "~~",
                 SpanStyle(textDecoration = TextDecoration.LineThrough)
@@ -76,16 +79,16 @@ class KeywordHighlighter {
         }
 
         if (text.contains("***")) {
-            applyStylePattern(text, lastIndex, italicPattern, "***", SpanStyle(fontStyle = FontStyle.Italic))
+            applyStylePattern(text, end, italicPattern, "***", SpanStyle(fontStyle = FontStyle.Italic))
             return
         }
 
         if (text.contains("**")) {
-            applyStylePattern(text, lastIndex, boldingPattern, "**", SpanStyle(fontWeight = FontWeight.Bold))
+            applyStylePattern(text, end, boldingPattern, "**", SpanStyle(fontWeight = FontWeight.Bold))
             return
         }
 
-        append(text.substring(lastIndex, text.length))
+        append(text.substring(end))
     }
 
     private fun AnnotatedString.Builder.applyStylePattern(
@@ -96,7 +99,7 @@ class KeywordHighlighter {
         spanStyle: SpanStyle
     ) {
         val m = pattern.matcher(text)
-        append(text.substring(lastIndex, text.length).replace(replacementTarget, ""))
+        append(text.substring(lastIndex).replace(replacementTarget, ""))
         val offset = replacementTarget.length * 2
         m.results().toList().forEachIndexed { index, matchResult ->
             addStyle(
