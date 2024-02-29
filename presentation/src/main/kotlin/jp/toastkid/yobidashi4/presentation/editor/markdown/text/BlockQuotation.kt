@@ -11,15 +11,15 @@ class BlockQuotation {
         if (text.isNullOrEmpty()) {
             return text
         }
-        val converted = text.trimEnd().split(lineSeparator)
+        val converted = text.trimEnd().split(LINE_SEPARATOR)
                 .asSequence()
                 .map { "> $it" }
-                .reduce { str1, str2 -> str1 + lineSeparator + str2 }
-        return if (text.endsWith(lineSeparator)) converted.plus(lineSeparator) else converted
+                .reduce { str1, str2 -> str1 + LINE_SEPARATOR + str2 }
+        return if (text.endsWith(LINE_SEPARATOR)) converted.plus(LINE_SEPARATOR) else converted
     }
 }
 
 /**
  * Line separator.
  */
-private const val lineSeparator = "\n"
+private const val LINE_SEPARATOR = "\n"
