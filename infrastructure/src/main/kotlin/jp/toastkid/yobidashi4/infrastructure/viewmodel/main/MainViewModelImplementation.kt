@@ -622,7 +622,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun selectedText(): String? {
-        return textManager?.selectedText?.text
+        val selectedText = textManager?.selectedText ?: return null
+        return selectedText.text
     }
 
 }
