@@ -57,7 +57,7 @@ class KeywordHighlighterTest {
     }
 
     @Test
-    fun link2() {
+    fun linkAndTextCase() {
         val annotate = subject.invoke(
             "- [Easter Egg in APK Files: What Is Frosting](https://bi-zone.medium.com/easter-egg-in-apk-files-what-is-frosting-f356aa9f4d1)……いわゆる雪エフェクトの実装方法についてだった",
             "雪"
