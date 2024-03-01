@@ -6,6 +6,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Path
@@ -44,13 +45,29 @@ class TextFileReceiverTest {
         }
 
         MockKAnnotations.init(this)
-        every { mainViewModel.droppedPathFlow() } returns flowOf(path, path2)
+        every { mainViewModel.droppedPathFlow() } returns flowOf(
+            path,
+            path2,
+            mameMockPath("test.md"),
+            mameMockPath("test.log"),
+            mameMockPath("test.java"),
+            mameMockPath("test.kt"),
+            mameMockPath("test.py"),
+            mameMockPath("test")
+        )
         every { path.fileName } returns path
         every { path.toString() } returns "test.txt"
         every { path2.fileName } returns path2
         every { path2.toString() } returns "test.exe"
 
         textFileReceiver = TextFileReceiver()
+    }
+
+    private fun mameMockPath(fileName: String): Path {
+        val path = mockk<Path>()
+        every { path.fileName } returns path
+        every { path.toString() } returns fileName
+        return path
     }
 
     @AfterEach
@@ -68,6 +85,7 @@ class TextFileReceiverTest {
             textFileReceiver.launch()
 
             verify { mainViewModel.droppedPathFlow() }
+            verify(exactly = 6) { mainViewModel.edit(any(), any()) }
         }
     }
 
