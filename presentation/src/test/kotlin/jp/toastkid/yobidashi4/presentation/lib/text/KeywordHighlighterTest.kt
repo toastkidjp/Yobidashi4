@@ -32,7 +32,7 @@ class KeywordHighlighterTest {
     }
 
     @Test
-    fun annotate3() {
+    fun italicCase() {
         val annotate = subject.invoke("It longs ***to*** make it.", "long")
 
         Assertions.assertEquals(2, annotate.spanStyles.size)
