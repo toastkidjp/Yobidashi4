@@ -15,7 +15,14 @@ import androidx.compose.ui.unit.sp
 import java.time.DayOfWeek
 
 @Composable
-fun DayLabelView(date: Int, dayOfWeek: DayOfWeek, label: String?, offDay: Boolean, today: Boolean, modifier: Modifier) {
+fun DayLabelView(
+    date: Int,
+    dayOfWeek: DayOfWeek,
+    label: String?,
+    offDay: Boolean,
+    today: Boolean,
+    modifier: Modifier
+) {
     val viewModel = remember { DayLabelViewModel() }
 
     Surface(
