@@ -66,7 +66,10 @@ class KeywordHighlighterTest {
         )
         assertEquals(2, annotate.spanStyles.size)
         assertTrue(annotate.spanStyles.any { it.item.textDecoration == Underline })
-        assertEquals("- Easter Egg in APK Files: What Is Frosting……いわゆる雪エフェクトの実装方法についてだった", annotate.text)
+        assertEquals(
+            "- Easter Egg in APK Files: What Is Frosting……いわゆる雪エフェクトの実装方法についてだった",
+            annotate.text
+        )
     }
 
 }
