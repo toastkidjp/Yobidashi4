@@ -48,7 +48,7 @@ import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlin.io.path.absolutePathString
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
     val viewModel = remember { WebBookmarkTabViewModel() }
@@ -68,6 +68,9 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(viewModel.bookmarks()) { bookmark ->
+                    val cursorOn = remember { mutableStateOf(false) }
+                    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
+
                     WebBookmarkItemRow(
                         bookmark,
                         viewModel.findFaviconPath(bookmark.url),
@@ -82,6 +85,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                         },
                         viewModel.openingDropdown(bookmark),
                         viewModel::closeDropdown,
+                        if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                         Modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
@@ -96,6 +100,13 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                                 awaitEachGesture {
                                     viewModel.onPointerEvent(awaitPointerEvent(), bookmark)
                                 }
+                            }
+                            .drawBehind { drawRect(backgroundColor.value) }
+                            .onPointerEvent(PointerEventType.Enter) {
+                                cursorOn.value = true
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                cursorOn.value = false
                             }
                     )
                 }
@@ -127,28 +138,18 @@ private fun WebBookmarkItemRow(
     onDelete: () -> Unit,
     openingDropdown: Boolean,
     closeDropdown: () -> Unit,
+    textColor: Color,
     modifier: Modifier
 ) {
-    val cursorOn = remember { mutableStateOf(false) }
-    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
-
     Box {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
-                .drawBehind { drawRect(backgroundColor.value) }
-                .onPointerEvent(PointerEventType.Enter) {
-                    cursorOn.value = true
-                }
-                .onPointerEvent(PointerEventType.Exit) {
-                    cursorOn.value = false
-                }
         ) {
             LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
             Column(modifier = Modifier
                 .padding(horizontal = 16.dp)
             ) {
-                val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
                 Text(bookmark.title, color = textColor)
                 Text(bookmark.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
                 Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
