@@ -428,6 +428,13 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun noopBrowseUriWithBlank() {
+        subject.browseUri(" ")
+
+        verify(inverse = true) { desktop.browse(any()) }
+    }
+
+    @Test
     fun browseUri() {
         subject.browseUri("https://www.yahoo.com")
 
