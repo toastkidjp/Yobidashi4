@@ -62,6 +62,12 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
                     }
                 )
                 Item(
+                    "Open user folder",
+                    onClick = {
+                        mainViewModel.openFile(Path.of("user"))
+                    }
+                )
+                Item(
                     "Exit",
                     onClick = {
                         exitApplication()
