@@ -13,10 +13,12 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +58,9 @@ class WebBookmarkTabViewModelTest {
             )
         }
 
+        mockkConstructor(WebIcon::class)
+        every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
+
         subject = WebBookmarkTabViewModel()
     }
 
@@ -91,7 +96,9 @@ class WebBookmarkTabViewModelTest {
 
         subject.launch(CoroutineScope(Dispatchers.Unconfined), 20)
 
+        verify { focusRequester.requestFocus() }
         verify { repository.list() }
+        verify { anyConstructed<WebIcon>().makeFolderIfNeed() }
         assertEquals(2, subject.bookmarks().size)
     }
 
