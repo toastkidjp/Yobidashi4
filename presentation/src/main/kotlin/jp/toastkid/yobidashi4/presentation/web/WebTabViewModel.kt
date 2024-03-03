@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.web
 
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import java.awt.Color
 import java.awt.Component
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
@@ -19,7 +18,7 @@ class WebTabViewModel : KoinComponent {
 
     private val webViewPool: WebViewPool by inject()
 
-    fun component(tab: WebTab, background: Color): Component {
+    fun component(tab: WebTab): Component {
         return webViewPool.component(tab.id(), tab.url())
     }
 
