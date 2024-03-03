@@ -96,7 +96,6 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                     }
                                 )
                                 .padding(horizontal = 16.dp)
-                                .animateItemPlacement()
                             ) {
                                 val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
 
