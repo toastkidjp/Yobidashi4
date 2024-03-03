@@ -443,6 +443,14 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun browseUriWithHttpUrl() {
+        subject.browseUri("http://www.yahoo.com")
+
+        verify { Desktop.getDesktop() }
+        verify { desktop.browse(any()) }
+    }
+
+    @Test
     fun browseUriWithCurrentTabsUrl() {
         val webTab = mockk<WebTab>()
         every { webTab.url() } returns "https://www.yahoo.com"
