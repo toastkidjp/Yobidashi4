@@ -5,8 +5,8 @@ import androidx.compose.ui.unit.dp
 import java.awt.Color
 import java.awt.Component
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -20,11 +20,7 @@ class WebTabViewModel : KoinComponent {
     private val webViewPool: WebViewPool by inject()
 
     fun component(tab: WebTab, background: Color): Component {
-        val component = webViewPool.component(tab.id(), tab.url())
-        component.background = background
-        component.setSize(1281, 1040)
-        component.requestFocus()
-        return component
+        return webViewPool.component(tab.id(), tab.url())
     }
 
     fun focusRequester() = focusRequester
