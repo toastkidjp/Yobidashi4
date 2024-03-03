@@ -38,7 +38,7 @@ internal fun WebTabView(tab: WebTab) {
     LaunchedEffect(tab.id()) {
         component.background = background
         component.removeAll()
-        val component1 = viewModel.component(tab, background)
+        val component1 = viewModel.component(tab)
         //component1.size = Dimension(component.parent.width, component.parent.height)
         component.add(component1)
 
