@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberTrayState
+import java.nio.file.Path
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
@@ -54,6 +55,12 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             state = trayState,
             icon = painterResource("images/icon.png"),
             menu = {
+                Item(
+                    "Open app folder",
+                    onClick = {
+                        mainViewModel.openFile(Path.of("."))
+                    }
+                )
                 Item(
                     "Exit",
                     onClick = {
