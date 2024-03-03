@@ -41,9 +41,9 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
-import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlin.io.path.absolutePathString
@@ -70,6 +70,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                 items(viewModel.bookmarks()) { bookmark ->
                     WebBookmarkItemRow(
                         bookmark,
+                        viewModel.findFaviconPath(bookmark.url),
                         {
                             viewModel.openUrl(bookmark.url, it)
                         },
@@ -120,6 +121,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
 @OptIn(ExperimentalComposeUiApi::class)
 private fun WebBookmarkItemRow(
     bookmark: Bookmark,
+    iconPath: Path?,
     openUrl: (Boolean) -> Unit,
     browseUri: () -> Unit,
     onDelete: () -> Unit,
@@ -142,9 +144,6 @@ private fun WebBookmarkItemRow(
                     cursorOn.value = false
                 }
         ) {
-            val faviconFolder = WebIcon()
-            faviconFolder.makeFolderIfNeed()
-            val iconPath = faviconFolder.find(bookmark.url)
             LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
             Column(modifier = Modifier
                 .padding(horizontal = 16.dp)
