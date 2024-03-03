@@ -74,18 +74,16 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.onPointerEvent(awaitPointerEvent(), webHistory)
                             }
                         }
+                            .animateItemPlacement()
+                            .drawBehind { drawRect(backgroundColor.value) }
+                            .onPointerEvent(PointerEventType.Enter) {
+                                cursorOn.value = true
+                            }
+                            .onPointerEvent(PointerEventType.Exit) {
+                                cursorOn.value = false
+                            }
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.animateItemPlacement()
-                                .drawBehind { drawRect(backgroundColor.value) }
-                                .onPointerEvent(PointerEventType.Enter) {
-                                    cursorOn.value = true
-                                }
-                                .onPointerEvent(PointerEventType.Exit) {
-                                    cursorOn.value = false
-                                }
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             LoadIcon(viewModel.findIconPath(webHistory), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
                             Column(modifier = Modifier
                                 .combinedClickable(
