@@ -9,8 +9,10 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -33,6 +35,8 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     private val scrollAction = KeyboardScrollAction(state)
 
+    private val faviconFolder = WebIcon()
+
     fun bookmarks() = bookmarks
 
     fun listState() = state
@@ -48,6 +52,8 @@ class WebBookmarkTabViewModel : KoinComponent {
         coroutineScope.launch {
             state.scrollToItem(scrollPosition)
         }
+
+        faviconFolder.makeFolderIfNeed()
     }
 
     fun delete(bookmark: Bookmark) {
@@ -87,6 +93,10 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     fun update(tab: WebBookmarkTab) {
         viewModel.updateScrollableTab(tab, state.firstVisibleItemIndex)
+    }
+
+    fun findFaviconPath(url: String): Path? {
+        return faviconFolder.find(url)
     }
 
 }
