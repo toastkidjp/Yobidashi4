@@ -156,8 +156,9 @@ internal fun TabsView(modifier: Modifier) {
                             },
                             {
                                 viewModel.exportTable(it.items())
-                            }
-                        ) { viewModel.closeDropdown() }
+                            },
+                            viewModel::closeDropdown
+                        )
                     }
                 }
             }
