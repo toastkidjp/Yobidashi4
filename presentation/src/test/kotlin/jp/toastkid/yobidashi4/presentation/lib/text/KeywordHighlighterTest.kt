@@ -64,6 +64,7 @@ class KeywordHighlighterTest {
                     "……いわゆる雪エフェクトの実装方法についてだった",
             "雪"
         )
+
         assertEquals(2, annotate.spanStyles.size)
         assertTrue(annotate.spanStyles.any { it.item.textDecoration == Underline })
         assertEquals(
