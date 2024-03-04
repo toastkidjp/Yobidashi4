@@ -39,6 +39,7 @@ internal fun WebTabView(tab: WebTab) {
         component.background = background
         component.removeAll()
         val component1 = viewModel.component(tab)
+        component1.background = background
         component.add(component1)
 
         withContext(Dispatchers.IO) {
