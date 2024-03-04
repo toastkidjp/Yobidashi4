@@ -14,7 +14,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
 import java.awt.CardLayout
 import java.awt.Color
-import java.awt.Dimension
 import javax.swing.JPanel
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +39,6 @@ internal fun WebTabView(tab: WebTab) {
         component.background = background
         component.removeAll()
         val component1 = viewModel.component(tab)
-        component1.size = Dimension(component.parent.width, component.parent.height)
         component.add(component1)
 
         withContext(Dispatchers.IO) {
