@@ -101,7 +101,7 @@ class TabsViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownClosedCase() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns false
 
         runDesktopComposeUiTest {
             setContent {
