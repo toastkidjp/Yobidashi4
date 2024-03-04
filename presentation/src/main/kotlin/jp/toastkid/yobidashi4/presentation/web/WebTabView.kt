@@ -30,8 +30,7 @@ internal fun WebTabView(tab: WebTab) {
     val viewModel = remember { WebTabViewModel() }
 
     val component = remember {
-        val container = JPanel()
-        container.layout = CardLayout()
+        val container = JPanel(CardLayout())
         container
     }
 
