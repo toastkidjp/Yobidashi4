@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.dp
+import java.awt.CardLayout
 import java.awt.Color
-import java.awt.Container
+import java.awt.Dimension
+import javax.swing.JPanel
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,13 +30,16 @@ internal fun WebTabView(tab: WebTab) {
 
     val viewModel = remember { WebTabViewModel() }
 
-    val component = remember { Container() }
+    val component = remember { val container = JPanel()
+        container.layout = CardLayout()
+        container
+    }
 
     LaunchedEffect(tab.id()) {
         component.background = background
         component.removeAll()
         val component1 = viewModel.component(tab)
-        //component1.size = Dimension(component.parent.width, component.parent.height)
+        component1.size = Dimension(component.parent.width, component.parent.height)
         component.add(component1)
 
         withContext(Dispatchers.IO) {
@@ -53,13 +56,6 @@ internal fun WebTabView(tab: WebTab) {
                 .fillMaxSize()
                 .weight(1f)
                 .focusRequester(viewModel.focusRequester())
-                .onSizeChanged {
-                    if (component.components.isEmpty()) {
-                        return@onSizeChanged
-                    }
-
-                    component.components[0].setSize(it.width - 180.dp.value.toInt(), it.height)
-                }
         )
 
         Spacer(modifier = Modifier.height(viewModel.spacerHeight()))
