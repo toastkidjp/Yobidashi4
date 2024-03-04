@@ -13,11 +13,10 @@ import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.dp
 import java.awt.Color
 import java.awt.Container
-import java.awt.Dimension
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import kotlin.math.max
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -60,7 +59,8 @@ internal fun WebTabView(tab: WebTab) {
                     if (component.components.isEmpty()) {
                         return@onSizeChanged
                     }
-                    component.getComponent(0).size = Dimension(max(1, it.width - 40), it.height)
+
+                    component.components[0].setSize(it.width - 180.dp.value.toInt(), it.height)
                 }
         )
 
