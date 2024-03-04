@@ -10,7 +10,6 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Color
 import java.awt.Panel
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -67,7 +66,7 @@ class WebTabViewModelTest {
         every { tab.url() } returns "https://www.yahoo.co.jp"
         every { webViewPool.component(any(), any()) } returns Panel()
 
-        subject.component(tab, Color.BLACK)
+        subject.component(tab)
 
         verify { webViewPool.component(any(), any()) }
     }
