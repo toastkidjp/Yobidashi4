@@ -16,6 +16,7 @@ import java.awt.Image
 import java.net.URL
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -464,6 +465,15 @@ class CefContextMenuActionTest {
     @Test
     fun noopSwitchDevTools() {
         every { viewModel.currentTab() } returns null
+
+        subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
+
+        verify { pool wasNot called }
+    }
+
+    @Test
+    fun noopSwitchDevToolsIfCurrentIsEditorTab() {
+        every { viewModel.currentTab() } returns mockk<EditorTab>()
 
         subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
 
