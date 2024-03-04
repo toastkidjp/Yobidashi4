@@ -30,9 +30,7 @@ internal fun WebTabView(tab: WebTab) {
 
     val viewModel = remember { WebTabViewModel() }
 
-    val component = remember { val panel = Container()
-        panel
-    }
+    val component = remember { Container() }
 
     LaunchedEffect(tab.id()) {
         component.background = background
