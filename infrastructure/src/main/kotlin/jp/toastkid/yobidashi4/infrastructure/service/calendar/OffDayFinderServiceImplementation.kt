@@ -27,11 +27,11 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
             return false
         }
 
-        if (month == 3 && date == equinoxDayCalculator.calculateVernalEquinoxDay(year).day) {
+        if (month == 3 && date == equinoxDayCalculator.calculateVernalEquinoxDay(year)?.day) {
             return true
         }
 
-        if (month == 9 && date == equinoxDayCalculator.calculateAutumnalEquinoxDay(year).day) {
+        if (month == 9 && date == equinoxDayCalculator.calculateAutumnalEquinoxDay(year)?.day) {
             return true
         }
 
