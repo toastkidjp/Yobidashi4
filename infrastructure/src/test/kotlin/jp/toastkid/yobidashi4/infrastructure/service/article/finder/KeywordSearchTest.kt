@@ -9,10 +9,13 @@ import io.mockk.unmockkAll
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
+import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -65,6 +68,10 @@ internal class KeywordSearchTest {
         val result = keywordSearch.invoke("test", "mock")
 
         assertEquals(2, result.itemArrays().size)
+        assertFalse(result.isEmpty())
+        assertEquals(2, result.header().size)
+        assertTrue(result.title().endsWith("2"))
+        assertEquals("test", (result as? FindResult)?.keyword())
     }
 
     @Test
