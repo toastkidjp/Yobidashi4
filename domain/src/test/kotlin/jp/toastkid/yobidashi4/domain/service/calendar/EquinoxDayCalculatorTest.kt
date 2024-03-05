@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.calendar
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -15,8 +16,14 @@ internal class EquinoxDayCalculatorTest {
 
     @Test
     fun test() {
-        assertEquals(20, equinoxDayCalculator.calculateVernalEquinoxDay(2020).day)
-        assertEquals(22, equinoxDayCalculator.calculateAutumnalEquinoxDay(2020).day)
+        assertEquals(20, equinoxDayCalculator.calculateVernalEquinoxDay(2020)?.day)
+        assertEquals(22, equinoxDayCalculator.calculateAutumnalEquinoxDay(2020)?.day)
+    }
+
+    @Test
+    fun case224() {
+        assertNull(equinoxDayCalculator.calculateVernalEquinoxDay(224))
+        assertNull(equinoxDayCalculator.calculateAutumnalEquinoxDay(224))
     }
 
 }
