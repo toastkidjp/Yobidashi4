@@ -10,6 +10,7 @@ import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -47,8 +48,11 @@ class UserTemplateStreamReaderTest {
     fun testReadingDefaultTemplateCase() {
         every { Files.exists(any()) }.returns(false)
 
-        userTemplateStreamReader.invoke()
+        val inputStream = userTemplateStreamReader.invoke()
 
+        inputStream?.use {
+            assertEquals("# {{title}}\n", String(it.readBytes()))
+        }
         verify { Files.exists(any()) }
         verify(inverse = true) { Files.newInputStream(any()) }
     }
