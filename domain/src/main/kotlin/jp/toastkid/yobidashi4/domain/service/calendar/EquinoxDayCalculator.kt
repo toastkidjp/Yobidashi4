@@ -4,7 +4,11 @@ import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 
 class EquinoxDayCalculator {
 
-    fun calculateVernalEquinoxDay(year: Int): Holiday {
+    fun calculateVernalEquinoxDay(year: Int): Holiday? {
+        if (year < 1980) {
+            return null
+        }
+
         return Holiday(
             "Vernal equinox day",
             3,
@@ -13,7 +17,11 @@ class EquinoxDayCalculator {
         )
     }
 
-    fun calculateAutumnalEquinoxDay(year: Int): Holiday {
+    fun calculateAutumnalEquinoxDay(year: Int): Holiday? {
+        if (year < 1980) {
+            return null
+        }
+
         return Holiday(
             "Autumnal equinox day",
             9,
