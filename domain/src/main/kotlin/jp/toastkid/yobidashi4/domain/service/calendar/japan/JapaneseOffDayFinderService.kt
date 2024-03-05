@@ -22,13 +22,11 @@ class JapaneseOffDayFinderService(
         val holidays = mutableListOf<Holiday>()
 
         if (month == 3) {
-            val vernalEquinoxDay = equinoxDayCalculator.calculateVernalEquinoxDay(year)
-            holidays.add(vernalEquinoxDay)
+            equinoxDayCalculator.calculateVernalEquinoxDay(year)?.let(holidays::add)
         }
 
         if (month == 9) {
-            val autumnalEquinoxDay = equinoxDayCalculator.calculateAutumnalEquinoxDay(year)
-            holidays.add(autumnalEquinoxDay)
+            equinoxDayCalculator.calculateAutumnalEquinoxDay(year)?.let(holidays::add)
         }
 
         /*if (useUserOffDay && userOffDayService(month, date)) {
