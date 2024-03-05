@@ -10,7 +10,7 @@ class UserTemplateStreamReader {
         return if (Files.exists(userTemplatePath)) {
             Files.newInputStream(userTemplatePath)
         } else {
-            javaClass.classLoader?.getResourceAsStream("article/template/article_template.txt")
+            "# {{title}}\n".byteInputStream()
         }
     }
 }
