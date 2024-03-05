@@ -36,9 +36,9 @@ internal fun WebTabView(tab: WebTab) {
     LaunchedEffect(tab.id()) {
         component.background = background
         component.removeAll()
-        val component1 = viewModel.component(tab)
-        component1.background = background
-        component.add(component1)
+        val webUiComponent = viewModel.component(tab)
+        webUiComponent.background = background
+        component.add(webUiComponent)
 
         withContext(Dispatchers.IO) {
             viewModel.start(tab.id())
