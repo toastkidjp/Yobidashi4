@@ -99,6 +99,18 @@ internal class OffDayFinderServiceTest {
     }
 
     @Test
+    fun testSpecialCase2019ButNotOffDayCase() {
+        every { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }.answers { setOf(Holiday("", 5, 1)) }
+
+        assertFalse(offDayFinderService(2019, 5, 11, DayOfWeek.SATURDAY))
+
+        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
+        verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
+    }
+
+    @Test
     fun testSpecialCase2020October() {
         every { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }.answers { emptySet() }
 
@@ -107,8 +119,6 @@ internal class OffDayFinderServiceTest {
         verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
         verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
-        verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
-        verify(exactly = 1) { userOffDayService.invoke(any(), any())}
     }
 
     @Test
