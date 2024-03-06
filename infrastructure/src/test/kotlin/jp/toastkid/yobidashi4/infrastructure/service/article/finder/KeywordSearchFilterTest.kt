@@ -13,6 +13,7 @@ class KeywordSearchFilterTest {
         assertTrue(keywordSearchFilter.invoke("これはtestです."))
         assertTrue(keywordSearchFilter.invoke("これはtetです."))
         assertTrue(keywordSearchFilter.invoke(""))
+        assertFalse(keywordSearchFilter.invoke(null))
     }
 
     @Test
