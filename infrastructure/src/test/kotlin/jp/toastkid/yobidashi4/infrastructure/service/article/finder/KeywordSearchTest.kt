@@ -81,6 +81,13 @@ internal class KeywordSearchTest {
         assertEquals(1, result.itemArrays().size)
     }
 
+    @Test
+    fun testUseTitleFilterNotFoundCase() {
+        val result = keywordSearch.invoke("told", "1")
+
+        assertTrue(result.itemArrays().isEmpty())
+    }
+
     @AfterEach
     fun tearDown() {
         stopKoin()
