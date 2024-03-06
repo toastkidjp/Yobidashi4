@@ -153,6 +153,32 @@ class SlideshowViewModelTest {
 
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
+    fun onNoopKeyEvent() {
+        runDesktopComposeUiTest {
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onKeyEvent(
+                    coroutineScope,
+                    KeyEvent(
+                        java.awt.event.KeyEvent(
+                            mockk(),
+                            java.awt.event.KeyEvent.KEY_RELEASED,
+                            1,
+                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                            java.awt.event.KeyEvent.VK_F7,
+                            'A'
+                        )
+                    ),
+                    mockk()
+                )
+
+                assertFalse(consumed)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
     fun onKeyEventEscape() {
         runDesktopComposeUiTest {
             setContent {
