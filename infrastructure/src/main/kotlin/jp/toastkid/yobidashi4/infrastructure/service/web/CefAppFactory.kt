@@ -24,7 +24,10 @@ class CefAppFactory : KoinComponent {
                 if (processType.isNullOrEmpty()) {
                     commandLine?.appendSwitchWithValue("enable-media-stream", "true")
                     if (appSetting.darkMode()) {
-                        commandLine?.appendSwitchWithValue("blink-settings", "forceDarkModeInversionAlgorithm=1,forceDarkModeEnabled=true")
+                        commandLine?.appendSwitchWithValue(
+                            "blink-settings",
+                            "forceDarkModeInversionAlgorithm=1,forceDarkModeEnabled=true"
+                        )
                     }
                 }
                 super.onBeforeCommandLineProcessing(processType, commandLine)
