@@ -13,7 +13,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
@@ -22,6 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.extension
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -70,6 +75,11 @@ class MainScaffoldKtTest {
         every { mainViewModel.articles() } returns emptyList()
         every { mainViewModel.reloadAllArticle() } just Runs
         every { mainViewModel.tabs } returns mutableStateListOf<Tab>()
+
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 20000
+        every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
 
     /*    mockkConstructor(TextFileReceiver::class, SlideshowWindow::class)
         every { anyConstructed<TextFileReceiver>().launch() } just Runs
@@ -145,6 +155,20 @@ class MainScaffoldKtTest {
             BarcodeToolTab(),
             FileRenameToolTab()
         )
+
+        runDesktopComposeUiTest {
+            setContent {
+                MainScaffold()
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun articles() {
+        val path = mockk<Path>()
+        every { path.extension } returns "md"
+        every { mainViewModel.articles() } returns listOf(path)
 
         runDesktopComposeUiTest {
             setContent {
