@@ -21,10 +21,10 @@ class SimpleCalculator {
     private fun getExpression(chars: List<Char>): Data {
         var (rest, carry) = getTerm(chars)
         while (true) {
-            when {
-                rest.firstOrNull() == '+' -> rest = getTerm(rest.drop(1)).also { carry += it.value }.rest
-                rest.firstOrNull() == '-' -> rest = getTerm(rest.drop(1)).also { carry -= it.value }.rest
-                else                      -> return Data(rest, carry)
+            when (rest.firstOrNull()) {
+                '+' -> rest = getTerm(rest.drop(1)).also { carry += it.value }.rest
+                '-' -> rest = getTerm(rest.drop(1)).also { carry -= it.value }.rest
+                else -> return Data(rest, carry)
             }
         }
     }
@@ -32,9 +32,9 @@ class SimpleCalculator {
     private fun getTerm(chars: List<Char>): Data {
         var (rest, carry) = getFactor(chars)
         while (true) {
-            when {
-                rest.firstOrNull() == '*' -> rest = getTerm(rest.drop(1)).also { carry *= it.value }.rest
-                rest.firstOrNull() == '/' -> rest = getTerm(rest.drop(1)).also { carry /= it.value }.rest
+            when (rest.firstOrNull()) {
+                '*' -> rest = getTerm(rest.drop(1)).also { carry *= it.value }.rest
+                '/' -> rest = getTerm(rest.drop(1)).also { carry /= it.value }.rest
                 else                      -> return Data(rest, carry)
             }
         }
