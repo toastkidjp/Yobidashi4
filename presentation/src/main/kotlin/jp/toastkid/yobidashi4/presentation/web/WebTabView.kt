@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.onPlaced
 import java.awt.CardLayout
 import java.awt.Color
 import javax.swing.JPanel
@@ -33,6 +34,23 @@ internal fun WebTabView(tab: WebTab) {
         JPanel(CardLayout())
     }
 
+    Column {
+        SwingPanel(
+            factory = {
+                component
+            },
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+                .focusRequester(viewModel.focusRequester())
+                .onPlaced {
+                    component.revalidate()
+                }
+        )
+
+        Spacer(modifier = Modifier.height(viewModel.spacerHeight()))
+    }
+
     LaunchedEffect(tab.id()) {
         component.background = background
         component.removeAll()
@@ -43,19 +61,5 @@ internal fun WebTabView(tab: WebTab) {
         withContext(Dispatchers.IO) {
             viewModel.start(tab.id())
         }
-    }
-
-    Column {
-        SwingPanel(
-            factory = {
-                component
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-                .focusRequester(viewModel.focusRequester())
-        )
-
-        Spacer(modifier = Modifier.height(viewModel.spacerHeight()))
     }
 }
