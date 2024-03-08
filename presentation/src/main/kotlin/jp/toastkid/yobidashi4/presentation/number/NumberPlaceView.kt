@@ -94,8 +94,6 @@ fun NumberPlaceView() {
 
                         row.forEachIndexed { columnIndex, cellValue ->
                             if (cellValue == -1) {
-                                viewModel.setSolving(rowIndex, columnIndex)
-
                                 MaskedCell(
                                     viewModel.openingCellOption(rowIndex, columnIndex),
                                     { viewModel.closeCellOption(rowIndex, columnIndex) },
