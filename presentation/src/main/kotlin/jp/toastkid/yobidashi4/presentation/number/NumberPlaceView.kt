@@ -37,7 +37,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,22 +94,13 @@ fun NumberPlaceView() {
 
                         row.forEachIndexed { columnIndex, cellValue ->
                             if (cellValue == -1) {
-                                val open = remember { mutableStateOf(false) }
-                                val number = remember { mutableStateOf("_") }
-                                viewModel.addNumber(number)
-
-                                val solving = viewModel.pickSolving(rowIndex, columnIndex)
-                                if (solving != -1) {
-                                    number.value = "$solving"
-                                }
+                                viewModel.setSolving(rowIndex, columnIndex)
 
                                 MaskedCell(
-                                    open.value,
-                                    { open.value = false },
-                                    number.value,
+                                    viewModel.openingCellOption(rowIndex, columnIndex),
+                                    { viewModel.closeCellOption(rowIndex, columnIndex) },
+                                    viewModel.numberLabel(rowIndex, columnIndex),
                                     {
-                                        number.value = "$it"
-                                        open.value = false
                                         viewModel.place(rowIndex, columnIndex, it) { done ->
                                             viewModel.showMessageSnackbar(done) {
                                                 viewModel.startNewGame()
@@ -122,10 +112,10 @@ fun NumberPlaceView() {
                                         .weight(1f)
                                         .combinedClickable(
                                             onClick = {
-                                                open.value = true
+                                                viewModel.openCellOption(rowIndex, columnIndex)
                                             },
                                             onLongClick = {
-                                                viewModel.onCellLongClick(rowIndex, columnIndex, number)
+                                                viewModel.onCellLongClick(rowIndex, columnIndex)
                                             }
                                         )
                                 )
