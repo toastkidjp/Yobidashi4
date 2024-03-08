@@ -211,9 +211,7 @@ private fun AppBarContent(
         Box(
             modifier = Modifier
                 .padding(start = 4.dp)
-                .clickable {
-                    openMaskingCount()
-                }
+                .clickable(onClick = openMaskingCount)
         ) {
             Text(
                 "$maskingCount",
