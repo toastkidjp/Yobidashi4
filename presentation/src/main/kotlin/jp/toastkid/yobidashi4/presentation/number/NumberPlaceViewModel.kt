@@ -117,9 +117,6 @@ class NumberPlaceViewModel : KoinComponent {
 
     fun setSolving(rowIndex: Int, columnIndex: Int) {
         val solving = pickSolving(rowIndex, columnIndex)
-        if (numberStates.containsKey("${rowIndex}-${columnIndex}")) {
-            return
-        }
         numberStates.put("${rowIndex}-${columnIndex}", CellState(solving))
     }
 
