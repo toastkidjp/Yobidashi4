@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.number
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
@@ -108,7 +107,7 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun useHint() {
-        numberPlaceViewModel.useHint(0, 0, mutableStateOf(""), {})
+        numberPlaceViewModel.useHint(0, 0, {})
     }
 
     @Test
@@ -280,17 +279,17 @@ class NumberPlaceViewModelTest {
     fun onCellLongClick() {
         numberPlaceViewModel = spyk(numberPlaceViewModel)
         val innerSlot = slot<(Boolean) -> Unit>()
-        every { numberPlaceViewModel.useHint(any(), any(), any(), capture(innerSlot)) } just Runs
+        every { numberPlaceViewModel.useHint(any(), any(), capture(innerSlot)) } just Runs
         every { numberPlaceViewModel.showMessageSnackbar(any(), any()) } just Runs
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
 
-        numberPlaceViewModel.onCellLongClick(1, 1, mutableStateOf(""))
+        numberPlaceViewModel.onCellLongClick(1, 1)
         slot.captured.invoke()
         innerSlot.captured.invoke(true)
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
-        verify { numberPlaceViewModel.useHint(any(), any(), any(), any()) }
+        verify { numberPlaceViewModel.useHint(any(), any(), any()) }
         verify { numberPlaceViewModel.showMessageSnackbar(true, any()) }
     }
 
@@ -380,11 +379,6 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.closeDropdown()
 
         assertFalse(numberPlaceViewModel.openingDropdown())
-    }
-
-    @Test
-    fun addNumber() {
-        numberPlaceViewModel.addNumber(mutableStateOf("1"))
     }
 
     @Test
