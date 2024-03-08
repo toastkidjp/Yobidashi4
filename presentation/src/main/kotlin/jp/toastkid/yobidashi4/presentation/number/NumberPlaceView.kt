@@ -273,10 +273,7 @@ private fun MaskedCell(
         )
         DropdownMenu(open, onDismissRequest = close) {
             (1..9).forEach {
-                DropdownMenuItem(
-                    onClick = {
-                    onMenuItemClick(it)
-                }) {
+                DropdownMenuItem(onClick = { onMenuItemClick(it) }) {
                     Text(
                         text = "$it",
                         fontSize = fontSize,
