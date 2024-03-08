@@ -8,8 +8,8 @@
 
 package jp.toastkid.yobidashi4.presentation.number
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.pointer.PointerButton
@@ -43,7 +43,7 @@ class NumberPlaceViewModel : KoinComponent {
 
     private val _loading = mutableStateOf(false)
 
-    private val numberStates = mutableListOf<MutableState<String>>()
+    private val numberStates = mutableStateMapOf<String, CellState>()
 
     private val openOption = mutableStateOf(false)
 
@@ -62,6 +62,7 @@ class NumberPlaceViewModel : KoinComponent {
         _loading.value = true
         _game.value.initializeSolving()
         _mask.value = _game.value.masked()
+        numberStates.keys.forEach { numberStates.put(it, CellState()) }
         _loading.value = false
         closeDropdown()
     }
@@ -87,17 +88,17 @@ class NumberPlaceViewModel : KoinComponent {
 
     fun place(rowIndex: Int, columnIndex: Int, it: Int, onSolved: (Boolean) -> Unit) {
         _game.value.place(rowIndex, columnIndex, it, onSolved)
+        numberStates.put("${rowIndex}-${columnIndex}", CellState(it))
     }
 
     fun useHint(
         rowIndex: Int,
         columnIndex: Int,
-        numberState: MutableState<String>,
         onSolved: (Boolean) -> Unit
     ) {
         val it = _game.value.pickCorrect(rowIndex, columnIndex)
-        numberState.value = "$it"
         _game.value.place(rowIndex, columnIndex, it, onSolved)
+        numberStates.put("${rowIndex}-${columnIndex}", CellState(it))
     }
 
     fun saveCurrentGame() {
@@ -107,6 +108,34 @@ class NumberPlaceViewModel : KoinComponent {
 
     fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
         return _game.value.pickSolving(rowIndex, columnIndex)
+    }
+
+    fun setSolving(rowIndex: Int, columnIndex: Int) {
+        val solving = pickSolving(rowIndex, columnIndex)
+        if (numberStates.containsKey("${rowIndex}-${columnIndex}")) {
+            return
+        }
+        numberStates.put("${rowIndex}-${columnIndex}", CellState(solving))
+    }
+
+    fun openingCellOption(rowIndex: Int, columnIndex: Int): Boolean {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return false
+        return state.open
+    }
+
+    fun openCellOption(rowIndex: Int, columnIndex: Int) {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return
+        numberStates.put("${rowIndex}-${columnIndex}", state.copy(open = true))
+    }
+
+    fun closeCellOption(rowIndex: Int, columnIndex: Int) {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return
+        numberStates.put("${rowIndex}-${columnIndex}", state.copy(open = false))
+    }
+
+    fun numberLabel(rowIndex: Int, columnIndex: Int): String {
+        val state = numberStates.get("${rowIndex}-${columnIndex}") ?: return ""
+        return state.text()
     }
 
     fun deleteGame() {
@@ -170,15 +199,14 @@ class NumberPlaceViewModel : KoinComponent {
         setting.setMaskingCount(it)
     }
 
-    fun onCellLongClick(rowIndex: Int, columnIndex: Int, number: MutableState<String>) {
+    fun onCellLongClick(rowIndex: Int, columnIndex: Int) {
         mainViewModel.showSnackbar(
             "Would you like to use hint?",
             "Use"
         ) {
             useHint(
                 rowIndex,
-                columnIndex,
-                number
+                columnIndex
             ) { done ->
                 showMessageSnackbar(done)
             }
@@ -205,13 +233,9 @@ class NumberPlaceViewModel : KoinComponent {
         openOption.value = false
     }
 
-    fun addNumber(number: MutableState<String>) {
-        numberStates.add(number)
-    }
-
     fun clear() {
         initializeSolving()
-        numberStates.forEach { it.value = "_" }
+        numberStates.keys.forEach { numberStates.put(it, CellState()) }
     }
 
     fun openingMaskingCount() = openMaskingCount.value
