@@ -71,6 +71,11 @@ class NumberPlaceViewModel : KoinComponent {
         _loading.value = true
         _game.value = game
         _mask.value = _game.value.masked()
+        _game.value.masked().rows().forEachIndexed { rowIndex, row ->
+            row.forEachIndexed { columnIndex, i ->
+                setSolving(rowIndex, columnIndex)
+            }
+        }
         _loading.value = false
     }
 
