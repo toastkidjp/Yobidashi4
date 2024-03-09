@@ -20,6 +20,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
+import jp.toastkid.yobidashi4.domain.model.number.NumberBoard
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
@@ -233,7 +234,9 @@ class NumberPlaceViewModelTest {
         mockkStatic(Files::class)
         every { Files.size(any()) } returns 1L
         val game = mockk<NumberPlaceGame>()
-        every { game.masked() } returns mockk()
+        val numberBoard = mockk<NumberBoard>()
+        every { game.masked() } returns numberBoard
+        every { numberBoard.rows() } returns emptyList()
         every { repository.load(any()) } returns game
 
         runBlocking {
