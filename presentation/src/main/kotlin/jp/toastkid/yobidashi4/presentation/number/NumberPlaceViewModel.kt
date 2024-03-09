@@ -93,9 +93,7 @@ class NumberPlaceViewModel : KoinComponent {
 
     fun place(rowIndex: Int, columnIndex: Int, it: Int) {
         _game.value.place(rowIndex, columnIndex, it) { done ->
-            showMessageSnackbar(done) {
-                startNewGame()
-            }
+            showMessageSnackbar(done, ::startNewGame)
         }
         numberStates.put("${rowIndex}-${columnIndex}", CellState(it))
     }
