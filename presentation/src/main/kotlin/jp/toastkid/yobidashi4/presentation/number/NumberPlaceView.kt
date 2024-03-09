@@ -99,11 +99,7 @@ fun NumberPlaceView() {
                                     { viewModel.closeCellOption(rowIndex, columnIndex) },
                                     viewModel.numberLabel(rowIndex, columnIndex),
                                     {
-                                        viewModel.place(rowIndex, columnIndex, it) { done ->
-                                            viewModel.showMessageSnackbar(done) {
-                                                viewModel.startNewGame()
-                                            }
-                                        }
+                                        viewModel.place(rowIndex, columnIndex, it)
                                     },
                                     viewModel.fontSize(),
                                     modifier = Modifier
