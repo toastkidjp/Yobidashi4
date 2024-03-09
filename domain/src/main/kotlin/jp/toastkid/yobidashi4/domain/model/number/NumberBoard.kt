@@ -116,7 +116,7 @@ data class NumberBoard(
         }
     }
 
-    fun rows(): MutableList<MutableList<Int>> {
+    fun rows(): List<List<Int>> {
         return rows
     }
 
