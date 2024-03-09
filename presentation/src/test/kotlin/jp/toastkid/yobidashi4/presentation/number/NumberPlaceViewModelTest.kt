@@ -149,11 +149,6 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
-    fun pickSolving() {
-        numberPlaceViewModel.pickSolving(0, 0)
-    }
-
-    @Test
     fun deleteGame() {
         mockkConstructor(GameFileProvider::class)
         every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
