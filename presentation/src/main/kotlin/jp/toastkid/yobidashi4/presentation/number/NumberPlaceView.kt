@@ -216,7 +216,6 @@ private fun AppBarContent(
                                     closeMaskingCount()
                                     deleteGame()
                                     renewGame()
-                                    //contentViewModel?.nextRoute("tool/number/place")
                                 }) {
                                 Text(
                                     text = "$count",
