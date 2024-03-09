@@ -103,7 +103,24 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun place() {
+        val slot = slot<(Boolean) -> Unit>()
+        val game = mockk<NumberPlaceGame>()
+        every { game.place(any(), any(), any(), capture(slot)) } just Runs
+        every { game.masked() } returns NumberBoard()
+        every { game.pickSolving(any(), any()) } returns 1
+        val callbackSlot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(callbackSlot)) } just Runs
+        numberPlaceViewModel = spyk(numberPlaceViewModel)
+        every { numberPlaceViewModel.startNewGame() } just Runs
+        numberPlaceViewModel.setGame(game)
+
         numberPlaceViewModel.place(0, 0, 1)
+        slot.captured.invoke(false)
+        slot.captured.invoke(true)
+        callbackSlot.captured.invoke()
+
+        verify { game.place(any(), any(), any(), any()) }
+        verify { mainViewModel.showSnackbar(any(), any(), any()) }
     }
 
     @Test
