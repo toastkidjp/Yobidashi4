@@ -103,7 +103,7 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun place() {
-        numberPlaceViewModel.place(0, 0, 1, {})
+        numberPlaceViewModel.place(0, 0, 1)
     }
 
     @Test
