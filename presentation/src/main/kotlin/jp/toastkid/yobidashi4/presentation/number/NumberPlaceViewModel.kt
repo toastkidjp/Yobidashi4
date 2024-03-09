@@ -115,7 +115,7 @@ class NumberPlaceViewModel : KoinComponent {
         return _game.value.pickSolving(rowIndex, columnIndex)
     }
 
-    fun setSolving(rowIndex: Int, columnIndex: Int) {
+    private fun setSolving(rowIndex: Int, columnIndex: Int) {
         val solving = pickSolving(rowIndex, columnIndex)
         numberStates.put("${rowIndex}-${columnIndex}", CellState(solving))
     }
