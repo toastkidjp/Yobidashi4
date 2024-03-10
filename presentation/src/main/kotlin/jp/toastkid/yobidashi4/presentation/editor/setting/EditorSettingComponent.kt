@@ -106,7 +106,7 @@ private fun EditorSettingDropdown(
         Text(displayText)
         DropdownMenu(
             open,
-            onDismissRequest = {  onClose() }
+            onDismissRequest = onClose
         ) {
             items.forEach {
                 DropdownMenuItem(
