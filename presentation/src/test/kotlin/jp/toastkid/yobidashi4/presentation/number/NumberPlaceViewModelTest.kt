@@ -333,7 +333,6 @@ class NumberPlaceViewModelTest {
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
         every { pointerEvent.button } returns PointerButton.Secondary
-        numberPlaceViewModel.openDropdown()
 
         numberPlaceViewModel.onPointerEvent(pointerEvent)
 
