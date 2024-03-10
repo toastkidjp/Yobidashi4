@@ -13,6 +13,7 @@ group = "jp.toastkid.yobidashi4"
 version = "1.0.0"
 
 repositories {
+    google()
     mavenCentral()
 }
 
@@ -27,7 +28,7 @@ dependencies {
     implementation(project(path = ":presentation"))
     implementation(project(path = ":infrastructure"))
 
-    implementation("org.jetbrains.compose.runtime:runtime:1.5.11")
+    implementation("org.jetbrains.compose.runtime:runtime:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
 
@@ -46,6 +47,7 @@ dependencies {
 
 allprojects {
     repositories {
+        google()
         mavenCentral()
     }
 
