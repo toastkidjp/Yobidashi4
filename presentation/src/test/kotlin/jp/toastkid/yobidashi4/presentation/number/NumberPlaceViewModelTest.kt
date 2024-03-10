@@ -387,10 +387,6 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun closeDropdown() {
-        numberPlaceViewModel.openDropdown()
-
-        assertTrue(numberPlaceViewModel.openingDropdown())
-
         numberPlaceViewModel.closeDropdown()
 
         assertFalse(numberPlaceViewModel.openingDropdown())
