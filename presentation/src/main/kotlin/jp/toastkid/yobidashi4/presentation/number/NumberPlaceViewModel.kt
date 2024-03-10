@@ -113,7 +113,7 @@ class NumberPlaceViewModel : KoinComponent {
         gameRepository.save(file, _game.value)
     }
 
-    fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
+    private fun pickSolving(rowIndex: Int, columnIndex: Int): Int {
         return _game.value.pickSolving(rowIndex, columnIndex)
     }
 
@@ -228,10 +228,6 @@ class NumberPlaceViewModel : KoinComponent {
     }
 
     fun openingDropdown() = openOption.value
-
-    fun openDropdown() {
-        openOption.value = true
-    }
 
     fun closeDropdown() {
         openOption.value = false
