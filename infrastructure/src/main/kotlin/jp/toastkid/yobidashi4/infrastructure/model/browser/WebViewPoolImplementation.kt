@@ -13,7 +13,9 @@ import org.koin.core.annotation.Single
 @Single
 class WebViewPoolImplementation : WebViewPool {
 
-    private val client: CefClient = CefClientFactory().invoke()
+    private val cefClientFactory = CefClientFactory()
+
+    private val client: CefClient = cefClientFactory.invoke()
 
     private var lastId: String? = null
 
@@ -72,6 +74,7 @@ class WebViewPoolImplementation : WebViewPool {
             client.doClose(it)
         }
         browsers.clear()
+        client.dispose()
         CefApp.getInstance().dispose()
     }
 
