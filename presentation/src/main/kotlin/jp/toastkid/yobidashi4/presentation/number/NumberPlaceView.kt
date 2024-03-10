@@ -74,8 +74,10 @@ fun NumberPlaceView() {
                     .padding(8.dp)
             ) {
                 AppBarContent(
-                    viewModel::deleteGame,
-                    viewModel::renewGame,
+                    {
+                        viewModel.deleteGame()
+                        viewModel.renewGame()
+                    },
                     viewModel.getMaskingCount(),
                     viewModel::setMaskingCount,
                     viewModel.openingMaskingCount(),
@@ -166,8 +168,7 @@ fun NumberPlaceView() {
 
 @Composable
 private fun AppBarContent(
-    deleteGame: () -> Unit,
-    renewGame: () -> Unit,
+    reloadGame: () -> Unit,
     maskingCount: Int,
     setMaskingCount: (Int) -> Unit,
     openingMaskingCount: Boolean,
@@ -178,8 +179,7 @@ private fun AppBarContent(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Button(
             onClick = {
-                deleteGame()
-                renewGame()
+                reloadGame()
             },
             modifier = Modifier.padding(start = 8.dp)
         ) {
@@ -214,8 +214,7 @@ private fun AppBarContent(
                                 onClick = {
                                     setMaskingCount(count)
                                     closeMaskingCount()
-                                    deleteGame()
-                                    renewGame()
+                                    reloadGame()
                                 }) {
                                 Text(
                                     text = "$count",
