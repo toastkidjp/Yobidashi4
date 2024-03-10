@@ -159,6 +159,11 @@ class NumberPlaceViewModel : KoinComponent {
         closeDropdown()
     }
 
+    fun reloadGame() {
+        deleteGame()
+        renewGame()
+    }
+
     fun startNewGame() {
         deleteGame()
         initializeSolving()
