@@ -427,4 +427,24 @@ class NumberPlaceViewModelTest {
         assertEquals(2.dp, numberPlaceViewModel.calculateThickness(8))
     }
 
+    @Test
+    fun openingCellOption() {
+        assertFalse(numberPlaceViewModel.openingCellOption(1, 2))
+    }
+
+    @Test
+    fun openCellOption() {
+        numberPlaceViewModel.openCellOption(1, 2)
+    }
+
+    @Test
+    fun closeCellOption() {
+        numberPlaceViewModel.closeCellOption(1, 2)
+    }
+
+    @Test
+    fun numberLabel() {
+        assertTrue(numberPlaceViewModel.numberLabel(1, 2).isEmpty())
+    }
+
 }
