@@ -74,7 +74,7 @@ fun SimpleTextEditor(
                                 }
                             ) {
                                 Text(lineNumberText, fontSize = 16.sp, fontFamily = FontFamily.Monospace,
-                                    textAlign = TextAlign.End, lineHeight = 1.5.em)
+                                    textAlign = TextAlign.End, lineHeight = viewModel.getLineHeight(lineNumber))
                             }
                         }
                     }
