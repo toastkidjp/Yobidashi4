@@ -420,8 +420,15 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
-    fun openingCellOption() {
+    fun noopOpeningCellOption() {
         assertFalse(numberPlaceViewModel.openingCellOption(1, 2))
+    }
+
+    @Test
+    fun openingCellOption() {
+        numberPlaceViewModel.place(1, 1, 2)
+
+        assertFalse(numberPlaceViewModel.openingCellOption(1, 1))
     }
 
     @Test
