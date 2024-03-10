@@ -75,8 +75,7 @@ fun NumberPlaceView() {
             ) {
                 AppBarContent(
                     {
-                        viewModel.deleteGame()
-                        viewModel.renewGame()
+                        viewModel.reloadGame()
                     },
                     viewModel.getMaskingCount(),
                     viewModel::setMaskingCount,
