@@ -100,7 +100,7 @@ compose.desktop {
         nativeDistributions {
             packageVersion = rootProject.version.toString()
             description = "Yobidashi 4 is a Toast kid's super tool aop."
-            copyright = "c2022 toastkidjp. All rights reserved."
+            copyright = "(c) 2022 toastkidjp. All rights reserved."
             vendor = "Toast kid"
             //licenseFile.set(project.file("LICENSE.txt"))
             includeAllModules = true
