@@ -322,6 +322,10 @@ class NumberPlaceViewModelTest {
         numberPlaceViewModel.onPointerEvent(pointerEvent)
 
         Assertions.assertTrue(numberPlaceViewModel.openingDropdown())
+
+        numberPlaceViewModel.closeDropdown()
+
+        assertFalse(numberPlaceViewModel.openingDropdown())
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
@@ -380,13 +384,6 @@ class NumberPlaceViewModelTest {
         every { pointerEvent.button } returns PointerButton.Secondary
 
         numberPlaceViewModel.onPointerEvent(pointerEvent)
-
-        assertFalse(numberPlaceViewModel.openingDropdown())
-    }
-
-    @Test
-    fun closeDropdown() {
-        numberPlaceViewModel.closeDropdown()
 
         assertFalse(numberPlaceViewModel.openingDropdown())
     }
