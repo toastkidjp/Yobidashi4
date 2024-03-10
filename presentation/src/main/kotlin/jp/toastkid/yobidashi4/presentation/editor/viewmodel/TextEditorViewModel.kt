@@ -18,9 +18,11 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.em
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
@@ -89,11 +91,23 @@ class TextEditorViewModel {
         content.value = newContent
     }
 
+    private val lineHeights = mutableMapOf<Int, TextUnit>()
+
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
         lastParagraph = multiParagraph
         if (lineCount.value != multiParagraph.lineCount) {
             lineCount.value = multiParagraph.lineCount
         }
+
+        val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
+        val distinct = lastLineHeights.values.distinct()
+        val max = distinct.max()
+        lineHeights.clear()
+        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / max).em) }
+    }
+
+    fun getLineHeight(lineNumber: Int): TextUnit {
+        return lineHeights.getOrElse(lineNumber, { 1.55.em })
     }
 
     fun verticalScrollState() = verticalScrollState
