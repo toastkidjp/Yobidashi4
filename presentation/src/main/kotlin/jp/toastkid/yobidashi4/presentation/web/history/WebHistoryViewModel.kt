@@ -98,11 +98,13 @@ class WebHistoryViewModel : KoinComponent {
 
     fun browseUri(url: String) {
         viewModel.browseUri(url)
+        closeDropdown()
     }
 
     fun delete(item: WebHistory) {
         repository.delete(item)
         reloadItems()
+        closeDropdown()
     }
 
     private val currentDropdownItem = mutableStateOf<WebHistory?>(null)
@@ -139,6 +141,7 @@ class WebHistoryViewModel : KoinComponent {
             repository.storeAll(current)
             reloadItems()
         }
+        closeDropdown()
     }
 
     fun onDispose(tab: WebHistoryTab) {
