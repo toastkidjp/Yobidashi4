@@ -453,8 +453,15 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
-    fun closeCellOption() {
+    fun noopCloseCellOption() {
         numberPlaceViewModel.closeCellOption(1, 2)
+    }
+
+    @Test
+    fun closeCellOption() {
+        numberPlaceViewModel.place(1, 1, 2)
+
+        numberPlaceViewModel.closeCellOption(1, 1)
     }
 
     @Test
