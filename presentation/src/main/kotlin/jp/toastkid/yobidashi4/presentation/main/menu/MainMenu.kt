@@ -22,9 +22,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
     MenuBar {
         Menu("File") {
-            Item("Make new", shortcut = KeyShortcut(Key.N, ctrl = true), icon = painterResource("images/icon/ic_new_article.xml")) {
-                viewModel.makeNewArticle()
-            }
+            Item(
+                "Make new",
+                shortcut = KeyShortcut(Key.N, ctrl = true),
+                icon = painterResource("images/icon/ic_new_article.xml"),
+                onClick = viewModel::makeNewArticle
+            )
 
             Item(
                 viewModel.switchArticleListLabel(),
