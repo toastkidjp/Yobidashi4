@@ -193,6 +193,22 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
+    fun reloadGame() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        mockkConstructor(NumberPlaceGame::class, GameFileProvider::class)
+        every { anyConstructed<NumberPlaceGame>().initialize(any()) } just Runs
+        every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
+        every { setting.getMaskingCount() } returns 20
+
+        numberPlaceViewModel.reloadGame()
+
+        verify { anyConstructed<GameFileProvider>().invoke() }
+        verify { repository.delete(any()) }
+        verify { anyConstructed<NumberPlaceGame>().initialize(any()) }
+    }
+
+    @Test
     fun startNewGame() {
         mockkConstructor(GameFileProvider::class)
         every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
