@@ -17,7 +17,9 @@ import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -170,6 +172,16 @@ class WebViewPoolImplementationTest {
         subject.switchDevTools("test")
 
         verify { anyConstructed<JDialog>().isVisible = any() }
+    }
+
+    @Test
+    fun findId() {
+        assertNull(subject.findId("test"))
+        assertNull(subject.findId(mockk()))
+
+        subject.component("1", "")
+
+        assertEquals("1", subject.findId(cefBrowser))
     }
 
 }
