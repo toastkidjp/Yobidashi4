@@ -139,7 +139,6 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.browseUri(webHistory.url)
-                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -183,7 +182,6 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.delete(webHistory)
-                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
@@ -194,7 +192,6 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.clear()
-                                    viewModel.closeDropdown()
                                 }
                             ) {
                                 Text(
