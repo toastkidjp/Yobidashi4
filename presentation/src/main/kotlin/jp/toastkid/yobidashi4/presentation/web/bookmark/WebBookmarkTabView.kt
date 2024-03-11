@@ -76,12 +76,15 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                         viewModel.findFaviconPath(bookmark.url),
                         {
                             viewModel.openUrl(bookmark.url, it)
+                            viewModel.closeDropdown()
                         },
                         {
                             viewModel.browseUri(bookmark.url)
+                            viewModel.closeDropdown()
                         },
                         {
                             viewModel.delete(bookmark)
+                            viewModel.closeDropdown()
                         },
                         viewModel.openingDropdown(bookmark),
                         viewModel::closeDropdown,
@@ -163,7 +166,6 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     openUrl(false)
-                    closeDropdown()
                 }
             ) {
                 Text(
@@ -175,7 +177,6 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     openUrl(true)
-                    closeDropdown()
                 }
             ) {
                 Text(
@@ -186,7 +187,6 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     browseUri()
-                    closeDropdown()
                 }
             ) {
                 Text(
@@ -230,7 +230,6 @@ private fun WebBookmarkItemRow(
             DropdownMenuItem(
                 onClick = {
                     onDelete()
-                    closeDropdown()
                 }
             ) {
                 Text(
