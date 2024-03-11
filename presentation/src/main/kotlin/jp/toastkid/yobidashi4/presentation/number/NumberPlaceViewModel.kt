@@ -71,12 +71,16 @@ class NumberPlaceViewModel : KoinComponent {
         _loading.value = true
         _game.value = game
         _mask.value = _game.value.masked()
-        _game.value.masked().rows().forEachIndexed { rowIndex, row ->
+        walkMatrix(_game.value.masked().rows(), ::setSolving)
+        _loading.value = false
+    }
+
+    private fun walkMatrix(matrix: List<List<Int>>, biConsumer: (Int, Int) -> Unit) {
+        matrix.forEachIndexed { rowIndex, row ->
             row.forEachIndexed { columnIndex, i ->
-                setSolving(rowIndex, columnIndex)
+                biConsumer(rowIndex, columnIndex)
             }
         }
-        _loading.value = false
     }
 
     fun setCorrect() {
