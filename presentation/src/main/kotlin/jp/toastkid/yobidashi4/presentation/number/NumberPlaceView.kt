@@ -74,9 +74,7 @@ fun NumberPlaceView() {
                     .padding(8.dp)
             ) {
                 AppBarContent(
-                    {
-                        viewModel.reloadGame()
-                    },
+                    viewModel::reloadGame,
                     viewModel.getMaskingCount(),
                     viewModel::setMaskingCount,
                     viewModel.openingMaskingCount(),
