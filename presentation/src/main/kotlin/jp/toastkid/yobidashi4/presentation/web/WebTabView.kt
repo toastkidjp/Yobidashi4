@@ -56,7 +56,7 @@ internal fun WebTabView(tab: WebTab) {
         webUiComponent.background = background
         component.add(webUiComponent)
 
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Unconfined) {
             viewModel.start(tab.id())
         }
     }
