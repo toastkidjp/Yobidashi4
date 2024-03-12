@@ -32,10 +32,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 viewModel.switchArticleListLabel(),
                 icon = painterResource(viewModel.switchArticleListIconPath()),
-                shortcut = viewModel.switchArticleListShortcut()
-            ) {
-                viewModel.switchArticleList()
-            }
+                shortcut = viewModel.switchArticleListShortcut(),
+                onClick = viewModel::switchArticleList
+            )
 
             Item("Find", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, alt = true)) {
                 viewModel.switchFindArticle()
