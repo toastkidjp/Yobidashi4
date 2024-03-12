@@ -132,7 +132,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
 }
 
 @Composable
-@OptIn(ExperimentalComposeUiApi::class)
 private fun WebBookmarkItemRow(
     bookmark: Bookmark,
     iconPath: Path?,
