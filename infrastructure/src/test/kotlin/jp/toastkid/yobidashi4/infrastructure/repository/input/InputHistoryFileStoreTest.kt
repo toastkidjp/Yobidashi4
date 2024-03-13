@@ -11,7 +11,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -49,7 +50,7 @@ class InputHistoryFileStoreTest {
     fun listEmptyCase() {
         every { Files.exists(any()) }.returns(false)
 
-        Assertions.assertTrue(subject.list().isEmpty())
+        assertTrue(subject.list().isEmpty())
     }
 
     private val timestamp = System.currentTimeMillis()
@@ -57,9 +58,9 @@ class InputHistoryFileStoreTest {
     @Test
     fun list() {
         val bookmarks = subject.list()
-        Assertions.assertTrue(bookmarks.isNotEmpty())
-        Assertions.assertEquals("test", bookmarks.first().word)
-        Assertions.assertEquals(timestamp, bookmarks.first().timestamp)
+        assertTrue(bookmarks.isNotEmpty())
+        assertEquals("test", bookmarks.first().word)
+        assertEquals(timestamp, bookmarks.first().timestamp)
     }
 
     @Test
