@@ -36,9 +36,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::switchArticleList
             )
 
-            Item("Find", icon = painterResource("images/icon/ic_search.xml"), shortcut = KeyShortcut(Key.F, alt = true)) {
-                viewModel.switchFindArticle()
-            }
+            Item(
+                "Find",
+                icon = painterResource("images/icon/ic_search.xml"),
+                shortcut = KeyShortcut(Key.F, alt = true),
+                onClick = viewModel::switchFindArticle
+            )
+
             Item("Dump latest", icon = painterResource("images/icon/ic_dump.xml")) {
                 viewModel.dumpLatest()
             }
