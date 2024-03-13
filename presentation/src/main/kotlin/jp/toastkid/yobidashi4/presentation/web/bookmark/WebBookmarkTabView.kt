@@ -184,9 +184,7 @@ private fun WebBookmarkItemRow(
                 )
             }
             DropdownMenuItem(
-                onClick = {
-                    browseUri()
-                }
+                onClick = browseUri
             ) {
                 Text(
                     "Open with browser",
