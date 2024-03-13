@@ -42,6 +42,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 
 @Composable
@@ -112,38 +113,54 @@ internal fun WebSearchBox() {
                     }
                 }
             }
-            TextField(
-                viewModel.query(),
-                maxLines = 1,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-                label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
-                onValueChange = {
-                    viewModel.onValueChange(it)
-                },
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        viewModel.invokeSearch()
-                    }
-                ),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                visualTransformation = {
-                    TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
-                },
-                trailingIcon = {
-                    Icon(
-                        painterResource("images/icon/ic_clear_form.xml"),
-                        contentDescription = "Clear input.",
-                        tint = MaterialTheme.colors.secondary,
-                        modifier = Modifier.clickable {
-                            viewModel.clearInput()
+            Box {
+                TextField(
+                    viewModel.query(),
+                    maxLines = 1,
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+                    label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
+                    onValueChange = {
+                        viewModel.onValueChange(it)
+                    },
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            viewModel.invokeSearch()
                         }
-                    )
-                },
-                modifier = Modifier.focusRequester(viewModel.focusRequester())
-                    .onKeyEvent {
-                        viewModel.onKeyEvent(it)
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    visualTransformation = {
+                        TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painterResource("images/icon/ic_clear_form.xml"),
+                            contentDescription = "Clear input.",
+                            tint = MaterialTheme.colors.secondary,
+                            modifier = Modifier.clickable {
+                                viewModel.clearInput()
+                            }
+                        )
+                    },
+                    modifier = Modifier.focusRequester(viewModel.focusRequester())
+                        .onKeyEvent {
+                            viewModel.onKeyEvent(it)
+                        }
+                )
+
+                DropdownMenu(
+                    viewModel.shouldShowInputHistory(),
+                    properties = PopupProperties(clippingEnabled = false),
+                    onDismissRequest = {  }
+                ) {
+                    viewModel.inputHistories().forEach {
+                        DropdownMenuItem({
+                            viewModel.putText(it.word)
+                        }) {
+                            Text(it.word)
+                        }
                     }
-            )
+                }
+            }
 
             Button(
                 onClick = viewModel::invokeSearch
