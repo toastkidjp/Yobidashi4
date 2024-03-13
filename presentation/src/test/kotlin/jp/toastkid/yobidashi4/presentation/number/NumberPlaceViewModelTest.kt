@@ -28,7 +28,6 @@ import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -337,7 +336,7 @@ class NumberPlaceViewModelTest {
 
         numberPlaceViewModel.onPointerEvent(pointerEvent)
 
-        Assertions.assertTrue(numberPlaceViewModel.openingDropdown())
+        assertTrue(numberPlaceViewModel.openingDropdown())
 
         numberPlaceViewModel.closeDropdown()
 
@@ -356,7 +355,7 @@ class NumberPlaceViewModelTest {
 
         numberPlaceViewModel.onPointerEvent(pointerEvent)
 
-        Assertions.assertTrue(numberPlaceViewModel.openingDropdown())
+        assertTrue(numberPlaceViewModel.openingDropdown())
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
