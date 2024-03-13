@@ -115,6 +115,7 @@ class WebViewPoolImplementationTest {
         verify(inverse = true) { cefBrowser.close(any()) }
         verify(inverse = true) { cefClient.doClose(any()) }
         verify { CefApp.getInstance().dispose() }
+        verify { cefClient.dispose() }
     }
 
     @Test
@@ -125,6 +126,7 @@ class WebViewPoolImplementationTest {
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
         verify { cefClient.doClose(any()) }
+        verify { cefClient.dispose() }
     }
 
     @Test
@@ -137,6 +139,7 @@ class WebViewPoolImplementationTest {
 
         verify(exactly = 3) { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
+        verify { cefClient.dispose() }
     }
 
     @Test
@@ -151,6 +154,7 @@ class WebViewPoolImplementationTest {
 
         verify(inverse = true) { cefBrowser.close(any()) }
         verify(inverse = true) { CefApp.getInstance().dispose() }
+        verify(inverse = true) { cefClient.dispose() }
     }
 
     @Test
