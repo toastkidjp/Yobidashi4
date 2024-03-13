@@ -189,11 +189,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                     modifier = Modifier.padding(8.dp).fillMaxSize()
                                 )
                             }
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.clear()
-                                }
-                            ) {
+                            DropdownMenuItem(onClick = viewModel::clear) {
                                 Text(
                                     "Clear",
                                     modifier = Modifier.padding(8.dp).fillMaxSize()
