@@ -175,9 +175,7 @@ private fun AppBarContent(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Button(
-            onClick = {
-                reloadGame()
-            },
+            onClick = reloadGame,
             modifier = Modifier.padding(start = 8.dp)
         ) {
             Text("Reload")
