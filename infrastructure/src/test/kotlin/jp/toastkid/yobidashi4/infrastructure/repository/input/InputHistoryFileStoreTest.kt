@@ -64,6 +64,11 @@ class InputHistoryFileStoreTest {
     }
 
     @Test
+    fun filter() {
+        assertTrue(subject.filter("taken").isEmpty())
+    }
+
+    @Test
     fun add() {
         subject.add(InputHistory("test", timestamp))
 
