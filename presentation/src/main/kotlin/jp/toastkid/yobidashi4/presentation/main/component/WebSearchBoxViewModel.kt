@@ -132,7 +132,7 @@ class WebSearchBoxViewModel : KoinComponent {
         return viewModel.showWebSearch()
     }
 
-    fun inputHistories(): List<InputHistory> = inputHistories
+    fun inputHistories(): List<String> = inputHistories.map { it.word }
 
     fun shouldShowInputHistory() = inputHistories.isNotEmpty()
 
