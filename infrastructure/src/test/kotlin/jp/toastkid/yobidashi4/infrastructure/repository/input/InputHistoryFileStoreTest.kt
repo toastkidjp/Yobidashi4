@@ -69,6 +69,11 @@ class InputHistoryFileStoreTest {
     }
 
     @Test
+    fun filterWithNull() {
+        assertEquals(1, subject.filter(null).size)
+    }
+
+    @Test
     fun add() {
         subject.add(InputHistory("test", timestamp))
 
