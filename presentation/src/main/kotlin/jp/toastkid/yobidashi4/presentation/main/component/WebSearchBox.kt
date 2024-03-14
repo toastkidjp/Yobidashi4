@@ -15,35 +15,25 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
+import jp.toastkid.yobidashi4.presentation.component.InputTextField
 
 @Composable
 internal fun WebSearchBox() {
@@ -113,54 +103,29 @@ internal fun WebSearchBox() {
                     }
                 }
             }
-            Box {
-                TextField(
-                    viewModel.query(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-                    label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.onValueChange(it)
-                    },
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            viewModel.invokeSearch()
-                        }
-                    ),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    visualTransformation = {
-                        TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.secondary,
-                            modifier = Modifier.clickable {
-                                viewModel.clearInput()
-                            }
-                        )
-                    },
-                    modifier = Modifier.focusRequester(viewModel.focusRequester())
-                        .onKeyEvent {
-                            viewModel.onKeyEvent(it)
-                        }
-                )
 
-                DropdownMenu(
-                    viewModel.shouldShowInputHistory(),
-                    properties = PopupProperties(clippingEnabled = false),
-                    onDismissRequest = {  }
-                ) {
-                    viewModel.inputHistories().forEach {
-                        DropdownMenuItem({
-                            viewModel.putText(it.word)
-                        }) {
-                            Text(it.word)
-                        }
+            InputTextField(
+                viewModel.query(),
+                onValueChange = {
+                    viewModel.onValueChange(it)
+                },
+                onSearch = {
+                    viewModel.invokeSearch()
+                },
+                clearButton = {
+                    viewModel.clearInput()
+                },
+                viewModel.shouldShowInputHistory(),
+                suggestions = viewModel.inputHistories(),
+                suggestionConsumer = {
+                    viewModel.putText(it)
+                },
+                modifier = Modifier
+                    .focusRequester(viewModel.focusRequester())
+                    .onKeyEvent {
+                        viewModel.onKeyEvent(it)
                     }
-                }
-            }
+            )
 
             Button(
                 onClick = viewModel::invokeSearch
