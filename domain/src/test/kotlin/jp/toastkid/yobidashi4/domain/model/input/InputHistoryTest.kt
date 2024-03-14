@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.input
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 
@@ -23,6 +24,11 @@ class InputHistoryTest {
 
         assertEquals("test", inputHistory.word)
         assertEquals(timestamp, inputHistory.timestamp)
+    }
+
+    @Test
+    fun fromReturnsNullCase() {
+        assertNull(InputHistory.from(null))
     }
 
 }
