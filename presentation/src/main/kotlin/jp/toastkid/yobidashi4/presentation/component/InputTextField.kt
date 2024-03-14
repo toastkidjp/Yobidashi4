@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -33,40 +34,42 @@ internal fun InputTextField(
     suggestionConsumer: (String) -> Unit,
     modifier: Modifier
 ) {
-    TextField(
-        textFieldValue,
-        maxLines = 1,
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-        label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
-        onValueChange = onValueChange,
-        keyboardActions = KeyboardActions(
-            onSearch = onSearch
-        ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        visualTransformation = {
-            TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
-        },
-        trailingIcon = {
-            Icon(
-                painterResource("images/icon/ic_clear_form.xml"),
-                contentDescription = "Clear input.",
-                tint = MaterialTheme.colors.secondary,
-                modifier = Modifier.clickable(onClick = clearButton)
-            )
-        },
-        modifier = modifier
-    )
+    Box {
+        TextField(
+            textFieldValue,
+            maxLines = 1,
+            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+            label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
+            onValueChange = onValueChange,
+            keyboardActions = KeyboardActions(
+                onSearch = onSearch
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            visualTransformation = {
+                TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
+            },
+            trailingIcon = {
+                Icon(
+                    painterResource("images/icon/ic_clear_form.xml"),
+                    contentDescription = "Clear input.",
+                    tint = MaterialTheme.colors.secondary,
+                    modifier = Modifier.clickable(onClick = clearButton)
+                )
+            },
+            modifier = modifier
+        )
 
-    DropdownMenu(
-        openSuggestion,
-        properties = PopupProperties(clippingEnabled = false),
-        onDismissRequest = {  }
-    ) {
-        suggestions.forEach {
-            DropdownMenuItem({
-                suggestionConsumer(it)
-            }) {
-                Text(it)
+        DropdownMenu(
+            openSuggestion,
+            properties = PopupProperties(clippingEnabled = false),
+            onDismissRequest = {  }
+        ) {
+            suggestions.forEach {
+                DropdownMenuItem({
+                    suggestionConsumer(it)
+                }) {
+                    Text(it)
+                }
             }
         }
     }
