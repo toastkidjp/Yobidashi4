@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.InputTextField
 
 @Composable
 internal fun AggregationBox() {
@@ -114,31 +115,26 @@ internal fun AggregationBox() {
             }
 
             if (viewModel.requireSecondInput()) {
-                TextField(
+                InputTextField(
                     viewModel.keyword(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.secondary
-                    ),
-                    label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
-                    onValueChange = viewModel::onKeywordValueChange,
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            viewModel.onSearch()
-                        }
-                    ),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.secondary,
-                            modifier = Modifier.clickable(onClick = viewModel::clearKeywordInput)
-                        )
+                    onValueChange = {
+                        viewModel.onKeywordValueChange(it)
+                    },
+                    onSearch = {
+                        viewModel.onSearch()
+                    },
+                    clearButton = {
+                        viewModel.clearKeywordInput()
+                    },
+                    viewModel.shouldShowKeywordHistory(),
+                    suggestions = viewModel.keywordHistories(),
+                    suggestionConsumer = {
+                        viewModel.putKeyword(it)
                     },
                     modifier = viewModel.focusingModifier()
                 )
+
+                // label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
             }
 
             TextField(
