@@ -31,4 +31,11 @@ class InputHistoryTest {
         assertNull(InputHistory.from(null))
     }
 
+    @Test
+    fun withWord() {
+        val inputHistory = InputHistory.withWord("test")
+
+        assertEquals("test", inputHistory.word)
+    }
+
 }
