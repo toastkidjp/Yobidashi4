@@ -132,6 +132,9 @@ internal fun AggregationBox() {
                     suggestionConsumer = {
                         viewModel.putKeyword(it)
                     },
+                    { text ->
+                        viewModel.deleteInputHistoryItem(text)
+                    },
                     modifier = viewModel.focusingModifier()
                 )
             }
