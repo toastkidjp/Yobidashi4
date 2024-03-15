@@ -152,6 +152,13 @@ class AggregationBoxViewModel : KoinComponent {
         keywordHistories.clear()
     }
 
+    fun deleteInputHistoryItem(text: String) {
+        keywordHistoryRepository.deleteWithWord(text)
+        val filtered = keywordHistories.filter { it.word != text }
+        keywordHistories.clear()
+        keywordHistories.addAll(filtered)
+    }
+
     private fun invokeAggregation(
         viewModel: MainViewModel,
         query: String,
