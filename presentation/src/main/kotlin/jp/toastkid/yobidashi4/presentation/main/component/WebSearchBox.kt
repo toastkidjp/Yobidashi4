@@ -106,6 +106,7 @@ internal fun WebSearchBox() {
 
             InputTextField(
                 viewModel.query(),
+                "Please would you input web search keyword?",
                 onValueChange = {
                     viewModel.onValueChange(it)
                 },
