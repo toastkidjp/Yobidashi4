@@ -117,6 +117,7 @@ internal fun AggregationBox() {
             if (viewModel.requireSecondInput()) {
                 InputTextField(
                     viewModel.keyword(),
+                    "Keyword",
                     onValueChange = {
                         viewModel.onKeywordValueChange(it)
                     },
@@ -133,8 +134,6 @@ internal fun AggregationBox() {
                     },
                     modifier = viewModel.focusingModifier()
                 )
-
-                // label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
             }
 
             TextField(
