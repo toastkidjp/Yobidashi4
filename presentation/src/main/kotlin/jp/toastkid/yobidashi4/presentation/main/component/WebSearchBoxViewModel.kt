@@ -144,6 +144,13 @@ class WebSearchBoxViewModel : KoinComponent {
         inputHistories.clear()
     }
 
+    fun deleteInputHistoryItem(text: String) {
+        inputHistoryRepository.deleteWithWord(text)
+        val filtered = inputHistories.filter { it.word != text }
+        inputHistories.clear()
+        inputHistories.addAll(filtered)
+    }
+
     fun start() {
         if (viewModel.showWebSearch()) {
             focusRequester().requestFocus()
