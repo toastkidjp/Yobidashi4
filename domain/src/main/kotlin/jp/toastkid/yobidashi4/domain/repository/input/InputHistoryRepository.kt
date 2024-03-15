@@ -12,6 +12,8 @@ interface InputHistoryRepository {
 
     fun delete(item: InputHistory)
 
+    fun deleteWithWord(word: String)
+
     fun clear()
 
 }
