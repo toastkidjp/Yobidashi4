@@ -32,6 +32,10 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
         save(list().minus(item))
     }
 
+    override fun deleteWithWord(word: String) {
+        save(list().filter { it.word != word })
+    }
+
     override fun clear() {
         Files.deleteIfExists(path())
     }
