@@ -26,6 +26,7 @@ import androidx.compose.ui.window.PopupProperties
 @Composable
 internal fun InputTextField(
     textFieldValue: TextFieldValue,
+    labelText: String,
     onValueChange: (TextFieldValue) -> Unit,
     onSearch:  (KeyboardActionScope.() -> Unit),
     clearButton: () -> Unit,
@@ -39,7 +40,7 @@ internal fun InputTextField(
             textFieldValue,
             maxLines = 1,
             colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-            label = { Text("Please would you input web search keyword?", color = MaterialTheme.colors.secondary) },
+            label = { Text(labelText, color = MaterialTheme.colors.secondary) },
             onValueChange = onValueChange,
             keyboardActions = KeyboardActions(
                 onSearch = onSearch
