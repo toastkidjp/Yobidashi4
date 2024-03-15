@@ -16,6 +16,9 @@ data class InputHistory(
             val split = it.split("\t")
             return InputHistory(split[0], split[1].toLong())
         }
+
+        fun withWord(word: String) = InputHistory(word, System.currentTimeMillis())
+
     }
 
 }
