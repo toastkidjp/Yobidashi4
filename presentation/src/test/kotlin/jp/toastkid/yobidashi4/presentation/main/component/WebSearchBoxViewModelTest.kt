@@ -122,6 +122,21 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
+    fun invokeSearchWithCurrentWebTabUrl() {
+        every { viewModel.openUrl(any(), any()) } just Runs
+        every { viewModel.setShowWebSearch(any()) } just Runs
+        val tab = mockk<WebTab>()
+        every { viewModel.currentTab() } returns tab
+        every { tab.url() } returns "https://www.yahoo.co.jp/index.html"
+        subject.onValueChange(TextFieldValue("test"))
+
+        subject.invokeSearch()
+
+        verify { viewModel.openUrl(any(), any()) }
+        verify { viewModel.setShowWebSearch(false) }
+    }
+
+    @Test
     fun invokeSearchWithUrlInput() {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.setShowWebSearch(any()) } just Runs
