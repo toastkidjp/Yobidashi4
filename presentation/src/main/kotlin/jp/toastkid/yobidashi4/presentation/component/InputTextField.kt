@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -21,6 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 
 @Composable
@@ -33,6 +37,7 @@ internal fun InputTextField(
     openSuggestion: Boolean,
     suggestions: List<String>,
     suggestionConsumer: (String) -> Unit,
+    onClickDelete: (String) -> Unit,
     modifier: Modifier
 ) {
     Box {
@@ -66,10 +71,19 @@ internal fun InputTextField(
             onDismissRequest = {  }
         ) {
             suggestions.forEach {
-                DropdownMenuItem({
-                    suggestionConsumer(it)
-                }) {
-                    Text(it)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "x",
+                        Modifier.clickable { onClickDelete(it) }.padding(vertical = 8.dp, horizontal = 4.dp)
+                    )
+
+                    DropdownMenuItem({
+                        suggestionConsumer(it)
+                    }) {
+                        Text(it)
+                    }
                 }
             }
         }
