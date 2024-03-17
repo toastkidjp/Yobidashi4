@@ -8,17 +8,15 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
-import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
+import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.parameter.ParametersHolder
 
 class WebSearchBoxViewModel : KoinComponent {
 
@@ -26,7 +24,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     private val focusRequester = FocusRequester()
 
-    private val inputHistoryRepository: InputHistoryRepository by inject(parameters = { ParametersHolder(mutableListOf("web_search")) })
+    private val inputHistoryService = InputHistoryService("web_search")
 
     private val inputHistories = mutableStateListOf<InputHistory>()
 
@@ -81,8 +79,7 @@ class WebSearchBoxViewModel : KoinComponent {
             else -> toString
         }
 
-        inputHistories.clear()
-        inputHistories.addAll(inputHistoryRepository.filter(it.text).takeLast(5))
+        inputHistoryService.filter(inputHistories, it.text)
     }
 
     fun query(): TextFieldValue {
@@ -104,7 +101,8 @@ class WebSearchBoxViewModel : KoinComponent {
             viewModel.openUrl(it.toString(), false)
         }
         viewModel.setShowWebSearch(false)
-        inputHistoryRepository.add(InputHistory(query.value.text, System.currentTimeMillis()))
+
+        inputHistoryService.add(query.value.text)
     }
 
     fun clearInput() {
@@ -132,35 +130,22 @@ class WebSearchBoxViewModel : KoinComponent {
         return viewModel.showWebSearch()
     }
 
-    fun inputHistories(): List<String> = inputHistories.map { it.word }
+    fun inputHistories(): List<String> = inputHistoryService.inputHistories(inputHistories)
 
-    fun shouldShowInputHistory() = inputHistories.isNotEmpty()
+    fun shouldShowInputHistory() = inputHistoryService.shouldShowInputHistory(inputHistories)
 
     fun putText(text: String?) {
-        if (text.isNullOrBlank()) {
-            return
-        }
-        query.value = TextFieldValue("${text} ", TextRange(text.length + 1))
+        val textFieldValue = inputHistoryService.make(text) ?: return
+        query.value = textFieldValue
         inputHistories.clear()
     }
 
     fun deleteInputHistoryItem(text: String) {
-        inputHistoryRepository.deleteWithWord(text)
-        val filtered = inputHistories.filter { it.word != text }
-        inputHistories.clear()
-        inputHistories.addAll(filtered)
+        inputHistoryService.delete(inputHistories, text)
     }
 
     fun clearInputHistory() {
-        val swap = mutableListOf<InputHistory>().also {
-            it.addAll(inputHistoryRepository.list())
-        }
-        inputHistories.clear()
-        inputHistoryRepository.clear()
-        viewModel.showSnackbar("It has done clear!", "Undo", {
-            swap.forEach { inputHistoryRepository.add(it) }
-            inputHistories.addAll(swap.takeLast(5))
-        })
+        inputHistoryService.clear(inputHistories)
     }
 
     fun start() {
