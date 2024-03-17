@@ -151,6 +151,18 @@ class WebSearchBoxViewModel : KoinComponent {
         inputHistories.addAll(filtered)
     }
 
+    fun clearInputHistory() {
+        val swap = mutableListOf<InputHistory>().also {
+            it.addAll(inputHistoryRepository.list())
+        }
+        inputHistories.clear()
+        inputHistoryRepository.clear()
+        viewModel.showSnackbar("It has done clear!", "Undo", {
+            swap.forEach { inputHistoryRepository.add(it) }
+            inputHistories.addAll(swap.takeLast(5))
+        })
+    }
+
     fun start() {
         if (viewModel.showWebSearch()) {
             focusRequester().requestFocus()
