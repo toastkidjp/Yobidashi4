@@ -14,6 +14,7 @@ import io.mockk.verify
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -42,6 +43,9 @@ class AggregationBoxViewModelTest {
     @MockK
     private lateinit var articlesReaderService: ArticlesReaderService
 
+    @MockK
+    private lateinit var inputHistoryRepository: InputHistoryRepository
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -52,6 +56,7 @@ class AggregationBoxViewModelTest {
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
                     single(qualifier = null) { keywordSearch } bind (KeywordArticleFinder::class)
                     single(qualifier = null) { articlesReaderService } bind (ArticlesReaderService::class)
+                    single(qualifier = null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                 }
             )
         }
@@ -59,6 +64,9 @@ class AggregationBoxViewModelTest {
         every { mainViewModel.switchAggregationBox(any()) } just Runs
         every { mainViewModel.showAggregationBox() } returns true
         every { articlesReaderService.invoke() } returns Stream.empty()
+        every { inputHistoryRepository.add(any()) } just Runs
+        every { inputHistoryRepository.filter(any()) } returns emptyList()
+        every { inputHistoryRepository.deleteWithWord(any()) } just Runs
 
         subject = AggregationBoxViewModel()
     }
@@ -236,6 +244,24 @@ class AggregationBoxViewModelTest {
         subject.start()
 
         verify { mainViewModel.showAggregationBox() }
+    }
+
+    @Test
+    fun keywordHistory() {
+        assertFalse(subject.shouldShowKeywordHistory())
+        assertTrue(subject.keywordHistories().isEmpty())
+    }
+
+    @Test
+    fun putKeyword() {
+        subject.putKeyword(null)
+
+        subject.putKeyword("test")
+
+        val keyword = subject.keyword()
+        assertEquals("test ", keyword.text)
+        assertEquals(5, keyword.selection.start)
+        assertEquals(5, keyword.selection.end)
     }
 
 }
