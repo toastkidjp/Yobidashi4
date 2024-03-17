@@ -22,3 +22,5 @@ logs/
 cache/
 Web Data*
 temporary/
+DawnCache/
+GPUCache/
