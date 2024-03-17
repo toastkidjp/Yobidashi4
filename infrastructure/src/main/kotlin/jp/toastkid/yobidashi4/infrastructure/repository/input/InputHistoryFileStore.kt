@@ -45,7 +45,7 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
             Files.createDirectories(path().parent)
         }
 
-        Files.write(path(), list.map { it.toTsv() })
+        Files.write(path(), list.sortedByDescending { it.timestamp }.distinctBy { it.word }.map { it.toTsv() })
     }
 
     private fun path(): Path {
