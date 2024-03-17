@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
 import jp.toastkid.yobidashi4.domain.service.aggregation.MovieMemoSubtitleExtractor
@@ -28,10 +27,10 @@ import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.parameter.ParametersHolder
 
 class AggregationBoxViewModel : KoinComponent {
 
@@ -122,8 +121,7 @@ class AggregationBoxViewModel : KoinComponent {
     fun onKeywordValueChange(it: TextFieldValue) {
         keyword.value = it
 
-        keywordHistories.clear()
-        keywordHistories.addAll(keywordHistoryRepository.filter(it.text))
+        keywordHistoryService.filter(keywordHistories, it.text)
     }
 
     fun onSearch() {
@@ -134,7 +132,7 @@ class AggregationBoxViewModel : KoinComponent {
         keyword.value = TextFieldValue()
     }
 
-    private val keywordHistoryRepository: InputHistoryRepository by inject(parameters = { ParametersHolder(mutableListOf("aggregation_keyword")) })
+    private val keywordHistoryService: InputHistoryService = InputHistoryService("aggregation_keyword")
 
     private val keywordHistories = mutableStateListOf<InputHistory>()
 
@@ -145,18 +143,13 @@ class AggregationBoxViewModel : KoinComponent {
     }
 
     fun putKeyword(text: String?) {
-        if (text.isNullOrBlank()) {
-            return
-        }
-        keyword.value = TextFieldValue("${text} ", TextRange(text.length + 1))
+        val newFieldValue = keywordHistoryService.make(text) ?: return
+        keyword.value = newFieldValue
         keywordHistories.clear()
     }
 
     fun deleteInputHistoryItem(text: String) {
-        keywordHistoryRepository.deleteWithWord(text)
-        val filtered = keywordHistories.filter { it.word != text }
-        keywordHistories.clear()
-        keywordHistories.addAll(filtered)
+        keywordHistoryService.delete(keywordHistories, text)
     }
 
     private fun invokeAggregation(
@@ -169,7 +162,7 @@ class AggregationBoxViewModel : KoinComponent {
         }
 
         if (keyword.value.text.isNotBlank()) {
-            keywordHistoryRepository.add(InputHistory.withWord(keyword.value.text))
+            keywordHistoryService.add(keyword.value.text)
         }
 
         val result = aggregator.invoke(query)
