@@ -38,6 +38,7 @@ internal fun InputTextField(
     suggestions: List<String>,
     suggestionConsumer: (String) -> Unit,
     onClickDelete: (String) -> Unit,
+    onClickClear: () -> Unit,
     modifier: Modifier
 ) {
     Box {
@@ -85,6 +86,12 @@ internal fun InputTextField(
                         Text(it)
                     }
                 }
+            }
+
+            DropdownMenuItem({
+                onClickClear()
+            }) {
+                Text("Clear history")
             }
         }
     }
