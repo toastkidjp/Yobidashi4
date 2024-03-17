@@ -20,7 +20,11 @@ class InputHistoryService(private val context: String) : KoinComponent {
         items.addAll(repository.filter(query).takeLast(5))
     }
 
-    fun add(query: String) {
+    fun add(query: String?) {
+        if (query.isNullOrBlank()) {
+            return
+        }
+
         repository.add(InputHistory(query, System.currentTimeMillis()))
     }
 
