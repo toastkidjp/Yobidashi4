@@ -189,9 +189,7 @@ class AggregationBoxViewModel : KoinComponent {
             return
         }
 
-        if (keyword.value.text.isNotBlank()) {
-            keywordHistoryService.add(keyword.value.text)
-        }
+        keywordHistoryService.add(keyword.value.text)
 
         dateHistoryService.add(this.query.value.text)
 
