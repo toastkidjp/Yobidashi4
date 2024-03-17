@@ -74,6 +74,11 @@ class InputHistoryFileStoreTest {
     }
 
     @Test
+    fun filterWithExisting() {
+        assertEquals(1, subject.filter("test").size)
+    }
+
+    @Test
     fun add() {
         subject.add(InputHistory("test", timestamp))
 
