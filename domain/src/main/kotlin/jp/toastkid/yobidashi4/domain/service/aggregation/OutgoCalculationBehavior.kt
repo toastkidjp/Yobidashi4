@@ -13,6 +13,9 @@ internal class OutgoCalculationBehavior(
 
     operator fun invoke(keyword: String): OutgoAggregationResult {
         val aggregationResult = OutgoAggregationResult(keyword)
+
+        val monthly = keyword.length <= 4
+
         articlesReaderService.invoke()
             .parallel()
             .map { it.nameWithoutExtension to Files.readAllLines(it) }
@@ -33,12 +36,20 @@ internal class OutgoCalculationBehavior(
                     if (target.endsWith(YEN_UNIT)) {
                         val priceStr = target.substring(0, target.indexOf(YEN_UNIT)).trim().replace(",", "")
                         if (priceStr.isNotBlank()) {
-                            aggregationResult.add(it.first, items[0] + items[1].trim(), Integer.parseInt(priceStr))
+                            val key = if (monthly) it.first.substring(0, 7) else it.first
+                            val title = if (monthly) key else items[0] + items[1].trim()
+                            val value = Integer.parseInt(priceStr)
+                            aggregationResult.add(key, title, value)
                         }
                     }
                 }
             }
             .collect(Collectors.toList())
+
+        if (monthly) {
+            aggregationResult.aggregate()
+        }
+
         return aggregationResult
     }
 
