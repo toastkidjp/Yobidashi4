@@ -156,6 +156,30 @@ class AggregationBoxViewModel : KoinComponent {
         keywordHistoryService.clear(keywordHistories)
     }
 
+    private val dateHistoryService: InputHistoryService = InputHistoryService("aggregation_date")
+
+    private val dateHistories = mutableStateListOf<InputHistory>()
+
+    fun shouldShowDateHistory(): Boolean = dateHistories.isNotEmpty()
+
+    fun dateHistories(): List<String> {
+        return dateHistories.map { it.word }
+    }
+
+    fun putDate(text: String?) {
+        val newFieldValue = dateHistoryService.make(text) ?: return
+        query.value = newFieldValue
+        dateHistories.clear()
+    }
+
+    fun deleteDateHistoryItem(text: String) {
+        dateHistoryService.delete(dateHistories, text)
+    }
+
+    fun clearDateHistory() {
+        dateHistoryService.clear(dateHistories)
+    }
+
     private fun invokeAggregation(
         viewModel: MainViewModel,
         query: String,
@@ -168,6 +192,8 @@ class AggregationBoxViewModel : KoinComponent {
         if (keyword.value.text.isNotBlank()) {
             keywordHistoryService.add(keyword.value.text)
         }
+
+        dateHistoryService.add(this.query.value.text)
 
         val result = aggregator.invoke(query)
         if (result.isEmpty()) {
@@ -194,6 +220,8 @@ class AggregationBoxViewModel : KoinComponent {
 
     fun onDateInputValueChange(it: TextFieldValue) {
         query.value = it
+
+        dateHistoryService.filter(dateHistories, it.text)
     }
 
     fun dateInputModifier(): Modifier {
