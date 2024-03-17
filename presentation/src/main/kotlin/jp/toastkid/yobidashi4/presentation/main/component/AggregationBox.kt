@@ -135,6 +135,9 @@ internal fun AggregationBox() {
                     { text ->
                         viewModel.deleteInputHistoryItem(text)
                     },
+                    {
+                        viewModel.clearKeywordHistory()
+                    },
                     modifier = viewModel.focusingModifier()
                 )
             }

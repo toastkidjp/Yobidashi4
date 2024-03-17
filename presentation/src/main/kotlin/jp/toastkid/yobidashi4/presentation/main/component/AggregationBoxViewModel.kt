@@ -152,6 +152,10 @@ class AggregationBoxViewModel : KoinComponent {
         keywordHistoryService.delete(keywordHistories, text)
     }
 
+    fun clearKeywordHistory() {
+        keywordHistoryService.clear(keywordHistories)
+    }
+
     private fun invokeAggregation(
         viewModel: MainViewModel,
         query: String,
