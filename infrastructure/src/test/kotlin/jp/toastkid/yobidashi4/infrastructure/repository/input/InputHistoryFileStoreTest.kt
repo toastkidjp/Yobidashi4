@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
@@ -80,10 +81,22 @@ class InputHistoryFileStoreTest {
 
     @Test
     fun add() {
-        subject.add(InputHistory("test", timestamp))
+        val slot = slot<Iterable<String>>()
+        every { Files.write(any(), capture(slot)) }.returns(mockk())
+        every { Files.readAllLines(any()) }.returns(
+            listOf(
+                "test\t1",
+                "test\t3",
+                "test\t2",
+            )
+        )
+
+        subject.add(InputHistory("test", 1))
 
         verify(inverse = true) { Files.createDirectories(any()) }
         verify { Files.write(any(), any<Iterable<String>>()) }
+        assertEquals(1, slot.captured.toList().size)
+        assertEquals("test\t3", slot.captured.toList().first())
     }
 
     @Test
