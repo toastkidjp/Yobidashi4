@@ -16,7 +16,7 @@ class KeywordSearchFilter(private val input: String?) {
             input.split("*").forEach { keywords.add(it) }
             useAndSearch = true
         } else if (input.contains(" ")) {
-            input.split(" ").forEach { keywords.add(it) }
+            input.split(" ").filter { it.isNotBlank() }.forEach { keywords.add(it) }
             useAndSearch = false
         } else {
             keywords.add(input)
