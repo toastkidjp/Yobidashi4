@@ -118,4 +118,13 @@ class InputHistoryFileStoreTest {
         verify { Files.write(any(), any<Iterable<String>>()) }
     }
 
+    @Test
+    fun clear() {
+        every { Files.deleteIfExists(any()) } returns true
+
+        subject.clear()
+
+        verify { Files.deleteIfExists(any()) }
+    }
+
 }
