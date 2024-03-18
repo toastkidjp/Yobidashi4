@@ -166,7 +166,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("File rename", icon = painterResource("images/icon/ic_rename.xml")) {
                 viewModel.openFileRenameToolTab()
             }
-            Item("Roulette", icon = painterResource("images/icon/ic_shuffle.xml")) {
+            Item("Roulette", shortcut = KeyShortcut(Key.R, alt = true), icon = painterResource("images/icon/ic_shuffle.xml")) {
                 viewModel.openRouletteToolTab()
             }
             Item("Compound interest calculator", icon = painterResource("images/icon/ic_elevation.xml")) {
