@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.util.stream.Stream
@@ -17,6 +18,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -67,6 +69,12 @@ class AggregationBoxViewModelTest {
         every { inputHistoryRepository.add(any()) } just Runs
         every { inputHistoryRepository.filter(any()) } returns emptyList()
         every { inputHistoryRepository.deleteWithWord(any()) } just Runs
+
+        mockkConstructor(InputHistoryService::class)
+        every { anyConstructed<InputHistoryService>().add(any()) } just Runs
+        every { anyConstructed<InputHistoryService>().clear(any()) } just Runs
+        every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
+        every { anyConstructed<InputHistoryService>().filter(any(), any()) } just Runs
 
         subject = AggregationBoxViewModel()
     }
@@ -262,6 +270,20 @@ class AggregationBoxViewModelTest {
         assertEquals("test ", keyword.text)
         assertEquals(5, keyword.selection.start)
         assertEquals(5, keyword.selection.end)
+    }
+
+    @Test
+    fun deleteInputHistoryItem() {
+        subject.deleteInputHistoryItem("test")
+
+        verify { anyConstructed<InputHistoryService>().delete(any(), any()) }
+    }
+
+    @Test
+    fun clearKeywordHistory() {
+        subject.clearKeywordHistory()
+
+        verify { anyConstructed<InputHistoryService>().clear(any()) }
     }
 
 }
