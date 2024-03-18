@@ -9,11 +9,11 @@ data class InputHistory(
 
     companion object {
         fun from(it: String?): InputHistory? {
-            if (it == null || it.contains("\t").not()) {
+            if (it == null || it.contains(DELIMITER).not()) {
                 return null
             }
 
-            val split = it.split("\t")
+            val split = it.split(DELIMITER)
             return InputHistory(split[0], split[1].toLong())
         }
 
@@ -22,3 +22,5 @@ data class InputHistory(
     }
 
 }
+
+private val DELIMITER = "\t"
