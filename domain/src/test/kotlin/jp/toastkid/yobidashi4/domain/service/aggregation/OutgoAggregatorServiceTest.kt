@@ -29,7 +29,7 @@ internal class OutgoAggregatorServiceTest {
     @BeforeEach
     fun setUp() {
         val path = mockk<Path>()
-        every { path.nameWithoutExtension }.returns("file.md")
+        every { path.nameWithoutExtension }.returns("2024-03-18.md")
 
         mockkStatic(Files::class)
         val lines = """
@@ -60,9 +60,35 @@ _
 
     @Test
     fun testInvoke() {
-        val outgoAggregationResult = outgoAggregatorService.invoke("file")
+        val outgoAggregationResult = outgoAggregatorService.invoke("2024-03")
 
         assertEquals(1733, outgoAggregationResult.sum())
+
+        verify(exactly = 1) { Files.readAllLines(any()) }
+        verify(exactly = 1) { articlesReaderService.invoke() }
+    }
+
+    @Test
+    fun monthlyCase() {
+        val path = mockk<Path>()
+        every { path.nameWithoutExtension }.returns("2024-02-23.md")
+
+        val lines = """
+_
+## 家計簿_
+| 品目 | 金額 |_
+|:---|:---|_
+| (外食) マッシュルームとひき肉のカレー | 1000円_
+| 玉ねぎ8 | 218円_
+"""
+            .split("_").map { it.trim() }
+        every { Files.readAllLines(any()) }.returns(lines)
+        every { articlesReaderService.invoke() }.returns(Stream.of(path))
+
+        val outgoAggregationResult = outgoAggregatorService.invoke("2024")
+
+        assertEquals(1218, outgoAggregationResult.sum())
+        assertEquals("2024-02", outgoAggregationResult.itemArrays().first()[0])
 
         verify(exactly = 1) { Files.readAllLines(any()) }
         verify(exactly = 1) { articlesReaderService.invoke() }
