@@ -32,6 +32,11 @@ class InputHistoryTest {
     }
 
     @Test
+    fun fromReturnsNullCaseWithoutDelimiter() {
+        assertNull(InputHistory.from("test"))
+    }
+
+    @Test
     fun withWord() {
         val inputHistory = InputHistory.withWord("test")
 
