@@ -88,9 +88,7 @@ internal fun InputTextField(
                 }
             }
 
-            DropdownMenuItem({
-                onClickClear()
-            }) {
+            DropdownMenuItem(onClickClear) {
                 Text("Clear history")
             }
         }
