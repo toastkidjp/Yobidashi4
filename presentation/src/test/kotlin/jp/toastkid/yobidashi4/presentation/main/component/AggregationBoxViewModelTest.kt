@@ -220,6 +220,10 @@ class AggregationBoxViewModelTest {
     @Test
     fun requireSecondInput() {
         assertFalse(subject.requireSecondInput())
+
+        subject.choose(subject.categories().entries.last())
+
+        assertTrue(subject.requireSecondInput())
     }
 
     @Test
