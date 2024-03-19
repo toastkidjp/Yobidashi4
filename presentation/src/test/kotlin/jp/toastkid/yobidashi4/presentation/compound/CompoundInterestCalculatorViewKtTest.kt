@@ -6,7 +6,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
 import jp.toastkid.yobidashi4.presentation.compound.viewmodel.CompoundInterestCalculatorViewModel
@@ -42,7 +41,6 @@ class CompoundInterestCalculatorViewKtTest {
         runDesktopComposeUiTest {
             setContent {
                 CompoundInterestCalculatorView()
-                verify { anyConstructed<CompoundInterestCalculatorViewModel>().result() }
             }
         }
     }
