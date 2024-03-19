@@ -218,6 +218,11 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun requireSecondInput() {
+        assertFalse(subject.requireSecondInput())
+    }
+
+    @Test
     fun onSearchWithBlankQuery() {
         subject.onDateInputValueChange(TextFieldValue("  "))
 
