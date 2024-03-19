@@ -93,6 +93,13 @@ class InputHistoryServiceTest {
     }
 
     @Test
+    fun addWithNull() {
+        subject.add(null)
+
+        verify { inputHistoryRepository wasNot called }
+    }
+
+    @Test
     fun make() {
         val textFieldValue = subject.make("test")
 
