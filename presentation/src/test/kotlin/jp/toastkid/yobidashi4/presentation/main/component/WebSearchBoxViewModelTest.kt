@@ -17,7 +17,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
-import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -38,9 +37,6 @@ class WebSearchBoxViewModelTest {
     @MockK
     private lateinit var viewModel: MainViewModel
 
-    @MockK
-    private lateinit var inputHistoryRepository: InputHistoryRepository
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -49,13 +45,9 @@ class WebSearchBoxViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                 }
             )
         }
-        every { inputHistoryRepository.add(any()) } just Runs
-        every { inputHistoryRepository.filter(any()) } returns emptyList()
-        every { inputHistoryRepository.deleteWithWord(any()) } just Runs
 
         mockkConstructor(InputHistoryService::class)
         every { anyConstructed<InputHistoryService>().add(any()) } just Runs
