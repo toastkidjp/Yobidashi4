@@ -278,4 +278,36 @@ class AggregationBoxViewModelTest {
         verify { anyConstructed<InputHistoryService>().clear(any()) }
     }
 
+    @Test
+    fun dateHistories() {
+        assertFalse(subject.shouldShowDateHistory())
+        assertTrue(subject.dateHistories().isEmpty())
+    }
+
+    @Test
+    fun putDate() {
+        subject.putDate(null)
+
+        subject.putDate("test")
+
+        val textFieldValue = subject.dateInput()
+        assertEquals("test ", textFieldValue.text)
+        assertEquals(5, textFieldValue.selection.start)
+        assertEquals(5, textFieldValue.selection.end)
+    }
+
+    @Test
+    fun deleteDateHistoryItem() {
+        subject.deleteDateHistoryItem("test")
+
+        verify { anyConstructed<InputHistoryService>().delete(any(), any()) }
+    }
+
+    @Test
+    fun clearDateHistory() {
+        subject.clearDateHistory()
+
+        verify { anyConstructed<InputHistoryService>().clear(any()) }
+    }
+
 }
