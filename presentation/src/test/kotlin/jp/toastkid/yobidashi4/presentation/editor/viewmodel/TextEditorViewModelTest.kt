@@ -10,6 +10,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.getSelectedText
+import androidx.compose.ui.unit.em
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -19,8 +20,8 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,6 +80,7 @@ class TextEditorViewModelTest {
         assertTrue(viewModel.lineNumbers().isEmpty())
 
         every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineHeight(any()) } returns 31.0f
         every { multiParagraph.getLineLeft(any()) } returns 20f
         every { multiParagraph.getLineTop(any()) } returns 0f
         every { multiParagraph.lineCount } returns 11
@@ -108,6 +110,9 @@ class TextEditorViewModelTest {
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(any()) } returns 0
         every { multiParagraph.getLineEnd(any()) } returns text.length
+        every { multiParagraph.getLineHeight(0) } returns 25.0f
+        every { multiParagraph.getLineHeight(1) } returns 31.0f
+        every { multiParagraph.getLineHeight(2) } returns 30.0f
         every { multiParagraph.lineCount } returns 3
         viewModel.setMultiParagraph(multiParagraph)
         viewModel.onValueChange(TextFieldValue(text))
@@ -115,6 +120,13 @@ class TextEditorViewModelTest {
         viewModel.onClickLineNumber(0)
 
         assertEquals(text, viewModel.content().getSelectedText().text)
+        assertEquals(1.55.em, viewModel.getLineHeight(-1))
+        assertEquals(1.25.em, viewModel.getLineHeight(0))
+        assertEquals(1.55.em, viewModel.getLineHeight(1))
+        assertEquals(1.5.em, viewModel.getLineHeight(2))
+        verify { multiParagraph.getLineHeight(0) }
+        verify { multiParagraph.getLineHeight(1) }
+        verify { multiParagraph.getLineHeight(2) }
     }
 
     @Test
