@@ -218,6 +218,11 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun dateInputModifier() {
+        assertEquals(subject.focusingModifier(), subject.dateInputModifier())
+    }
+
+    @Test
     fun requireSecondInput() {
         assertFalse(subject.requireSecondInput())
 
