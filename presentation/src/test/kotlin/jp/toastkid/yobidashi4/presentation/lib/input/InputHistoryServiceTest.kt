@@ -114,6 +114,13 @@ class InputHistoryServiceTest {
     }
 
     @Test
+    fun makeWithBlank() {
+        val textFieldValue = subject.make(" ")
+
+        assertNull(textFieldValue)
+    }
+
+    @Test
     fun inputHistories() {
         val mutableList = mutableListOf<InputHistory>()
 
