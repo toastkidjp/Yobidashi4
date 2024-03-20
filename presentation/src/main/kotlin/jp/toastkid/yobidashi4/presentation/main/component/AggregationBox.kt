@@ -155,7 +155,7 @@ internal fun AggregationBox() {
                 {
                     viewModel.clearDateHistory()
                 },
-                modifier = viewModel.focusingModifier()
+                modifier = viewModel.dateInputModifier()
             )
 
             Button(
