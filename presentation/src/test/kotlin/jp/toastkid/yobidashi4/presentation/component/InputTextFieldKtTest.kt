@@ -24,9 +24,35 @@ class InputTextFieldKtTest {
                     {},
                     {},
                     {},
+                    {},
                     Modifier
                 )
             }
         }
     }
+
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun closeSuggestionCase() {
+        runDesktopComposeUiTest {
+            setContent {
+                InputTextField(
+                    TextFieldValue("test"),
+                    "label",
+                    {},
+                    {},
+                    {},
+                    false,
+                    listOf("test"),
+                    {},
+                    {},
+                    {},
+                    {},
+                    Modifier
+                )
+            }
+        }
+    }
+
 }
