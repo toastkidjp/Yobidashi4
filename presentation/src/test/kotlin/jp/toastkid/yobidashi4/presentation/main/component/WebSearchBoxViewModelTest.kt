@@ -218,6 +218,27 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
+    fun notConsumedOnKeyEventWithEscapeReleased() {
+        every { viewModel.setShowWebSearch(any()) } just Runs
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_RELEASED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_ESCAPE,
+                    'A'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        verify { viewModel wasNot called }
+    }
+
+    @Test
     fun existsResult() {
         assertFalse(subject.existsResult())
     }
