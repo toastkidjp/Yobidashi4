@@ -121,6 +121,27 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun notConsumedOnKeyEventWithEscapeReleased() {
+        every { mainViewModel.switchAggregationBox(any()) } just Runs
+
+        val consumed = subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_RELEASED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_ESCAPE,
+                    'A'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
+    }
+
+    @Test
     fun switchAggregationBox() {
         every { mainViewModel.switchAggregationBox(any()) } just Runs
 
