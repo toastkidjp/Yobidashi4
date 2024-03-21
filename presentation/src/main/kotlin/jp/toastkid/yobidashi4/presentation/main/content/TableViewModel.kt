@@ -2,10 +2,12 @@ package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
@@ -32,6 +34,8 @@ class TableViewModel : KoinComponent {
 
     private val highlighter = KeywordHighlighter()
 
+    private val query = mutableStateOf("")
+
     fun items() = articleStates
 
     fun focusRequester() = focusRequester
@@ -46,6 +50,8 @@ class TableViewModel : KoinComponent {
         articleStates.clear()
         articleStates.addAll(aggregationResult.itemArrays())
         focusRequester().requestFocus()
+
+        query.value = if (aggregationResult is FindResult) aggregationResult.keyword() else ""
     }
 
     fun sort(index: Int, aggregationResult: AggregationResult) {
@@ -92,6 +98,6 @@ class TableViewModel : KoinComponent {
         articleStates.addAll(swap)
     }
 
-    fun highlight(text: String, keyword: String?) = highlighter(text, keyword)
+    fun highlight(text: String) = highlighter(text, query.value)
 
 }
