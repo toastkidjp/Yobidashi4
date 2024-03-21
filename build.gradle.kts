@@ -105,15 +105,14 @@ compose.desktop {
             copyright = "(c) 2022 toastkidjp. All rights reserved."
             vendor = "Toast kid"
             //licenseFile.set(project.file("LICENSE.txt"))
-            includeAllModules = true
+            //includeAllModules = true
+            modules("java.instrument", "java.sql", "jdk.unsupported")
             outputBaseDir.set(project.rootDir.resolve("."))
             targetFormats(
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg,
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi,
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
+                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Exe
             )
             windows {
-                iconFile.set(project.file("src/main/resources/images/icon.png"))
+                iconFile.set(project.file("presentation/src/main/resources/images/icon.png"))
             }
         }
 
