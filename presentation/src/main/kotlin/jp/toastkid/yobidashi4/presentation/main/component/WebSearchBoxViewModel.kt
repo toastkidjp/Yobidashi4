@@ -153,9 +153,9 @@ class WebSearchBoxViewModel : KoinComponent {
         if (viewModel.showWebSearch()) {
             focusRequester().requestFocus()
         }
-        query.value = TextFieldValue(
-            (viewModel.currentTab() as? WebTab)?.url() ?: ""
-        )
+
+        val webTab = viewModel.currentTab() as? WebTab ?: return
+        query.value = TextFieldValue(webTab.url())
     }
 
     fun onFocusChanged(focusState: FocusState) {
