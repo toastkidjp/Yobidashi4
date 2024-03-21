@@ -1,24 +1,19 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
 @Composable
 fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
@@ -31,45 +26,20 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
         Row {
             Column {
                 Text(unixTimeConverterService.title(), modifier = Modifier.padding(8.dp))
-                TextField(
+
+                SingleLineTextField(
                     viewModel.firstInput(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text(unixTimeConverterService.firstInputLabel(), color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.onFirstValueChange(it)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.clickable {
-                                viewModel.clearFirstInput()
-                            }
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    unixTimeConverterService.firstInputLabel(),
+                    viewModel::onFirstValueChange,
+                    viewModel::clearFirstInput,
+                    KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
-                TextField(
+                SingleLineTextField(
                     viewModel.secondInput(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text(unixTimeConverterService.secondInputLabel(), color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.onSecondValueChange(it)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.clickable {
-                                viewModel.clearSecondInput()
-                            }
-                        )
-                    }
+                    unixTimeConverterService.secondInputLabel(),
+                    viewModel::onSecondValueChange,
+                    viewModel::clearSecondInput
                 )
             }
         }
