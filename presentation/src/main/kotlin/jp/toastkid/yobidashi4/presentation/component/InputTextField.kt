@@ -13,6 +13,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -96,4 +97,35 @@ internal fun InputTextField(
             }
         }
     }
+}
+
+@Composable
+fun SingleLineTextField(
+    textFieldValue: TextFieldValue,
+    labelText: String,
+    onValueChange: (TextFieldValue) -> Unit,
+    onClearInput: () -> Unit = {},
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        textFieldValue,
+        maxLines = 1,
+        colors = colors,
+        label = { Text(labelText, color = MaterialTheme.colors.secondary) },
+        onValueChange = onValueChange,
+        trailingIcon = {
+            Icon(
+                painterResource("images/icon/ic_clear_form.xml"),
+                contentDescription = "Clear input.",
+                tint = MaterialTheme.colors.primary,
+                modifier = Modifier.clickable(onClick = onClearInput)
+            )
+        },
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        modifier = modifier
+    )
 }
