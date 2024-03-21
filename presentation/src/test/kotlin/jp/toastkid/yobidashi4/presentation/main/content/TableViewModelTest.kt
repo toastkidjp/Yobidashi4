@@ -13,6 +13,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
+import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
@@ -117,6 +118,20 @@ class TableViewModelTest {
         subject.highlight("It longs to get them.", "get")
 
         verify { anyConstructed<KeywordHighlighter>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun sort() {
+        val result = StocksAggregationResult()
+        result.put("2023-12-25", 1200, 200, 9.5)
+        result.put("2023-12-26", 2000, 280, 12.2)
+
+        subject.sort(2, result)
+        subject.sort(2, result)
+        subject.sort(2, result)
+        subject.sort(3, result)
+        subject.sort(3, result)
+        subject.sort(3, result)
     }
 
 }
