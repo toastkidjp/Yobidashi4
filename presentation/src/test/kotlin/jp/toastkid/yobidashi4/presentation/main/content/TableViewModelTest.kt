@@ -115,7 +115,7 @@ class TableViewModelTest {
 
     @Test
     fun highlight() {
-        subject.highlight("It longs to get them.", "get")
+        subject.highlight("It longs to get them.")
 
         verify { anyConstructed<KeywordHighlighter>().invoke(any(), any()) }
     }
