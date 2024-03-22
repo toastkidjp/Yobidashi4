@@ -116,6 +116,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
             }
 
+            if (viewModel.currentIsEditableTab()) {
+                Item("Edit", shortcut = KeyShortcut(Key.E, ctrl = true), icon = painterResource("images/icon/ic_edit.xml")) {
+                    viewModel.openEditorTabWithCurrentTabsPath()
+                }
+            }
+
             Item(
                 "Find in page",
                 icon = painterResource("images/icon/ic_search.xml"),
