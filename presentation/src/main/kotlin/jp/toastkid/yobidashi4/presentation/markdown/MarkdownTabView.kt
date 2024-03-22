@@ -10,10 +10,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.launch
@@ -28,14 +24,7 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
-        modifier = modifier.focusRequester(focusRequester).onKeyEvent {
-            if (it.isCtrlPressed && it.key == Key.E) {
-                val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
-                mainViewModel.edit(tab.slideshowSourcePath())
-                return@onKeyEvent true
-            }
-            return@onKeyEvent false
-        }
+        modifier = modifier.focusRequester(focusRequester)
     ) {
         MarkdownPreview(tab.markdown(), scrollState, modifier)
 
