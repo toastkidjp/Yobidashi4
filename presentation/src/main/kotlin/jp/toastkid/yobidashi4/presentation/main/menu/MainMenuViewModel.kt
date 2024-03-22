@@ -148,6 +148,15 @@ class MainMenuViewModel : KoinComponent {
         return viewModel.currentTab() is WebTab
     }
 
+    fun currentIsEditableTab(): Boolean {
+        return viewModel.currentTab() is MarkdownPreviewTab
+    }
+
+    fun openEditorTabWithCurrentTabsPath() {
+        val markdownPreviewTab = viewModel.currentTab() as? MarkdownPreviewTab ?: return
+        viewModel.edit(markdownPreviewTab.slideshowSourcePath())
+    }
+
     fun copyTabsUrl() {
         val tab = viewModel.currentTab() as? WebTab ?: return
         ClipboardPutterService().invoke(tab.url())
