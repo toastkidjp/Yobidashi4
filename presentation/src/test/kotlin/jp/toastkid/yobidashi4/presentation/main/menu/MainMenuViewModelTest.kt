@@ -370,6 +370,46 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun currentIsEditableTab() {
+        every { mainViewModel.currentTab() } returns mockk<MarkdownPreviewTab>()
+
+        assertTrue(subject.currentIsEditableTab())
+    }
+
+    @Test
+    fun currentIsNotEditableTab() {
+        every { mainViewModel.currentTab() } returns mockk<WebTab>()
+
+        assertFalse(subject.currentIsEditableTab())
+    }
+
+    @Test
+    fun openEditorTabWithCurrentTabsPath() {
+        val markdownPreviewTab = mockk<MarkdownPreviewTab>()
+        every { mainViewModel.currentTab() } returns markdownPreviewTab
+        val path = mockk<Path>()
+        every { markdownPreviewTab.slideshowSourcePath() } returns path
+        every { mainViewModel.edit(path, any()) } just Runs
+
+        subject.openEditorTabWithCurrentTabsPath()
+
+        verify { mainViewModel.currentTab() }
+        verify { markdownPreviewTab.slideshowSourcePath() }
+        verify { mainViewModel.edit(path, any()) }
+    }
+
+    @Test
+    fun noopOpenEditorTabWithCurrentTabsPath() {
+        every { mainViewModel.currentTab() } returns mockk()
+        every { mainViewModel.edit(any(), any()) } just Runs
+
+        subject.openEditorTabWithCurrentTabsPath()
+
+        verify { mainViewModel.currentTab() }
+        verify(inverse = true) { mainViewModel.edit(any(), any()) }
+    }
+
+    @Test
     fun copyTabsTitle() {
         val tab = mockk<Tab>()
         every { tab.title() } returns "test"
