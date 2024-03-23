@@ -224,6 +224,10 @@ class MainMenuViewModel : KoinComponent {
         viewModel.openTab(CalendarTab())
     }
 
+    fun searchWithSelectedText() {
+        viewModel.webSearch(viewModel.selectedText())
+    }
+
     fun openAggregationBox() {
         switchAggregationBox(0)
     }

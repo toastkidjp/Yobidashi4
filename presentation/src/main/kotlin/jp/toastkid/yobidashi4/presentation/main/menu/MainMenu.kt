@@ -140,6 +140,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
             }
 
+            Item(
+                "Search with selected text",
+                icon = painterResource("images/icon/ic_search.xml"),
+                shortcut = KeyShortcut(Key.O, ctrl = true, shift = true)) {
+                viewModel.searchWithSelectedText()
+            }
+
             (1 .. min(10, viewModel.tabCount())).forEach {
                 Item("Tab $it", shortcut = viewModel.makeTabIndexShortcut(it)) {
                     viewModel.setSelectedIndex(it - 1)
