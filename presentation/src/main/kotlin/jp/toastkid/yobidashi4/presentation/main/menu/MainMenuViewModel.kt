@@ -225,7 +225,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun searchWithSelectedText() {
-        viewModel.webSearch(viewModel.selectedText())
+        viewModel.webSearchWithSelectedText()
     }
 
     fun openAggregationBox() {

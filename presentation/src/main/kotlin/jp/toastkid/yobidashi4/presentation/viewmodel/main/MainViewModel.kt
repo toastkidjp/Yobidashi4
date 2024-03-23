@@ -48,6 +48,8 @@ interface MainViewModel {
 
     fun webSearch(query: String?, background: Boolean = false)
 
+    fun webSearchWithSelectedText()
+
     fun edit(path: Path, onBackground: Boolean = false)
 
     fun browseUri(uri: String?)

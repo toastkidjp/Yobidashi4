@@ -225,6 +225,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openUrl(SearchUrlFactory().invoke(query), background)
     }
 
+    override fun webSearchWithSelectedText() {
+        webSearch(selectedText())
+    }
+
     override fun edit(path: Path, onBackground: Boolean) {
         if (Files.exists(path).not()) {
             return
