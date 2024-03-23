@@ -20,8 +20,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,14 +32,12 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.net.URL
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
@@ -49,13 +46,10 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
-import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
-import jp.toastkid.yobidashi4.presentation.editor.preview.LinkGenerator
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun MarkdownPreview(
@@ -153,29 +147,23 @@ fun MarkdownPreview(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TextLineView(text: String, textStyle: TextStyle, annotate: (String, String) -> AnnotatedString, modifier: Modifier) {
-    val lastLayoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-    val finderTarget = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm.finderFlow() }
-    val annotatedString = annotate(
-        LinkGenerator().invoke(text), finderTarget.collectAsState(
-            FindOrder.EMPTY).value.target
-    )
+    val viewModel = remember { TextLineViewModel() }
+
     ClickableText(
-        annotatedString,
+        viewModel.annotatedString(),
         style = textStyle,
         onClick = {},
         modifier = modifier.onPointerEvent(PointerEventType.Release) {
-            val offset = lastLayoutResult.value?.getOffsetForPosition(it.changes.first().position) ?: 0
-            annotatedString
-                .getStringAnnotations(tag = "URL", start = offset, end = offset)
-                .firstOrNull()
-                ?.let { annotation ->
-                    if (annotation.tag == "URL") {
-                        LinkBehaviorService().invoke(annotation.item)
-                    }
-                }
+            viewModel.onPointerReleased(it)
         },
         onTextLayout = { layoutResult ->
-            lastLayoutResult.value = layoutResult
+            viewModel.putLayoutResult(layoutResult)
         }
     )
+
+    LaunchedEffect(text) {
+        withContext(Dispatchers.IO) {
+            viewModel.launch(text)
+        }
+    }
 }
