@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -81,7 +80,6 @@ fun MarkdownPreview(
                                         fontSize = line.fontSize().sp,
                                         fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
                                     ),
-                                    { a, b -> viewModel.annotate(a, b) },
                                     Modifier.padding(bottom = 8.dp)
                                 )
                             }
@@ -109,7 +107,6 @@ fun MarkdownPreview(
                                     TextLineView(
                                         if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
                                         TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
-                                        { a, b -> viewModel.annotate(a, b) },
                                         Modifier.padding(bottom = 4.dp)
                                     )
                                 }
@@ -146,7 +143,7 @@ fun MarkdownPreview(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun TextLineView(text: String, textStyle: TextStyle, annotate: (String, String) -> AnnotatedString, modifier: Modifier) {
+private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     val viewModel = remember { TextLineViewModel() }
 
     ClickableText(
