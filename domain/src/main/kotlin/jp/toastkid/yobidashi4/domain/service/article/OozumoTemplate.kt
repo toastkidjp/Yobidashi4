@@ -12,7 +12,7 @@ class OozumoTemplate {
         val dateTitle = makeDateTitle(term.indexOf(today.dayOfMonth)) ?: return null
         return """
 ## $monthTitle $dateTitle
-
+${if (dateTitle == "千秋楽") THREE_SPECIAL_AWARDS else ""}
 ### 十両
 追記
 
@@ -73,6 +73,16 @@ ${if (dateTitle == "千秋楽") FINAL_DATE_PROGRAMS else ""}
     }
 
 }
+
+private const val THREE_SPECIAL_AWARDS = """
+### 三賞
+
+| 賞 | 力士 |
+|:---|:---|
+| 殊勲賞 | 
+| 敢闘賞 | 
+| 技能賞 | 
+"""
 
 private const val FINAL_DATE_PROGRAMS = """
 ### これより三役
