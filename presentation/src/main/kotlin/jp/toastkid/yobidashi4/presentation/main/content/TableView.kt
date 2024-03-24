@@ -91,7 +91,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                         headerCursorOn.value = false
                                     }
                                     .drawBehind { drawRect(headerColumnBackgroundColor.value) }
-                                    .weight(if (index == 0) 0.4f else 1f)
+                                    .weight(viewModel.makeWeight(index))
                             ) {
                                 Text(
                                     item.toString(),
@@ -163,7 +163,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                         return@forEachIndexed
                                     }
                                     Text(
-                                        if (any is Int) String.format("%,d", any) else any.toString(),
+                                        viewModel.makeText(any),
                                         color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                                         modifier = Modifier
                                             .weight(if (index == 0) 0.4f else 1f)

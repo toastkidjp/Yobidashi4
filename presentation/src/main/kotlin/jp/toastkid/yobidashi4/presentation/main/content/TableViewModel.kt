@@ -100,4 +100,12 @@ class TableViewModel : KoinComponent {
 
     fun highlight(text: String) = highlighter(text, query.value)
 
+    fun makeText(any: Any): String {
+        return if (any is Int) String.format("%,d", any) else any.toString()
+    }
+
+    fun makeWeight(index: Int): Float {
+        return if (index == 0) 0.4f else 1f
+    }
+
 }
