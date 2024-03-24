@@ -169,14 +169,14 @@ class CefClientFactory : KoinComponent {
                     KeyEvent(
                         browser.uiComponent,
                         KeyEvent.KEY_PRESSED,
-                        1,
+                        System.currentTimeMillis(),
                         modifiers,
                         event.windows_key_code,
-                        'A'
+                        event.character
                     )
                 )
 
-                return true
+                return false
             }
         })
         client.addContextMenuHandler(object : CefContextMenuHandlerAdapter() {
