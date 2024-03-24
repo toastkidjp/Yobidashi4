@@ -76,13 +76,15 @@ internal fun InputTextField(
             onDismissRequest = {  }
         ) {
             suggestions.forEach {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        "x",
-                        Modifier.clickable { onClickDelete(it) }.padding(vertical = 8.dp, horizontal = 4.dp)
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .clickable { onClickDelete(it) }
+                            .padding(vertical = 8.dp, horizontal = 4.dp)
+                    ) {
+                        Text("x")
+                    }
 
                     DropdownMenuItem({
                         suggestionConsumer(it)
