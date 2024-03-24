@@ -12,6 +12,7 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
@@ -93,6 +94,25 @@ class TableViewModelTest {
 
         verify { focusRequester.requestFocus() }
         assertEquals(2, subject.items().size)
+
+        subject.sort(1, result)
+    }
+
+    @Test
+    fun startWithExtractingQuery() {
+        assertTrue(subject.items().isEmpty())
+
+        subject = spyk(subject)
+        val focusRequester = mockk<FocusRequester>()
+        every { focusRequester.requestFocus() } just Runs
+        every { subject.focusRequester() } returns focusRequester
+        val result = FindResult("test")
+        result.add("2024-03-23.md", listOf("test"))
+
+        subject.start(result)
+
+        verify { focusRequester.requestFocus() }
+        assertEquals(1, subject.items().size)
 
         subject.sort(1, result)
     }
