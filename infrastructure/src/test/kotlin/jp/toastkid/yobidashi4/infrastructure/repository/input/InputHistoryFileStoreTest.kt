@@ -75,6 +75,11 @@ class InputHistoryFileStoreTest {
     }
 
     @Test
+    fun filterWithBlank() {
+        assertEquals(1, subject.filter(" ").size)
+    }
+
+    @Test
     fun filterWithExisting() {
         assertEquals(1, subject.filter("test").size)
     }
