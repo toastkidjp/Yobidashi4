@@ -19,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
@@ -29,20 +28,11 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.input.InputHistory
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
-import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Composable
 internal fun FindInPageBox() {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
-    val focusRequester = remember { FocusRequester() }
-    val findInputHistoryService = remember { InputHistoryService("find_in_page") }
-    val findInputHistories = remember { mutableListOf<InputHistory>() }
+    val viewModel = remember { FindInPageBoxViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -68,19 +58,19 @@ internal fun FindInPageBox() {
                 "Please would you input web search keyword?",
                 {
                     viewModel.onFindInputChange(it)
-                    findInputHistoryService.filter(findInputHistories, it.text)
                 },
                 {  },
                 { viewModel.onFindInputChange(TextFieldValue()) },
-                findInputHistoryService.shouldShowInputHistory(findInputHistories),
-                findInputHistoryService.inputHistories(findInputHistories),
-                { findInputHistoryService.delete(findInputHistories, it) },
-                { findInputHistoryService.clear(findInputHistories) },
-                { findInputHistories.clear() },
-                modifier = Modifier.focusRequester(focusRequester)
+                viewModel.shouldShowInputHistory(),
+                viewModel.inputHistories(),
+                { viewModel.onClickInputHistory(it) },
+                { viewModel.onClickDelete(it) },
+                { viewModel.onClickClear() },
+                { viewModel.onFocusChanged(it) },
+                modifier = Modifier.focusRequester(viewModel.focusRequester())
             )
 
-            if (viewModel.currentTab() is EditorTab) {
+            if (viewModel.useReplace()) {
                 TextField(
                     viewModel.replaceInputValue(),
                     onValueChange = {
@@ -135,7 +125,7 @@ internal fun FindInPageBox() {
             }
 
             LaunchedEffect(viewModel.openFind()) {
-                focusRequester.requestFocus()
+                viewModel.launch()
             }
         }
     }
