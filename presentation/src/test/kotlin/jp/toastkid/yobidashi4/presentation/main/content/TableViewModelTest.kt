@@ -154,4 +154,10 @@ class TableViewModelTest {
         subject.sort(3, result)
     }
 
+    @Test
+    fun makeWeight() {
+        assertEquals(0.4f, subject.makeWeight(0))
+        assertEquals(1f, subject.makeWeight(1))
+    }
+
 }
