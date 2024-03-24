@@ -193,7 +193,7 @@ class AggregationBoxViewModel : KoinComponent {
 
         dateHistoryService.add(this.query.value.text)
 
-        val result = aggregator.invoke(query)
+        val result = aggregator.invoke(query.trim())
         if (result.isEmpty()) {
             viewModel.showSnackbar("Finding by \"$query\" has not get any result.")
             return
