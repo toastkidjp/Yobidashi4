@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
@@ -28,9 +27,12 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.component.InputTextField
+import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -39,6 +41,8 @@ import org.koin.core.component.inject
 internal fun FindInPageBox() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
     val focusRequester = remember { FocusRequester() }
+    val findInputHistoryService = remember { InputHistoryService("find_in_page") }
+    val findInputHistories = remember { mutableListOf<InputHistory>() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -59,23 +63,20 @@ internal fun FindInPageBox() {
                 .padding(8.dp)
             )
 
-            TextField(
+            InputTextField(
                 viewModel.inputValue(),
-                onValueChange = {
+                "Please would you input web search keyword?",
+                {
                     viewModel.onFindInputChange(it)
+                    findInputHistoryService.filter(findInputHistories, it.text)
                 },
-                maxLines = 1,
-                label = {
-                    Text(
-                        "Please would you input web search keyword?",
-                        color = MaterialTheme.colors.secondary
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.secondary
-                ),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                {  },
+                { viewModel.onFindInputChange(TextFieldValue()) },
+                findInputHistoryService.shouldShowInputHistory(findInputHistories),
+                findInputHistoryService.inputHistories(findInputHistories),
+                { findInputHistoryService.delete(findInputHistories, it) },
+                { findInputHistoryService.clear(findInputHistories) },
+                { findInputHistories.clear() },
                 modifier = Modifier.focusRequester(focusRequester)
             )
 
