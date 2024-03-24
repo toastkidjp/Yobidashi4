@@ -27,16 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
@@ -78,7 +74,7 @@ fun MarkdownPreview(
                                     TextStyle(
                                         color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
                                         fontSize = line.fontSize().sp,
-                                        fontWeight = if (line.level != -1) FontWeight.Bold else FontWeight.Normal,
+                                        fontWeight = viewModel.makeFontWeight(line.level),
                                     ),
                                     Modifier.padding(bottom = 8.dp)
                                 )
@@ -105,7 +101,7 @@ fun MarkdownPreview(
                                         }
                                     }
                                     TextLineView(
-                                        if (line.taskList) it.substring(it.indexOf("] ") + 1) else it,
+                                        viewModel.extractText(it, line.taskList),
                                         TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
                                         Modifier.padding(bottom = 4.dp)
                                     )
@@ -114,10 +110,10 @@ fun MarkdownPreview(
                         }
 
                         is ImageLine -> {
-                            val read = ImageIO.read(URL(line.source))
+                            val read = viewModel.loadBitmap(line.source)
                             if (read != null) {
                                 Image(
-                                    read.toComposeImageBitmap(),
+                                    read,
                                     contentDescription = line.source,
                                     modifier = Modifier.padding(vertical = 8.dp)
                                 )
