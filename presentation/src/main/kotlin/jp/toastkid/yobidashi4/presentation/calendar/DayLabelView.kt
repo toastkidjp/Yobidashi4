@@ -18,7 +18,7 @@ import java.time.DayOfWeek
 fun DayLabelView(
     date: Int,
     dayOfWeek: DayOfWeek,
-    label: String?,
+    label: String,
     offDay: Boolean,
     today: Boolean,
     modifier: Modifier
@@ -41,7 +41,7 @@ fun DayLabelView(
                 color = viewModel.textColor(dayOfWeek, offDay, today) ?: MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
-            Text(label ?: "", fontSize = viewModel.labelSize(label), color = viewModel.labelColor())
+            Text(label, fontSize = viewModel.labelSize(label), color = viewModel.labelColor())
         }
     }
 }
