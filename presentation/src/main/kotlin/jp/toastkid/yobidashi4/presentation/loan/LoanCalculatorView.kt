@@ -46,89 +46,41 @@ fun LoanCalculatorView() {
                 SelectionContainer {
                     Text(text = viewModel.result(), fontSize = 18.sp)
                 }
-                OutlinedTextField(
-                    value = viewModel.loanAmount(),
-                    onValueChange = {
-                        viewModel.setLoanAmount(it)
-                    },
-                    label = { Text(text = "Loan amount") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                LoanCalculatorInput(
+                    viewModel.loanAmount(),
+                    { viewModel.setLoanAmount(it) },
+                    "Loan amount"
                 )
-                OutlinedTextField(
-                    value = viewModel.loanTerm(),
-                    onValueChange = {
-                        viewModel.setLoanTerm(it)
-                    },
-                    label = { Text(text = "Loan term") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                LoanCalculatorInput(
+                    viewModel.loanTerm(),
+                    { viewModel.setLoanTerm(it) },
+                    "Loan term"
                 )
-                OutlinedTextField(
-                    value = viewModel.interestRate(),
-                    onValueChange = {
-                        viewModel.setInterestRate(it)
-                    },
-                    label = { Text(text = "Interest rate") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                LoanCalculatorInput(
+                    viewModel.interestRate(),
+                    { viewModel.setInterestRate(it) },
+                    "Interest rate"
                 )
-                OutlinedTextField(
-                    value = viewModel.downPayment(),
-                    onValueChange = {
-                        viewModel.setDownPayment(it)
-                    },
-                    label = { Text(text = "Down payment") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                LoanCalculatorInput(
+                    viewModel.downPayment(),
+                    { viewModel.setDownPayment(it) },
+                    "Down payment"
                 )
-                OutlinedTextField(
-                    value = viewModel.managementFee(),
-                    onValueChange = {
-                        viewModel.setManagementFee(it)
-                    },
-                    label = { Text(text = "Management fee (Monthly)") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                LoanCalculatorInput(
+                    viewModel.managementFee(),
+                    { viewModel.setManagementFee(it) },
+                    "Management fee (Monthly)"
                 )
-                OutlinedTextField(
-                    value = viewModel.renovationReserves(),
-                    onValueChange = {
-                        viewModel.setRenovationReserves(it)
-                    },
-                    label = { Text(text = "Renovation reserves (Monthly)") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colors.onSurface,
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.onSurface
-                    ),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                LoanCalculatorInput(
+                    viewModel.renovationReserves(),
+                    { viewModel.setRenovationReserves(it) },
+                    "Renovation reserves (Monthly)"
                 )
             }
 
@@ -176,4 +128,20 @@ fun LoanCalculatorView() {
     LaunchedEffect(Unit) {
         viewModel.launch()
     }
+}
+
+@Composable
+private fun LoanCalculatorInput(value: String, onValueChange: (String) -> Unit, labelText: String) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = labelText) },
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = MaterialTheme.colors.onSurface,
+            backgroundColor = Color.Transparent,
+            cursorColor = MaterialTheme.colors.onSurface
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+    )
 }
