@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -20,16 +19,12 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,8 +38,6 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Composable
 fun MarkdownPreview(
@@ -134,29 +127,5 @@ fun MarkdownPreview(
                 Alignment.CenterEnd
             )
         )
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-private fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
-    val viewModel = remember { TextLineViewModel() }
-
-    ClickableText(
-        viewModel.annotatedString(),
-        style = textStyle,
-        onClick = {},
-        modifier = modifier.onPointerEvent(PointerEventType.Release) {
-            viewModel.onPointerReleased(it)
-        },
-        onTextLayout = { layoutResult ->
-            viewModel.putLayoutResult(layoutResult)
-        }
-    )
-
-    LaunchedEffect(text) {
-        withContext(Dispatchers.IO) {
-            viewModel.launch(text)
-        }
     }
 }
