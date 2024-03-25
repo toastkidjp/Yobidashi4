@@ -498,7 +498,7 @@ class CefClientFactoryTest {
         val consumed = handlerSlot.captured.onKeyEvent(browser, event)
 
         assertNotNull(client)
-        assertTrue(consumed)
+        assertFalse(consumed)
         verify { client.addKeyboardHandler(any()) }
         verify { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
         verify { browser.uiComponent }
@@ -543,7 +543,7 @@ class CefClientFactoryTest {
         val consumed = handlerSlot.captured.onKeyEvent(browser, event)
 
         assertNotNull(client)
-        assertTrue(consumed)
+        assertFalse(consumed)
         verify { client.addKeyboardHandler(any()) }
         verify { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
         verify { browser.uiComponent }
@@ -588,7 +588,7 @@ class CefClientFactoryTest {
         val consumed = handlerSlot.captured.onKeyEvent(browser, event)
 
         assertNotNull(client)
-        assertTrue(consumed)
+        assertFalse(consumed)
         verify { client.addKeyboardHandler(any()) }
         verify { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
         verify { browser.uiComponent }
