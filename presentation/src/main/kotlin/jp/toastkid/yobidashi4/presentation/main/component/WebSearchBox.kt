@@ -121,9 +121,7 @@ internal fun WebSearchBox() {
                 suggestionConsumer = {
                     viewModel.putText(it)
                 },
-                { text ->
-                    viewModel.deleteInputHistoryItem(text)
-                },
+                { viewModel.deleteInputHistoryItem(it) },
                 {
                     viewModel.clearInputHistory()
                 },
