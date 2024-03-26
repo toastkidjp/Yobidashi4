@@ -225,9 +225,7 @@ private fun WebBookmarkItemRow(
                 )
             }
             DropdownMenuItem(
-                onClick = {
-                    onDelete()
-                }
+                onClick = onDelete
             ) {
                 Text(
                     "Delete",
