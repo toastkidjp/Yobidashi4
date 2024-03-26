@@ -15,6 +15,7 @@ import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -97,6 +98,11 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     fun findFaviconPath(url: String): Path? {
         return faviconFolder.find(url)
+    }
+
+    fun clipText(text: String) {
+        ClipboardPutterService().invoke(text)
+        closeDropdown()
     }
 
 }

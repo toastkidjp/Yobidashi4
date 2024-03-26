@@ -45,7 +45,6 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlin.io.path.absolutePathString
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -82,6 +81,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                             viewModel.browseUri(bookmark.url)
                             viewModel.closeDropdown()
                         },
+                        { viewModel.clipText(it) },
                         {
                             viewModel.delete(bookmark)
                             viewModel.closeDropdown()
@@ -137,6 +137,7 @@ private fun WebBookmarkItemRow(
     iconPath: Path?,
     openUrl: (Boolean) -> Unit,
     browseUri: () -> Unit,
+    clipText: (String) -> Unit,
     onDelete: () -> Unit,
     openingDropdown: Boolean,
     closeDropdown: () -> Unit,
@@ -193,8 +194,7 @@ private fun WebBookmarkItemRow(
             }
             DropdownMenuItem(
                 onClick = {
-                    ClipboardPutterService().invoke(bookmark.title)
-                    closeDropdown()
+                    clipText(bookmark.title)
                 }
             ) {
                 Text(
@@ -204,8 +204,7 @@ private fun WebBookmarkItemRow(
             }
             DropdownMenuItem(
                 onClick = {
-                    ClipboardPutterService().invoke(bookmark.url)
-                    closeDropdown()
+                    clipText(bookmark.url)
                 }
             ) {
                 Text(
@@ -215,8 +214,7 @@ private fun WebBookmarkItemRow(
             }
             DropdownMenuItem(
                 onClick = {
-                    ClipboardPutterService().invoke("[${bookmark.title}](${bookmark.url})")
-                    closeDropdown()
+                    clipText("[${bookmark.title}](${bookmark.url})")
                 }
             ) {
                 Text(
