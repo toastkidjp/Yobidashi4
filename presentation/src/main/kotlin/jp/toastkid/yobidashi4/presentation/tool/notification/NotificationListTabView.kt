@@ -44,7 +44,7 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun NotificationListTabView() {
     val coroutineScope = rememberCoroutineScope()
@@ -73,34 +73,38 @@ internal fun NotificationListTabView() {
                 }
 
                 itemsIndexed(viewModel.items()) { index, item ->
-                    Row(modifier = Modifier.fillMaxWidth().animateItemPlacement()) {
-                        var notificationEvent = item
-                        NotificationEventRow(item.title, viewModel.listState().firstVisibleItemIndex != 0) {
-                            if (it.composition != null) {
-                                return@NotificationEventRow
-                            }
-
-                            notificationEvent = notificationEvent.copy(title = it.text)
+                    val titleState = remember { mutableStateOf(TextFieldValue(item.title)) }
+                    val textState = remember { mutableStateOf(TextFieldValue(item.text)) }
+                    val dateTimeState = remember { mutableStateOf(TextFieldValue(item.dateTimeString())) }
+                    val headerCursorOn = mutableStateOf(false)
+                    val headerColumnBackgroundColor = animateColorAsState(
+                        if (headerCursorOn.value) MaterialTheme.colors.primary
+                        else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+                        else Color.Transparent
+                    )
+                    Row(modifier = Modifier.fillMaxWidth()
+                        .animateItemPlacement()
+                        .onPointerEvent(PointerEventType.Enter) {
+                            headerCursorOn.value = true
                         }
-                        NotificationEventRow(item.text, viewModel.listState().firstVisibleItemIndex != 0) {
-                            if (it.composition != null) {
-                                return@NotificationEventRow
-                            }
-
-                            notificationEvent = notificationEvent.copy(text = it.text)
+                        .onPointerEvent(PointerEventType.Exit) {
+                            headerCursorOn.value = false
                         }
-                        NotificationEventRow(item.dateTimeString(), viewModel.listState().firstVisibleItemIndex != 0) {
-                            if (it.composition != null) {
-                                return@NotificationEventRow
-                            }
-
-                            val dateTime = NotificationEvent.parse(it.text) ?: return@NotificationEventRow
-
-                            notificationEvent = notificationEvent.copy(date = dateTime)
+                        .drawBehind { drawRect(headerColumnBackgroundColor.value) }
+                    ) {
+                        NotificationEventRow(titleState.value, headerCursorOn.value) {
+                            titleState.value = it
+                        }
+                        NotificationEventRow(textState.value, headerCursorOn.value) {
+                            textState.value = it
+                        }
+                        NotificationEventRow(dateTimeState.value, headerCursorOn.value) {
+                            dateTimeState.value = it
                         }
 
                         Button(onClick = {
-                            viewModel.update(index, notificationEvent)
+                            val dateTime = NotificationEvent.parse(dateTimeState.value.text) ?: return@Button
+                            viewModel.update(index, NotificationEvent(titleState.value.text, textState.value.text, dateTime))
                         }) {
                             Text("Update")
                         }
@@ -127,41 +131,23 @@ internal fun NotificationListTabView() {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun NotificationEventRow(
-    initialInput: String,
-    firstVisible: Boolean,
+    initialInput: TextFieldValue,
+    headerCursorOn: Boolean,
     onValueChange: (TextFieldValue) -> Unit
 ) {
-    val input = remember { mutableStateOf(TextFieldValue()) }
-
-    val headerCursorOn = mutableStateOf(false)
-    val headerColumnBackgroundColor = animateColorAsState(
-        if (headerCursorOn.value) MaterialTheme.colors.primary
-        else if (firstVisible) MaterialTheme.colors.surface
-        else Color.Transparent
-    )
-
     Box(
-        contentAlignment = Alignment.CenterStart,
-        modifier = Modifier.Companion
-            .onPointerEvent(PointerEventType.Enter) {
-                headerCursorOn.value = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                headerCursorOn.value = false
-            }
-            .drawBehind { drawRect(headerColumnBackgroundColor.value) }
+        contentAlignment = Alignment.CenterStart
     ) {
         TextField(
-            input.value,
+            initialInput,
             maxLines = 1,
             colors = TextFieldDefaults.textFieldColors(
-                textColor = if (headerCursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                textColor = if (headerCursorOn) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                 backgroundColor = Color.Transparent,
                 cursorColor = MaterialTheme.colors.secondary
             ),
             label = { Text("Keyword", color = MaterialTheme.colors.secondary) },
             onValueChange = {
-                input.value = it
                 onValueChange(it)
             },
             keyboardActions = KeyboardActions(
@@ -175,14 +161,10 @@ private fun NotificationEventRow(
                     contentDescription = "Clear input.",
                     tint = MaterialTheme.colors.secondary,
                     modifier = Modifier.clickable {
-                        input.value = TextFieldValue()
+                        onValueChange(TextFieldValue())
                     }
                 )
             }
         )
-
-        LaunchedEffect(onValueChange) {
-            input.value = TextFieldValue(initialInput)
-        }
     }
 }
