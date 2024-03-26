@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.pathString
@@ -304,6 +305,16 @@ class WebHistoryViewModelTest {
         verify { viewModel.showSnackbar(any(), any(), any()) }
         verify { repository.storeAll(any()) }
         verify { repository.readAll() }
+    }
+
+    @Test
+    fun clipText() {
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        subject.clipText("test")
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
     @Test
