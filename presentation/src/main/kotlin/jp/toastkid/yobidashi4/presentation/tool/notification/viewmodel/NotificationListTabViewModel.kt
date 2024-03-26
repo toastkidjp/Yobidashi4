@@ -48,14 +48,12 @@ class NotificationListTabViewModel : KoinComponent {
     }
 
     fun update(index: Int, notificationEvent: NotificationEvent) {
-        repository
-            .update(index, notificationEvent)
-        mainViewModel
-            .showSnackbar("Update notification event.", "Reload") {
-                CoroutineScope(Dispatchers.IO).launch {
-                    notification.start()
-                }
-            }
+        repository.update(index, notificationEvent)
+        mainViewModel.showSnackbar("Update notification event.")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            notification.start()
+        }
     }
 
     fun deleteAt(index: Int) {
