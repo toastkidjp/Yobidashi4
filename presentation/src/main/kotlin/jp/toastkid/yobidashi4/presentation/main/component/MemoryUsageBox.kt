@@ -47,7 +47,7 @@ fun MemoryUsageBox() {
                 .align(Alignment.CenterStart)
                 .padding(start = 4.dp)
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.clickClose() }
+                .clickable(onClick = viewModel::clickClose)
                 .padding(8.dp)
             )
         }
