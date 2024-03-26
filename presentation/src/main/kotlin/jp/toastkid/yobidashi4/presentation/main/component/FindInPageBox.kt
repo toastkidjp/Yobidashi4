@@ -21,11 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
@@ -38,11 +34,7 @@ internal fun FindInPageBox() {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.fillMaxWidth().onKeyEvent {
-            if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
-                viewModel.switchFind()
-                return@onKeyEvent true
-            }
-            return@onKeyEvent false
+            viewModel.onKeyEvent(it)
         }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
