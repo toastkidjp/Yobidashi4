@@ -13,6 +13,7 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
@@ -57,6 +58,65 @@ class FindInPageBoxViewModelTest {
     fun tearDown() {
         stopKoin()
         unmockkAll()
+    }
+
+    @Test
+    fun onKeyEvent() {
+        every { mainViewModel.switchFind() } just Runs
+        val keyEvent = androidx.compose.ui.input.key.KeyEvent(
+            KeyEvent(
+                mockk(),
+                KeyEvent.KEY_PRESSED,
+                1,
+                KeyEvent.ALT_DOWN_MASK,
+                KeyEvent.VK_ESCAPE,
+                ','
+            )
+        )
+
+        val consumed = subject.onKeyEvent(keyEvent)
+
+        assertTrue(consumed)
+        verify { mainViewModel.switchFind() }
+    }
+
+    @Test
+    fun notConsumedKeyEvent() {
+        val keyEvent = androidx.compose.ui.input.key.KeyEvent(
+            KeyEvent(
+                mockk(),
+                KeyEvent.KEY_PRESSED,
+                1,
+                KeyEvent.CTRL_DOWN_MASK,
+                KeyEvent.VK_COMMA,
+                ','
+            )
+        )
+
+        val consumed = subject.onKeyEvent(keyEvent)
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun notConsumedOnKeyEventWithEscapeReleased() {
+        every { mainViewModel.switchFind() } just Runs
+
+        val consumed = subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_RELEASED,
+                    1,
+                    KeyEvent.CTRL_DOWN_MASK,
+                    KeyEvent.VK_ESCAPE,
+                    'A'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        verify(inverse = true) { mainViewModel.switchFind() }
     }
 
     @Test
