@@ -2,6 +2,11 @@ package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -19,6 +24,14 @@ class FindInPageBoxViewModel : KoinComponent {
     private val findInputHistoryService = InputHistoryService("find_in_page")
 
     private val findInputHistories = mutableListOf<InputHistory>()
+
+    fun onKeyEvent(it: KeyEvent): Boolean {
+        if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
+            viewModel.switchFind()
+            return true
+        }
+        return false
+    }
 
     fun switchFind() {
         viewModel.switchFind()
