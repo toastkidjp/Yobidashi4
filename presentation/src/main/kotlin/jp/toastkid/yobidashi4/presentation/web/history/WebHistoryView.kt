@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -148,8 +147,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    ClipboardPutterService().invoke(webHistory.title)
-                                    viewModel.closeDropdown()
+                                    viewModel.clipText(webHistory.title)
                                 }
                             ) {
                                 Text(
@@ -159,8 +157,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    ClipboardPutterService().invoke(webHistory.url)
-                                    viewModel.closeDropdown()
+                                    viewModel.clipText(webHistory.url)
                                 }
                             ) {
                                 Text(
@@ -170,8 +167,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             }
                             DropdownMenuItem(
                                 onClick = {
-                                    ClipboardPutterService().invoke("[${webHistory.title}](${webHistory.url})")
-                                    viewModel.closeDropdown()
+                                    viewModel.clipText("[${webHistory.title}](${webHistory.url})")
                                 }
                             ) {
                                 Text(
