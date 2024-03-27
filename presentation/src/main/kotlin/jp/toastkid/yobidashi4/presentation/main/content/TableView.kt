@@ -151,9 +151,8 @@ fun TableView(aggregationResult: AggregationResult) {
                                     if (any is Collection<*>) {
                                         Column(modifier = Modifier.weight(1f)) {
                                             any.forEach { line ->
-                                                val highlight = viewModel.highlight(line.toString())
                                                 Text(
-                                                    highlight,
+                                                    viewModel.highlight(line.toString()),
                                                     modifier = Modifier
                                                         .padding(horizontal = 16.dp)
                                                 )
