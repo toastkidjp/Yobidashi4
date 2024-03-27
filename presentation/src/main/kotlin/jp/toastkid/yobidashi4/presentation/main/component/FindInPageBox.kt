@@ -65,9 +65,7 @@ internal fun FindInPageBox() {
             if (viewModel.useReplace()) {
                 TextField(
                     viewModel.replaceInputValue(),
-                    onValueChange = {
-                        viewModel.onReplaceInputChange(it)
-                    },
+                    onValueChange = viewModel::onReplaceInputChange,
                     maxLines = 1,
                     label = { Text("Replacement", color = MaterialTheme.colors.secondary) },
                     colors = TextFieldDefaults.textFieldColors(
