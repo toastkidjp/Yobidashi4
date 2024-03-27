@@ -96,7 +96,8 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun switchPreviewLabel(): String {
-        return if ((viewModel.currentTab() as? EditorTab)?.showPreview() == true) "Hide preview" else "Show preview"
+        val editorTab = viewModel.currentTab() as? EditorTab ?: return "Show preview"
+        return if (editorTab.showPreview()) "Hide preview" else "Show preview"
     }
 
     fun switchPreview() {
