@@ -47,7 +47,10 @@ class NotificationListTabViewModel : KoinComponent {
         notificationEvents.add(new)
     }
 
-    fun update(index: Int, notificationEvent: NotificationEvent) {
+    fun update(index: Int, title: String, text: String, dateInput: String) {
+        val dateTime = NotificationEvent.parse(dateInput) ?: return
+
+        val notificationEvent = NotificationEvent(title, text, dateTime)
         repository.update(index, notificationEvent)
         mainViewModel.showSnackbar("Update notification event.")
 
