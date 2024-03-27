@@ -40,7 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
 
@@ -103,8 +102,7 @@ internal fun NotificationListTabView() {
                         }
 
                         Button(onClick = {
-                            val dateTime = NotificationEvent.parse(dateTimeState.value.text) ?: return@Button
-                            viewModel.update(index, NotificationEvent(titleState.value.text, textState.value.text, dateTime))
+                            viewModel.update(index, titleState.value.text, textState.value.text, dateTimeState.value.text)
                         }) {
                             Text("Update")
                         }
