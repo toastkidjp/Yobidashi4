@@ -34,9 +34,7 @@ internal fun AggregationBox() {
     val viewModel = remember { AggregationBoxViewModel() }
 
     Surface(
-        modifier = Modifier.wrapContentHeight().fillMaxWidth().onKeyEvent {
-            return@onKeyEvent viewModel.onKeyEvent(it)
-        },
+        modifier = Modifier.wrapContentHeight().fillMaxWidth().onKeyEvent(viewModel::onKeyEvent),
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
@@ -141,9 +139,7 @@ internal fun AggregationBox() {
                 onSearch = {
                     viewModel.onSearch()
                 },
-                clearButton = {
-                    viewModel.clearDateInput()
-                },
+                clearButton = viewModel::clearDateInput,
                 viewModel.shouldShowDateHistory(),
                 suggestions = viewModel.dateHistories(),
                 suggestionConsumer = {
