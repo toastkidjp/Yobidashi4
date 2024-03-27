@@ -160,4 +160,11 @@ class TableViewModelTest {
         assertEquals(1f, subject.makeWeight(1))
     }
 
+    @Test
+    fun makeText() {
+        assertEquals("test", subject.makeText("test"))
+        assertEquals("12.34", subject.makeText(12.34))
+        assertEquals("1,234", subject.makeText(1234))
+    }
+
 }
