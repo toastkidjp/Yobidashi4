@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -122,11 +123,25 @@ class NotificationListTabViewModelTest {
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
         coEvery { notification.start(any()) } just Runs
 
-        subject.update(1, NotificationEvent.makeDefault())
+        subject.update(1, "title", "text", "2024-12-24 12:00:00")
         slot.invoke()
 
         verify { repository.update(1, any()) }
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
+    }
+
+    @Test
+    fun noopUpdate() {
+        every { repository.update(any(), any()) } just Runs
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+        coEvery { notification.start(any()) } just Runs
+
+        subject.update(1, "title", "text", "2024-14-24 :00:00")
+
+        assertFalse(slot.isCaptured)
+        verify(inverse = true) { repository.update(1, any()) }
+        verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
     }
 
     @Test
