@@ -37,9 +37,7 @@ fun MemoryUsageBox() {
                     Text(viewModel.totalMemory(), modifier = Modifier.padding(8.dp))
                     Text(viewModel.maxMemory(), modifier = Modifier.padding(8.dp))
                 }
-                Button(onClick = {
-                    viewModel.launchGarbageCollection()
-                }) {
+                Button(onClick = viewModel::launchGarbageCollection) {
                     Text("Launch GC", modifier = Modifier.padding(8.dp))
                 }
             }
