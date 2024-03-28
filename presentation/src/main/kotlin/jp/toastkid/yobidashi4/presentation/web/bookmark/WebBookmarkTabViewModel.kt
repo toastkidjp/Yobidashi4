@@ -60,6 +60,7 @@ class WebBookmarkTabViewModel : KoinComponent {
     fun delete(bookmark: Bookmark) {
         repository.delete(bookmark)
         bookmarks.remove(bookmark)
+        closeDropdown()
     }
 
     fun openUrl(url: String, onBackground: Boolean) {
