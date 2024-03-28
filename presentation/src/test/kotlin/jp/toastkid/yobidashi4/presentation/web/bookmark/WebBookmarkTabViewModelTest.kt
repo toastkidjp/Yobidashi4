@@ -20,6 +20,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -233,6 +234,25 @@ class WebBookmarkTabViewModelTest {
         subject.update(mockk())
 
         verify { viewModel.updateScrollableTab(any(), any()) }
+    }
+
+    @Test
+    fun findFaviconPath() {
+        every { anyConstructed<WebIcon>().find(any()) } returns mockk()
+
+        subject.findFaviconPath("https://www.yahoo.co.jp")
+
+        verify { anyConstructed<WebIcon>().find(any()) }
+    }
+
+    @Test
+    fun clipText() {
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        subject.clipText("test")
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
 }
