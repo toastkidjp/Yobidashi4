@@ -84,7 +84,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                         { viewModel.clipText(it) },
                         {
                             viewModel.delete(bookmark)
-                            viewModel.closeDropdown()
                         },
                         viewModel.openingDropdown(bookmark),
                         viewModel::closeDropdown,
