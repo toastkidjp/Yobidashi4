@@ -63,7 +63,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                 userScrollEnabled = true,
                 modifier = Modifier.padding(end = 16.dp)
             ) {
-                items(viewModel.list()) { webHistory ->
+                items(viewModel.list(), key = { it.hashCode() }) { webHistory ->
                     val cursorOn = remember { mutableStateOf(false) }
                     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
