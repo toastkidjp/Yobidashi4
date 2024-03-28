@@ -38,7 +38,7 @@ class EditorTheme {
         EditorStyle(
             Regex("\\n-.*"),
             SpanStyle(Color(0xFF666239)),
-            SpanStyle(Color(0xFFDDBBFF))
+            SpanStyle(Color(0xFFFFD54F))
         )
     )
 
