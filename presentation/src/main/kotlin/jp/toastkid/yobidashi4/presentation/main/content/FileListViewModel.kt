@@ -186,15 +186,15 @@ class FileListViewModel : KoinComponent {
     }
 
     fun openFile(path: Path) {
-        useSelectedFile(path) { viewModel.openFile(it) }
+        useSelectedFile(path, viewModel::openFile)
     }
 
     fun edit(path: Path) {
-        useSelectedFile(path) { viewModel.edit(it) }
+        useSelectedFile(path, viewModel::edit)
     }
 
     fun preview(path: Path) {
-        useSelectedFile(path) { viewModel.openPreview(it) }
+        useSelectedFile(path, viewModel::openPreview)
     }
 
     private fun useSelectedFile(pathIfEmpty: Path, action: (Path) -> Unit) {
