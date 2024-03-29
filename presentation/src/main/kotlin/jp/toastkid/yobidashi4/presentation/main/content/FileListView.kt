@@ -100,7 +100,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                     )
                 }
 
-                itemsIndexed(viewModel.items(), key = { index, fileListItem -> fileListItem.path}) { index, fileListItem ->
+                itemsIndexed(viewModel.items(), key = { _, fileListItem -> fileListItem.path}) { index, fileListItem ->
                     val underlay = if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f)
                     else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f)
                     else Color.Transparent
