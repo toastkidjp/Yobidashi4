@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.calendar.japan
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -35,6 +36,11 @@ class JapaneseOffDayFinderServiceTest {
     @Test
     fun september() {
         assertEquals(23, japaneseOffDayFinderService.invoke(2024, 9).first().day)
+    }
+
+    @Test
+    fun check224() {
+        assertTrue(japaneseOffDayFinderService.invoke(224, 3, false).isEmpty())
     }
 
 }
