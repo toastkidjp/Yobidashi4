@@ -90,10 +90,13 @@ class FileListViewModel : KoinComponent {
     fun onValueChange(it: TextFieldValue) {
         keyword.value = it
         if (keyword.value.composition == null) {
+            val lowercase = keyword.value.text.lowercase()
+
             articleStates.clear()
             articleStates.addAll(
-                if (keyword.value.text.isNotBlank()) completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(keyword.value.text.lowercase()) }
-                else completeItems
+                if (keyword.value.text.isNotBlank()) {
+                    completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
+                } else completeItems
             )
         }
     }
