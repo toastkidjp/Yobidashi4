@@ -26,4 +26,10 @@ internal class EquinoxDayCalculatorTest {
         assertNull(equinoxDayCalculator.calculateAutumnalEquinoxDay(224))
     }
 
+    @Test
+    fun over3000() {
+        assertNull(equinoxDayCalculator.calculateVernalEquinoxDay(20124))
+        assertNull(equinoxDayCalculator.calculateAutumnalEquinoxDay(20124))
+    }
+
 }
