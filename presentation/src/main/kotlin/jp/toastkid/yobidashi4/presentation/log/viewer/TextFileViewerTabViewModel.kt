@@ -50,8 +50,9 @@ class TextFileViewerTabViewModel {
 
         withContext(dispatcher) {
             Files.readAllLines(path).forEach { textState.add(it) }
-            focusRequester().requestFocus()
         }
+
+        focusRequester().requestFocus()
     }
 
 }
