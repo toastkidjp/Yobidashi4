@@ -94,9 +94,10 @@ class FileListViewModel : KoinComponent {
 
             articleStates.clear()
             articleStates.addAll(
-                if (lowercase.isNotBlank()) {
+                if (lowercase.isNotBlank())
                     completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
-                } else completeItems
+                else
+                    completeItems
             )
         }
     }
