@@ -186,21 +186,19 @@ class FileListViewModel : KoinComponent {
     }
 
     fun openFile(path: Path) {
-        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(path) }.forEach {
-            viewModel.openFile(it)
-        }
+        useSelectedFile(path) { viewModel.openFile(it) }
     }
 
     fun edit(path: Path) {
-        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(path) }.forEach {
-            viewModel.edit(it)
-        }
+        useSelectedFile(path) { viewModel.edit(it) }
     }
 
     fun preview(path: Path) {
-        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(path) }.forEach {
-            viewModel.openPreview(it)
-        }
+        useSelectedFile(path) { viewModel.openPreview(it) }
+    }
+
+    private fun useSelectedFile(pathIfEmpty: Path, action: (Path) -> Unit) {
+        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(pathIfEmpty) }.forEach(action)
     }
 
     fun slideshow(path: Path) {
