@@ -49,7 +49,7 @@ fun LoanCalculatorView() {
 
                 LoanCalculatorInput(
                     viewModel.loanAmount(),
-                    { viewModel.setLoanAmount(it) },
+                    viewModel::setLoanAmount,
                     "Loan amount"
                 )
 
