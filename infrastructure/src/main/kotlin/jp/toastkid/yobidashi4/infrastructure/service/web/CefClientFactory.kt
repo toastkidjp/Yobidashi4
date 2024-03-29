@@ -163,7 +163,7 @@ class CefClientFactory : KoinComponent {
                     EventFlags.EVENTFLAG_SHIFT_DOWN -> KeyEvent.SHIFT_DOWN_MASK
                     EventFlags.EVENTFLAG_ALT_DOWN -> KeyEvent.ALT_DOWN_MASK
                     else -> null
-                } ?: return super.onKeyEvent(browser, event)
+                } ?: return false
 
                 windowForComponent.dispatchEvent(
                     KeyEvent(
