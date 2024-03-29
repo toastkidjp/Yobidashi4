@@ -9,10 +9,15 @@ class EquinoxDayCalculator {
             return null
         }
 
+        val day = (20.8431 + 0.242194 * (year - 1980)).toInt() - ((year - 1980) / 4)
+        if (day <= 0) {
+            return null
+        }
+
         return Holiday(
             "Vernal equinox day",
             3,
-            (20.8431 + 0.242194 * (year - 1980)).toInt() - ((year - 1980) / 4),
+            day,
             "\uD83C\uDDEF\uD83C\uDDF5"
         )
     }
@@ -22,10 +27,15 @@ class EquinoxDayCalculator {
             return null
         }
 
+        val day = (23.2488 + 0.242194 * (year - 1980)).toInt() - ((year - 1980) / 4)
+        if (day <= 0) {
+            return null
+        }
+
         return Holiday(
             "Autumnal equinox day",
             9,
-            (23.2488 + 0.242194 * (year - 1980)).toInt() - ((year - 1980) / 4),
+            day,
             "\uD83C\uDDEF\uD83C\uDDF5"
         )
     }
