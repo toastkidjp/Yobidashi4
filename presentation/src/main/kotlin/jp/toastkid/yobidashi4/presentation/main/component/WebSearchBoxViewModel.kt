@@ -10,6 +10,8 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
@@ -164,6 +166,10 @@ class WebSearchBoxViewModel : KoinComponent {
         }
 
         inputHistories.clear()
+    }
+
+    fun makeVerticalOffset(): Dp {
+        return (if (containsSwingContent()) -80 else 0).dp
     }
 
 }

@@ -70,7 +70,7 @@ internal fun WebSearchBox() {
                 val swingContent = viewModel.containsSwingContent()
                 DropdownMenu(
                     expanded = viewModel.openingDropdown(),
-                    offset = DpOffset(0.dp, if (swingContent) (-80).dp else 0.dp),
+                    offset = DpOffset(0.dp, viewModel.makeVerticalOffset()),
                     onDismissRequest = { viewModel.closeDropdown() }
                 ) {
                     if (swingContent) {
