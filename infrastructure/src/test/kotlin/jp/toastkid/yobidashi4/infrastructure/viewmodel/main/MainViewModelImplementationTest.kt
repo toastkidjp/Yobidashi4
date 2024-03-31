@@ -682,6 +682,20 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun replaceTab() {
+        val tab = mockk<WebBookmarkTab>()
+        val newTab = mockk<WebBookmarkTab>()
+        every { tab.withNewPosition(any()) } returns newTab
+        subject.openTab(mockk())
+        subject.openTab(tab)
+
+        subject.replaceTab(tab, newTab)
+
+        val updatedTab = subject.tabs[1]
+        assertSame(newTab, updatedTab)
+    }
+
+    @Test
     fun closeCurrent() {
         subject.closeCurrent()
 
