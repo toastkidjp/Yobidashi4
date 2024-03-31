@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
@@ -598,6 +599,15 @@ class MainMenuViewModelTest {
         subject.openCalendarTab()
 
         verify { mainViewModel.openTab(any<CalendarTab>()) }
+    }
+
+    @Test
+    fun searchWithSelectedText() {
+        every { mainViewModel.webSearchWithSelectedText() } just Runs
+
+        subject.searchWithSelectedText()
+
+        verify { mainViewModel.webSearchWithSelectedText() }
     }
 
     @Test
