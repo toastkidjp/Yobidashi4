@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -318,6 +319,14 @@ class WebSearchBoxViewModelTest {
         subject.clearInputHistory()
 
         verify { anyConstructed<InputHistoryService>().clear(any()) }
+    }
+
+    @Test
+    fun onFocusChanged() {
+        val focusState = mockk<FocusState>()
+        every { focusState.hasFocus } returns false
+
+        subject.onFocusChanged(focusState)
     }
 
 }
