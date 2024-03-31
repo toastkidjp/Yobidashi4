@@ -62,6 +62,8 @@ interface Setting {
 
     fun switchUseBackground()
 
+    fun chatApiKey(): String?
+
     fun save()
 
 }
