@@ -110,4 +110,8 @@ class TestSettingImplementation : Setting {
     override fun save() {
         TODO("Not yet implemented")
     }
+
+    override fun chatApiKey(): String? {
+        TODO("Not yet implemented")
+    }
 }
