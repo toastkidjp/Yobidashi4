@@ -421,7 +421,7 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun webSearchWith() {
+    fun webSearchWithNull() {
         mockkConstructor(SearchUrlFactory::class)
         every { anyConstructed<SearchUrlFactory>().invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
 
@@ -437,6 +437,17 @@ class MainViewModelImplementationTest {
         every { anyConstructed<SearchUrlFactory>().invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
 
         subject.webSearch(" ", false)
+
+        assertTrue(subject.tabs.isEmpty())
+        verify(inverse = true) { anyConstructed<SearchUrlFactory>().invoke(any()) }
+    }
+
+    @Test
+    fun webSearchWithSelectedText() {
+        mockkConstructor(SearchUrlFactory::class)
+        every { anyConstructed<SearchUrlFactory>().invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
+
+        subject.webSearchWithSelectedText()
 
         assertTrue(subject.tabs.isEmpty())
         verify(inverse = true) { anyConstructed<SearchUrlFactory>().invoke(any()) }
