@@ -295,6 +295,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         tabs.set(indexOf, tab.withNewPosition(scrollPosition))
     }
 
+    override fun replaceTab(target: Tab, replacement: Tab) {
+        val indexOf = tabs.indexOf(target)
+        if (indexOf == -1) {
+            return
+        }
+        tabs.set(indexOf, replacement)
+    }
+
     override fun closeCurrent() {
         removeTabAt(selected.value)
     }
