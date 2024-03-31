@@ -696,6 +696,13 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun noopReplaceTab() {
+        subject.replaceTab(mockk(), mockk())
+
+        assertTrue(subject.tabs.isEmpty())
+    }
+
+    @Test
     fun closeCurrent() {
         subject.closeCurrent()
 
