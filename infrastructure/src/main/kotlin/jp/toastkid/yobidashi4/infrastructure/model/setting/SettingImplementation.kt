@@ -135,6 +135,10 @@ class SettingImplementation : Setting {
         properties.setProperty("use_background", useBackground().not().toString())
     }
 
+    override fun chatApiKey(): String? {
+        return properties.getProperty("chat_api_key")?.toString()
+    }
+
 }
 
 private const val PATH = "user/setting.properties"
