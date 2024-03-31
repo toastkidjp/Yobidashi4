@@ -70,6 +70,9 @@ interface MainViewModel {
     fun updateWebTab(id: String, title: String, url: String?)
     fun updateCalendarTab(tab: CalendarTab, year: Int, month: Int)
     fun updateScrollableTab(tab: ScrollableContentTab, scrollPosition: Int)
+
+    fun replaceTab(target: Tab, replacement: Tab)
+
     fun windowState(): WindowState
 
     fun windowVisible(): Boolean
