@@ -113,9 +113,7 @@ internal fun WebSearchBox() {
                 onSearch = {
                     viewModel.invokeSearch()
                 },
-                clearButton = {
-                    viewModel.clearInput()
-                },
+                clearButton = viewModel::clearInput,
                 viewModel.shouldShowInputHistory(),
                 suggestions = viewModel.inputHistories(),
                 suggestionConsumer = {
