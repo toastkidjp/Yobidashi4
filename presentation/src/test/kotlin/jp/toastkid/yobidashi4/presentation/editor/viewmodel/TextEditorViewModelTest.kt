@@ -21,6 +21,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -48,6 +49,9 @@ class TextEditorViewModelTest {
     private lateinit var mainViewModel: MainViewModel
 
     @MockK
+    private lateinit var setting: Setting
+
+    @MockK
     private lateinit var multiParagraph: MultiParagraph
 
     @BeforeEach
@@ -58,9 +62,11 @@ class TextEditorViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier = null) { setting } bind(Setting::class)
                 }
             )
         }
+        every { setting.editorConversionLimit() } returns 4500
 
         viewModel = TextEditorViewModel()
 
