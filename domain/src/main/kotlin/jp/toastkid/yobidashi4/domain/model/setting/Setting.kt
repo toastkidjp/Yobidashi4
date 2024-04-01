@@ -42,6 +42,8 @@ interface Setting {
 
     fun editorFontSize(): Int
 
+    fun editorConversionLimit(): Int
+
     fun mediaPlayerPath(): String?
 
     fun mediaFolderPath(): String?
