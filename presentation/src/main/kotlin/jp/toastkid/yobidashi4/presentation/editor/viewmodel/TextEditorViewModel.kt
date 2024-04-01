@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
@@ -66,6 +67,10 @@ class TextEditorViewModel {
     private val focusRequester = FocusRequester()
 
     private val finderMessageFactory = FinderMessageFactory()
+
+    private val setting = object : KoinComponent { val setting: Setting by inject() }.setting
+
+    private val conversionLimit = setting.editorConversionLimit()
 
     fun content() = content.value
 
@@ -240,7 +245,7 @@ class TextEditorViewModel {
     }
 
     fun visualTransformation(): VisualTransformation {
-        if (content.value.text.length > CONVERSION_LIMIT_LENGTH) {
+        if (content.value.text.length > conversionLimit) {
             return VisualTransformation.None
         }
 
