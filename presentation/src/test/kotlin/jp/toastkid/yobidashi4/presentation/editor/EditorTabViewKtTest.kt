@@ -12,6 +12,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -30,6 +31,9 @@ class EditorTabViewKtTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
+    @MockK
+    private lateinit var setting: Setting
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -38,10 +42,12 @@ class EditorTabViewKtTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { setting } bind(Setting::class)
                 }
             )
         }
 
+        every { setting.editorConversionLimit() } returns 4500
         every { mainViewModel.darkMode() } returns false
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
         every { mainViewModel.finderFlow() } returns emptyFlow()
