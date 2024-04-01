@@ -109,12 +109,37 @@ fun SingleLineTextField(
     onClearInput: () -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+    modifier: Modifier = Modifier
+) {
+    MultiLineTextField(
+        textFieldValue,
+        labelText,
+        1,
+        onValueChange,
+        onClearInput,
+        keyboardOptions,
+        keyboardActions,
+        colors,
+        modifier
+    )
+}
+
+@Composable
+fun MultiLineTextField(
+    textFieldValue: TextFieldValue,
+    labelText: String,
+    maxLines: Int,
+    onValueChange: (TextFieldValue) -> Unit,
+    onClearInput: () -> Unit = {},
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
     modifier: Modifier = Modifier
 ) {
     TextField(
         textFieldValue,
-        maxLines = 1,
+        maxLines = maxLines,
         colors = colors,
         label = { Text(labelText, color = MaterialTheme.colors.secondary) },
         onValueChange = onValueChange,
