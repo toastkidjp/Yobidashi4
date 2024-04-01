@@ -96,6 +96,10 @@ class SettingImplementation : Setting {
         return properties.getProperty("editor_font_size")?.toIntOrNull() ?: 14
     }
 
+    override fun editorConversionLimit(): Int {
+        return properties.getProperty("editor_conversion_limit")?.toIntOrNull() ?: 4500
+    }
+
     override fun mediaPlayerPath() = properties.getProperty("media_player_path")
 
     override fun mediaFolderPath() = properties.getProperty("media_folder_path")
