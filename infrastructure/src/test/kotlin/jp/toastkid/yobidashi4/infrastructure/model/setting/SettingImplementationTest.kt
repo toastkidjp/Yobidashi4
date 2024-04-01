@@ -163,6 +163,11 @@ user_off_day=12/29,12/30
     }
 
     @Test
+    fun editorConversionLimit() {
+        assertTrue(subject.editorConversionLimit() > 0)
+    }
+
+    @Test
     fun mediaPlayerPath() {
         assertNull(subject.mediaPlayerPath())
     }
