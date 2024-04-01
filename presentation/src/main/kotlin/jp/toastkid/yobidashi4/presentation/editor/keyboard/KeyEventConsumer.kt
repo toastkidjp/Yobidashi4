@@ -64,8 +64,9 @@ class KeyEventConsumer(
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
                 val lineEnd = textLayoutResult.getLineEnd(currentLine)
+                val safeEnd = min(content.text.length, lineEnd)
                 val newText = StringBuilder(content.text)
-                    .insert(lineEnd, "\n${content.text.substring(lineStart, lineEnd)}")
+                    .insert(safeEnd, "\n${content.text.substring(lineStart, safeEnd)}")
                     .toString()
                 setNewContent(
                     TextFieldValue(
