@@ -77,9 +77,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
         )
 
         Window(
-            onCloseRequest = {
-                exitApplication()
-            },
+            onCloseRequest = ::exitApplication,
             title = "Yobidashi 4 ${LauncherJarTimestampReader().invoke() ?: ""}",
             state = mainViewModel.windowState(),
             visible = mainViewModel.windowVisible(),
