@@ -38,11 +38,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @OptIn(ExperimentalFoundationApi::class)
-class TextEditorViewModel {
+class TextEditorViewModel : KoinComponent {
 
     private var tab: EditorTab = EditorTab(Path.of(""))
 
-    private val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+    private val mainViewModel: MainViewModel by inject()
 
     private val content = mutableStateOf(TextFieldValue())
 
@@ -68,7 +68,7 @@ class TextEditorViewModel {
 
     private val finderMessageFactory = FinderMessageFactory()
 
-    private val setting = object : KoinComponent { val setting: Setting by inject() }.setting
+    private val setting: Setting by inject()
 
     private val conversionLimit = setting.editorConversionLimit()
 
