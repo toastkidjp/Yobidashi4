@@ -18,11 +18,16 @@ class WebIcon {
 
     fun faviconFolder(): Path = faviconFolder
 
-    fun find(url: String): Path? =
-        Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
+    fun find(url: String): Path? {
+        if (!url.startsWith("http")) {
+            return null
+        }
+
+        return Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
             val startsWith = it.fileName.pathString.startsWith(URL(url).host.trim())
             startsWith
         }
+    }
 
     fun readAll(): List<Path> =
         Files.list(faviconFolder).collect(Collectors.toList())
