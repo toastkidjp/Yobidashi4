@@ -97,7 +97,7 @@ class SettingImplementation : Setting {
     }
 
     override fun editorConversionLimit(): Int {
-        return properties.getProperty("editor_conversion_limit")?.toIntOrNull() ?: 4500
+        return properties.getProperty("editor_conversion_limit")?.toIntOrNull() ?: 4_500
     }
 
     override fun mediaPlayerPath() = properties.getProperty("media_player_path")
