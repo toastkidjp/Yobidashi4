@@ -88,6 +88,13 @@ class WebIconTest {
     }
 
     @Test
+    fun unknownSchemeCase() {
+        val find = webIcon.find("tel:0120112112")
+
+        assertNull(find)
+    }
+
+    @Test
     fun readAll() {
         every { Files.list(any()) } returns Stream.of(mockk())
 
