@@ -4,6 +4,7 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import javax.net.ssl.HttpsURLConnection
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory
 class ChatApi(private val apiKey: String) : ChatRepository {
 
     override fun request(content: String): String? {
-        val connection = URL("https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=$apiKey").openConnection() as? HttpsURLConnection ?: return null
+        val connection = openConnection() ?: return null
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
         connection.doInput = true
@@ -41,5 +42,8 @@ class ChatApi(private val apiKey: String) : ChatRepository {
             return@use orElse.split("\": \"")[1].replace("\"$".toRegex(), "").replace("\\n", "\n")
         }
     }
+
+    fun openConnection(): HttpURLConnection? =
+        URL("https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=$apiKey").openConnection() as? HttpsURLConnection
 
 }
