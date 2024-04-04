@@ -14,6 +14,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -155,6 +157,30 @@ class ChatTabViewModelTest {
     @Test
     fun nameColor() {
         assertNotEquals(subject.nameColor("model"), subject.nameColor("model2"))
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun onKeyEventOtherKey() {
+        runDesktopComposeUiTest {
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onKeyEvent(
+                    coroutineScope,
+                    androidx.compose.ui.input.key.KeyEvent(
+                        KeyEvent(
+                            mockk(),
+                            KeyEvent.KEY_RELEASED,
+                            1,
+                            KeyEvent.CTRL_DOWN_MASK,
+                            KeyEvent.VK_1,
+                            'A'
+                        )
+                    )
+                )
+                assertFalse(consumed)
+            }
+        }
     }
 
 }
