@@ -23,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,7 +53,7 @@ fun ChatTabView(chatTab: ChatTab) {
                                     viewModel.name(it.role),
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.ExtraBold,
-                                    color = if (it.role == "model") Color(0xFF86EEC7) else Color(0xFFFFD54F),
+                                    color = viewModel.nameColor(it.role),
                                     modifier = Modifier.padding(horizontal = 4.dp)
                                 )
                                 Text(it.text, fontSize = 16.sp)
