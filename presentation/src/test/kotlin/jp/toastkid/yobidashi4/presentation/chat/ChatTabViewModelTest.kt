@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -149,6 +150,11 @@ class ChatTabViewModelTest {
     @Test
     fun scrollState() {
         assertNotNull(subject.scrollState())
+    }
+
+    @Test
+    fun nameColor() {
+        assertNotEquals(subject.nameColor("model"), subject.nameColor("model2"))
     }
 
 }
