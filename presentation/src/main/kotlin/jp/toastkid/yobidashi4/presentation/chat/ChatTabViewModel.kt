@@ -3,13 +3,19 @@ package jp.toastkid.yobidashi4.presentation.chat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -80,6 +86,17 @@ class ChatTabViewModel : KoinComponent {
 
     fun scrollState(): LazyListState {
         return scrollState
+    }
+
+    fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
+        if (textInput().composition == null && it.isCtrlPressed && it.key == Key.Enter) {
+            coroutineScope.launch {
+                send()
+            }
+            return true
+        }
+
+        return false
     }
 
 }
