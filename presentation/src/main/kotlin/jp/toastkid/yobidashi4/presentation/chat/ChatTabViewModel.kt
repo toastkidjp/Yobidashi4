@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.chat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
@@ -97,6 +98,10 @@ class ChatTabViewModel : KoinComponent {
         }
 
         return false
+    }
+
+    fun nameColor(role: String): Color {
+        return if (role == "model") Color(0xFF86EEC7) else Color(0xFFFFD54F)
     }
 
 }
