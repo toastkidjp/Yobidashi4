@@ -24,16 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -80,15 +76,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 Int.MAX_VALUE,
                 viewModel::onValueChanged,
                 modifier = Modifier.focusRequester(viewModel.focusRequester()).fillMaxWidth().weight(0.2f)
-                    .onKeyEvent {
-                        if (viewModel.textInput().composition == null && it.isCtrlPressed && it.key == Key.Enter) {
-                            coroutineScope.launch {
-                                viewModel.send()
-                            }
-                            return@onKeyEvent true
-                        }
-                        false
-                    }
+                    .onKeyEvent { viewModel.onKeyEvent(coroutineScope, it) }
             )
         }
     }
