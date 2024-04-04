@@ -143,6 +143,7 @@ class ChatTabViewModelTest {
     fun name() {
         assertEquals("You", subject.name("user"))
         assertEquals("Assistant", subject.name("model"))
+        assertEquals("Unknown", subject.name("unknown"))
     }
 
     @Test
