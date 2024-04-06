@@ -7,6 +7,7 @@ import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -157,6 +158,34 @@ class ChatTabViewModelTest {
     @Test
     fun nameColor() {
         assertNotEquals(subject.nameColor("model"), subject.nameColor("model2"))
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun onKeyEvent() {
+        runDesktopComposeUiTest {
+            setContent {
+                subject = spyk(subject)
+                coEvery { subject.send() } just Runs
+                subject.onValueChanged(TextFieldValue("test"))
+
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onKeyEvent(
+                    coroutineScope,
+                    androidx.compose.ui.input.key.KeyEvent(
+                        KeyEvent(
+                            mockk(),
+                            KeyEvent.KEY_RELEASED,
+                            1,
+                            KeyEvent.CTRL_DOWN_MASK,
+                            KeyEvent.VK_ENTER,
+                            'E'
+                        )
+                    )
+                )
+                assertTrue(consumed)
+            }
+        }
     }
 
     @OptIn(ExperimentalTestApi::class)
