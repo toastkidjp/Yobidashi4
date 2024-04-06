@@ -5,6 +5,7 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -327,6 +328,20 @@ class WebSearchBoxViewModelTest {
         every { focusState.hasFocus } returns false
 
         subject.onFocusChanged(focusState)
+    }
+
+    @Test
+    fun makeVerticalOffsetWhenCurrentDoesNotContainSwingContent() {
+        every { viewModel.currentTab() } returns mockk()
+
+        assertEquals(0.dp, subject.makeVerticalOffset())
+    }
+
+    @Test
+    fun makeVerticalOffset() {
+        every { viewModel.currentTab() } returns mockk<WebTab>()
+
+        assertEquals(-80.dp, subject.makeVerticalOffset())
     }
 
 }
