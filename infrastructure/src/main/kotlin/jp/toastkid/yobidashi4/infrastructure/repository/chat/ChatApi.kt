@@ -1,14 +1,13 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.chat
 
-import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import javax.net.ssl.HttpsURLConnection
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
+import jp.toastkid.yobidashi4.infrastructure.service.chat.ChatResponseParser
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 
@@ -33,14 +32,7 @@ class ChatApi(private val apiKey: String) : ChatRepository {
             return null
         }
 
-        return BufferedReader(InputStreamReader(connection.inputStream, StandardCharsets.UTF_8)).use {
-            val orElse = it.lines().filter { it.trim().startsWith("\"text\"") }.findFirst().orElse("")
-            if (orElse.contains("\": \"").not()) {
-                return null
-            }
-
-            return@use orElse.split("\": \"")[1].replace("\"$".toRegex(), "").replace("\\n", "\n")
-        }
+        return ChatResponseParser().invoke(connection.inputStream)
     }
 
     fun openConnection(): HttpURLConnection? =
