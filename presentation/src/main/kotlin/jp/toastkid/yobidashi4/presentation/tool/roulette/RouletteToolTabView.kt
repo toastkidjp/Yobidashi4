@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
@@ -54,7 +55,8 @@ fun RouletteToolTabView() {
                 "Base file name",
                 Int.MAX_VALUE,
                 viewModel::onValueChange,
-                viewModel::clearInput
+                viewModel::clearInput,
+                modifier = Modifier.onKeyEvent { viewModel.onKeyEvent(it) }
             )
         }
     }
