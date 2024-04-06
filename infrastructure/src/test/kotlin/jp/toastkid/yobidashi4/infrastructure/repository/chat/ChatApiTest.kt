@@ -59,4 +59,13 @@ class ChatApiTest {
         assertNull(response)
     }
 
+    @Test
+    fun requestConnectionNullCase() {
+        every { subject.openConnection() } returns null
+
+        val response = subject.request("{test}")
+
+        assertNull(response)
+    }
+
 }
