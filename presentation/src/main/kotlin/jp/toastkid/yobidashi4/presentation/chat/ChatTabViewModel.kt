@@ -101,7 +101,7 @@ class ChatTabViewModel : KoinComponent {
     }
 
     fun nameColor(role: String): Color {
-        return if (role == "model") Color(0xFF86EEC7) else Color(0xFFFFD54F)
+        return Color(if (role == "model") 0xFF86EEC7 else 0xFFFFD54F)
     }
 
 }
