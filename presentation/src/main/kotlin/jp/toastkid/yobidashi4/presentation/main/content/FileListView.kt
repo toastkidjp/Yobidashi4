@@ -35,8 +35,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -148,11 +146,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                 }
                             }
                             .onKeyEvent {
-                                if (it.key == Key.Enter) {
-                                    viewModel.edit(fileListItem.path)
-                                    return@onKeyEvent true
-                                }
-                                return@onKeyEvent false
+                                viewModel.onKeyEventFromCell(it, fileListItem.path)
                             }
                     )
                 }

@@ -88,6 +88,14 @@ class FileListViewModel : KoinComponent {
         return false
     }
 
+    fun onKeyEventFromCell(it: KeyEvent, path: Path): Boolean {
+        if (it.key == Key.Enter) {
+            viewModel.edit(path)
+            return true
+        }
+        return false
+    }
+
     fun currentIsTop(): Boolean {
         return listState.firstVisibleItemIndex == 0
     }
