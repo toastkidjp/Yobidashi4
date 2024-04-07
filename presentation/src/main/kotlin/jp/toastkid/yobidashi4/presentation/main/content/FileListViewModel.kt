@@ -80,6 +80,10 @@ class FileListViewModel : KoinComponent {
             }
             return@onKeyEvent true
         }
+        if (keyEvent.key == Key.Enter) {
+            openFile()
+            return true
+        }
 
         return false
     }
@@ -186,7 +190,7 @@ class FileListViewModel : KoinComponent {
         }
     }
 
-    fun openFile(path: Path) {
+    fun openFile(path: Path? = null) {
         useSelectedFile(path, viewModel::openFile)
     }
 
@@ -198,8 +202,8 @@ class FileListViewModel : KoinComponent {
         useSelectedFile(path, viewModel::openPreview)
     }
 
-    private fun useSelectedFile(pathIfEmpty: Path, action: (Path) -> Unit) {
-        articleStates.filter { it.selected }.map { it.path }.ifEmpty { listOf(pathIfEmpty) }.forEach(action)
+    private fun useSelectedFile(pathIfEmpty: Path?, action: (Path) -> Unit) {
+        articleStates.filter { it.selected }.map { it.path }.ifEmpty { if (pathIfEmpty == null) emptyList() else listOf(pathIfEmpty) }.forEach(action)
     }
 
     fun slideshow(path: Path) {
