@@ -25,6 +25,7 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
@@ -464,6 +465,16 @@ class FileListViewModelTest {
         subject.slideshow(mockk())
 
         verify { mainViewModel.slideshow(any()) }
+    }
+
+    @Test
+    fun clipText() {
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+
+        subject.clipText("test")
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
 }
