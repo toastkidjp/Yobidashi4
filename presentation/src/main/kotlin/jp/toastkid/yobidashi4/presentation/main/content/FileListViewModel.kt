@@ -16,6 +16,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
@@ -203,6 +204,11 @@ class FileListViewModel : KoinComponent {
 
     fun slideshow(path: Path) {
         viewModel.slideshow(path)
+    }
+
+    fun clipText(text: String) {
+        ClipboardPutterService().invoke(text)
+        closeDropdown()
     }
 
 }
