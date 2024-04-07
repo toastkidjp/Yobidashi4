@@ -80,10 +80,6 @@ class FileListViewModel : KoinComponent {
             }
             return@onKeyEvent true
         }
-        if (keyEvent.key == Key.Enter) {
-            openFile()
-            return true
-        }
 
         return false
     }
