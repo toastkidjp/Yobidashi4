@@ -112,6 +112,29 @@ class FileListViewModelTest {
         }
     }
 
+    @Test
+    fun onKeyEventFromCell() {
+        val path = mockk<Path>()
+        subject = spyk(subject)
+        every { subject.edit(any()) } just Runs
+
+        val consumed = subject.onKeyEventFromCell(
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_PRESSED,
+                    1,
+                    0,
+                    KeyEvent.VK_ENTER,
+                    'E'
+                )
+            ),
+            path
+        )
+
+        assertTrue(consumed)
+    }
+
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun onDirectionUpKeyEvent() {
