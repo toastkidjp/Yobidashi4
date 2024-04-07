@@ -133,6 +133,7 @@ class FileListViewModelTest {
         )
 
         assertTrue(consumed)
+        verify { subject.edit(any()) }
     }
 
     @Test
