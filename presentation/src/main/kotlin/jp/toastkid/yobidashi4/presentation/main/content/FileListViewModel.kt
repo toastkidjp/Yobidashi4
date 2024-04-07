@@ -86,7 +86,7 @@ class FileListViewModel : KoinComponent {
 
     fun onKeyEventFromCell(it: KeyEvent, path: Path): Boolean {
         if (it.key == Key.Enter) {
-            viewModel.edit(path)
+            edit(path)
             return true
         }
         return false
