@@ -60,16 +60,17 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
+        every { chat.addModelTexts(any()) } just Runs
         every { chat.makeContent() } returns ""
-        every { repository.request(any()) } returns "test"
+        every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
 
         subject.send("test")
 
         verify { chat.addUserText(any()) }
-        verify { chat.addModelText(any()) }
+        verify { chat.addModelTexts(any()) }
         verify { chat.makeContent() }
-        verify { repository.request(any()) }
+        verify { repository.request(any(), any()) }
     }
 
     @Test
@@ -77,8 +78,9 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
+        every { chat.addModelTexts(any()) } just Runs
         every { chat.makeContent() } returns ""
-        every { repository.request(any()) } returns null
+        every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
 
         subject.send("test")
@@ -86,7 +88,7 @@ class ChatServiceImplementationTest {
         verify { chat.addUserText(any()) }
         verify(inverse = true) { chat.addModelText(any()) }
         verify { chat.makeContent() }
-        verify { repository.request(any()) }
+        verify { repository.request(any(), any()) }
     }
 
     @Test
