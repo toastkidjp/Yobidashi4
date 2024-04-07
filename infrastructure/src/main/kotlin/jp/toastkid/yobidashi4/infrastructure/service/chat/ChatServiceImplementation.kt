@@ -24,13 +24,14 @@ class ChatServiceImplementation : ChatService, KoinComponent {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
-        val response = repository.request(chat.makeContent())
+        val responses = mutableListOf<String>()
+        repository.request(chat.makeContent(), {
+            chat.addModelText(it)
+            responses.add(it)
+        })
+        chat.addModelTexts(responses)
 
-        if (response != null) {
-            chat.addModelText(response)
-        }
-
-        return response
+        return null
     }
 
     override fun setChat(chat: Chat) {
