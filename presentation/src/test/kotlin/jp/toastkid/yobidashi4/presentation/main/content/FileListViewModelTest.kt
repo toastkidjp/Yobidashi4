@@ -135,6 +135,25 @@ class FileListViewModelTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun onKeyEventFromCellUnconsumed() {
+        val consumed = subject.onKeyEventFromCell(
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_PRESSED,
+                    1,
+                    0,
+                    KeyEvent.VK_1,
+                    'E'
+                )
+            ),
+            mockk()
+        )
+
+        assertFalse(consumed)
+    }
+
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun onDirectionUpKeyEvent() {
