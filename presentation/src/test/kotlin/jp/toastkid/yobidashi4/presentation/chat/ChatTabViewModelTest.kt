@@ -190,6 +190,32 @@ class ChatTabViewModelTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
+    fun onKeyEventWithoutCtrlMask() {
+        runDesktopComposeUiTest {
+            setContent {
+                subject.onValueChanged(TextFieldValue("test"))
+
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onKeyEvent(
+                    coroutineScope,
+                    androidx.compose.ui.input.key.KeyEvent(
+                        KeyEvent(
+                            mockk(),
+                            KeyEvent.KEY_RELEASED,
+                            1,
+                            KeyEvent.ALT_DOWN_MASK,
+                            KeyEvent.VK_ENTER,
+                            'E'
+                        )
+                    )
+                )
+                assertFalse(consumed)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
     fun onKeyEventOtherKey() {
         runDesktopComposeUiTest {
             setContent {
