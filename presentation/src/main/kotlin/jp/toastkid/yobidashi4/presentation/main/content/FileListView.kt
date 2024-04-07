@@ -44,7 +44,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import kotlin.io.path.nameWithoutExtension
 
@@ -120,6 +119,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         { viewModel.edit(fileListItem.path) },
                         { viewModel.preview(fileListItem.path) },
                         { viewModel.slideshow(fileListItem.path) },
+                        { viewModel.clipText(it) },
                         modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
@@ -172,6 +172,7 @@ private fun FileListItemRow(
     edit: () -> Unit,
     preview: () -> Unit,
     slideshow: () -> Unit,
+    clipText: (String) -> Unit,
     modifier: Modifier
 ) {
     Box(
@@ -262,8 +263,7 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
-                        ClipboardPutterService().invoke(fileListItem.path.nameWithoutExtension)
-                        closeOption()
+                        clipText(fileListItem.path.nameWithoutExtension)
                     }
                 ) {
                     Text(
@@ -273,8 +273,7 @@ private fun FileListItemRow(
                 }
                 DropdownMenuItem(
                     onClick = {
-                        ClipboardPutterService().invoke("[[${fileListItem.path.nameWithoutExtension}]]")
-                        closeOption()
+                        clipText("[[${fileListItem.path.nameWithoutExtension}]]")
                     }
                 ) {
                     Text(
