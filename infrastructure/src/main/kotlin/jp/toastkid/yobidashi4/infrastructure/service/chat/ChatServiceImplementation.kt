@@ -26,8 +26,13 @@ class ChatServiceImplementation : ChatService, KoinComponent {
 
         val responses = mutableListOf<String>()
         repository.request(chat.makeContent(), {
-            chat.addModelText(it)
-            responses.add(it)
+            if (it != null) {
+                chat.addModelText(it)
+                responses.add(it)
+                return@request
+            }
+
+            chat.removeLastUserText()
         })
         chat.addModelTexts(responses)
 
