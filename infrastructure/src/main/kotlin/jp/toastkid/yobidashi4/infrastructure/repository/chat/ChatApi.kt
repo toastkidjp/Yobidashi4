@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
 @Single
 class ChatApi(private val apiKey: String) : ChatRepository {
 
-    override fun request(content: String, streamLineConsumer: (String) -> Unit) {
+    override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
         val connection = openConnection() ?: return
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
@@ -43,6 +43,7 @@ class ChatApi(private val apiKey: String) : ChatRepository {
                 if (response != null) {
                     streamLineConsumer(response)
                 }
+
                 line = it.readLine()
             }
         }
