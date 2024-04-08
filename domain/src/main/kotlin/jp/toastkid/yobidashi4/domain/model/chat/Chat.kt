@@ -6,14 +6,20 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
     fun addUserText(text: String) {
         texts.add(ChatMessage("user", text))
-        contentsHolder.add("user" to listOf(text))
+        //contentsHolder.add("user" to listOf(text))
     }
 
     fun addModelText(text: String) {
-        val element = ChatMessage("model", text)
-        texts.add(element)
+        if (texts.isEmpty() || texts.last().role != "model") {
+            texts.add(ChatMessage("model", text))
+            return
+        }
+
+        val element = texts.last()
+        texts.set(texts.lastIndex, element.copy(text = element.text + text))
     }
 
+    @Deprecated("Delete soon")
     fun addModelTexts(texts: List<String>) {
         if (texts.isEmpty()) {
             contentsHolder.removeLast()
@@ -36,7 +42,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
     fun makeContent() = """
       {
         "contents": [
-          ${contentsHolder.map { "{\"role\":\"${it.first}\", \"parts\":[ ${it.second.map { "{ \"text\": \"${it}\"}" }.joinToString(",")} ]}" }.joinToString(",")}
+          ${texts.map { "{\"role\":\"${it.role}\", \"parts\":[ ${it.text.map { "{ \"text\": \"${it}\"}" }.joinToString(",")} ]}" }.joinToString(",")}
         ],
         "safetySettings": [
             {
