@@ -18,6 +18,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,6 +61,12 @@ fun ChatTabView(chatTab: ChatTab) {
                                 Text(it.text, fontSize = 16.sp)
                             }
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
+                        }
+                    }
+
+                    SideEffect {
+                        coroutineScope.launch {
+                            viewModel.scrollState().scrollToItem(viewModel.scrollState().layoutInfo.totalItemsCount)
                         }
                     }
                 }
