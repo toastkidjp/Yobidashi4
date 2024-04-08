@@ -48,8 +48,6 @@ class ChatTabViewModel : KoinComponent {
             service.send(text)
         }
         labelState.value = DEFAULT_LABEL
-
-        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
     }
 
     fun textInput() = textInput.value
