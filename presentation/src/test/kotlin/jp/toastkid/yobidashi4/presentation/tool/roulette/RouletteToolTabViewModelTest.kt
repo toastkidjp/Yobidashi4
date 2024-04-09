@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.tool.roulette
 
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -87,6 +88,26 @@ class RouletteToolTabViewModelTest {
         )
 
         assertTrue(consumed)
+    }
+
+    @Test
+    fun noopOnKeyEventWithComposition() {
+        subject.onValueChange(TextFieldValue("test", composition = TextRange.Zero))
+
+        val consumed = subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_RELEASED,
+                    1,
+                    KeyEvent.CTRL_DOWN_MASK,
+                    KeyEvent.VK_ENTER,
+                    'E'
+                )
+            )
+        )
+
+        assertFalse(consumed)
     }
 
     @Test
