@@ -24,17 +24,13 @@ class ChatServiceImplementation : ChatService, KoinComponent {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
-        //val responses = mutableListOf<String>()
         repository.request(chat.makeContent(), {
-            if (it != null) {
-                chat.addModelText(it)
-                //responses.add(it)
+            if (it == null) {
                 return@request
             }
 
-            chat.removeLastUserText()
+            chat.addModelText(it)
         })
-        //chat.addModelTexts(responses)
 
         return null
     }
