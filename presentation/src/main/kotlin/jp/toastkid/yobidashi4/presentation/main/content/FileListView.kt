@@ -113,7 +113,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         backgroundColor.value,
                         viewModel.openingDropdown(fileListItem),
                         cursorOn,
-                        { viewModel.closeDropdown() },
+                        viewModel::closeDropdown,
                         { viewModel.items().filter { it.selected }.map { it.path } },
                         viewModel::openFile,
                         { viewModel.edit(fileListItem.path) },
