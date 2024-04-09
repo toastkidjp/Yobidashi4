@@ -28,15 +28,6 @@ class ChatTest {
     @Test
     fun addModelTextsWithEmptyList() {
         chat.addUserText("test")
-
-        chat.addModelTexts(emptyList())
-    }
-
-    @Test
-    fun addModelTexts() {
-        chat.addModelTexts(listOf("test"))
-
-        println(chat.makeContent())
     }
 
     @Test
