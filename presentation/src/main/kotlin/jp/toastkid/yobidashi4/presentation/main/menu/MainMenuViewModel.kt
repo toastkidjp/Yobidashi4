@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
@@ -7,11 +8,13 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
@@ -215,6 +218,10 @@ class MainMenuViewModel : KoinComponent {
 
     fun setSelectedIndex(i: Int) {
         viewModel.setSelectedIndex(i)
+    }
+
+    fun openChatTab() {
+        viewModel.openTab(ChatTab(Chat(mutableStateListOf())))
     }
 
     fun openBookmarkTab() {
