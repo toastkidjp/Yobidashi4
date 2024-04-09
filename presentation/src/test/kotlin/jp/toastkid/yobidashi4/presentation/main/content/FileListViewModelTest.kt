@@ -117,6 +117,7 @@ class FileListViewModelTest {
         val path = mockk<Path>()
         subject = spyk(subject)
         every { subject.edit(any()) } just Runs
+        every { mainViewModel.hideArticleList() } just Runs
 
         val consumed = subject.onKeyEventFromCell(
             androidx.compose.ui.input.key.KeyEvent(
@@ -134,6 +135,7 @@ class FileListViewModelTest {
 
         assertTrue(consumed)
         verify { subject.edit(any()) }
+        verify { mainViewModel.hideArticleList() }
     }
 
     @Test
