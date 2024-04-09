@@ -87,6 +87,7 @@ class FileListViewModel : KoinComponent {
     fun onKeyEventFromCell(it: KeyEvent, path: Path): Boolean {
         if (it.key == Key.Enter) {
             edit(path)
+            viewModel.hideArticleList()
             return true
         }
         return false
