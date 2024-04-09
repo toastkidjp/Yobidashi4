@@ -4,6 +4,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -184,6 +185,32 @@ class ChatTabViewModelTest {
                     )
                 )
                 assertTrue(consumed)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun onKeyEventWithComposition() {
+        runDesktopComposeUiTest {
+            setContent {
+                subject.onValueChanged(TextFieldValue("test", composition = TextRange.Zero))
+
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onKeyEvent(
+                    coroutineScope,
+                    androidx.compose.ui.input.key.KeyEvent(
+                        KeyEvent(
+                            mockk(),
+                            KeyEvent.KEY_RELEASED,
+                            1,
+                            KeyEvent.CTRL_DOWN_MASK,
+                            KeyEvent.VK_ENTER,
+                            'E'
+                        )
+                    )
+                )
+                assertFalse(consumed)
             }
         }
     }
