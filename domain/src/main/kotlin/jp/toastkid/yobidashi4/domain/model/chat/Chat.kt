@@ -19,15 +19,6 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         texts.set(texts.lastIndex, element.copy(text = element.text + text))
     }
 
-    fun removeLastUserText() {
-        if (texts.isNotEmpty()) {
-            texts.removeLast()
-        }
-        if (contentsHolder.isNotEmpty()) {
-            contentsHolder.removeLast()
-        }
-    }
-
     fun list(): List<ChatMessage> = texts
 
     fun makeContent() = """

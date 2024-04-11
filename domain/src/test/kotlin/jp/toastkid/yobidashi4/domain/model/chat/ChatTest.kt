@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.chat
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -28,16 +27,6 @@ class ChatTest {
     @Test
     fun addModelTextsWithEmptyList() {
         chat.addUserText("test")
-    }
-
-    @Test
-    fun removeLastUserText() {
-        chat.removeLastUserText()
-
-        chat.addUserText("test")
-        chat.removeLastUserText()
-
-        assertTrue(chat.list().isEmpty())
     }
 
 }
