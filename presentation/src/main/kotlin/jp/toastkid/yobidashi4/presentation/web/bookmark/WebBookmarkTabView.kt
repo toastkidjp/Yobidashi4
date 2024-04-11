@@ -66,7 +66,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                 userScrollEnabled = true,
                 modifier = Modifier.padding(end = 16.dp)
             ) {
-                items(viewModel.bookmarks()) { bookmark ->
+                items(viewModel.bookmarks(), { it.title + it.url }) { bookmark ->
                     val cursorOn = remember { mutableStateOf(false) }
                     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
