@@ -127,4 +127,21 @@ class RouletteToolTabViewModelTest {
         assertFalse(consumed)
     }
 
+    @Test
+    fun onKeyEventOtherMask() {
+        val consumed = subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_RELEASED,
+                    1,
+                    KeyEvent.ALT_DOWN_MASK,
+                    KeyEvent.VK_ENTER,
+                    'A'
+                )
+            )
+        )
+        assertFalse(consumed)
+    }
+
 }
