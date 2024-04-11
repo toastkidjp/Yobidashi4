@@ -19,15 +19,6 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         texts.set(texts.lastIndex, element.copy(text = element.text + text))
     }
 
-    @Deprecated("Delete soon")
-    fun addModelTexts(texts: List<String>) {
-        if (texts.isEmpty()) {
-            contentsHolder.removeLast()
-            return
-        }
-        contentsHolder.add("model" to texts)
-    }
-
     fun removeLastUserText() {
         if (texts.isNotEmpty()) {
             texts.removeLast()
