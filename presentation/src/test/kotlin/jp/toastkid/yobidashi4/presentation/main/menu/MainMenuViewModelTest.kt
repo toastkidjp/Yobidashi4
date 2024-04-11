@@ -584,6 +584,15 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun openChatTab() {
+        every { mainViewModel.openTab(any()) } just Runs
+
+        subject.openChatTab()
+
+        verify { mainViewModel.openTab(any<ChatTab>()) }
+    }
+
+    @Test
     fun openBookmarkTab() {
         every { mainViewModel.openTab(any()) } just Runs
 
