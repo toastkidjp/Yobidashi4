@@ -104,7 +104,7 @@ fun TableView(aggregationResult: AggregationResult) {
                     Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                 }
 
-                items(viewModel.items()) { article ->
+                items(viewModel.items(), { it.hashCode() }) { article ->
                     SelectionContainer {
                         Column(modifier = Modifier.animateItemPlacement()) {
                             val cursorOn = remember { mutableStateOf(false) }
