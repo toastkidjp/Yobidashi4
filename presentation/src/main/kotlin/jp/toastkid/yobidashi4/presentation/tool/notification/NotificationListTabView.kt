@@ -71,7 +71,7 @@ internal fun NotificationListTabView() {
                     }
                 }
 
-                itemsIndexed(viewModel.items()) { index, item ->
+                itemsIndexed(viewModel.items(), { _, item -> item.title + item.text + item.date }) { index, item ->
                     val titleState = remember { mutableStateOf(TextFieldValue(item.title)) }
                     val textState = remember { mutableStateOf(TextFieldValue(item.text)) }
                     val dateTimeState = remember { mutableStateOf(TextFieldValue(item.dateTimeString())) }
