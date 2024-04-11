@@ -1,20 +1,24 @@
 package jp.toastkid.yobidashi4.presentation.main.snackbar
 
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ResistanceConfig
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarData
-import androidx.compose.material.SwipeableState
 import androidx.compose.material.Text
-import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,16 +26,26 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
-    val dismissSnackbarDistance = with(LocalDensity.current) { 72.dp.toPx() }
-    val snackbarSwipingAnchors = mapOf(-dismissSnackbarDistance to -1, 0f to 0, dismissSnackbarDistance to 1)
-    val snackbarSwipeableState = SwipeableState(
-        initialValue = 0,
-        confirmStateChange = {
-            if (it == -1 || it == 1) {
-                onDismiss()
+    val dismissSnackbarDistance = with(LocalDensity.current) { 120.dp.toPx() }
+    val anchors = DraggableAnchors {
+        Start at -dismissSnackbarDistance.dp.value
+        Center at 0f
+        End at dismissSnackbarDistance.dp.value
+    }
+
+    val anchoredDraggableState = AnchoredDraggableState(
+        initialValue = 0f,
+        anchors = anchors,
+        positionalThreshold = { it * 0.75f },
+        velocityThreshold = { 125.dp.value },
+        animationSpec = spring(),
+        confirmValueChange = {
+            when (it) {
+                Start, End -> onDismiss()
+                else -> Unit
             }
             true
         }
@@ -39,16 +53,12 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
 
     Snackbar(
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary,
-        modifier = Modifier
-            .swipeable(
-                state = snackbarSwipeableState,
-                anchors = snackbarSwipingAnchors,
-                thresholds = { _, _ -> FractionalThreshold(0.75f) },
-                resistance = ResistanceConfig(0.5f),
+        contentColor = MaterialTheme.colors.onPrimary, modifier = Modifier
+            .anchoredDraggable(
+                state = anchoredDraggableState,
                 orientation = Orientation.Horizontal
             )
-            .offset { IntOffset(snackbarSwipeableState.offset.value.toInt(), 0) }
+            .offset { IntOffset(anchoredDraggableState.offset.toInt(), 0) }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
