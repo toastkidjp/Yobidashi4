@@ -12,7 +12,7 @@ import kotlin.math.min
 
 class KeywordHighlighter {
 
-    operator fun invoke(text: String, finderTarget: String?) = buildAnnotatedString {
+    operator fun invoke(text: String, finderTarget: String? = null) = buildAnnotatedString {
         var lastIndex = 0
         val matcher = internalLinkPattern.matcher(text)
         while (matcher.find()) {
