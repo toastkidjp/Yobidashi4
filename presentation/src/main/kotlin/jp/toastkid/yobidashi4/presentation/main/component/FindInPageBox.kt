@@ -106,7 +106,7 @@ internal fun FindInPageBox() {
 
             Spacer(modifier = Modifier.width(40.dp))
 
-            Button(onClick = { viewModel.replaceAll() }) {
+            Button(onClick = viewModel::replaceAll) {
                 Text("All")
             }
 
