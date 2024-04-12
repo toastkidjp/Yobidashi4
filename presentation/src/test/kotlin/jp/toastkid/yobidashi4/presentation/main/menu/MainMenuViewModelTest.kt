@@ -253,6 +253,18 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun switchPreviewLabelWhenCurrentTabIsNotEditorTab() {
+        val tab = mockk<Tab>()
+        every { mainViewModel.currentTab() } returns tab
+
+        val trueCase = subject.switchPreviewLabel()
+
+        val falseCase = subject.switchPreviewLabel()
+
+        assertEquals(trueCase, falseCase)
+    }
+
+    @Test
     fun switchPreview() {
         val tab = mockk<EditorTab>()
         every { tab.switchPreview() } just Runs
