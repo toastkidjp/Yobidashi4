@@ -56,9 +56,9 @@ fun ChatTabView(chatTab: ChatTab) {
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = viewModel.nameColor(it.role),
-                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                    modifier = Modifier.padding(horizontal = 4.dp).weight(0.2f)
                                 )
-                                Text(it.text, fontSize = 16.sp)
+                                Text(it.text, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 4.dp).weight(1f))
                             }
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                         }
