@@ -119,7 +119,6 @@ internal fun NotificationListTabView() {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun NotificationEventRow(
     initialInput: TextFieldValue,
