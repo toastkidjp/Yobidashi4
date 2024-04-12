@@ -29,4 +29,25 @@ class ChatTest {
         chat.addUserText("test")
     }
 
+    @Test
+    fun makeContent() {
+        chat.addUserText("test")
+        chat.addModelText("Answer")
+
+        assertEquals(
+            """{
+  "contents": [
+    {"role":"user", "parts":[ { "text": "test"} ]},{"role":"model", "parts":[ { "text": "Answer"} ]}
+  ],
+  "safetySettings": [
+      {
+          "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+          "threshold": "BLOCK_ONLY_HIGH"
+      }
+  ]
+}""".trimIndent(),
+            chat.makeContent()
+        )
+    }
+
 }
