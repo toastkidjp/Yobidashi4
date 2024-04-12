@@ -2,11 +2,8 @@ package jp.toastkid.yobidashi4.domain.model.chat
 
 data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
-    private val contentsHolder = mutableListOf<Pair<String, List<String>>>()
-
     fun addUserText(text: String) {
         texts.add(ChatMessage("user", text))
-        //contentsHolder.add("user" to listOf(text))
     }
 
     fun addModelText(text: String) {
