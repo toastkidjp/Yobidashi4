@@ -58,7 +58,10 @@ fun ChatTabView(chatTab: ChatTab) {
                                     color = viewModel.nameColor(it.role),
                                     modifier = Modifier.padding(horizontal = 4.dp).weight(0.2f)
                                 )
-                                Text(it.text, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 4.dp).weight(1f))
+                                MessageContent(
+                                    it.text,
+                                    modifier = Modifier.padding(horizontal = 4.dp).weight(1f)
+                                )
                             }
                             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                         }
