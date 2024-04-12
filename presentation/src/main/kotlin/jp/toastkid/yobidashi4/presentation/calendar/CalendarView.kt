@@ -9,15 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -29,7 +26,6 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +34,7 @@ import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -135,16 +132,10 @@ private fun TopComponent(
         }
 
         Surface(modifier = Modifier.padding(8.dp)) {
-            TextField(
+            SingleLineTextField(
                 yearInput,
-                maxLines = 1,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                label = { Text("Installment") },
-                textStyle = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
-                onValueChange = {
-                    setYearInput(it)
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                "Installment",
+                setYearInput,
                 modifier = Modifier.widthIn(100.dp)
             )
         }
