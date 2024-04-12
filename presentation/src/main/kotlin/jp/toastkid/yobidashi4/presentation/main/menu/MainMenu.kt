@@ -43,9 +43,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::switchFindArticle
             )
 
-            Item("Dump latest", icon = painterResource("images/icon/ic_dump.xml")) {
-                viewModel.dumpLatest()
-            }
+            Item(
+                "Dump latest",
+                icon = painterResource("images/icon/ic_dump.xml"),
+                onClick = viewModel::dumpLatest
+            )
+
             Item("Dump all") {
                 viewModel.dumpAll()
             }
