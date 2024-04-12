@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.10"
-    id("org.jetbrains.compose") version "1.6.1"
+    id("org.jetbrains.compose") version "1.6.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
