@@ -85,11 +85,7 @@ internal fun InputBox() {
                     }
             )
 
-            Button(
-                onClick = {
-                    viewModel.invokeAction()
-                }
-            ) {
+            Button(onClick = viewModel::invokeAction) {
                 Text("Done")
             }
 
