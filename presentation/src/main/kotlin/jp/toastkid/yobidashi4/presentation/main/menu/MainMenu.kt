@@ -58,9 +58,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::openArticleFolder
             )
 
-            Item("Open user folder", icon = painterResource("images/icon/ic_user_folder.xml"), shortcut = KeyShortcut(Key.U, alt = true)) {
-                viewModel.openUserFolder()
-            }
+            Item(
+                "Open user folder",
+                icon = painterResource("images/icon/ic_user_folder.xml"),
+                shortcut = KeyShortcut(Key.U, alt = true),
+                onClick = viewModel::openUserFolder
+            )
+
             Item("Exit", icon = painterResource("images/icon/ic_exit.xml")) {
                 exitApplication()
             }
