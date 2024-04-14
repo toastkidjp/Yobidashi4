@@ -144,8 +144,8 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun copyTabsTitle() {
-        val title = viewModel.currentTab()?.title() ?: return
-        ClipboardPutterService().invoke(title)
+        val currentTab = viewModel.currentTab() ?: return
+        ClipboardPutterService().invoke(currentTab.title())
     }
 
     fun currentIsWebTab(): Boolean {
