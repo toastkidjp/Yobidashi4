@@ -25,9 +25,9 @@ class SlideshowViewModel {
 
     private val sliderVisibility = mutableStateOf(false)
 
-    private var onEscapeKeyReleased: () -> Unit = {}
+    private var onEscapeKeyReleased: (() -> Unit)? = null
 
-    private var onFullscreenKeyReleased: () -> Unit = {}
+    private var onFullscreenKeyReleased: (() -> Unit)? = null
 
     private var maxSize = -1
 
@@ -59,11 +59,11 @@ class SlideshowViewModel {
                 true
             }
             Key.Escape -> {
-                onEscapeKeyReleased()
+                onEscapeKeyReleased?.invoke()
                 true
             }
             Key.F5 -> {
-                onFullscreenKeyReleased()
+                onFullscreenKeyReleased?.invoke()
                 true
             }
             else -> false
