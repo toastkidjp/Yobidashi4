@@ -7,6 +7,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -49,6 +50,10 @@ class NumberPlaceViewKtTest {
         every { setting.setMaskingCount(any()) } just Runs
         every { gameRepository.load(any()) } returns NumberPlaceGame()
         every { gameRepository.save(any(), any()) } just Runs
+
+        mockkConstructor(NumberPlaceViewModel::class)
+        every { anyConstructed<NumberPlaceViewModel>().openingDropdown() } returns true
+        every { anyConstructed<NumberPlaceViewModel>().openingCellOption(any(), any()) } returns true
     }
 
     @AfterEach
