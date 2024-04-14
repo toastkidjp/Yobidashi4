@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.markdown
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLineBuilder
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
@@ -29,14 +30,22 @@ class MarkdownParser {
 
     private val horizontalRulePattern = "^-{3,}$".toRegex()
 
+    operator fun invoke(path: Path): Markdown {
+        return invoke(Files.lines(path), path.nameWithoutExtension)
+    }
+
+    operator fun invoke(content: String, title: String): Markdown {
+        return invoke(content.split("\n").stream(), title)
+    }
+
     /**
      * Convert to Slides.
      * @return List&lt;Slide&gt;
      */
-    operator fun invoke(path: Path): Markdown {
-        val markdown = Markdown(title = path.nameWithoutExtension)
+    private fun invoke(stream: Stream<String>, title: String): Markdown {
+        val markdown = Markdown(title)
         try {
-            Files.lines(path).forEach { line ->
+            stream.forEach { line ->
                 if (line.startsWith("#")) {
                     markdown.add(
                         TextBlock(
