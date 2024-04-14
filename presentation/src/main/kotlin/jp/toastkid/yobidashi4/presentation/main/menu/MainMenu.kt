@@ -49,9 +49,8 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::dumpLatest
             )
 
-            Item("Dump all") {
-                viewModel.dumpAll()
-            }
+            Item("Dump all", onClick = viewModel::dumpAll)
+
             Item("Open article folder", icon = painterResource("images/icon/ic_article_folder.xml"), shortcut = KeyShortcut(Key.O, alt = true)) {
                 viewModel.openArticleFolder()
             }
