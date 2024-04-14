@@ -134,7 +134,7 @@ private fun TopComponent(
         Surface(modifier = Modifier.padding(8.dp)) {
             SingleLineTextField(
                 yearInput,
-                "Installment",
+                "Year",
                 setYearInput,
                 modifier = Modifier.widthIn(100.dp)
             )
