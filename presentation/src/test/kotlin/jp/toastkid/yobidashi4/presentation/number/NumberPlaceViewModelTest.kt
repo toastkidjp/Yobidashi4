@@ -448,6 +448,13 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun openCellOption() {
+        numberPlaceViewModel.place(1, 1, 2)
+
+        numberPlaceViewModel.openCellOption(1, 1)
+    }
+
+    @Test
+    fun noopOpenCellOption() {
         numberPlaceViewModel.openCellOption(1, 2)
     }
 
@@ -465,6 +472,13 @@ class NumberPlaceViewModelTest {
 
     @Test
     fun numberLabel() {
+        numberPlaceViewModel.place(1, 1, 2)
+
+        assertEquals("2", numberPlaceViewModel.numberLabel(1, 1))
+    }
+
+    @Test
+    fun noopNumberLabel() {
         assertTrue(numberPlaceViewModel.numberLabel(1, 2).isEmpty())
     }
 
