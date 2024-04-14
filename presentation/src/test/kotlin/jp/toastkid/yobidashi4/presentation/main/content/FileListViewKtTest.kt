@@ -4,6 +4,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import java.nio.file.Files
@@ -35,6 +36,9 @@ class FileListViewKtTest {
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 19223
+
+        mockkConstructor(FileListViewModel::class)
+        every { anyConstructed<FileListViewModel>().openingDropdown(any()) } returns false
     }
 
     @AfterEach
@@ -56,4 +60,20 @@ class FileListViewKtTest {
             }
         }
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun withDropdown() {
+        val path = mockk<Path>()
+        every { path.nameWithoutExtension } returns "test"
+        every { path.getLastModifiedTime() } returns FileTime.fromMillis(System.currentTimeMillis())
+        every { anyConstructed<FileListViewModel>().openingDropdown(any()) } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                FileListView(listOf(path))
+            }
+        }
+    }
+
 }
