@@ -3,11 +3,12 @@ package jp.toastkid.yobidashi4.presentation.log.viewer
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkStatic
+import io.mockk.just
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
@@ -39,9 +40,9 @@ class TextFileViewerTabViewKtTest {
             )
         }
 
-        mockkStatic(Files::class)
-        every { Files.exists(any()) } returns true
-        every { Files.readAllLines(any()) } returns listOf("test", "test2")
+        mockkConstructor(TextFileViewerTabViewModel::class)
+        coEvery { anyConstructed<TextFileViewerTabViewModel>().launch(any(), any()) } just Runs
+        coEvery { anyConstructed<TextFileViewerTabViewModel>().textState() } returns listOf("test", "test2")
     }
 
     @AfterEach
