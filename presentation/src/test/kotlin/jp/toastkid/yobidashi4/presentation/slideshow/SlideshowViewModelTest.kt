@@ -8,6 +8,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -151,6 +152,35 @@ class SlideshowViewModelTest {
         }
     }
 
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun onKeyEventF5ForCoverage() {
+        subject = SlideshowViewModel()
+
+        runDesktopComposeUiTest {
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                subject.onKeyEvent(
+                    coroutineScope,
+                    KeyEvent(
+                        java.awt.event.KeyEvent(
+                            mockk(),
+                            java.awt.event.KeyEvent.KEY_RELEASED,
+                            1,
+                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                            java.awt.event.KeyEvent.VK_F5,
+                            'A'
+                        )
+                    ),
+                    mockk()
+                )
+
+                verify { onFullscreenKeyReleased wasNot called }
+            }
+        }
+    }
+
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun onNoopKeyEvent() {
@@ -199,6 +229,34 @@ class SlideshowViewModelTest {
                 )
 
                 verify { onEscapeKeyReleased.invoke() }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun onKeyEventEscapeForCoverage() {
+        subject = SlideshowViewModel()
+
+        runDesktopComposeUiTest {
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                subject.onKeyEvent(
+                    coroutineScope,
+                    KeyEvent(
+                        java.awt.event.KeyEvent(
+                            mockk(),
+                            java.awt.event.KeyEvent.KEY_RELEASED,
+                            1,
+                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                            java.awt.event.KeyEvent.VK_ESCAPE,
+                            'A'
+                        )
+                    ),
+                    mockk()
+                )
+
+                verify { onEscapeKeyReleased wasNot called }
             }
         }
     }
