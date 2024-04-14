@@ -20,6 +20,7 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarData
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -36,20 +37,22 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
         End at dismissSnackbarDistance.dp.value
     }
 
-    val anchoredDraggableState = AnchoredDraggableState(
-        initialValue = 0f,
-        anchors = anchors,
-        positionalThreshold = { it * 0.75f },
-        velocityThreshold = { 125.dp.value },
-        animationSpec = spring(),
-        confirmValueChange = {
-            when (it) {
-                Start, End -> onDismiss()
-                else -> Unit
+    val anchoredDraggableState = remember {
+        AnchoredDraggableState(
+            initialValue = Center,
+            anchors = anchors,
+            positionalThreshold = { it },
+            velocityThreshold = { 124.dp.value },
+            animationSpec = spring(),
+            confirmValueChange = {
+                when (it) {
+                    Start, End -> onDismiss()
+                    else -> return@AnchoredDraggableState false
+                }
+                true
             }
-            true
-        }
-    )
+        )
+    }
 
     Snackbar(
         backgroundColor = MaterialTheme.colors.primary,
@@ -58,7 +61,7 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
                 state = anchoredDraggableState,
                 orientation = Orientation.Horizontal
             )
-            .offset { IntOffset(anchoredDraggableState.offset.toInt(), 0) }
+            .offset { IntOffset(anchoredDraggableState.requireOffset().toInt(), 0) }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
