@@ -20,7 +20,7 @@ fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     ClickableText(
         viewModel.annotatedString(),
         style = textStyle,
-        onClick = {},
+        onClick = ::print,
         modifier = modifier.onPointerEvent(PointerEventType.Release) {
             viewModel.onPointerReleased(it)
         },
