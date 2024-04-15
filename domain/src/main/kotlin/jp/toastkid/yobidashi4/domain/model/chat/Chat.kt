@@ -21,7 +21,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
     fun makeContent() = """
       {
         "contents": [
-          ${texts.map { "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": \"${it.text}\"} ]}" }.joinToString(",")}
+          ${texts.joinToString(",") { "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": \"${it.text}\"} ]}" }}
         ],
         "safetySettings": [
             {
