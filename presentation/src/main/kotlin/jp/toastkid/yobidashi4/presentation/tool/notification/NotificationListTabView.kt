@@ -84,13 +84,13 @@ internal fun NotificationListTabView() {
                         }
                         .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     ) {
-                        NotificationEventRow(titleState.value, headerCursorOn.value) {
+                        NotificationEventRow(titleState.value) {
                             titleState.value = it
                         }
-                        NotificationEventRow(textState.value, headerCursorOn.value) {
+                        NotificationEventRow(textState.value) {
                             textState.value = it
                         }
-                        NotificationEventRow(dateTimeState.value, headerCursorOn.value) {
+                        NotificationEventRow(dateTimeState.value) {
                             dateTimeState.value = it
                         }
 
@@ -122,7 +122,6 @@ internal fun NotificationListTabView() {
 @Composable
 private fun NotificationEventRow(
     initialInput: TextFieldValue,
-    headerCursorOn: Boolean,
     onValueChange: (TextFieldValue) -> Unit
 ) {
     Box(
