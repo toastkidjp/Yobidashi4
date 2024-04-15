@@ -11,12 +11,9 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -24,11 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -52,33 +48,17 @@ internal fun InputBox() {
                 .padding(8.dp)
             )
 
-            TextField(
+            SingleLineTextField(
                 viewModel.query(),
-                maxLines = 1,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.secondary
-                ),
-                label = { Text("Please would you input file name?", color = MaterialTheme.colors.secondary) },
-                onValueChange = {
-                    viewModel.onValueChange(it)
-                },
+                "Please would you input file name?",
+                viewModel::onValueChange,
+                viewModel::clearInput,
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         viewModel.invokeAction()
                     }
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                trailingIcon = {
-                    Icon(
-                        painterResource("images/icon/ic_clear_form.xml"),
-                        contentDescription = "Clear input.",
-                        tint = MaterialTheme.colors.secondary,
-                        modifier = Modifier.clickable {
-                            viewModel.clearInput()
-                        }
-                    )
-                },
                 modifier = Modifier.focusRequester(viewModel.focusRequester())
                     .onKeyEvent {
                         viewModel.onKeyEvent(it)
