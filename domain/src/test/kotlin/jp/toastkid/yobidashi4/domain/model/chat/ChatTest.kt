@@ -26,7 +26,10 @@ class ChatTest {
 
     @Test
     fun addModelTextsWithEmptyList() {
-        chat.addUserText("test")
+        chat.addModelText("Greed")
+        chat.addModelText(" is good.")
+
+        assertEquals("Greed is good.", chat.list().last().text)
     }
 
     @Test
