@@ -145,7 +145,7 @@ private fun TopComponent(
         Surface(modifier = Modifier.padding(8.dp)) {
             Box(modifier = Modifier.clickable(onClick = openMonthChooser)) {
                 Text("$currentMonth", fontSize = 16.sp)
-                DropdownMenu(expanded = openingMonthChooser, onDismissRequest = { closeMonthChooser() }) {
+                DropdownMenu(expanded = openingMonthChooser, onDismissRequest = closeMonthChooser) {
                     Month.values().forEach {
                         DropdownMenuItem(onClick = {
                             moveMonth(it.value)
