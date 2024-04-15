@@ -12,19 +12,17 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
 @Composable
 internal fun FindInPageBox() {
@@ -63,15 +61,10 @@ internal fun FindInPageBox() {
             )
 
             if (viewModel.useReplace()) {
-                TextField(
+                SingleLineTextField(
                     viewModel.replaceInputValue(),
-                    onValueChange = viewModel::onReplaceInputChange,
-                    maxLines = 1,
-                    label = { Text("Replacement", color = MaterialTheme.colors.secondary) },
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colors.secondary
-                        )
+                    "Replacement",
+                    viewModel::onReplaceInputChange,
                 )
             }
 
