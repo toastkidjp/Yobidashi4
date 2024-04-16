@@ -39,9 +39,7 @@ fun FileRenameToolView() {
                 "Base file name",
                 viewModel::onValueChange,
                 viewModel::clearInput,
-                modifier = Modifier.onKeyEvent {
-                    viewModel.onKeyEvent(it)
-                }
+                modifier = Modifier.onKeyEvent(viewModel::onKeyEvent)
             )
 
             Row {
