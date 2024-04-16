@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.ApplicationScope
@@ -18,6 +19,7 @@ import androidx.compose.ui.window.rememberTrayState
 import java.nio.file.Path
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
+import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.main.content.MainScaffold
@@ -71,7 +73,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
                 Item(
                     "New chat",
                     onClick = {
-                        mainViewModel.openTab(ChatTab())
+                        mainViewModel.openTab(ChatTab(Chat(mutableStateListOf())))
                     }
                 )
                 Item(
