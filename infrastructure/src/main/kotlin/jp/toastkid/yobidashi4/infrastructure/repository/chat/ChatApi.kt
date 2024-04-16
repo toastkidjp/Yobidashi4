@@ -42,6 +42,7 @@ class ChatApi(private val apiKey: String) : ChatRepository {
                 val response = parser.invoke(line)
                 if (response != null) {
                     streamLineConsumer(response)
+                    LoggerFactory.getLogger(javaClass).debug(response)
                 }
 
                 line = it.readLine()
