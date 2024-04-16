@@ -184,6 +184,11 @@ class CalendarViewModelTest {
     }
 
     @Test
+    fun dayOfWeek() {
+        assertEquals(7, viewModel.dayOfWeeks().size)
+    }
+
+    @Test
     fun month() {
         viewModel.moveMonth(2)
 
