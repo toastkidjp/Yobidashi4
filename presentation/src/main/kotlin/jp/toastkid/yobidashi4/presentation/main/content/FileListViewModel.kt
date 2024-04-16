@@ -118,7 +118,7 @@ class FileListViewModel : KoinComponent {
         articleStates.addAll(completeItems)
     }
 
-    fun items() = articleStates
+    fun items(): List<FileListItem> = articleStates
 
     fun onSingleClick(fileListItem: FileListItem) {
         val clickedIndex = items().indexOf(fileListItem)
