@@ -85,6 +85,14 @@ class SlideshowViewModel {
         return if (sliderVisibility.value) 1f else 0f
     }
 
+    fun showSlider() {
+        sliderVisibility.value = true
+    }
+
+    fun hideSlider() {
+        sliderVisibility.value = false
+    }
+
     fun setSliderVisibility(b: Boolean) {
         sliderVisibility.value = b
     }
