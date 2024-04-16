@@ -117,10 +117,10 @@ fun Slideshow(
                 valueRange = 0f .. (deck.slides.size - 1).toFloat(),
                 modifier = Modifier.align(Alignment.BottomCenter).alpha(alpha.value)
                     .onPointerEvent(PointerEventType.Enter) {
-                        viewModel.setSliderVisibility(true)
+                        viewModel.showSlider()
                     }
                     .onPointerEvent(PointerEventType.Exit) {
-                        viewModel.setSliderVisibility(false)
+                        viewModel.hideSlider()
                     }
             )
         }
