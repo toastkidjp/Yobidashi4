@@ -177,4 +177,20 @@ class MainScaffoldKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun articlesWithOpenArticleList() {
+        every { mainViewModel.openArticleList() } returns true
+
+        val path = mockk<Path>()
+        every { path.extension } returns "md"
+        every { mainViewModel.articles() } returns listOf(path)
+
+        runDesktopComposeUiTest {
+            setContent {
+                MainScaffold()
+            }
+        }
+    }
+
 }
