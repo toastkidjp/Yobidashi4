@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.WindowState
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MainViewModel {
     val selected: State<Int>
-    val tabs: SnapshotStateList<Tab>
+    val tabs: List<Tab>
     fun showWebSearch(): Boolean
     fun showAggregationBox(): Boolean
     fun switchAggregationBox(newState: Boolean)
