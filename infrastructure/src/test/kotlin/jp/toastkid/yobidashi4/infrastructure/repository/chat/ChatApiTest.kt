@@ -2,9 +2,11 @@ package jp.toastkid.yobidashi4.infrastructure.repository.chat
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -70,6 +72,17 @@ class ChatApiTest {
         every { subject.openConnection() } returns null
 
         subject.request("{test}", {})
+    }
+
+    @Test
+    fun requestWhenParseResultIsNullCase() {
+        val consumer: (String?) -> Unit = mockk()
+        every { anyConstructed<ChatStreamParser>().invoke(any()) } returns null
+        every { consumer.invoke(any()) } just Runs
+
+        subject.request("{test}", consumer)
+
+        verify { consumer wasNot called }
     }
 
 }
