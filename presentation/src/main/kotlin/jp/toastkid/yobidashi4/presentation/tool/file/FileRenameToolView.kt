@@ -44,9 +44,7 @@ fun FileRenameToolView() {
 
             Row {
                 Button(
-                    onClick = {
-                        viewModel.clearPaths()
-                    },
+                    onClick = viewModel::clearPaths,
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Text("Clear files")
