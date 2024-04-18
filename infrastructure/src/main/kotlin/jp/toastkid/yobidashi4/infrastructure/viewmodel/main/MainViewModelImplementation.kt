@@ -8,7 +8,6 @@ import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
@@ -144,7 +143,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     private val _tabs = mutableStateListOf<Tab>()
 
-    override val tabs: SnapshotStateList<Tab> = _tabs
+    override val tabs: List<Tab> = _tabs
 
     override fun currentTab(): Tab? {
         return tabs.getOrNull(selected.value)
@@ -283,7 +282,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        tabs.set(indexOf, CalendarTab(year, month))
+        _tabs.set(indexOf, CalendarTab(year, month))
     }
 
     override fun updateScrollableTab(tab: ScrollableContentTab, scrollPosition: Int) {
@@ -292,7 +291,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        tabs.set(indexOf, tab.withNewPosition(scrollPosition))
+        _tabs.set(indexOf, tab.withNewPosition(scrollPosition))
     }
 
     override fun replaceTab(target: Tab, replacement: Tab) {
@@ -300,7 +299,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         if (indexOf == -1) {
             return
         }
-        tabs.set(indexOf, replacement)
+        _tabs.set(indexOf, replacement)
     }
 
     override fun closeCurrent() {
