@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.window.Window
@@ -13,6 +12,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.unmockkConstructor
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
@@ -76,7 +76,7 @@ class MainMenuKtTest {
         every { viewModel.closeOtherTabs() } just Runs
         every { viewModel.closeSlideshow() } just Runs
         every { viewModel.showSnackbar(any(), any(), any()) } just Runs
-        every { viewModel.tabs } returns mutableStateListOf()
+        every { viewModel.tabs } returns mutableListOf()
         every { viewModel.slideshow(any()) } just Runs
         every { viewModel.setSelectedIndex(any()) } just Runs
         every { viewModel.openMemoryUsageBox() } returns false
@@ -158,6 +158,24 @@ class MainMenuKtTest {
                 }
             }
         }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun useAdditionalTabMenu() {
+        mockkConstructor(MainMenuViewModel::class)
+        every { anyConstructed<MainMenuViewModel>().useAdditionalTabMenu() } returns true
+        every { anyConstructed<MainMenuViewModel>().currentIsWebTab() } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                Window({}, visible = false) {
+                    MainMenu {  }
+                }
+            }
+        }
+
+        unmockkConstructor(MainMenuViewModel::class)
     }
 
 }
