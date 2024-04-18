@@ -184,6 +184,14 @@ class CalendarViewModelTest {
     }
 
     @Test
+    fun noopOpenDateArticle() {
+        viewModel.openDateArticle(-1)
+
+        verify(inverse = true) { setting.articleFolderPath() }
+        verify(inverse = true) { mainViewModel.edit(any(), any()) }
+    }
+
+    @Test
     fun dayOfWeek() {
         assertEquals(7, viewModel.dayOfWeeks().size)
     }
