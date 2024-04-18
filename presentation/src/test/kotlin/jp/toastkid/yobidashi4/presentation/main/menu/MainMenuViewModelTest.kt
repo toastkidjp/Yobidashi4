@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -87,7 +86,7 @@ class MainMenuViewModelTest {
                 }
             )
         }
-        every { mainViewModel.tabs } returns SnapshotStateList()
+        every { mainViewModel.tabs } returns emptyList()
         every { setting.userAgentName() } returns "test"
 
         subject = MainMenuViewModel()
