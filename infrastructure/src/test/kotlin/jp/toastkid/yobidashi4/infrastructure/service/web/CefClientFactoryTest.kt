@@ -596,4 +596,36 @@ class CefClientFactoryTest {
         verify { window.dispatchEvent(any()) }
     }
 
+    @Test
+    fun checkAddKeyboardHandlerWithBothNull() {
+        mockkConstructor(CefKeyboardShortcutProcessor::class)
+        val handlerSlot = slot<CefKeyboardHandler>()
+        every { client.addKeyboardHandler(capture(handlerSlot)) } returns client
+        every { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) } returns false
+
+        val client = subject.invoke()
+        val consumed = handlerSlot.captured.onKeyEvent(null, null)
+
+        assertNotNull(client)
+        assertFalse(consumed)
+        verify { client.addKeyboardHandler(any()) }
+        verify(inverse = true) { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun checkAddKeyboardHandlerWithNullBrowser() {
+        mockkConstructor(CefKeyboardShortcutProcessor::class)
+        val handlerSlot = slot<CefKeyboardHandler>()
+        every { client.addKeyboardHandler(capture(handlerSlot)) } returns client
+        every { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) } returns false
+
+        val client = subject.invoke()
+        val consumed = handlerSlot.captured.onKeyEvent(null, mockk())
+
+        assertNotNull(client)
+        assertFalse(consumed)
+        verify { client.addKeyboardHandler(any()) }
+        verify(inverse = true) { anyConstructed<CefKeyboardShortcutProcessor >().invoke(any(), any(), any(), any()) }
+    }
+
 }
