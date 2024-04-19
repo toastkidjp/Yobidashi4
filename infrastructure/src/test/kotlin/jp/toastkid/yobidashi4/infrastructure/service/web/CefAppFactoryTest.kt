@@ -96,4 +96,22 @@ class CefAppFactoryTest {
         verify { CefApp.addAppHandler(any()) }
     }
 
+    @Test
+    fun lightModeCase() {
+        every { appSetting.darkMode() } returns false
+        val slot = slot<CefAppHandlerAdapter>()
+        mockkStatic(CefApp::class)
+        every { CefApp.addAppHandler(capture(slot)) } just Runs
+        val cefCommandLine = mockk<CefCommandLine>()
+        every { cefCommandLine.appendSwitch(any()) } just Runs
+        every { cefCommandLine.appendSwitchWithValue(any(), any()) } just Runs
+
+        val cefApp = subject.invoke()
+        slot.captured.onBeforeCommandLineProcessing("", cefCommandLine)
+
+        assertNotNull(cefApp)
+        verify { cefCommandLine.appendSwitchWithValue(any(), any()) }
+        verify { CefApp.addAppHandler(any()) }
+    }
+
 }
