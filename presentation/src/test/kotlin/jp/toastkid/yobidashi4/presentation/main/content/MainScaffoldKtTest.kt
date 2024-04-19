@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -74,7 +73,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.articles() } returns emptyList()
         every { mainViewModel.reloadAllArticle() } just Runs
-        every { mainViewModel.tabs } returns mutableStateListOf<Tab>()
+        every { mainViewModel.tabs } returns mutableListOf<Tab>()
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
@@ -130,7 +129,7 @@ class MainScaffoldKtTest {
     fun useTabContents() {
         every { mainViewModel.selected } returns mutableStateOf(0)
         every { mainViewModel.currentTab() } returns LoanCalculatorTab()
-        every { mainViewModel.tabs } returns mutableStateListOf(
+        every { mainViewModel.tabs } returns mutableListOf(
             LoanCalculatorTab(),
             BarcodeToolTab(),
             FileRenameToolTab()
@@ -150,7 +149,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.currentTab() } returns FileRenameToolTab()
         every { mainViewModel.droppedPathFlow() } returns emptyFlow()
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
-        every { mainViewModel.tabs } returns mutableStateListOf(
+        every { mainViewModel.tabs } returns mutableListOf(
             LoanCalculatorTab(),
             BarcodeToolTab(),
             FileRenameToolTab()
