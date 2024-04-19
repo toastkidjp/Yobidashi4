@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
-import androidx.compose.runtime.mutableStateListOf
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -332,7 +331,7 @@ class MainMenuViewModelTest {
 
     @Test
     fun closeCurrentTab() {
-        every { mainViewModel.tabs } returns mutableStateListOf(mockk())
+        every { mainViewModel.tabs } returns mutableListOf(mockk())
         every { mainViewModel.closeCurrent() } just Runs
         val ifEmpty = mockk<() -> Unit>()
         every { ifEmpty.invoke() } just Runs
@@ -344,7 +343,7 @@ class MainMenuViewModelTest {
 
     @Test
     fun useAdditionalTabMenu() {
-        every { mainViewModel.tabs } returns mutableStateListOf(mockk())
+        every { mainViewModel.tabs } returns mutableListOf(mockk())
 
         assertTrue(subject.useAdditionalTabMenu())
     }
@@ -553,11 +552,11 @@ class MainMenuViewModelTest {
     fun canMoveTab() {
         assertFalse(subject.canMoveTab())
 
-        every { mainViewModel.tabs } returns mutableStateListOf(mockk())
+        every { mainViewModel.tabs } returns mutableListOf(mockk())
 
         assertFalse(subject.canMoveTab())
 
-        every { mainViewModel.tabs } returns mutableStateListOf(mockk(), mockk())
+        every { mainViewModel.tabs } returns mutableListOf(mockk(), mockk())
 
         assertTrue(subject.canMoveTab())
     }
@@ -573,7 +572,7 @@ class MainMenuViewModelTest {
 
     @Test
     fun tabCount() {
-        every { mainViewModel.tabs } returns mutableStateListOf(mockk())
+        every { mainViewModel.tabs } returns mutableListOf(mockk())
 
         assertEquals(1, subject.tabCount())
     }
