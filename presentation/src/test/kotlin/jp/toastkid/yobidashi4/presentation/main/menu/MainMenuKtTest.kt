@@ -178,4 +178,21 @@ class MainMenuKtTest {
         unmockkConstructor(MainMenuViewModel::class)
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun canMoveTab() {
+        mockkConstructor(MainMenuViewModel::class)
+        every { anyConstructed<MainMenuViewModel>().canMoveTab() } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                Window({}, visible = false) {
+                    MainMenu {  }
+                }
+            }
+        }
+
+        unmockkConstructor(MainMenuViewModel::class)
+    }
+
 }
