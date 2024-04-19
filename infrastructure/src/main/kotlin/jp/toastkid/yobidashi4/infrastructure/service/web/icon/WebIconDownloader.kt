@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web.icon
 
 import java.io.BufferedInputStream
-import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 
 class WebIconDownloader {
 
@@ -23,7 +23,7 @@ class WebIconDownloader {
         if (Files.exists(iconPath)) {
             return
         }
-        val urlConnection = urlConnection(iconUrl) ?: return
+        val urlConnection = HttpUrlConnectionFactory().invoke(iconUrl) ?: return
         if (urlConnection.responseCode != 200) {
             return
         }
@@ -31,7 +31,5 @@ class WebIconDownloader {
             Files.write(iconPath, it.readAllBytes())
         }
     }
-
-    fun urlConnection(iconUrl: URL) = iconUrl.openConnection() as? HttpURLConnection
 
 }
