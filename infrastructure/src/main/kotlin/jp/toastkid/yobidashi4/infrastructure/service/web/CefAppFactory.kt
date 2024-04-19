@@ -20,11 +20,11 @@ class CefAppFactory : KoinComponent {
         builder.setInstallDir(Path.of("jcef-bundle").toFile()) //Default
         builder.setProgressHandler(ConsoleProgressHandler()) //Default
         CefApp.addAppHandler(object : CefAppHandlerAdapter(arrayOf("--disable-gpu")) {
-            override fun onBeforeCommandLineProcessing(processType: String?, commandLine: CefCommandLine?) {
-                if (processType.isNullOrEmpty()) {
-                    commandLine?.appendSwitchWithValue("enable-media-stream", "true")
+            override fun onBeforeCommandLineProcessing(processType: String, commandLine: CefCommandLine) {
+                if (processType.isEmpty()) {
+                    commandLine.appendSwitchWithValue("enable-media-stream", "true")
                     if (appSetting.darkMode()) {
-                        commandLine?.appendSwitchWithValue(
+                        commandLine.appendSwitchWithValue(
                             "blink-settings",
                             "forceDarkModeInversionAlgorithm=1,forceDarkModeEnabled=true"
                         )
