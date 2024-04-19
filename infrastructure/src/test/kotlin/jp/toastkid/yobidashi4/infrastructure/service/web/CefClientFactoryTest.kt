@@ -317,9 +317,11 @@ class CefClientFactoryTest {
             .getResourceRequestHandler(mockk(), mockk(), request, true, true, "test", mockk())
         resourceRequestHandler.onBeforeResourceLoad(mockk(), mockk(), request)
         val result = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(), "https://www.yahoo.co.jp", true)
+        val falseCase = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(), "https://www.yahoo.co.jp", false)
 
         assertNotNull(client)
         assertTrue(result)
+        assertFalse(falseCase)
         verify { client.addRequestHandler(any()) }
         verify { request.dispose() }
         verify { viewModel.openUrl(any(), any()) }
