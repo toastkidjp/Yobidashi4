@@ -4,14 +4,15 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
-import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,8 +45,9 @@ class WebIconDownloaderTest {
         every { urlConnection.responseCode } returns 200
         every { urlConnection.inputStream } returns "test".byteInputStream()
 
-        subject = spyk(WebIconDownloader())
-        every { subject.urlConnection(any()) } returns urlConnection
+        subject = WebIconDownloader()
+        mockkConstructor(HttpUrlConnectionFactory::class)
+        every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns urlConnection
     }
 
     @AfterEach
@@ -62,24 +64,48 @@ class WebIconDownloaderTest {
     }
 
     @Test
+    fun urlNotIncludeExtensionCase() {
+        every { folder.resolve(any<String>()) } returns imagePath
+        url = URL("https://www.yahoo.co.jp/favicon")
+
+        subject.invoke(url, folder, "test")
+
+        verify { Files.exists(any()) }
+        verify { Files.write(any(), any<ByteArray>()) }
+        verify { folder.resolve("test.png") }
+    }
+
+    @Test
+    fun urlEndDotCase() {
+        every { folder.resolve(any<String>()) } returns imagePath
+        url = URL("https://www.yahoo.co.jp/favicon.")
+
+        subject.invoke(url, folder, "test")
+
+        verify { Files.exists(any()) }
+        verify { Files.write(any(), any<ByteArray>()) }
+        verify { folder.resolve("test.png") }
+    }
+
+    @Test
     fun existsCase() {
         every { Files.exists(any()) } returns true
 
         subject.invoke(url, folder, "test")
 
         verify { Files.exists(any()) }
-        verify(inverse = true) { subject.urlConnection(any()) }
+        verify(inverse = true) { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) }
         verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
     @Test
     fun connectionIsNullCase() {
-        every { subject.urlConnection(any()) } returns null
+        every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns null
 
         subject.invoke(url, folder, "test")
 
         verify { Files.exists(any()) }
-        verify { subject.urlConnection(any()) }
+        verify { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) }
         verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
