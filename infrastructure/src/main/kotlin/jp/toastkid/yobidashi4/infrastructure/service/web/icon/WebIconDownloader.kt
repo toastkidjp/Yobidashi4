@@ -8,6 +8,8 @@ import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectio
 
 class WebIconDownloader {
 
+    private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
+
     operator fun invoke(
         iconUrl: URL,
         faviconFolder: Path,
@@ -23,7 +25,7 @@ class WebIconDownloader {
         if (Files.exists(iconPath)) {
             return
         }
-        val urlConnection = HttpUrlConnectionFactory().invoke(iconUrl) ?: return
+        val urlConnection = httpUrlConnectionFactory.invoke(iconUrl) ?: return
         if (urlConnection.responseCode != 200) {
             return
         }
