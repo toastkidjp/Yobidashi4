@@ -8,12 +8,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
+import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 import jp.toastkid.yobidashi4.infrastructure.service.chat.ChatStreamParser
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -30,9 +30,8 @@ class ChatApiTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        subject = spyk(ChatApi("test-key"))
+        subject = ChatApi("test-key")
 
-        every { subject.openConnection() } returns connection
         every { connection.setRequestProperty("Content-Type", "application/json") } just Runs
         every { connection.requestMethod = any() } just Runs
         every { connection.readTimeout = any() } just Runs
@@ -44,8 +43,9 @@ class ChatApiTest {
         every { connection.errorStream } returns ByteArrayInputStream(byteArrayOf())
         every { connection.responseCode } returns 200
 
-        mockkConstructor(ChatStreamParser::class)
+        mockkConstructor(ChatStreamParser::class, HttpUrlConnectionFactory::class)
         every { anyConstructed<ChatStreamParser>().invoke(any()) } returns "test"
+        every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns connection
     }
 
     @AfterEach
@@ -69,7 +69,7 @@ class ChatApiTest {
 
     @Test
     fun requestConnectionNullCase() {
-        every { subject.openConnection() } returns null
+        every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns null
 
         subject.request("{test}", {})
     }
