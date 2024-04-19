@@ -15,6 +15,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.callback.CefContextMenuParams
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -70,7 +71,8 @@ class BookmarkInsertionTest {
         every { mainViewModel.showSnackbar(capture(slot)) } just Runs
 
         bookmarkInsertion.invoke(null, null)
-        assertEquals("Add bookmark: Bookmark(title=tab, url=, favicon=, parent=root, folder=false)", slot.captured)
+
+        assertFalse(slot.isCaptured)
     }
 
     @Test
@@ -78,6 +80,17 @@ class BookmarkInsertionTest {
         val slot = slot<String>()
         every { mainViewModel.showSnackbar(capture(slot)) } just Runs
         every { params.linkUrl } returns "https://www.yahoo.co.jp"
+
+        bookmarkInsertion.invoke(params, null)
+        assertEquals("Add bookmark: Bookmark(title=tab, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
+    }
+
+    @Test
+    fun invokeWithoutTitle() {
+        val slot = slot<String>()
+        every { mainViewModel.showSnackbar(capture(slot)) } just Runs
+        every { params.linkUrl } returns "https://www.yahoo.co.jp"
+        every { mainViewModel.currentTab() } returns null
 
         bookmarkInsertion.invoke(params, null)
         assertEquals("Add bookmark: Bookmark(title=https://www.yahoo.co.jp, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
@@ -92,7 +105,7 @@ class BookmarkInsertionTest {
 
         bookmarkInsertion.invoke(params, "")
 
-        assertEquals("Add bookmark: Bookmark(title=https://www.yahoo.co.jp, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
+        assertEquals("Add bookmark: Bookmark(title=tab, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
     }
 
     @Test
@@ -104,7 +117,7 @@ class BookmarkInsertionTest {
 
         bookmarkInsertion.invoke(params, "")
 
-        assertEquals("Add bookmark: Bookmark(title=https://www.yahoo.co.jp, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
+        assertEquals("Add bookmark: Bookmark(title=tab, url=https://www.yahoo.co.jp, favicon=, parent=root, folder=false)", slot.captured)
     }
 
     @Test
