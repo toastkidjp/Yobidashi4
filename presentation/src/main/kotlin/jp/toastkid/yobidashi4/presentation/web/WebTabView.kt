@@ -19,10 +19,6 @@ import kotlinx.coroutines.withContext
 
 @Composable
 internal fun WebTabView(tab: WebTab) {
-    if (tab.isReadableUrl().not()) {
-        return
-    }
-
     val background = Color(MaterialTheme.colors.surface.toArgb())
 
     val viewModel = remember { WebTabViewModel() }
