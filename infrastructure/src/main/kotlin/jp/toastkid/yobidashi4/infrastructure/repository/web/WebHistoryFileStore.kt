@@ -14,9 +14,9 @@ class WebHistoryFileStore : WebHistoryRepository {
 
     override fun add(title: String, url: String) {
         val webHistories = readAll()
-        val item = webHistories
-            .firstOrNull { it.title == title && it.url == url }
-            ?.let { it.copy(lastVisitedTime = System.currentTimeMillis(), visitingCount = it.visitingCount + 1) }
+        val firstOrNull = webHistories.firstOrNull { it.title == title && it.url == url }
+
+        val item = firstOrNull?.copy(lastVisitedTime = System.currentTimeMillis(), visitingCount = firstOrNull.visitingCount + 1)
             ?: WebHistory(title, url, System.currentTimeMillis())
 
         val key = title + url
