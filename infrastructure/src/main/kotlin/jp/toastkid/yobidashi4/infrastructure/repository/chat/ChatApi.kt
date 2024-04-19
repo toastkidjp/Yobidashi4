@@ -15,8 +15,10 @@ import org.slf4j.LoggerFactory
 @Single
 class ChatApi(private val apiKey: String) : ChatRepository {
 
+    private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
+
     override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
-        val connection = HttpUrlConnectionFactory().invoke(
+        val connection = httpUrlConnectionFactory.invoke(
             URL("https://generativelanguage.googleapis.com/v1/models/gemini-pro:streamGenerateContent?alt=sse&key=$apiKey")
         ) ?: return
         connection.setRequestProperty("Content-Type", "application/json")
