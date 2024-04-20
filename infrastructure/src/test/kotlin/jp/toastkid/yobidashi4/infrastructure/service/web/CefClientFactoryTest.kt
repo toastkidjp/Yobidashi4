@@ -114,6 +114,13 @@ class CefClientFactoryTest {
         val sourceSlot = slot<CefStringVisitor>()
         every { browser.getSource(capture(sourceSlot)) } just Runs
         loadHandlerSlot.captured.onLoadingStateChange(browser, false, false, false)
+        // For test coverage.
+        loadHandlerSlot.captured.onLoadingStateChange(browser, true, false, false)
+        every { browser.url } returns "ftp://test"
+        loadHandlerSlot.captured.onLoadingStateChange(browser, false, false, false)
+        every { browser.url } returns null
+        loadHandlerSlot.captured.onLoadingStateChange(browser, false, false, false)
+        loadHandlerSlot.captured.onLoadingStateChange(null, true, false, false)
         sourceSlot.captured.visit("test")
 
         assertNotNull(client)
