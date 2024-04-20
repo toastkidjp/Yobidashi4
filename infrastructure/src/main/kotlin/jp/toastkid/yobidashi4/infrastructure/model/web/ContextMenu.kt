@@ -13,6 +13,7 @@ enum class ContextMenu(
     CLIP_LINK(404, "リンクをコピー", Context.LINK),
 
     DOWNLOAD(407, "ダウンロード", Context.IMAGE),
+    QUICK_STORE_IMAGE(418, "画像を保存", Context.IMAGE),
     CLIP_IMAGE(409, "画像をコピー", Context.IMAGE),
     SEARCH_WITH_IMAGE(415, "この画像を検索", Context.IMAGE),
 
