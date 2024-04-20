@@ -1,13 +1,19 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import java.net.URL
+import java.nio.file.Files
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
+import jp.toastkid.yobidashi4.infrastructure.service.web.download.DownloadFolder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cef.browser.CefBrowser
 import org.cef.callback.CefContextMenuParams
 import org.koin.core.component.KoinComponent
@@ -59,6 +65,21 @@ class CefContextMenuAction : KoinComponent {
             ContextMenu.DOWNLOAD.id -> {
                 val sourceUrl = params?.sourceUrl ?: return
                 browser?.startDownload(sourceUrl)
+            }
+
+            ContextMenu.QUICK_STORE_IMAGE.id -> {
+                val sourceUrl = params?.sourceUrl ?: return
+                CoroutineScope(Dispatchers.Unconfined).launch {
+                    val image = withContext(Dispatchers.IO) { URL(sourceUrl).openStream().readAllBytes() }
+                        ?: return@launch
+
+                    val downloadFolder = DownloadFolder()
+                    downloadFolder.makeIfNeed()
+
+                    withContext(Dispatchers.IO) {
+                        Files.write(downloadFolder.assignQuickStorePath(sourceUrl), image)
+                    }
+                }
             }
 
             ContextMenu.ADD_BOOKMARK.id -> {
