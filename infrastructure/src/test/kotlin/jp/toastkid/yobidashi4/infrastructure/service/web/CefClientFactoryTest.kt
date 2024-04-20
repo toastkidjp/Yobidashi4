@@ -335,6 +335,28 @@ class CefClientFactoryTest {
     }
 
     @Test
+    fun checkAddRequestHandlerForTestCoverage() {
+        val handlerSlot = slot<CefRequestHandler>()
+        every { client.addRequestHandler(capture(handlerSlot)) } returns client
+        val request = mockk<CefRequest>()
+        every { request.url } returns "https://www.ad.com"
+        every { request.dispose() } just Runs
+        every { viewModel.openUrl(any(), any()) } just Runs
+        mockkObject(AdHosts)
+        val adHosts = mockk<AdHosts>()
+        every { AdHosts.make() } returns adHosts
+        every { adHosts.contains(any()) } returns true
+        subject = CefClientFactory()
+
+        val client = subject.invoke()
+        val resourceRequestHandler = handlerSlot.captured
+            .getResourceRequestHandler(mockk(), mockk(), request, true, true, "test", mockk())
+        resourceRequestHandler.onBeforeResourceLoad(mockk(), mockk(), request)
+        every { request.url } returns null
+        resourceRequestHandler.onBeforeResourceLoad(mockk(), mockk(), null)
+    }
+
+    @Test
     fun checkAddRequestHandlerWithoutAdUrl() {
         val handlerSlot = slot<CefRequestHandler>()
         every { client.addRequestHandler(capture(handlerSlot)) } returns client
