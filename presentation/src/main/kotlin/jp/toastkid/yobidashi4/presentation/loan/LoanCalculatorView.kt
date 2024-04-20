@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
@@ -50,37 +51,43 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.loanAmount(),
                     viewModel::setLoanAmount,
-                    "Loan amount"
+                    "Loan amount",
+                    viewModel.visualTransformation()
                 )
 
                 LoanCalculatorInput(
                     viewModel.loanTerm(),
                     { viewModel.setLoanTerm(it) },
-                    "Loan term"
+                    "Loan term",
+                    viewModel.visualTransformation()
                 )
 
                 LoanCalculatorInput(
                     viewModel.interestRate(),
                     { viewModel.setInterestRate(it) },
-                    "Interest rate"
+                    "Interest rate",
+                    viewModel.visualTransformation()
                 )
 
                 LoanCalculatorInput(
                     viewModel.downPayment(),
                     { viewModel.setDownPayment(it) },
-                    "Down payment"
+                    "Down payment",
+                    viewModel.visualTransformation()
                 )
 
                 LoanCalculatorInput(
                     viewModel.managementFee(),
                     { viewModel.setManagementFee(it) },
-                    "Management fee (Monthly)"
+                    "Management fee (Monthly)",
+                    viewModel.visualTransformation()
                 )
 
                 LoanCalculatorInput(
                     viewModel.renovationReserves(),
                     { viewModel.setRenovationReserves(it) },
-                    "Renovation reserves (Monthly)"
+                    "Renovation reserves (Monthly)",
+                    viewModel.visualTransformation()
                 )
             }
 
@@ -131,7 +138,11 @@ fun LoanCalculatorView() {
 }
 
 @Composable
-private fun LoanCalculatorInput(value: String, onValueChange: (String) -> Unit, labelText: String) {
+private fun LoanCalculatorInput(
+    value: String,
+    onValueChange: (String) -> Unit, labelText: String,
+    visualTransformation: VisualTransformation
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -142,6 +153,7 @@ private fun LoanCalculatorInput(value: String, onValueChange: (String) -> Unit, 
             cursorColor = MaterialTheme.colors.onSurface
         ),
         singleLine = true,
+        visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 }
