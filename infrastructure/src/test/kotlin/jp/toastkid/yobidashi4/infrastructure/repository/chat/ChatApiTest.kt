@@ -30,8 +30,6 @@ class ChatApiTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        subject = ChatApi("test-key")
-
         every { connection.setRequestProperty("Content-Type", "application/json") } just Runs
         every { connection.requestMethod = any() } just Runs
         every { connection.readTimeout = any() } just Runs
@@ -46,6 +44,8 @@ class ChatApiTest {
         mockkConstructor(ChatStreamParser::class, HttpUrlConnectionFactory::class)
         every { anyConstructed<ChatStreamParser>().invoke(any()) } returns "test"
         every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns connection
+
+        subject = ChatApi("test-key")
     }
 
     @AfterEach
