@@ -3,6 +3,11 @@ package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
@@ -12,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import org.slf4j.LoggerFactory
 
 class LoanCalculatorViewModel {
 
@@ -22,7 +26,7 @@ class LoanCalculatorViewModel {
 
     fun result() = result.value
 
-    private val loanAmount = mutableStateOf("35,000,000")
+    private val loanAmount = mutableStateOf("35000000")
 
     fun loanAmount() = loanAmount.value
 
@@ -52,7 +56,7 @@ class LoanCalculatorViewModel {
         onChange(inputChannel, value)
     }
 
-    private val downPayment = mutableStateOf("1,000,000")
+    private val downPayment = mutableStateOf("1000000")
 
     fun downPayment() = downPayment.value
 
@@ -62,7 +66,7 @@ class LoanCalculatorViewModel {
         onChange(inputChannel, value)
     }
 
-    private val managementFee = mutableStateOf("10,000")
+    private val managementFee = mutableStateOf("10000")
 
     fun managementFee() = managementFee.value
 
@@ -72,7 +76,7 @@ class LoanCalculatorViewModel {
         onChange(inputChannel, value)
     }
 
-    private val renovationReserves = mutableStateOf("10,000")
+    private val renovationReserves = mutableStateOf("10000")
 
     fun renovationReserves() = renovationReserves.value
 
@@ -120,20 +124,43 @@ class LoanCalculatorViewModel {
     
     private val formatter = DecimalFormat("#,###.##")
 
+    private val visualTransformation: VisualTransformation = VisualTransformation {
+        val decimal = toDecimal(it.text)
+        val useFormatter = decimal != null && decimal != BigDecimal.ZERO && !it.contains(".")
+        val formatted = if (useFormatter) AnnotatedString(formatter.format(decimal)) else it
+        val offsetMapping = if (!useFormatter) OffsetMapping.Identity else object : OffsetMapping {
+
+            override fun originalToTransformed(offset: Int): Int {
+                val totalSeparatorCount = (it.length - 1) / 3
+                val rightSeparatorCount = (it.length - 1 - offset) / 3
+                val leftSeparatorCount = totalSeparatorCount - rightSeparatorCount
+                return offset + leftSeparatorCount
+            }
+
+            override fun transformedToOriginal(offset: Int): Int {
+                val totalSeparatorCount = (it.length - 1) / 3
+                val rightSeparatorCount = (formatted.length - offset) / 4
+                val leftSeparatorCount = totalSeparatorCount - rightSeparatorCount
+                return offset - leftSeparatorCount
+            }
+
+        }
+
+        TransformedText(formatted, offsetMapping = offsetMapping)
+    }
+
+    private fun toDecimal(input: String): BigDecimal? {
+        return input.toBigDecimalOrNull();
+    }
+
+    fun visualTransformation() = visualTransformation
+
     private fun format(input: String?): String {
         if (input.isNullOrBlank()) {
             return "0"
         }
 
-        val formatted = try {
-            formatter.format(
-                input.filter { it.isDigit() || it == '.' }.trim().toBigDecimalOrNull()
-            )
-        } catch (e: IllegalArgumentException) {
-            LoggerFactory.getLogger("LoanCalculator").debug("Illegal input", e)
-            input
-        }
-        return formatted
+        return input.filter { it.isDigit() || it == '.' }.trim()
     }
 
     private fun extractLong(editText: String) =
