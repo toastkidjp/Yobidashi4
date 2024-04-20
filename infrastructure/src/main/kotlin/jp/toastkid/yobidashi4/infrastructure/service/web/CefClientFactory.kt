@@ -1,13 +1,11 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import java.awt.event.KeyEvent
-import java.nio.file.Files
-import java.nio.file.Path
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
+import jp.toastkid.yobidashi4.infrastructure.service.web.download.DownloadFolder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.absolutePathString
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.cef.browser.CefFrame
@@ -129,14 +127,11 @@ class CefClientFactory : KoinComponent {
             ) {
                 callback ?: return
 
-                val downloadFolder = Path.of("user/download")
-                if (Files.exists(downloadFolder).not()) {
-                    Files.createDirectories(downloadFolder)
-                }
-                if (suggestedName == null) {
-                    return
-                }
-                callback.Continue(downloadFolder.resolve(suggestedName).absolutePathString(), false)
+                val downloadFolder = DownloadFolder()
+                downloadFolder.makeIfNeed()
+
+                val assignAbsolutePath = downloadFolder.assignAbsolutePath(suggestedName) ?: return
+                callback.Continue(assignAbsolutePath, false)
             }
         })
 
