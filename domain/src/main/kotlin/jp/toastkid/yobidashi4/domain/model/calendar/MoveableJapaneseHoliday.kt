@@ -63,7 +63,7 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
                 }
             }
 
-            val targetDay = values().firstOrNull { it.month == month } ?: return emptyList()
+            val targetDay = values().first { it.month == month }
 
             return listOf(
                 Holiday(
