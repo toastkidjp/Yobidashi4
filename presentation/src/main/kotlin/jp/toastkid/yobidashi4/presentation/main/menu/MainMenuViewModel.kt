@@ -94,6 +94,10 @@ class MainMenuViewModel : KoinComponent {
         viewModel.openFile(Path.of("user"))
     }
 
+    fun openDownloadFolder() {
+        viewModel.openFile(Path.of("user/download"))
+    }
+
     fun useEditorMenu(): Boolean {
         return viewModel.currentTab() is EditorTab
     }
