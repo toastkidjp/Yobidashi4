@@ -85,7 +85,7 @@ fun LoanCalculatorView() {
 
                 LoanCalculatorInput(
                     viewModel.renovationReserves(),
-                    { viewModel.setRenovationReserves(it) },
+                    viewModel::setRenovationReserves,
                     "Renovation reserves (Monthly)",
                     viewModel.visualTransformation()
                 )
