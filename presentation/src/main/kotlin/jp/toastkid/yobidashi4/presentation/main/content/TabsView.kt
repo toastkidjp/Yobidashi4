@@ -30,6 +30,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
@@ -268,6 +273,24 @@ private fun TabOptionMenu(
                 }
             ) {
                 Text("Clip internal link")
+            }
+        }
+
+        if (tab is ChatTab) {
+            DropdownMenuItem(
+                onClick = {
+                    val folder = Path.of("user/chat")
+                    if (Files.exists(folder).not()) {
+                        Files.createDirectories(folder)
+                    }
+                    Files.write(
+                        folder.resolve("chat_${DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now())}.json"),
+                        tab.chat().makeContent().toByteArray(StandardCharsets.UTF_8)
+                    )
+                    close()
+                }
+            ) {
+                Text("Export chat")
             }
         }
     }
