@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
+import jp.toastkid.yobidashi4.infrastructure.service.web.menu.QuickStoreActionBehavior
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.browser.CefBrowser
@@ -375,6 +376,37 @@ class CefContextMenuActionTest {
         subject.invoke(browser, param, "test", ContextMenu.ADD_BOOKMARK.id)
 
         verify { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) }
+    }
+
+    @Test
+    fun quickStore() {
+        mockkConstructor(QuickStoreActionBehavior::class)
+        every { anyConstructed<QuickStoreActionBehavior>().invoke(any()) } just Runs
+
+        subject.invoke(null, param, "https://www.yahoo.co.jp/favicon.ico", ContextMenu.QUICK_STORE_IMAGE.id)
+
+        verify { anyConstructed<QuickStoreActionBehavior>().invoke(any()) }
+    }
+
+    @Test
+    fun quickStoreWithNullSourceUrl() {
+        mockkConstructor(QuickStoreActionBehavior::class)
+        every { anyConstructed<QuickStoreActionBehavior>().invoke(any()) } just Runs
+        every { param.sourceUrl } returns null
+
+        subject.invoke(null, param, "test", ContextMenu.QUICK_STORE_IMAGE.id)
+
+        verify(inverse = true) { anyConstructed<QuickStoreActionBehavior>().invoke(any()) }
+    }
+
+    @Test
+    fun quickStoreWhenParamIsNull() {
+        mockkConstructor(QuickStoreActionBehavior::class)
+        every { anyConstructed<QuickStoreActionBehavior>().invoke(any()) } just Runs
+
+        subject.invoke(null, null, "test", ContextMenu.QUICK_STORE_IMAGE.id)
+
+        verify(inverse = true) { anyConstructed<QuickStoreActionBehavior>().invoke(any()) }
     }
 
     @Test
