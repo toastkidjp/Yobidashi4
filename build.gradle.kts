@@ -70,6 +70,7 @@ allprojects {
         useJUnitPlatform()
         jvmArgs(
             "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
+            "--add-opens", "java.base/java.net=ALL-UNNAMED",
             "--add-opens", "java.base/java.time=ALL-UNNAMED",
             "--add-opens", "java.base/java.time.chrono=ALL-UNNAMED",
             "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",
