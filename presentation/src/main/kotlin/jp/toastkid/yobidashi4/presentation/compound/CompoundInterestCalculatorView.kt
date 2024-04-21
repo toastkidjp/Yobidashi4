@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.compound
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,21 +13,17 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.compound.viewmodel.CompoundInterestCalculatorViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -44,86 +39,35 @@ internal fun CompoundInterestCalculatorView() {
             Column {
                 Text("Compound Interest calculator", modifier = Modifier.padding(8.dp))
 
-                TextField(
+                SingleLineTextField(
                     viewModel.capitalInput(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Installment", color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.setCapitalInput(it)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.clickable {
-                                viewModel.setCapitalInput(TextFieldValue())
-                            }
-                        )
-                    },
+                    "Capital",
+                    viewModel::setCapitalInput,
+                    { viewModel.setCapitalInput(TextFieldValue()) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
-                TextField(
+                SingleLineTextField(
                     viewModel.installmentInput(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Installment", color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.setInstallmentInput(it)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.clickable {
-                                viewModel.setInstallmentInput(TextFieldValue())
-                            }
-                        )
-                    },
+                    "Installment",
+                    viewModel::setInstallmentInput,
+                    { viewModel.setInstallmentInput(TextFieldValue()) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
-                TextField(
+                SingleLineTextField(
                     viewModel.annualInterestInput(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Annual interest", color = MaterialTheme.colors.secondary) },
-                    onValueChange = {
-                        viewModel.setAnnualInterestInput(it)
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.clickable {
-                                viewModel.setAnnualInterestInput(TextFieldValue())
-                            }
-                        )
-                    }
+                    "Annual interest",
+                    viewModel::setAnnualInterestInput,
+                    { viewModel.setAnnualInterestInput(TextFieldValue()) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
-                TextField(
+                SingleLineTextField(
                     viewModel.yearInput(),
-                    maxLines = 1,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    label = { Text("Year", color = MaterialTheme.colors.secondary) },
-                    onValueChange = { newValue ->
-                        viewModel.setYearInput(TextFieldValue(newValue.text, newValue.selection, newValue.composition))
-                    },
-                    trailingIcon = {
-                        Icon(
-                            painterResource("images/icon/ic_clear_form.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.clickable {
-                                viewModel.setYearInput(TextFieldValue())
-                            }
-                        )
-                    },
+                    "Year",
+                    viewModel::setYearInput,
+                    { viewModel.setYearInput(TextFieldValue()) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
