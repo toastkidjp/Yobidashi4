@@ -314,6 +314,11 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun printToPDFWhenBrowserIsNull() {
+        subject.invoke(null, param, "test", ContextMenu.SAVE_AS_PDF.id)
+    }
+
+    @Test
     fun search() {
         subject.invoke(browser, param, "test", ContextMenu.SEARCH_WITH_SELECTED_TEXT.id)
 
