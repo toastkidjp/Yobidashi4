@@ -30,11 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
@@ -161,6 +156,7 @@ internal fun TabsView(modifier: Modifier) {
                             {
                                 viewModel.exportTable(it.items())
                             },
+                            viewModel::exportChat,
                             viewModel::closeDropdown
                         )
                     }
@@ -201,6 +197,7 @@ private fun TabOptionMenu(
     clipText: (String) -> Unit,
     edit: (MarkdownPreviewTab) -> Unit,
     exportTable: (TableTab) -> Unit,
+    exportChat: (ChatTab) -> Unit,
     close: () -> Unit
 ) {
     DropdownMenu(
@@ -279,15 +276,7 @@ private fun TabOptionMenu(
         if (tab is ChatTab) {
             DropdownMenuItem(
                 onClick = {
-                    val folder = Path.of("user/chat")
-                    if (Files.exists(folder).not()) {
-                        Files.createDirectories(folder)
-                    }
-                    Files.write(
-                        folder.resolve("chat_${DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now())}.json"),
-                        tab.chat().makeContent().toByteArray(StandardCharsets.UTF_8)
-                    )
-                    close()
+                    exportChat(tab)
                 }
             ) {
                 Text("Export chat")
