@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
@@ -70,7 +69,7 @@ class TabsViewModelTest {
 
     @Test
     fun tabIsEmpty() {
-        every { mainViewModel.tabs } returns mutableStateListOf(mockk<Tab>())
+        every { mainViewModel.tabs } returns mutableListOf(mockk<Tab>())
 
         assertFalse(subject.tabIsEmpty())
     }
