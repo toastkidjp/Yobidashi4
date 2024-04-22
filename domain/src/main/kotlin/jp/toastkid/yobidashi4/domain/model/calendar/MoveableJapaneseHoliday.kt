@@ -13,6 +13,13 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
     SPORTS_DAY("スポーツの日", 10, 2)
     ;
 
+    fun makeTitle(year: Int): String {
+        if (this != SPORTS_DAY) {
+            return title;
+        }
+
+        return if (year <= 2019) "体育の日" else title
+    }
 
     companion object {
         private val months = values().map { it.month }.distinct()
@@ -67,7 +74,7 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
 
             return listOf(
                 Holiday(
-                    targetDay.title,
+                    targetDay.makeTitle(year),
                     month,
                     calculateDate(year, month, targetDay.week),
                     "\uD83C\uDDEF\uD83C\uDDF5"
