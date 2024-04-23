@@ -72,9 +72,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::openDownloadFolder
             )
 
-            Item("Exit", icon = painterResource("images/icon/ic_exit.xml")) {
-                exitApplication()
-            }
+            Item(
+                "Exit",
+                icon = painterResource("images/icon/ic_exit.xml"),
+                onClick = exitApplication
+            )
         }
 
         if (viewModel.useEditorMenu()) {
