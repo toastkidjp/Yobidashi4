@@ -24,8 +24,10 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -47,6 +49,9 @@ class TabsViewModelTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
+    @MockK
+    private lateinit var chatExporter: ChatExporter
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -54,6 +59,7 @@ class TabsViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier = null) { chatExporter } bind(ChatExporter::class)
                 }
             )
         }
@@ -148,6 +154,18 @@ class TabsViewModelTest {
         unmockkConstructor(TableContentExporter::class)
         unmockkObject(TableContentExporter)
         unmockkStatic(Path::class)
+    }
+
+    @Test
+    fun exportChat() {
+        val chatTab = mockk<ChatTab>()
+        every { chatTab.chat() } returns mockk()
+        every { chatExporter.invoke(any()) } just Runs
+
+        subject.exportChat(chatTab)
+
+        verify { chatTab.chat() }
+        verify { chatExporter.invoke(any()) }
     }
 
     @Test
