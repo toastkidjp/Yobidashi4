@@ -1,6 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.compound.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkAll
+import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -12,6 +18,11 @@ class CompoundInterestCalculatorViewModelTest {
     @BeforeEach
     fun setUp() {
         subject = CompoundInterestCalculatorViewModel()
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
@@ -52,6 +63,16 @@ class CompoundInterestCalculatorViewModelTest {
 
         assertEquals("10", subject.yearInput().text)
         assertEquals(10, subject.result().itemArrays().size)
+    }
+
+    @Test
+    fun resultIsNullCase() {
+        mockkObject(CompoundInterestCalculatorInput)
+        every { CompoundInterestCalculatorInput.from(any(), any(), any(), any()) } returns null
+
+        subject.setYearInput(TextFieldValue("2022"))
+
+        verify { CompoundInterestCalculatorInput.from(any(), any(), any(), any()) }
     }
 
 }
