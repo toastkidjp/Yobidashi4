@@ -71,7 +71,7 @@ fun LoanCalculatorView() {
 
                 LoanCalculatorInput(
                     viewModel.downPayment(),
-                    { viewModel.setDownPayment(it) },
+                    viewModel::setDownPayment,
                     "Down payment",
                     viewModel.visualTransformation()
                 )
