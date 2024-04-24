@@ -76,12 +76,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
                         mainViewModel.openTab(ChatTab(Chat(mutableStateListOf())))
                     }
                 )
-                Item(
-                    "Exit",
-                    onClick = {
-                        exitApplication()
-                    }
-                )
+                Item("Exit", onClick = ::exitApplication)
             }
         )
 
