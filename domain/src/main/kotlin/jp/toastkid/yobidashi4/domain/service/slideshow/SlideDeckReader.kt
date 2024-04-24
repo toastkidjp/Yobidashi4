@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 class SlideDeckReader(private val pathToMarkdown: Path) {
 
     /** Slide builder.  */
-    private var builder: Slide? = Slide()
+    private var builder: Slide = Slide()
 
     /** Table builder.  */
     private var tableBuilder: TableBuilder? = null
@@ -32,17 +32,17 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
             Files.lines(pathToMarkdown).use { lines ->
                 lines.forEach { line: String ->
                     if (line.startsWith("#")) {
-                        if (builder?.hasTitle() == true) {
-                            builder?.let {
+                        if (builder.hasTitle()) {
+                            builder.let {
                                 deck.add(it)
                             }
                             builder = Slide()
                         }
                         if (line.startsWith("# ")) {
-                            builder?.setFront(true)
+                            builder.setFront(true)
                         }
                         val titleText = line.substring(line.indexOf(" ")).trim { it <= ' ' }
-                        builder?.setTitle(titleText)
+                        builder.setTitle(titleText)
                         if (deck.title.isEmpty()) {
                             deck.title = titleText
                         }
@@ -55,12 +55,12 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                                     deck.background = it
                                     return@forEach
                                 }
-                                builder?.setBackground(it)
+                                builder.setBackground(it)
                             }
                             return@forEach
                         }
 
-                        builder?.addLines(imageExtractor.invoke(line))
+                        builder.addLines(imageExtractor.invoke(line))
                         return@forEach
                     }
                     if (line.startsWith("[footer](")) {
@@ -71,14 +71,14 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                         return@forEach
                     }
                     if (line.startsWith("> ")) {
-                        builder?.addQuotedLines(line)
+                        builder.addQuotedLines(line)
                         return@forEach
                     }
                     // Adding code block.
                     if (line.startsWith("```")) {
                         if (codeBlockBuilder.inCodeBlock()) {
                             codeBlockBuilder.build().let {
-                                builder?.addLine(it)
+                                builder.addLine(it)
                                 codeBlockBuilder.initialize()
                             }
                             return@forEach
@@ -115,16 +115,16 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
 
                     if (tableBuilder != null) {
                         tableBuilder?.build()?.let {
-                            builder?.addLine(it)
+                            builder.addLine(it)
                         }
                         tableBuilder = null
                     }
                     // Not code.
                     if (line.isNotEmpty()) {
-                        builder?.addText(line)
+                        builder.addText(line)
                     }
                 }
-                builder?.let {
+                builder.let {
                     deck.add(it)
                 }
             }
