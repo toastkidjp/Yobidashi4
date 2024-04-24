@@ -81,9 +81,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
         if (viewModel.useEditorMenu()) {
             Menu("Edit") {
-                Item(viewModel.switchPreviewLabel(), shortcut = KeyShortcut(Key.M, ctrl = true), icon = painterResource("images/icon/ic_markdown.xml")) {
-                    viewModel.switchPreview()
-                }
+                Item(
+                    viewModel.switchPreviewLabel(),
+                    shortcut = KeyShortcut(Key.M, ctrl = true),
+                    icon = painterResource("images/icon/ic_markdown.xml"),
+                    onClick = viewModel::switchPreview
+                )
+
                 Item("Save", shortcut = KeyShortcut(Key.S, ctrl = true), icon = painterResource("images/icon/ic_save.xml")) {
                     viewModel.saveCurrentEditorTab()
                 }
