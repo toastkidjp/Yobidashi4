@@ -14,7 +14,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
     private var builder: Slide = Slide()
 
     /** Table builder.  */
-    private var tableBuilder: TableBuilder? = null
+    private val tableBuilder = TableBuilder()
 
     private var codeBlockBuilder = CodeBlockBuilder()
 
@@ -96,28 +96,27 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     }
 
                     if (TableBuilder.isTableStart(line)) {
-                        if (tableBuilder == null) {
-                            tableBuilder = TableBuilder()
+                        if (!tableBuilder.active()) {
+                            tableBuilder.setActive()
                         }
 
                         if (TableBuilder.shouldIgnoreLine(line)) {
                             return@forEach
                         }
 
-                        if (tableBuilder?.hasColumns() == false) {
-                            tableBuilder?.setColumns(line)
+                        if (tableBuilder.hasColumns() == false) {
+                            tableBuilder.setColumns(line)
                             return@forEach
                         }
 
-                        tableBuilder?.addTableLines(line)
+                        tableBuilder.addTableLines(line)
                         return@forEach
                     }
 
-                    if (tableBuilder != null) {
-                        tableBuilder?.build()?.let {
-                            builder.addLine(it)
-                        }
-                        tableBuilder = null
+                    if (tableBuilder.active()) {
+                        builder.addLine(tableBuilder.build())
+                        tableBuilder.setInactive()
+                        tableBuilder.clear()
                     }
                     // Not code.
                     if (line.isNotEmpty()) {
