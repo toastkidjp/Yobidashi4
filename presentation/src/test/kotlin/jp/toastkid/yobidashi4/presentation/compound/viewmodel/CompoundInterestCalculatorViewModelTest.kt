@@ -8,6 +8,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -33,6 +34,10 @@ class CompoundInterestCalculatorViewModelTest {
 
         assertEquals("10000", subject.capitalInput().text)
         assertEquals(20, subject.result().itemArrays().size)
+
+        subject.clearCapitalInput()
+
+        assertTrue(subject.capitalInput().text.isEmpty())
     }
 
     @Test
@@ -43,6 +48,10 @@ class CompoundInterestCalculatorViewModelTest {
 
         assertEquals("10000", subject.installmentInput().text)
         assertEquals(20, subject.result().itemArrays().size)
+
+        subject.clearInstallmentInput()
+
+        assertTrue(subject.installmentInput().text.isEmpty())
     }
 
     @Test
@@ -53,6 +62,10 @@ class CompoundInterestCalculatorViewModelTest {
 
         assertEquals("0.1", subject.annualInterestInput().text)
         assertEquals(20, subject.result().itemArrays().size)
+
+        subject.clearAnnualInterestInput()
+
+        assertTrue(subject.annualInterestInput().text.isEmpty())
     }
 
     @Test
@@ -63,6 +76,10 @@ class CompoundInterestCalculatorViewModelTest {
 
         assertEquals("10", subject.yearInput().text)
         assertEquals(10, subject.result().itemArrays().size)
+
+        subject.clearYearInput()
+
+        assertTrue(subject.yearInput().text.isEmpty())
     }
 
     @Test
