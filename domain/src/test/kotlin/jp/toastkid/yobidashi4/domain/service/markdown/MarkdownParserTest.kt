@@ -110,8 +110,15 @@ println("Hello")
             { assertTrue(lines.any { it is TextBlock }) },
             { assertTrue(lines.any { it is CodeBlockLine }) },
             { assertTrue(lines.any { it is HorizontalRule }) },
-            { assertEquals(2, lines.count { it is TableLine }) },
             { assertTrue(lines.any { it is ImageLine }) },
+            {
+                val tables = lines.filterIsInstance<TableLine>()
+                assertEquals(2, tables.size)
+                assertEquals(2, tables[0].header.size)
+                assertEquals(2, tables[0].table.size)
+                assertEquals(2, tables[1].header.size)
+                assertEquals(4, tables[1].table.size)
+            },
         )
     }
 
