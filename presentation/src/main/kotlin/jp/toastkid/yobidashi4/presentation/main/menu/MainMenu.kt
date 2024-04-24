@@ -88,9 +88,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     onClick = viewModel::switchPreview
                 )
 
-                Item("Save", shortcut = KeyShortcut(Key.S, ctrl = true), icon = painterResource("images/icon/ic_save.xml")) {
-                    viewModel.saveCurrentEditorTab()
-                }
+                Item(
+                    "Save",
+                    shortcut = KeyShortcut(Key.S, ctrl = true),
+                    icon = painterResource("images/icon/ic_save.xml"),
+                    onClick = viewModel::saveCurrentEditorTab
+                )
+
                 Item("Save all", shortcut = KeyShortcut(Key.S, ctrl = true, shift = true), icon = painterResource("images/icon/ic_save.xml")) {
                     viewModel.saveAllEditorTab()
                 }
