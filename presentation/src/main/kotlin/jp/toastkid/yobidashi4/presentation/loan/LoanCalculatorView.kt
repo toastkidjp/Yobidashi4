@@ -78,7 +78,7 @@ fun LoanCalculatorView() {
 
                 LoanCalculatorInput(
                     viewModel.managementFee(),
-                    { viewModel.setManagementFee(it) },
+                    viewModel::setManagementFee,
                     "Management fee (Monthly)",
                     viewModel.visualTransformation()
                 )
