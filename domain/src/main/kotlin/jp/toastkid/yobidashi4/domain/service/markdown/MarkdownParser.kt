@@ -15,7 +15,7 @@ import kotlin.io.path.nameWithoutExtension
 class MarkdownParser {
 
     /** Table builder.  */
-    private var tableBuilder: TableBuilder? = null
+    private val tableBuilder = TableBuilder()
 
     private var codeBlockBuilder = CodeBlockBuilder()
 
@@ -85,28 +85,27 @@ class MarkdownParser {
             }
 
             if (TableBuilder.isTableStart(line)) {
-                if (tableBuilder == null) {
-                    tableBuilder = TableBuilder()
+                if (!tableBuilder.active()) {
+                    tableBuilder.setActive()
                 }
 
                 if (TableBuilder.shouldIgnoreLine(line)) {
                     return@forEach
                 }
 
-                if (tableBuilder?.hasColumns() == false) {
-                    tableBuilder?.setColumns(line)
+                if (!tableBuilder.hasColumns()) {
+                    tableBuilder.setColumns(line)
                     return@forEach
                 }
 
-                tableBuilder?.addTableLines(line)
+                tableBuilder.addTableLines(line)
                 return@forEach
             }
 
-            if (tableBuilder != null) {
-                tableBuilder?.build()?.let {
-                    markdown.add(it)
-                }
-                tableBuilder = null
+            if (tableBuilder.active()) {
+                markdown.add(tableBuilder.build())
+                tableBuilder.setInactive()
+                tableBuilder.clear()
             }
 
             if (line.startsWith("- [ ] ") || line.startsWith("- [x] ")) {
@@ -157,11 +156,10 @@ class MarkdownParser {
             markdown.add(listLineBuilder.build())
             listLineBuilder.clear()
         }
-        if (tableBuilder != null) {
-            tableBuilder?.build()?.let {
-                markdown.add(it)
-            }
-            tableBuilder = null
+        if (tableBuilder.active()) {
+            markdown.add(tableBuilder.build())
+            tableBuilder.setInactive()
+            tableBuilder.clear()
         }
 
         return markdown
