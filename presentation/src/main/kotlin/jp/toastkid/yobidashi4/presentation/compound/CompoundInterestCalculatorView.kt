@@ -66,7 +66,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.yearInput(),
                     "Year",
                     viewModel::setYearInput,
-                    { viewModel.clearYearInput() },
+                    viewModel::clearYearInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
