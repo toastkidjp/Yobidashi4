@@ -23,9 +23,7 @@ class SlideshowWindow {
             val deck = SlideDeckReader(path).invoke()
             val viewModel = remember { SlideshowViewModel() }
             Window(
-                onCloseRequest = {
-                    onCloseWindow()
-                },
+                onCloseRequest = onCloseWindow,
                 undecorated = true,
                 state = viewModel.windowState(),
                 visible = viewModel.windowVisible(),
