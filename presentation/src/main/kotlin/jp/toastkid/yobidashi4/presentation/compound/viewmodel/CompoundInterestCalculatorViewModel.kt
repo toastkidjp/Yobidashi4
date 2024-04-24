@@ -20,6 +20,10 @@ class CompoundInterestCalculatorViewModel {
         calculate()
     }
 
+    fun clearCapitalInput() {
+        setCapitalInput(TextFieldValue())
+    }
+
     private val installmentInput = mutableStateOf(TextFieldValue("40000"))
 
     fun installmentInput() = installmentInput.value
@@ -28,6 +32,10 @@ class CompoundInterestCalculatorViewModel {
         installmentInput.value = value
 
         calculate()
+    }
+
+    fun clearInstallmentInput() {
+        setInstallmentInput(TextFieldValue())
     }
 
     private val annualInterestInput = mutableStateOf(TextFieldValue("0.03"))
@@ -40,6 +48,10 @@ class CompoundInterestCalculatorViewModel {
         calculate()
     }
 
+    fun clearAnnualInterestInput() {
+        setAnnualInterestInput(TextFieldValue())
+    }
+
     private val yearInput = mutableStateOf(TextFieldValue("20"))
 
     fun yearInput() = yearInput.value
@@ -48,6 +60,10 @@ class CompoundInterestCalculatorViewModel {
         yearInput.value = value
 
         calculate()
+    }
+
+    fun clearYearInput() {
+        setYearInput(TextFieldValue())
     }
 
     private val result = mutableStateOf(CompoundInterestCalculationResult())
