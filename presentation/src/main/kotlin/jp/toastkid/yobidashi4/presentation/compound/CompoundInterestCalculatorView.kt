@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.compound.viewmodel.CompoundInterestCalculatorViewModel
@@ -43,7 +42,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.capitalInput(),
                     "Capital",
                     viewModel::setCapitalInput,
-                    { viewModel.setCapitalInput(TextFieldValue()) },
+                    { viewModel.clearCapitalInput() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
@@ -51,7 +50,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.installmentInput(),
                     "Installment",
                     viewModel::setInstallmentInput,
-                    { viewModel.setInstallmentInput(TextFieldValue()) },
+                    { viewModel.clearInstallmentInput() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
@@ -59,7 +58,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.annualInterestInput(),
                     "Annual interest",
                     viewModel::setAnnualInterestInput,
-                    { viewModel.setAnnualInterestInput(TextFieldValue()) },
+                    { viewModel.clearAnnualInterestInput() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
@@ -67,7 +66,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.yearInput(),
                     "Year",
                     viewModel::setYearInput,
-                    { viewModel.setYearInput(TextFieldValue()) },
+                    { viewModel.clearYearInput() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
