@@ -1,9 +1,13 @@
 package jp.toastkid.yobidashi4.domain.service.slideshow
 
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
+import java.io.IOException
 import java.nio.file.Files
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -71,6 +75,22 @@ result.value = engine.eval(input.value.text).toString()
         assertEquals("https://www.yahoo.co.jp/all", background)
         assertEquals("Title slide", title)
         assertTrue(slides.any { it.isFront() })
+    }
+
+    @Test
+    fun exception() {
+        val ioException = mockk<IOException>()
+        every { Files.lines(any()) } throws ioException
+        every { ioException.printStackTrace() } just Runs
+
+        val (slides, background, title, footerText) = slideDeckReader.invoke()
+
+        verify { Files.lines(any()) }
+        verify { ioException.printStackTrace() }
+        assertTrue(slides.isEmpty())
+        assertTrue(background.isEmpty())
+        assertTrue(title.isEmpty())
+        assertTrue(footerText.isEmpty())
     }
 
 }
