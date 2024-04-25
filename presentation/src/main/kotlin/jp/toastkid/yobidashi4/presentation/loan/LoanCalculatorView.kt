@@ -64,7 +64,7 @@ fun LoanCalculatorView() {
 
                 LoanCalculatorInput(
                     viewModel.interestRate(),
-                    { viewModel.setInterestRate(it) },
+                    viewModel::setInterestRate,
                     "Interest rate",
                     viewModel.visualTransformation()
                 )
