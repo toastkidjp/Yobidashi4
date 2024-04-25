@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.DecimalVisualTransformation
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.compound.viewmodel.CompoundInterestCalculatorViewModel
 
@@ -43,7 +44,8 @@ internal fun CompoundInterestCalculatorView() {
                     "Capital",
                     viewModel::setCapitalInput,
                     { viewModel.clearCapitalInput() },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    visualTransformation = DecimalVisualTransformation()
                 )
 
                 SingleLineTextField(
@@ -51,7 +53,8 @@ internal fun CompoundInterestCalculatorView() {
                     "Installment",
                     viewModel::setInstallmentInput,
                     { viewModel.clearInstallmentInput() },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    visualTransformation = DecimalVisualTransformation()
                 )
 
                 SingleLineTextField(
