@@ -86,6 +86,10 @@ Test
 println("Hello")
 ```
 
+```kotlin:test
+println("Hello")
+```
+
 ## Table2
 | Key | Value |
 |:---|:---|
