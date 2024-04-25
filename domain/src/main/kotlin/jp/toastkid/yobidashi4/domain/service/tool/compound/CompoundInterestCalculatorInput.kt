@@ -17,10 +17,14 @@ data class CompoundInterestCalculatorInput(
             annualInterestInput: String?,
             yearInput: String?,
         ): CompoundInterestCalculatorInput? {
-            val capital = capitalInput?.replace(REPLACE_TARGET, "")?.toDoubleOrNull() ?: return null
-            val installment = installmentInput?.replace(REPLACE_TARGET, "")?.toLongOrNull() ?: return null
-            val annualInterest = annualInterestInput?.replace(REPLACE_TARGET, "")?.toDoubleOrNull() ?: return null
-            val year = yearInput?.replace(REPLACE_TARGET, "")?.toLongOrNull() ?: return null
+            if (capitalInput.isNullOrBlank() || installmentInput.isNullOrBlank() || annualInterestInput.isNullOrBlank() || yearInput.isNullOrBlank()) {
+                return null
+            }
+
+            val capital = capitalInput.toDouble()
+            val installment = installmentInput.toLong()
+            val annualInterest = annualInterestInput.toDouble()
+            val year = yearInput.toLong()
 
             return CompoundInterestCalculatorInput(capital, installment, annualInterest, year)
         }
