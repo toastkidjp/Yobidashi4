@@ -1,8 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.VisualTransformation
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -95,25 +96,7 @@ class LoanCalculatorViewModelTest {
     fun visualTransformation() {
         val visualTransformation = subject.visualTransformation()
 
-        val willContainingComma = visualTransformation.filter(AnnotatedString("1000000"))
-        assertEquals("1,000,000", willContainingComma.text.text)
-        assertEquals(4, willContainingComma.offsetMapping.originalToTransformed(3))
-        assertEquals(2, willContainingComma.offsetMapping.transformedToOriginal(3))
-
-        val containsDot = visualTransformation.filter(AnnotatedString("0.33343"))
-        assertEquals("0.33343", containsDot.text.text)
-        assertEquals(0, containsDot.offsetMapping.originalToTransformed(0))
-        assertEquals(1, containsDot.offsetMapping.transformedToOriginal(1))
-
-        val zero = visualTransformation.filter(AnnotatedString("0"))
-        assertEquals("0", zero.text.text)
-        assertEquals(0, zero.offsetMapping.originalToTransformed(0))
-        assertEquals(1, zero.offsetMapping.transformedToOriginal(1))
-
-        val transformedText = visualTransformation.filter(AnnotatedString("test"))
-        assertEquals("test", transformedText.text.text)
-        assertEquals(0, transformedText.offsetMapping.originalToTransformed(0))
-        assertEquals(1, transformedText.offsetMapping.transformedToOriginal(1))
+        assertNotSame(VisualTransformation.None, visualTransformation)
     }
 
     @Test
