@@ -130,14 +130,12 @@ class LoanCalculatorViewModel {
         return input.filter { it.isDigit() || it == '.' }.trim()
     }
 
-    private fun extractLong(editText: String) =
-        editText.replace(",", "").toLongOrNull() ?: 0
+    private fun extractLong(editText: String) = editText.toLong()
 
-    private fun extractInt(editText: String) =
-        editText.replace(",", "").toIntOrNull() ?: 0
+    private fun extractInt(editText: String) = editText.toInt()
 
     private fun extractDouble(editText: String) =
-        editText.replace(",", "").toDoubleOrNull() ?: 0.0
+        editText.toDoubleOrNull() ?: 0.0
 
     fun roundToIntSafely(d: Double) =
         if (d.isNaN()) "0" else d.roundToInt().toString()
