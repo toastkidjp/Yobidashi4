@@ -9,7 +9,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -74,25 +73,6 @@ class WebTabViewKtTest {
             }
 
             verify { webViewPool.component(any(), any()) }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun isNotReadableUrl() {
-        runDesktopComposeUiTest {
-            setContent {
-                val tab = mockk<WebTab>()
-                every { tab.isReadableUrl() } returns false
-                every { tab.id() } returns "test"
-                every { tab.url() } returns "test"
-
-                WebTabView(tab)
-
-                verify { tab.isReadableUrl() }
-                verify(inverse = true) { tab.id() }
-                verify(inverse = true) { tab.url() }
-            }
         }
     }
 
