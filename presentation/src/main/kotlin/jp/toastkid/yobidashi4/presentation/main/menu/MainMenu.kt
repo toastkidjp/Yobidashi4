@@ -102,9 +102,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     onClick = viewModel::saveAllEditorTab
                 )
 
-                Item("Replace", shortcut = KeyShortcut(Key.R, ctrl = true), icon = painterResource("images/icon/ic_replace.xml")) {
-                    viewModel.switchFind()
-                }
+                Item(
+                    "Replace",
+                    shortcut = KeyShortcut(Key.R, ctrl = true),
+                    icon = painterResource("images/icon/ic_replace.xml"),
+                    onClick = viewModel::switchFind
+                )
+
                 Item("Editor's Color & Font") {
                     viewModel.openEditorSetting()
                 }
