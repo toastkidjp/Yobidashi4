@@ -81,6 +81,13 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun keydownCase() {
+        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYDOWN, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_CIRCUMFLEX)
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun elseCase() {
         val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_CIRCUMFLEX)
 
@@ -283,7 +290,7 @@ class CefKeyboardShortcutProcessorTest {
         val consumed = subject.invoke(
             null,
             CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
-            EventFlags.EVENTFLAG_SHIFT_DOWN,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
             KeyEvent.VK_P
         )
 
