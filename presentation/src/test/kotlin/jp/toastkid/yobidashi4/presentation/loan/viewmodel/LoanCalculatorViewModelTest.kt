@@ -116,4 +116,9 @@ class LoanCalculatorViewModelTest {
         assertEquals(1, transformedText.offsetMapping.transformedToOriginal(1))
     }
 
+    @Test
+    fun listState() {
+        assertEquals(0, subject.listState().firstVisibleItemIndex)
+    }
+
 }
