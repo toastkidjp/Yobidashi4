@@ -60,9 +60,7 @@ internal fun InputBox() {
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 modifier = Modifier.focusRequester(viewModel.focusRequester())
-                    .onKeyEvent {
-                        viewModel.onKeyEvent(it)
-                    }
+                    .onKeyEvent(viewModel::onKeyEvent)
             )
 
             Button(onClick = viewModel::invokeAction) {
