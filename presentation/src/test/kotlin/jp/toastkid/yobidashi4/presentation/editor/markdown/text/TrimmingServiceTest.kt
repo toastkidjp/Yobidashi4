@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -26,6 +27,11 @@ class TrimmingServiceTest {
     @Test
     fun testEmptyCase() {
         assertEquals("", trimmingService.invoke(""))
+    }
+
+    @Test
+    fun testNullCase() {
+        assertNull(trimmingService.invoke(null))
     }
 
 }
