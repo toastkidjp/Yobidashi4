@@ -109,9 +109,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     onClick = viewModel::switchFind
                 )
 
-                Item("Editor's Color & Font") {
-                    viewModel.openEditorSetting()
-                }
+                Item(
+                    "Editor's Color & Font",
+                    onClick = viewModel::openEditorSetting
+                )
             }
         }
 
