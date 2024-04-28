@@ -67,13 +67,12 @@ internal fun WebSearchBox() {
                     )
                 }
 
-                val swingContent = viewModel.containsSwingContent()
                 DropdownMenu(
                     expanded = viewModel.openingDropdown(),
                     offset = DpOffset(0.dp, viewModel.makeVerticalOffset()),
                     onDismissRequest = { viewModel.closeDropdown() }
                 ) {
-                    if (swingContent) {
+                    if (viewModel.containsSwingContent()) {
                         LazyRow(modifier = Modifier.width(600.dp).height(60.dp)) {
                             items(SearchSite.values()) {
                                 Image(
