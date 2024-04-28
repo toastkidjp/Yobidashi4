@@ -1,15 +1,9 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.awt.Point
-import java.awt.Robot
 import java.awt.event.KeyEvent
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.UUID
-import javax.imageio.ImageIO
-import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.infrastructure.service.web.screenshot.ScreenshotExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.browser.CefBrowser
 import org.cef.handler.CefKeyboardHandler
@@ -99,26 +93,10 @@ class CefKeyboardShortcutProcessor(
             return true
         }
         if (modifier == EventFlags.EVENTFLAG_SHIFT_DOWN
-            && keyCode == KeyEvent.VK_P) {
-            val folder = Path.of("user/screenshot")
-            if (Files.exists(folder).not()) {
-                Files.createDirectories(folder)
-            }
-            val outputStream = Files.newOutputStream(folder.resolve("${UUID.randomUUID()}.png"))
-            outputStream.use {
-                browser ?: return true
-                val p = Point(0, 0)
-                SwingUtilities.convertPointToScreen(p, browser.uiComponent)
-                val region = browser.uiComponent.bounds
-                region.x = p.x
-                region.y = p.y
-                if (region.x == 0 || region.y == 0) {
-                    return true
-                }
-
-                val screenshot = Robot().createScreenCapture(region)
-                ImageIO.write(screenshot, "png", it)
-            }
+            && keyCode == KeyEvent.VK_P
+            && browser != null
+            ) {
+            ScreenshotExporter().invoke(browser.uiComponent)
             return true
         }
 
