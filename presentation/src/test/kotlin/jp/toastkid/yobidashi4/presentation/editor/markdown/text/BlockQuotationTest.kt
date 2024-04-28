@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -36,6 +37,11 @@ class BlockQuotationTest {
     @Test
     fun testInvokeWithEmptyInput() {
         assertEquals("", quotation(""))
+    }
+
+    @Test
+    fun testInvokeWithNullInput() {
+        assertNull(quotation(null))
     }
 
 }
