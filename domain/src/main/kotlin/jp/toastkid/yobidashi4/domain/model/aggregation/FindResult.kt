@@ -26,4 +26,10 @@ class FindResult(private val keyword: String) : AggregationResult {
 
     fun keyword() = keyword
 
+    fun sortByTitle() {
+        val sorted = items.toSortedMap()
+        items.clear()
+        items.putAll(sorted)
+    }
+
 }
