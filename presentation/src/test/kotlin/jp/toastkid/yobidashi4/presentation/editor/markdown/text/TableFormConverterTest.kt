@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -31,6 +32,11 @@ class TableFormConverterTest {
                 assertTrue(it.startsWith("| "))
                 assertTrue(it.contains("分 | "))
             }
+    }
+
+    @Test
+    fun notEndWithBreak() {
+        assertEquals("| a | b", TableFormConverter().invoke("a b"))
     }
 
 }
