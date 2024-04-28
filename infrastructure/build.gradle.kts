@@ -28,6 +28,11 @@ dependencies {
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
 
     implementation("com.google.zxing:core:3.4.1")
+
+    implementation("org.apache.lucene:lucene-core:9.10.0")
+    implementation("org.apache.lucene:lucene-queryparser:9.10.0") {
+        exclude("org.apache.lucene", "lucene-sandbox")
+    }
 }
 
 // KSP - To use generated sources
