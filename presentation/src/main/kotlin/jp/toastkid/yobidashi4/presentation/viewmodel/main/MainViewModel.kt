@@ -79,6 +79,9 @@ interface MainViewModel {
     fun toggleFullscreen()
     fun toggleFullscreenLabel(): String
     fun toggleNarrowWindow()
+
+    fun toDefaultWindowSize()
+
     fun snackbarHostState(): SnackbarHostState
     fun showSnackbar(message: String, actionLabel: String? = null, action: () -> Unit = {})
 
