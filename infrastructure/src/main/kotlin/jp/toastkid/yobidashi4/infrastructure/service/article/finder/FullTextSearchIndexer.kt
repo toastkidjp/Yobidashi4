@@ -16,7 +16,7 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
-class FullTextSearchIndexer(indexDirectoryPath: Path) {
+class FullTextSearchIndexer(private val indexDirectoryPath: Path) {
 
     private val directory: Directory = FSDirectory.open(indexDirectoryPath)
 
@@ -25,7 +25,7 @@ class FullTextSearchIndexer(indexDirectoryPath: Path) {
     @Throws(IOException::class)
     private fun getDocument(path: Path): Document {
         val document = Document()
-        val contentField = TextField("contents", Files.readString(path), Field.Store.NO)
+        val contentField = TextField("content", Files.readString(path), Field.Store.YES)
         val fileNameField = StringField("name", path.nameWithoutExtension, Field.Store.YES)
         val filePathField = StringField("path", path.pathString, Field.Store.YES)
         document.add(contentField)
@@ -41,8 +41,9 @@ class FullTextSearchIndexer(indexDirectoryPath: Path) {
 
     @Throws(IOException::class)
     fun createIndex(dataDirPath: Path): Int {
+        val indexTargetFilter = IndexTargetFilter(indexDirectoryPath)
         Files.list(dataDirPath)
-            .filter { Files.isDirectory(it).not() && Files.exists(it) && Files.isReadable(it) }
+            .filter(indexTargetFilter::invoke)
             .forEach(::indexFile)
         writer.commit()
         return writer.numRamDocs()
