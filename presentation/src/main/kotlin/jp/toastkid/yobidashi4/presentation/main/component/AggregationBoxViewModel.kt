@@ -25,8 +25,8 @@ import jp.toastkid.yobidashi4.domain.service.aggregation.Nikkei225AggregatorServ
 import jp.toastkid.yobidashi4.domain.service.aggregation.OutgoAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
-import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -36,7 +36,7 @@ class AggregationBoxViewModel : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
 
-    private val keywordSearch: KeywordArticleFinder by inject()
+    private val keywordSearch: FullTextArticleFinder by inject()
 
     private val articlesReaderService: ArticlesReaderService by inject()
 
