@@ -429,8 +429,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         inputBoxAction?.let { it(input) }
     }
 
+    private val defaultWindowSize = DpSize(width = 1100.dp, height = 700.dp)
+
     private val window = WindowState(
-        size = DpSize(width = 1100.dp, height = 700.dp),
+        size = defaultWindowSize,
         position = WindowPosition(Alignment.Center)
     )
 
@@ -452,6 +454,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun toggleNarrowWindow() {
         windowState().size = DpSize(if (windowState().size.width <= 600.dp) 1100.dp else 520.dp, windowState().size.height)
+    }
+
+    override fun toDefaultWindowSize() {
+        windowState().size = defaultWindowSize
     }
 
     override fun openTab(tab: Tab) {
