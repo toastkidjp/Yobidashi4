@@ -271,6 +271,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Narrow window", icon = painterResource("images/icon/ic_narrow_window.xml")) {
                 viewModel.toggleNarrowWindow()
             }
+
+            Item("Default window size", onClick = viewModel::toDefaultWindowSize)
+
             Item(
                 "Re-lottery background",
                 shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true),
