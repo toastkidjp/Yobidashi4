@@ -343,6 +343,10 @@ class MainMenuViewModel : KoinComponent {
         viewModel.toggleNarrowWindow()
     }
 
+    fun toDefaultWindowSize() {
+        viewModel.toDefaultWindowSize()
+    }
+
     fun loadBackgroundImage() {
         viewModel.loadBackgroundImage()
     }
