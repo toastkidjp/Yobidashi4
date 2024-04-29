@@ -54,11 +54,6 @@ internal fun AggregationBox() {
                 modifier = Modifier.clickable { viewModel.openChooser() }
             ) {
                 Surface(elevation = 4.dp) {
-                    /*Image(
-                        painterResource(selectedSite.value.iconPath()),
-                        contentDescription = selectedSite.value.siteName,
-                        modifier = Modifier.size(64.dp).padding(8.dp)
-                    )*/
                     Text(viewModel.selectedCategoryName(), modifier = Modifier.padding(start = 8.dp))
                 }
 
@@ -71,14 +66,6 @@ internal fun AggregationBox() {
                     if (swingContent) {
                         LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
                             items(viewModel.items()) {
-                               /* Image(
-                                    painterResource(it.iconPath()),
-                                    contentDescription = it.siteName,
-                                    modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
-                                        openDropdown.value = false
-                                        selectedSite.value = it
-                                    }
-                                )*/
                                 Text(it.key, modifier = Modifier.padding(horizontal = 8.dp).clickable {
                                     viewModel.choose(it)
                                     }
@@ -93,11 +80,6 @@ internal fun AggregationBox() {
                                 viewModel.choose(it)
                             }
                         ) {
-                            /*Image(
-                                painterResource(it.iconPath()),
-                                contentDescription = it.siteName,
-                                modifier = Modifier.size(48.dp).padding(8.dp)
-                            )*/
                             Text(it.key, modifier = Modifier.padding(start = 8.dp))
                         }
                     }
