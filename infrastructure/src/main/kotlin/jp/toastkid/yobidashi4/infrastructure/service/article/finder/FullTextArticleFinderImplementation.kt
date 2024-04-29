@@ -1,11 +1,9 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
-import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
-import kotlin.io.path.nameWithoutExtension
 import org.koin.core.annotation.Single
 
 @Single
@@ -24,13 +22,11 @@ class FullTextArticleFinderImplementation : FullTextArticleFinder {
             .mapNotNull(searcher::getDocument)
             .filter { it["name"] != null }
             .parallelStream()
-            .map { Path.of(it["path"]) }
-            .filter { Files.isReadable(it) }
             .forEach {
-                val lines = Files.readAllLines(it)
+                val lines = it["content"].split("\n")
                 val filteredList = lines.filter { line -> filter.invoke(line) }
                 if (filteredList.isNotEmpty()) {
-                    aggregationResult.add(it.nameWithoutExtension, filteredList)
+                    aggregationResult.add(it["name"], filteredList)
                 }
             }
         aggregationResult.sortByTitle()
