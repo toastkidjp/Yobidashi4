@@ -118,65 +118,53 @@ class AggregationBoxViewModel : KoinComponent {
 
     fun keyword() = keyword.value
 
-    fun onKeywordValueChange(it: TextFieldValue) {
-        keyword.value = it
-
-        keywordHistoryService.filter(keywordHistories, it.text)
-    }
-
     fun onSearch() {
         invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
-    }
-
-    fun clearKeywordInput() {
-        keyword.value = TextFieldValue()
     }
 
     private val keywordHistoryService: InputHistoryService = InputHistoryService("aggregation_keyword")
 
     private val keywordHistories = mutableStateListOf<InputHistory>()
 
-    fun shouldShowKeywordHistory(): Boolean = keywordHistories.isNotEmpty()
-
-    fun keywordHistories(): List<String> {
-        return keywordHistories.map { it.word }
-    }
-
-    fun putKeyword(text: String?) {
-        val newFieldValue = keywordHistoryService.make(text) ?: return
-        keyword.value = newFieldValue
-        keywordHistories.clear()
-    }
-
-    fun deleteInputHistoryItem(text: String) {
-        keywordHistoryService.delete(keywordHistories, text)
-    }
-
-    fun clearKeywordHistory() {
-        keywordHistoryService.clear(keywordHistories)
-    }
-
     private val dateHistoryService: InputHistoryService = InputHistoryService("aggregation_date")
 
     private val dateHistories = mutableStateListOf<InputHistory>()
 
-    fun shouldShowDateHistory(): Boolean = dateHistories.isNotEmpty()
+    fun shouldShowDateHistory(): Boolean =
+        if (requireSecondInput()) keywordHistories.isNotEmpty() else dateHistories.isNotEmpty()
 
     fun dateHistories(): List<String> {
-        return dateHistories.map { it.word }
+        return (if (requireSecondInput()) keywordHistories else dateHistories).map { it.word }
     }
 
     fun putDate(text: String?) {
+        if (requireSecondInput()) {
+            val newFieldValue = keywordHistoryService.make(text) ?: return
+            keyword.value = newFieldValue
+            keywordHistories.clear()
+            return
+        }
         val newFieldValue = dateHistoryService.make(text) ?: return
         query.value = newFieldValue
         dateHistories.clear()
+        keywordHistories.clear()
     }
 
     fun deleteDateHistoryItem(text: String) {
+        if (requireSecondInput()) {
+            keywordHistoryService.delete(keywordHistories, text)
+            return
+        }
+
         dateHistoryService.delete(dateHistories, text)
     }
 
     fun clearDateHistory() {
+        if (requireSecondInput()) {
+            keywordHistoryService.clear(keywordHistories)
+            return
+        }
+
         dateHistoryService.clear(dateHistories)
     }
 
@@ -214,19 +202,31 @@ class AggregationBoxViewModel : KoinComponent {
         }
     }
 
-    fun dateInput() = query.value
+    fun dateInput() = if (requireSecondInput()) keyword.value else query.value
 
     fun onDateInputValueChange(it: TextFieldValue) {
+        if (requireSecondInput()) {
+            onKeywordValueChange(it)
+            return
+        }
+
         query.value = it
 
         dateHistoryService.filter(dateHistories, it.text)
     }
 
-    fun dateInputModifier(): Modifier {
-        return if (selectedSite.value.key == "Find article") Modifier else focusingModifier()
+    private fun onKeywordValueChange(it: TextFieldValue) {
+        keyword.value = it
+
+        keywordHistoryService.filter(keywordHistories, it.text)
     }
 
     fun clearDateInput() {
+        if (requireSecondInput()) {
+            keyword.value = TextFieldValue()
+            return
+        }
+
         query.value = TextFieldValue()
     }
 
