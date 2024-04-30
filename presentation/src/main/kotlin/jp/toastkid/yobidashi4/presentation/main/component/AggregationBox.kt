@@ -86,32 +86,6 @@ internal fun AggregationBox() {
                 }
             }
 
-            if (viewModel.requireSecondInput()) {
-                InputTextField(
-                    viewModel.keyword(),
-                    "Keyword",
-                    onValueChange = {
-                        viewModel.onKeywordValueChange(it)
-                    },
-                    onSearch = {
-                        viewModel.onSearch()
-                    },
-                    clearButton = {
-                        viewModel.clearKeywordInput()
-                    },
-                    viewModel.shouldShowKeywordHistory(),
-                    suggestions = viewModel.keywordHistories(),
-                    suggestionConsumer = {
-                        viewModel.putKeyword(it)
-                    },
-                    { viewModel.deleteInputHistoryItem(it) },
-                    {
-                        viewModel.clearKeywordHistory()
-                    },
-                    modifier = viewModel.focusingModifier()
-                )
-            }
-
             InputTextField(
                 viewModel.dateInput(),
                 "Article name filter",
