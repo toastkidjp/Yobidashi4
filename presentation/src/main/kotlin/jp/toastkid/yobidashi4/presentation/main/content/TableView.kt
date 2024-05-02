@@ -25,6 +25,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,12 +43,12 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun TableView(aggregationResult: AggregationResult) {
+fun TableView(tab: TableTab) {
     val coroutineScope = rememberCoroutineScope()
     val viewModel = remember { TableViewModel() }
 
@@ -66,7 +67,7 @@ fun TableView(aggregationResult: AggregationResult) {
             ) {
                 stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        aggregationResult.header().forEachIndexed { index, item ->
+                        tab.items().header().forEachIndexed { index, item ->
                             if (index != 0) {
                                 VerticalDivider(modifier = Modifier.height(32.dp).padding(vertical = 1.dp))
                             }
@@ -82,7 +83,7 @@ fun TableView(aggregationResult: AggregationResult) {
                                 modifier = Modifier
                                     .fillParentMaxHeight(0.05f)
                                     .clickable {
-                                        viewModel.sort(index, aggregationResult)
+                                        viewModel.sort(index, tab.items())
                                     }
                                     .onPointerEvent(PointerEventType.Enter) {
                                         headerCursorOn.value = true
@@ -179,8 +180,13 @@ fun TableView(aggregationResult: AggregationResult) {
             HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
                 Alignment.BottomCenter))
 
-            LaunchedEffect(aggregationResult) {
-                viewModel.start(aggregationResult)
+            LaunchedEffect(tab) {
+                viewModel.start(tab)
+            }
+            DisposableEffect(tab) {
+                onDispose {
+                    viewModel.onDispose(tab)
+                }
             }
         }
     }

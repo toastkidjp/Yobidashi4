@@ -17,10 +17,12 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -90,7 +92,9 @@ class TableViewModelTest {
         result.put("2023-12-25", 1200, 95)
         result.put("2023-12-26", 2000, 122)
 
-        subject.start(result)
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.start(TableTab("test", result))
+        }
 
         verify { focusRequester.requestFocus() }
         assertEquals(2, subject.items().size)
@@ -109,7 +113,9 @@ class TableViewModelTest {
         val result = FindResult("test")
         result.add("2024-03-23.md", listOf("test"))
 
-        subject.start(result)
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.start(TableTab("test", result))
+        }
 
         verify { focusRequester.requestFocus() }
         assertEquals(1, subject.items().size)

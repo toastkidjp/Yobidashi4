@@ -9,6 +9,7 @@ import androidx.compose.ui.input.key.Key
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -46,12 +47,14 @@ class TableViewModel : KoinComponent {
         return scrollAction.invoke(coroutineScope, key, isCtrlPressed)
     }
 
-    fun start(aggregationResult: AggregationResult) {
+    suspend fun start(tab: TableTab) {
         articleStates.clear()
+        val aggregationResult = tab.items()
         articleStates.addAll(aggregationResult.itemArrays())
         focusRequester().requestFocus()
 
         query.value = if (aggregationResult is FindResult) aggregationResult.keyword() else ""
+        state.scrollToItem(tab.scrollPosition())
     }
 
     fun sort(index: Int, aggregationResult: AggregationResult) {
@@ -106,6 +109,10 @@ class TableViewModel : KoinComponent {
 
     fun makeWeight(index: Int): Float {
         return if (index == 0) 0.4f else 1f
+    }
+
+    fun onDispose(tab: TableTab) {
+        mainViewModel.updateScrollableTab(tab, state.firstVisibleItemIndex)
     }
 
 }

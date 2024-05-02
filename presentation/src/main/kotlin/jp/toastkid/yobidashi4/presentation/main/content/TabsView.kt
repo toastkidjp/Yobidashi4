@@ -166,7 +166,7 @@ internal fun TabsView(modifier: Modifier) {
 
         when (val currentTab = viewModel.currentTab()) {
             is FileTab -> FileListView(currentTab.items, Modifier)
-            is TableTab -> TableView(currentTab.items())
+            is TableTab -> TableView(currentTab)
             is EditorTab -> EditorTabView(currentTab)
             is MarkdownPreviewTab -> MarkdownTabView(currentTab, Modifier)
             is EditorSettingTab -> EditorSettingComponent(modifier = Modifier)

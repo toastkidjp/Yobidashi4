@@ -10,8 +10,9 @@ data class TableTab(
     private val title: String,
     private val items: AggregationResult,
     private val closeable: Boolean = true,
+    private val scrollPosition: Int = 0,
     private val reloadAction: () -> Unit = {}
-): Tab, Reloadable {
+): ScrollableContentTab, Reloadable {
 
     override fun title(): String = title
 
@@ -32,6 +33,12 @@ data class TableTab(
     }
 
     fun items() = items
+
+    override fun scrollPosition(): Int = scrollPosition
+
+    override fun withNewPosition(scrollPosition: Int): ScrollableContentTab {
+        return this.copy(scrollPosition = scrollPosition)
+    }
 
 }
 

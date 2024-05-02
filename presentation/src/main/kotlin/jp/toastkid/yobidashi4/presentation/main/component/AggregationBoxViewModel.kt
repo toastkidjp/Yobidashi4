@@ -187,7 +187,7 @@ class AggregationBoxViewModel : KoinComponent {
             return
         }
 
-        viewModel.openTab(TableTab(result.title(), result, true, { invokeAggregation(viewModel, query, aggregator) }))
+        viewModel.openTab(TableTab(result.title(), result, true, reloadAction = { invokeAggregation(viewModel, query, aggregator) }))
 
         viewModel.switchAggregationBox(false)
     }
