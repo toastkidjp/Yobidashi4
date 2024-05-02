@@ -10,7 +10,6 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
-import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -27,9 +26,6 @@ class AggregationBoxKtTest {
     private lateinit var mainViewModel: MainViewModel
 
     @MockK
-    private lateinit var keywordSearch: KeywordArticleFinder
-
-    @MockK
     private lateinit var articlesReaderService: ArticlesReaderService
 
     @BeforeEach
@@ -40,7 +36,6 @@ class AggregationBoxKtTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { keywordSearch } bind(KeywordArticleFinder::class)
                     single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                 }
             )
