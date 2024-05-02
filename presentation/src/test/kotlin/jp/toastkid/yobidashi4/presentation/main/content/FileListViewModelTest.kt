@@ -23,9 +23,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.event.KeyEvent
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
-import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -48,12 +46,6 @@ class FileListViewModelTest {
 
     @MockK
     private lateinit var mainViewModel: MainViewModel
-
-    @MockK
-    private lateinit var keywordSearch: KeywordArticleFinder
-
-    @MockK
-    private lateinit var articlesReaderService: ArticlesReaderService
 
     @BeforeEach
     fun setUp() {
