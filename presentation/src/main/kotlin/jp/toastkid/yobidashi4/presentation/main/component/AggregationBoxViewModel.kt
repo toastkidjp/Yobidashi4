@@ -204,6 +204,8 @@ class AggregationBoxViewModel : KoinComponent {
 
     fun dateInput() = if (requireSecondInput()) keyword.value else query.value
 
+    fun label() = if (requireSecondInput()) "Keyword" else "Year-Month"
+
     fun onDateInputValueChange(it: TextFieldValue) {
         if (requireSecondInput()) {
             onKeywordValueChange(it)
