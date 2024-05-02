@@ -51,4 +51,10 @@ class KeywordSearchFilterTest {
         assertFalse(keywordSearchFilter.invoke("これはtetです."))
         assertFalse(keywordSearchFilter.invoke(""))
     }
+
+    @Test
+    fun init() {
+        assertFalse(KeywordSearchFilter("input ").invoke("test"))
+    }
+
 }
