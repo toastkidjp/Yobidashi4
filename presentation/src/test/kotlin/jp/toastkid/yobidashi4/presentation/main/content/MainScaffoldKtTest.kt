@@ -67,6 +67,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.openFind() } returns false
         every { mainViewModel.showInputBox() } returns false
         every { mainViewModel.openMemoryUsageBox() } returns false
+        every { mainViewModel.openWorldTime() } returns false
         every { mainViewModel.slideshowPath() } returns mockk()
         every { mainViewModel.closeSlideshow() } just Runs
         every { mainViewModel.loadBackgroundImage() } just Runs
