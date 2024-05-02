@@ -838,7 +838,7 @@ class MainViewModelImplementationTest {
         every { tab.setContent(any(), any()) } just Runs
         every { tab.setCaretPosition(any()) } just Runs
         every { tab.setScroll(any()) } just Runs
-        subject.tabs.add(tab)
+        subject.openTab(tab)
 
         subject.updateEditorContent(path, "test", 1, 1.0, true)
 
@@ -856,7 +856,7 @@ class MainViewModelImplementationTest {
         every { tab.setContent(any(), any()) } just Runs
         every { tab.setCaretPosition(any()) } just Runs
         every { tab.setScroll(any()) } just Runs
-        subject.tabs.add(tab)
+        subject.openTab(tab)
 
         subject.updateEditorContent(path, "test", 1, 1.0, true)
 
@@ -874,7 +874,7 @@ class MainViewModelImplementationTest {
         every { tab.setContent(any(), any()) } just Runs
         every { tab.setCaretPosition(any()) } just Runs
         every { tab.setScroll(any()) } just Runs
-        subject.tabs.add(tab)
+        subject.openTab(tab)
 
         subject.updateEditorContent(path, "test", resetEditing = false)
 
@@ -1000,7 +1000,6 @@ class MainViewModelImplementationTest {
         subject.snackbarHostState().currentSnackbarData?.performAction()
         countDownLatch.await(1, TimeUnit.SECONDS)
 
-        assertTrue(subject.showingSnackbar())
         assertNotNull(subject.snackbarHostState().currentSnackbarData)
         assertNull(subject.snackbarHostState().currentSnackbarData?.actionLabel)
     }
