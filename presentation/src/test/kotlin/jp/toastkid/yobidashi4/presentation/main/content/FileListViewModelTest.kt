@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -483,6 +484,15 @@ class FileListViewModelTest {
         subject.openFile(mockk())
 
         verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun openFileWithDefaultParameter() {
+        every { mainViewModel.openFile(any()) } just Runs
+
+        subject.openFile()
+
+        verify { mainViewModel wasNot called }
     }
 
     @Test
