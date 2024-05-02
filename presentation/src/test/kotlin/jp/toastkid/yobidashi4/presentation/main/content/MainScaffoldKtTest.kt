@@ -22,8 +22,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
-import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
-import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlinx.coroutines.flow.emptyFlow
@@ -40,12 +38,6 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
-    @MockK
-    private lateinit var keywordArticleFinder: KeywordArticleFinder
-
-    @MockK
-    private lateinit var articlesReaderService: ArticlesReaderService
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -54,8 +46,6 @@ class MainScaffoldKtTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { keywordArticleFinder } bind(KeywordArticleFinder::class)
-                    single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                 }
             )
         }
@@ -80,10 +70,6 @@ class MainScaffoldKtTest {
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 20000
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
-
-    /*    mockkConstructor(TextFileReceiver::class, SlideshowWindow::class)
-        every { anyConstructed<TextFileReceiver>().launch() } just Runs
-        every { anyConstructed<SlideshowWindow>().openWindow(any(), any()) } just Runs*/
     }
 
     @AfterEach
