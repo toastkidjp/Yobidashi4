@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
@@ -22,7 +21,6 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -194,13 +192,15 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun onKeywordValueChange() {
+        subject.choose(subject.categories().entries.last())
+
         assertTrue(subject.keyword().text.isEmpty())
 
-        subject.onKeywordValueChange(TextFieldValue("new text"))
+        subject.onDateInputValueChange(TextFieldValue("new text"))
 
         assertEquals("new text", subject.keyword().text)
 
-        subject.clearKeywordInput()
+        subject.clearDateInput()
 
         assertTrue(subject.keyword().text.isEmpty())
     }
@@ -227,20 +227,14 @@ class AggregationBoxViewModelTest {
         val result = mockk<AggregationResult>()
         every { result.isEmpty() } returns false
         every { result.title() } returns "test"
-        every { keywordSearch.invoke(any(), any()) } returns result
+        every { keywordSearch.invoke(any()) } returns result
         every { mainViewModel.openTab(any()) } just Runs
 
         subject.onSearch()
 
-        assertSame(Modifier, subject.dateInputModifier())
-        verify { keywordSearch.invoke(any(), any()) }
+        verify { keywordSearch.invoke(any()) }
         verify { mainViewModel.openTab(any()) }
         verify { mainViewModel.switchAggregationBox(false) }
-    }
-
-    @Test
-    fun dateInputModifier() {
-        assertEquals(subject.focusingModifier(), subject.dateInputModifier())
     }
 
     @Test
@@ -282,39 +276,15 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
-    fun keywordHistory() {
-        assertFalse(subject.shouldShowKeywordHistory())
-        assertTrue(subject.keywordHistories().isEmpty())
-    }
-
-    @Test
-    fun putKeyword() {
-        subject.putKeyword(null)
-
-        subject.putKeyword("test")
-
-        val keyword = subject.keyword()
-        assertEquals("test ", keyword.text)
-        assertEquals(5, keyword.selection.start)
-        assertEquals(5, keyword.selection.end)
-    }
-
-    @Test
-    fun deleteInputHistoryItem() {
-        subject.deleteInputHistoryItem("test")
-
-        verify { anyConstructed<InputHistoryService>().delete(any(), any()) }
-    }
-
-    @Test
-    fun clearKeywordHistory() {
-        subject.clearKeywordHistory()
-
-        verify { anyConstructed<InputHistoryService>().clear(any()) }
-    }
-
-    @Test
     fun dateHistories() {
+        assertFalse(subject.shouldShowDateHistory())
+        assertTrue(subject.dateHistories().isEmpty())
+    }
+
+    @Test
+    fun keywordHistory() {
+        subject.choose(subject.categories().entries.last())
+
         assertFalse(subject.shouldShowDateHistory())
         assertTrue(subject.dateHistories().isEmpty())
     }
@@ -332,6 +302,20 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun putKeyword() {
+        subject.choose(subject.categories().entries.last())
+
+        subject.putDate(null)
+
+        subject.putDate("test")
+
+        val keyword = subject.keyword()
+        assertEquals("test ", keyword.text)
+        assertEquals(5, keyword.selection.start)
+        assertEquals(5, keyword.selection.end)
+    }
+
+    @Test
     fun deleteDateHistoryItem() {
         subject.deleteDateHistoryItem("test")
 
@@ -339,7 +323,25 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun deleteInputHistoryItem() {
+        subject.choose(subject.categories().entries.last())
+
+        subject.deleteDateHistoryItem("test")
+
+        verify { anyConstructed<InputHistoryService>().delete(any(), any()) }
+    }
+
+    @Test
     fun clearDateHistory() {
+        subject.clearDateHistory()
+
+        verify { anyConstructed<InputHistoryService>().clear(any()) }
+    }
+
+    @Test
+    fun clearKeywordHistory() {
+        subject.choose(subject.categories().entries.last())
+
         subject.clearDateHistory()
 
         verify { anyConstructed<InputHistoryService>().clear(any()) }
