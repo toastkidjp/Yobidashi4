@@ -88,7 +88,7 @@ internal fun AggregationBox() {
 
             InputTextField(
                 viewModel.dateInput(),
-                "Article name filter",
+                viewModel.label(),
                 onValueChange = {
                     viewModel.onDateInputValueChange(it)
                 },
