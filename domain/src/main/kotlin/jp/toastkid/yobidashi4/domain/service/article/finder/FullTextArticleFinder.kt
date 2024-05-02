@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi4.domain.service.article.finder
 
-import jp.toastkid.yobidashi4.domain.service.archive.KeywordArticleFinder
+import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 
-interface FullTextArticleFinder : KeywordArticleFinder {
+interface FullTextArticleFinder {
+
+    operator fun invoke(keyword: String): AggregationResult
 
 }
