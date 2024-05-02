@@ -52,7 +52,7 @@ class AggregationBoxViewModel : KoinComponent {
         "Article length" to { ArticleLengthAggregatorService(articlesReaderService).invoke(it) },
         "Steps" to { StepsAggregatorService(articlesReaderService).invoke(it) },
         "Nikkei 225" to { Nikkei225AggregatorService(articlesReaderService).invoke(it) },
-        "Find article" to { keywordSearch.invoke(keyword.value.text, it) }
+        "Find article" to { keywordSearch.invoke(keyword.value.text) }
     )
 
     private val selectedSite = mutableStateOf(aggregations.entries.toList().get(
