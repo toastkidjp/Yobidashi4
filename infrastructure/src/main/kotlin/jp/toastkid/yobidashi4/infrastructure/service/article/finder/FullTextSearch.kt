@@ -22,7 +22,7 @@ class FullTextSearch constructor(private val indexSearcher: IndexSearcher) {
     @Throws(IOException::class, ParseException::class)
     fun search(searchQueryInput: String): TopDocs? {
         val sanitized =
-            if (searchQueryInput.startsWith("?")) searchQueryInput.replaceFirst("?", "\\?")
+            if (searchQueryInput.startsWith("?") || searchQueryInput.startsWith("*")) "\\$searchQueryInput"
             else searchQueryInput
         return indexSearcher.search(queryParser.parse(sanitized), 300)
     }
