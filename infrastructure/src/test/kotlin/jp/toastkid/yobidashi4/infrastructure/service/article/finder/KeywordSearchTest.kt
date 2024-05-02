@@ -82,6 +82,13 @@ internal class KeywordSearchTest {
     }
 
     @Test
+    fun testDoesNotUseTitleFilter() {
+        val result = keywordSearch.invoke("test", null)
+
+        assertEquals(2, result.itemArrays().size)
+    }
+
+    @Test
     fun testUseTitleFilterNotFoundCase() {
         val result = keywordSearch.invoke("told", "1")
 
