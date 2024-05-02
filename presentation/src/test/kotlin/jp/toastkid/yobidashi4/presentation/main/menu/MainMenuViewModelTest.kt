@@ -229,6 +229,15 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun openDownloadFolder() {
+        every { mainViewModel.openFile(any()) } just Runs
+
+        subject.openDownloadFolder()
+
+        verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
     fun useEditorMenu() {
         every { mainViewModel.currentTab() } returns null
 
