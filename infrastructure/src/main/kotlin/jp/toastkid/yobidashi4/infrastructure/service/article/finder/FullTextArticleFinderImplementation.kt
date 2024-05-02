@@ -11,7 +11,7 @@ class FullTextArticleFinderImplementation : FullTextArticleFinder {
 
     private val searcher = FullTextSearch.make(Path.of("temporary/finder/index"))
 
-    override fun invoke(keyword: String, fileFilter: String?): AggregationResult {
+    override fun invoke(keyword: String): AggregationResult {
         val aggregationResult = FindResult(keyword)
 
         val hits = searcher.search(keyword) ?: return aggregationResult
