@@ -20,8 +20,11 @@ class FullTextSearch constructor(private val indexSearcher: IndexSearcher) {
     private val indexReader = indexSearcher.indexReader
 
     @Throws(IOException::class, ParseException::class)
-    fun search(searchQuery: String): TopDocs? {
-        return indexSearcher.search(queryParser.parse(searchQuery), 300)
+    fun search(searchQueryInput: String): TopDocs? {
+        val sanitized =
+            if (searchQueryInput.startsWith("?")) searchQueryInput.replaceFirst("?", "\\?")
+            else searchQueryInput
+        return indexSearcher.search(queryParser.parse(sanitized), 300)
     }
 
     @Throws(CorruptIndexException::class, IOException::class)

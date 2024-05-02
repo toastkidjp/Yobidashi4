@@ -51,6 +51,13 @@ class FullTextSearchTest {
     }
 
     @Test
+    fun searchWithQueryWhichStartQuestionMark() {
+        subject.search("?test")
+
+        verify { indexSearcher.search(any(), any<Int>()) }
+    }
+
+    @Test
     fun getDocument() {
         val scoreDoc = ScoreDoc(1, 1.0f)
 
