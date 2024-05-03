@@ -14,9 +14,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
@@ -27,7 +25,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
-import jp.toastkid.yobidashi4.presentation.editor.style.EditorTheme
+import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorVisualTransformation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -55,8 +53,6 @@ class TextEditorViewModel : KoinComponent {
     private val keyEventConsumer = KeyEventConsumer()
 
     private val previewKeyEventConsumer = PreviewKeyEventConsumer()
-
-    private val theme = EditorTheme()
 
     private val verticalScrollState = TextFieldScrollState(Orientation.Vertical, 0)
 
@@ -234,31 +230,14 @@ class TextEditorViewModel : KoinComponent {
         )
     }
 
-    private var transformedText: TransformedText? = null
-
-    private val offsetMapping = object : OffsetMapping {
-        override fun originalToTransformed(offset: Int): Int =
-            if (offset >= content.value.text.length) content.value.text.length else offset
-
-        override fun transformedToOriginal(offset: Int): Int =
-            if (offset >= content.value.text.length) content.value.text.length else offset
-    }
+    private val visualTransformation = TextEditorVisualTransformation(content, mainViewModel.darkMode())
 
     fun visualTransformation(): VisualTransformation {
         if (content.value.text.length > conversionLimit) {
             return VisualTransformation.None
         }
 
-        return VisualTransformation { text ->
-            val last = transformedText
-            if (last != null && content.value.composition == null && last.text.text == text.text) {
-                return@VisualTransformation last
-            }
-
-            val new = TransformedText(theme.codeString(text.text, mainViewModel.darkMode()), offsetMapping)
-            transformedText = new
-            return@VisualTransformation new
-        }
+        return visualTransformation
     }
 
     fun makeCharacterCountMessage(count: Int): String {
@@ -278,7 +257,6 @@ class TextEditorViewModel : KoinComponent {
         }
 
         lastParagraph = null
-        transformedText = null
         content.value = TextFieldValue()
     }
 
