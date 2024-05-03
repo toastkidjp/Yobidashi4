@@ -39,6 +39,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
@@ -58,7 +59,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
             return@onKeyEvent viewModel.scrollAction(coroutineScope, it.key, it.isCtrlPressed)
-        }.focusRequester(viewModel.focusRequester()).focusable(true)
+        }.focusRequester(viewModel.focusRequester()).focusable(true).testTag("surface")
     ) {
         Box {
             LazyColumn(
