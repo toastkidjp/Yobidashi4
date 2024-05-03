@@ -38,7 +38,7 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     private val faviconFolder = WebIcon()
 
-    fun bookmarks() = bookmarks
+    fun bookmarks(): List<Bookmark> = bookmarks
 
     fun listState() = state
 
