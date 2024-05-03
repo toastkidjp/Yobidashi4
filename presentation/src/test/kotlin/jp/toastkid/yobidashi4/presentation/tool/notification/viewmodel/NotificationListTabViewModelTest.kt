@@ -146,8 +146,9 @@ class NotificationListTabViewModelTest {
 
     @Test
     fun deleteAt() {
+        every { repository.add(any()) } just Runs
         every { repository.deleteAt(any()) } just Runs
-        subject.items().add(NotificationEvent.makeDefault())
+        subject.add()
 
         subject.deleteAt(0)
 
