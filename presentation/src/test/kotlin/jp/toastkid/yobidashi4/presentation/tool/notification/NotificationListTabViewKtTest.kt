@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.tool.notification
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
@@ -49,7 +48,7 @@ class NotificationListTabViewKtTest {
         mockkConstructor(NotificationListTabViewModel::class)
         every { anyConstructed<NotificationListTabViewModel>().listState() } returns LazyListState()
         every { anyConstructed<NotificationListTabViewModel>().start(Dispatchers.IO) } just Runs
-        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableStateListOf(NotificationEvent.makeDefault())
+        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(NotificationEvent.makeDefault())
         every { anyConstructed<NotificationListTabViewModel>().focusRequester() } returns FocusRequester()
     }
 
