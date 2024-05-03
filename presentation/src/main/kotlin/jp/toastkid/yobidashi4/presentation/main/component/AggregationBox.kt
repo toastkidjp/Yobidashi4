@@ -51,7 +51,7 @@ internal fun AggregationBox() {
             )
 
             Box(
-                modifier = Modifier.clickable { viewModel.openChooser() }
+                modifier = Modifier.clickable(onClick = viewModel::openChooser)
             ) {
                 Surface(elevation = 4.dp) {
                     Text(viewModel.selectedCategoryName(), modifier = Modifier.padding(start = 8.dp))
