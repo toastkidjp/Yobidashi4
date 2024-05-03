@@ -34,7 +34,7 @@ class NotificationListTabViewModel : KoinComponent {
     }
 
     private val notificationEvents = mutableStateListOf<NotificationEvent>()
-    fun items() = notificationEvents
+    fun items(): List<NotificationEvent> = notificationEvents
 
     private val repository: NotificationEventRepository by inject()
 
