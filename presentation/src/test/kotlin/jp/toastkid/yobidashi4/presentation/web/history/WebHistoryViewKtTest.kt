@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.web.history
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -45,7 +44,7 @@ class WebHistoryViewKtTest {
         mockkConstructor(WebHistoryViewModel::class)
         every { anyConstructed<WebHistoryViewModel>().launch(any(), any()) } just Runs
         every { anyConstructed<WebHistoryViewModel>().onDispose(any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().list() } returns mutableStateListOf(WebHistory("", ""))
+        every { anyConstructed<WebHistoryViewModel>().list() } returns mutableListOf(WebHistory("", ""))
     }
 
     @AfterEach
