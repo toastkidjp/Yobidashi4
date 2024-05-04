@@ -46,9 +46,16 @@ class TableTabTest {
     }
 
     @Test
+    fun reloadDefault() {
+        val tab = TableTab("test", mockk())
+
+        tab.reload()
+    }
+
+    @Test
     fun items() {
         val items = MovieMemoExtractorResult()
-        val tableTab = TableTab("test", items, true, mockk())
+        val tableTab = TableTab("test", items, true, reloadAction = mockk())
 
         assertSame(items, tableTab.items())
     }
