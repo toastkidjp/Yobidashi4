@@ -122,9 +122,7 @@ internal fun WebSearchBox() {
                 {
                     viewModel.clearInputHistory()
                 },
-                {
-                viewModel.onFocusChanged(it)
-                },
+                viewModel::onFocusChanged,
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
                     .onKeyEvent {
