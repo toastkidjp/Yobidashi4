@@ -55,4 +55,19 @@ class InputTextFieldKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun singleLineTextField() {
+        runDesktopComposeUiTest {
+            setContent {
+                SingleLineTextField(
+                    TextFieldValue("test"),
+                    "label",
+                    {},
+                    {}
+                )
+            }
+        }
+    }
+
 }
