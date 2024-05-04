@@ -43,6 +43,7 @@ class FullTextArticleFinderImplementationTest {
         every { fullTextSearch.getDocument(any()) } returns document
         every { document["name"] } returns "test.md"
         every { document["path"] } returns "/path/to/test"
+        every { document["content"] } returns "This is test content."
         every { Files.readAllLines(any()) } returns listOf("a", "b", "c")
         every { anyConstructed<KeywordSearchFilter>().invoke(any()) } returns true
         every { path.nameWithoutExtension } returns "test"
@@ -57,7 +58,7 @@ class FullTextArticleFinderImplementationTest {
 
     @Test
     fun invoke() {
-        val aggregationResult = subject.invoke("test", "")
+        val aggregationResult = subject.invoke("test")
 
         println(aggregationResult.itemArrays().size)
     }
@@ -66,7 +67,7 @@ class FullTextArticleFinderImplementationTest {
     fun notFoundCase() {
         every { fullTextSearch.search(any()) } returns null
 
-        val aggregationResult = subject.invoke("test", "")
+        val aggregationResult = subject.invoke("test")
 
         assertTrue(aggregationResult.isEmpty())
     }
@@ -75,7 +76,7 @@ class FullTextArticleFinderImplementationTest {
     fun filterOutCase() {
         every { fullTextSearch.getDocument(any()) } returns null
 
-        val aggregationResult = subject.invoke("test", "")
+        val aggregationResult = subject.invoke("test")
 
         assertTrue(aggregationResult.isEmpty())
     }
@@ -84,7 +85,7 @@ class FullTextArticleFinderImplementationTest {
     fun filterOutByNullTileCase() {
         every { document["name"] } returns null
 
-        val aggregationResult = subject.invoke("test", "")
+        val aggregationResult = subject.invoke("test")
 
         assertTrue(aggregationResult.isEmpty())
     }
@@ -93,7 +94,7 @@ class FullTextArticleFinderImplementationTest {
     fun filterOutByNoneWordLinesCase() {
         every { anyConstructed<KeywordSearchFilter>().invoke(any()) } returns false
 
-        val aggregationResult = subject.invoke("test", "")
+        val aggregationResult = subject.invoke("test")
 
         assertTrue(aggregationResult.isEmpty())
     }
