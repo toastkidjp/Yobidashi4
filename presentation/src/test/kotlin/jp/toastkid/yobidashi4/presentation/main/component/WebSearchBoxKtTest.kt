@@ -41,4 +41,19 @@ class WebSearchBoxKtTest {
             }
         }
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun containsSwingContent() {
+        every { anyConstructed<WebSearchBoxViewModel>().containsSwingContent() } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                WebSearchBox()
+
+                verify { anyConstructed<WebSearchBoxViewModel>().openingDropdown() }
+                verify { anyConstructed<WebSearchBoxViewModel>().showWebSearch() }
+            }
+        }
+    }
 }
