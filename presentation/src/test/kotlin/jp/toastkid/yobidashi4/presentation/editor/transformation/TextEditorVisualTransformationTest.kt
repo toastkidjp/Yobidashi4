@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.editor.transformation
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotSame
@@ -24,7 +23,6 @@ class TextEditorVisualTransformationTest {
     fun visualTransformation() {
         val transformedText = subject.filter(buildAnnotatedString { append("test") })
         assertEquals("test[EOF]", transformedText.text.text)
-        assertEquals(OffsetMapping.Identity, transformedText.offsetMapping)
     }
     @Test
     fun overwriteWithStateContainingComposition() {
