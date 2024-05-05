@@ -44,7 +44,7 @@ internal fun InputBox() {
             Text("x", modifier = Modifier
                 .padding(start = 4.dp)
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.setShowInputBox() }
+                .clickable(onClick = viewModel::setShowInputBox)
                 .padding(8.dp)
             )
 
