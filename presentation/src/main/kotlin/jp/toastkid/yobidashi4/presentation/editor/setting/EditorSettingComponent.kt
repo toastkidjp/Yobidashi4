@@ -48,9 +48,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
                 modifier = Modifier.height(200.dp)
             )
 
-            Button(onClick = {
-                viewModel.commit()
-            },
+            Button(onClick = viewModel::commit,
                 colors = ButtonDefaults.buttonColors(backgroundColor = viewModel.currentBackgroundColor(), contentColor = viewModel.currentFontColor())
             ) {
                 Text("Commit colors")
