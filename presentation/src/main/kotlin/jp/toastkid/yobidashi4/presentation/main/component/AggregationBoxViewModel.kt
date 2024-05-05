@@ -8,6 +8,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
@@ -74,6 +75,11 @@ class AggregationBoxViewModel : KoinComponent {
     fun onKeyEvent(it: KeyEvent): Boolean {
         if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
             viewModel.switchAggregationBox(false)
+            return true
+        }
+        if (requireSecondInput() && it.type == KeyEventType.KeyDown && it.isShiftPressed && it.key == Key.Two) {
+            val newText = "\"${keyword.value.text}\""
+            keyword.value = TextFieldValue(newText, TextRange(newText.length))
             return true
         }
         return false

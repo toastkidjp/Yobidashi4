@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -98,6 +99,92 @@ class AggregationBoxViewModelTest {
 
         assertTrue(consumed)
         every { mainViewModel.switchAggregationBox(any()) }
+    }
+
+    @Test
+    fun onKeyEventWith2Key() {
+        subject.choose(subject.categories().entries.last())
+        subject.onDateInputValueChange(TextFieldValue("test"))
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_2,
+                    '2'
+                )
+            )
+        )
+
+        assertTrue(consumed)
+        assertEquals("\"test\"", subject.dateInput().text)
+    }
+
+    @Test
+    fun onKeyEventWith2KeyButKeyHasReleased() {
+        subject.choose(subject.categories().entries.last())
+        subject.onDateInputValueChange(TextFieldValue("test"))
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_RELEASED,
+                    1,
+                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_2,
+                    '2'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun onKeyEventWith2KeyButCurrentIsNotFind() {
+        subject.onDateInputValueChange(TextFieldValue("test"))
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_2,
+                    '2'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+    }
+
+
+    @Test
+    fun unconsumedOnKeyEventWith2KeyAndCtrlMask() {
+        subject.choose(subject.categories().entries.last())
+        subject.onDateInputValueChange(TextFieldValue("test"))
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_2,
+                    '2'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        assertEquals("test", subject.dateInput().text)
     }
 
     @Test
@@ -345,6 +432,15 @@ class AggregationBoxViewModelTest {
         subject.clearDateHistory()
 
         verify { anyConstructed<InputHistoryService>().clear(any()) }
+    }
+
+    @Test
+    fun label() {
+        val normal = subject.label()
+        subject.choose(subject.categories().entries.last())
+        val find = subject.label()
+
+        assertNotEquals(normal, find)
     }
 
 }
