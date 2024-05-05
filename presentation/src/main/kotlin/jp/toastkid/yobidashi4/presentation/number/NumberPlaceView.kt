@@ -9,7 +9,6 @@
 package jp.toastkid.yobidashi4.presentation.number
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -17,14 +16,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -197,32 +191,24 @@ private fun AppBarContent(
                 textAlign = TextAlign.Center,
                 fontSize = fontSize
             )
+
             DropdownMenu(
                 openingMaskingCount,
+                scrollState = rememberScrollState(),
                 onDismissRequest = closeMaskingCount) {
-                val lazyListState = rememberLazyListState()
-                Box(modifier = Modifier.width(100.dp).height(600.dp)) {
-                    LazyColumn(state = lazyListState) {
-                        items(64) {
-                            val count = it + 1
-                            DropdownMenuItem(
-                                onClick = {
-                                    setMaskingCount(count)
-                                    closeMaskingCount()
-                                    reloadGame()
-                                }) {
-                                Text(
-                                    text = "$count",
-                                    fontSize = fontSize,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
+                (1 .. 64).forEach { count ->
+                    DropdownMenuItem(
+                        onClick = {
+                            setMaskingCount(count)
+                            closeMaskingCount()
+                            reloadGame()
+                        }) {
+                        Text(
+                            text = "$count",
+                            fontSize = fontSize,
+                            textAlign = TextAlign.Center
+                        )
                     }
-                    VerticalScrollbar(
-                        adapter = rememberScrollbarAdapter(lazyListState),
-                        modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
-                    )
                 }
             }
         }
