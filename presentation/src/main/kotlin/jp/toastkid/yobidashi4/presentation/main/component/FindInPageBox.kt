@@ -31,9 +31,7 @@ internal fun FindInPageBox() {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
-        modifier = Modifier.fillMaxWidth().onKeyEvent {
-            viewModel.onKeyEvent(it)
-        }
+        modifier = Modifier.fillMaxWidth().onKeyEvent(viewModel::onKeyEvent)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("x", modifier = Modifier
