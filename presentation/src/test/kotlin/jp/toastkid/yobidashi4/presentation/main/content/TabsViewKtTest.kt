@@ -12,8 +12,10 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -79,6 +81,8 @@ class TabsViewKtTest {
             markdownPreviewTab,
             tableTab,
             editorTab,
+            BarcodeToolTab(),
+            NotificationListTab()
         )
     }
 
