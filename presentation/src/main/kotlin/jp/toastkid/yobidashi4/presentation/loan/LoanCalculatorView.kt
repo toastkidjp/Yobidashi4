@@ -57,7 +57,7 @@ fun LoanCalculatorView() {
 
                 LoanCalculatorInput(
                     viewModel.loanTerm(),
-                    { viewModel.setLoanTerm(it) },
+                    viewModel::setLoanTerm,
                     "Loan term",
                     viewModel.visualTransformation()
                 )
