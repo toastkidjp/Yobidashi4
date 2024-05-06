@@ -297,6 +297,13 @@ class MainMenuViewModel : KoinComponent {
         )
     }
 
+    fun toggleWorldTimeShortcut() =
+        KeyShortcut(if (viewModel.openWorldTime()) Key.DirectionRight else Key.DirectionLeft, ctrl = true, shift = true)
+
+    fun toggleWorldTime() {
+        viewModel.toggleWorldTime()
+    }
+
     fun isSelectedUserAgent(it: UserAgent): Boolean {
         return it == currentUserAgent.value
     }
