@@ -10,6 +10,7 @@ import io.mockk.unmockkAll
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.getLastModifiedTime
 import kotlin.io.path.nameWithoutExtension
@@ -39,6 +40,15 @@ class FileListViewKtTest {
 
         mockkConstructor(FileListViewModel::class)
         every { anyConstructed<FileListViewModel>().openingDropdown(any()) } returns false
+        val element = mockk<FileListItem>()
+        val path = mockk<Path>()
+        every { path.fileName } returns path
+        every { path.toString() } returns "test.md"
+        every { element.path } returns path
+        every { element.editable } returns true
+        every { element.selected } returns true
+        every { element.subText() } returns "2024-01-22"
+        every { anyConstructed<FileListViewModel>().items() } returns listOf(element)
     }
 
     @AfterEach
