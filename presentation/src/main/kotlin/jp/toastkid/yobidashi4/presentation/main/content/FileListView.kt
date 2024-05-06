@@ -95,7 +95,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         { viewModel.edit(fileListItem.path) },
                         { viewModel.preview(fileListItem.path) },
                         { viewModel.slideshow(fileListItem.path) },
-                        { viewModel.clipText(it) },
+                        viewModel::clipText,
                         modifier.animateItemPlacement()
                             .combinedClickable(
                                 enabled = true,
