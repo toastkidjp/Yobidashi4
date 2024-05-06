@@ -76,10 +76,6 @@ import kotlin.io.path.nameWithoutExtension
 internal fun TabsView(modifier: Modifier) {
     val viewModel = remember { TabsViewModel() }
 
-    if (viewModel.tabIsEmpty()) {
-        return
-    }
-
     Column(modifier = modifier) {
         ScrollableTabRow(
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f),
