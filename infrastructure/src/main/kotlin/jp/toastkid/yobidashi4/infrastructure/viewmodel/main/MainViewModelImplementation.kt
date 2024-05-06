@@ -201,6 +201,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(TextFileViewerTab(path))
     }
 
+    private val openWorldTime = mutableStateOf(false)
+
+    override fun openWorldTime(): Boolean {
+        return openWorldTime.value
+    }
+
+    override fun toggleWorldTime() {
+        openWorldTime.value = openWorldTime.value.not()
+    }
+
     override fun openUrl(url: String, background: Boolean) {
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             showSnackbar("Invalid URL. $url")
