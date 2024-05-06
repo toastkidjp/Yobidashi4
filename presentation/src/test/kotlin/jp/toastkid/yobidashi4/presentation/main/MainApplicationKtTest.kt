@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.window.WindowState
 import io.mockk.MockKAnnotations
@@ -114,7 +115,8 @@ class MainApplicationKtTest {
         every { mainViewModel.articles() } returns emptyList()
         every { mainViewModel.reloadAllArticle() } just Runs
         every { mainViewModel.tabs } returns mutableListOf<Tab>()
-        
+        every { mainViewModel.selected } returns mutableStateOf(0)
+
         every { setting.articleFolderPath() } returns mockk()
         every { setting.userAgentName() } returns "test"
         every { setting.setUserAgentName(any()) } just Runs
