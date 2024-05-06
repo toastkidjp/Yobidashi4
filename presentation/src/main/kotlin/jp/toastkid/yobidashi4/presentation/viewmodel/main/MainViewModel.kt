@@ -92,6 +92,10 @@ interface MainViewModel {
     fun hideArticleList()
     fun openTextFile(path: Path)
 
+    fun openWorldTime(): Boolean
+
+    fun toggleWorldTime()
+
     fun openMemoryUsageBox(): Boolean
 
     fun switchMemoryUsageBox()
