@@ -105,6 +105,7 @@ class MainApplicationKtTest {
         every { mainViewModel.showWebSearch() } returns false
         every { mainViewModel.showAggregationBox() } returns false
         every { mainViewModel.openFind() } returns false
+        every { mainViewModel.openWorldTime() } returns false
         every { mainViewModel.showInputBox() } returns false
         every { mainViewModel.openMemoryUsageBox() } returns false
         every { mainViewModel.closeSlideshow() } just Runs
