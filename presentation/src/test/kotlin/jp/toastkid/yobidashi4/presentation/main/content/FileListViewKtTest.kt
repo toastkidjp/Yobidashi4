@@ -66,7 +66,7 @@ class FileListViewKtTest {
 
         runDesktopComposeUiTest {
             setContent {
-                FileListView(listOf(path))
+                FileListView(listOf(path, path, path, path))
             }
         }
     }
