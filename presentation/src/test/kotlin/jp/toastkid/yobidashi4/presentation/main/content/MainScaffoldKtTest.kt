@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
-import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlinx.coroutines.flow.emptyFlow
@@ -64,7 +63,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.articles() } returns emptyList()
         every { mainViewModel.reloadAllArticle() } just Runs
-        every { mainViewModel.tabs } returns mutableListOf<Tab>()
+        every { mainViewModel.tabs } returns mutableListOf()
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
