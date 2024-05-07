@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Notification
+import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
@@ -26,6 +28,7 @@ import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -651,6 +654,18 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun selectedText(): String? {
         val selectedText = textManager?.selectedText ?: return null
         return selectedText.text
+    }
+
+    private val trayState = TrayState()
+
+    override fun trayState(): TrayState {
+        return trayState
+    }
+
+    override fun sendNotification(notificationEvent: NotificationEvent) {
+        trayState().sendNotification(
+            Notification(notificationEvent.title, notificationEvent.text, Notification.Type.Info)
+        )
     }
 
 }
