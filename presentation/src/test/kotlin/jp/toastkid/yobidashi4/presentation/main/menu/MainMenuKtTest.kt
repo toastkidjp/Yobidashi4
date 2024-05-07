@@ -83,6 +83,7 @@ class MainMenuKtTest {
         every { viewModel.loadBackgroundImage() } just Runs
         every { viewModel.setShowWebSearch(any()) } just Runs
         every { viewModel.setInitialAggregationType(any()) } just Runs
+        every { viewModel.openWorldTime() } returns true
 
         every { setting.articleFolderPath() } returns mockk()
         every { setting.userAgentName() } returns "test"
