@@ -43,7 +43,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.capitalInput(),
                     "Capital",
                     viewModel::setCapitalInput,
-                    { viewModel.clearCapitalInput() },
+                    viewModel::clearCapitalInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = DecimalVisualTransformation()
                 )
