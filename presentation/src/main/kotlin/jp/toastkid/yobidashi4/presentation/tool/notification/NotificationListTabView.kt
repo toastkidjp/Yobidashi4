@@ -56,9 +56,7 @@ internal fun NotificationListTabView() {
             ) {
                 stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        Button(onClick = {
-                            viewModel.add()
-                        }) {
+                        Button(onClick = viewModel::add) {
                             Text("Add")
                         }
                     }
