@@ -6,9 +6,11 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowState
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
@@ -141,5 +143,9 @@ interface MainViewModel {
     fun setTextManager(textManager: TextContextMenu.TextManager)
 
     fun selectedText(): String?
+
+    fun trayState(): TrayState
+
+    fun sendNotification(notificationEvent: NotificationEvent)
 
 }
