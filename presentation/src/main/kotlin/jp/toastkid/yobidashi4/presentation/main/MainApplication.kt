@@ -11,11 +11,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.ApplicationScope
-import androidx.compose.ui.window.Notification
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberTrayState
 import java.nio.file.Path
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
@@ -51,11 +49,10 @@ fun launchMainApplication(exitProcessOnExit: Boolean = true) {
 @OptIn(ExperimentalFoundationApi::class)
 private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
     val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
-    val trayState = rememberTrayState()
 
     AppTheme(darkTheme = mainViewModel.darkMode()) {
         Tray(
-            state = trayState,
+            state = mainViewModel.trayState(),
             icon = painterResource("images/icon.png"),
             menu = {
                 Item(
@@ -133,9 +130,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
         withContext(Dispatchers.IO) {
             notification
                 .notificationFlow()
-                .collect {
-                    trayState.sendNotification(Notification(it.title, it.text, Notification.Type.Info))
-                }
+                .collect(mainViewModel::sendNotification)
         }
     }
 
