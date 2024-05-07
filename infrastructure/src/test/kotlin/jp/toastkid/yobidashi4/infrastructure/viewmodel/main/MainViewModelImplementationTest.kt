@@ -6,6 +6,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import io.mockk.MockKAnnotations
@@ -38,6 +39,7 @@ import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -535,6 +537,19 @@ class MainViewModelImplementationTest {
         subject.openTextFile(mockk())
 
         assertEquals(1, subject.tabs.size)
+    }
+
+    @Test
+    fun openWorldTime() {
+        assertFalse(subject.openWorldTime())
+
+        subject.toggleWorldTime()
+
+        assertTrue(subject.openWorldTime())
+
+        subject.toggleWorldTime()
+
+        assertFalse(subject.openWorldTime())
     }
 
     @Test
@@ -1219,6 +1234,23 @@ class MainViewModelImplementationTest {
     @Test
     fun windowVisible() {
         assertTrue(subject.windowVisible())
+    }
+
+    @Test
+    fun trayState() {
+        subject.trayState()
+    }
+
+    @Test
+    fun sendNotification() {
+        subject = spyk(subject)
+        val trayState = mockk<TrayState>()
+        every { subject.trayState() } returns trayState
+        every { trayState.sendNotification(any()) } just Runs
+
+        subject.sendNotification(NotificationEvent.makeDefault())
+
+        verify { trayState.sendNotification(any()) }
     }
 
 }
