@@ -769,6 +769,21 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun toggleWorldTime() {
+        every { mainViewModel.openWorldTime() } returns true
+        every { mainViewModel.toggleWorldTime() } just Runs
+
+        val shortcut = subject.toggleWorldTimeShortcut()
+
+        subject.toggleWorldTime()
+        every { mainViewModel.openWorldTime() } returns false
+
+        assertNotEquals(subject.toggleWorldTimeShortcut(), shortcut)
+
+        verify(exactly = 1) { mainViewModel.toggleWorldTime() }
+    }
+
+    @Test
     fun isSelectedUserAgent() {
         assertTrue(subject.isSelectedUserAgent(UserAgent.DEFAULT))
     }
