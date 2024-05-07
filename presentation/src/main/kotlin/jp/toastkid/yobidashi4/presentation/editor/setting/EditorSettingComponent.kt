@@ -64,9 +64,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
                 {
                     viewModel.setEditorFontFamily(it.toString())
                 },
-                Modifier.clickable {
-                    viewModel.openFontFamily()
-                }
+                Modifier.clickable(onClick = viewModel::openFontFamily)
             )
 
             EditorSettingDropdown(
