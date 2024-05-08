@@ -52,7 +52,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.installmentInput(),
                     "Installment",
                     viewModel::setInstallmentInput,
-                    { viewModel.clearInstallmentInput() },
+                    viewModel::clearInstallmentInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = DecimalVisualTransformation()
                 )
