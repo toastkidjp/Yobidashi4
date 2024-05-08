@@ -33,9 +33,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
 
             ClassicColorPicker(
                 color = viewModel.currentBackgroundColor(),
-                onColorChanged = { hsvColor ->
-                    viewModel.onBackgroundColorChanged(hsvColor)
-                },
+                onColorChanged =viewModel::onBackgroundColorChanged,
                 modifier = Modifier.height(200.dp)
             )
 
