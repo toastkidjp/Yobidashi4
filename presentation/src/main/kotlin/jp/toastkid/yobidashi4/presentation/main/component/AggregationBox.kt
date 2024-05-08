@@ -61,7 +61,7 @@ internal fun AggregationBox() {
                 DropdownMenu(
                     expanded = viewModel.isOpeningChooser(),
                     offset = DpOffset(0.dp, if (swingContent) (-80).dp else 0.dp),
-                    onDismissRequest = { viewModel.closeChooser() }
+                    onDismissRequest = viewModel::closeChooser
                 ) {
                     if (swingContent) {
                         LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
