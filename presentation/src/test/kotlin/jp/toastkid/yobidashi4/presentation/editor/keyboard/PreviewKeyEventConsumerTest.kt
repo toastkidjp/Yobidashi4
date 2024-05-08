@@ -89,7 +89,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
             java.awt.event.KeyEvent.VK_UP,
             'A'
         )
@@ -112,7 +112,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
             java.awt.event.KeyEvent.VK_DOWN,
             'A'
         )
@@ -127,6 +127,56 @@ class PreviewKeyEventConsumerTest {
 
         assertTrue(consumed)
         verify { scrollBy(16.dp.value) }
+    }
+
+    @Test
+    fun moveToTop() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_UP,
+            'A'
+        )
+        val setNewContent = mockk<(TextFieldValue) -> Unit>()
+        every { setNewContent.invoke(any()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            setNewContent,
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { setNewContent.invoke(any()) }
+    }
+
+    @Test
+    fun moveToBottom() {
+        awtKeyEvent = java.awt.event.KeyEvent(
+            mockk(),
+            java.awt.event.KeyEvent.KEY_PRESSED,
+            1,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.VK_DOWN,
+            'A'
+        )
+        val setNewContent = mockk<(TextFieldValue) -> Unit>()
+        every { setNewContent.invoke(any()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(awtKeyEvent),
+            TextFieldValue(),
+            mockk(),
+            setNewContent,
+            scrollBy
+        )
+
+        assertTrue(consumed)
+        verify { setNewContent.invoke(any()) }
     }
 
     @Test
