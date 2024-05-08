@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowState
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -49,6 +50,7 @@ class MainApplicationKtTest {
         every { mainViewModel.windowState() } returns WindowState()
         every { mainViewModel.slideshowPath() } returns null
         every { mainViewModel.droppedPathFlow() } returns emptyFlow()
+        every { mainViewModel.trayState() } returns TrayState()
         coEvery { notification.start(any()) } just Runs
         every { notification.notificationFlow() } returns MutableSharedFlow()
 
