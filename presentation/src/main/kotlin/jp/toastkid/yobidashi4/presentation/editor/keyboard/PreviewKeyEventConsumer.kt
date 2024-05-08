@@ -5,6 +5,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
@@ -33,12 +34,20 @@ class PreviewKeyEventConsumer(
             return false
         }
         when {
-            it.isCtrlPressed && it.key == Key.DirectionUp -> {
+            it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionUp -> {
                 scrollBy(-16.sp.value)
                 return true
             }
-            it.isCtrlPressed && it.key == Key.DirectionDown -> {
+            it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionDown -> {
                 scrollBy(16.sp.value)
+                return true
+            }
+            it.isCtrlPressed && it.key == Key.DirectionUp -> {
+                setNewContent(content.copy(selection = TextRange.Zero))
+                return true
+            }
+            it.isCtrlPressed && it.key == Key.DirectionDown -> {
+                setNewContent(content.copy(selection = TextRange(content.text.length)))
                 return true
             }
             it.isCtrlPressed && it.key == Key.X -> {
