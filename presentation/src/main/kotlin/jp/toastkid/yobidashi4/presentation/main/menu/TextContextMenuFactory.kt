@@ -23,31 +23,41 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
             ) {
                 val localization = LocalLocalization.current
                 mainViewModel.setTextManager(textManager)
-                val items = {
-                    listOfNotNull(
-                        textManager.cut?.let {
-                            ContextMenuItem(localization.cut, it)
-                        },
-                        textManager.copy?.let {
-                            ContextMenuItem(localization.copy, it)
-                        },
-                        textManager.paste?.let {
-                            ContextMenuItem(localization.paste, it)
-                        },
-                        textManager.selectAll?.let {
-                            ContextMenuItem(localization.selectAll, it)
-                        },
+
+                val itemConsumer = {
+                    val items = mutableListOf<ContextMenuItem>()
+                    val cut = textManager.cut
+                    if (cut != null) {
+                        items.add(ContextMenuItem(localization.cut, cut))
+                    }
+                    val copy = textManager.copy
+                    if (copy != null) {
+                        items.add(ContextMenuItem(localization.copy, copy))
+                    }
+                    val paste = textManager.paste
+                    if (paste != null) {
+                        items.add(ContextMenuItem(localization.paste, paste))
+                    }
+                    val selectAll = textManager.selectAll
+                    if (selectAll != null) {
+                        items.add(ContextMenuItem(localization.selectAll, selectAll))
+                    }
+                    items.add(
                         ContextMenuItem("Search") {
                             mainViewModel.webSearch(textManager.selectedText.text)
-                        },
+                        }
+                    )
+                    items.add(
                         ContextMenuItem("Count") {
                             mainViewModel
                                 .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
                         }
                     )
+
+                    items
                 }
 
-                ContextMenuArea(items, state, content = content)
+                ContextMenuArea(itemConsumer, state, content = content)
             }
         }
     }
