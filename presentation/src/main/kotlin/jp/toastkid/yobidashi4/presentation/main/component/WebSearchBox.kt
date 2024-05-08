@@ -117,9 +117,7 @@ internal fun WebSearchBox() {
                 clearButton = viewModel::clearInput,
                 viewModel.shouldShowInputHistory(),
                 suggestions = viewModel.inputHistories(),
-                suggestionConsumer = {
-                    viewModel.putText(it)
-                },
+                suggestionConsumer = viewModel::putText,
                 { viewModel.deleteInputHistoryItem(it) },
                 {
                     viewModel.clearInputHistory()
