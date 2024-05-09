@@ -14,8 +14,8 @@ class ArticleLengthAggregatorService(
 
         articlesReaderService.invoke()
                 .parallel()
+                .filter { it.nameWithoutExtension.startsWith(keyword) }
                 .map { it.nameWithoutExtension to Files.readAllBytes(it) }
-                .filter { it.first.startsWith(keyword) }
                 .forEach {
                     result.put(it.first, String(it.second).trim().codePoints().count())
                 }
