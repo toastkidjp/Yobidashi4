@@ -4,14 +4,13 @@ import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
-import kotlin.streams.asSequence
 
 class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesReaderService) {
 
     operator fun invoke(keyword: String): MovieMemoExtractorResult {
         val result = MovieMemoExtractorResult()
         articlesReaderService.invoke()
-                .asSequence()
+                .parallel()
                 .filter { it.fileName.toString().startsWith(keyword) }
                 .map {
                     it.nameWithoutExtension to
