@@ -12,8 +12,8 @@ class Nikkei225AggregatorService(private val articlesReaderService: ArticlesRead
 
         articlesReaderService.invoke()
                 .parallel()
+                .filter { it.nameWithoutExtension.startsWith(keyword) }
                 .map { it.nameWithoutExtension to Files.readAllLines(it) }
-                .filter { it.first.startsWith(keyword) }
                 .forEach {
                     extract(result, it)
                 }
