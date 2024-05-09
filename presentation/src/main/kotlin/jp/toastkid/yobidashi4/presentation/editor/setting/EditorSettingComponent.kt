@@ -40,9 +40,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
             Text("Font color")
             ClassicColorPicker(
                 color = viewModel.currentFontColor(),
-                onColorChanged = { hsvColor ->
-                    viewModel.onFontColorChanged(hsvColor)
-                },
+                onColorChanged = viewModel::onFontColorChanged,
                 modifier = Modifier.height(200.dp)
             )
 
