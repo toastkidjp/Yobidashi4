@@ -18,8 +18,8 @@ internal class OutgoCalculationBehavior(
 
         articlesReaderService.invoke()
             .parallel()
+            .filter { it.nameWithoutExtension.startsWith(keyword) }
             .map { it.nameWithoutExtension to Files.readAllLines(it) }
-            .filter { it.first.startsWith(keyword) }
             .map {
                 var isOutGoLine = false
                 for (line in it.second) {
