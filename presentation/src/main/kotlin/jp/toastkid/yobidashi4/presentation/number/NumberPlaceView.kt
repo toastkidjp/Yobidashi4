@@ -36,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -58,6 +60,7 @@ fun NumberPlaceView() {
                 viewModel.onPointerEvent(awaitPointerEvent())
             }
         }
+            .semantics { contentDescription = "Surface" }
     ) {
         Box(
             contentAlignment = Alignment.Center
@@ -105,6 +108,7 @@ fun NumberPlaceView() {
                                                 viewModel.onCellLongClick(rowIndex, columnIndex)
                                             }
                                         )
+                                        .semantics { contentDescription = "Masked cell" }
                                 )
                             } else {
                                 Text(
@@ -202,7 +206,7 @@ private fun AppBarContent(
                             setMaskingCount(count)
                             closeMaskingCount()
                             reloadGame()
-                        }) {
+                        }, modifier = Modifier.semantics { contentDescription = "masking_count_$count" }) {
                         Text(
                             text = "$count",
                             fontSize = fontSize,
@@ -236,7 +240,7 @@ private fun MaskedCell(
         )
         DropdownMenu(open, onDismissRequest = close) {
             (1..9).forEach {
-                DropdownMenuItem(onClick = { onMenuItemClick(it) }) {
+                DropdownMenuItem(onClick = { onMenuItemClick(it) }, modifier = Modifier.semantics { contentDescription = "chooser_$it" }) {
                     Text(
                         text = "$it",
                         fontSize = fontSize,
