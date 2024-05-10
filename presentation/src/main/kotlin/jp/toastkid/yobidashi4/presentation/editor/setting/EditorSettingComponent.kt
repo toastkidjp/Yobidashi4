@@ -84,12 +84,12 @@ internal fun EditorSettingComponent(modifier: Modifier) {
 }
 
 @Composable
-private fun EditorSettingDropdown(
-    items: Collection<Any>,
+private fun <T> EditorSettingDropdown(
+    items: Collection<T>,
     displayText: String,
     open: Boolean,
     onClose: () -> Unit,
-    onSelectValue: (Any) -> Unit,
+    onSelectValue: (T) -> Unit,
     modifier: Modifier
 ) {
     Box(
