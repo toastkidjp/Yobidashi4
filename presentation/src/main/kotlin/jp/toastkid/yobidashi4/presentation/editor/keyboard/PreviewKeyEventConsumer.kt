@@ -35,19 +35,19 @@ class PreviewKeyEventConsumer(
         }
         when {
             it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionUp -> {
-                scrollBy(-16.sp.value)
-                return true
-            }
-            it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                scrollBy(16.sp.value)
-                return true
-            }
-            it.isCtrlPressed && it.key == Key.DirectionUp -> {
                 setNewContent(content.copy(selection = TextRange.Zero))
                 return true
             }
-            it.isCtrlPressed && it.key == Key.DirectionDown -> {
+            it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionDown -> {
                 setNewContent(content.copy(selection = TextRange(content.text.length)))
+                return true
+            }
+            it.isCtrlPressed && it.key == Key.DirectionUp -> {
+                scrollBy(-16.sp.value)
+                return true
+            }
+            it.isCtrlPressed && it.key == Key.DirectionDown -> {
+                scrollBy(16.sp.value)
                 return true
             }
             it.isCtrlPressed && it.key == Key.X -> {
