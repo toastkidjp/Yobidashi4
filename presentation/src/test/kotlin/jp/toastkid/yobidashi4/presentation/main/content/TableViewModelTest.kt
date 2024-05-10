@@ -173,4 +173,13 @@ class TableViewModelTest {
         assertEquals("1,234", subject.makeText(1234))
     }
 
+    @Test
+    fun onDispose() {
+        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
+
+        subject.onDispose(mockk())
+
+        verify { mainViewModel.updateScrollableTab(any(), any()) }
+    }
+
 }
