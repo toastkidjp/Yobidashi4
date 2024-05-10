@@ -89,7 +89,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_UP,
             'A'
         )
@@ -112,7 +112,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
             java.awt.event.KeyEvent.VK_DOWN,
             'A'
         )
@@ -135,7 +135,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
             java.awt.event.KeyEvent.VK_UP,
             'A'
         )
@@ -160,7 +160,7 @@ class PreviewKeyEventConsumerTest {
             mockk(),
             java.awt.event.KeyEvent.KEY_PRESSED,
             1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
             java.awt.event.KeyEvent.VK_DOWN,
             'A'
         )
