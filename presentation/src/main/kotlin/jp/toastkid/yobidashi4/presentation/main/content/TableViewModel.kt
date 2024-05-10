@@ -101,7 +101,7 @@ class TableViewModel : KoinComponent {
         articleStates.addAll(swap)
     }
 
-    fun highlight(text: String) = highlighter(text, query.value)
+    fun highlight(text: String) = highlighter(text, query.value.replace("\"", ""))
 
     fun makeText(any: Any): String {
         return if (any is Int) String.format("%,d", any) else any.toString()
