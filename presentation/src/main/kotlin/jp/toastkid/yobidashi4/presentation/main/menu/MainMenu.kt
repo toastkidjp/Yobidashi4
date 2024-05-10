@@ -118,7 +118,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
         Menu("Tab") {
             Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true), icon = painterResource("images/icon/ic_tab_close.xml")) {
-                viewModel.closeCurrentTab { exitApplication() }
+                viewModel.closeCurrentTab(exitApplication)
             }
 
             if (viewModel.useAdditionalTabMenu()) {
