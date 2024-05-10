@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -144,6 +145,23 @@ class TableViewModelTest {
         subject.highlight("It longs to get them.")
 
         verify { anyConstructed<KeywordHighlighter>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun highlightIncludingDoubleQuote() {
+        runBlocking {
+            subject = spyk(subject)
+            val focusRequester = mockk<FocusRequester>()
+            every { subject.focusRequester() } returns focusRequester
+            every { focusRequester.requestFocus() } just Runs
+            CoroutineScope(Dispatchers.Unconfined).launch {
+                subject.start(TableTab("Test", FindResult("\"Test\"")))
+            }
+        }
+
+        subject.highlight("It test to get them.")
+
+        verify { anyConstructed<KeywordHighlighter>().invoke(any(), "Test") }
     }
 
     @Test
