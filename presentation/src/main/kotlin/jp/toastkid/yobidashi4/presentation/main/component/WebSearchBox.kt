@@ -121,9 +121,7 @@ internal fun WebSearchBox() {
                 viewModel::onFocusChanged,
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
-                    .onKeyEvent {
-                        viewModel.onKeyEvent(it)
-                    }
+                    .onKeyEvent(viewModel::onKeyEvent)
             )
 
             Button(
