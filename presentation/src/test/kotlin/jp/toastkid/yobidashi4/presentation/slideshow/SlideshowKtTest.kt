@@ -1,12 +1,24 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.toOffset
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.net.URL
@@ -63,6 +75,10 @@ result.value = engine.eval(input.value.text).toString()
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } returns BufferedImage(1, 1, Image.SCALE_FAST)
 
+        mockkConstructor(SlideshowViewModel::class)
+        every { anyConstructed<SlideshowViewModel>().showSlider() } just Runs
+        every { anyConstructed<SlideshowViewModel>().hideSlider() } just Runs
+
         slideDeck = SlideDeckReader(mockk()).invoke()
     }
 
@@ -83,6 +99,22 @@ result.value = engine.eval(input.value.text).toString()
                     Modifier
                 )
             }
+
+            onNodeWithContentDescription("slider", useUnmergedTree = true)
+                .assertExists("Not found!")
+                .performMouseInput {
+                    enter()
+                    click()
+                    press()
+                    moveBy(IntOffset(-20, 0).toOffset())
+                    release()
+                    exit()
+                }
+                .performKeyInput {
+                    pressKey(Key.K, 1000L)
+                }
+            verify { anyConstructed<SlideshowViewModel>().showSlider() }
+            verify { anyConstructed<SlideshowViewModel>().hideSlider() }
         }
     }
 
