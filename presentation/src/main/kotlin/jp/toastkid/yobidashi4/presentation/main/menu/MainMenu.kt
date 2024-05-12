@@ -307,9 +307,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             ) {
                 viewModel.switchMemoryUsageBox()
             }
-            Item("Show log", icon = painterResource("images/icon/ic_log.xml")) {
-                viewModel.openLogViewerTab()
-            }
+            Item(
+                "Show log",
+                icon = painterResource("images/icon/ic_log.xml"),
+                onClick = viewModel::openLogViewerTab
+            )
         }
     }
 }
