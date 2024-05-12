@@ -1,15 +1,16 @@
 package jp.toastkid.yobidashi4.domain.service.aggregation
 
 import java.nio.file.Files
+import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.ArticleLengthAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 
 class ArticleLengthAggregatorService(
     private val articlesReaderService: ArticlesReaderService
-) {
+): ArticleAggregator {
 
-    operator fun invoke(keyword: String): ArticleLengthAggregationResult {
+    override operator fun invoke(keyword: String): AggregationResult {
         val result = ArticleLengthAggregationResult()
 
         articlesReaderService.invoke()
@@ -22,5 +23,9 @@ class ArticleLengthAggregatorService(
 
         return result
     }
+
+    override fun label() = "Article length"
+
+    override fun iconPath() = "images/icon/ic_article_folder.xml"
 
 }
