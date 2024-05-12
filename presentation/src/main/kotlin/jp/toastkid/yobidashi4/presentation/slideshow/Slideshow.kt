@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -115,13 +117,15 @@ fun Slideshow(
                     }
                 },
                 valueRange = 0f .. (deck.slides.size - 1).toFloat(),
-                modifier = Modifier.align(Alignment.BottomCenter).alpha(alpha.value)
+                modifier = Modifier.align(Alignment.BottomCenter)
+                    .alpha(alpha.value)
                     .onPointerEvent(PointerEventType.Enter) {
                         viewModel.showSlider()
                     }
                     .onPointerEvent(PointerEventType.Exit) {
                         viewModel.hideSlider()
                     }
+                    .semantics { contentDescription = "slider" }
             )
         }
     }
