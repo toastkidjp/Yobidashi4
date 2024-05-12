@@ -1003,6 +1003,24 @@ class MainViewModelImplementationTest {
 
         assertEquals(520.dp, subject.windowState().size.width)
         assertEquals(height, subject.windowState().size.height)
+
+        subject.toggleNarrowWindow()
+
+        assertEquals(1100.dp, subject.windowState().size.width)
+        assertEquals(height, subject.windowState().size.height)
+    }
+
+    @Test
+    fun toDefaultWindowSize() {
+        val size = subject.windowState().size
+        assertEquals(1100.dp, size.width)
+        val height = size.height
+        subject.toggleNarrowWindow()
+
+        subject.toDefaultWindowSize()
+
+        assertEquals(1100.dp, subject.windowState().size.width)
+        assertEquals(height, subject.windowState().size.height)
     }
 
     @Test
