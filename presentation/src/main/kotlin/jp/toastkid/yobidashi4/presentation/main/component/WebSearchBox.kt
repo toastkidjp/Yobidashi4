@@ -117,9 +117,7 @@ internal fun WebSearchBox() {
                 suggestions = viewModel.inputHistories(),
                 suggestionConsumer = viewModel::putText,
                 { viewModel.deleteInputHistoryItem(it) },
-                {
-                    viewModel.clearInputHistory()
-                },
+                viewModel::clearInputHistory,
                 viewModel::onFocusChanged,
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
