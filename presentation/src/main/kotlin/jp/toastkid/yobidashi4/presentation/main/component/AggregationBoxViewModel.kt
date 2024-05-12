@@ -53,7 +53,7 @@ class AggregationBoxViewModel : KoinComponent {
         "Article length" to { ArticleLengthAggregatorService(articlesReaderService).invoke(it) },
         "Steps" to { StepsAggregatorService(articlesReaderService).invoke(it) },
         "Nikkei 225" to { Nikkei225AggregatorService(articlesReaderService).invoke(it) },
-        "Find article" to { keywordSearch.invoke(keyword.value.text) }
+        "Find article" to { keywordSearch.invoke(it) }
     )
 
     private val selectedSite = mutableStateOf(aggregations.entries.toList().get(
@@ -125,7 +125,7 @@ class AggregationBoxViewModel : KoinComponent {
     fun keyword() = keyword.value
 
     fun onSearch() {
-        invokeAggregation(viewModel, query.value.text, selectedSite.value.value)
+        invokeAggregation(viewModel, getQuery(), selectedSite.value.value)
     }
 
     private val keywordHistoryService: InputHistoryService = InputHistoryService("aggregation_keyword")
@@ -183,9 +183,11 @@ class AggregationBoxViewModel : KoinComponent {
             return
         }
 
-        keywordHistoryService.add(keyword.value.text)
-
-        dateHistoryService.add(this.query.value.text)
+        if (requireSecondInput()) {
+            keywordHistoryService.add(query)
+        } else {
+            dateHistoryService.add(query)
+        }
 
         val result = aggregator.invoke(query.trim())
         if (result.isEmpty()) {
@@ -197,6 +199,8 @@ class AggregationBoxViewModel : KoinComponent {
 
         viewModel.switchAggregationBox(false)
     }
+
+    private fun getQuery() = if (requireSecondInput()) keyword.value.text else query.value.text
 
     fun showAggregationBox(): Boolean {
         return viewModel.showAggregationBox()
