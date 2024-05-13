@@ -72,7 +72,7 @@ internal fun WebSearchBox() {
                 DropdownMenu(
                     expanded = viewModel.openingDropdown(),
                     offset = DpOffset(0.dp, viewModel.makeVerticalOffset()),
-                    onDismissRequest = { viewModel.closeDropdown() }
+                    onDismissRequest = viewModel::closeDropdown
                 ) {
                     if (viewModel.containsSwingContent()) {
                         LazyRow(modifier = Modifier.width(600.dp).height(60.dp)) {
