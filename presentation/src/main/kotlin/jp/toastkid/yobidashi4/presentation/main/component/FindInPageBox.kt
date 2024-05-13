@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
@@ -56,6 +58,7 @@ internal fun FindInPageBox() {
                 { viewModel.onClickClear() },
                 { viewModel.onFocusChanged(it) },
                 modifier = Modifier.focusRequester(viewModel.focusRequester())
+                    .semantics { contentDescription = "Find input" }
             )
 
             if (viewModel.useReplace()) {
@@ -70,7 +73,8 @@ internal fun FindInPageBox() {
                 viewModel.caseSensitive(),
                 onCheckedChange = {
                     viewModel.switchCaseSensitive()
-                }
+                },
+                modifier = Modifier.semantics { contentDescription = "Case sensitive checkbox" }
             )
 
             Text("Case sensitive")
