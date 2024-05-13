@@ -1,5 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.viewmodel
 
+import io.mockk.Runs
+import io.mockk.called
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -44,6 +50,27 @@ class SlideshowViewModelTest {
         viewModel.closeFullscreen()
 
         assertTrue(viewModel.isFloatingWindow())
+    }
+
+    @Test
+    fun onEscapeKeyReleasedOnFullscreen() {
+        val onCloseWindow = mockk<() -> Unit>()
+        every { onCloseWindow.invoke() } just Runs
+
+        viewModel.onEscapeKeyReleased(onCloseWindow)
+
+        verify { onCloseWindow wasNot called }
+    }
+
+    @Test
+    fun onEscapeKeyReleasedOnWindowed() {
+        val onCloseWindow = mockk<() -> Unit>()
+        every { onCloseWindow.invoke() } just Runs
+
+        viewModel.closeFullscreen()
+        viewModel.onEscapeKeyReleased(onCloseWindow)
+
+        verify { onCloseWindow.invoke() }
     }
 
     @Test
