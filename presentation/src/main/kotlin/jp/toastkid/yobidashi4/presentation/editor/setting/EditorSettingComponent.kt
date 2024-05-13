@@ -73,7 +73,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
                 {
                     viewModel.setEditorFontSize(it)
                 },
-                Modifier.clickable { viewModel.openFontSize() }
+                Modifier.clickable(onClick = viewModel::openFontSize)
             )
 
             Text("Reset color setting", modifier = Modifier.clickable {
