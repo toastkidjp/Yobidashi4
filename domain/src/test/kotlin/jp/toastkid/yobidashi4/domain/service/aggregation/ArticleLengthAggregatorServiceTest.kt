@@ -16,6 +16,7 @@ import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -56,6 +57,16 @@ class ArticleLengthAggregatorServiceTest {
         assertEquals(2, aggregationResult.header().size)
         assertEquals(String::class.java, aggregationResult.columnClass(0))
         assertEquals(Int::class.java, aggregationResult.columnClass(1))
+    }
+
+    @Test
+    fun label() {
+        assertTrue(articleLengthAggregatorService.label().isNotBlank())
+    }
+
+    @Test
+    fun iconPath() {
+        assertTrue(articleLengthAggregatorService.iconPath().isNotBlank())
     }
 
 }
