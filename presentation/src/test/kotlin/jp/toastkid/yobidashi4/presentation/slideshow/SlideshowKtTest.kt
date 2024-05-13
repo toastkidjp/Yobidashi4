@@ -112,6 +112,10 @@ result.value = engine.eval(input.value.text).toString()
                 }
                 .performKeyInput {
                     pressKey(Key.K, 1000L)
+                    pressKey(Key.DirectionRight, 1000L)
+                    pressKey(Key.DirectionRight, 1000L)
+                    pressKey(Key.DirectionRight, 1000L)
+                    pressKey(Key.DirectionLeft, 1000L)
                 }
             verify { anyConstructed<SlideshowViewModel>().showSlider() }
             verify { anyConstructed<SlideshowViewModel>().hideSlider() }
