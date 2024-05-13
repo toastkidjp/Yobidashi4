@@ -303,10 +303,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item(
                 viewModel.switchMemoryUsageBoxLabel(),
-                icon = painterResource("images/icon/ic_memory.xml")
-            ) {
-                viewModel.switchMemoryUsageBox()
-            }
+                icon = painterResource("images/icon/ic_memory.xml"),
+                onClick = viewModel::switchMemoryUsageBox
+            )
+
             Item(
                 "Show log",
                 icon = painterResource("images/icon/ic_log.xml"),
