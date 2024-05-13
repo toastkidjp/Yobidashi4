@@ -14,11 +14,16 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
+import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
+import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -65,6 +70,8 @@ class MainApplicationKtTest {
                 }
             )
         }
+        mockkConstructor(LauncherJarTimestampReader::class)
+        every { anyConstructed<LauncherJarTimestampReader>().invoke() } returns "test"
     }
 
     private fun mockMainMenu(setting: Setting) {
@@ -139,4 +146,21 @@ class MainApplicationKtTest {
     fun test() {
         launchMainApplication(false)
     }
+
+    @Test
+    fun slideshowPath() {
+        every { anyConstructed<LauncherJarTimestampReader>().invoke() } returns null
+        every { mainViewModel.slideshowPath() } returns mockk()
+        mockkConstructor(SlideshowViewModel::class)
+        every { anyConstructed<SlideshowViewModel>().windowVisible() } returns false
+        mockkStatic(Files::class)
+        every { Files.lines(any()) } returns """
+# Test
+""".split("\n").stream()
+
+        launchMainApplication(false)
+
+        verify { anyConstructed<SlideshowViewModel>().windowVisible() }
+    }
+
 }
