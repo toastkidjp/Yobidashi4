@@ -53,7 +53,7 @@ internal fun FindInPageBox() {
                 { viewModel.onFindInputChange(TextFieldValue()) },
                 viewModel.shouldShowInputHistory(),
                 viewModel.inputHistories(),
-                { viewModel.onClickInputHistory(it) },
+                viewModel::onClickInputHistory,
                 { viewModel.onClickDelete(it) },
                 { viewModel.onClickClear() },
                 { viewModel.onFocusChanged(it) },
