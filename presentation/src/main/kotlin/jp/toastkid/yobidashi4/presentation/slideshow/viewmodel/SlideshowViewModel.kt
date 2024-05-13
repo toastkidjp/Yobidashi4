@@ -21,6 +21,15 @@ class SlideshowViewModel {
 
     fun isFloatingWindow() = windowState.placement == WindowPlacement.Floating
 
+    fun onEscapeKeyReleased(onCloseWindow: () -> Unit) {
+        if (isFloatingWindow()) {
+            onCloseWindow()
+            return
+        }
+
+        closeFullscreen()
+    }
+
     fun windowVisible() = true
 
 }
