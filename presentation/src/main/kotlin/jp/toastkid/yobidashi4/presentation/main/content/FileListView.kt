@@ -34,6 +34,8 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
@@ -65,6 +67,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                     .onKeyEvent { keyEvent ->
                         viewModel.onKeyEvent(coroutineScope, keyEvent)
                     }
+                    .semantics { contentDescription = "File list" }
             ) {
                 stickyHeader {
                     SingleLineTextField(
@@ -124,6 +127,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             .onKeyEvent {
                                 viewModel.onKeyEventFromCell(it, fileListItem.path)
                             }
+                            .semantics { contentDescription = fileListItem.path.nameWithoutExtension }
                     )
                 }
             }
