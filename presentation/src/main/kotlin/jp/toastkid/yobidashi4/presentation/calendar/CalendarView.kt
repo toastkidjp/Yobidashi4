@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -91,6 +92,7 @@ fun CalendarView(tab: CalendarTab) {
                                         calendarViewModel.openDateArticle(day.date, true)
                                     }
                                 )
+                                .testTag("day_label_${day.date}")
                         )
                     }
                 }
@@ -150,7 +152,7 @@ private fun TopComponent(
                         DropdownMenuItem(onClick = {
                             moveMonth(it.value)
                             closeMonthChooser()
-                        }) {
+                        }, modifier = Modifier.testTag("month_chooser_button_${it.value}")) {
                             Text("${it.value}")
                         }
                     }
