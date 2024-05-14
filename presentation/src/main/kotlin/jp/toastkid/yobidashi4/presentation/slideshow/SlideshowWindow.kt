@@ -33,14 +33,7 @@ class SlideshowWindow {
 
                 Slideshow(
                     deck,
-                    {
-                        if (viewModel.isFloatingWindow()) {
-                            onCloseWindow()
-                            return@Slideshow
-                        }
-
-                        viewModel.closeFullscreen()
-                    },
+                    { viewModel.onEscapeKeyReleased(onCloseWindow) },
                     { viewModel.toggleFullscreen() },
                     modifier = Modifier.focusRequester(focusRequester)
                 )
