@@ -67,6 +67,7 @@ ad-move.jp
 ad-nex.com
 ad-sell.com
 ad-shot.com
+ad-spire.genieesspv.jp
 ad-trip.com
 ad-wisteria.excite.co.jp
 ad.2ch.live
@@ -1162,6 +1163,7 @@ ssum-sec.casalemedia.com
 stat.gamy.ameba.jp
 static-cdn.ashleyrnadison.com
 static.a-ads.com
+static.ad-spire.net
 static.adgger.jp
 static.adlantis.jp
 static.adroute.focas.jp
@@ -1381,3 +1383,6 @@ pagead2.googlesyndication.com
 cdn4.fireworktv.com
 asset.fwcdn3.com
 player.gliacloud.com
+skirthoetwoutb.com
+mostlypillow.com
+eropasture.com
