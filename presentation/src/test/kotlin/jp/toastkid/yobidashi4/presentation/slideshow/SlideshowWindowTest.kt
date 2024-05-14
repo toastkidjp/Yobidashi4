@@ -1,6 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.every
 import io.mockk.mockk
@@ -36,6 +40,10 @@ class SlideshowWindowTest {
         runDesktopComposeUiTest {
             setContent {
                 SlideshowWindow().openWindow(mockk()) {}
+            }
+
+            onNodeWithContentDescription("slider").performKeyInput {
+                pressKey(Key.Escape)
             }
         }
     }
