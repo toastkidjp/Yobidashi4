@@ -101,7 +101,7 @@ internal fun AggregationBox() {
                 suggestionConsumer = {
                     viewModel.putDate(it)
                 },
-                { viewModel.deleteDateHistoryItem(it) },
+                viewModel::deleteDateHistoryItem,
                 {
                     viewModel.clearDateHistory()
                 },
