@@ -59,7 +59,7 @@ internal fun WebSearchBox() {
             )
 
             Box(
-                modifier = Modifier.clickable { viewModel.setOpenDropdown() }.testTag("dropdown_switch")
+                modifier = Modifier.clickable(onClick = viewModel::setOpenDropdown).testTag("dropdown_switch")
             ) {
                 Surface(elevation = 4.dp) {
                     Image(
