@@ -52,7 +52,7 @@ internal fun FindInPageBox() {
                 viewModel.shouldShowInputHistory(),
                 viewModel.inputHistories(),
                 viewModel::onClickInputHistory,
-                { viewModel.onClickDelete(it) },
+                viewModel::onClickDelete,
                 { viewModel.onClickClear() },
                 { viewModel.onFocusChanged(it) },
                 modifier = Modifier.focusRequester(viewModel.focusRequester())
