@@ -8,7 +8,6 @@
 
 package jp.toastkid.yobidashi4.presentation.number
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -93,7 +92,7 @@ class NumberPlaceViewModel : KoinComponent {
 
     fun masked() = _mask.value
 
-    fun loading(): State<Boolean> = _loading
+    fun loading(): Boolean = _loading.value
 
     fun place(rowIndex: Int, columnIndex: Int, it: Int) {
         _game.value.place(rowIndex, columnIndex, it) { done ->
