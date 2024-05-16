@@ -931,4 +931,13 @@ class MainMenuViewModelTest {
         verify { mainViewModel.openTextFile(any()) }
     }
 
+    @Test
+    fun toDefaultWindowSize() {
+        every { mainViewModel.toDefaultWindowSize() } just Runs
+
+        subject.toDefaultWindowSize()
+
+        verify { mainViewModel.toDefaultWindowSize() }
+    }
+
 }
