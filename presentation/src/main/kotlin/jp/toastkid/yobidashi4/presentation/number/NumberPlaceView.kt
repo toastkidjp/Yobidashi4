@@ -126,7 +126,7 @@ fun NumberPlaceView() {
                 }
             }
 
-            if (viewModel.loading().value) {
+            if (viewModel.loading()) {
                 CircularProgressIndicator()
             }
         }
