@@ -92,7 +92,7 @@ class NumberPlaceViewModelTest {
     fun setCorrect() {
         numberPlaceViewModel.setCorrect()
 
-        assertFalse(numberPlaceViewModel.loading().value)
+        assertFalse(numberPlaceViewModel.loading())
     }
 
     @Test
