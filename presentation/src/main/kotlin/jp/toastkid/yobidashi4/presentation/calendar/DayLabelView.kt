@@ -33,7 +33,7 @@ fun DayLabelView(
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.padding(vertical = 16.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         ) {
             Text(
                 viewModel.makeText(date),
