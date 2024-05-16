@@ -112,7 +112,7 @@ class AggregationBoxViewModelTest {
                     mockk(),
                     java.awt.event.KeyEvent.KEY_PRESSED,
                     1,
-                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
                     java.awt.event.KeyEvent.VK_2,
                     '2'
                 )
@@ -134,7 +134,7 @@ class AggregationBoxViewModelTest {
                     mockk(),
                     java.awt.event.KeyEvent.KEY_RELEASED,
                     1,
-                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
                     java.awt.event.KeyEvent.VK_2,
                     '2'
                 )
@@ -154,7 +154,7 @@ class AggregationBoxViewModelTest {
                     mockk(),
                     java.awt.event.KeyEvent.KEY_PRESSED,
                     1,
-                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
                     java.awt.event.KeyEvent.VK_2,
                     '2'
                 )
@@ -166,7 +166,7 @@ class AggregationBoxViewModelTest {
 
 
     @Test
-    fun unconsumedOnKeyEventWith2KeyAndCtrlMask() {
+    fun unconsumedOnKeyEventWith2KeyAndOtherMask() {
         subject.choose(subject.categories().entries.last())
         subject.onDateInputValueChange(TextFieldValue("test"))
 
@@ -176,7 +176,7 @@ class AggregationBoxViewModelTest {
                     mockk(),
                     java.awt.event.KeyEvent.KEY_PRESSED,
                     1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
+                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
                     java.awt.event.KeyEvent.VK_2,
                     '2'
                 )
@@ -316,6 +316,7 @@ class AggregationBoxViewModelTest {
         every { result.title() } returns "test"
         every { keywordSearch.invoke(any()) } returns result
         every { mainViewModel.openTab(any()) } just Runs
+        subject.onDateInputValueChange(TextFieldValue("test"))
 
         subject.onSearch()
 
