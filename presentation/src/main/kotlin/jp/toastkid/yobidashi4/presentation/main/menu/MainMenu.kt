@@ -298,9 +298,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Switch dark mode", icon = painterResource("images/icon/ic_dark_mode.xml"), shortcut = KeyShortcut(key = Key.D, alt = true)) {
                 viewModel.switchDarkMode()
             }
-            Item("Open article template", icon = painterResource("images/icon/ic_user_template.xml")) {
-                viewModel.openArticleTemplate()
-            }
+
+            Item(
+                "Open article template",
+                icon = painterResource("images/icon/ic_user_template.xml"),
+                onClick = viewModel::openArticleTemplate
+            )
+
             Item(
                 viewModel.switchMemoryUsageBoxLabel(),
                 icon = painterResource("images/icon/ic_memory.xml"),
