@@ -47,7 +47,7 @@ internal fun FindInPageBox() {
                 viewModel.inputValue(),
                 "Please would you input web search keyword?",
                 viewModel::onFindInputChange,
-                {  },
+                ::print,
                 { viewModel.onFindInputChange(TextFieldValue()) },
                 viewModel.shouldShowInputHistory(),
                 viewModel.inputHistories(),
