@@ -295,9 +295,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
 
         Menu("Setting") {
-            Item("Switch dark mode", icon = painterResource("images/icon/ic_dark_mode.xml"), shortcut = KeyShortcut(key = Key.D, alt = true)) {
-                viewModel.switchDarkMode()
-            }
+            Item(
+                "Switch dark mode",
+                icon = painterResource("images/icon/ic_dark_mode.xml"),
+                shortcut = KeyShortcut(key = Key.D, alt = true),
+                onClick = viewModel::switchDarkMode
+            )
 
             Item(
                 "Open article template",
