@@ -53,7 +53,7 @@ internal fun FindInPageBox() {
                 viewModel.inputHistories(),
                 viewModel::onClickInputHistory,
                 viewModel::onClickDelete,
-                { viewModel.onClickClear() },
+                viewModel::onClickClear,
                 { viewModel.onFocusChanged(it) },
                 modifier = Modifier.focusRequester(viewModel.focusRequester())
                     .semantics { contentDescription = "Find input" }
