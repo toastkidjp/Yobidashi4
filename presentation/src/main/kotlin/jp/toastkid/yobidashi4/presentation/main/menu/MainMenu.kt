@@ -288,10 +288,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
             Item(
                 "Use background",
-                shortcut = KeyShortcut(key = Key.B, alt = true, shift = true)
-            ) {
-                viewModel.switchUseBackground()
-            }
+                shortcut = KeyShortcut(key = Key.B, alt = true, shift = true),
+                onClick = viewModel::switchUseBackground
+            )
         }
 
         Menu("Setting") {
