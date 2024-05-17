@@ -98,9 +98,7 @@ internal fun AggregationBox() {
                 clearButton = viewModel::clearDateInput,
                 viewModel.shouldShowDateHistory(),
                 suggestions = viewModel.dateHistories(),
-                suggestionConsumer = {
-                    viewModel.putDate(it)
-                },
+                suggestionConsumer = viewModel::putDate,
                 viewModel::deleteDateHistoryItem,
                 {
                     viewModel.clearDateHistory()
