@@ -19,10 +19,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.presentation.editor.finder.FinderMessageFactory
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorVisualTransformation
@@ -62,7 +61,7 @@ class TextEditorViewModel : KoinComponent {
 
     private val focusRequester = FocusRequester()
 
-    private val finderMessageFactory = FinderMessageFactory()
+    private val findOrderReceiver = FindOrderReceiver()
 
     private val setting: Setting by inject()
 
@@ -189,30 +188,9 @@ class TextEditorViewModel : KoinComponent {
         val newContent = TextFieldValue(tab.getContent(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
 
-        var selected = -1
         CoroutineScope(dispatcher).launch {
             mainViewModel.finderFlow().collect {
-                if (it == FindOrder.EMPTY) {
-                    return@collect
-                }
-
-                if (it.invokeReplace) {
-                    content.value = TextFieldValue(content.value.text.replace(it.target, it.replace, it.caseSensitive.not()))
-                    return@collect
-                }
-                selected =
-                    if (it.upper) content.value.text.lastIndexOf(it.target, selected - 1, it.caseSensitive.not())
-                    else content.value.text.indexOf(it.target, selected + 1, it.caseSensitive.not())
-
-                val foundCount = if (it.target.isBlank()) 0 else content.value.text.split(it.target).size - 1
-                mainViewModel.setFindStatus(finderMessageFactory(it.target, foundCount))
-
-                if (selected == -1) {
-                    content.value = content.value.copy(selection = TextRange(content.value.selection.start))
-                    return@collect
-                }
-
-                content.value = content.value.copy(selection = TextRange(selected, selected + it.target.length))
+                findOrderReceiver(it, content.value) { content.value = it }
             }
         }
     }
