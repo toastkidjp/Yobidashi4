@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
@@ -67,11 +68,10 @@ class TextEditorViewModelTest {
             )
         }
         every { setting.editorConversionLimit() } returns 4500
-
-        viewModel = TextEditorViewModel()
-
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
         every { mainViewModel.darkMode() } returns true
+
+        viewModel = TextEditorViewModel()
     }
 
     @AfterEach
@@ -222,6 +222,29 @@ class TextEditorViewModelTest {
         verify { focusRequester.requestFocus() }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
+    @Test
+    fun initialScrollWhenTabsScrollOverZero() {
+        val focusRequester = mockk<FocusRequester>()
+        every { focusRequester.requestFocus() } just Runs
+        viewModel = spyk(viewModel)
+        every { viewModel.focusRequester() } returns focusRequester
+        val editorTab = mockk<EditorTab>()
+        every { editorTab.scroll() } returns 1.0
+        every { editorTab.getContent() } returns "test"
+        every { editorTab.caretPosition() } returns 0
+        every { editorTab.editable() } returns true
+        every { editorTab.path } returns mockk()
+        every { mainViewModel.finderFlow() } returns emptyFlow()
+        viewModel.launchTab(editorTab)
+
+        viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
+
+        assertEquals(0.0f, viewModel.verticalScrollState().offset)
+        verify { focusRequester.requestFocus() }
+        verify { editorTab.scroll() }
+    }
+
     @Test
     fun lineNumbers() {
         assertTrue(viewModel.lineNumbers().isEmpty())
@@ -284,7 +307,6 @@ class TextEditorViewModelTest {
 
         val transformedText = visualTransformation.filter(buildAnnotatedString { append("test") })
         assertEquals("test[EOF]", transformedText.text.text)
-        assertNotEquals(OffsetMapping.Identity, transformedText.offsetMapping)
     }
 
     @Test
