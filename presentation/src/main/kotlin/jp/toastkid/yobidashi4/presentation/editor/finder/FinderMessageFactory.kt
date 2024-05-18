@@ -9,7 +9,7 @@ class FinderMessageFactory {
             }
 
             append("\"${targetText}\" was ")
-            if (foundCount <= 0 || targetText.isBlank()) {
+            if (foundCount <= 0) {
                 append("not ")
             }
             append("found.")
