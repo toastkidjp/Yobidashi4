@@ -136,6 +136,11 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun noopOnClickLineNumber() {
+        viewModel.onClickLineNumber(0)
+    }
+
+    @Test
     fun noopOnValueChange() {
         val keyEvent = KeyEvent(
             java.awt.event.KeyEvent(
