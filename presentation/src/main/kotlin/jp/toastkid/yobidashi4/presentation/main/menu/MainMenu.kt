@@ -273,9 +273,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             ) {
                 viewModel.toggleFullscreen()
             }
-            Item("Narrow window", icon = painterResource("images/icon/ic_narrow_window.xml")) {
-                viewModel.toggleNarrowWindow()
-            }
+
+            Item(
+                "Narrow window",
+                icon = painterResource("images/icon/ic_narrow_window.xml"),
+                onClick = viewModel::toggleNarrowWindow
+            )
 
             Item("Default window size", onClick = viewModel::toDefaultWindowSize)
 
