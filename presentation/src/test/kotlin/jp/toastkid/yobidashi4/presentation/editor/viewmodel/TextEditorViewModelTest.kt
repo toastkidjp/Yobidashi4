@@ -278,6 +278,30 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun launchTabWithNotEditableTab() {
+        val tab = mockk<EditorTab>()
+        every { tab.getContent() } returns "test"
+        every { tab.caretPosition() } returns 3
+        every { tab.editable() } returns false
+        every { tab.path } returns mockk()
+        every { mainViewModel.setFindStatus(any()) } just Runs
+        every { mainViewModel.finderFlow() } returns flowOf(
+            FindOrder.EMPTY,
+            FindOrder("test", ""),
+            FindOrder("test", "", true, true, false)
+        )
+
+        viewModel.launchTab(tab, Dispatchers.Unconfined)
+        viewModel.onValueChange(TextFieldValue("good"))
+
+        assertTrue(viewModel.content().text.isEmpty())
+        verify { tab.getContent() }
+        verify { tab.caretPosition() }
+        verify { tab.editable() }
+        verify { mainViewModel.setFindStatus(any()) }
+    }
+
+    @Test
     fun dispose() {
         viewModel.onValueChange(TextFieldValue("test"))
 
