@@ -44,6 +44,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             )
 
             Item(
+                "Update finder index",
+                //icon = painterResource("images/icon/ic_search.xml"),
+                onClick = viewModel::updateFinderIndex
+            )
+
+            Item(
                 "Dump latest",
                 icon = painterResource("images/icon/ic_dump.xml"),
                 onClick = viewModel::dumpLatest
