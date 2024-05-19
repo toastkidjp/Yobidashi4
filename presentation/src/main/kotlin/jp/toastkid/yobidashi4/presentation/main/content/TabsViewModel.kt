@@ -10,11 +10,14 @@ import androidx.compose.ui.unit.dp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.extension
+import kotlinx.coroutines.flow.filter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -91,6 +94,12 @@ class TabsViewModel  : KoinComponent {
 
     fun calculateTabWidth(tab: Tab): Dp {
         return if (tab is WebTab) 232.dp else 1000.dp
+    }
+
+    suspend fun receivePathFlow() {
+        viewModel.droppedPathFlow()
+            .filter { setOf("jpg", "webp", "png").contains(it.extension) }
+            .collect { viewModel.openTab(PhotoTab(it)) }
     }
 
 }
