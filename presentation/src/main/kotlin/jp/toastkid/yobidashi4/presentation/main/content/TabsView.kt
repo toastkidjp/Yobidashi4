@@ -28,6 +28,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
@@ -135,6 +137,7 @@ internal fun TabsView(modifier: Modifier) {
                                         .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
                                         .clickable { viewModel.removeTabAt(index) }
                                         .padding(8.dp)
+                                        .semantics { contentDescription = "Close button $index" }
                                 )
                             }
                         }
