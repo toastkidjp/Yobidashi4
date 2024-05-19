@@ -34,9 +34,11 @@ import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
+import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -45,6 +47,8 @@ class MainMenuViewModel : KoinComponent {
     private val viewModel: MainViewModel by inject()
 
     private val setting: Setting by inject()
+
+    private val asynchronousArticleIndexerService: AsynchronousArticleIndexerService by inject()
 
     private val webBookmarkRepository: BookmarkRepository by inject()
 
@@ -72,6 +76,10 @@ class MainMenuViewModel : KoinComponent {
 
     fun switchFindArticle() {
         switchAggregationBox(7)
+    }
+
+    fun updateFinderIndex() {
+        asynchronousArticleIndexerService.invoke(Dispatchers.IO)
     }
 
     fun dumpLatest() {
