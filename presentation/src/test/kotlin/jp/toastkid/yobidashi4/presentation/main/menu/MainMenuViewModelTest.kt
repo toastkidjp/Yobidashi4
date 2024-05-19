@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
+import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -63,6 +64,9 @@ class MainMenuViewModelTest {
     private lateinit var mainViewModel: MainViewModel
 
     @MockK
+    private lateinit var asynchronousArticleIndexerService: AsynchronousArticleIndexerService
+
+    @MockK
     private lateinit var setting: Setting
 
     @MockK
@@ -79,6 +83,7 @@ class MainMenuViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
+                    single(qualifier = null) { asynchronousArticleIndexerService } bind (AsynchronousArticleIndexerService::class)
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
                     single(qualifier = null) { notificationEventRepository } bind (NotificationEventRepository::class)
@@ -86,6 +91,7 @@ class MainMenuViewModelTest {
             )
         }
         every { mainViewModel.tabs } returns emptyList()
+        every { asynchronousArticleIndexerService.invoke(any()) } just Runs
         every { setting.userAgentName() } returns "test"
 
         subject = MainMenuViewModel()
@@ -178,6 +184,13 @@ class MainMenuViewModelTest {
         verify { mainViewModel.showAggregationBox() }
         verify(inverse = true) { mainViewModel.setInitialAggregationType(any()) }
         verify { mainViewModel.switchAggregationBox(false) }
+    }
+
+    @Test
+    fun updateFinderIndex() {
+        subject.updateFinderIndex()
+
+        verify { asynchronousArticleIndexerService.invoke(any()) }
     }
 
     @Test
