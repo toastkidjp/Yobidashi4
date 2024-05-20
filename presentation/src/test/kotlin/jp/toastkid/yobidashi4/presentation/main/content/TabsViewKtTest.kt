@@ -4,6 +4,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performMouseInput
@@ -106,6 +107,7 @@ class TabsViewKtTest {
         every { editorTab.update() } returns flowOf(1, 2, 3)
         every { anyConstructed<TabsViewModel>().setSelectedIndex(any()) } just Runs
         every { anyConstructed<TabsViewModel>().edit(any()) } just Runs
+        every { anyConstructed<TabsViewModel>().removeTabAt(any()) } just Runs
         every { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) } just Runs
         every { anyConstructed<TabsViewModel>().closeOtherTabs() } just Runs
         every { anyConstructed<TabsViewModel>().exportTable(any()) } just Runs
@@ -144,6 +146,10 @@ class TabsViewKtTest {
 
             verify { anyConstructed<TabsViewModel>().setSelectedIndex(any()) }
             verify { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) }
+
+            onNodeWithContentDescription("Close button 0", useUnmergedTree = true)
+                .performClick()
+            verify { anyConstructed<TabsViewModel>().removeTabAt(0) }
         }
     }
 
