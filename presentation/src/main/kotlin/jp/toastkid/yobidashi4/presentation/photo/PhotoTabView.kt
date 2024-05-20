@@ -47,37 +47,34 @@ fun PhotoTabView(tab: PhotoTab) {
             .focusable(true)
             .focusRequester(viewModel.focusRequester())
     ) {
-        val imageBitmap = viewModel.bitmap(tab.path())
-        if (imageBitmap != null) {
-            Image(
-                imageBitmap,
-                contentDescription = tab.path().name,
-                colorFilter = viewModel.colorFilter(),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer(
-                        scaleX = viewModel.scale(),
-                        scaleY = viewModel.scale(),
-                        rotationY = viewModel.rotationY(),
-                        rotationZ = viewModel.rotationZ()
+        Image(
+            viewModel.bitmap(),
+            contentDescription = tab.path().name,
+            colorFilter = viewModel.colorFilter(),
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(
+                    scaleX = viewModel.scale(),
+                    scaleY = viewModel.scale(),
+                    rotationY = viewModel.rotationY(),
+                    rotationZ = viewModel.rotationZ()
+                )
+                .offset {
+                    viewModel.offset()
+                }
+                .transformable(state = viewModel.state())
+                .pointerInput(Unit) {
+                    detectDragGestures { change, dragAmount ->
+                        change.consume()
+                        viewModel.setOffset(dragAmount)
+                    }
+                }
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onDoubleTap = { viewModel.resetStates() }
                     )
-                    .offset {
-                        viewModel.offset()
-                    }
-                    .transformable(state = viewModel.state())
-                    .pointerInput(Unit) {
-                        detectDragGestures { change, dragAmount ->
-                            change.consume()
-                            viewModel.setOffset(dragAmount)
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onDoubleTap = { viewModel.resetStates() }
-                        )
-                    }
-            )
-        }
+                }
+        )
 
         Surface(
             elevation = 4.dp,
@@ -193,6 +190,6 @@ fun PhotoTabView(tab: PhotoTab) {
     }
 
     LaunchedEffect(tab) {
-        viewModel.launch()
+        viewModel.launch(tab.path())
     }
 }
