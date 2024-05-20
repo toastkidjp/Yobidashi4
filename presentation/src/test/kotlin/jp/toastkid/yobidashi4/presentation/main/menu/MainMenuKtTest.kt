@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -34,6 +35,9 @@ class MainMenuKtTest {
     private lateinit var viewModel: MainViewModel
 
     @MockK
+    private lateinit var asynchronousArticleIndexerService: AsynchronousArticleIndexerService
+
+    @MockK
     private lateinit var  setting: Setting
 
     @BeforeEach
@@ -43,6 +47,7 @@ class MainMenuKtTest {
             modules(
                 module {
                     single(qualifier=null) { viewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { asynchronousArticleIndexerService } bind(AsynchronousArticleIndexerService::class)
                     single(qualifier=null) { setting } bind(Setting::class)
                 }
             )
