@@ -30,6 +30,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -277,5 +279,30 @@ class TabsViewModelTest {
 
         assertFalse(subject.openingDropdown(bookmark))
     }
-    
+
+    @Test
+    fun receivePathFlow() {
+        every { mainViewModel.droppedPathFlow() } returns flowOf(
+            makePath("jpg"),
+            makePath("webp"),
+            makePath("png"),
+            makePath("txt")
+        )
+        every { mainViewModel.openTab(any()) } just Runs
+
+        runTest {
+            subject.receivePathFlow()
+        }
+
+        verify { mainViewModel.droppedPathFlow() }
+        verify(exactly = 3) { mainViewModel.openTab(any()) }
+    }
+
+    private fun makePath(extension: String): Path {
+        val path = mockk<Path>()
+        every { path.fileName } returns path
+        every { path.toString() } returns "test.$extension"
+        return path
+    }
+
 }
