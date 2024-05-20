@@ -64,7 +64,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
                 MainScaffold()
             }
 
-            window.dropTarget = DropTargetFactory().invoke { mainViewModel.emitDroppedPath(it) }
+            window.dropTarget = DropTargetFactory().invoke(mainViewModel::emitDroppedPath)
 
             LaunchedEffect(Unit) {
                 withContext(Dispatchers.IO) {
