@@ -22,6 +22,8 @@ import kotlin.math.max
 
 class PhotoTabViewModel {
 
+    private val bitmap = mutableStateOf(ImageBitmap(1,1))
+
     private val openMenu = mutableStateOf(false)
 
     private val scale = mutableStateOf(1f)
@@ -46,15 +48,7 @@ class PhotoTabViewModel {
 
     private val focusRequester = FocusRequester()
 
-    fun bitmap(source: Path): ImageBitmap? {
-        val bufferedImage = try {
-            ImageIO.read(source.toFile())
-        } catch (e: IOException) {
-            return null
-        } ?: return null
-
-        return bufferedImage.toComposeImageBitmap()
-    }
+    fun bitmap() = bitmap.value
 
     fun handleIconPath() = "images/icon/ic_${if (openMenu.value) "down" else "up"}.xml"
 
@@ -167,8 +161,16 @@ class PhotoTabViewModel {
         updateColorFilter()
     }
 
-    fun launch() {
+    fun launch(path: Path) {
         focusRequester().requestFocus()
+
+        val bufferedImage = try {
+            ImageIO.read(path.toFile())
+        } catch (e: IOException) {
+            return
+        } ?: return
+
+        bitmap.value =  bufferedImage.toComposeImageBitmap()
     }
 
     fun resetStates() {
