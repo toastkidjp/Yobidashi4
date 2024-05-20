@@ -8,16 +8,20 @@ import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
+import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
+import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
@@ -63,12 +67,17 @@ class MainScaffoldKtTest {
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.articles() } returns emptyList()
         every { mainViewModel.reloadAllArticle() } just Runs
+        every { mainViewModel.selected } returns mutableStateOf(0)
+        every { mainViewModel.currentTab() } returns ConverterToolTab()
         every { mainViewModel.tabs } returns mutableListOf()
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 20000
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
+
+        mockkConstructor(TabsViewModel::class)
+        coEvery { anyConstructed<TabsViewModel>().receivePathFlow() } just Runs
     }
 
     @AfterEach
@@ -97,11 +106,17 @@ class MainScaffoldKtTest {
         every { mainViewModel.openFind() } returns true
         every { mainViewModel.showInputBox() } returns true
         every { mainViewModel.openMemoryUsageBox() } returns true
-        every { mainViewModel.currentTab() } returns mockk<MarkdownPreviewTab>()
+        val markdownPreviewTab = mockk<MarkdownPreviewTab>()
+        val markdown = mockk<Markdown>()
+        every { markdown.lines() } returns emptyList()
+        every { markdownPreviewTab.markdown() } returns markdown
+        every { markdownPreviewTab.scrollPosition() } returns 1
+        every { mainViewModel.currentTab() } returns markdownPreviewTab
         every { mainViewModel.initialAggregationType() } returns 0
         every { mainViewModel.inputValue() } returns TextFieldValue("search")
         every { mainViewModel.findStatus() } returns "test"
         every { mainViewModel.caseSensitive() } returns true
+        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
 
         runDesktopComposeUiTest {
             setContent {
