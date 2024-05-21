@@ -4,7 +4,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performMouseInput
@@ -99,7 +99,7 @@ class CalendarViewKtTest {
 
             verify { anyConstructed<CalendarViewModel>().launch(any()) }
 
-            onNodeWithTag("day_label_5", useUnmergedTree = true)
+            onNodeWithContentDescription("day_label_5", useUnmergedTree = true)
                 .assertExists("Not found!")
                 .performMouseInput {
                     click()
@@ -131,7 +131,7 @@ class CalendarViewKtTest {
                 CalendarView(CalendarTab())
             }
 
-            onNodeWithTag("month_chooser_button_7", useUnmergedTree = true).performClick()
+            onNodeWithContentDescription("month_chooser_button_7", useUnmergedTree = true).performClick()
             verify { anyConstructed<CalendarViewModel>().moveMonth(any()) }
             verify { anyConstructed<CalendarViewModel>().closeMonthChooser() }
         }
