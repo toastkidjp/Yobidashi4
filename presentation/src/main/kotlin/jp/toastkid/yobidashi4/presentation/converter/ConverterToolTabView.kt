@@ -22,7 +22,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.DistanceConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.JapaneseAgeConverterService
@@ -47,7 +48,7 @@ fun ConverterToolTabView() {
         modifier = Modifier
             .onKeyEvent { keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed) }
             .focusRequester(focusRequester)
-            .testTag("surface")
+            .semantics { contentDescription = "surface" }
     ) {
         Box {
             Column(modifier = Modifier.padding(8.dp).verticalScroll(state).fillMaxWidth()) {
