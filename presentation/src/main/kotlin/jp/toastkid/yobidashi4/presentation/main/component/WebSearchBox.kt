@@ -29,8 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
@@ -55,11 +56,11 @@ internal fun WebSearchBox() {
                 .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
                 .clickable { viewModel.setShowWebSearch(false) }
                 .padding(8.dp)
-                .testTag("simple_close_button")
+                .semantics { contentDescription = "Close web search box." }
             )
 
             Box(
-                modifier = Modifier.clickable(onClick = viewModel::setOpenDropdown).testTag("dropdown_switch")
+                modifier = Modifier.clickable(onClick = viewModel::setOpenDropdown).semantics { contentDescription = "Switch dropdown menu." }
             ) {
                 Surface(elevation = 4.dp) {
                     Image(
