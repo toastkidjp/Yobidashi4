@@ -3,8 +3,10 @@ package jp.toastkid.yobidashi4.presentation.editor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
@@ -56,6 +58,7 @@ class SimpleTextEditorKtTest {
         every { anyConstructed<TextEditorViewModel>().launchTab(any()) } just Runs
         every { anyConstructed<TextEditorViewModel>().initialScroll(any()) } just Runs
         every { anyConstructed<TextEditorViewModel>().onValueChange(any()) } just Runs
+        every { anyConstructed<TextEditorViewModel>().onClickLineNumber(any()) } just Runs
         every { anyConstructed<TextEditorViewModel>().dispose() } just Runs
         coEvery { anyConstructed<TextEditorViewModel>().adjustLineNumberState() } just Runs
     }
@@ -71,7 +74,7 @@ class SimpleTextEditorKtTest {
     fun simpleTextEditor() {
         val setStatus = mockk<(String) -> Unit>()
         every { setStatus(any()) } just Runs
-        val textFieldValue = TextFieldValue("test_content")
+        val textFieldValue = TextFieldValue("test_content\nSecond line\n3rd line")
         every { anyConstructed<TextEditorViewModel>().content() } returns textFieldValue
 
         runDesktopComposeUiTest {
@@ -84,14 +87,17 @@ class SimpleTextEditorKtTest {
 
             onNodeWithContentDescription("Editor input area", useUnmergedTree = true)
                 .assertExists("Not exists!")
+                .performClick()
                 .performKeyInput {
-                    keyDown(Key.A)
-                    keyUp(Key.A)
+                    pressKey(Key.A, 1000L)
                 }
                 .performTextInput("test new value")
-
             verify { setStatus(any()) }
             verify { anyConstructed<TextEditorViewModel>().onValueChange(any()) }
+
+            onNodeWithContentDescription("Line number 1", useUnmergedTree = true)
+                .performClick()
+            verify { anyConstructed<TextEditorViewModel>().onClickLineNumber(any()) }
         }
     }
 }
