@@ -17,12 +17,14 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,6 +72,8 @@ class TextEditorViewModelTest {
         every { setting.editorConversionLimit() } returns 4500
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
         every { mainViewModel.darkMode() } returns true
+        mockkConstructor(FindOrderReceiver::class)
+        every { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) } just Runs
 
         viewModel = TextEditorViewModel()
     }
@@ -263,18 +267,14 @@ class TextEditorViewModelTest {
         every { tab.editable() } returns true
         every { tab.path } returns mockk()
         every { mainViewModel.setFindStatus(any()) } just Runs
-        every { mainViewModel.finderFlow() } returns flowOf(
-            FindOrder.EMPTY,
-            FindOrder("test", ""),
-            FindOrder("test", "", true, true, false)
-        )
+        every { mainViewModel.finderFlow() } returns flowOf(FindOrder.EMPTY)
 
         viewModel.launchTab(tab, Dispatchers.Unconfined)
 
         verify { tab.getContent() }
         verify { tab.caretPosition() }
         verify { tab.editable() }
-        verify { mainViewModel.setFindStatus(any()) }
+        verify { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) }
     }
 
     @Test
@@ -285,11 +285,7 @@ class TextEditorViewModelTest {
         every { tab.editable() } returns false
         every { tab.path } returns mockk()
         every { mainViewModel.setFindStatus(any()) } just Runs
-        every { mainViewModel.finderFlow() } returns flowOf(
-            FindOrder.EMPTY,
-            FindOrder("test", ""),
-            FindOrder("test", "", true, true, false)
-        )
+        every { mainViewModel.finderFlow() } returns flowOf(FindOrder.EMPTY)
 
         viewModel.launchTab(tab, Dispatchers.Unconfined)
         viewModel.onValueChange(TextFieldValue("good"))
@@ -298,7 +294,7 @@ class TextEditorViewModelTest {
         verify { tab.getContent() }
         verify { tab.caretPosition() }
         verify { tab.editable() }
-        verify { mainViewModel.setFindStatus(any()) }
+        verify { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) }
     }
 
     @Test
