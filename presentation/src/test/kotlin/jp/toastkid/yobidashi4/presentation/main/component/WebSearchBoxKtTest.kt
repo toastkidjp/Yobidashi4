@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.main.component
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -55,10 +54,10 @@ class WebSearchBoxKtTest {
 
             verify { anyConstructed<WebSearchBoxViewModel>().showWebSearch() }
 
-            onNodeWithTag("simple_close_button", true).performClick()
+            onNodeWithContentDescription("Close web search box.", true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().setShowWebSearch(false) }
 
-            onNodeWithTag("dropdown_switch", true).performClick()
+            onNodeWithContentDescription("Switch dropdown menu.", true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().setOpenDropdown() }
 
             onNode(hasText(text), useUnmergedTree = true).performImeAction()
@@ -101,7 +100,7 @@ class WebSearchBoxKtTest {
             onNodeWithContentDescription(SearchSite.SEARCH_WITH_IMAGE.siteName, useUnmergedTree = true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().choose(any()) }
 
-            onNodeWithTag("dropdown_switch", true).performClick()
+            onNodeWithContentDescription("Switch dropdown menu.", true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().closeDropdown() }
         }
     }
