@@ -74,6 +74,7 @@ fun SimpleTextEditor(
                                 modifier = Modifier.clickable {
                                     viewModel.onClickLineNumber(lineNumber)
                                 }
+                                    .semantics { contentDescription = "Line number $lineNumberText" }
                             ) {
                                 Text(lineNumberText, fontSize = 16.sp, fontFamily = FontFamily.Monospace,
                                     textAlign = TextAlign.End, lineHeight = viewModel.getLineHeight(lineNumber))
