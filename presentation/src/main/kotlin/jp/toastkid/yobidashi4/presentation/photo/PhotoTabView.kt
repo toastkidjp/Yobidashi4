@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.photo
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -23,11 +25,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -35,6 +41,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import kotlin.io.path.name
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PhotoTabView(tab: PhotoTab) {
     val viewModel = remember { PhotoTabViewModel() }
@@ -78,9 +85,18 @@ fun PhotoTabView(tab: PhotoTab) {
 
         Surface(
             elevation = 4.dp,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter).alpha(animateFloatAsState(viewModel.handleAlpha()).value)
         ) {
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onPointerEvent(PointerEventType.Enter) {
+                        viewModel.showHandle()
+                    }
+                    .onPointerEvent(PointerEventType.Exit) {
+                        viewModel.hideHandle()
+                    }
+            ) {
                 Icon(
                     painterResource(viewModel.handleIconPath()),
                     contentDescription = "handle",
