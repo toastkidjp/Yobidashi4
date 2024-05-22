@@ -112,6 +112,7 @@ class TabsViewKtTest {
         every { anyConstructed<TabsViewModel>().closeOtherTabs() } just Runs
         every { anyConstructed<TabsViewModel>().exportTable(any()) } just Runs
         every { anyConstructed<TabsViewModel>().exportChat(any()) } just Runs
+        coEvery { anyConstructed<TabsViewModel>().receivePathFlow() } just Runs
         every { anyConstructed<TabsViewModel>().tabs() } returns listOf(
             webTab,
             markdownPreviewTab,
