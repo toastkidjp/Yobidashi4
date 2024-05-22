@@ -12,6 +12,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.IntOffset
@@ -48,6 +49,8 @@ class PhotoTabViewModel {
 
     private val focusRequester = FocusRequester()
 
+    private val handleAlpha = mutableStateOf(0f)
+
     fun bitmap() = bitmap.value
 
     fun handleIconPath() = "images/icon/ic_${if (openMenu.value) "down" else "up"}.xml"
@@ -57,6 +60,16 @@ class PhotoTabViewModel {
     }
 
     fun visibleMenu() = openMenu.value
+
+    fun handleAlpha() = if (visibleMenu()) 1f else handleAlpha.value
+
+    fun showHandle() {
+        handleAlpha.value = 1f
+    }
+
+    fun hideHandle() {
+        handleAlpha.value = 0f
+    }
 
     fun alphaSliderPosition() = alpha.value
 
@@ -142,6 +155,14 @@ class PhotoTabViewModel {
             }
             it.isCtrlPressed && it.key == Key.Minus -> {
                 scale.value = scale.value - 0.2f
+                true
+            }
+            it.isCtrlPressed && it.isShiftPressed && it.key == Key.DirectionUp -> {
+                openMenu.value = true
+                true
+            }
+            it.isCtrlPressed && it.isShiftPressed && it.key == Key.DirectionDown -> {
+                openMenu.value = false
                 true
             }
             else -> false
