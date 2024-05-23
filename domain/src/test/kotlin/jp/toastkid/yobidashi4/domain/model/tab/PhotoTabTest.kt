@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -21,6 +22,7 @@ class PhotoTabTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        every { path.absolutePathString() } returns "/path/to/test.png"
         every { path.fileName } returns path
         every { path.toString() } returns "test.png"
 
@@ -40,6 +42,11 @@ class PhotoTabTest {
     @Test
     fun path() {
         assertSame(path, subject.path())
+    }
+
+    @Test
+    fun iconPath() {
+        assertEquals("/path/to/test.png", subject.iconPath())
     }
 
 }
