@@ -24,9 +24,7 @@ fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
         modifier = modifier.onPointerEvent(PointerEventType.Release) {
             viewModel.onPointerReleased(it)
         },
-        onTextLayout = { layoutResult ->
-            viewModel.putLayoutResult(layoutResult)
-        }
+        onTextLayout = viewModel::putLayoutResult
     )
 
     LaunchedEffect(text) {
