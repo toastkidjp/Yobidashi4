@@ -44,16 +44,17 @@ class TextLineViewModel : KoinComponent {
     }
 
     fun onPointerReleased(it: PointerEvent) {
-        val offset = lastLayoutResult.value?.getOffsetForPosition(it.changes.first().position) ?: 0
-        annotatedString
+        val textLayoutResult = lastLayoutResult.value ?: return
+        val offset = textLayoutResult.getOffsetForPosition(it.changes.first().position)
+
+        val stringRange = annotatedString
             .value
             .getStringAnnotations(tag = "URL", start = offset, end = offset)
-            .firstOrNull()
-            ?.let { annotation ->
-                if (annotation.tag == "URL") {
-                    linkBehaviorService.invoke(annotation.item)
-                }
-            }
+            .firstOrNull() ?: return
+
+        if (stringRange.tag == "URL") {
+            linkBehaviorService.invoke(stringRange.item)
+        }
     }
 
 }
