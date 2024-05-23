@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -214,6 +215,16 @@ class MainViewModelImplementationTest {
         subject.loadBackgroundImage()
 
         verify(inverse = true) { Files.exists(any()) }
+    }
+
+    @Test
+    fun showBackgroundImage() {
+        assertFalse(subject.showBackgroundImage())
+
+        subject = spyk(subject)
+        every { subject.backgroundImage() } returns ImageBitmap(0, 1)
+
+        assertTrue(subject.showBackgroundImage())
     }
 
     @Test
