@@ -263,9 +263,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
                 }
             }
-            Item("Open file", icon = painterResource("images/icon/ic_user_template.xml")) {
-                viewModel.openNotificationFile()
-            }
+
+            Item(
+                "Open file",
+                icon = painterResource("images/icon/ic_user_template.xml"),
+                onClick = viewModel::openNotificationFile
+            )
 
             Item(
                 "Export",
