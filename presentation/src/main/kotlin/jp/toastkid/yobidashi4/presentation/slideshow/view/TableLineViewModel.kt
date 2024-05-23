@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import jp.toastkid.yobidashi4.presentation.markdown.TableSortService
 
 class TableLineViewModel {
 
@@ -10,6 +11,8 @@ class TableLineViewModel {
     private val tableData: MutableState<List<List<Any>>> =  mutableStateOf(emptyList())
 
     private val headerCursorOn = mutableStateOf(false)
+
+    private val tableSortService = TableSortService()
 
     fun tableData() = tableData.value
 
@@ -22,26 +25,10 @@ class TableLineViewModel {
         index: Int,
         articleStates: MutableState<List<List<Any>>>
     ) {
-        val first = articleStates.value.firstOrNull() ?: return
-        val snapshot = articleStates.value
-        val swap = if (lastSortOrder)
-            if (first[index].toString().toDoubleOrNull() != null) {
-                snapshot.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
-            } else if (first[index].toString().toIntOrNull() != null) {
-                snapshot.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
-            } else {
-                snapshot.sortedBy { it[index].toString() }
-            }
-        else
-            if (first[index].toString().toDoubleOrNull() != null) {
-                snapshot.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
-            } else if (first[index].toString().toIntOrNull() != null) {
-                snapshot.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
-            } else {
-                snapshot.sortedByDescending { it[index].toString() }
-            }
-
-        articleStates.value = swap
+        val newItems = tableSortService.invoke(lastSortOrder, index, articleStates.value)
+        if (newItems != null) {
+            articleStates.value = newItems
+        }
     }
 
     fun clickHeaderColumn(index: Int) {
