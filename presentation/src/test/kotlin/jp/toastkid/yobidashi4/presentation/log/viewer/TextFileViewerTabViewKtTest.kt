@@ -1,6 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.log.viewer
 
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -60,6 +65,10 @@ class TextFileViewerTabViewKtTest {
                     TextFileViewerTab(path)
                 )
             }
+
+            onNode(hasText("test2"), useUnmergedTree = true).assertExists("Not found!")
+                .performClick()
+                .performKeyInput { pressKey(Key.DirectionDown) }
         }
     }
 }
