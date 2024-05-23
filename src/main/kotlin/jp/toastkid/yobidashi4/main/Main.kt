@@ -14,8 +14,9 @@ fun main() {
 
     CoroutineScope(Dispatchers.IO).launch {
         TodayArticleGeneratorImplementation().invoke()
-        AsynchronousArticleIndexerServiceImplementation().invoke(Dispatchers.IO)
     }
+
+    AsynchronousArticleIndexerServiceImplementation().invoke(Dispatchers.IO)
 
     launchMainApplication()
 
