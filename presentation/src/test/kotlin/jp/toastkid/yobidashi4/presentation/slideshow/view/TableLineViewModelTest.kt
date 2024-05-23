@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,6 +42,19 @@ class TableLineViewModelTest {
         subject.clickHeaderColumn(0)
         subject.clickHeaderColumn(2)
         subject.clickHeaderColumn(2)
+    }
+
+    @Test
+    fun header() {
+        assertFalse(subject.onCursorOnHeader())
+
+        subject.setCursorOnHeader()
+
+        assertTrue(subject.onCursorOnHeader())
+
+        subject.setCursorOffHeader()
+
+        assertFalse(subject.onCursorOnHeader())
     }
 
 }
