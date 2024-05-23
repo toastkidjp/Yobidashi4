@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasText
@@ -7,7 +8,9 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -90,6 +93,9 @@ class TableViewKtTest {
                 click()
                 click()
             }
+                .performKeyInput {
+                    pressKey(Key.DirectionUp, 1000L)
+                }
             verify { anyConstructed<TableViewModel>().sort(any(), any()) }
 
             val previewButton = onAllNodesWithContentDescription("Open preview", useUnmergedTree = true).onFirst()
