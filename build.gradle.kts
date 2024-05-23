@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
-    id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("org.jetbrains.kotlinx.kover") version "0.8.0"
 }
 
 group = "jp.toastkid.yobidashi4"
@@ -79,16 +79,20 @@ allprojects {
     }
 }
 
-koverReport {
-    // common filters for all reports of all variants
-    filters {
-        // exclusions for reports
-        excludes {
-            // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
-            classes("jp.toastkid.yobidashi4.infrastructure.di.*")
-            classes("*ComposableSingletons*")
-            classes("*\$inject\$*")
-            packages("org.koin.ksp.generated")
+kover {
+    reports {
+        total {
+            // common filters for all reports of all variants
+            filters {
+                // exclusions for reports
+                excludes {
+                    // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+                    classes("jp.toastkid.yobidashi4.infrastructure.di.*")
+                    classes("*ComposableSingletons*")
+                    classes("*\$inject\$*")
+                    packages("org.koin.ksp.generated")
+                }
+            }
         }
     }
 }
