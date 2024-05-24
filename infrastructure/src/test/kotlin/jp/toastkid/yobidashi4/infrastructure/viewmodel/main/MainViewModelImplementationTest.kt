@@ -668,6 +668,20 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun updateWebTabOnlyTitle() {
+        val tab = mockk<WebTab>()
+        every { tab.id() } returns "test"
+        every { tab.updateTitleAndUrl(any(), any()) } just Runs
+        subject.openTab(tab)
+        every { webHistoryRepository.add(any(), any()) } just Runs
+
+        subject.updateWebTab("test", "New title", null)
+
+        verify { tab.updateTitleAndUrl(any(), null) }
+        verify { webHistoryRepository wasNot called }
+    }
+
+    @Test
     fun updateCalendarTab() {
         val tab = mockk<CalendarTab>()
         subject.openTab(tab)
