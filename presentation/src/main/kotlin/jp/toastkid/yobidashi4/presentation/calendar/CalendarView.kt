@@ -167,7 +167,7 @@ private fun TopComponent(
             Text(">", modifier = Modifier.padding(8.dp))
         }
 
-        Button(onClick = moveToCurrentMonth, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionLeft }) {
+        Button(onClick = moveToCurrentMonth, modifier = Modifier.padding(8.dp)) {
             Text("Current month", modifier = Modifier.padding(8.dp))
         }
     }
