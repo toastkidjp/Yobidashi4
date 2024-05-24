@@ -255,9 +255,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
 
         Menu("Notification") {
-            Item("List") {
-                viewModel.openNotificationList()
-            }
+            Item(
+                "List",
+                onClick = viewModel::openNotificationList
+            )
+
             Item("Restart") {
                 CoroutineScope(Dispatchers.IO).launch {
                     object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
