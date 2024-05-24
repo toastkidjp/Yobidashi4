@@ -1,3 +1,6 @@
+#-ignorewarnings
+
+
 # JSR 305 annotations are for embedding nullability information.
 -dontwarn javax.annotation.**
 
@@ -12,5 +15,19 @@
 -dontwarn org.conscrypt.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
+-dontwarn jogamp.**
+-dontwarn com.jogamp.newt.javafx.**
+-dontwarn com.jogamp.newt.swt.**
+-dontwarn com.jogamp.newt.nativewindow.javafx.**
+-dontwarn com.jogamp.newt.nativewindow.swt.**
+-dontwarn com.jogamp.opengl.javafx.**
+-dontwarn com.jogamp.opengl.swt.**
+-dontwarn org.apache.commons.compress.**
 
--keep class org.ocpsoft.prettytime.i18n**
+-keep class org.ocpsoft.prettytime.i18n** { *; }
+-keep class kotlinx.serialization.internal.** {*;}
+-keep class org.apache.lucene.** {*;}
+-keep class com.google.gson.** {*;}
+-keep class org.objectweb.** {*;}
+-keep class org.tukaani.** {*;}
+-keep class com.github.luben.** {*;}
