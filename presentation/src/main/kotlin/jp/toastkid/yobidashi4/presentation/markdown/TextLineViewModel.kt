@@ -52,9 +52,7 @@ class TextLineViewModel : KoinComponent {
             .getStringAnnotations(tag = "URL", start = offset, end = offset)
             .firstOrNull() ?: return
 
-        if (stringRange.tag == "URL") {
-            linkBehaviorService.invoke(stringRange.item)
-        }
+        linkBehaviorService.invoke(stringRange.item)
     }
 
 }
