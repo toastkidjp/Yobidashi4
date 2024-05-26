@@ -26,7 +26,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun InputBox() {
     val viewModel = remember { InputBoxViewModel() }
