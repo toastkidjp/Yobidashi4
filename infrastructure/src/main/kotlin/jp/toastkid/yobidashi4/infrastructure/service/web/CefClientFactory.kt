@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import java.awt.event.KeyEvent
+import java.util.concurrent.atomic.AtomicReference
 import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
@@ -38,7 +39,7 @@ class CefClientFactory : KoinComponent {
     private val adHosts = AdHosts.make()
 
     operator fun invoke(): CefClient {
-        var selectedText = ""
+        val selectedText = AtomicReference("")
 
         val client = cefAppFactory.invoke().createClient()
         client.addLoadHandler(object : CefLoadHandlerAdapter() {
@@ -141,7 +142,7 @@ class CefClientFactory : KoinComponent {
 
         client.addKeyboardHandler(object : CefKeyboardHandlerAdapter() {
 
-            private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor { selectedText }
+            private val keyboardShortcutProcessor = CefKeyboardShortcutProcessor(selectedText::get)
 
             override fun onKeyEvent(browser: CefBrowser?, event: CefKeyboardHandler.CefKeyEvent?): Boolean {
                 if (browser == null || event == null) {
@@ -189,7 +190,7 @@ class CefClientFactory : KoinComponent {
                 model: CefMenuModel?
             ) {
                 super.onBeforeContextMenu(browser, frame, params, model)
-                selectedText = params?.selectionText ?: ""
+                selectedText.set(params?.selectionText ?: "")
 
                 cefContextMenuFactory.invoke(params, model)
             }
@@ -203,7 +204,7 @@ class CefClientFactory : KoinComponent {
                 commandId: Int,
                 eventFlags: Int
             ): Boolean {
-                cefContextMenuAction.invoke(browser, params, selectedText, commandId)
+                cefContextMenuAction.invoke(browser, params, selectedText.get(), commandId)
 
                 return super.onContextMenuCommand(browser, frame, params, commandId, eventFlags)
             }
