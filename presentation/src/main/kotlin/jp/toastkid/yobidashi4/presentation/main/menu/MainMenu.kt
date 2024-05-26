@@ -236,9 +236,14 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Number place", shortcut = KeyShortcut(Key.N, alt = true), icon = painterResource("images/icon/ic_number_place.xml")) {
                 viewModel.openNumberPlaceTab()
             }
-            Item("Music player", shortcut = KeyShortcut(Key.M, alt = true), icon = painterResource("images/icon/ic_music.xml")) {
-                viewModel.openMusicPlayerTab()
-            }
+
+            Item(
+                "Music player",
+                shortcut = KeyShortcut(Key.M, alt = true),
+                icon = painterResource("images/icon/ic_music.xml"),
+                onClick = viewModel::openMusicPlayerTab
+            )
+
             Item(
                 "World time",
                 shortcut = viewModel.toggleWorldTimeShortcut(),
