@@ -19,6 +19,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import org.junit.jupiter.api.AfterEach
@@ -53,6 +54,9 @@ class PhotoTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun photoTabView() {
+        every { anyConstructed<PhotoTabViewModel>().showHandle() } just Runs
+        every { anyConstructed<PhotoTabViewModel>().hideHandle() } just Runs
+
         runDesktopComposeUiTest {
             setContent {
                 PhotoTabView(tab)
@@ -65,6 +69,13 @@ class PhotoTabViewKtTest {
                 .performKeyInput {
                     pressKey(Key.DirectionUp, 1000L)
                 }
+                .performMouseInput {
+                    enter()
+                    exit()
+                }
+            verify { anyConstructed<PhotoTabViewModel>().showHandle() }
+            verify { anyConstructed<PhotoTabViewModel>().hideHandle() }
+
             onNodeWithContentDescription("test.png", useUnmergedTree = true)
                 .performMouseInput {
                     doubleClick()
