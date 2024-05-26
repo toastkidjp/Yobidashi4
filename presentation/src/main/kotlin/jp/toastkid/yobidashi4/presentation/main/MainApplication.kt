@@ -56,7 +56,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             visible = mainViewModel.windowVisible(),
             icon = painterResource("images/icon.png")
         ) {
-            MainMenu { exitApplication() }
+            MainMenu(::exitApplication)
 
             CompositionLocalProvider(
                 LocalTextContextMenu provides TextContextMenuFactory(mainViewModel).invoke()
