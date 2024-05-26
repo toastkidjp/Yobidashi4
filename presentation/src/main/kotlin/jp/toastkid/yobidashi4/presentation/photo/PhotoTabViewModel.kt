@@ -7,7 +7,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
@@ -15,10 +14,10 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.IntOffset
-import java.io.IOException
+import java.nio.file.Files
 import java.nio.file.Path
-import javax.imageio.ImageIO
 import kotlin.math.max
 
 class PhotoTabViewModel {
@@ -185,13 +184,15 @@ class PhotoTabViewModel {
     fun launch(path: Path) {
         focusRequester().requestFocus()
 
-        val bufferedImage = try {
-            ImageIO.read(path.toFile())
-        } catch (e: IOException) {
-            return
+        val bufferedImage = Files.newInputStream(path).use { inputStream ->
+            try {
+                loadImageBitmap(inputStream)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
         } ?: return
 
-        bitmap.value =  bufferedImage.toComposeImageBitmap()
+        bitmap.value =  bufferedImage
     }
 
     fun resetStates() {
