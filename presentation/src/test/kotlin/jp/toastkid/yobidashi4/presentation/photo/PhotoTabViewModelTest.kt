@@ -162,6 +162,41 @@ class PhotoTabViewModelTest {
     }
 
     @Test
+    fun onKeyEventOnSwitchMenu() {
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_UP,
+                    '-'
+                )
+            )
+        )
+
+        assertTrue(consumed)
+        assertTrue(subject.visibleMenu())
+
+        val consumedOnDown = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
+                    java.awt.event.KeyEvent.VK_DOWN,
+                    '-'
+                )
+            )
+        )
+
+        assertTrue(consumedOnDown)
+        assertFalse(subject.visibleMenu())
+    }
+
+    @Test
     fun onKeyEventWithRelease() {
         val consumed = subject.onKeyEvent(
             KeyEvent(
@@ -274,6 +309,27 @@ class PhotoTabViewModelTest {
         subject.resetStates()
 
         assertEquals(1f, subject.scale())
+    }
+
+    @Test
+    fun handleAlpha() {
+        assertEquals(0f, subject.handleAlpha())
+
+        subject.switchMenu()
+
+        assertEquals(1f, subject.handleAlpha())
+
+        subject.hideHandle()
+
+        assertEquals(1f, subject.handleAlpha())
+
+        subject.switchMenu()
+
+        assertEquals(0f, subject.handleAlpha())
+
+        subject.showHandle()
+
+        assertEquals(1f, subject.handleAlpha())
     }
 
 }
