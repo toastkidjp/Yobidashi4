@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.notification
 
 import java.time.LocalDateTime
+import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
@@ -18,7 +19,7 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
 
     private val repository: NotificationEventRepository by inject()
 
-    private var running = false
+    private val running = AtomicBoolean(false)
 
     private val notificationEvents = mutableSetOf<NotificationEvent>()
 
@@ -26,11 +27,11 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
 
     override suspend fun start(delay: Long) {
         notificationEvents.addAll(repository.readAll())
-        if (running) {
+        if (running.get()) {
             return
         }
 
-        running = true
+        running.set(true)
         while (notificationEvents.isNotEmpty()) {
             val iterator = notificationEvents.iterator()
             for (event in iterator) {
@@ -42,7 +43,7 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
             }
             delay(delay)
         }
-        running = false
+        running.set(false)
     }
 
 }
