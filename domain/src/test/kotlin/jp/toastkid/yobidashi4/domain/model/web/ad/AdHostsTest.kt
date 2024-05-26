@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.web.ad
 
+import io.mockk.every
+import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -26,6 +28,14 @@ class AdHostsTest {
         assertTrue(adHosts.contains("https://test-ad.info/content.txt"))
         assertFalse(adHosts.contains("https://normal-site.com/content.txt"))
         assertFalse(adHosts.contains(null))
+    }
+
+    @Test
+    fun nullCase() {
+        mockkObject(AdHosts)
+        every { AdHosts.loadInputStream() } returns null
+
+        AdHosts.make()
     }
 
 }
