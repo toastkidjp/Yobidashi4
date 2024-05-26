@@ -67,7 +67,8 @@ class ScheduledNotificationImplementationTest {
         }
 
         val sendJob = CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.start(1)
+            subject.start(1000)
+            every { repository.readAll() } returns emptyList()
             subject.start(1)
         }
 
