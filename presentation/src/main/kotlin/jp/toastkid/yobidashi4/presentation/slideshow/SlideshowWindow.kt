@@ -34,7 +34,7 @@ class SlideshowWindow {
                 Slideshow(
                     deck,
                     { viewModel.onEscapeKeyReleased(onCloseWindow) },
-                    { viewModel.toggleFullscreen() },
+                    viewModel::toggleFullscreen,
                     modifier = Modifier.focusRequester(focusRequester)
                 )
 
