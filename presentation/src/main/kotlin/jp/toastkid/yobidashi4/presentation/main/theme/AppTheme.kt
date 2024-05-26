@@ -40,11 +40,12 @@ fun AppTheme(
             )
 
     MaterialTheme(colors = colors) {
-        CompositionLocalProvider(LocalTextSelectionColors provides TextSelectionColors(
-            handleColor = MaterialTheme.colors.secondary,
-            backgroundColor = MaterialTheme.colors.secondary.copy(alpha = 0.65f)
-        )) {
-            content()
-        }
+        CompositionLocalProvider(
+            value = LocalTextSelectionColors provides TextSelectionColors(
+                handleColor = MaterialTheme.colors.secondary,
+                backgroundColor = MaterialTheme.colors.secondary.copy(alpha = 0.65f),
+            ),
+            content = content
+        )
     }
 }
