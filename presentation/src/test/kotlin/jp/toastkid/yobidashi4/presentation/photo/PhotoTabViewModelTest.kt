@@ -1,8 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.photo
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -11,10 +14,9 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Image
-import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
+import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
 import org.junit.jupiter.api.AfterEach
@@ -22,9 +24,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(InternalComposeUiApi::class)
 class PhotoTabViewModelTest {
 
     private lateinit var subject: PhotoTabViewModel
@@ -32,6 +36,10 @@ class PhotoTabViewModelTest {
     @BeforeEach
     fun setUp() {
         subject = PhotoTabViewModel()
+
+        mockkStatic(Files::class)
+        val resourceAsStream = javaClass.classLoader.getResourceAsStream("icon/icon.png") ?: fail()
+        every { Files.newInputStream(any()) } returns resourceAsStream
     }
 
     @AfterEach
@@ -42,10 +50,6 @@ class PhotoTabViewModelTest {
     @Test
     fun bitmap() {
         subject.bitmap()
-    }
-
-    @Test
-    fun handleIconPath() {
     }
 
     @Test
@@ -104,92 +108,38 @@ class PhotoTabViewModelTest {
     }
 
     @Test
-    fun state() {
-    }
-
-    @Test
     fun onKeyEventWithScaleUp() {
-        val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_SEMICOLON,
-                    ';'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Semicolon, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertTrue(consumed)
     }
 
     @Test
     fun noopOnKeyEventWithCtrlMask() {
-        val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_Z,
-                    ';'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Z, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertFalse(consumed)
     }
 
     @Test
     fun onKeyEventWithScaleDown() {
-        val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_MINUS,
-                    '-'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Minus, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertTrue(consumed)
     }
 
     @Test
     fun onKeyEventOnSwitchMenu() {
+
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_UP,
-                    '-'
-                )
-            )
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
         assertTrue(consumed)
         assertTrue(subject.visibleMenu())
 
         val consumedOnDown = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_DOWN,
-                    '-'
-                )
-            )
+            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
         assertTrue(consumedOnDown)
@@ -199,16 +149,7 @@ class PhotoTabViewModelTest {
     @Test
     fun onKeyEventWithRelease() {
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_RELEASED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_SEMICOLON,
-                    'A'
-                )
-            )
+            KeyEvent(Key.Semicolon, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
@@ -216,24 +157,9 @@ class PhotoTabViewModelTest {
 
     @Test
     fun onKeyEventElseCase() {
-        val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.ALT_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_Q,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Q, KeyEventType.KeyDown, isAltPressed = true))
 
         assertFalse(consumed)
-    }
-
-    @Test
-    fun focusRequester() {
     }
 
     @Test
@@ -262,8 +188,6 @@ class PhotoTabViewModelTest {
         every { focusRequester.requestFocus() } just Runs
         val path = mockk<Path>()
         every { path.toFile() } returns mockk()
-        mockkStatic(ImageIO::class)
-        every { ImageIO.read(any<File>()) } returns BufferedImage(1, 1, Image.SCALE_SMOOTH)
 
         subject.launch(path)
 
@@ -284,6 +208,7 @@ class PhotoTabViewModelTest {
         subject.launch(path)
 
         verify { focusRequester.requestFocus() }
+        verify { Files.newInputStream(any()) }
     }
 
     @Test
@@ -295,12 +220,12 @@ class PhotoTabViewModelTest {
         every { focusRequester.requestFocus() } just Runs
         val path = mockk<Path>()
         every { path.toFile() } returns mockk()
-        mockkStatic(ImageIO::class)
-        every { ImageIO.read(any<File>()) } returns null
+        every { Files.newInputStream(any()) } returns "test".byteInputStream()
 
         subject.launch(path)
 
         verify { focusRequester.requestFocus() }
+        verify { Files.newInputStream(any()) }
         assertSame(snapshot, subject.bitmap())
     }
 
