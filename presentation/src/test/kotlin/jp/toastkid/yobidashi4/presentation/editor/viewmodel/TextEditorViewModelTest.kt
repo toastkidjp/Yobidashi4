@@ -1,9 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
@@ -44,6 +47,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+@OptIn(InternalComposeUiApi::class)
 class TextEditorViewModelTest {
 
     private lateinit var viewModel: TextEditorViewModel
@@ -147,14 +151,9 @@ class TextEditorViewModelTest {
     @Test
     fun noopOnValueChange() {
         val keyEvent = KeyEvent(
-            java.awt.event.KeyEvent(
-                mockk(),
-                java.awt.event.KeyEvent.KEY_PRESSED,
-                1,
-                java.awt.event.KeyEvent.ALT_DOWN_MASK,
-                java.awt.event.KeyEvent.VK_ALT,
-                'A'
-            )
+            Key.AltLeft,
+            KeyEventType.KeyDown,
+            isAltPressed = true
         )
         viewModel.onKeyEvent(keyEvent)
 
@@ -170,16 +169,7 @@ class TextEditorViewModelTest {
 
     @Test
     fun onKeyEvent() {
-        val keyEvent = KeyEvent(
-            java.awt.event.KeyEvent(
-                mockk(),
-                java.awt.event.KeyEvent.KEY_PRESSED,
-                1,
-                java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                java.awt.event.KeyEvent.VK_COMMA,
-                ','
-            )
-        )
+        val keyEvent = KeyEvent(Key.Comma, KeyEventType.KeyDown, isCtrlPressed = true)
 
         val consumed = viewModel.onKeyEvent(keyEvent)
 
@@ -188,16 +178,7 @@ class TextEditorViewModelTest {
 
     @Test
     fun onPreviewKeyEvent() {
-        val keyEvent = KeyEvent(
-            java.awt.event.KeyEvent(
-                mockk(),
-                java.awt.event.KeyEvent.KEY_PRESSED,
-                1,
-                java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                java.awt.event.KeyEvent.VK_ENTER,
-                ','
-            )
-        )
+        val keyEvent = KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true)
         viewModel = TextEditorViewModel()
 
         val consumed = viewModel.onPreviewKeyEvent(keyEvent, CoroutineScope(Dispatchers.Unconfined))
