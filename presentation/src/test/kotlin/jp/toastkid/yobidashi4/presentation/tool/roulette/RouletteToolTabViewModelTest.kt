@@ -1,17 +1,18 @@
 package jp.toastkid.yobidashi4.presentation.tool.roulette
 
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(InternalComposeUiApi::class)
 class RouletteToolTabViewModelTest {
 
     private lateinit var subject: RouletteToolTabViewModel
@@ -75,16 +77,7 @@ class RouletteToolTabViewModelTest {
         subject.onValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_RELEASED,
-                    1,
-                    KeyEvent.CTRL_DOWN_MASK,
-                    KeyEvent.VK_ENTER,
-                    'E'
-                )
-            )
+            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertTrue(consumed)
@@ -95,16 +88,7 @@ class RouletteToolTabViewModelTest {
         subject.onValueChange(TextFieldValue("test", composition = TextRange.Zero))
 
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_RELEASED,
-                    1,
-                    KeyEvent.CTRL_DOWN_MASK,
-                    KeyEvent.VK_ENTER,
-                    'E'
-                )
-            )
+            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
@@ -113,16 +97,7 @@ class RouletteToolTabViewModelTest {
     @Test
     fun onKeyEventOtherKey() {
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_RELEASED,
-                    1,
-                    KeyEvent.CTRL_DOWN_MASK,
-                    KeyEvent.VK_1,
-                    'A'
-                )
-            )
+            androidx.compose.ui.input.key.KeyEvent(Key.One, KeyEventType.KeyUp, isCtrlPressed = true)
         )
         assertFalse(consumed)
     }
@@ -130,16 +105,7 @@ class RouletteToolTabViewModelTest {
     @Test
     fun onKeyEventOtherMask() {
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_RELEASED,
-                    1,
-                    KeyEvent.ALT_DOWN_MASK,
-                    KeyEvent.VK_ENTER,
-                    'A'
-                )
-            )
+            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyUp, isAltPressed = true)
         )
         assertFalse(consumed)
     }
