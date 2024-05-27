@@ -7,7 +7,6 @@ import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
@@ -273,12 +272,6 @@ class KeyEventConsumer(
             it.isCtrlPressed && it.key == Key.At -> {
                 convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
                     "```$it```"
-                }?.let(setNewContent)
-                true
-            }
-            it.isCtrlPressed && it.key.nativeKeyCode == java.awt.event.KeyEvent.VK_CIRCUMFLEX -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
-                    "~~$it~~"
                 }?.let(setNewContent)
                 true
             }
