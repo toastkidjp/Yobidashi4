@@ -1,8 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -113,6 +116,18 @@ class WebSearchBoxViewModelTest {
         assertEquals("1+2", subject.query().text)
         assertEquals("3", subject.result())
 
+        subject.onValueChange(TextFieldValue("1*0.5"))
+        assertEquals("0.5", subject.result())
+
+        subject.onValueChange(TextFieldValue("1.2+1.8"))
+        assertEquals("3", subject.result())
+
+        subject.onValueChange(TextFieldValue("1/0"))
+        assertEquals("Infinity", subject.result())
+
+        subject.onValueChange(TextFieldValue("1."))
+        assertEquals("1", subject.result())
+
         subject.clearInput()
 
         assertTrue(subject.query().text.isEmpty())
@@ -177,63 +192,35 @@ class WebSearchBoxViewModelTest {
         verify { viewModel wasNot called }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         every { viewModel.setShowWebSearch(any()) } just Runs
 
-        val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    -1,
-                    java.awt.event.KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyDown))
 
         assertTrue(consumed)
         verify { viewModel.setShowWebSearch(false) }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEvent() {
         every { viewModel.setShowWebSearch(any()) } just Runs
 
-        val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_UP,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertFalse(consumed)
         verify { viewModel wasNot called }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEventWithEscapeReleased() {
         every { viewModel.setShowWebSearch(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_RELEASED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
+            KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
@@ -326,6 +313,14 @@ class WebSearchBoxViewModelTest {
     fun onFocusChanged() {
         val focusState = mockk<FocusState>()
         every { focusState.hasFocus } returns false
+
+        subject.onFocusChanged(focusState)
+    }
+
+    @Test
+    fun onFocusChangedWhenReturnTrueCase() {
+        val focusState = mockk<FocusState>()
+        every { focusState.hasFocus } returns true
 
         subject.onFocusChanged(focusState)
     }
