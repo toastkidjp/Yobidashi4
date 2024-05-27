@@ -3,7 +3,10 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -74,7 +77,7 @@ class SlideshowViewModelTest {
         unmockkAll()
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventLeft() {
         runDesktopComposeUiTest {
@@ -82,16 +85,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_LEFT,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.DirectionLeft, KeyEventType.KeyUp, isCtrlPressed = true),
                     pagerState
                 )
 
@@ -100,7 +94,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventRight() {
         runDesktopComposeUiTest {
@@ -108,16 +102,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_RIGHT,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.DirectionRight, KeyEventType.KeyUp, isCtrlPressed = true),
                     pagerState
                 )
 
@@ -126,7 +111,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventF5() {
         runDesktopComposeUiTest {
@@ -134,16 +119,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_F5,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
                     mockk()
                 )
 
@@ -153,7 +129,7 @@ class SlideshowViewModelTest {
     }
 
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventF5ForCoverage() {
         subject = SlideshowViewModel()
@@ -163,16 +139,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_F5,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
                     mockk()
                 )
 
@@ -181,7 +148,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onNoopKeyEvent() {
         runDesktopComposeUiTest {
@@ -189,16 +156,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 val consumed = subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_F7,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.F7, KeyEventType.KeyUp, isCtrlPressed = true),
                     mockk()
                 )
 
@@ -207,7 +165,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventEscape() {
         runDesktopComposeUiTest {
@@ -215,16 +173,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_ESCAPE,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
                     mockk()
                 )
 
@@ -233,7 +182,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventEscapeForCoverage() {
         subject = SlideshowViewModel()
@@ -243,16 +192,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_RELEASED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_ESCAPE,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
                     mockk()
                 )
 
@@ -261,7 +201,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun otherKeyEvent() {
         runDesktopComposeUiTest {
@@ -269,16 +209,7 @@ class SlideshowViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 val consumed = subject.onKeyEvent(
                     coroutineScope,
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_PRESSED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_ESCAPE,
-                            'A'
-                        )
-                    ),
+                    KeyEvent(Key.Escape, KeyEventType.KeyDown, isCtrlPressed = true),
                     mockk()
                 )
 
