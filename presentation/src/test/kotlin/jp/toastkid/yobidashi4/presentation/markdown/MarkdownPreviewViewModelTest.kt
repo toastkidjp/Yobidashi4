@@ -2,7 +2,10 @@ package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.font.FontWeight
@@ -74,23 +77,14 @@ class MarkdownPreviewViewModelTest {
         unmockkAll()
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         runDesktopComposeUiTest {
             setContent {
                 val consumed = subject.onKeyEvent(
                     rememberCoroutineScope(),
-                    KeyEvent(
-                        java.awt.event.KeyEvent(
-                            mockk(),
-                            java.awt.event.KeyEvent.KEY_PRESSED,
-                            1,
-                            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                            java.awt.event.KeyEvent.VK_UP,
-                            '-'
-                        )
-                    )
+                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
                 )
 
                 assertTrue(consumed)
@@ -98,40 +92,24 @@ class MarkdownPreviewViewModelTest {
         }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun noopOnKeyEventWithWebSearchShortcutWithKeyPressed() {
         val consumed = subject.onKeyEvent(
             CoroutineScope(Dispatchers.Unconfined),
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_O,
-                    '-'
-                )
-            )
+            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
         assertFalse(consumed)
         verify { mainViewModel wasNot called }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun elseCaseOnKeyEventWithWebSearchShortcut() {
         val consumed = subject.onKeyEvent(
             CoroutineScope(Dispatchers.Unconfined),
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_RELEASED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_Q,
-                    '-'
-                )
-            )
+            KeyEvent(Key.Q, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true)
         )
 
         assertFalse(consumed)
