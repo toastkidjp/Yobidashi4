@@ -1,6 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -30,6 +33,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+@OptIn(InternalComposeUiApi::class)
 class AggregationBoxViewModelTest {
 
     private lateinit var subject: AggregationBoxViewModel
@@ -85,16 +89,7 @@ class AggregationBoxViewModelTest {
     fun onKeyEvent() {
         every { mainViewModel.switchAggregationBox(any()) } just Runs
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
+            KeyEvent(Key.Escape, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
         assertTrue(consumed)
@@ -107,16 +102,7 @@ class AggregationBoxViewModelTest {
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_2,
-                    '2'
-                )
-            )
+            KeyEvent(Key.Two, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
         assertTrue(consumed)
@@ -129,16 +115,7 @@ class AggregationBoxViewModelTest {
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_RELEASED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_2,
-                    '2'
-                )
-            )
+            KeyEvent(Key.Two, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
@@ -149,16 +126,7 @@ class AggregationBoxViewModelTest {
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_2,
-                    '2'
-                )
-            )
+            KeyEvent(Key.Two, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
@@ -171,16 +139,7 @@ class AggregationBoxViewModelTest {
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_2,
-                    '2'
-                )
-            )
+            KeyEvent(Key.Two, KeyEventType.KeyDown, isShiftPressed = true)
         )
 
         assertFalse(consumed)
@@ -190,16 +149,7 @@ class AggregationBoxViewModelTest {
     @Test
     fun notConsumedOnKeyEvent() {
         val consumed = subject.onKeyEvent(
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_RELEASED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_1,
-                    'A'
-                )
-            )
+            KeyEvent(Key.One, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
@@ -210,16 +160,7 @@ class AggregationBoxViewModelTest {
         every { mainViewModel.switchAggregationBox(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_RELEASED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
+            KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
