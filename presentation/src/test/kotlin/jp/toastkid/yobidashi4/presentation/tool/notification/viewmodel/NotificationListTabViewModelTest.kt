@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -81,21 +84,12 @@ class NotificationListTabViewModelTest {
         assertNotNull(subject.listState())
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         val consumed = subject.onKeyEvent(
             CoroutineScope(Dispatchers.Unconfined),
-            KeyEvent(
-                java.awt.event.KeyEvent(
-                    mockk(),
-                    java.awt.event.KeyEvent.KEY_PRESSED,
-                    1,
-                    java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-                    java.awt.event.KeyEvent.VK_DOWN,
-                    '↓'
-                )
-            )
+            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
         assertTrue(consumed)
