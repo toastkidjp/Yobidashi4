@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -107,7 +108,7 @@ class FileRenameToolViewModelTest {
     fun onKeyEvent() {
         subject.onValueChange(TextFieldValue("ABC"))
 
-        subject.onKeyEvent(
+        val consumed = subject.onKeyEvent(
             KeyEvent(
                 java.awt.event.KeyEvent(
                     mockk(),
@@ -120,12 +121,33 @@ class FileRenameToolViewModelTest {
             )
         )
 
+        assertTrue(consumed)
         verify(inverse = true) { Files.copy(any<Path>(), any<Path>()) }
         verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
     }
 
     @Test
-    fun onKeyEventNotConsumed() {
+    fun onKeyEventNotConsumedWithKeyReleasing() {
+        subject.onValueChange(TextFieldValue("ABC"))
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_RELEASED,
+                    1,
+                    0,
+                    java.awt.event.KeyEvent.VK_ENTER,
+                    '-'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun onKeyEventNotConsumedWithOtherKey() {
         val consumed = subject.onKeyEvent(
             KeyEvent(
                 java.awt.event.KeyEvent(
@@ -135,6 +157,46 @@ class FileRenameToolViewModelTest {
                     0,
                     java.awt.event.KeyEvent.VK_0,
                     '0'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun onKeyEventNotConsumedWithExistingComposition() {
+        subject.onValueChange(TextFieldValue("ABC", composition = TextRange.Companion.Zero))
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    0,
+                    java.awt.event.KeyEvent.VK_ENTER,
+                    '-'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun onKeyEventNotConsumedWithTextIsEmpty() {
+        subject.onValueChange(TextFieldValue())
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(
+                java.awt.event.KeyEvent(
+                    mockk(),
+                    java.awt.event.KeyEvent.KEY_PRESSED,
+                    1,
+                    0,
+                    java.awt.event.KeyEvent.VK_ENTER,
+                    '-'
                 )
             )
         )
