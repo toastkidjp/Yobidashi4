@@ -118,11 +118,6 @@ class MainViewModelImplementationTest {
         every { setting.useCaseSensitiveInFinder() } returns false
         every { topArticleLoaderService.invoke() } returns listOf(mockk(), mockk())
         every { webViewPool.dispose(any()) } just Runs
-        val article = mockk<Article>()
-        every { articleFactory.withTitle(any()) } returns article
-        every { article.makeFile(any()) } just Runs
-        every { article.getTitle() } returns "title"
-        every { article.path() } returns mockk()
 
         mockkStatic(Desktop::class)
         every { Desktop.getDesktop() } returns desktop
@@ -807,13 +802,21 @@ class MainViewModelImplementationTest {
         every { Files.list(any()) } returns Stream.empty()
         subject = spyk(subject)
         every { subject.edit(any()) } just Runs
+        val article = mockk<Article>()
+        val slot = slot<() -> String>()
+        every { article.makeFile(capture(slot)) } just Runs
+        every { article.getTitle() } returns "title"
+        every { article.path() } returns mockk()
+        every { articleFactory.withTitle(any()) } returns article
 
         subject.makeNewArticle()
 
         assertTrue(subject.showInputBox())
 
         subject.invokeInputAction("test")
+        slot.captured.invoke()
 
+        verify { article.getTitle() }
         verify { subject.edit(any()) }
     }
 
