@@ -9,6 +9,8 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
@@ -58,6 +60,15 @@ class TableTabTest {
         val tableTab = TableTab("test", items, true, reloadAction = mockk())
 
         assertSame(items, tableTab.items())
+    }
+
+    @Test
+    fun withNewPosition() {
+        val tableTab = TableTab("test", MovieMemoExtractorResult(), true, reloadAction = mockk())
+        val withNewPosition = tableTab.withNewPosition(20)
+
+        assertEquals(20, withNewPosition.scrollPosition())
+        assertNotEquals(tableTab.scrollPosition(), withNewPosition.scrollPosition())
     }
 
 }
