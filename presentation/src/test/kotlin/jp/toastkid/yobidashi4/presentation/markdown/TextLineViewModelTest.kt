@@ -1,11 +1,18 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
+import androidx.compose.material.Text
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerId
 import androidx.compose.ui.input.pointer.PointerInputChange
-import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
+import androidx.compose.ui.input.pointer.PointerType
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.buildAnnotatedString
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -53,12 +60,6 @@ class TextLineViewModelTest {
 
         mockkConstructor(LinkGenerator::class, KeywordHighlighter::class, LinkBehaviorService::class)
         every { anyConstructed<LinkGenerator>().invoke(any()) } returns "generated"
-        val annotatedString = mockk<AnnotatedString>()
-        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
-        val element = mockk<AnnotatedString.Range<String>>()
-        every { element.tag } returns "URL"
-        every { element.item } returns "https://www.yahoo.com"
-        every { annotatedString.getStringAnnotations(any(), any(), any()) } returns listOf(element)
         every { anyConstructed<LinkBehaviorService>().invoke(any()) } just Runs
 
         subject = TextLineViewModel()
@@ -75,22 +76,149 @@ class TextLineViewModelTest {
         assertTrue(subject.annotatedString().text.isEmpty())
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
     @Test
     fun onPointerReleased() {
+        val annotatedString = buildAnnotatedString {
+            append("test https://www.yahoo.com")
+            addStringAnnotation("URL", "", 0, 10)
+        }
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
+
+        var textLayoutResult: TextLayoutResult? = null
+        runDesktopComposeUiTest {
+            setContent {
+                Text(annotatedString, onTextLayout = {
+                    textLayoutResult = it
+                })
+            }
+        }
+
+        subject = TextLineViewModel()
+
         runBlocking {
-            val pointerInputChange = mockk<PointerInputChange>()
-            every { pointerInputChange.previousPressed } returns false
-            every { pointerInputChange.pressed } returns true
-            every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+            val pointerInputChange = PointerInputChange(
+                id = PointerId(1),
+                uptimeMillis = 0,
+                position = Offset.Zero,
+                pressed = false,
+                previousUptimeMillis = 1,
+                previousPosition = Offset.Zero,
+                previousPressed = false,
+                isInitiallyConsumed = false,
+                type = PointerType.Touch,
+                scrollDelta = Offset.Zero
+            )
             val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
             every { pointerEvent.button } returns PointerButton.Secondary
 
             subject.launch("test")
+            textLayoutResult?.let {
+                subject.putLayoutResult(it)
+            }
             subject.onPointerReleased(PointerEvent(listOf(pointerInputChange)))
 
             verify { anyConstructed<LinkBehaviorService>().invoke(any()) }
-            verify { anyConstructed<LinkGenerator>().invoke(any()) }
+        }
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
+    @Test
+    fun noopOnPointerReleasedIfAnnotationIsNotUrl() {
+        val annotatedString = buildAnnotatedString {
+            append("test https://www.yahoo.com")
+            addStringAnnotation("Other", "", 0, 10)
+        }
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
+
+        var textLayoutResult: TextLayoutResult? = null
+        runDesktopComposeUiTest {
+            setContent {
+                Text(annotatedString, onTextLayout = {
+                    textLayoutResult = it
+                })
+            }
+        }
+
+        subject = TextLineViewModel()
+
+        runBlocking {
+            val pointerInputChange = PointerInputChange(
+                id = PointerId(1),
+                uptimeMillis = 0,
+                position = Offset.Zero,
+                pressed = false,
+                previousUptimeMillis = 1,
+                previousPosition = Offset.Zero,
+                previousPressed = false,
+                isInitiallyConsumed = false,
+                type = PointerType.Touch,
+                scrollDelta = Offset.Zero
+            )
+            val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+            every { pointerEvent.button } returns PointerButton.Secondary
+
+            subject.launch("test")
+            textLayoutResult?.let {
+                subject.putLayoutResult(it)
+            }
+            subject.onPointerReleased(PointerEvent(listOf(pointerInputChange)))
+
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
+        }
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
+    @Test
+    fun noopOnPointerReleasedWhenUrlIsNotFound() {
+        val annotatedString = AnnotatedString("test https://www.yahoo.com")
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
+
+        var textLayoutResult: TextLayoutResult? = null
+        runDesktopComposeUiTest {
+            setContent {
+                Text(annotatedString, onTextLayout = {
+                    textLayoutResult = it
+                })
+            }
+        }
+
+        subject = TextLineViewModel()
+
+        runBlocking {
+            val pointerInputChange = PointerInputChange(
+                id = PointerId(1),
+                uptimeMillis = 0,
+                position = Offset.Zero,
+                pressed = false,
+                previousUptimeMillis = 1,
+                previousPosition = Offset.Zero,
+                previousPressed = false,
+                isInitiallyConsumed = false,
+                type = PointerType.Touch,
+                scrollDelta = Offset.Zero
+            )
+            val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+            every { pointerEvent.button } returns PointerButton.Secondary
+
+            subject.launch("test")
+            textLayoutResult?.let {
+                subject.putLayoutResult(it)
+            }
+            subject.onPointerReleased(PointerEvent(listOf(pointerInputChange)))
+
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
+        }
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerReleased() {
+        runBlocking {
+            subject.onPointerReleased(mockk())
+
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
+            verify(inverse = true) { anyConstructed<LinkGenerator>().invoke(any()) }
         }
     }
 
