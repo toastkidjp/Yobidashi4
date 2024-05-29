@@ -1,6 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -12,7 +16,6 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -84,64 +87,34 @@ class InputBoxViewModelTest {
         assertTrue(subject.query().text.isEmpty())
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         every { viewModel.setShowInputBox(any()) } just Runs
 
-        val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_PRESSED,
-                    1,
-                    -1,
-                    KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyDown))
 
         assertTrue(consumed)
         verify { viewModel.setShowInputBox(any()) }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEvent() {
         every { viewModel.setShowInputBox(any()) } just Runs
 
-        val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_PRESSED,
-                    1,
-                    KeyEvent.CTRL_DOWN_MASK,
-                    KeyEvent.VK_UP,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertFalse(consumed)
         verify { viewModel wasNot called }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEventWithEscapeReleased() {
         every { viewModel.setShowWebSearch(any()) } just Runs
 
-        val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_RELEASED,
-                    1,
-                    KeyEvent.CTRL_DOWN_MASK,
-                    KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true))
 
         assertFalse(consumed)
         verify { viewModel wasNot called }
