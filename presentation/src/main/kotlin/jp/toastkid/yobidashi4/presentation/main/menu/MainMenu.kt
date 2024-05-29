@@ -227,9 +227,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Roulette", shortcut = KeyShortcut(Key.R, alt = true), icon = painterResource("images/icon/ic_shuffle.xml")) {
                 viewModel.openRouletteToolTab()
             }
-            Item("Compound interest calculator", icon = painterResource("images/icon/ic_elevation.xml")) {
-                viewModel.openCompoundInterestCalculatorTab()
-            }
+
+            Item(
+                "Compound interest calculator",
+                icon = painterResource("images/icon/ic_elevation.xml"),
+                onClick = viewModel::openCompoundInterestCalculatorTab
+            )
 
             Item(
                 "Loan calculator",
