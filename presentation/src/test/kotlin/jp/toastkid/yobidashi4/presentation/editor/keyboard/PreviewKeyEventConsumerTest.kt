@@ -1,6 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -25,12 +28,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(InternalComposeUiApi::class)
 class PreviewKeyEventConsumerTest {
 
     @InjectMockKs
     private lateinit var previewKeyEventConsumer: PreviewKeyEventConsumer
-
-    private lateinit var awtKeyEvent: java.awt.event.KeyEvent
 
     @MockK
     private lateinit var mainViewModel: MainViewModel
@@ -46,14 +48,6 @@ class PreviewKeyEventConsumerTest {
         MockKAnnotations.init(this)
 
         every { scrollBy.invoke(any()) } just Runs
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_A,
-            'A'
-        )
     }
 
     @AfterEach
@@ -63,17 +57,8 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun onKeyUp() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_RELEASED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_A,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.A, KeyEventType.KeyUp, isCtrlPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -85,17 +70,8 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun scrollUp() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_UP,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -108,17 +84,8 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun scrollDown() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_DOWN,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -131,19 +98,11 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun moveToTop() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_UP,
-            'A'
-        )
         val setNewContent = mockk<(TextFieldValue) -> Unit>()
         every { setNewContent.invoke(any()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldValue(),
             mockk(),
             setNewContent,
@@ -156,19 +115,11 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun moveToBottom() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK or java.awt.event.KeyEvent.SHIFT_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_DOWN,
-            'A'
-        )
         val setNewContent = mockk<(TextFieldValue) -> Unit>()
         every { setNewContent.invoke(any()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldValue(),
             mockk(),
             setNewContent,
@@ -181,14 +132,6 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun cutLine() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_X,
-            'X'
-        )
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
         every { multiParagraph.getLineEnd(0) } returns 4
@@ -196,7 +139,7 @@ class PreviewKeyEventConsumerTest {
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3"),
             multiParagraph,
             {},
@@ -213,19 +156,11 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun noopCutLine() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_X,
-            'X'
-        )
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3"),
             null,
             {},
@@ -239,14 +174,6 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun cutLineOnSelectedTextCase() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_X,
-            'X'
-        )
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
         every { multiParagraph.getLineEnd(0) } returns 4
@@ -254,7 +181,7 @@ class PreviewKeyEventConsumerTest {
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3", TextRange(1, 3)),
             multiParagraph,
             {},
@@ -269,20 +196,12 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun deleteLine() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_ENTER,
-            'A'
-        )
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
         every { multiParagraph.getLineEnd(0) } returns 4
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3"),
             multiParagraph,
             { assertEquals("test2\ntest3", it.text) },
@@ -298,20 +217,12 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun deleteLineOnSelectedText() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_ENTER,
-            'A'
-        )
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
         every { multiParagraph.getLineEnd(0) } returns 4
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3", TextRange(0, 3)),
             multiParagraph,
             {},
@@ -325,17 +236,8 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun deleteLineOnParagraphIsNull() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_ENTER,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3"),
             null,
             {},
@@ -347,17 +249,8 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun elseCase() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_UNDEFINED,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -372,17 +265,8 @@ class PreviewKeyEventConsumerTest {
         every { mainViewModel.switchArticleList() } just Runs
         every { mainViewModel.hideArticleList() } just Runs
 
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_LEFT,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -400,17 +284,8 @@ class PreviewKeyEventConsumerTest {
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.switchArticleList() } just Runs
 
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_RIGHT,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -429,17 +304,8 @@ class PreviewKeyEventConsumerTest {
         every { mainViewModel.openArticleList() } returns true
         every { mainViewModel.switchArticleList() } just Runs
 
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_RIGHT,
-            'A'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -455,17 +321,8 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun noopAltCombination() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.ALT_DOWN_MASK or java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_CIRCUMFLEX,
-            '^'
-        )
-
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldValue(),
             mockk(),
             {},
@@ -477,14 +334,6 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun lastLine() {
-        awtKeyEvent = java.awt.event.KeyEvent(
-            mockk(),
-            java.awt.event.KeyEvent.KEY_PRESSED,
-            1,
-            java.awt.event.KeyEvent.CTRL_DOWN_MASK,
-            java.awt.event.KeyEvent.VK_X,
-            'X'
-        )
         every { multiParagraph.getLineForOffset(any()) } returns 2
         every { multiParagraph.getLineStart(2) } returns 11
         every { multiParagraph.getLineEnd(2) } returns 16
@@ -492,7 +341,7 @@ class PreviewKeyEventConsumerTest {
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
-            KeyEvent(awtKeyEvent),
+            KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("test\ntest2\ntest3"),
             multiParagraph,
             {},
