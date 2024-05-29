@@ -1,7 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -13,7 +17,6 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
@@ -60,19 +63,11 @@ class FindInPageBoxViewModelTest {
         unmockkAll()
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         every { mainViewModel.switchFind() } just Runs
-        val keyEvent = androidx.compose.ui.input.key.KeyEvent(
-            KeyEvent(
-                mockk(),
-                KeyEvent.KEY_PRESSED,
-                1,
-                KeyEvent.ALT_DOWN_MASK,
-                KeyEvent.VK_ESCAPE,
-                ','
-            )
-        )
+        val keyEvent = KeyEvent(Key.Escape, KeyEventType.KeyDown, isAltPressed = true)
 
         val consumed = subject.onKeyEvent(keyEvent)
 
@@ -80,40 +75,20 @@ class FindInPageBoxViewModelTest {
         verify { mainViewModel.switchFind() }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedKeyEvent() {
-        val keyEvent = androidx.compose.ui.input.key.KeyEvent(
-            KeyEvent(
-                mockk(),
-                KeyEvent.KEY_PRESSED,
-                1,
-                KeyEvent.CTRL_DOWN_MASK,
-                KeyEvent.VK_COMMA,
-                ','
-            )
-        )
-
-        val consumed = subject.onKeyEvent(keyEvent)
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Comma, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertFalse(consumed)
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEventWithEscapeReleased() {
         every { mainViewModel.switchFind() } just Runs
 
-        val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_RELEASED,
-                    1,
-                    KeyEvent.CTRL_DOWN_MASK,
-                    KeyEvent.VK_ESCAPE,
-                    'A'
-                )
-            )
-        )
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true))
 
         assertFalse(consumed)
         verify(inverse = true) { mainViewModel.switchFind() }
