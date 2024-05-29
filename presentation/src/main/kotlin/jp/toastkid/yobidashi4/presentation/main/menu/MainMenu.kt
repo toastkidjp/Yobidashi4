@@ -230,9 +230,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Compound interest calculator", icon = painterResource("images/icon/ic_elevation.xml")) {
                 viewModel.openCompoundInterestCalculatorTab()
             }
-            Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
-                viewModel.openLoanCalculatorTab()
-            }
+
+            Item(
+                "Loan calculator",
+                shortcut = KeyShortcut(Key.L, alt = true),
+                icon = painterResource("images/icon/ic_home.xml"),
+                onClick = viewModel::openLoanCalculatorTab
+            )
 
             Item(
                 "Number place",
