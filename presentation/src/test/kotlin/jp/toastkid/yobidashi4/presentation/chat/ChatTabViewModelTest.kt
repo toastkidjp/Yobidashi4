@@ -1,7 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.TextRange
@@ -16,7 +20,6 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -161,7 +164,7 @@ class ChatTabViewModelTest {
         assertNotEquals(subject.nameColor("model"), subject.nameColor("model2"))
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         runDesktopComposeUiTest {
@@ -173,23 +176,14 @@ class ChatTabViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 val consumed = subject.onKeyEvent(
                     coroutineScope,
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_RELEASED,
-                            1,
-                            KeyEvent.CTRL_DOWN_MASK,
-                            KeyEvent.VK_ENTER,
-                            'E'
-                        )
-                    )
+                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
                 )
                 assertTrue(consumed)
             }
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventWithComposition() {
         runDesktopComposeUiTest {
@@ -199,23 +193,14 @@ class ChatTabViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 val consumed = subject.onKeyEvent(
                     coroutineScope,
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_RELEASED,
-                            1,
-                            KeyEvent.CTRL_DOWN_MASK,
-                            KeyEvent.VK_ENTER,
-                            'E'
-                        )
-                    )
+                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
                 )
                 assertFalse(consumed)
             }
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventWithoutCtrlMask() {
         runDesktopComposeUiTest {
@@ -225,23 +210,14 @@ class ChatTabViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 val consumed = subject.onKeyEvent(
                     coroutineScope,
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_RELEASED,
-                            1,
-                            KeyEvent.ALT_DOWN_MASK,
-                            KeyEvent.VK_ENTER,
-                            'E'
-                        )
-                    )
+                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isAltPressed = true)
                 )
                 assertFalse(consumed)
             }
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventOtherKey() {
         runDesktopComposeUiTest {
@@ -249,16 +225,7 @@ class ChatTabViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 val consumed = subject.onKeyEvent(
                     coroutineScope,
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_RELEASED,
-                            1,
-                            KeyEvent.CTRL_DOWN_MASK,
-                            KeyEvent.VK_1,
-                            'A'
-                        )
-                    )
+                    KeyEvent(Key.One, KeyEventType.KeyUp, isCtrlPressed = true)
                 )
                 assertFalse(consumed)
             }
