@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -13,6 +15,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
@@ -36,7 +39,7 @@ class TextLineViewKtTest {
 
         mockkConstructor(TextLineViewModel::class)
         coEvery { anyConstructed<TextLineViewModel>().launch(any()) } just Runs
-        every { anyConstructed<TextLineViewModel>().annotatedString() } returns AnnotatedString("test")
+        every { anyConstructed<TextLineViewModel>().annotatedString() } returns AnnotatedString("test-text-line")
         every { anyConstructed<TextLineViewModel>().onPointerReleased(any()) } just Runs
         every { anyConstructed<TextLineViewModel>().putLayoutResult(any()) } just Runs
 
@@ -66,6 +69,12 @@ class TextLineViewKtTest {
                     Modifier
                 )
             }
+
+            onNode(hasText("test-text-line"), useUnmergedTree = true).performMouseInput {
+                press()
+                release()
+            }
+            verify { anyConstructed<TextLineViewModel>().onPointerReleased(any()) }
         }
     }
 
