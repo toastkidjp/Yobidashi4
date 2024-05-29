@@ -102,9 +102,7 @@ fun PhotoTabView(tab: PhotoTab) {
                     painterResource(viewModel.handleIconPath()),
                     contentDescription = "handle",
                     modifier = Modifier
-                        .clickable {
-                            viewModel.switchMenu()
-                        }
+                        .clickable(onClick = viewModel::switchMenu)
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                 )
