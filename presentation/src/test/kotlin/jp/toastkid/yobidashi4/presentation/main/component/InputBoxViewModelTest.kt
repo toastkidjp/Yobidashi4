@@ -127,6 +127,27 @@ class InputBoxViewModelTest {
     }
 
     @Test
+    fun notConsumedOnKeyEventWithEscapeReleased() {
+        every { viewModel.setShowWebSearch(any()) } just Runs
+
+        val consumed = subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(
+                KeyEvent(
+                    mockk(),
+                    KeyEvent.KEY_RELEASED,
+                    1,
+                    KeyEvent.CTRL_DOWN_MASK,
+                    KeyEvent.VK_ESCAPE,
+                    'A'
+                )
+            )
+        )
+
+        assertFalse(consumed)
+        verify { viewModel wasNot called }
+    }
+
+    @Test
     fun start() {
         every { viewModel.showInputBox() } returns true
         val tab = mockk<WebTab>()
