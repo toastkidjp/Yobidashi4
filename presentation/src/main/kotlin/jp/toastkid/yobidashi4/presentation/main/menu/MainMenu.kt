@@ -233,9 +233,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Loan calculator", shortcut = KeyShortcut(Key.L, alt = true), icon = painterResource("images/icon/ic_home.xml")) {
                 viewModel.openLoanCalculatorTab()
             }
-            Item("Number place", shortcut = KeyShortcut(Key.N, alt = true), icon = painterResource("images/icon/ic_number_place.xml")) {
-                viewModel.openNumberPlaceTab()
-            }
+
+            Item(
+                "Number place",
+                shortcut = KeyShortcut(Key.N, alt = true),
+                icon = painterResource("images/icon/ic_number_place.xml"),
+                onClick = viewModel::openNumberPlaceTab
+            )
 
             Item(
                 "Music player",
