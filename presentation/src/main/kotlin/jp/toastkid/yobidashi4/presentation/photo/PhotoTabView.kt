@@ -90,6 +90,7 @@ fun PhotoTabView(tab: PhotoTab) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(8.dp)
                     .onPointerEvent(PointerEventType.Enter) {
                         viewModel.showHandle()
                     }
