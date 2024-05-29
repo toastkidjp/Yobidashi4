@@ -2,6 +2,9 @@ package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -21,7 +24,6 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.event.KeyEvent
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -77,7 +79,7 @@ class FileListViewModelTest {
         assertEquals(0, subject.horizontalScrollState().value)
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
         runDesktopComposeUiTest {
@@ -88,14 +90,7 @@ class FileListViewModelTest {
                 val consumed = subject.onKeyEvent(
                     rememberCoroutineScope(),
                     androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_PRESSED,
-                            1,
-                            KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK,
-                            KeyEvent.VK_Z,
-                            'Z'
-                        )
+                        Key.Z, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true
                     )
                 )
 
@@ -105,6 +100,7 @@ class FileListViewModelTest {
         }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEventFromCell() {
         val path = mockk<Path>()
@@ -113,16 +109,7 @@ class FileListViewModelTest {
         every { mainViewModel.hideArticleList() } just Runs
 
         val consumed = subject.onKeyEventFromCell(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_PRESSED,
-                    1,
-                    0,
-                    KeyEvent.VK_ENTER,
-                    'E'
-                )
-            ),
+            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyDown),
             path
         )
 
@@ -131,42 +118,25 @@ class FileListViewModelTest {
         verify { mainViewModel.hideArticleList() }
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEventFromCellUnconsumed() {
         val consumed = subject.onKeyEventFromCell(
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_PRESSED,
-                    1,
-                    0,
-                    KeyEvent.VK_1,
-                    'E'
-                )
-            ),
+            androidx.compose.ui.input.key.KeyEvent(Key.One, KeyEventType.KeyDown),
             mockk()
         )
 
         assertFalse(consumed)
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onDirectionUpKeyEvent() {
         runDesktopComposeUiTest {
             setContent {
                 val consumed = subject.onKeyEvent(
                     rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_PRESSED,
-                            1,
-                            -1,
-                            KeyEvent.VK_UP,
-                            '↑'
-                        )
-                    )
+                    androidx.compose.ui.input.key.KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
                 )
 
                 assertTrue(consumed)
@@ -174,23 +144,14 @@ class FileListViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onDirectionDownKeyEvent() {
         runDesktopComposeUiTest {
             setContent {
                 val consumed = subject.onKeyEvent(
                     rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_PRESSED,
-                            1,
-                            -1,
-                            KeyEvent.VK_DOWN,
-                            '↓'
-                        )
-                    )
+                    androidx.compose.ui.input.key.KeyEvent(Key.DirectionDown, KeyEventType.KeyDown)
                 )
 
                 assertTrue(consumed)
@@ -198,7 +159,7 @@ class FileListViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun unConsumedOnKeyEvent() {
         runDesktopComposeUiTest {
@@ -208,16 +169,7 @@ class FileListViewModelTest {
 
                 val consumed = subject.onKeyEvent(
                     rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(
-                        KeyEvent(
-                            mockk(),
-                            KeyEvent.KEY_PRESSED,
-                            1,
-                            KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK,
-                            KeyEvent.VK_Q,
-                            'Q'
-                        )
-                    )
+                    androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
                 )
 
                 assertFalse(consumed)
@@ -292,20 +244,12 @@ class FileListViewModelTest {
         subject.onSingleClick(subject.items().first())
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onSingleClickWithShift() {
         subject.onKeyEvent(
             mockk(),
-            androidx.compose.ui.input.key.KeyEvent(
-                KeyEvent(
-                    mockk(),
-                    KeyEvent.KEY_PRESSED,
-                    1,
-                    KeyEvent.SHIFT_DOWN_MASK,
-                    KeyEvent.VK_Q,
-                    'Q'
-                )
-            )
+            androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isShiftPressed = true)
         )
 
         subject.start(
