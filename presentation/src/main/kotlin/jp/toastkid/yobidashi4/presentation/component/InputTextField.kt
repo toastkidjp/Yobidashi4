@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 
@@ -110,6 +111,7 @@ fun SingleLineTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     modifier: Modifier = Modifier
 ) {
     MultiLineTextField(
@@ -121,6 +123,7 @@ fun SingleLineTextField(
         keyboardOptions,
         keyboardActions,
         colors,
+        visualTransformation,
         modifier
     )
 }
@@ -135,6 +138,7 @@ fun MultiLineTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     modifier: Modifier = Modifier
 ) {
     TextField(
@@ -153,6 +157,7 @@ fun MultiLineTextField(
         },
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        visualTransformation = visualTransformation,
         modifier = modifier
     )
 }
