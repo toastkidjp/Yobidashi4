@@ -5,6 +5,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
 import io.mockk.MockKAnnotations
@@ -15,6 +17,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -49,6 +52,7 @@ class TextContextMenuFactoryTest {
         every { textManager.paste } returns mockk()
         every { textManager.selectAll } returns mockk()
         every { state.status } returns mockk()
+        every { state.status = any() } just Runs
     }
 
     @AfterEach
@@ -85,12 +89,20 @@ class TextContextMenuFactoryTest {
 
                 }
             }
+
+            onNode(hasText("Search")).performClick()
+            verify { mainViewModel.webSearch(any()) }
+
+            onNode(hasText("Count")).performClick()
+            verify { mainViewModel.showSnackbar(any()) }
         }
     }
 
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun nullCase() {
+        every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
+
         every { textManager.cut } returns null
         every { textManager.copy } returns null
         every { textManager.paste } returns null
@@ -105,6 +117,10 @@ class TextContextMenuFactoryTest {
 
                 }
             }
+
+            onNode(hasText("Cut")).assertDoesNotExist()
+            onNode(hasText("Copy")).assertDoesNotExist()
+            onNode(hasText("Paste")).assertDoesNotExist()
         }
     }
 
