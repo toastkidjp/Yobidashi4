@@ -56,7 +56,7 @@ class LoadIconKtTest {
 
         runDesktopComposeUiTest {
             setContent {
-                LoadIcon("images/icon/ic_web.xml", Modifier)
+                LoadIcon("images/icon/ic_web.xml")
 
                 verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
             }
