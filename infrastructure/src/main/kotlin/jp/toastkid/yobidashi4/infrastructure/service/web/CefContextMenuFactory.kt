@@ -15,9 +15,9 @@ class CefContextMenuFactory {
             return
         }
 
-        val enableSourceUrl = params?.sourceUrl.isNullOrBlank().not()
-        val enablePageUrl = params?.pageUrl.isNullOrBlank().not()
-        val usePlainTextMenu = params?.linkUrl.isNullOrBlank() && params?.sourceUrl.isNullOrBlank()
+        val enableSourceUrl = params != null && params.sourceUrl.isNullOrBlank().not()
+        val enablePageUrl = params != null && params.pageUrl.isNullOrBlank().not()
+        val usePlainTextMenu = params != null && params.linkUrl.isNullOrBlank() && params.sourceUrl.isNullOrBlank()
 
         ContextMenu.values().filter {
             return@filter when (it.context) {
