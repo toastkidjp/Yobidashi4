@@ -122,8 +122,8 @@ class LoanCalculatorViewModel {
 
     fun visualTransformation() = visualTransformation
 
-    private fun format(input: String?): String {
-        if (input.isNullOrBlank()) {
+    private fun format(input: String): String {
+        if (input.isBlank()) {
             return "0"
         }
 
