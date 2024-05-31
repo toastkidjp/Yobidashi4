@@ -47,26 +47,17 @@ internal fun InputTextField(
     modifier: Modifier
 ) {
     Box {
-        TextField(
+        MultiLineTextField(
             textFieldValue,
             maxLines = 1,
             colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-            label = { Text(labelText, color = MaterialTheme.colors.secondary) },
+            labelText = labelText,
             onValueChange = onValueChange,
-            keyboardActions = KeyboardActions(
-                onSearch = onSearch
-            ),
+            onClearInput = clearButton,
+            keyboardActions = KeyboardActions(onSearch = onSearch),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             visualTransformation = {
                 TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
-            },
-            trailingIcon = {
-                Icon(
-                    painterResource("images/icon/ic_clear_form.xml"),
-                    contentDescription = "Clear input.",
-                    tint = MaterialTheme.colors.secondary,
-                    modifier = Modifier.clickable(onClick = clearButton)
-                )
             },
             modifier = modifier.onFocusChanged(onFocusChanged)
         )
