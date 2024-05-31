@@ -50,9 +50,7 @@ fun FileRenameToolView() {
                     Text("Clear files")
                 }
                 Button(
-                    onClick = {
-                        viewModel.rename()
-                    },
+                    onClick = viewModel::rename,
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Text("Rename")
