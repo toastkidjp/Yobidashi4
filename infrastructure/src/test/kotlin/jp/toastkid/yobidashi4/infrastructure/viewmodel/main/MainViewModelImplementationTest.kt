@@ -1091,6 +1091,14 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun dismissSnackbar() {
+        subject.dismissSnackbar()
+
+        subject.showSnackbar("test")
+        subject.dismissSnackbar()
+    }
+
+    @Test
     fun switchArticleList() {
         assertFalse(subject.openArticleList())
 
