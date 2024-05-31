@@ -43,4 +43,10 @@ class JapaneseOffDayFinderServiceTest {
         assertTrue(japaneseOffDayFinderService.invoke(224, 3, false).isEmpty())
     }
 
+    @Test
+    fun check20124() {
+        assertTrue(japaneseOffDayFinderService.invoke(20124, 3, false).isEmpty())
+        assertEquals(1, japaneseOffDayFinderService.invoke(20124, 4, false).size)
+    }
+
 }
