@@ -512,6 +512,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
     }
 
+    override fun dismissSnackbar() {
+        snackbarHostState().currentSnackbarData?.dismiss()
+    }
+
     private val _openArticleList = mutableStateOf(false)
 
     override fun openArticleList(): Boolean = _openArticleList.value
