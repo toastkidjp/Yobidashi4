@@ -67,7 +67,6 @@ interface MainViewModel {
     fun updateEditorContent(path: Path, text: String, caretPosition: Int = -1, scroll: Double = -1.0, resetEditing: Boolean)
     fun openingEditor(): Boolean
     fun setShowWebSearch(newState: Boolean = true)
-    fun showingSnackbar(): Boolean
     fun updateWebTab(id: String, title: String, url: String?)
     fun updateCalendarTab(tab: CalendarTab, year: Int, month: Int)
     fun updateScrollableTab(tab: ScrollableContentTab, scrollPosition: Int)
@@ -84,8 +83,11 @@ interface MainViewModel {
 
     fun toDefaultWindowSize()
 
+    fun showingSnackbar(): Boolean
     fun snackbarHostState(): SnackbarHostState
     fun showSnackbar(message: String, actionLabel: String? = null, action: () -> Unit = {})
+
+    fun dismissSnackbar()
 
     fun articles(): List<Path>
     fun reloadAllArticle()
