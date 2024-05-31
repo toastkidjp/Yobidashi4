@@ -23,7 +23,7 @@ fun MainScaffold() {
             SnackbarHost(
                 hostState = mainViewModel.snackbarHostState(),
                 snackbar = {
-                    MainSnackbar(it) { mainViewModel.snackbarHostState().currentSnackbarData?.dismiss() }
+                    MainSnackbar(it, mainViewModel::dismissSnackbar)
                 }
             )
         }
