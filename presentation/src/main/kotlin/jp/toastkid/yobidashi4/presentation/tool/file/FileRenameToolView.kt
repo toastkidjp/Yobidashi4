@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -58,13 +57,12 @@ fun FileRenameToolView() {
             }
 
             Box {
-                val verticalScrollState = rememberLazyListState()
-                LazyColumn(state = verticalScrollState) {
+                LazyColumn(state = viewModel.listState()) {
                     items(viewModel.items()) { path ->
                         Text(path.fileName.toString())
                     }
                 }
-                VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(
+                VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(
                     Alignment.CenterEnd))
             }
         }
