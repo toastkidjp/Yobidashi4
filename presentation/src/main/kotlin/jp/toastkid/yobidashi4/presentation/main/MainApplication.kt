@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.main.content.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.drop.TextFileReceiver
-import jp.toastkid.yobidashi4.presentation.main.handler.UncaughtExceptionHandler
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
 import jp.toastkid.yobidashi4.presentation.main.menu.TextContextMenuFactory
 import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
@@ -89,8 +88,6 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
     }
 
     LaunchedEffect(Unit) {
-        Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
-
         withContext(Dispatchers.IO) {
             mainViewModel.loadBackgroundImage()
         }

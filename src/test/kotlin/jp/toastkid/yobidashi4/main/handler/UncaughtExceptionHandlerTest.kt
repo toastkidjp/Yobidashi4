@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.presentation.main.handler
+package jp.toastkid.yobidashi4.main.handler
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs

@@ -4,6 +4,7 @@ import jp.toastkid.yobidashi4.infrastructure.di.DependencyInjectionContainer
 import jp.toastkid.yobidashi4.infrastructure.service.article.TodayArticleGeneratorImplementation
 import jp.toastkid.yobidashi4.infrastructure.service.article.finder.AsynchronousArticleIndexerServiceImplementation
 import jp.toastkid.yobidashi4.infrastructure.service.main.AppCloserThreadFactory
+import jp.toastkid.yobidashi4.main.handler.UncaughtExceptionHandler
 import jp.toastkid.yobidashi4.presentation.main.launchMainApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,8 @@ fun main() {
     }
 
     AsynchronousArticleIndexerServiceImplementation().invoke(Dispatchers.IO)
+
+    Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler())
 
     launchMainApplication()
 
