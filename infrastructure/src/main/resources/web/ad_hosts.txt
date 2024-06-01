@@ -613,6 +613,7 @@ engine.spotscenered.info
 enhance.genieesspv.jp
 entrypoint.search.yahooapis.jp
 ero-advertising.com
+eropasture.com
 erosoku.net
 erotube69.pw
 et.w.inmobi.com
@@ -738,6 +739,7 @@ img.bbchat.tv
 img.bypass.jp
 img.dailyfortune.jp
 img.dlsite.jp
+img.dsp.bance.jp
 img.e-nls.com
 img.fam-ad.com
 img.fluct.jp
@@ -822,6 +824,7 @@ js.rfp.fout.jp
 js.spacenine.biz
 js.speead.jp
 js.sprout-ad.com
+js.ssp.bance.jp
 js.tapone.jp
 js.toki-aiad.com
 js.unitedblades.jp
@@ -1222,7 +1225,9 @@ tools.sbs-ad.com
 touch.vivid-memory.com
 tpc.googlesyndication.com
 tr.adplatform.jp
+tr.dsp.bance.jp
 tr.find-a.jp
+tr.ssp.bance.jp
 tracer.a-cast.jp
 tracer.jp
 track.bannerbridge.net
@@ -1237,6 +1242,7 @@ tsyndicate.com
 u.openx.net
 uac.advertising.com
 umamistreet.analytics.qlook.net
+unpkg.com
 ups.analytics.yahoo.com
 ups.virool.com
 us.themoneytizer.com
@@ -1385,4 +1391,3 @@ asset.fwcdn3.com
 player.gliacloud.com
 skirthoetwoutb.com
 mostlypillow.com
-eropasture.com
