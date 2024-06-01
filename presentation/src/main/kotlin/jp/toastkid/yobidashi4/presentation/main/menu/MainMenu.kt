@@ -221,9 +221,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Converter", icon = painterResource("images/icon/ic_converter.xml")) {
                 viewModel.openConverterToolTab()
             }
-            Item("File rename", icon = painterResource("images/icon/ic_rename.xml")) {
-                viewModel.openFileRenameToolTab()
-            }
+
+            Item(
+                "File rename",
+                icon = painterResource("images/icon/ic_rename.xml"),
+                onClick = viewModel::openFileRenameToolTab
+            )
 
             Item(
                 "Roulette",
