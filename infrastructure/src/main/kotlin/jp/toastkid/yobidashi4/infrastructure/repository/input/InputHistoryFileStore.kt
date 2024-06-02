@@ -56,4 +56,4 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
 
 private val folder = Path.of("temporary/input/history/")
 
-private val extension = "tsv"
+private const val extension = "tsv"
