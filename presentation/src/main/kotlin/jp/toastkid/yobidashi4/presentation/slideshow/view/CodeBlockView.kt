@@ -44,9 +44,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
         Box(modifier = modifier.background(MaterialTheme.colors.surface).heightIn(max = viewModel.maxHeight(fontSize))) {
             BasicTextField(
                 value = viewModel.content(),
-                onValueChange = {
-                    viewModel.onValueChange(it)
-                },
+                onValueChange = viewModel::onValueChange,
                 visualTransformation = {
                     viewModel.transform(it)
                 },
