@@ -62,7 +62,9 @@ class InputBoxViewModel : KoinComponent {
         if (viewModel.showInputBox()) {
             focusRequester().requestFocus()
         }
-        query.value = TextFieldValue((viewModel.currentTab() as? WebTab)?.url() ?: "")
+
+        val webTab = viewModel.currentTab() as? WebTab ?: return
+        query.value = TextFieldValue(webTab.url())
     }
 
 }
