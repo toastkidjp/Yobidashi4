@@ -190,7 +190,7 @@ class TextEditorViewModel : KoinComponent {
 
         CoroutineScope(dispatcher).launch {
             mainViewModel.finderFlow().collect {
-                findOrderReceiver(it, content.value) { content.value = it }
+                findOrderReceiver(it, content.value, ::applyStyle)
             }
         }
     }
