@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
@@ -23,7 +24,11 @@ class FileRenameToolViewModel : KoinComponent {
 
     private val input = mutableStateOf(TextFieldValue("img_"))
 
+    private val listState = LazyListState()
+
     fun items(): List<Path> = paths
+
+    fun listState() = listState
 
     fun input() = input.value
 
