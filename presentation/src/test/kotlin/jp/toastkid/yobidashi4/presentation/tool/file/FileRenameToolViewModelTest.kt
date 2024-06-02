@@ -69,6 +69,11 @@ class FileRenameToolViewModelTest {
     }
 
     @Test
+    fun listState() {
+        assertEquals(0, subject.listState().firstVisibleItemIndex)
+    }
+
+    @Test
     fun onValueChange() {
         assertEquals("img_", subject.input().text)
 
