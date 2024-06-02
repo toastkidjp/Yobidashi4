@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.content.data
 
+import androidx.compose.runtime.Immutable
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
@@ -7,6 +8,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+@Immutable
 data class FileListItem(
     val path: Path,
     val selected: Boolean = false,
