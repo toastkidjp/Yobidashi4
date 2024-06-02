@@ -23,4 +23,4 @@ data class InputHistory(
 
 }
 
-private val DELIMITER = "\t"
+private const val DELIMITER = "\t"
