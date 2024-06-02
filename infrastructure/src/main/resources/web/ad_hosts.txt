@@ -280,6 +280,7 @@ aimds.er.cyberwing.co.jp
 aimg.fc2.com
 aio.lp.mydas.mobi
 ak.assets.adlantis.jp
+al.dmm.com
 ala.durasite.net
 aladdin.genieesspv.jp
 alea.adam.ad.daum.net
@@ -388,6 +389,7 @@ as.yl.impact-ad.jp
 ashot.txxx.com
 asp.m-live.jp
 aspm.jp
+asset.fwcdn3.com
 assets.gunosy.com
 associate.microad.jp
 au.adserver.yahoo.com
@@ -893,6 +895,7 @@ mobylog.jp
 momoemoe.com
 moneytizer-d.openx.net
 moradu.com
+mostlypillow.com
 movie-wiki.net
 moviegate1.net
 msend.microad.jp
@@ -949,8 +952,10 @@ pc.tunnel-vision.info
 pcmax.jp
 penta.a.one.impact-ad.jp
 pic.tokyo-tube-ad.com
+pics.dmm.com
 pink.clicktx.jp
 pixel.mathtag.com
+player.gliacloud.com
 playfolders.com
 playtune.info
 pokoran.com
@@ -1106,6 +1111,7 @@ sh.adingo.jp
 sh.i2i.jp
 sh.zucks.net
 shopapi.ranking.rakuten.co.jp
+skirthoetwoutb.com
 smaad.jp
 smart-c.jp
 smartaccess.biz
@@ -1264,6 +1270,7 @@ webtrackerplus.com
 webtrendslive.com
 whos.amung.us
 widget-view.dmm.co.jp
+widget-view.dmm.com
 widget.blogram.jp
 widget.iid-network.jp
 widget.plugrush.com
@@ -1382,12 +1389,3 @@ yj-a.p.adnxs.com
 yjaxc.yahoo.co.jp
 yourbest.exclusiveoffer.today
 z.moatads.com
-pics.dmm.com
-al.dmm.com
-widget-view.dmm.com
-pagead2.googlesyndication.com
-cdn4.fireworktv.com
-asset.fwcdn3.com
-player.gliacloud.com
-skirthoetwoutb.com
-mostlypillow.com
