@@ -85,7 +85,7 @@ fun MarkdownPreview(
                                         line.taskList -> Checkbox(
                                             checked = it.startsWith("[x]"),
                                             enabled = false,
-                                            onCheckedChange = {},
+                                            onCheckedChange = null,
                                             modifier = Modifier.size(32.dp)
                                         )
 
@@ -116,7 +116,6 @@ fun MarkdownPreview(
                         is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
                         is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
                         is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                        else -> Unit
                     }
                 }
             }
