@@ -218,9 +218,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Barcode tool", icon = painterResource("images/icon/ic_barcode.xml")) {
                 viewModel.openBarcodeToolTab()
             }
-            Item("Converter", icon = painterResource("images/icon/ic_converter.xml")) {
-                viewModel.openConverterToolTab()
-            }
+
+            Item(
+                "Converter",
+                icon = painterResource("images/icon/ic_converter.xml"),
+                onClick = viewModel::openConverterToolTab
+            )
 
             Item(
                 "File rename",
