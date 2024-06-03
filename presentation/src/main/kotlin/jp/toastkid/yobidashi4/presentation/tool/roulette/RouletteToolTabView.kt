@@ -56,7 +56,7 @@ fun RouletteToolTabView() {
                 Int.MAX_VALUE,
                 viewModel::onValueChange,
                 viewModel::clearInput,
-                modifier = Modifier.onKeyEvent { viewModel.onKeyEvent(it) }
+                modifier = Modifier.onKeyEvent(viewModel::onKeyEvent)
             )
         }
     }
