@@ -15,6 +15,7 @@ import kotlin.io.path.nameWithoutExtension
 import org.apache.lucene.document.Document
 import org.apache.lucene.search.TopDocs
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -60,7 +61,8 @@ class FullTextArticleFinderImplementationTest {
     fun invoke() {
         val aggregationResult = subject.invoke("test")
 
-        println(aggregationResult.itemArrays().size)
+        assertEquals(1, aggregationResult.itemArrays().size)
+        assertEquals("'test' find result 1", aggregationResult.title())
     }
 
     @Test
