@@ -93,8 +93,4 @@ class SlideshowViewModel {
         sliderVisibility.value = false
     }
 
-    fun setSliderVisibility(b: Boolean) {
-        sliderVisibility.value = b
-    }
-
 }
