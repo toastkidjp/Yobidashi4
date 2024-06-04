@@ -54,6 +54,11 @@ val engine = KotlinJsr223DefaultScriptEngineFactory().scriptEngine
 result.value = engine.eval(input.value.text).toString()
 ```
 
+```kotlin:test
+val engine = KotlinJsr223DefaultScriptEngineFactory().scriptEngine
+result.value = engine.eval(input.value.text).toString()
+```
+
 #### Quote
 > To be, or not to be, that is the question.
 
