@@ -69,9 +69,9 @@ data class NumberBoard(
 
     private fun getIntInBox(parameterX: Int, parameterY: Int): Set<Int> {
         val currentNumbers = mutableSetOf<Int>()
-        (initialIndex(parameterX) .. initialIndex(parameterX) + 2).forEach { _x ->
-            (initialIndex(parameterY)..initialIndex(parameterY) + 2).forEach { _y ->
-                currentNumbers.add(rows[_y][_x])
+        (initialIndex(parameterX) .. initialIndex(parameterX) + 2).forEach { x ->
+            (initialIndex(parameterY)..initialIndex(parameterY) + 2).forEach { y ->
+                currentNumbers.add(rows[y][x])
             }
         }
 
