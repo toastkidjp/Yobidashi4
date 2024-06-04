@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.barcode
 
 import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -85,6 +86,16 @@ class BarcodeToolTabViewModelTest {
 
         assertEquals("test", barcodeToolTabViewModel.encodeInputValue().text)
         verify { barcodeEncoder.invoke(any(), any(), any()) }
+    }
+
+    @Test
+    fun setEncodeInputValueWithoutNewBarcode() {
+        assertTrue(barcodeToolTabViewModel.encodeInputValue().text.isEmpty())
+
+        barcodeToolTabViewModel.setEncodeInputValue(TextFieldValue(""))
+
+        assertTrue(barcodeToolTabViewModel.encodeInputValue().text.isEmpty())
+        verify { barcodeEncoder wasNot Called }
     }
 
     @Test
