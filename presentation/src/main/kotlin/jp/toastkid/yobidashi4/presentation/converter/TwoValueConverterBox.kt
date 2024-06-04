@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
@@ -23,25 +22,23 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        Row {
-            Column {
-                Text(unixTimeConverterService.title(), modifier = Modifier.padding(8.dp))
+        Column {
+            Text(unixTimeConverterService.title(), modifier = Modifier.padding(8.dp))
 
-                SingleLineTextField(
-                    viewModel.firstInput(),
-                    unixTimeConverterService.firstInputLabel(),
-                    viewModel::onFirstValueChange,
-                    viewModel::clearFirstInput,
-                    KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+            SingleLineTextField(
+                viewModel.firstInput(),
+                unixTimeConverterService.firstInputLabel(),
+                viewModel::onFirstValueChange,
+                viewModel::clearFirstInput,
+                KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
 
-                SingleLineTextField(
-                    viewModel.secondInput(),
-                    unixTimeConverterService.secondInputLabel(),
-                    viewModel::onSecondValueChange,
-                    viewModel::clearSecondInput
-                )
-            }
+            SingleLineTextField(
+                viewModel.secondInput(),
+                unixTimeConverterService.secondInputLabel(),
+                viewModel::onSecondValueChange,
+                viewModel::clearSecondInput
+            )
         }
     }
 }
