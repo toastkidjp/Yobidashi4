@@ -35,6 +35,11 @@ class TableFormConverterTest {
     }
 
     @Test
+    fun endWithBreak() {
+        assertEquals("| a | b\n", TableFormConverter().invoke("a b\n"))
+    }
+
+    @Test
     fun notEndWithBreak() {
         assertEquals("| a | b", TableFormConverter().invoke("a b"))
     }
