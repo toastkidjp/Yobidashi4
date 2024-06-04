@@ -25,6 +25,20 @@ class LoanCalculatorViewModelTest {
     }
 
     @Test
+    fun useZeroInsteadOfEmpty() {
+        subject.setLoanAmount("")
+
+        assertEquals("0", subject.loanAmount())
+    }
+
+    @Test
+    fun useZeroInsteadOfBlank() {
+        subject.setLoanAmount(" ")
+
+        assertEquals("0", subject.loanAmount())
+    }
+
+    @Test
     fun loanAmount() {
         subject.setLoanAmount("20000000")
 
