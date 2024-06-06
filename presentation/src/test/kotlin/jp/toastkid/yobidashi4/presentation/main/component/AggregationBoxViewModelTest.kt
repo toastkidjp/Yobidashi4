@@ -71,6 +71,8 @@ class AggregationBoxViewModelTest {
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
         every { anyConstructed<InputHistoryService>().filter(any(), any()) } just Runs
 
+        every { keywordSearch.label() } returns "Find article"
+
         subject = AggregationBoxViewModel()
     }
 
@@ -98,7 +100,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun onKeyEventWith2Key() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
@@ -111,7 +113,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun onKeyEventWith2KeyButKeyHasReleased() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
@@ -135,7 +137,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun unconsumedOnKeyEventWith2KeyAndOtherMask() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
         subject.onDateInputValueChange(TextFieldValue("test"))
 
         val consumed = subject.onKeyEvent(
@@ -220,7 +222,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun onKeywordValueChange() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         assertTrue(subject.keyword().text.isEmpty())
 
@@ -248,7 +250,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun choose() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         assertEquals("Find article", subject.selectedCategoryName())
 
@@ -270,7 +272,7 @@ class AggregationBoxViewModelTest {
     fun requireSecondInput() {
         assertFalse(subject.requireSecondInput())
 
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         assertTrue(subject.requireSecondInput())
     }
@@ -312,7 +314,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun keywordHistory() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         assertFalse(subject.shouldShowDateHistory())
         assertTrue(subject.dateHistories().isEmpty())
@@ -332,7 +334,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun putKeyword() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         subject.putDate(null)
 
@@ -353,7 +355,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun deleteInputHistoryItem() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         subject.deleteDateHistoryItem("test")
 
@@ -369,7 +371,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun clearKeywordHistory() {
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
 
         subject.clearDateHistory()
 
@@ -379,7 +381,7 @@ class AggregationBoxViewModelTest {
     @Test
     fun label() {
         val normal = subject.label()
-        subject.choose(subject.categories().entries.last())
+        subject.choose(subject.categories().last())
         val find = subject.label()
 
         assertNotEquals(normal, find)
