@@ -5,9 +5,9 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 
-class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesReaderService) {
+class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesReaderService) : ArticleAggregator {
 
-    operator fun invoke(keyword: String): MovieMemoExtractorResult {
+    override operator fun invoke(keyword: String): MovieMemoExtractorResult {
         val result = MovieMemoExtractorResult()
         articlesReaderService.invoke()
                 .parallel()
@@ -24,4 +24,9 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
                 }
         return result
     }
+
+    override fun label() = "Movies"
+
+    override fun iconPath() = "images/icon/ic_movie.xml"
+
 }
