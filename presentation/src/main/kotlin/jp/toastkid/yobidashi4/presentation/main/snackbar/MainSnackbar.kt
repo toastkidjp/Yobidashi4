@@ -26,10 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
+internal fun MainSnackbar(snackbarData: SnackbarData) {
+    val mainViewModel = remember { object : KoinComponent { val it: MainViewModel by inject() }.it }
     val dismissSnackbarDistance = with(LocalDensity.current) { 120.dp.toPx() }
     val anchors = DraggableAnchors {
         Start at -dismissSnackbarDistance.dp.value
@@ -46,7 +50,7 @@ internal fun MainSnackbar(snackbarData: SnackbarData, onDismiss: () -> Unit) {
             animationSpec = spring(),
             confirmValueChange = {
                 when (it) {
-                    Start, End -> onDismiss()
+                    Start, End -> mainViewModel.dismissSnackbar()
                     else -> return@AnchoredDraggableState false
                 }
                 true
