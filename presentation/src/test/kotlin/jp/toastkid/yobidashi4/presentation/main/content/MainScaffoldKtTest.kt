@@ -25,6 +25,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
 import kotlinx.coroutines.flow.emptyFlow
@@ -41,6 +43,12 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
+    @MockK
+    private lateinit var articlesReaderService: ArticlesReaderService
+
+    @MockK
+    private lateinit var fullTextArticleFinder: FullTextArticleFinder
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -49,6 +57,8 @@ class MainScaffoldKtTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
+                    single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                 }
             )
         }
