@@ -11,10 +11,47 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
+import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.unmockkAll
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.launch
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 class MainSnackbarKtTest {
+
+    @MockK
+    private lateinit var mainViewModel: MainViewModel
+
+    @BeforeEach
+    fun setUp() {
+        MockKAnnotations.init(this)
+
+        startKoin {
+            modules(
+                module {
+                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
+                }
+            )
+        }
+
+        every { mainViewModel.dismissSnackbar() } just Runs
+    }
+
+    @AfterEach
+    fun tearDown() {
+        stopKoin()
+        unmockkAll()
+    }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
@@ -28,7 +65,7 @@ class MainSnackbarKtTest {
                         SnackbarHost(
                             hostState = snackbarHostState,
                             snackbar = {
-                                MainSnackbar(it) { snackbarHostState.currentSnackbarData?.dismiss() }
+                                MainSnackbar(it)
                             }
                         )
                     }
@@ -57,7 +94,7 @@ class MainSnackbarKtTest {
                         SnackbarHost(
                             hostState = snackbarHostState,
                             snackbar = {
-                                MainSnackbar(it) { snackbarHostState.currentSnackbarData?.dismiss() }
+                                MainSnackbar(it)
                             }
                         )
                     }
@@ -89,7 +126,7 @@ class MainSnackbarKtTest {
                         SnackbarHost(
                             hostState = snackbarHostState,
                             snackbar = {
-                                MainSnackbar(it) { snackbarHostState.currentSnackbarData?.dismiss() }
+                                MainSnackbar(it)
                             }
                         )
                     }
