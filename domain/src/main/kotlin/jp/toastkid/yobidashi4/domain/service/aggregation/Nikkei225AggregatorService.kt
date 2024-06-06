@@ -1,13 +1,14 @@
 package jp.toastkid.yobidashi4.domain.service.aggregation
 
 import java.nio.file.Files
+import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.Nikkei225AggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 
-class Nikkei225AggregatorService(private val articlesReaderService: ArticlesReaderService) {
+class Nikkei225AggregatorService(private val articlesReaderService: ArticlesReaderService) : ArticleAggregator {
 
-    operator fun invoke(keyword: String): Nikkei225AggregationResult {
+    override operator fun invoke(keyword: String): AggregationResult {
         val result = Nikkei225AggregationResult()
 
         articlesReaderService.invoke()
@@ -39,6 +40,10 @@ class Nikkei225AggregatorService(private val articlesReaderService: ArticlesRead
             }
         }
     }
+
+    override fun label() = "Nikkei 225"
+
+    override fun iconPath() = "images/icon/ic_payments.xml"
 
     companion object {
 
