@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -27,9 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -139,20 +140,20 @@ fun LoanCalculatorView() {
 
 @Composable
 private fun LoanCalculatorInput(
-    value: String,
-    onValueChange: (String) -> Unit, labelText: String,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    labelText: String,
     visualTransformation: VisualTransformation
 ) {
-    OutlinedTextField(
-        value = value,
+    SingleLineTextField(
+        textFieldValue = value,
         onValueChange = onValueChange,
-        label = { Text(text = labelText) },
+        labelText = labelText,
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onSurface,
             backgroundColor = Color.Transparent,
             cursorColor = MaterialTheme.colors.onSurface
         ),
-        singleLine = true,
         visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
