@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.loan
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -23,12 +24,12 @@ class LoanCalculatorViewKtTest {
             PaymentDetail(1.0, 0.99, 2000),
             PaymentDetail(1.2, 1.0, 2000),
         )
-        every { anyConstructed<LoanCalculatorViewModel>().loanAmount() } returns "0"
-        every { anyConstructed<LoanCalculatorViewModel>().loanTerm() } returns "0"
-        every { anyConstructed<LoanCalculatorViewModel>().interestRate() } returns "0"
-        every { anyConstructed<LoanCalculatorViewModel>().downPayment() } returns "0"
-        every { anyConstructed<LoanCalculatorViewModel>().managementFee() } returns "0"
-        every { anyConstructed<LoanCalculatorViewModel>().renovationReserves() } returns "0"
+        every { anyConstructed<LoanCalculatorViewModel>().loanAmount() } returns TextFieldValue("0")
+        every { anyConstructed<LoanCalculatorViewModel>().loanTerm() } returns TextFieldValue("0")
+        every { anyConstructed<LoanCalculatorViewModel>().interestRate() } returns TextFieldValue("0")
+        every { anyConstructed<LoanCalculatorViewModel>().downPayment() } returns TextFieldValue("0")
+        every { anyConstructed<LoanCalculatorViewModel>().managementFee() } returns TextFieldValue("0")
+        every { anyConstructed<LoanCalculatorViewModel>().renovationReserves() } returns TextFieldValue("0")
         every { anyConstructed<LoanCalculatorViewModel>().roundToIntSafely(any()) } returns "0"
         every { anyConstructed<LoanCalculatorViewModel>().launch() } just Runs
         every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(0)
