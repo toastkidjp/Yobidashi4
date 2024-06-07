@@ -6,9 +6,9 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 
-class StocksAggregatorService(private val articlesReaderService: ArticlesReaderService) {
+class StocksAggregatorService(private val articlesReaderService: ArticlesReaderService) : ArticleAggregator {
 
-    operator fun invoke(keyword: String): StocksAggregationResult {
+    override operator fun invoke(keyword: String): StocksAggregationResult {
         val aggregationResult = StocksAggregationResult()
         articlesReaderService.invoke()
             .parallel()
@@ -30,6 +30,10 @@ class StocksAggregatorService(private val articlesReaderService: ArticlesReaderS
             }
         return aggregationResult
     }
+
+    override fun label() = "Stock"
+
+    override fun iconPath() = "images/icon/ic_asset_management.xml"
 
     companion object {
 
