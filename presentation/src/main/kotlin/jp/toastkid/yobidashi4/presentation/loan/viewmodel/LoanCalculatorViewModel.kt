@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
@@ -22,63 +23,63 @@ class LoanCalculatorViewModel {
 
     fun result() = result.value
 
-    private val loanAmount = mutableStateOf("35000000")
+    private val loanAmount = mutableStateOf(TextFieldValue("35000000"))
 
     fun loanAmount() = loanAmount.value
 
-    fun setLoanAmount(value: String) {
-        loanAmount.value = format(value)
+    fun setLoanAmount(value: TextFieldValue) {
+        loanAmount.value = format(value.text)
 
-        onChange(inputChannel, value)
+        onChange(inputChannel, value.text)
     }
 
-    private val loanTerm = mutableStateOf("35")
+    private val loanTerm = mutableStateOf(TextFieldValue("35"))
 
     fun loanTerm() = loanTerm.value
 
-    fun setLoanTerm(value: String) {
-        loanTerm.value = format(value)
+    fun setLoanTerm(value: TextFieldValue) {
+        loanTerm.value = format(value.text)
 
-        onChange(inputChannel, value)
+        onChange(inputChannel, value.text)
     }
 
-    private val interestRate = mutableStateOf("1.0")
+    private val interestRate = mutableStateOf(TextFieldValue("1.0"))
 
     fun interestRate() = interestRate.value
 
-    fun setInterestRate(value: String) {
-        interestRate.value = format(value)
+    fun setInterestRate(value: TextFieldValue) {
+        interestRate.value = format(value.text)
 
-        onChange(inputChannel, value)
+        onChange(inputChannel, value.text)
     }
 
-    private val downPayment = mutableStateOf("1000000")
+    private val downPayment = mutableStateOf(TextFieldValue("1000000"))
 
     fun downPayment() = downPayment.value
 
-    fun setDownPayment(value: String) {
-        downPayment.value = format(value)
+    fun setDownPayment(value: TextFieldValue) {
+        downPayment.value = format(value.text)
 
-        onChange(inputChannel, value)
+        onChange(inputChannel, value.text)
     }
 
-    private val managementFee = mutableStateOf("10000")
+    private val managementFee = mutableStateOf(TextFieldValue("10000"))
 
     fun managementFee() = managementFee.value
 
-    fun setManagementFee(value: String) {
-        managementFee.value = format(value)
+    fun setManagementFee(value: TextFieldValue) {
+        managementFee.value = format(value.text)
 
-        onChange(inputChannel, value)
+        onChange(inputChannel, value.text)
     }
 
-    private val renovationReserves = mutableStateOf("10000")
+    private val renovationReserves = mutableStateOf(TextFieldValue("10000"))
 
     fun renovationReserves() = renovationReserves.value
 
-    fun setRenovationReserves(value: String) {
-        renovationReserves.value = format(value)
-        onChange(inputChannel, value)
+    fun setRenovationReserves(value: TextFieldValue) {
+        renovationReserves.value = format(value.text)
+        onChange(inputChannel, value.text)
     }
 
     private val scheduleState = mutableStateListOf<PaymentDetail>()
@@ -94,12 +95,12 @@ class LoanCalculatorViewModel {
             inputChannel,
             {
                 Factor(
-                    extractLong(loanAmount.value),
-                    extractInt(loanTerm.value),
-                    extractDouble(interestRate.value),
-                    extractInt(downPayment.value),
-                    extractInt(managementFee.value),
-                    extractInt(renovationReserves.value)
+                    extractLong(loanAmount.value.text),
+                    extractInt(loanTerm.value.text),
+                    extractDouble(interestRate.value.text),
+                    extractInt(downPayment.value.text),
+                    extractInt(managementFee.value.text),
+                    extractInt(renovationReserves.value.text)
                 )
             },
             {
@@ -122,12 +123,12 @@ class LoanCalculatorViewModel {
 
     fun visualTransformation() = visualTransformation
 
-    private fun format(input: String): String {
+    private fun format(input: String): TextFieldValue {
         if (input.isBlank()) {
-            return "0"
+            return TextFieldValue("0")
         }
 
-        return input.filter { it.isDigit() || it == '.' }.trim()
+        return TextFieldValue(input.filter { it.isDigit() || it == '.' }.trim())
     }
 
     private fun extractLong(editText: String) = editText.toLong()
