@@ -217,9 +217,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Web history", shortcut = KeyShortcut(Key.H, alt = true), icon = painterResource("images/icon/ic_history.xml")) {
                 viewModel.openWebHistoryTab()
             }
-            Item("Web search", shortcut = KeyShortcut(Key.S, alt = true), icon = painterResource("images/icon/ic_search.xml")) {
-                viewModel.switchWebSearchBox()
-            }
+
+            Item(
+                "Web search",
+                shortcut = KeyShortcut(Key.S, alt = true),
+                icon = painterResource("images/icon/ic_search.xml"),
+                onClick =  viewModel::switchWebSearchBox
+            )
 
             Item(
                 "Barcode tool",
