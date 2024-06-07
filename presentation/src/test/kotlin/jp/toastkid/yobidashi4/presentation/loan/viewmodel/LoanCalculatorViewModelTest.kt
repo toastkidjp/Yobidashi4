@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -26,58 +27,58 @@ class LoanCalculatorViewModelTest {
 
     @Test
     fun useZeroInsteadOfEmpty() {
-        subject.setLoanAmount("")
+        subject.setLoanAmount(TextFieldValue())
 
-        assertEquals("0", subject.loanAmount())
+        assertEquals("0", subject.loanAmount().text)
     }
 
     @Test
     fun useZeroInsteadOfBlank() {
-        subject.setLoanAmount(" ")
+        subject.setLoanAmount(TextFieldValue(" "))
 
-        assertEquals("0", subject.loanAmount())
+        assertEquals("0", subject.loanAmount().text)
     }
 
     @Test
     fun loanAmount() {
-        subject.setLoanAmount("20000000")
+        subject.setLoanAmount(TextFieldValue("20000000"))
 
-        assertEquals("20000000", subject.loanAmount())
+        assertEquals("20000000", subject.loanAmount().text)
     }
 
     @Test
     fun loanTerm() {
-        subject.setLoanTerm("5")
+        subject.setLoanTerm(TextFieldValue("5"))
 
-        assertEquals("5", subject.loanTerm())
+        assertEquals("5", subject.loanTerm().text)
     }
 
     @Test
     fun interestRate() {
-        subject.setInterestRate("0.5")
+        subject.setInterestRate(TextFieldValue("0.5"))
 
-        assertEquals("0.5", subject.interestRate())
+        assertEquals("0.5", subject.interestRate().text)
     }
 
     @Test
     fun downPayment() {
-        subject.setDownPayment("2000000")
+        subject.setDownPayment(TextFieldValue("2000000"))
 
-        assertEquals("2000000", subject.downPayment())
+        assertEquals("2000000", subject.downPayment().text)
     }
 
     @Test
     fun managementFee() {
-        subject.setManagementFee("30000")
+        subject.setManagementFee(TextFieldValue("30000"))
 
-        assertEquals("30000", subject.managementFee())
+        assertEquals("30000", subject.managementFee().text)
     }
 
     @Test
     fun renovationReserves() {
-        subject.setRenovationReserves("30001")
+        subject.setRenovationReserves(TextFieldValue("30001"))
 
-        assertEquals("30001", subject.renovationReserves())
+        assertEquals("30001", subject.renovationReserves().text)
     }
 
     @Test
@@ -94,16 +95,16 @@ class LoanCalculatorViewModelTest {
 
     @Test
     fun setEmpty() {
-        subject.setRenovationReserves("")
+        subject.setRenovationReserves(TextFieldValue())
 
-        assertEquals("0", subject.renovationReserves())
+        assertEquals("0", subject.renovationReserves().text)
     }
 
     @Test
     fun setIncludingComma() {
-        subject.setRenovationReserves("10,000")
+        subject.setRenovationReserves(TextFieldValue("10,000"))
 
-        assertEquals("10000", subject.renovationReserves())
+        assertEquals("10000", subject.renovationReserves().text)
     }
 
     @Test
