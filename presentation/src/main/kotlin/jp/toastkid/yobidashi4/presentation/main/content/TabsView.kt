@@ -86,12 +86,11 @@ internal fun TabsView(modifier: Modifier) {
             selectedTabIndex = viewModel.selectedTabIndex(),
             indicator = { tabPositions ->
                 val currentTabIndex = viewModel.currentTabIndex(tabPositions.size)
-                if (currentTabIndex >= tabPositions.size) {
-                    return@ScrollableTabRow
-                }
+
+                val currentTabPosition = tabPositions.getOrNull(currentTabIndex) ?: return@ScrollableTabRow
 
                 Divider(modifier = Modifier
-                    .tabIndicatorOffset(tabPositions[currentTabIndex])
+                    .tabIndicatorOffset(currentTabPosition)
                     .height(2.dp)
                     .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                     .padding(horizontal = 4.dp)
