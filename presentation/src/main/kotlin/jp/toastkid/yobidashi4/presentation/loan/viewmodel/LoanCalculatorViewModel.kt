@@ -28,7 +28,7 @@ class LoanCalculatorViewModel {
     fun loanAmount() = loanAmount.value
 
     fun setLoanAmount(value: TextFieldValue) {
-        loanAmount.value = format(value.text)
+        loanAmount.value = value.copy(text = format(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -38,7 +38,7 @@ class LoanCalculatorViewModel {
     fun loanTerm() = loanTerm.value
 
     fun setLoanTerm(value: TextFieldValue) {
-        loanTerm.value = format(value.text)
+        loanTerm.value = value.copy(text = format(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -48,7 +48,7 @@ class LoanCalculatorViewModel {
     fun interestRate() = interestRate.value
 
     fun setInterestRate(value: TextFieldValue) {
-        interestRate.value = format(value.text)
+        interestRate.value = value.copy(format(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -58,7 +58,7 @@ class LoanCalculatorViewModel {
     fun downPayment() = downPayment.value
 
     fun setDownPayment(value: TextFieldValue) {
-        downPayment.value = format(value.text)
+        downPayment.value = value.copy(format(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -68,7 +68,7 @@ class LoanCalculatorViewModel {
     fun managementFee() = managementFee.value
 
     fun setManagementFee(value: TextFieldValue) {
-        managementFee.value = format(value.text)
+        managementFee.value = value.copy(format(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -78,7 +78,7 @@ class LoanCalculatorViewModel {
     fun renovationReserves() = renovationReserves.value
 
     fun setRenovationReserves(value: TextFieldValue) {
-        renovationReserves.value = format(value.text)
+        renovationReserves.value = value.copy(format(value.text))
         onChange(inputChannel, value.text)
     }
 
@@ -123,12 +123,12 @@ class LoanCalculatorViewModel {
 
     fun visualTransformation() = visualTransformation
 
-    private fun format(input: String): TextFieldValue {
+    private fun format(input: String): String {
         if (input.isBlank()) {
-            return TextFieldValue("0")
+            return "0"
         }
 
-        return TextFieldValue(input.filter { it.isDigit() || it == '.' }.trim())
+        return input.filter { it.isDigit() || it == '.' }.trim()
     }
 
     private fun extractLong(editText: String) = editText.toLong()
