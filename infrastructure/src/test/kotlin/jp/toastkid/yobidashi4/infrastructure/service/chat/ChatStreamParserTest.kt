@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.chat
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -31,6 +32,11 @@ class ChatStreamParserTest {
 
 **スープ**
 * 豚骨または""".trimIndent(), subject.invoke(line))
+    }
+
+    @Test
+    fun unacceptableFormatCase() {
+        assertNull(subject.invoke("test"))
     }
 
 }
