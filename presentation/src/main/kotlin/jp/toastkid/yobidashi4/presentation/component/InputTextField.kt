@@ -93,12 +93,14 @@ internal fun InputTextField(
     }
 }
 
+private val emptyClearInputAction = {}
+
 @Composable
 fun SingleLineTextField(
     textFieldValue: TextFieldValue,
     labelText: String,
     onValueChange: (TextFieldValue) -> Unit,
-    onClearInput: () -> Unit = {},
+    onClearInput: () -> Unit = emptyClearInputAction,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
@@ -125,7 +127,7 @@ fun MultiLineTextField(
     labelText: String,
     maxLines: Int,
     onValueChange: (TextFieldValue) -> Unit,
-    onClearInput: () -> Unit = {},
+    onClearInput: () -> Unit = emptyClearInputAction,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
@@ -139,12 +141,14 @@ fun MultiLineTextField(
         label = { Text(labelText, color = MaterialTheme.colors.secondary) },
         onValueChange = onValueChange,
         trailingIcon = {
-            Icon(
-                painterResource("images/icon/ic_clear_form.xml"),
-                contentDescription = "Clear input.",
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier.clickable(onClick = onClearInput)
-            )
+            if (onClearInput !== emptyClearInputAction) {
+                Icon(
+                    painterResource("images/icon/ic_clear_form.xml"),
+                    contentDescription = "Clear input.",
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier.clickable(onClick = onClearInput)
+                )
+            }
         },
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
