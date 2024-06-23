@@ -81,6 +81,26 @@ class FileListViewModelTest {
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
+    fun onKeyEventWithKeyUp() {
+        runDesktopComposeUiTest {
+            setContent {
+                mockkConstructor(ZipArchiver::class)
+                every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
+
+                val consumed = subject.onKeyEvent(
+                    rememberCoroutineScope(),
+                    androidx.compose.ui.input.key.KeyEvent(
+                        Key.Z, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true
+                    )
+                )
+
+                assertFalse(consumed)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @Test
     fun onKeyEvent() {
         runDesktopComposeUiTest {
             setContent {
