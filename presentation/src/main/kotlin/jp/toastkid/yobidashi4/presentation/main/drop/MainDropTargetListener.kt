@@ -8,6 +8,7 @@ import java.awt.dnd.DropTargetDropEvent
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
+import kotlin.io.path.name
 import org.slf4j.LoggerFactory
 
 class MainDropTargetListener(private val consumer: (List<Path>) -> Unit) : DropTargetAdapter() {
@@ -21,7 +22,7 @@ class MainDropTargetListener(private val consumer: (List<Path>) -> Unit) : DropT
                 val list = transferable.getTransferData(
                     DataFlavor.javaFileListFlavor
                 ) as List<*>
-                val files = list.filterIsInstance<File>().map { it.toPath() }.sortedBy { it.fileName.toString() }
+                val files = list.filterIsInstance<File>().map { it.toPath() }.sortedBy(::sortKey)
                 consumer(files)
                 dtde.dropComplete(true)
                 return
@@ -33,5 +34,7 @@ class MainDropTargetListener(private val consumer: (List<Path>) -> Unit) : DropT
         }
         dtde.rejectDrop()
     }
+
+    private fun sortKey(path: Path) = path.name
 
 }
