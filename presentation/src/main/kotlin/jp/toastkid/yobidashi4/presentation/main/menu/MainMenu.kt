@@ -214,9 +214,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true), icon = painterResource("images/icon/ic_aggregation.xml")) {
                 viewModel.openAggregationBox()
             }
-            Item("Web history", shortcut = KeyShortcut(Key.H, alt = true), icon = painterResource("images/icon/ic_history.xml")) {
-                viewModel.openWebHistoryTab()
-            }
+
+            Item(
+                "Web history",
+                shortcut = KeyShortcut(Key.H, alt = true),
+                icon = painterResource("images/icon/ic_history.xml"),
+                onClick = viewModel::openWebHistoryTab
+            )
 
             Item(
                 "Web search",
