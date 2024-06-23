@@ -60,7 +60,6 @@ class WorldTimeViewModel {
             "Australia/Sydney" -> "\uD83C\uDDE6\uD83C\uDDFA Sydney"
             "NZ" -> "\uD83C\uDDF3\uD83C\uDDFF New Zealand"
             "Asia/Ho_Chi_Minh" -> "\uD83C\uDDFB\uD83C\uDDF3 Ho Chi Minh"
-            "IST" -> "\uD83C\uDDEE\uD83C\uDDF3 IST"
             else -> timeZoneId
         }
     }
