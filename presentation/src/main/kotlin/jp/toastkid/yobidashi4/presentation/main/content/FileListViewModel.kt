@@ -7,9 +7,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -63,6 +65,10 @@ class FileListViewModel : KoinComponent {
         controlPressing = keyEvent.isCtrlPressed
         shiftPressing = keyEvent.isShiftPressed
 
+        if (keyEvent.type != KeyEventType.KeyDown) {
+            return false
+        }
+
         if (keyEvent.isCtrlPressed && keyEvent.key == Key.Z) {
             ZipArchiver().invoke(articleStates.filter { it.selected }.map { it.path })
             viewModel.openFile(Path.of("."))
@@ -76,7 +82,7 @@ class FileListViewModel : KoinComponent {
         }
         if (keyEvent.key == Key.DirectionDown) {
             coroutineScope.launch {
-                listState.scrollToItem(min(articleStates.size - 1, listState.firstVisibleItemIndex + 1), 0)
+                listState.scrollToItem(min(items().size - 1, listState.firstVisibleItemIndex + 1), 0)
             }
             return@onKeyEvent true
         }
