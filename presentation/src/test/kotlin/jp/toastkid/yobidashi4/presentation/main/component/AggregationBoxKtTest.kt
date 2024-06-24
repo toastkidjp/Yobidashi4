@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -16,8 +17,10 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
+import java.util.stream.Stream
+import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -35,6 +38,9 @@ class AggregationBoxKtTest {
     @MockK
     private lateinit var articlesReaderService: ArticlesReaderService
 
+    @MockK
+    private lateinit var fullTextArticleFinder: FullTextArticleFinder
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -44,6 +50,7 @@ class AggregationBoxKtTest {
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
+                    single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                 }
             )
         }
@@ -60,10 +67,12 @@ class AggregationBoxKtTest {
         every { anyConstructed<AggregationBoxViewModel>().closeChooser() } just Runs
         every { anyConstructed<AggregationBoxViewModel>().onSearch() } just Runs
         every { anyConstructed<AggregationBoxViewModel>().switchAggregationBox(any()) } just Runs
-        every { anyConstructed<AggregationBoxViewModel>().categories() } returns mapOf(
-            "test" to { StepsAggregationResult() },
-            "test2" to { StepsAggregationResult() }
+        every { anyConstructed<AggregationBoxViewModel>().categories() } returns listOf(
+            StepsAggregatorService(articlesReaderService)
         )
+        every { articlesReaderService.invoke() } returns Stream.empty()
+        every { fullTextArticleFinder.label() } returns "Find article"
+        every { fullTextArticleFinder.iconPath() } returns ""
     }
 
     @AfterEach
@@ -104,7 +113,7 @@ class AggregationBoxKtTest {
                 AggregationBox()
             }
 
-            onNode(hasText("test2"), true).onParent().performClick()
+            onNode(hasText(StepsAggregatorService(articlesReaderService).label()), true).onParent().performClick()
             verify { anyConstructed<AggregationBoxViewModel>().choose(any()) }
 
             val input = onNode(hasText(label), true)
@@ -127,7 +136,7 @@ class AggregationBoxKtTest {
                 AggregationBox()
             }
 
-            onNode(hasText("Stock"), true).performClick()
+            onNodeWithContentDescription(StepsAggregatorService(articlesReaderService).label(), true).performClick()
             verify { anyConstructed<AggregationBoxViewModel>().choose(any()) }
         }
     }
