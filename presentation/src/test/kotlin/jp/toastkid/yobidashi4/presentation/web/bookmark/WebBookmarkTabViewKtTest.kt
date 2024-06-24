@@ -22,11 +22,13 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlin.io.path.absolutePathString
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -60,7 +62,15 @@ class WebBookmarkTabViewKtTest {
         mockkConstructor(WebIcon::class, WebBookmarkTabViewModel::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
         every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
-        every { anyConstructed<WebIcon>().find(any()) } returns null
+        every { anyConstructed<WebIcon>().find(any()) } answers {
+            val url = this.args.get(0) as? String ?: return@answers null
+            if (url == "https://www.icon.co.jp") {
+                val path = mockk<Path>()
+                every { path.absolutePathString() } returns "icon/icon.png"
+                return@answers path
+            }
+            return@answers null
+        }
         every { webBookmarkTab.scrollPosition() } returns 0
         every { webBookmarkTab.withNewPosition(any()) } returns mockk()
         every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
@@ -72,8 +82,10 @@ class WebBookmarkTabViewKtTest {
         every { anyConstructed<WebBookmarkTabViewModel>().delete(any()) } just Runs
         every { anyConstructed<WebBookmarkTabViewModel>().focusRequester() } returns FocusRequester()
         every { anyConstructed<WebBookmarkTabViewModel>().listState() } returns LazyListState(0)
-        every { anyConstructed<WebBookmarkTabViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<WebBookmarkTabViewModel>().bookmarks() } returns listOf(Bookmark("test item", "https://www.yahoo.co.jp"))
+        every { anyConstructed<WebBookmarkTabViewModel>().bookmarks() } returns listOf(
+            Bookmark("test item", "https://www.yahoo.co.jp"),
+            Bookmark("icon item", "https://www.icon.co.jp")
+        )
     }
 
     @AfterEach
@@ -109,6 +121,9 @@ class WebBookmarkTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun webBookmarkTabViewWithDropdown() {
+        every { anyConstructed<WebBookmarkTabViewModel>().openingDropdown(any()) } answers {
+            (this.args[0] as? Bookmark)?.title == "test item"
+        }
         runDesktopComposeUiTest {
             setContent {
                 WebBookmarkTabView(webBookmarkTab)
