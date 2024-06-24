@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
@@ -66,9 +69,13 @@ internal fun AggregationBox() {
                     if (swingContent) {
                         LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
                             items(viewModel.items()) {
-                                Text(it.key, modifier = Modifier.padding(horizontal = 8.dp).clickable {
-                                    viewModel.choose(it)
-                                    }
+                                Icon(
+                                    painterResource(it.iconPath()),
+                                    contentDescription = it.label(),
+                                    modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
+                                        viewModel.choose(it)
+                                    },
+                                    tint = MaterialTheme.colors.onPrimary
                                 )
                             }
                         }
@@ -80,7 +87,13 @@ internal fun AggregationBox() {
                                 viewModel.choose(it)
                             }
                         ) {
-                            Text(it.key, modifier = Modifier.padding(start = 8.dp))
+                            Icon(
+                                painterResource(it.iconPath()),
+                                contentDescription = it.label(),
+                                modifier = Modifier.size(48.dp).padding(horizontal = 8.dp),
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                            Text(it.label(), modifier = Modifier.padding(start = 8.dp))
                         }
                     }
                 }
