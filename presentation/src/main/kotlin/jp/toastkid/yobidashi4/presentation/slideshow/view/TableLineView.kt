@@ -54,7 +54,6 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(horizontal = 16.dp)
                             .clickable {
                                 viewModel.clickHeaderColumn(index)
                             }
@@ -65,6 +64,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                                 viewModel.setCursorOffHeader()
                             }
                             .drawBehind { drawRect(headerColumnBackgroundColor.value) }
+                            .padding(horizontal = 16.dp)
                     )
                 }
             }
