@@ -15,10 +15,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleAggregator
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
 import jp.toastkid.yobidashi4.domain.service.aggregation.MovieMemoSubtitleExtractor
@@ -45,18 +45,18 @@ class AggregationBoxViewModel : KoinComponent {
 
     private val keyword = mutableStateOf(TextFieldValue())
 
-    private val aggregations =  mapOf<String, (String) -> AggregationResult>(
-        "Movies" to { MovieMemoSubtitleExtractor(articlesReaderService).invoke(it) },
-        "Stock" to { StocksAggregatorService(articlesReaderService).invoke(it) },
-        "Outgo" to { OutgoAggregatorService(articlesReaderService).invoke(it) },
-        "Eat out" to { EatingOutCounterService(articlesReaderService).invoke(it) },
-        "Article length" to { ArticleLengthAggregatorService(articlesReaderService).invoke(it) },
-        "Steps" to { StepsAggregatorService(articlesReaderService).invoke(it) },
-        "Nikkei 225" to { Nikkei225AggregatorService(articlesReaderService).invoke(it) },
-        "Find article" to { keywordSearch.invoke(it) }
+    private val aggregations = listOf(
+        MovieMemoSubtitleExtractor(articlesReaderService),
+        StocksAggregatorService(articlesReaderService),
+        OutgoAggregatorService(articlesReaderService),
+        EatingOutCounterService(articlesReaderService),
+        ArticleLengthAggregatorService(articlesReaderService),
+        StepsAggregatorService(articlesReaderService),
+        Nikkei225AggregatorService(articlesReaderService),
+        keywordSearch
     )
 
-    private val selectedSite = mutableStateOf(aggregations.entries.toList().get(
+    private val selectedSite = mutableStateOf(aggregations.get(
         when {
             viewModel.initialAggregationType() < 0 -> 0
             viewModel.initialAggregationType() >= aggregations.size -> aggregations.size - 1
@@ -90,7 +90,7 @@ class AggregationBoxViewModel : KoinComponent {
     }
 
     fun selectedCategoryName(): String {
-        return selectedSite.value.key
+        return selectedSite.value.label()
     }
 
     fun isCurrentSwingContent(): Boolean {
@@ -109,23 +109,23 @@ class AggregationBoxViewModel : KoinComponent {
         openDropdown.value = false
     }
 
-    fun items() = aggregations.entries.toList()
+    fun items() = aggregations
 
     fun categories() = aggregations
 
-    fun choose(it: Map.Entry<String, (String) -> AggregationResult>) {
+    fun choose(articleAggregator: ArticleAggregator) {
         closeChooser()
-        selectedSite.value = it
+        selectedSite.value = articleAggregator
     }
 
     fun requireSecondInput(): Boolean {
-        return selectedSite.value.key == "Find article"
+        return selectedSite.value is FullTextArticleFinder
     }
 
     fun keyword() = keyword.value
 
     fun onSearch() {
-        invokeAggregation(viewModel, getQuery(), selectedSite.value.value)
+        invokeAggregation(viewModel, getQuery(), selectedSite.value)
     }
 
     private val keywordHistoryService: InputHistoryService = InputHistoryService("aggregation_keyword")
@@ -177,7 +177,7 @@ class AggregationBoxViewModel : KoinComponent {
     private fun invokeAggregation(
         viewModel: MainViewModel,
         query: String,
-        aggregator: (String) -> AggregationResult
+        aggregator: ArticleAggregator
     ) {
         if (query.isBlank()) {
             return
