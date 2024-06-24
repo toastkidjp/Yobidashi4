@@ -229,4 +229,9 @@ user_off_day=12/29,12/30
         assertFalse(subject.useBackground())
     }
 
+    @Test
+    fun chatApiKey() {
+        assertNull(subject.chatApiKey())
+    }
+
 }
