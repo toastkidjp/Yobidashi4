@@ -109,4 +109,20 @@ class InputTextFieldKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun useEmptyClearInputAction() {
+        runDesktopComposeUiTest {
+            setContent {
+                SingleLineTextField(
+                    TextFieldValue("test"),
+                    "label",
+                    {}
+                )
+            }
+
+            onNodeWithContentDescription("Clear input.", useUnmergedTree = true).assertDoesNotExist()
+        }
+    }
+
 }
