@@ -33,5 +33,8 @@ class FullTextArticleFinderImplementation : FullTextArticleFinder {
         return aggregationResult
     }
 
+    override fun label() = "Find article"
+
+    override fun iconPath() = "images/icon/ic_find_in_page.xml"
 
 }
