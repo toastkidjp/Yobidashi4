@@ -17,11 +17,12 @@ class WeekTest {
         week.add(LocalDate.of(2023, 8, 8))
         week.add(LocalDate.of(2023, 8, 9))
         week.add(LocalDate.of(2023, 8, 10))
-        week.add(LocalDate.of(2023, 8, 11), Holiday("", 8, 11))
+        week.add(LocalDate.of(2023, 8, 11), null)
+        week.add(LocalDate.of(2023, 8, 11), Holiday("Mountain day", 8, 11))
         week.add(LocalDate.of(2023, 8, 12))
         week.addEmpty()
 
-        assertEquals(8, week.days().size)
+        assertEquals(9, week.days().size)
         assertTrue(week.anyApplicableDate())
     }
 
