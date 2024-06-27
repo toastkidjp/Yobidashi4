@@ -35,6 +35,11 @@ class BlockQuotationTest {
     }
 
     @Test
+    fun withEndOfLineBreak() {
+        assertEquals("> test\n", quotation("test\n"))
+    }
+
+    @Test
     fun testInvokeWithEmptyInput() {
         assertEquals("", quotation(""))
     }
