@@ -16,6 +16,7 @@ class FinderMessageFactoryTest {
 
     @Test
     fun invoke() {
+        assertTrue(finderMessageFactory.invoke("", -1).isEmpty())
         assertTrue(finderMessageFactory.invoke("", 2).isEmpty())
         assertTrue(finderMessageFactory.invoke(" ", 2).isEmpty())
         assertEquals("\"test\" was not found.", finderMessageFactory.invoke("test", -1))
