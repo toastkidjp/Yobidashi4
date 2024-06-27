@@ -325,12 +325,14 @@ class CefClientFactoryTest {
         resourceRequestHandler.onBeforeResourceLoad(mockk(), mockk(), request)
         val result = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(), "https://www.yahoo.co.jp", true)
         val falseCase = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(), "https://www.yahoo.co.jp", false)
-        val targetUrlIsNullCase = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(),  null, false)
+        val targetUrlIsNullCase = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(),  null, true)
+        val targetUrlIsNullAndUserGestureIsFalseCase = handlerSlot.captured.onOpenURLFromTab(mockk(), mockk(),  null, false)
 
         assertNotNull(client)
         assertTrue(result)
         assertFalse(falseCase)
-        assertFalse(targetUrlIsNullCase)
+        assertTrue(targetUrlIsNullCase)
+        assertFalse(targetUrlIsNullAndUserGestureIsFalseCase)
         verify { client.addRequestHandler(any()) }
         verify { request.dispose() }
         verify { viewModel.openUrl(any(), any()) }
