@@ -31,12 +31,16 @@ class SimpleCalculatorTest {
         assertEquals(51.0, calculator.invoke("1500*0.03+6"))
         assertEquals(525.00, calculator.invoke("1500/3 + 25"))
         assertEquals(525.00, calculator.invoke("1,500/3 + 25"))
-        assertNull(calculator.invoke("Good+day"))
-        assertNull(calculator.invoke("Good-day"))
         assertEquals(9.0, calculator.invoke("+11-2"))
         assertEquals(-9.0, calculator.invoke("-11+2"))
         assertEquals(Double.NEGATIVE_INFINITY, calculator.invoke("-11/0"))
         assertEquals(3.0, calculator.invoke("1++2"))
+    }
+
+    @Test
+    fun testIncorrectInputCase() {
+        assertNull(calculator.invoke("Good+day"))
+        assertNull(calculator.invoke("Good-day"))
         assertNull(calculator.invoke("1+*+2"))
         assertNull(calculator.invoke("*1+2"))
         assertNull(calculator.invoke("/1+2"))
@@ -45,4 +49,5 @@ class SimpleCalculatorTest {
         assertNull(calculator.invoke("good"))
         assertNull(calculator.invoke("11+(2"))
     }
+
 }
