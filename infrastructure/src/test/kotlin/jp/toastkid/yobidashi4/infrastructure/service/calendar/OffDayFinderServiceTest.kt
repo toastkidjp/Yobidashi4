@@ -57,7 +57,7 @@ internal class OffDayFinderServiceTest {
     fun testJune() {
         assertFalse(offDayFinderService(2020, 6, 4, DayOfWeek.THURSDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
     }
 
     @Test
@@ -65,8 +65,8 @@ internal class OffDayFinderServiceTest {
         assertTrue(offDayFinderService(2020, 3, 20, DayOfWeek.FRIDAY))
 
         verify(exactly = 1) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(2020) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
     }
 
     @Test
@@ -74,16 +74,16 @@ internal class OffDayFinderServiceTest {
         assertFalse(offDayFinderService(2020, 3, 19, DayOfWeek.THURSDAY))
 
         verify(exactly = 1) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(2020) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }
     }
 
     @Test
     fun testAutumnalEquinoxDay() {
         assertTrue(offDayFinderService(2020, 9, 22, DayOfWeek.FRIDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
         verify(exactly = 1) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
-        verify(exactly = 0) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
+        verify(inverse = true) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
     }
 
     @Test
@@ -92,10 +92,10 @@ internal class OffDayFinderServiceTest {
 
         assertTrue(offDayFinderService(2019, 5, 1, DayOfWeek.WEDNESDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
-        verify(exactly = 0) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
+        verify(inverse = true) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
     }
 
     @Test
@@ -104,8 +104,8 @@ internal class OffDayFinderServiceTest {
 
         assertFalse(offDayFinderService(2019, 5, 11, DayOfWeek.SATURDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
         verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
     }
@@ -116,8 +116,8 @@ internal class OffDayFinderServiceTest {
 
         assertFalse(offDayFinderService(2020, 10, 14, DayOfWeek.WEDNESDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
     }
 
@@ -127,11 +127,11 @@ internal class OffDayFinderServiceTest {
 
         assertTrue(offDayFinderService(2020, 9, 21, DayOfWeek.MONDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
         verify(exactly = 1) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
         verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
-        verify(exactly = 0) { userOffDayService.invoke(any(), any())}
+        verify(inverse = true) { userOffDayService.invoke(any(), any())}
     }
 
     @Test
@@ -140,8 +140,8 @@ internal class OffDayFinderServiceTest {
 
         assertTrue(offDayFinderService(2020, 12, 29, DayOfWeek.TUESDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
         verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
         verify(exactly = 1) { userOffDayService.invoke(any(), any())}
@@ -151,8 +151,8 @@ internal class OffDayFinderServiceTest {
     fun testMay6() {
         assertTrue(offDayFinderService(2020, 5, 6, DayOfWeek.WEDNESDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
         verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
         verify(exactly = 1) { userOffDayService.invoke(any(), any())}
@@ -162,8 +162,8 @@ internal class OffDayFinderServiceTest {
     fun testNov4() {
         assertTrue(offDayFinderService(2019, 11, 4, DayOfWeek.MONDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
         verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
         verify(exactly = 1) { userOffDayService.invoke(any(), any())}
@@ -173,8 +173,8 @@ internal class OffDayFinderServiceTest {
     fun testNormalDay() {
         assertFalse(offDayFinderService(2020, 12, 17, DayOfWeek.THURSDAY))
 
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
-        verify(exactly = 0) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
         verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
         verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
         verify(exactly = 1) { userOffDayService.invoke(any(), any())}
