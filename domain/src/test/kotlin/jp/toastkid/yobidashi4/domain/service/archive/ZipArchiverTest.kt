@@ -73,6 +73,18 @@ class ZipArchiverTest {
     }
 
     @Test
+    fun exceptionCase2() {
+        val mockk = mockk<IOException>()
+        every { mockk.printStackTrace() } just Runs
+        every { Files.newOutputStream(any()) } throws mockk
+
+        zipArchiver.invoke(listOf(path))
+
+        verify { Files.newOutputStream(any()) }
+        verify { mockk.printStackTrace() }
+    }
+
+    @Test
     fun exceptionWithNullZipStreamCase() {
         val mockk = mockk<IOException>()
         every { mockk.printStackTrace() } just Runs
