@@ -56,6 +56,18 @@ class CefContextMenuFactoryTest {
     }
 
     @Test
+    fun testPlainTextCaseWithBlank() {
+        every { params.sourceUrl } returns " "
+        every { params.linkUrl } returns " "
+
+        cefContextMenuFactory.invoke(params, model)
+
+        ContextMenu.values().filter { it.context == Context.PLAIN_TEXT }.forEach {
+            verify(exactly = 1) { model.addItem(it.id, it.text) }
+        }
+    }
+
+    @Test
     fun modelIsNull() {
         cefContextMenuFactory.invoke(params, null)
 
