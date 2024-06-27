@@ -25,6 +25,11 @@ class TrimmingServiceTest {
     }
 
     @Test
+    fun endWithLineBreak() {
+        assertEquals("test\n", trimmingService.invoke("test \n"))
+    }
+
+    @Test
     fun testEmptyCase() {
         assertEquals("", trimmingService.invoke(""))
     }
