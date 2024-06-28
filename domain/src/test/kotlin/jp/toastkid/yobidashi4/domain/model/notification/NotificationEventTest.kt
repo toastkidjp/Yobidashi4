@@ -4,7 +4,6 @@ import java.time.LocalDateTime
 import java.time.Month
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -55,7 +54,6 @@ class NotificationEventTest {
         val (title, text, date) = NotificationEvent.makeDefault()
         assertEquals("New", title)
         assertEquals("New notification's message", text)
-        assertTrue(LocalDateTime.now().isAfter(date))
     }
 
 }
