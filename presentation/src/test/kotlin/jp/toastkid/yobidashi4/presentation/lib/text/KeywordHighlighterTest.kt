@@ -82,4 +82,14 @@ class KeywordHighlighterTest {
         )
     }
 
+    @Test
+    fun incorrectInput() {
+        val annotate = subject.invoke(
+            "## 『Dead recording』(2021,North Africa)",
+            "Africa)"
+        )
+
+        assertTrue(annotate.spanStyles.isEmpty())
+    }
+
 }
