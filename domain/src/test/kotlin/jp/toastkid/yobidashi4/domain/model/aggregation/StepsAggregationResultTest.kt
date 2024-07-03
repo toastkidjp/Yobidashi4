@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.aggregation
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -11,6 +12,12 @@ class StepsAggregationResultTest {
     @BeforeEach
     fun setUp() {
         subject = StepsAggregationResult()
+    }
+
+    @Test
+    fun properties() {
+        assertTrue(subject.title().isNotBlank())
+        assertTrue(subject.isEmpty())
     }
 
     @Test
