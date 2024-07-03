@@ -57,4 +57,19 @@ class GameFileProviderTest {
         verify (exactly = 2) { folder.resolve(any<String>()) }
     }
 
+    @Test
+    fun fileDoesNotExistCase() {
+        every { Files.exists(folder) } returns false
+        every { Files.exists(file) } returns false
+
+        gameFileProvider.invoke()
+
+        verify (exactly = 2) { Path.of("user/number/place/games") }
+        verify (exactly = 1) { Files.exists(folder) }
+        verify (exactly = 1) { Files.exists(file) }
+        verify (exactly = 1) { Files.createDirectories(any()) }
+        verify (exactly = 1) { Files.createFile(any()) }
+        verify (exactly = 2) { folder.resolve(any<String>()) }
+    }
+
 }
