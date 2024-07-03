@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import java.util.regex.Pattern
+import java.util.regex.PatternSyntaxException
 import kotlin.math.min
 
 class KeywordHighlighter {
@@ -52,8 +53,15 @@ class KeywordHighlighter {
         appendStyleIfNeed(text, lastIndex)
 
         if (!finderTarget.isNullOrBlank()) {
+            val pattern = try {
+                Pattern.compile(finderTarget)
+            } catch (e: PatternSyntaxException) {
+                return@buildAnnotatedString
+            }
+
             val buildString = toAnnotatedString().text
-            val finderMatcher = Pattern.compile(finderTarget).matcher(buildString)
+
+            val finderMatcher = pattern.matcher(buildString)
             while (finderMatcher.find()) {
                 addStyle(
                     style = SpanStyle(
