@@ -114,7 +114,7 @@ private fun MessageList(
             }
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
-            LaunchedEffect(chatMessages.map { it.text.length }.sum()) {
+            LaunchedEffect(chatMessages.last().text.length) {
                 coroutineScope.launch {
                     listState.animateScrollToItem(listState.layoutInfo.totalItemsCount)
                 }
