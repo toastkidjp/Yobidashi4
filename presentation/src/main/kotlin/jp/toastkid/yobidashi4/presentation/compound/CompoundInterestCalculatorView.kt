@@ -91,8 +91,10 @@ internal fun CompoundInterestCalculatorView() {
                         }
                     }
                 }
-                VerticalScrollbar(adapter = rememberScrollbarAdapter(verticalScrollState), modifier = Modifier.fillMaxHeight().align(
-                    Alignment.CenterEnd))
+                VerticalScrollbar(
+                    adapter = rememberScrollbarAdapter(verticalScrollState),
+                    modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+                )
             }
         }
     }
