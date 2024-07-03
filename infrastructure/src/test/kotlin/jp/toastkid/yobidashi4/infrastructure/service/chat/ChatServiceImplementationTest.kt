@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
@@ -60,15 +61,16 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
-        every { chat.addModelTexts(any()) } just Runs
         every { chat.makeContent() } returns ""
-        every { repository.request(any(), any()) } just Runs
+        val capturingSlot = slot<(String?) -> Unit>()
+        every { repository.request(any(), capture(capturingSlot)) } just Runs
         subject.setChat(chat)
 
         subject.send("test")
+        capturingSlot.captured.invoke("test")
+        capturingSlot.captured.invoke(null)
 
         verify { chat.addUserText(any()) }
-        verify { chat.addModelTexts(any()) }
         verify { chat.makeContent() }
         verify { repository.request(any(), any()) }
     }
@@ -78,7 +80,6 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
-        every { chat.addModelTexts(any()) } just Runs
         every { chat.makeContent() } returns ""
         every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
