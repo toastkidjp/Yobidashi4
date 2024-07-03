@@ -45,9 +45,10 @@ class WebIconDownloaderTest {
         every { urlConnection.responseCode } returns 200
         every { urlConnection.inputStream } returns "test".byteInputStream()
 
-        subject = WebIconDownloader()
         mockkConstructor(HttpUrlConnectionFactory::class)
         every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns urlConnection
+
+        subject = WebIconDownloader()
     }
 
     @AfterEach
@@ -106,6 +107,16 @@ class WebIconDownloaderTest {
 
         verify { Files.exists(any()) }
         verify { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) }
+        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
+    }
+//
+
+    @Test
+    fun responseCodeIsNot200Case() {
+        every { urlConnection.responseCode } returns 400
+
+        subject.invoke(url, folder, "test")
+
         verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
