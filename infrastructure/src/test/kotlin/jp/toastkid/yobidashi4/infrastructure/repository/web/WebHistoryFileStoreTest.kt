@@ -63,6 +63,17 @@ class WebHistoryFileStoreTest {
     }
 
     @Test
+    fun addUpdatingCase() {
+        val slot = slot<Iterable<CharSequence>>()
+        every { Files.write(any(), capture(slot)) } returns path
+
+        webHistoryFileStore.add("Yahoo! JAPAN Test", "https://www.yahoo.co.jp")
+
+        assertEquals(1, slot.captured.toMutableList().size)
+        verify { Files.write(any(), slot.captured)  }
+    }
+
+    @Test
     fun storeAll() {
         val slot = slot<Iterable<CharSequence>>()
         every { Files.write(any(), capture(slot)) } returns path
