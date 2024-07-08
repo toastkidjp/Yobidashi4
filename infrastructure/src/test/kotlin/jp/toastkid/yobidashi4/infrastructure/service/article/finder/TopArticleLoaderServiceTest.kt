@@ -9,6 +9,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
+import java.nio.file.attribute.FileTime
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
@@ -42,7 +43,8 @@ class TopArticleLoaderServiceTest {
         every { setting.articleFolderPath() }.returns(mockk())
 
         mockkStatic(Files::class)
-        every { Files.list(any()) }.returns(Stream.of(mockk()))
+        every { Files.list(any()) }.returns(Stream.of(mockk(), mockk()))
+        every { Files.getLastModifiedTime(any()) }.returns(FileTime.fromMillis(System.currentTimeMillis()))
     }
 
     @AfterEach
@@ -57,6 +59,7 @@ class TopArticleLoaderServiceTest {
 
         verify { setting.articleFolderPath() }
         verify { Files.list(any()) }
+        verify(exactly = 2) { Files.getLastModifiedTime(any()) }
     }
 
 }
