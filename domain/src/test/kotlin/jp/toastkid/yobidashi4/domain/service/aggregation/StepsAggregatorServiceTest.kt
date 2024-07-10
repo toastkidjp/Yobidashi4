@@ -37,6 +37,7 @@ internal class StepsAggregatorServiceTest {
         val lines = """
 _
 今日の歩数は4,122、消費カロリーは143kcalだった。
+今日の歩数は追記、消費カロリーは追記kcalだった。
 _
 """.split("_").map { it.trim() }
 
@@ -59,7 +60,7 @@ _
         assertEquals(Int::class.java, outgoAggregationResult.columnClass(1))
         assertEquals(Int::class.java, outgoAggregationResult.columnClass(2))
 
-        outgoAggregationResult.itemArrays().firstOrNull()?.let {
+        outgoAggregationResult.itemArrays().firstOrNull { it[1] != 0 }?.let {
             assertTrue(outgoAggregationResult.title().isNotBlank())
             assertFalse(outgoAggregationResult.isEmpty())
             assertEquals(3, outgoAggregationResult.header().size)
