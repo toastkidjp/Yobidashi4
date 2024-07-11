@@ -53,6 +53,7 @@ class TextFileReceiverTest {
             mameMockPath("test.java"),
             mameMockPath("test.kt"),
             mameMockPath("test.py"),
+            mameMockPath("test.mp3"),
             mameMockPath("test")
         )
         every { path.fileName } returns path
