@@ -3,7 +3,13 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.font.FontWeight
 import io.mockk.MockKAnnotations
@@ -54,14 +60,29 @@ class MarkdownPreviewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun test() {
+        val content = MarkdownParser().invoke(
+            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd",
+            "test"
+        )
+
         runDesktopComposeUiTest {
             setContent {
                 MarkdownPreview(
-                    MarkdownParser().invoke("> test\n![test](https://www.yahoo.co.jp/favicon.ico)\ntest", "test"),
+                    content,
                     rememberScrollState(),
                     Modifier
                 )
             }
+
+            onAllNodes(hasText("test"))
+                .onFirst()
+                .assertExists("Not found!")
+                .performClick()
+                .performKeyInput {
+                    pressKey(Key.DirectionUp, 500L)
+                    pressKey(Key.DirectionDown, 500L)
+                    pressKey(Key.Enter, 500L)
+                }
         }
     }
 
