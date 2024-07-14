@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -19,6 +19,7 @@ class CommaInserterTest {
 
     @Test
     fun testInvoke() {
+        assertNull(commaInserter.invoke(null))
         assertEquals("100", commaInserter.invoke("100"))
         assertEquals("1,000", commaInserter.invoke("1000"))
         assertEquals("556,090", commaInserter.invoke("556090"))
