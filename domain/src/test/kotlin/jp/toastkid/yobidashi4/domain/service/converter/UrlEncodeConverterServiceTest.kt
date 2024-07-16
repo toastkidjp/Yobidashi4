@@ -5,6 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -61,5 +62,10 @@ class UrlEncodeConverterServiceTest {
         assertTrue(urlEncodeConverterService.defaultFirstInputValue().isNotBlank())
         assertTrue(urlEncodeConverterService.defaultSecondInputValue().isNotBlank())
     }
-    
+
+    @Test
+    fun exception() {
+        assertNull(urlEncodeConverterService.secondInputAction("%7s"))
+    }
+
 }
