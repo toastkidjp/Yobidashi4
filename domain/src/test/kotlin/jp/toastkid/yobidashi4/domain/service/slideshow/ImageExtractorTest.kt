@@ -8,6 +8,8 @@ class ImageExtractorTest {
     @Test
     fun elseCase() {
         assertTrue(ImageExtractor().invoke(null).isEmpty())
+        assertTrue(ImageExtractor().invoke("").isEmpty())
+        assertTrue(ImageExtractor().invoke(" ").isEmpty())
     }
 
 }
