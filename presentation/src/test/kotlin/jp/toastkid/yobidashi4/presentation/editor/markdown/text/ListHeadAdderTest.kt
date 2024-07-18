@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -23,6 +24,11 @@ class ListHeadAdderTest {
     @Test
     fun test() {
         assertEquals(expected, listHeadAdder.invoke(target, "-"))
+    }
+
+    @Test
+    fun passNull() {
+        assertNull(listHeadAdder.invoke(null, "-"))
     }
 
     @Test
