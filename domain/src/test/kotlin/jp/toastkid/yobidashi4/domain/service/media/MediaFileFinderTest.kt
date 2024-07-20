@@ -11,7 +11,9 @@ import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
+import kotlin.io.path.isDirectory
 import kotlin.io.path.isExecutable
+import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -80,6 +82,27 @@ class MediaFileFinderTest {
         every { Files.isDirectory(root) } returns false
 
         assertTrue(mediaFileFinder.invoke("empty").isEmpty())
+    }
+
+    @Test
+    fun keep() {
+        every { Files.list(subFolder) } returns Stream.of(
+            makeMockedPath("AlbumArt"),
+            makeMockedPath("Folder"),
+            makeMockedPath("iTunes"),
+            makeMockedPath("desktop"),
+            makeMockedPath("Merry christmas, Mr. Lawrence.mp3"),
+        )
+
+        assertEquals(2, mediaFileFinder.invoke("empty").size)
+    }
+
+    private fun makeMockedPath(name: String): Path {
+        val path = mockk<Path>()
+        every { path.nameWithoutExtension } returns name
+        every { path.isExecutable() } returns true
+        every { path.isDirectory() } returns false
+        return path
     }
 
 }
