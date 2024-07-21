@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.tool.compound
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,6 +32,16 @@ internal class CompoundInterestCalculatorServiceTest {
         val tenYearsLater = result.get(10) ?: fail("This case does not allow null.")
         assertEquals(1212000, tenYearsLater.second)
         assertEquals(1255466, tenYearsLater.third)
+    }
+
+    @Test
+    fun nanCase() {
+        val input = CompoundInterestCalculatorInput.from("0.0", "0", "NaN", "10") ?: return fail()
+        val result = compoundInterestCalculatorService.invoke(input)
+        assertEquals(3, result.header().size)
+        assertEquals(0, result.itemArrays().size)
+        assertNotNull(result.title())
+        assertTrue(result.isEmpty())
     }
 
 }
