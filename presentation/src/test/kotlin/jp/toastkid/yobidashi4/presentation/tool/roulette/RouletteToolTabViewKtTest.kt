@@ -34,4 +34,18 @@ class RouletteToolTabViewKtTest {
             }
         }
     }
+
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun resultIsEmptyCase() {
+        runDesktopComposeUiTest {
+            setContent {
+                every { anyConstructed<RouletteToolTabViewModel>().result() } returns ""
+
+                RouletteToolTabView()
+            }
+        }
+    }
+
 }
