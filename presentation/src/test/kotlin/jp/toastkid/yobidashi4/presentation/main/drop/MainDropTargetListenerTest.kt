@@ -93,9 +93,18 @@ class MainDropTargetListenerTest {
     }
 
     @Test
-    fun passNull() {
-        every { event.isDataFlavorSupported(any()) } throws IOException()
+    fun otherFlavorCase() {
+        every { event.isDataFlavorSupported(any()) } returns false
 
+        subject.drop(event)
+
+        verify { consumer wasNot called }
+        verify(inverse = true) { event.dropComplete(any()) }
+        verify { event.rejectDrop() }
+    }
+
+    @Test
+    fun passNull() {
         subject.drop(null)
 
         verify { consumer wasNot called }
