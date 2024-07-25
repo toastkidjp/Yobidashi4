@@ -104,11 +104,6 @@ class WebTabTest {
     }
 
     @Test
-    fun reload() {
-        webTab.reload()
-    }
-
-    @Test
     fun updateTitleAndUrl() {
         val countDownLatch = CountDownLatch(1)
         CoroutineScope(Dispatchers.Unconfined).launch {
@@ -120,6 +115,22 @@ class WebTabTest {
         }
 
         webTab.updateTitleAndUrl("test2", "https://test.yahoo.co.jp/favicon.ico")
+
+        countDownLatch.await(5, TimeUnit.SECONDS)
+    }
+
+    @Test
+    fun updateTitleAndUrlWithNull() {
+        val countDownLatch = CountDownLatch(1)
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            webTab.update().collect {
+                assertEquals("test", webTab.title())
+                assertEquals("https://test.yahoo.co.jp", webTab.url())
+                countDownLatch.countDown()
+            }
+        }
+
+        webTab.updateTitleAndUrl(null, null)
 
         countDownLatch.await(5, TimeUnit.SECONDS)
     }
