@@ -6,11 +6,13 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.text.TextFieldScrollState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import jp.toastkid.yobidashi4.presentation.text.code.CodeStringBuilder
 import kotlin.math.min
 
@@ -25,7 +27,9 @@ class CodeBlockViewModel {
 
     private val codeStringBuilder = CodeStringBuilder()
 
-    fun maxHeight(fontSize: TextUnit) = min(content.value.text.split("\n").size * fontSize.value, 800f).dp
+    private val lineCountState = mutableStateOf(1)
+
+    fun maxHeight(fontSize: TextUnit) = min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
 
     fun content() = content.value
 
@@ -44,8 +48,7 @@ class CodeBlockViewModel {
     }
 
     fun lineNumberTexts(): List<String> {
-        val textLines = content.value.text.split("\n")
-        val max = textLines.size
+        val max = lineCountState.value
         val length = max.toString().length
 
         return (0 until max).map {
@@ -58,6 +61,11 @@ class CodeBlockViewModel {
                 append(lineNumberCount)
             }.toString()
         }
+    }
+
+    fun setMultiParagraph(multiParagraph: MultiParagraph) {
+        val lineCount = multiParagraph.lineCount
+        lineCountState.value = lineCount
     }
 
     fun start(code: String) {
