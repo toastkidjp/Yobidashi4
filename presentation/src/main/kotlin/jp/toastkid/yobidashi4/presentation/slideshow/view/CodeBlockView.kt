@@ -45,6 +45,9 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
             BasicTextField(
                 value = viewModel.content(),
                 onValueChange = viewModel::onValueChange,
+                onTextLayout = {
+                    viewModel.setMultiParagraph(it.multiParagraph)
+                },
                 visualTransformation = {
                     viewModel.transform(it)
                 },
@@ -65,7 +68,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                                         fontSize = fontSize,
                                         fontFamily = FontFamily.Monospace,
                                         textAlign = TextAlign.End,
-                                        lineHeight = 1.5.em
+                                        lineHeight = 1.55.em
                                     )
                                 }
                             }
