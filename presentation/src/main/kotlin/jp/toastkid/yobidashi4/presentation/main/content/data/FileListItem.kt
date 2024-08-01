@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.main.content.data
 import androidx.compose.runtime.Immutable
 import java.nio.file.Files
 import java.nio.file.Path
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -24,7 +25,10 @@ data class FileListItem(
             return null
         }
 
-        return "${Files.size(path) / 1000} KB | ${
+        val size = Files.size(path).toDouble()
+        val unit = if (size > 1_000_000) "MB" else "KB"
+        val displaySize = decimalFormat.format(size / (if (size > 1_000_000) 1_000_000 else 1000))
+        return "$displaySize $unit | ${
             LocalDateTime
                 .ofInstant(Files.getLastModifiedTime(path).toInstant(), ZoneId.systemDefault())
                 .format(dateTimeFormatter)
@@ -32,6 +36,8 @@ data class FileListItem(
     }
 
 }
+
+private val decimalFormat = DecimalFormat("#,###.##")
 
 private val dateTimeFormatter =
     DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH)
