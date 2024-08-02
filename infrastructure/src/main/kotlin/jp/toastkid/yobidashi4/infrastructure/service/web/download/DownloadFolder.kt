@@ -28,8 +28,14 @@ class DownloadFolder {
     }
 
     fun assignQuickStorePath(url: String): Path {
-        val extension = if (!url.contains(".")) ".png" else url.substring(url.lastIndexOf("."))
-        return resolveUnusedPath("${dateTimeFormatter.format(LocalDateTime.now())}$extension")
+        val extension = AtomicReference(
+            if (!url.contains(".")) ".png" else url.substring(url.lastIndexOf("."))
+        )
+        val lastIndexOf = extension.get().lastIndexOf("?")
+        if (lastIndexOf != -1) {
+            extension.set(extension.get().substring(0, lastIndexOf))
+        }
+        return resolveUnusedPath("${dateTimeFormatter.format(LocalDateTime.now())}${extension.get()}")
     }
 
     private fun resolveUnusedPath(suggestedName: String): Path {
