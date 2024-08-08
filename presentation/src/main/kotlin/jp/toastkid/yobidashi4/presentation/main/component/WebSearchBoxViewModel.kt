@@ -41,6 +41,8 @@ class WebSearchBoxViewModel : KoinComponent {
 
     private val result = mutableStateOf("")
 
+    private val saveSearchHistory = mutableStateOf(true)
+
     fun setShowWebSearch(open: Boolean) {
         viewModel.setShowWebSearch(open)
     }
@@ -105,7 +107,9 @@ class WebSearchBoxViewModel : KoinComponent {
         }
         viewModel.setShowWebSearch(false)
 
-        inputHistoryService.add(query.value.text)
+        if (saveSearchHistory()) {
+            inputHistoryService.add(query.value.text)
+        }
     }
 
     fun clearInput() {
@@ -170,6 +174,14 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun makeVerticalOffset(): Dp {
         return (if (containsSwingContent()) -80 else 0).dp
+    }
+
+    fun saveSearchHistory(): Boolean {
+        return saveSearchHistory.value
+    }
+
+    fun switchSaveSearchHistory(b: Boolean) {
+        saveSearchHistory.value = b
     }
 
 }
