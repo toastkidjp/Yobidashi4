@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
@@ -130,6 +131,14 @@ internal fun WebSearchBox() {
             ) {
                 Text("Search")
             }
+
+            Checkbox(
+                viewModel.saveSearchHistory(),
+                viewModel::switchSaveSearchHistory,
+                modifier = Modifier.semantics { contentDescription = "save search history" }
+            )
+
+            Text("Save search history")
 
             if (viewModel.existsResult()) {
                 SelectionContainer {
