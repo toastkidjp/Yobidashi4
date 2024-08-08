@@ -129,15 +129,15 @@ class CefClientFactory : KoinComponent {
                 downloadItem: CefDownloadItem?,
                 suggestedName: String?,
                 callback: CefBeforeDownloadCallback?
-            ): Boolean {
-                callback ?: return false
+            ) {
+                callback ?: return
 
                 val downloadFolder = DownloadFolder()
                 downloadFolder.makeIfNeed()
 
-                val assignAbsolutePath = downloadFolder.assignAbsolutePath(suggestedName) ?: return false
+                val assignAbsolutePath = downloadFolder.assignAbsolutePath(suggestedName) ?: return
                 callback.Continue(assignAbsolutePath, false)
-                return true
+                return
             }
         })
 
