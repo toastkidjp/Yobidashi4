@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -98,7 +99,7 @@ class TabsViewModel  : KoinComponent {
 
     suspend fun receivePathFlow() {
         viewModel.droppedPathFlow()
-            .filter { setOf("jpg", "webp", "png").contains(it.extension) }
+            .filter { viewModel.currentTab() !is FileRenameToolTab && setOf("jpg", "webp", "png").contains(it.extension) }
             .collect { viewModel.openTab(PhotoTab(it)) }
     }
 
