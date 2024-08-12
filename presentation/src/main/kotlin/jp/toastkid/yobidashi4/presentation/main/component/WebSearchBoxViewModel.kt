@@ -180,8 +180,12 @@ class WebSearchBoxViewModel : KoinComponent {
         return saveSearchHistory.value
     }
 
-    fun switchSaveSearchHistory(b: Boolean) {
+    fun setSaveSearchHistory(b: Boolean) {
         saveSearchHistory.value = b
+    }
+
+    fun switchSaveSearchHistory() {
+        saveSearchHistory.value = saveSearchHistory.value.not()
     }
 
 }
