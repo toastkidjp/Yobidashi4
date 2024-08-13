@@ -134,11 +134,11 @@ internal fun WebSearchBox() {
 
             Checkbox(
                 viewModel.saveSearchHistory(),
-                viewModel::switchSaveSearchHistory,
+                viewModel::setSaveSearchHistory,
                 modifier = Modifier.semantics { contentDescription = "save search history" }
             )
 
-            Text("Save search history")
+            Text("Save search history", modifier = Modifier.clickable(onClick = viewModel::switchSaveSearchHistory))
 
             if (viewModel.existsResult()) {
                 SelectionContainer {
