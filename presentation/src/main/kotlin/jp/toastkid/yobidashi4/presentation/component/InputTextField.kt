@@ -145,7 +145,7 @@ fun MultiLineTextField(
                 Icon(
                     painterResource("images/icon/ic_clear_form.xml"),
                     contentDescription = "Clear input.",
-                    tint = MaterialTheme.colors.primary,
+                    tint = MaterialTheme.colors.secondary,
                     modifier = Modifier.clickable(onClick = onClearInput)
                 )
             }
