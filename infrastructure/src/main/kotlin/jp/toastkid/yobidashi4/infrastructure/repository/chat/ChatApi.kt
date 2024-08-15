@@ -19,7 +19,7 @@ class ChatApi(private val apiKey: String) : ChatRepository {
 
     override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
         val connection = httpUrlConnectionFactory.invoke(
-            URL("https://generativelanguage.googleapis.com/v1/models/gemini-pro:streamGenerateContent?alt=sse&key=$apiKey")
+            URL("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:streamGenerateContent?alt=sse&key=$apiKey")
         ) ?: return
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
