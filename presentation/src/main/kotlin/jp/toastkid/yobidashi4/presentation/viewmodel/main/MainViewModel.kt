@@ -26,6 +26,8 @@ interface MainViewModel {
     fun initialAggregationType(): Int
     fun setInitialAggregationType(ordinal: Int)
 
+    fun findArticle(query: String?)
+
     fun showInputBox(): Boolean
     fun setShowInputBox(action: ((String) -> Unit)? = null)
     fun invokeInputAction(input: String?)
