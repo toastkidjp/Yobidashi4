@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownPreview
 
 @Composable
@@ -40,7 +39,7 @@ internal fun EditorTabView(tab: EditorTab) {
                 }
 
                 if (viewModel.showPreview()) {
-                    MarkdownPreview(MarkdownParser().invoke(tab.path), rememberScrollState(), Modifier.weight(1f))
+                    MarkdownPreview(viewModel.preview(), rememberScrollState(), Modifier.weight(1f))
                 }
 
                 LaunchedEffect(tab) {

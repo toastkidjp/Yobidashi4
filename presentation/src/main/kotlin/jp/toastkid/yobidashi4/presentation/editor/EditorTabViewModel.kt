@@ -2,7 +2,9 @@ package jp.toastkid.yobidashi4.presentation.editor
 
 import androidx.compose.runtime.mutableStateOf
 import java.util.concurrent.atomic.AtomicReference
+import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 
 class EditorTabViewModel {
 
@@ -22,12 +24,18 @@ class EditorTabViewModel {
     fun showPreview() = showPreview.value
 
     private fun updatePreview() {
-        showPreview.value = tabHolder.get().showPreview()
+        val tab = tabHolder.get() ?: return
+        showPreview.value = tab.showPreview()
+        preview.value = MarkdownParser().invoke(tab.path)
     }
 
     private fun setTab(tab: EditorTab) {
         tabHolder.set(tab)
     }
+
+    private val preview = mutableStateOf<Markdown>(Markdown(""))
+
+    fun preview() = preview.value
 
     suspend fun launch(tab: EditorTab) {
         setTab(tab)
