@@ -49,8 +49,12 @@ class FileRenameToolViewModel : KoinComponent {
             .showSnackbar(
                 "Rename completed!",
                 "Open folder",
-                { viewModel.openFile(paths.first().parent) }
+                { openFolder() }
             )
+    }
+
+    private fun openFolder() {
+        viewModel.openFile(paths.first().parent)
     }
 
     fun onKeyEvent(it: KeyEvent): Boolean {
