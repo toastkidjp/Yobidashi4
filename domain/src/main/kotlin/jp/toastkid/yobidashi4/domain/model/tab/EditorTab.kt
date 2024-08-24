@@ -46,7 +46,6 @@ data class EditorTab(
     fun getContent() = content
 
     fun setContent(newContent: String?, resetEditing: Boolean) {
-        val currentEditing = editing.shouldShowIndicator()
         editing.setCurrentSize((newContent ?: content).length)
         if (resetEditing) {
             editing.clear()
@@ -56,10 +55,6 @@ data class EditorTab(
             return
         }
         content = newContent
-
-        if (currentEditing == editing.shouldShowIndicator()) {
-            return
-        }
 
         CoroutineScope(Dispatchers.IO).launch {
             _updateFlow.emit(System.currentTimeMillis())
