@@ -29,4 +29,11 @@ class EditorTabViewModel {
         tabHolder.set(tab)
     }
 
+    suspend fun launch(tab: EditorTab) {
+        setTab(tab)
+        tab.update().collect {
+            updatePreview()
+        }
+    }
+
 }

@@ -44,10 +44,7 @@ internal fun EditorTabView(tab: EditorTab) {
                 }
 
                 LaunchedEffect(tab) {
-                    viewModel.setTab(tab)
-                    tab.update().collect {
-                        viewModel.updatePreview()
-                    }
+                    viewModel.launch(tab)
                 }
             }
             StatusLabel(
