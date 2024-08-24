@@ -36,11 +36,13 @@ import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
+import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -421,6 +423,22 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun setInitialAggregationType(ordinal: Int) {
         initialAggregationType = ordinal
+    }
+
+    // TODO Move other viewModel
+    private val keywordSearch: FullTextArticleFinder by inject()
+
+    override fun findArticle(query: String?) {
+        if (query.isNullOrBlank()) {
+            return
+        }
+
+        val items = keywordSearch.invoke(query)
+        if (items.isEmpty()) {
+            showSnackbar("Search result are not found with query='$query'.")
+            return
+        }
+        openTab(TableTab(items.title(), items))
     }
 
     private val showInputBox = mutableStateOf(false)
