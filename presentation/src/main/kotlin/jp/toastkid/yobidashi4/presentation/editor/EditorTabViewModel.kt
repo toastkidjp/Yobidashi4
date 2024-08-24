@@ -21,7 +21,7 @@ class EditorTabViewModel {
 
     fun showPreview() = showPreview.value
 
-    fun updatePreview() {
+    private fun updatePreview() {
         showPreview.value = tabHolder.get().showPreview()
     }
 
