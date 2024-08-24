@@ -25,7 +25,7 @@ class EditorTabViewModel {
         showPreview.value = tabHolder.get().showPreview()
     }
 
-    fun setTab(tab: EditorTab) {
+    private fun setTab(tab: EditorTab) {
         tabHolder.set(tab)
     }
 
