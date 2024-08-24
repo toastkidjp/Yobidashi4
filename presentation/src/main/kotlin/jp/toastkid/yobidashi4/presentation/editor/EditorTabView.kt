@@ -12,7 +12,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,7 @@ import jp.toastkid.yobidashi4.presentation.markdown.MarkdownPreview
 
 @Composable
 internal fun EditorTabView(tab: EditorTab) {
-    val status = remember { mutableStateOf("") }
+    val viewModel = remember { EditorTabViewModel() }
     Surface(color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
         Column {
             Row(
@@ -35,25 +34,24 @@ internal fun EditorTabView(tab: EditorTab) {
                 ) {
                     SimpleTextEditor(
                         tab,
-                        { status.value = (if (tab.editable()) "" else "Not editable | ") + it },
+                        { viewModel.updateStatus(it) },
                         Modifier
                     )
                 }
 
-                val showPreview = remember { mutableStateOf(tab.showPreview()) }
-
-                if (showPreview.value) {
+                if (viewModel.showPreview()) {
                     MarkdownPreview(MarkdownParser().invoke(tab.path), rememberScrollState(), Modifier.weight(1f))
                 }
 
                 LaunchedEffect(tab) {
+                    viewModel.setTab(tab)
                     tab.update().collect {
-                        showPreview.value = tab.showPreview()
+                        viewModel.updatePreview()
                     }
                 }
             }
             StatusLabel(
-                status.value,
+                viewModel.status(),
                 modifier = Modifier.height(24.dp)
             )
         }
