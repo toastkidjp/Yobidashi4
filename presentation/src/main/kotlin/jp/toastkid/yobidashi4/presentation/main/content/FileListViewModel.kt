@@ -192,7 +192,8 @@ class FileListViewModel : KoinComponent {
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
-    fun onPointerEvent(pointerEvent: PointerEvent, fileListItem: FileListItem) {
+    fun onPointerEvent(pointerEvent: PointerEvent, index: Int) {
+        val fileListItem = items().getOrNull(index) ?: return
         if (pointerEvent.type == PointerEventType.Press
             && !openingDropdown(fileListItem)
             && pointerEvent.button == PointerButton.Secondary
