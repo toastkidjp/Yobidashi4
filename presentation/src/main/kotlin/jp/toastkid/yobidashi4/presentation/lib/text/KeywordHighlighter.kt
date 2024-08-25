@@ -15,12 +15,12 @@ class KeywordHighlighter {
 
     operator fun invoke(text: String, finderTarget: String? = null) = buildAnnotatedString {
         var lastIndex = 0
+        var matcherEnd = 0
         val matcher = internalLinkPattern.matcher(text)
         while (matcher.find()) {
             val title = matcher.group(1)
             val url = matcher.group(2)
             val startIndex = matcher.start()
-            val endIndex = matcher.end()
 
             val extracted = text.substring(lastIndex, startIndex)
             if (extracted.isNotEmpty()) {
@@ -43,8 +43,10 @@ class KeywordHighlighter {
                 start = annotateStart,
                 end = annotateStart + title.length
             )
-            lastIndex = if (matcher.find()) annotateStart else endIndex
+            lastIndex = matcher.end()
+            matcherEnd = matcher.end()
         }
+        lastIndex = matcherEnd
 
         if (lastIndex >= text.length) {
             return@buildAnnotatedString
