@@ -371,66 +371,114 @@ class FileListViewModelTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun onPointerEvent() {
-        val bookmark = mockk<FileListItem>()
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
         every { pointerInputChange.pressed } returns true
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
         every { pointerEvent.button } returns PointerButton.Secondary
+        subject.start(
+            listOf(
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "TEST.md"
+                },
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "GUeST.md"
+                }
+            )
+        )
+        val fileListItem = subject.items()[1]
 
-        subject.onPointerEvent(pointerEvent, bookmark)
+        subject.onPointerEvent(pointerEvent, 1)
 
-        assertTrue(subject.openingDropdown(bookmark))
+        assertTrue(subject.openingDropdown(fileListItem))
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun noopOnPointerEvent() {
-        val bookmark = mockk<FileListItem>()
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
         every { pointerInputChange.pressed } returns true
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns false
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
         every { pointerEvent.button } returns PointerButton.Secondary
+        subject.start(
+            listOf(
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "TEST.md"
+                },
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "GUeST.md"
+                }
+            )
+        )
+        val fileListItem = subject.items()[1]
 
-        subject.onPointerEvent(pointerEvent, bookmark)
+        subject.onPointerEvent(pointerEvent, 0)
 
-        assertFalse(subject.openingDropdown(bookmark))
+        assertFalse(subject.openingDropdown(fileListItem))
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun noopOnPointerEventOnOpeningDropdown() {
-        val bookmark = mockk<FileListItem>()
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
         every { pointerInputChange.pressed } returns true
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
         every { pointerEvent.button } returns PointerButton.Secondary
-        subject.openDropdown(bookmark)
+        subject.start(
+            listOf(
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "TEST.md"
+                },
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "GUeST.md"
+                }
+            )
+        )
+        val fileListItem = subject.items()[1]
+        subject.openDropdown(fileListItem)
 
-        subject.onPointerEvent(pointerEvent, bookmark)
+        subject.onPointerEvent(pointerEvent, 1)
 
-        assertTrue(subject.openingDropdown(bookmark))
+        assertTrue(subject.openingDropdown(fileListItem))
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun noopOnPointerEventWithOtherButton() {
-        val bookmark = mockk<FileListItem>()
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
         every { pointerInputChange.pressed } returns true
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
         every { pointerEvent.button } returns PointerButton.Primary
+        subject.start(
+            listOf(
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "TEST.md"
+                },
+                mockk<Path>().also {
+                    every { it.extension } returns "md"
+                    every { it.nameWithoutExtension } returns "GUeST.md"
+                }
+            )
+        )
+        val fileListItem = subject.items()[1]
 
-        subject.onPointerEvent(pointerEvent, bookmark)
+        subject.onPointerEvent(pointerEvent, 1)
 
-        assertFalse(subject.openingDropdown(bookmark))
+        assertFalse(subject.openingDropdown(fileListItem))
     }
 
     @Test
