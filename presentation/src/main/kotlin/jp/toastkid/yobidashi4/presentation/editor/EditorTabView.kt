@@ -33,7 +33,7 @@ internal fun EditorTabView(tab: EditorTab) {
                 ) {
                     SimpleTextEditor(
                         tab,
-                        { viewModel.updateStatus(it) },
+                        viewModel::updateStatus,
                         Modifier
                     )
                 }
