@@ -57,6 +57,15 @@ class KeywordHighlighterTest {
     }
 
     @Test
+    fun multipleLink() {
+        val annotate = subject.invoke("It [longs](https://www.yahoo.co.jp) to [make](https://www.make.it/sample) it.", null)
+
+        assertEquals(2, annotate.spanStyles.size)
+        assertTrue(annotate.spanStyles.any { it.item.textDecoration == Underline })
+        assertEquals("It longs to make it.", annotate.text)
+    }
+
+    @Test
     fun defaultArgs() {
         val annotate = subject.invoke("It [longs](https://www.yahoo.co.jp) to make it.")
 
