@@ -426,6 +426,21 @@ class FileListViewModelTest {
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
+    fun noopOnPointerEventWithOutOfBoundsIndex() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns false
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+
+        subject.onPointerEvent(pointerEvent, 1)
+
+        verify { pointerEvent wasNot called }
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
     fun noopOnPointerEventOnOpeningDropdown() {
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
