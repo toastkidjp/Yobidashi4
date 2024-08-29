@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
@@ -11,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.slf4j.LoggerFactory
 
 class TextFileViewerTabViewModel {
 
@@ -49,7 +51,11 @@ class TextFileViewerTabViewModel {
         }
 
         withContext(dispatcher) {
-            Files.readAllLines(path).forEach { textState.add(it) }
+            try {
+                Files.readAllLines(path).forEach { textState.add(it) }
+            } catch (e: IOException) {
+                LoggerFactory.getLogger(javaClass).error("File read error.", e)
+            }
         }
 
         focusRequester().requestFocus()
