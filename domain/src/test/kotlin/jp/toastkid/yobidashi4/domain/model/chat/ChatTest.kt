@@ -40,7 +40,7 @@ class ChatTest {
         assertEquals(
             """{
   "contents": [
-    {"role":"user", "parts":[ { "text": "Test \"is\" good."} ]},{"role":"model", "parts":[ { "text": "Answer"} ]}
+    {"role":"user", "parts":[ { "text": 'Test \"is\" good.'} ]},{"role":"model", "parts":[ { "text": 'Answer'} ]}
   ],
   "safetySettings": [
       {
