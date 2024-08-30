@@ -34,13 +34,13 @@ class ChatTest {
 
     @Test
     fun makeContent() {
-        chat.addUserText("Test \"is\" good.")
+        chat.addUserText("Test \"is\" good. It's good.")
         chat.addModelText("Answer")
 
         assertEquals(
             """{
   "contents": [
-    {"role":"user", "parts":[ { "text": 'Test \"is\" good.'} ]},{"role":"model", "parts":[ { "text": 'Answer'} ]}
+    {"role":"user", "parts":[ { "text": 'Test \"is\" good. It\'s good.'} ]},{"role":"model", "parts":[ { "text": 'Answer'} ]}
   ],
   "safetySettings": [
       {
