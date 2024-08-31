@@ -93,6 +93,10 @@ class AggregationBoxViewModel : KoinComponent {
         return selectedSite.value.label()
     }
 
+    fun selectedCategoryIcon(): String {
+        return selectedSite.value.iconPath()
+    }
+
     fun isCurrentSwingContent(): Boolean {
         return viewModel.currentTab() is WebTab
     }
