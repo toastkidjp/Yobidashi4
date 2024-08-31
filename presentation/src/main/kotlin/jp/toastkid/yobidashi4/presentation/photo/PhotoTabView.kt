@@ -38,8 +38,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
+import kotlin.io.path.extension
 import kotlin.io.path.name
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -198,6 +202,20 @@ fun PhotoTabView(tab: PhotoTab) {
                                 .clickable(onClick = viewModel::saturation)
                                 .padding(start = 16.dp)
                         )
+
+                        if (tab.path().extension == "gif") {
+                            Icon(
+                                painterResource("images/icon/ic_brush.xml"),
+                                contentDescription = "Divide GIF",
+                                tint = MaterialTheme.colors.onSurface,
+                                modifier = Modifier.clickable {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        viewModel.divideGif(tab.path())
+                                    }
+                                }
+                                    .padding(start = 16.dp)
+                            )
+                        }
                     }
                 }
             }
