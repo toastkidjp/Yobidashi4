@@ -15,8 +15,9 @@ class EditorTabViewModel {
     fun status() = status.value
 
     fun updateStatus(it: String) {
-        val tab = tabHolder.get() ?: return
-        status.value = (if (tab.editable()) "" else "Not editable | ") + it
+        val tab = tabHolder.get()
+        val editableStatus = if (tab == null || tab.editable()) "" else "Not editable | "
+        status.value = editableStatus + it
     }
 
     private val showPreview = mutableStateOf(false)
