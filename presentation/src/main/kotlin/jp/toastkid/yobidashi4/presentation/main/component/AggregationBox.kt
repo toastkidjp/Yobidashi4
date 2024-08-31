@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 
 @Composable
@@ -57,7 +59,18 @@ internal fun AggregationBox() {
                 modifier = Modifier.clickable(onClick = viewModel::openChooser)
             ) {
                 Surface(elevation = 4.dp) {
-                    Text(viewModel.selectedCategoryName(), modifier = Modifier.padding(start = 8.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painterResource(viewModel.selectedCategoryIcon()),
+                            contentDescription = viewModel.selectedCategoryName(),
+                            tint = MaterialTheme.colors.onPrimary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Text(
+                            viewModel.selectedCategoryName(),
+                            fontSize = 12.sp
+                        )
+                    }
                 }
 
                 val swingContent = viewModel.isCurrentSwingContent()
