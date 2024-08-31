@@ -132,13 +132,20 @@ internal fun WebSearchBox() {
                 Text("Search")
             }
 
-            Checkbox(
-                viewModel.saveSearchHistory(),
-                viewModel::setSaveSearchHistory,
-                modifier = Modifier.semantics { contentDescription = "save search history" }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable(onClick = viewModel::switchSaveSearchHistory)
+                    .semantics { contentDescription = "Switch search history" }
+            ) {
+                Checkbox(
+                    viewModel.saveSearchHistory(),
+                    viewModel::setSaveSearchHistory,
+                    modifier = Modifier.semantics { contentDescription = "save search history" }
+                )
 
-            Text("Save search history", modifier = Modifier.clickable(onClick = viewModel::switchSaveSearchHistory))
+                Text("Save search history")
+            }
 
             if (viewModel.existsResult()) {
                 SelectionContainer {
