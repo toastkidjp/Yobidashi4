@@ -12,10 +12,13 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
@@ -260,8 +263,11 @@ class AggregationBoxViewModelTest {
         every { keywordSearch.invoke(any()) } returns result
         every { mainViewModel.openTab(any()) } just Runs
         subject.onDateInputValueChange(TextFieldValue("test"))
+        val slot = slot<Tab>()
+        every { mainViewModel.openTab(capture(slot)) } just Runs
 
         subject.onSearch()
+        (slot.captured as TableTab).reload()
 
         verify { keywordSearch.invoke(any()) }
         verify { mainViewModel.openTab(any()) }
