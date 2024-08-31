@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.main.component
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -29,6 +30,8 @@ class WebSearchBoxKtTest {
         every { anyConstructed<WebSearchBoxViewModel>().existsResult() } returns true
         every { anyConstructed<WebSearchBoxViewModel>().showWebSearch() } returns true
         every { anyConstructed<WebSearchBoxViewModel>().setShowWebSearch(any()) } just Runs
+        every { anyConstructed<WebSearchBoxViewModel>().setSaveSearchHistory(any()) } just Runs
+        every { anyConstructed<WebSearchBoxViewModel>().switchSaveSearchHistory() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().setOpenDropdown() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().closeDropdown() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().choose(any()) } just Runs
@@ -59,6 +62,12 @@ class WebSearchBoxKtTest {
 
             onNodeWithContentDescription("Switch dropdown menu.", true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().setOpenDropdown() }
+
+            onNodeWithContentDescription("save search history", true).performClick()
+            verify { anyConstructed<WebSearchBoxViewModel>().setSaveSearchHistory(any()) }
+
+            onNodeWithText("Save search history", true).performClick()
+            verify { anyConstructed<WebSearchBoxViewModel>().switchSaveSearchHistory() }
 
             onNode(hasText(text), useUnmergedTree = true).performImeAction()
             verify { anyConstructed<WebSearchBoxViewModel>().invokeSearch() }
