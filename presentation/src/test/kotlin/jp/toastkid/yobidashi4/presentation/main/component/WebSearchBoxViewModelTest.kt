@@ -147,6 +147,20 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
+    fun invokeSearchWithoutStoringHistory() {
+        every { viewModel.openUrl(any(), any()) } just Runs
+        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { viewModel.currentTab() } returns mockk()
+        subject.switchSaveSearchHistory()
+        subject.onValueChange(TextFieldValue("test"))
+
+        subject.invokeSearch()
+
+        verify { viewModel.openUrl(any(), any()) }
+        verify { viewModel.setShowWebSearch(false) }
+    }
+
+    @Test
     fun invokeSearchWithCurrentWebTabUrl() {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.setShowWebSearch(any()) } just Runs
@@ -337,6 +351,15 @@ class WebSearchBoxViewModelTest {
         every { viewModel.currentTab() } returns mockk<WebTab>()
 
         assertEquals(-80.dp, subject.makeVerticalOffset())
+    }
+
+    @Test
+    fun switchSaveSearchHistory() {
+        assertTrue(subject.saveSearchHistory())
+
+        subject.switchSaveSearchHistory()
+
+        assertFalse(subject.saveSearchHistory())
     }
 
 }
