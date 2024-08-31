@@ -99,7 +99,7 @@ class TabsViewModel  : KoinComponent {
 
     suspend fun receivePathFlow() {
         viewModel.droppedPathFlow()
-            .filter { viewModel.currentTab() !is FileRenameToolTab && setOf("jpg", "webp", "png").contains(it.extension) }
+            .filter { viewModel.currentTab() !is FileRenameToolTab && setOf("jpg", "webp", "png", "gif").contains(it.extension) }
             .collect { viewModel.openTab(PhotoTab(it)) }
     }
 
