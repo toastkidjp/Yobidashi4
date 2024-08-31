@@ -16,9 +16,18 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.IntOffset
+import java.awt.image.BufferedImage
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import javax.imageio.ImageIO
+import javax.imageio.ImageReader
+import javax.imageio.ImageWriter
+import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.slf4j.LoggerFactory
 
 class PhotoTabViewModel {
 
@@ -200,6 +209,43 @@ class PhotoTabViewModel {
         offset.value = Offset.Zero
         rotationY.value = 0f
         rotationZ.value = 0f
+    }
+
+    // TODO Divide to other class, and should write unit test.
+    suspend fun divideGif(path: Path) {
+        try {
+            val it = ImageIO.getImageReadersByFormatName("gif")
+            val imageReader: ImageReader = if (it.hasNext()) it.next() else null ?: return
+            imageReader.input = withContext(Dispatchers.IO) {
+                ImageIO.createImageInputStream(path.toFile())
+            }
+
+            val itr = ImageIO.getImageWritersByFormatName("gif")
+            val imageWriter: ImageWriter = if (itr.hasNext()) itr.next() else null ?: return
+            val count: Int = withContext(Dispatchers.IO) { imageReader.getNumImages(true) } ?: 0
+
+            val folder = path.resolveSibling(path.nameWithoutExtension)
+            withContext(Dispatchers.IO) {
+                Files.createDirectory(folder)
+            }
+
+            for (i in 0 until count) {
+                withContext(Dispatchers.IO) {
+                    val tmpImage: BufferedImage? = imageReader.read(i)
+                    val outputStream = ImageIO.createImageOutputStream(
+                        folder.resolve("${path.nameWithoutExtension}_${i}.png").toFile()
+                    )
+                    imageWriter.setOutput(outputStream)
+                    imageWriter.write(tmpImage)
+                    imageWriter.dispose()
+                    tmpImage?.flush()
+                    outputStream.close()
+                }
+            }
+            imageReader.dispose()
+        } catch (e: IOException) {
+            LoggerFactory.getLogger(javaClass).error("Error occurred by GIF dividing.", e)
+        }
     }
 
 }
