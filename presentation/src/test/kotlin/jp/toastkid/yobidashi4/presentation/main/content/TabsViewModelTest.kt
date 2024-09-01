@@ -25,6 +25,7 @@ import io.mockk.verify
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
@@ -289,6 +290,7 @@ class TabsViewModelTest {
             makePath("txt")
         )
         every { mainViewModel.openTab(any()) } just Runs
+        every { mainViewModel.currentTab() } returns mockk()
 
         runTest {
             subject.receivePathFlow()
@@ -296,6 +298,26 @@ class TabsViewModelTest {
 
         verify { mainViewModel.droppedPathFlow() }
         verify(exactly = 3) { mainViewModel.openTab(any()) }
+    }
+
+
+    @Test
+    fun receivePathFlowWhenCurrentIsFileRenameToolTab() {
+        every { mainViewModel.droppedPathFlow() } returns flowOf(
+            makePath("jpg"),
+            makePath("webp"),
+            makePath("png"),
+            makePath("txt")
+        )
+        every { mainViewModel.openTab(any()) } just Runs
+        every { mainViewModel.currentTab() } returns mockk<FileRenameToolTab>()
+
+        runTest {
+            subject.receivePathFlow()
+        }
+
+        verify { mainViewModel.droppedPathFlow() }
+        verify(inverse = true) { mainViewModel.openTab(any()) }
     }
 
     private fun makePath(extension: String): Path {
