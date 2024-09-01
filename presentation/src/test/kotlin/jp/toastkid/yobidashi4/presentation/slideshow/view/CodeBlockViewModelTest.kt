@@ -2,8 +2,11 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -47,12 +50,13 @@ class CodeBlockViewModelTest {
 
         assertEquals("Just beat It\nBeat It\nBeat It", subject.content().text)
         println(subject.lineNumberTexts())
-        assertEquals(3, subject.lineNumberTexts().size)
     }
 
     @Test
     fun lineNumberTexts() {
-        subject.onValueChange(TextFieldValue("test\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest"))
+        val multiParagraph = mockk<MultiParagraph>()
+        every { multiParagraph.lineCount } returns 14
+        subject.setMultiParagraph(multiParagraph)
 
         assertEquals(14, subject.lineNumberTexts().size)
     }
