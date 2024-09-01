@@ -53,6 +53,7 @@ class FindInPageBoxViewModelTest {
         }
 
         mockkConstructor(InputHistoryService::class)
+        every { anyConstructed<InputHistoryService>().clear(any()) } just Runs
 
         subject = FindInPageBoxViewModel()
     }
@@ -167,8 +168,6 @@ class FindInPageBoxViewModelTest {
 
     @Test
     fun onClickClear() {
-        every { anyConstructed<InputHistoryService>().clear(any()) } just Runs
-
         subject.onClickClear()
 
         verify { anyConstructed<InputHistoryService>().clear(any()) }
