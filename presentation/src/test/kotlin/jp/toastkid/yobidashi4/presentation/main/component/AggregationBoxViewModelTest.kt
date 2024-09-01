@@ -187,6 +187,11 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun selectedCategoryIcon() {
+        assertTrue(subject.selectedCategoryIcon().isNotEmpty())
+    }
+
+    @Test
     fun isNotCurrentSwingContent() {
         every { mainViewModel.currentTab() } returns mockk()
 
