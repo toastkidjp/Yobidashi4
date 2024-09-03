@@ -54,8 +54,8 @@ allprojects {
     apply(plugin = "kotlin")
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.0")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.0")
         testImplementation("io.mockk:mockk:1.10.6")
         testRuntimeOnly("net.bytebuddy:byte-buddy:1.12.22")
     }
@@ -67,6 +67,7 @@ allprojects {
 
     tasks.test {
         maxParallelForks = Runtime.getRuntime().availableProcessors()
+        maxHeapSize = "4G"
         useJUnitPlatform()
         jvmArgs(
             "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
