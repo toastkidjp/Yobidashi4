@@ -26,7 +26,6 @@ import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -54,7 +53,7 @@ class MainApplicationKtTest {
         every { mainViewModel.loadBackgroundImage() } just Runs
         every { mainViewModel.windowState() } returns WindowState()
         every { mainViewModel.slideshowPath() } returns null
-        every { mainViewModel.droppedPathFlow() } returns emptyFlow()
+        every { mainViewModel.registerDroppedPathReceiver(any(), any()) } just Runs
         every { mainViewModel.trayState() } returns TrayState()
         coEvery { notification.start(any()) } just Runs
         every { notification.notificationFlow() } returns MutableSharedFlow()

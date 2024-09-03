@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
@@ -667,6 +668,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             .collect {
                 registers.values.reversed().forEach { receiver ->
                     receiver(it)
+                }
+
+                when (it.extension) {
+                    "txt", "md", "log", "java", "kt", "py" -> {
+                        edit(it)
+                    }
+                    "jpg", "webp", "png", "gif" -> {
+                        openTab(PhotoTab(it))
+                    }
+                    else -> Unit
                 }
             }
     }

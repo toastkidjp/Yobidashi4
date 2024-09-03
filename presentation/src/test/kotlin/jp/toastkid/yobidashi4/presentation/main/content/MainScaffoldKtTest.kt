@@ -8,12 +8,10 @@ import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import java.nio.file.Files
@@ -84,9 +82,6 @@ class MainScaffoldKtTest {
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 20000
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
-
-        mockkConstructor(TabsViewModel::class)
-        coEvery { anyConstructed<TabsViewModel>().receivePathFlow() } just Runs
     }
 
     @AfterEach

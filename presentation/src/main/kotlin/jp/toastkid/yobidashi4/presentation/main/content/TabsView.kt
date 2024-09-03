@@ -188,10 +188,6 @@ internal fun TabsView(modifier: Modifier) {
             else -> Unit
         }
     }
-
-    LaunchedEffect(Unit) {
-        viewModel.receivePathFlow()
-    }
 }
 
 @Composable
