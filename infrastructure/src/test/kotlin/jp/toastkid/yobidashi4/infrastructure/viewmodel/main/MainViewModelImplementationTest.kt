@@ -36,6 +36,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.stream.Stream
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
@@ -54,6 +55,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
+import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import kotlin.io.path.extension
@@ -96,6 +98,9 @@ class MainViewModelImplementationTest {
     @MockK
     private lateinit var articleFactory: ArticleFactory
 
+    @MockK
+    private lateinit var keywordSearch: FullTextArticleFinder
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -109,6 +114,7 @@ class MainViewModelImplementationTest {
                     single(qualifier = null) { webViewPool } bind(WebViewPool::class)
                     single(qualifier = null) { webHistoryRepository } bind(WebHistoryRepository::class)
                     single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
+                    single(qualifier = null) { keywordSearch } bind (FullTextArticleFinder::class)
                 }
             )
         }
@@ -118,6 +124,10 @@ class MainViewModelImplementationTest {
         every { setting.useCaseSensitiveInFinder() } returns false
         every { topArticleLoaderService.invoke() } returns listOf(mockk(), mockk())
         every { webViewPool.dispose(any()) } just Runs
+        val aggregationResult = mockk<AggregationResult>()
+        every { keywordSearch.invoke(any()) } returns aggregationResult
+        every { aggregationResult.isEmpty() } returns false
+        every { aggregationResult.title() } returns "test"
 
         mockkStatic(Desktop::class)
         every { Desktop.getDesktop() } returns desktop
@@ -1316,6 +1326,35 @@ class MainViewModelImplementationTest {
         subject.sendNotification(NotificationEvent.makeDefault())
 
         verify { trayState.sendNotification(any()) }
+    }
+
+    @Test
+    fun findArticle() {
+        subject.findArticle("test")
+
+        verify { keywordSearch.invoke("test") }
+        assertEquals(1, subject.tabs.size)
+    }
+
+    @Test
+    fun findArticleNotFoundCase() {
+        val aggregationResult = mockk<AggregationResult>()
+        every { keywordSearch.invoke(any()) } returns aggregationResult
+        every { aggregationResult.isEmpty() } returns true
+
+        subject.findArticle("test")
+
+        verify { keywordSearch.invoke("test") }
+        assertTrue(subject.tabs.isEmpty())
+    }
+
+    @Test
+    fun noopFindArticle() {
+        subject.findArticle(null)
+        subject.findArticle("")
+        subject.findArticle(" ")
+
+        verify { keywordSearch wasNot called }
     }
 
 }
