@@ -62,10 +62,10 @@ class PhotoTabViewKtTest {
                 PhotoTabView(tab)
             }
 
-            onNodeWithContentDescription("handle", useUnmergedTree = true).performClick()
+            onNodeWithContentDescription("Switch menu", useUnmergedTree = true).performClick()
             onNodeWithContentDescription("Rotation left", useUnmergedTree = true).performClick()
             onNodeWithContentDescription("Rotation right", useUnmergedTree = true).performClick()
-            onNodeWithContentDescription("handle", useUnmergedTree = true).performClick()
+            onNodeWithContentDescription("Switch menu", useUnmergedTree = true).performClick()
                 .performKeyInput {
                     pressKey(Key.DirectionUp, 1000L)
                 }
