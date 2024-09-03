@@ -5,12 +5,13 @@ import kotlin.io.path.extension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+// TODO Delete it
 class TextFileReceiver : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
     suspend fun launch() {
-        mainViewModel.droppedPathFlow().collect {
+        mainViewModel.registerDroppedPathReceiver("text") {
             when (it.extension) {
                 "txt", "md", "log", "java", "kt", "py" -> {
                     mainViewModel.edit(it)
