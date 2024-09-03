@@ -23,8 +23,7 @@ class FileRenameToolViewKtTest {
         every { element.fileName } returns element
         every { element.toString() } returns "test"
         every { anyConstructed<FileRenameToolViewModel>().items() } returns listOf(element)
-        every { anyConstructed<FileRenameToolViewModel>().launchedEffectKey() } returns 1
-        coEvery { anyConstructed<FileRenameToolViewModel>().collectDroppedPaths() } just Runs
+        coEvery { anyConstructed<FileRenameToolViewModel>().collectDroppedPaths(any()) } just Runs
     }
 
     @AfterEach
