@@ -29,7 +29,6 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
-import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -158,7 +157,7 @@ class MainScaffoldKtTest {
     fun useFileRenameToolTabContents() {
         every { mainViewModel.selected } returns mutableStateOf(2)
         every { mainViewModel.currentTab() } returns FileRenameToolTab()
-        every { mainViewModel.droppedPathFlow() } returns emptyFlow()
+        every { mainViewModel.registerDroppedPathReceiver(any(), any()) } just Runs
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
         every { mainViewModel.tabs } returns mutableListOf(
             LoanCalculatorTab(),
