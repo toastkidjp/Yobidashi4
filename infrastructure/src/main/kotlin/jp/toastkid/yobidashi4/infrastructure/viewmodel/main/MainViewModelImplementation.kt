@@ -652,6 +652,25 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
     }
 
+    private val registers = mutableMapOf<String, (Path) -> Unit>()
+
+    override fun registerDroppedPathReceiver(key: String, receiver: (Path) -> Unit) {
+        registers.put(key, receiver)
+    }
+
+    override fun unregisterDroppedPathReceiver(key: String) {
+        registers.remove(key)
+    }
+
+    override suspend fun launchDroppedPathFlow() {
+        droppedPathFlow()
+            .collect {
+                registers.values.reversed().forEach { receiver ->
+                    receiver(it)
+                }
+            }
+    }
+
     private val slideshowState = mutableStateOf<Path?>(null)
 
     override fun slideshowPath() = slideshowState.value
