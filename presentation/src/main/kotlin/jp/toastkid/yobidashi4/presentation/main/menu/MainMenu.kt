@@ -128,9 +128,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
 
             if (viewModel.useAdditionalTabMenu()) {
-                Item("Close all tabs", shortcut = KeyShortcut(Key.W, alt = true), icon = painterResource("images/icon/ic_clean.xml")) {
-                    viewModel.closeAllTabs()
-                }
+                Item(
+                    "Close all tabs",
+                    shortcut = KeyShortcut(Key.W, alt = true),
+                    icon = painterResource("images/icon/ic_clean.xml"),
+                    onClick = viewModel::closeAllTabs
+                )
 
                 Item("Close other tabs", icon = painterResource("images/icon/ic_close_other_tabs.xml")) {
                     viewModel.closeOtherTabs()
