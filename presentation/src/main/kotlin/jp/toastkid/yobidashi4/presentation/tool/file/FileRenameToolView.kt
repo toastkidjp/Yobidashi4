@@ -70,9 +70,9 @@ fun FileRenameToolView() {
         }
     }
 
-    LaunchedEffect(viewModel.launchedEffectKey()) {
+    LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            viewModel.collectDroppedPaths()
+            viewModel.collectDroppedPaths("file_rename")
         }
     }
 }
