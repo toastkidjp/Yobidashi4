@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,8 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import kotlin.io.path.extension
@@ -102,14 +105,19 @@ fun PhotoTabView(tab: PhotoTab) {
                         viewModel.hideHandle()
                     }
             ) {
-                Icon(
-                    painterResource(viewModel.handleIconPath()),
-                    contentDescription = "handle",
+                Row(
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .clickable(onClick = viewModel::switchMenu)
-                        .padding(8.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                        .fillMaxWidth()
+                        .semantics { contentDescription = "Switch menu" }
+                ) {
+                    Icon(
+                        painterResource(viewModel.handleIconPath()),
+                        contentDescription = "handle",
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
 
                 if (viewModel.visibleMenu()) {
                     Row(
