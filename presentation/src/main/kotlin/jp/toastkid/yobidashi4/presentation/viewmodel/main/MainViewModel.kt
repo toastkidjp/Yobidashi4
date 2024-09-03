@@ -137,6 +137,12 @@ interface MainViewModel {
 
     fun emitDroppedPath(paths: Collection<Path>)
 
+    fun registerDroppedPathReceiver(key: String, receiver: (Path) -> Unit)
+
+    fun unregisterDroppedPathReceiver(key: String)
+
+    suspend fun launchDroppedPathFlow()
+
     fun slideshowPath(): Path?
 
     fun slideshow(path: Path)
