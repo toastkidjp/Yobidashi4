@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
-import kotlinx.coroutines.flow.filter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -97,10 +96,12 @@ class TabsViewModel  : KoinComponent {
         return if (tab is WebTab) 232.dp else 1000.dp
     }
 
-    suspend fun receivePathFlow() {
-        viewModel.droppedPathFlow()
-            .filter { viewModel.currentTab() !is FileRenameToolTab && setOf("jpg", "webp", "png", "gif").contains(it.extension) }
-            .collect { viewModel.openTab(PhotoTab(it)) }
+    fun receivePathFlow() {
+        viewModel.registerDroppedPathReceiver("tabs") {
+            if (currentTab() !is FileRenameToolTab && setOf("jpg", "webp", "png", "gif").contains(it.extension)) {
+                viewModel.openTab(PhotoTab(it))
+            }
+        }
     }
 
 }
