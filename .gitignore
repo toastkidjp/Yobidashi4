@@ -4,6 +4,7 @@
 *.pdf
 *.lnk
 *.jar
+!gradle-wrapper.jar
 *.zip
 .git/
 .gradle/
