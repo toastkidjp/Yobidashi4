@@ -183,7 +183,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun selectedCategoryName() {
-        println(subject.selectedCategoryName())
+        assertTrue(subject.selectedCategoryName().isNotEmpty())
     }
 
     @Test
