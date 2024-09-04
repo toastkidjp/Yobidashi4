@@ -23,6 +23,7 @@ import java.awt.Desktop
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
@@ -653,21 +654,23 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
     }
 
-    private val registers = mutableMapOf<String, (Path) -> Unit>()
+    private val overrideReceiver = AtomicReference<((Path) -> Unit)?>()
 
-    override fun registerDroppedPathReceiver(key: String, receiver: (Path) -> Unit) {
-        registers.put(key, receiver)
+    override fun registerDroppedPathReceiver(receiver: (Path) -> Unit) {
+        overrideReceiver.set(receiver)
     }
 
-    override fun unregisterDroppedPathReceiver(key: String) {
-        registers.remove(key)
+    override fun unregisterDroppedPathReceiver() {
+        overrideReceiver.set(null)
     }
 
     override suspend fun launchDroppedPathFlow() {
         droppedPathFlow()
             .collect {
-                registers.values.reversed().forEach { receiver ->
-                    receiver(it)
+                val receiver = overrideReceiver.get()
+                if (receiver != null) {
+                    receiver.invoke(it)
+                    return@collect
                 }
 
                 when (it.extension) {

@@ -49,7 +49,7 @@ class FileRenameToolViewModel : KoinComponent {
             .showSnackbar(
                 "Rename completed!",
                 "Open folder",
-                { openFolder() }
+                ::openFolder
             )
     }
 
@@ -73,12 +73,14 @@ class FileRenameToolViewModel : KoinComponent {
         paths.clear()
     }
 
-    fun launchedEffectKey() = viewModel.droppedPathFlow().hashCode()
-
-    suspend fun collectDroppedPaths() {
-        viewModel.droppedPathFlow().collect {
+    fun collectDroppedPaths(tabId: String) {
+        viewModel.registerDroppedPathReceiver {
             paths.add(it)
         }
+    }
+
+    fun dispose() {
+        viewModel.unregisterDroppedPathReceiver()
     }
 
     fun clearInput() {
