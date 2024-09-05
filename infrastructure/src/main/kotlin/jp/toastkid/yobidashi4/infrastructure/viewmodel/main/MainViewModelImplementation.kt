@@ -644,9 +644,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     private val droppedPathFlow = MutableSharedFlow<Path>()
-    override fun droppedPathFlow(): Flow<Path> {
-        return droppedPathFlow.asSharedFlow()
-    }
 
     override fun emitDroppedPath(paths: Collection<Path>) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -665,7 +662,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override suspend fun launchDroppedPathFlow() {
-        droppedPathFlow()
+        droppedPathFlow
+            .asSharedFlow()
             .collect {
                 val receiver = overrideReceiver.get()
                 if (receiver != null) {
