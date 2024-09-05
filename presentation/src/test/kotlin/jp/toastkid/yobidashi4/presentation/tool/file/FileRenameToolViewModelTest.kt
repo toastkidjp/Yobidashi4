@@ -165,4 +165,13 @@ class FileRenameToolViewModelTest {
         assertFalse(consumed)
     }
 
+    @Test
+    fun dispose() {
+        every { mainViewModel.unregisterDroppedPathReceiver() } just Runs
+
+        subject.dispose()
+
+        verify { mainViewModel.unregisterDroppedPathReceiver() }
+    }
+
 }
