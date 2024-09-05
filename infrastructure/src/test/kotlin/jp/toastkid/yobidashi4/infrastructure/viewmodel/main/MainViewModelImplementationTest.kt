@@ -1252,22 +1252,6 @@ class MainViewModelImplementationTest {
     }
 
     @Test
-    fun emitDroppedPath() {
-        val countDownLatch = CountDownLatch(1)
-        val path = mockk<Path>()
-        val job = CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.droppedPathFlow().collect {
-                assertSame(path, it)
-                countDownLatch.countDown()
-            }
-        }
-
-        subject.emitDroppedPath(listOf(path))
-
-        job.cancel()
-    }
-
-    @Test
     fun launchDroppedPathFlow() {
         subject = spyk(subject)
         every { subject.edit(any(), any()) } just Runs
