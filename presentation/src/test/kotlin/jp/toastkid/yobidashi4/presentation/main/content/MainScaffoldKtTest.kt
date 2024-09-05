@@ -152,7 +152,8 @@ class MainScaffoldKtTest {
     fun useFileRenameToolTabContents() {
         every { mainViewModel.selected } returns mutableStateOf(2)
         every { mainViewModel.currentTab() } returns FileRenameToolTab()
-        every { mainViewModel.registerDroppedPathReceiver(any(), any()) } just Runs
+        every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
+        every { mainViewModel.unregisterDroppedPathReceiver() } just Runs
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
         every { mainViewModel.tabs } returns mutableListOf(
             LoanCalculatorTab(),
