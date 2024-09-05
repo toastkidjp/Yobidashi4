@@ -135,9 +135,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     onClick = viewModel::closeAllTabs
                 )
 
-                Item("Close other tabs", icon = painterResource("images/icon/ic_close_other_tabs.xml")) {
-                    viewModel.closeOtherTabs()
-                }
+                Item(
+                    "Close other tabs",
+                    icon = painterResource("images/icon/ic_close_other_tabs.xml"),
+                    onClick = viewModel::closeOtherTabs
+                )
+
                 Item("Copy tab's title", icon = painterResource("images/icon/ic_clipboard.xml")) {
                     viewModel.copyTabsTitle()
                 }
