@@ -53,7 +53,8 @@ class MainApplicationKtTest {
         every { mainViewModel.loadBackgroundImage() } just Runs
         every { mainViewModel.windowState() } returns WindowState()
         every { mainViewModel.slideshowPath() } returns null
-        every { mainViewModel.registerDroppedPathReceiver(any(), any()) } just Runs
+        every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
+        coEvery { mainViewModel.launchDroppedPathFlow() } just Runs
         every { mainViewModel.trayState() } returns TrayState()
         coEvery { notification.start(any()) } just Runs
         every { notification.notificationFlow() } returns MutableSharedFlow()
