@@ -6,8 +6,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -19,6 +23,8 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -27,23 +33,41 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 @OptIn(InternalComposeUiApi::class)
 class PhotoTabViewModelTest {
 
     private lateinit var subject: PhotoTabViewModel
 
+    @MockK
+    private lateinit var gifDivider: GifDivider
+
     @BeforeEach
     fun setUp() {
-        subject = PhotoTabViewModel()
-
+        MockKAnnotations.init(this)
         mockkStatic(Files::class)
         val resourceAsStream = javaClass.classLoader.getResourceAsStream("icon/icon.png") ?: fail()
         every { Files.newInputStream(any()) } returns resourceAsStream
+
+        startKoin {
+            modules(
+                module {
+                    single(qualifier = null) { gifDivider } bind (GifDivider::class)
+                }
+            )
+        }
+        coEvery { gifDivider.invoke(any()) } just Runs
+
+        subject = PhotoTabViewModel()
     }
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -255,6 +279,15 @@ class PhotoTabViewModelTest {
         subject.showHandle()
 
         assertEquals(1f, subject.handleAlpha())
+    }
+
+    @Test
+    fun divideGif() {
+        runTest {
+            subject.divideGif(mockk())
+        }
+
+        coVerify { gifDivider.invoke(any()) }
     }
 
 }
