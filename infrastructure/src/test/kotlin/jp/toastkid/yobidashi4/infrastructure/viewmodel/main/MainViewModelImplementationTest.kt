@@ -1268,6 +1268,39 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun launchDroppedPathFlow() {
+        subject = spyk(subject)
+        every { subject.edit(any(), any()) } just Runs
+        every { subject.openTab(any()) } just Runs
+
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.launchDroppedPathFlow()
+        }
+
+        subject.emitDroppedPath(listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif").map(::makePath))
+        verify(exactly = 6) { subject.edit(any(), any()) }
+        verify(exactly = 4) { subject.openTab(any()) }
+
+        val countDownLatch = CountDownLatch(1)
+        subject.registerDroppedPathReceiver {
+            countDownLatch.countDown()
+        }
+
+        subject.emitDroppedPath(listOf(makePath("jpg")))
+
+        countDownLatch.await(3, TimeUnit.SECONDS)
+
+        subject.unregisterDroppedPathReceiver()
+    }
+
+    private fun makePath(extension: String): Path {
+        val path = mockk<Path>()
+        every { path.fileName } returns path
+        every { path.toString() } returns "test.$extension"
+        return path
+    }
+
+    @Test
     fun slideshow() {
         assertNull(subject.slideshowPath())
 
