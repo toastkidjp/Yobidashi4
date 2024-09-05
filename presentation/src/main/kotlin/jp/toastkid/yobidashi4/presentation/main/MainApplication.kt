@@ -24,7 +24,6 @@ import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.main.tray.MainTray
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -67,15 +66,6 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
 
             LaunchedEffect(Unit) {
                 withContext(Dispatchers.IO) {
-                    mainViewModel.registerDroppedPathReceiver("text") {
-                        when (it.extension) {
-                            "txt", "md", "log", "java", "kt", "py" -> {
-                                mainViewModel.edit(it)
-                            }
-
-                            else -> Unit
-                        }
-                    }
                     mainViewModel.launchDroppedPathFlow()
                 }
             }
