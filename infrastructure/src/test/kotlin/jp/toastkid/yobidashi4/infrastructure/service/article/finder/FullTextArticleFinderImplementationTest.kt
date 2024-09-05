@@ -101,4 +101,14 @@ class FullTextArticleFinderImplementationTest {
         assertTrue(aggregationResult.isEmpty())
     }
 
+    @Test
+    fun label() {
+        assertTrue(subject.label().isNotBlank())
+    }
+
+    @Test
+    fun iconPath() {
+        assertTrue(subject.iconPath().isNotBlank())
+    }
+
 }
