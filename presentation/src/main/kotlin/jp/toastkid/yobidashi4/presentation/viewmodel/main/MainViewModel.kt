@@ -133,8 +133,6 @@ interface MainViewModel {
 
     fun findStatus(): String
 
-    fun droppedPathFlow(): Flow<Path>
-
     fun emitDroppedPath(paths: Collection<Path>)
 
     fun registerDroppedPathReceiver(receiver: (Path) -> Unit)
