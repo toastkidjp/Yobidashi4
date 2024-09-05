@@ -69,7 +69,7 @@ fun FileRenameToolView() {
     }
 
     DisposableEffect(Unit) {
-        viewModel.collectDroppedPaths("file_rename")
+        viewModel.collectDroppedPaths()
 
         onDispose {
             viewModel.dispose()
