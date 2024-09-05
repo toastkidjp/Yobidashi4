@@ -20,8 +20,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.extension
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -53,7 +51,6 @@ class FileRenameToolViewModelTest {
             )
         }
 
-        every { mainViewModel.droppedPathFlow() } returns emptyFlow()
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
 
         mockkStatic(Files::class)
@@ -93,22 +90,28 @@ class FileRenameToolViewModelTest {
         every { value.resolveSibling(any<String>()) } returns mockk()
         every { value.extension } returns "png"
         every { value.parent } returns value
-        every { mainViewModel.droppedPathFlow() } returns flowOf(value, value)
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
         every { mainViewModel.openFile(any()) } just Runs
+        val capturingSlot = slot<(Path) -> Unit>()
+        every { mainViewModel.registerDroppedPathReceiver(capture(capturingSlot)) } just Runs
 
         runBlocking {
             subject.collectDroppedPaths()
+            capturingSlot.captured.invoke(value)
 
             subject.rename()
 
-            verify(exactly = 2) { Files.copy(any<Path>(), any<Path>()) }
+            verify(exactly = 1) { Files.copy(any<Path>(), any<Path>()) }
             verify(exactly = 1) { mainViewModel.showSnackbar(any(), any(), any()) }
             assertTrue(slot.isCaptured)
 
             slot.captured.invoke()
             verify { mainViewModel.openFile(any()) }
+
+            subject.clearPaths()
+
+            assertTrue(subject.items().isEmpty())
         }
     }
 
@@ -160,23 +163,6 @@ class FileRenameToolViewModelTest {
         val consumed = subject.onKeyEvent(KeyEvent(Key.Enter, KeyEventType.KeyDown))
 
         assertFalse(consumed)
-    }
-
-    @Test
-    fun collectDroppedPaths() {
-        runBlocking {
-            assertTrue(subject.items().isEmpty())
-
-            every { mainViewModel.droppedPathFlow() } returns flowOf(mockk())
-
-            subject.collectDroppedPaths()
-
-            assertEquals(1, subject.items().size)
-
-            subject.clearPaths()
-
-            assertTrue(subject.items().isEmpty())
-        }
     }
 
 }
