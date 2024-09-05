@@ -11,15 +11,13 @@ import java.util.zip.ZipOutputStream
 class ZipArchiver {
 
     operator fun invoke(paths: Collection<Path>) {
-        var zos: ZipOutputStream? = null
         try {
-            zos = ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Path.of(DESTINATION))))
-            createZip(zos, paths)
+            ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Path.of(DESTINATION)))).use {
+                createZip(it, paths)
+            }
         } catch (e: IOException) {
             // TODO LoggerFactory.getLogger(javaClass).warn("Zip error.", e)
             e.printStackTrace()
-        } finally {
-            zos?.close()
         }
     }
 
