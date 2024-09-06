@@ -13,7 +13,7 @@ class EatingOutCounterService(articlesReaderService: ArticlesReaderService) : Ar
 
     override fun label() = "Eat out"
 
-    override fun iconPath() = "images/icon/ic_payments.xml"
+    override fun iconPath() = "images/icon/ic_restaurant.xml"
 
 }
 
