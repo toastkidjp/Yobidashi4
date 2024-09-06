@@ -32,7 +32,7 @@ class StepsAggregatorService(private val articlesReaderService: ArticlesReaderSe
 
     override fun label() = "Steps"
 
-    override fun iconPath() = "images/icon/ic_payments.xml"
+    override fun iconPath() = "images/icon/ic_steps.xml"
 
     companion object {
 
