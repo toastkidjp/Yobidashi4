@@ -45,6 +45,7 @@ class TextContextMenuFactoryTest {
         MockKAnnotations.init(this)
         every { mainViewModel.setTextManager(any()) } just Runs
         every { mainViewModel.webSearch(any()) } just Runs
+        every { mainViewModel.findArticle(any()) } just Runs
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
         every { textManager.selectedText } returns AnnotatedString("test")
         every { textManager.cut } returns mockk()
@@ -95,6 +96,9 @@ class TextContextMenuFactoryTest {
 
             onNode(hasText("Count")).performClick()
             verify { mainViewModel.showSnackbar(any()) }
+
+            onNode(hasText("Find article")).performClick()
+            verify { mainViewModel.findArticle(any()) }
         }
     }
 
