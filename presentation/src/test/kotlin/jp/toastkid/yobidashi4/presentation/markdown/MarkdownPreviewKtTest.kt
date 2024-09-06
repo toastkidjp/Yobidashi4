@@ -61,7 +61,7 @@ class MarkdownPreviewKtTest {
     @Test
     fun test() {
         val content = MarkdownParser().invoke(
-            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd",
+            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```",
             "test"
         )
 
