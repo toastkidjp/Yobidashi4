@@ -43,7 +43,7 @@ class Nikkei225AggregatorService(private val articlesReaderService: ArticlesRead
 
     override fun label() = "Nikkei 225"
 
-    override fun iconPath() = "images/icon/ic_payments.xml"
+    override fun iconPath() = "images/icon/ic_currency_yen.xml"
 
     companion object {
 
