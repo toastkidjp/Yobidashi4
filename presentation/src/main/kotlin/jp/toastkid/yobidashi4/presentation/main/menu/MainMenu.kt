@@ -290,6 +290,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "World time",
                 shortcut = viewModel.toggleWorldTimeShortcut(),
+                icon = painterResource("images/icon/ic_world_time.xml"),
                 onClick = viewModel::toggleWorldTime
             )
         }
