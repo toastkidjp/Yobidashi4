@@ -99,7 +99,7 @@ class TextEditorViewModel : KoinComponent {
             lineCount.value = multiParagraph.lineCount
         }
 
-        val lastLineHeights = (0 until lineCount.value).map { it to multiParagraph.getLineHeight(it) }.toMap()
+        val lastLineHeights = (0 until lineCount.value).associateWith { multiParagraph.getLineHeight(it) }
         val distinct = lastLineHeights.values.distinct()
         val max = distinct.max()
         lineHeights.clear()
