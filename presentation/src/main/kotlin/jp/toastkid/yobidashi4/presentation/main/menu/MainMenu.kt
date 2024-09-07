@@ -178,10 +178,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Find in page",
                 icon = painterResource("images/icon/ic_search.xml"),
-                shortcut = KeyShortcut(Key.F, ctrl = true)
-            ) {
-                viewModel.switchFind()
-            }
+                shortcut = KeyShortcut(Key.F, ctrl = true),
+                onClick = viewModel::switchFind
+            )
 
             if (viewModel.canMoveTab()) {
                 Item("Move previous tab", icon = painterResource("images/icon/ic_back.xml"), shortcut = KeyShortcut(Key.PageUp, ctrl = true)) {
