@@ -61,6 +61,13 @@ class LoanCalculatorViewModelTest {
     }
 
     @Test
+    fun interestRateWithPlainText() {
+        subject.setInterestRate(TextFieldValue("az"))
+
+        assertEquals("", subject.interestRate().text)
+    }
+
+    @Test
     fun downPayment() {
         subject.setDownPayment(TextFieldValue("2000000"))
 
