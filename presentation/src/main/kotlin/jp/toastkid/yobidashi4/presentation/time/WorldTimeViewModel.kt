@@ -6,11 +6,12 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.zone.ZoneRulesException
+import java.util.Locale
 import java.util.TimeZone
 
 class WorldTimeViewModel {
 
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss")
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss", Locale.ENGLISH)
 
     private val listState = LazyListState()
 
