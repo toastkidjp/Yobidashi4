@@ -72,9 +72,11 @@ internal fun MainSnackbar(snackbarData: SnackbarData) {
                 snackbarData.message,
                 modifier = Modifier.weight(1f)
             )
-            if (snackbarData.actionLabel != null) {
+
+            val actionLabel = snackbarData.actionLabel
+            if (actionLabel != null) {
                 Text(
-                    snackbarData.actionLabel ?: "",
+                    actionLabel,
                     modifier = Modifier
                         .clickable(onClick = snackbarData::performAction)
                         .wrapContentWidth()
