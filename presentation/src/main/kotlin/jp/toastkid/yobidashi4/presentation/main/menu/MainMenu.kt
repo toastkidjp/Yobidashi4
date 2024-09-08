@@ -45,7 +45,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item(
                 "Update finder index",
-                //icon = painterResource("images/icon/ic_search.xml"),
+                icon = painterResource("images/icon/ic_reload.xml"),
                 onClick = viewModel::updateFinderIndex
             )
 
