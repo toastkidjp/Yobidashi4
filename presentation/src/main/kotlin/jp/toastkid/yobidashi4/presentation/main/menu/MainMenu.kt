@@ -346,7 +346,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Re-lottery background",
                 shortcut = KeyShortcut(key = Key.B, alt = true, ctrl = true),
-                icon = painterResource("images/icon/ic_wallpaper.xml"),
+                icon = painterResource("images/icon/ic_lottery_background.xml"),
                 onClick = viewModel::loadBackgroundImage
             )
 
