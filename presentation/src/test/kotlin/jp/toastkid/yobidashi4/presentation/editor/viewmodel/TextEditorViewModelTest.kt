@@ -90,7 +90,7 @@ class TextEditorViewModelTest {
 
     @Test
     fun setMultiParagraph() {
-        assertEquals(Offset.Unspecified, viewModel.currentLineOffset())
+        assertEquals(Offset.Zero, viewModel.currentLineOffset())
         assertTrue(viewModel.lineNumbers().isEmpty())
 
         every { multiParagraph.getLineForOffset(any()) } returns 0
