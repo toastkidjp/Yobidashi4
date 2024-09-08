@@ -308,7 +308,10 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::openNotificationList
             )
 
-            Item("Restart") {
+            Item(
+                "Restart",
+                icon = painterResource("images/icon/ic_restart.xml")
+            ) {
                 CoroutineScope(Dispatchers.IO).launch {
                     object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
                 }
