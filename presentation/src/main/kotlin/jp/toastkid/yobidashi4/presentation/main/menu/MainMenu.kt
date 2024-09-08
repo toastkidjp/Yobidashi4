@@ -353,6 +353,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Use background",
                 shortcut = KeyShortcut(key = Key.B, alt = true, shift = true),
+                icon = painterResource("images/icon/ic_wallpaper.xml"),
                 onClick = viewModel::switchUseBackground
             )
         }
