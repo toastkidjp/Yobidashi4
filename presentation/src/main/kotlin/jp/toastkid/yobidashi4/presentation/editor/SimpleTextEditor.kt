@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
@@ -95,13 +94,11 @@ fun SimpleTextEditor(
                 .onKeyEvent(viewModel::onKeyEvent)
                 .drawBehind {
                     val currentLineOffset = viewModel.currentLineOffset()
-                    if (currentLineOffset != Offset.Unspecified) {
-                        drawRect(
-                            viewModel.currentLineHighlightColor(),
-                            topLeft = currentLineOffset,
-                            size = Size(Float.MAX_VALUE, 30f)
-                        )
-                    }
+                    drawRect(
+                        viewModel.currentLineHighlightColor(),
+                        topLeft = currentLineOffset,
+                        size = Size(Float.MAX_VALUE, 30f)
+                    )
                 }
                 .semantics { contentDescription = "Editor input area" }
         )
