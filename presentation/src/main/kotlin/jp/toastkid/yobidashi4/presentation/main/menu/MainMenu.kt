@@ -305,6 +305,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         Menu("Notification") {
             Item(
                 "List",
+                icon = painterResource("images/icon/ic_restart.xml"),
                 onClick = viewModel::openNotificationList
             )
 
