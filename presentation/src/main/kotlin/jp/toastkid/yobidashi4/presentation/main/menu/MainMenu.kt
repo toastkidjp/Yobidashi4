@@ -170,9 +170,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             }
 
             if (viewModel.currentIsEditableTab()) {
-                Item("Edit", shortcut = KeyShortcut(Key.E, ctrl = true), icon = painterResource("images/icon/ic_edit.xml")) {
-                    viewModel.openEditorTabWithCurrentTabsPath()
-                }
+                Item(
+                    "Edit",
+                    shortcut = KeyShortcut(Key.E, ctrl = true),
+                    icon = painterResource("images/icon/ic_edit.xml"),
+                    onClick = viewModel::openEditorTabWithCurrentTabsPath
+                )
             }
 
             Item(
