@@ -71,6 +71,7 @@ class JapaneseAgeConverterServiceTest {
         assertNull(japaneseAgeConverterService.firstInputAction("大正"))
         assertNull(japaneseAgeConverterService.firstInputAction("1984"))
         assertNull(japaneseAgeConverterService.firstInputAction("大正浪漫"))
+        assertNull(japaneseAgeConverterService.firstInputAction("大正16"))
     }
 
     @Test
