@@ -48,8 +48,13 @@ class JapaneseAgeConverterService : TwoStringConverterService {
             return null
         }
 
+        val japaneseDate = try {
+            JapaneseDate.of(era, yearOfEra, 12, 26)
+        } catch (e: DateTimeException) {
+            return null
+        }
+
         val today = LocalDate.now()
-        val japaneseDate = JapaneseDate.of(era, yearOfEra, 12, 26)
         val ofEpochDay = LocalDate.ofEpochDay(japaneseDate.toEpochDay())
 
         return (ofEpochDay.withYear(today.year).year - ofEpochDay.year).toString()
