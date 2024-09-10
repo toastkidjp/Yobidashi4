@@ -62,6 +62,7 @@ class JapaneseEraConverterServiceTest {
         assertNull(japaneseEraConverterService.firstInputAction("63昭和"))
         assertNull(japaneseEraConverterService.firstInputAction("昭和初期"))
         assertNull(japaneseEraConverterService.firstInputAction("1984"))
+        assertNull(japaneseEraConverterService.firstInputAction("平成31"))
     }
 
     @Test
