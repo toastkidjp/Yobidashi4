@@ -58,6 +58,7 @@ class JapaneseAgeConverterServiceTest {
 
     @Test
     fun firstInputAction() {
+        assertNull(japaneseAgeConverterService.firstInputAction("明治5"))
         assertEquals("35", japaneseAgeConverterService.firstInputAction("昭和63"))
         assertEquals("33", japaneseAgeConverterService.firstInputAction("平成2"))
         assertEquals("4", japaneseAgeConverterService.firstInputAction("令和1"))
