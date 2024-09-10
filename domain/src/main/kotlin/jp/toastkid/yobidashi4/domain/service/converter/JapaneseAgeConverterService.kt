@@ -43,6 +43,11 @@ class JapaneseAgeConverterService : TwoStringConverterService {
             "令和" -> JapaneseEra.REIWA
             else -> null
         } ?: return null
+
+        if (era == JapaneseEra.MEIJI && yearOfEra < 6) {
+            return null
+        }
+
         val today = LocalDate.now()
         val japaneseDate = JapaneseDate.of(era, yearOfEra, 12, 26)
         val ofEpochDay = LocalDate.ofEpochDay(japaneseDate.toEpochDay())
