@@ -40,6 +40,11 @@ class JapaneseEraConverterService : TwoStringConverterService {
             "令和" -> JapaneseEra.REIWA
             else -> null
         } ?: return null
+
+        if (era == JapaneseEra.MEIJI && yearOfEra < 6) {
+            return null
+        }
+
         return JapaneseDate.of(era,  yearOfEra, 12, 28).format(DateTimeFormatter.ofPattern("Y"))
     }
 
