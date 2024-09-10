@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.converter
 
+import java.time.DateTimeException
 import java.time.chrono.JapaneseDate
 import java.time.chrono.JapaneseEra
 import java.time.format.DateTimeFormatter
@@ -45,7 +46,12 @@ class JapaneseEraConverterService : TwoStringConverterService {
             return null
         }
 
-        return JapaneseDate.of(era,  yearOfEra, 12, 28).format(DateTimeFormatter.ofPattern("Y"))
+        val japaneseDate = try {
+            JapaneseDate.of(era, yearOfEra, 12, 28)
+        } catch (e: DateTimeException) {
+            return null
+        }
+        return japaneseDate.format(DateTimeFormatter.ofPattern("Y"))
     }
 
     override fun secondInputAction(input: String): String? {
