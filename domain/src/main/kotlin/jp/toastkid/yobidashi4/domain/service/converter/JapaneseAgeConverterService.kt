@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.converter
 
+import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.chrono.JapaneseDate
 import java.time.chrono.JapaneseEra
@@ -51,7 +52,11 @@ class JapaneseAgeConverterService : TwoStringConverterService {
 
     override fun secondInputAction(input: String): String? {
         val age = input.toIntOrNull() ?: return null
-        val japaneseBirthDate = JapaneseDate.now().minus(age.toLong(), ChronoUnit.YEARS)
+        val japaneseBirthDate = try {
+            JapaneseDate.now().minus(age.toLong(), ChronoUnit.YEARS)
+        } catch (e: DateTimeException) {
+            return null
+        }
         return japaneseBirthDate.format(DateTimeFormatter.ofPattern("Gy"))
     }
 
