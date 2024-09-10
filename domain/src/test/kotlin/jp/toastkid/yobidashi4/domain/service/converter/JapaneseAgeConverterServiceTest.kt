@@ -74,6 +74,7 @@ class JapaneseAgeConverterServiceTest {
 
     @Test
     fun secondInputAction() {
+        assertNull(japaneseAgeConverterService.secondInputAction("2019"))
         assertNull(japaneseAgeConverterService.secondInputAction("大正"))
         assertEquals("大正14", japaneseAgeConverterService.secondInputAction("98"))
         assertEquals("大正15", japaneseAgeConverterService.secondInputAction("97"))
