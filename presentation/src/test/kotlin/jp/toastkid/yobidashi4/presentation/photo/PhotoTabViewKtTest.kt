@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toOffset
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -76,6 +78,8 @@ class PhotoTabViewKtTest {
             verify { anyConstructed<PhotoTabViewModel>().showHandle() }
             verify { anyConstructed<PhotoTabViewModel>().hideHandle() }
 
+            onNodeWithContentDescription("Divide GIF", useUnmergedTree = true).assertDoesNotExist()
+
             onNodeWithContentDescription("test.png", useUnmergedTree = true)
                 .performMouseInput {
                     doubleClick()
@@ -83,6 +87,24 @@ class PhotoTabViewKtTest {
                     moveBy(IntOffset(20, 32).toOffset(), 100L)
                     release()
                 }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun divideGif() {
+        coEvery { anyConstructed<PhotoTabViewModel>().divideGif(any()) } just Runs
+        every { path.toString() } returns "test.gif"
+        tab = PhotoTab(path)
+
+        runDesktopComposeUiTest {
+            setContent {
+                PhotoTabView(tab)
+            }
+            onNodeWithContentDescription("Switch menu", useUnmergedTree = true).performClick()
+            onNodeWithContentDescription("Divide GIF", useUnmergedTree = true).performClick()
+
+            coVerify { anyConstructed<PhotoTabViewModel>().divideGif(any()) }
         }
     }
 
