@@ -26,7 +26,7 @@ class JapaneseAgeConverterService : TwoStringConverterService {
     }
 
     override fun defaultSecondInputValue(): String {
-        return "2019年"
+        return "${firstInputAction(defaultFirstInputValue())}"
     }
 
     override fun firstInputAction(input: String): String? {
