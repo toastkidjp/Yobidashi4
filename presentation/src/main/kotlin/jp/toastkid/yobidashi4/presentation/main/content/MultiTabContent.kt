@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,11 +10,21 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
@@ -27,6 +39,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MultiTabContent() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
@@ -54,7 +67,29 @@ fun MultiTabContent() {
 
         Box(modifier = Modifier.fillMaxWidth()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ArticleListView(viewModel.openArticleList(), viewModel.articles())
+                Box {
+                    ArticleListView(viewModel.openArticleList(), viewModel.articles())
+
+                    if (viewModel.openArticleList()) {
+                        val visibility = remember { mutableStateOf(false) }
+                        Icon(
+                            painterResource("images/icon/ic_left_panel_close.xml"),
+                            contentDescription = "Clear input.",
+                            tint = MaterialTheme.colors.secondary,
+                            modifier = Modifier
+                                .alpha(animateFloatAsState(if (visibility.value) 1f else 0f).value)
+                                .onPointerEvent(PointerEventType.Enter) {
+                                    visibility.value = true
+                                }
+                                .onPointerEvent(PointerEventType.Exit) {
+                                    visibility.value = false
+                                }
+                                .clickable(onClick = viewModel::hideArticleList)
+                                .align(Alignment.CenterEnd)
+                                .semantics { contentDescription = "Close file list." }
+                        )
+                    }
+                }
 
                 TabsView(modifier = Modifier.fillMaxHeight().weight(1f))
             }
