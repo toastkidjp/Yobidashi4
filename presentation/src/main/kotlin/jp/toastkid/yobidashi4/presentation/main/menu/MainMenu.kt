@@ -146,9 +146,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 }
 
                 if (viewModel.currentIsWebTab()) {
-                    Item("Copy tab's URL", icon = painterResource("images/icon/ic_clipboard.xml")) {
-                        viewModel.copyTabsUrl()
-                    }
+                    Item(
+                        "Copy tab's URL",
+                        icon = painterResource("images/icon/ic_clipboard.xml"),
+                        onClick = viewModel::copyTabsUrl
+                    )
 
                     Item(
                         "Copy tab's markdown link",
