@@ -22,7 +22,7 @@ class JapaneseAgeConverterService : TwoStringConverterService {
     }
 
     override fun defaultFirstInputValue(): String {
-        return "平成3年"
+        return "平成3"
     }
 
     override fun defaultSecondInputValue(): String {
