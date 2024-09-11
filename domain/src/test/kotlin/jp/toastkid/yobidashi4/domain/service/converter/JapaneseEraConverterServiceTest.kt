@@ -47,7 +47,6 @@ class JapaneseEraConverterServiceTest {
 
     @Test
     fun firstInputAction() {
-        assertNull(japaneseEraConverterService.firstInputAction("明治5"))
         assertEquals("1874", japaneseEraConverterService.firstInputAction("明治6"))
         assertEquals("1900", japaneseEraConverterService.firstInputAction("明治33"))
         assertEquals("1914", japaneseEraConverterService.firstInputAction("大正2"))
@@ -58,6 +57,7 @@ class JapaneseEraConverterServiceTest {
 
     @Test
     fun firstInputActionIrregularInput() {
+        assertNull(japaneseEraConverterService.firstInputAction("明治5"))
         assertNull(japaneseEraConverterService.firstInputAction("63"))
         assertNull(japaneseEraConverterService.firstInputAction("63昭和"))
         assertNull(japaneseEraConverterService.firstInputAction("昭和初期"))
