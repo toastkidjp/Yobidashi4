@@ -20,11 +20,11 @@ class JapaneseEraConverterService : TwoStringConverterService {
     }
 
     override fun defaultFirstInputValue(): String {
-        return "平成31年"
+        return "平成30"
     }
 
     override fun defaultSecondInputValue(): String {
-        return "2019年"
+        return "2018"
     }
 
     override fun firstInputAction(input: String): String? {
