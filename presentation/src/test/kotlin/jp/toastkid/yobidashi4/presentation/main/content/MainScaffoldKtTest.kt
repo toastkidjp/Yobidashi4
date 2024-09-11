@@ -201,12 +201,14 @@ class MainScaffoldKtTest {
                 MainScaffold()
             }
 
-            onNodeWithContentDescription("Close file list.", useUnmergedTree = true)
+            val listSwitch = onNodeWithContentDescription("Close file list.", useUnmergedTree = true)
+            listSwitch
                 .performMouseInput {
                     enter()
                     exit()
                     enter()
                     click()
+                    exit()
                 }
 
             verify { mainViewModel.hideArticleList() }
