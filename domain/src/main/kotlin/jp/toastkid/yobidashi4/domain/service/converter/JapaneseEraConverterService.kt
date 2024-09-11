@@ -56,7 +56,12 @@ class JapaneseEraConverterService : TwoStringConverterService {
 
     override fun secondInputAction(input: String): String? {
         val year = input.toIntOrNull() ?: return null
-        return JapaneseDate.of(year, 12, 28).format(DateTimeFormatter.ofPattern("Gy"))
+        val japaneseDate = try {
+            JapaneseDate.of(year, 12, 28)
+        } catch (e: DateTimeException) {
+            return null
+        }
+        return japaneseDate.format(DateTimeFormatter.ofPattern("Gy"))
     }
 
 }
