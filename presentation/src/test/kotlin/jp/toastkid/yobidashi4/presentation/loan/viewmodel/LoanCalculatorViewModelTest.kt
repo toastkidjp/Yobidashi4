@@ -64,7 +64,7 @@ class LoanCalculatorViewModelTest {
     fun interestRateWithPlainText() {
         subject.setInterestRate(TextFieldValue("az"))
 
-        assertEquals("", subject.interestRate().text)
+        assertTrue(subject.interestRate().text.isBlank())
     }
 
     @Test
