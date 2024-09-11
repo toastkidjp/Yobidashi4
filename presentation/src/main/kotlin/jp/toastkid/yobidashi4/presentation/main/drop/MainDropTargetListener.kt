@@ -22,7 +22,7 @@ class MainDropTargetListener(private val consumer: (List<Path>) -> Unit) : DropT
                 val list = transferable.getTransferData(
                     DataFlavor.javaFileListFlavor
                 ) as List<*>
-                val files = list.filterIsInstance<File>().map { it.toPath() }.sortedBy(::sortKey)
+                val files = list.filterIsInstance<File>().map(File::toPath).sortedBy(::sortKey)
                 consumer(files)
                 dtde.dropComplete(true)
                 return
