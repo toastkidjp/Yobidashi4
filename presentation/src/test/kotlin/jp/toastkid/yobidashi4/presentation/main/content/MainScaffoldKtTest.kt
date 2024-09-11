@@ -4,6 +4,9 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
@@ -14,6 +17,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
@@ -186,6 +190,7 @@ class MainScaffoldKtTest {
     @Test
     fun articlesWithOpenArticleList() {
         every { mainViewModel.openArticleList() } returns true
+        every { mainViewModel.hideArticleList() } just Runs
 
         val path = mockk<Path>()
         every { path.extension } returns "md"
@@ -195,6 +200,16 @@ class MainScaffoldKtTest {
             setContent {
                 MainScaffold()
             }
+
+            onNodeWithContentDescription("Close file list.", useUnmergedTree = true)
+                .performMouseInput {
+                    enter()
+                    exit()
+                    enter()
+                    click()
+                }
+
+            verify { mainViewModel.hideArticleList() }
         }
     }
 
