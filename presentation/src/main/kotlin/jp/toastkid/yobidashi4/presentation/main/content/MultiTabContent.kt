@@ -71,20 +71,9 @@ fun MultiTabContent() {
                     ArticleListView(viewModel.openArticleList(), viewModel.articles())
 
                     if (viewModel.openArticleList()) {
-                        val visibility = remember { mutableStateOf(false) }
-                        Icon(
-                            painterResource("images/icon/ic_left_panel_close.xml"),
-                            contentDescription = "Clear input.",
-                            tint = MaterialTheme.colors.secondary,
-                            modifier = Modifier
-                                .alpha(animateFloatAsState(if (visibility.value) 1f else 0f).value)
-                                .onPointerEvent(PointerEventType.Enter) {
-                                    visibility.value = true
-                                }
-                                .onPointerEvent(PointerEventType.Exit) {
-                                    visibility.value = false
-                                }
-                                .clickable(onClick = viewModel::hideArticleList)
+                        ArticleListSwitch(
+                            viewModel::hideArticleList,
+                            Modifier
                                 .align(Alignment.CenterEnd)
                                 .semantics { contentDescription = "Close file list." }
                         )
@@ -115,6 +104,26 @@ private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
             modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)
         )
     }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun ArticleListSwitch(onClick: () -> Unit, modifier: Modifier) {
+    val visibility = remember { mutableStateOf(false) }
+    Icon(
+        painterResource("images/icon/ic_left_panel_close.xml"),
+        contentDescription = "Clear input.",
+        tint = MaterialTheme.colors.secondary,
+        modifier = modifier
+            .alpha(animateFloatAsState(if (visibility.value) 1f else 0f).value)
+            .onPointerEvent(PointerEventType.Enter) {
+                visibility.value = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                visibility.value = false
+            }
+            .clickable(onClick = onClick)
+    )
 }
 
 @Composable
