@@ -54,10 +54,9 @@ class JapaneseAgeConverterService : TwoStringConverterService {
             return null
         }
 
-        val today = LocalDate.now()
         val ofEpochDay = LocalDate.ofEpochDay(japaneseDate.toEpochDay())
 
-        return (ofEpochDay.withYear(today.year).year - ofEpochDay.year).toString()
+        return (ofEpochDay.withYear(LocalDate.now().year).year - ofEpochDay.year).toString()
     }
 
     override fun secondInputAction(input: String): String? {
