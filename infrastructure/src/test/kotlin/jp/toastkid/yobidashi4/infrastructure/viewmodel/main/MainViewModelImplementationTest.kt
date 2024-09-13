@@ -651,6 +651,22 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun editWithTitle() {
+        val article = mockk<Article>()
+        every { articleFactory.withTitle(any()) } returns article
+        every { article.path() } returns mockk()
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
+        every { Files.readString(any()) } returns "test"
+
+        subject.editWithTitle("test")
+
+        assertEquals(1, subject.tabs.size)
+        verify { Files.readString(any()) }
+        verify { articleFactory.withTitle(any()) }
+    }
+
+    @Test
     fun noopUpdateWebTab() {
         every { webHistoryRepository.add(any(), any()) } just Runs
 
