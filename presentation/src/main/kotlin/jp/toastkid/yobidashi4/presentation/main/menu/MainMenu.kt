@@ -226,9 +226,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::openBookmarkTab
             )
 
-            Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true), icon = painterResource("images/icon/ic_calendar.xml")) {
-                viewModel.openCalendarTab()
-            }
+            Item(
+                "Calendar",
+                shortcut = KeyShortcut(Key.C, alt = true),
+                icon = painterResource("images/icon/ic_calendar.xml"),
+                onClick = viewModel::openCalendarTab
+            )
             Item("Aggregation", shortcut = KeyShortcut(Key.A, alt = true), icon = painterResource("images/icon/ic_aggregation.xml")) {
                 viewModel.openAggregationBox()
             }
