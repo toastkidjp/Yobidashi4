@@ -100,4 +100,5 @@ class SimpleTextEditorKtTest {
             verify { anyConstructed<TextEditorViewModel>().onClickLineNumber(any()) }
         }
     }
+
 }
