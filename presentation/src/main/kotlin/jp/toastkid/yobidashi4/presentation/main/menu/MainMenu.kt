@@ -212,9 +212,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
 
         Menu("Tool") {
-            Item("Assistant Chat", shortcut = KeyShortcut(Key.G, alt = true), icon = painterResource("images/icon/ic_chat.xml")) {
-                viewModel.openChatTab()
-            }
+            Item(
+                "Assistant Chat",
+                shortcut = KeyShortcut(Key.G, alt = true),
+                icon = painterResource("images/icon/ic_chat.xml"),
+                onClick = viewModel::openChatTab
+            )
             Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
                 viewModel.openBookmarkTab()
             }
