@@ -105,10 +105,10 @@ class KeywordHighlighter {
         replacementTarget: String,
         spanStyle: SpanStyle
     ) {
-        val m = pattern.matcher(text)
+        val matcher = pattern.matcher(text)
         append(text.substring(lastIndex).replace(replacementTarget, ""))
         val offset = replacementTarget.length * 2
-        m.results().toList().forEachIndexed { index, matchResult ->
+        matcher.results().toList().forEachIndexed { index, matchResult ->
             addStyle(
                 spanStyle,
                 matchResult.start() - (offset * index),
