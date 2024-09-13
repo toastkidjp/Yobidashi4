@@ -38,7 +38,7 @@ class LinkBehaviorService(
         CoroutineScope(mainDispatcher).launch {
             val exists = withContext(ioDispatcher) { exists(title) }
             if (exists) {
-                viewModel.edit(articleFactory.withTitle(title).path())
+                viewModel.editWithTitle(title)
             } else {
                 viewModel.showSnackbar("\"$title\" does not exist.")
             }
