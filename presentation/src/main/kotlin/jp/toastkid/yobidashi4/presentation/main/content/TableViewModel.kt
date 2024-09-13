@@ -70,8 +70,7 @@ class TableViewModel : KoinComponent {
     }
 
     fun edit(title: String) {
-        val nextArticle = articleFactory.withTitle(title)
-        mainViewModel.edit(nextArticle.path())
+        mainViewModel.editWithTitle(title)
     }
 
     private fun sort(
