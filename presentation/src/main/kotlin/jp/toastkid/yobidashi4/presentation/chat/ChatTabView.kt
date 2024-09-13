@@ -37,7 +37,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatTabView(chatTab: ChatTab) {
     val viewModel = remember { ChatTabViewModel() }
