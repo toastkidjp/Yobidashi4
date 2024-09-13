@@ -218,9 +218,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 icon = painterResource("images/icon/ic_chat.xml"),
                 onClick = viewModel::openChatTab
             )
-            Item("Bookmark", shortcut = KeyShortcut(Key.B, alt = true), icon = painterResource("images/icon/ic_bookmark.xml")) {
-                viewModel.openBookmarkTab()
-            }
+            Item(
+                "Bookmark",
+                shortcut = KeyShortcut(Key.B, alt = true),
+                icon = painterResource("images/icon/ic_bookmark.xml"),
+                onClick = viewModel::openBookmarkTab
+            )
             Item("Calendar", shortcut = KeyShortcut(Key.C, alt = true), icon = painterResource("images/icon/ic_calendar.xml")) {
                 viewModel.openCalendarTab()
             }
