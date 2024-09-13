@@ -141,9 +141,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     onClick = viewModel::closeOtherTabs
                 )
 
-                Item("Copy tab's title", icon = painterResource("images/icon/ic_clipboard.xml")) {
-                    viewModel.copyTabsTitle()
-                }
+                Item(
+                    "Copy tab's title",
+                    icon = painterResource("images/icon/ic_clipboard.xml"),
+                    onClick = viewModel::copyTabsTitle
+                    )
 
                 if (viewModel.currentIsWebTab()) {
                     Item(
