@@ -265,6 +265,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(tab)
     }
 
+    override fun editWithTitle(title: String, onBackground: Boolean) {
+        edit(articleFactory.withTitle(title).path(), onBackground)
+    }
+
     override fun browseUri(uri: String?) {
         if (uri.isNullOrBlank()) {
             return
