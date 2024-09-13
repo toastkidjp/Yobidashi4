@@ -123,7 +123,7 @@ class CalendarViewModel : KoinComponent {
                 if (firstDay.month != current1.month) {
                     w.addEmpty()
                 } else {
-                    w.add(current1, offDayFinderService.find { it.month == current1.month.value && it.day == current1.dayOfMonth })
+                    w.add(current1, offDayFinderService.find { it.day == current1.dayOfMonth })
                 }
                 current1 = current1.plusDays(1L)
             }
