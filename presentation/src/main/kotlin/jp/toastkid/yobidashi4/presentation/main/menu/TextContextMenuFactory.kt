@@ -53,6 +53,12 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                                 .showSnackbar(TextCountMessageFactory().invoke(textManager.selectedText.text))
                         }
                     )
+                    items.add(
+                        ContextMenuItem("Find article") {
+                            mainViewModel
+                                .findArticle(TextCountMessageFactory().invoke(textManager.selectedText.text))
+                        }
+                    )
 
                     items
                 }
