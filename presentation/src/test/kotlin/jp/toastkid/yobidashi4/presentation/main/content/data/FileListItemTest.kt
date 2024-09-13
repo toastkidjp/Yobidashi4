@@ -71,7 +71,20 @@ class FileListItemTest {
 
         verify { Files.size(any()) }
         verify { Files.getLastModifiedTime(any()) }
-        assertEquals("1234 KB | 2023-12-10(Sun) 09:55:56", subText)
+        assertEquals("1.23 MB | 2023-12-10(Sun) 09:55:56", subText)
+    }
+
+    @Test
+    fun subTextUnder1M() {
+        every { Files.size(any()) } returns 123456
+        every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(1702169756151)
+        val fileListItem = FileListItem(path, true, true)
+
+        val subText = fileListItem.subText()
+
+        verify { Files.size(any()) }
+        verify { Files.getLastModifiedTime(any()) }
+        assertEquals("123.46 KB | 2023-12-10(Sun) 09:55:56", subText)
     }
 
 }
