@@ -6,11 +6,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.article.Article
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -41,16 +38,12 @@ class LinkBehaviorServiceTest {
     @MockK
     private lateinit var viewModel: MainViewModel
 
-    @MockK
-    private lateinit var articleFactory: ArticleFactory
-
     @BeforeEach
     fun setUp() {
         startKoin {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
                 }
             )
         }
@@ -62,6 +55,7 @@ class LinkBehaviorServiceTest {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.edit(any()) } just Runs
         every { viewModel.showSnackbar(any()) } just Runs
+        every { viewModel.editWithTitle(any(), any()) } just Runs
     }
 
     @AfterEach
@@ -92,31 +86,26 @@ class LinkBehaviorServiceTest {
         every { exists(any()) }.answers { false }
 
         linkBehaviorService.invoke("internal-article://yahoo")
+        verify(inverse = true) { viewModel.editWithTitle(any(), any()) }
     }
 
     @Test
     fun testArticleUrl() {
         every { exists(any()) }.answers { true }
-        val article = mockk<Article>()
-        every { articleFactory.withTitle(any()) } returns article
-        every { article.path() } returns mockk()
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
         verify { exists(any()) }
-        verify { articleFactory.withTitle(any()) }
+        verify { viewModel.editWithTitle(any(), any()) }
     }
 
     @Test
     fun testArticleUrlWithDefaultExistsCallback() {
-        val article = mockk<Article>()
-        every { articleFactory.withTitle(any()) } returns article
-        every { article.path() } returns mockk()
         linkBehaviorService = LinkBehaviorService(internalLinkScheme = internalLinkScheme, ioDispatcher = ioDispatcher, mainDispatcher = mainDispatcher)
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
-        verify { articleFactory.withTitle(any()) }
+        verify { viewModel.editWithTitle(any(), any()) }
     }
 
 }
