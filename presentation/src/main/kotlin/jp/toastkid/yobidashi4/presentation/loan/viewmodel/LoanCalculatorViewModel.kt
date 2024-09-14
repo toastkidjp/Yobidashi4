@@ -105,7 +105,7 @@ class LoanCalculatorViewModel {
             },
             {
                 result.value = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment,
-                    it.paymentSchedule.sumOf { paymentDetail -> paymentDetail.interest }.toLong()
+                    it.totalInterestAmount()
                 )
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
