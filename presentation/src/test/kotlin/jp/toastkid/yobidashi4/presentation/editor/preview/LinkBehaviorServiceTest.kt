@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -67,11 +68,15 @@ class LinkBehaviorServiceTest {
     @Test
     fun testNullUrl() {
         linkBehaviorService.invoke(null)
+
+        verify { viewModel wasNot called }
     }
 
     @Test
     fun testEmptyUrl() {
         linkBehaviorService.invoke("")
+
+        verify { viewModel wasNot called }
     }
 
     @Test
@@ -79,6 +84,8 @@ class LinkBehaviorServiceTest {
         every { internalLinkScheme.isInternalLink(any()) }.returns(false)
 
         linkBehaviorService.invoke("https://www.yahoo.co.jp")
+
+        verify { viewModel.openUrl(any(), any()) }
     }
 
     @Test
