@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article
 
 import java.util.regex.Pattern
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.service.article.ArticleOpener
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.annotation.Single
@@ -12,8 +11,6 @@ import org.koin.core.component.inject
 class ArticleOpenerImplementation : KoinComponent, ArticleOpener {
 
     private val viewModel: MainViewModel by inject()
-
-    private val articleFactory: ArticleFactory by inject()
 
     override fun fromRawText(rawText: String?) {
         if (rawText.isNullOrBlank()) {
