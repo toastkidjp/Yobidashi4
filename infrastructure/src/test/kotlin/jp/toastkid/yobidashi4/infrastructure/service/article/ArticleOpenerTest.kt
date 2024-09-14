@@ -11,7 +11,6 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.article.Article
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -30,9 +29,6 @@ class ArticleOpenerTest {
     private lateinit var viewModel: MainViewModel
 
     @MockK
-    private lateinit var articleFactory: ArticleFactory
-
-    @MockK
     private lateinit var article: Article
 
     @BeforeEach
@@ -42,13 +38,11 @@ class ArticleOpenerTest {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
                 }
             )
         }
 
-        every { viewModel.edit(any()) } just Runs
-        every { articleFactory.withTitle(any()) } returns article
+        every { viewModel.editWithTitle(any()) } just Runs
         every { article.path() } returns mockk()
     }
 
@@ -62,16 +56,14 @@ class ArticleOpenerTest {
     fun fromRawText() {
         articleOpener.fromRawText("[[テスト]]")
 
-        verify(exactly = 1) { viewModel.edit(any()) }
-        verify(exactly = 1) { articleFactory.withTitle(any()) }
+        verify(exactly = 1) { viewModel.editWithTitle(any()) }
     }
 
     @Test
     fun fromRawTextContainingPluralLinkCase() {
         articleOpener.fromRawText("今日はとにかく[[テスト]]して[[PDCA]]を回そう")
 
-        verify(exactly = 2) { viewModel.edit(any()) }
-        verify(exactly = 2) { articleFactory.withTitle(any()) }
+        verify(exactly = 2) { viewModel.editWithTitle(any()) }
     }
 
     @Test
@@ -79,7 +71,6 @@ class ArticleOpenerTest {
         articleOpener.fromRawText("テスト")
 
         verify { viewModel wasNot called }
-        verify { articleFactory wasNot called }
     }
 
     @Test
@@ -87,7 +78,6 @@ class ArticleOpenerTest {
         articleOpener.fromRawText(" ")
 
         verify { viewModel wasNot called }
-        verify { articleFactory wasNot called }
     }
 
     @Test
@@ -95,7 +85,6 @@ class ArticleOpenerTest {
         articleOpener.fromRawText("")
 
         verify { viewModel wasNot called }
-        verify { articleFactory wasNot called }
     }
 
     @Test
@@ -103,7 +92,6 @@ class ArticleOpenerTest {
         articleOpener.fromRawText(null)
 
         verify { viewModel wasNot called }
-        verify { articleFactory wasNot called }
     }
 
 }
