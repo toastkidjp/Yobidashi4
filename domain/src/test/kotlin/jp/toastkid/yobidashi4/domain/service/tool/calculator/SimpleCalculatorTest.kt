@@ -35,6 +35,7 @@ class SimpleCalculatorTest {
         assertEquals(-9.0, calculator.invoke("-11+2"))
         assertEquals(Double.NEGATIVE_INFINITY, calculator.invoke("-11/0"))
         assertEquals(3.0, calculator.invoke("1++2"))
+        assertEquals(4.0, calculator.invoke("(4/2) + 2"))
     }
 
     @Test
@@ -48,6 +49,7 @@ class SimpleCalculatorTest {
         assertNull(calculator.invoke("1+2*"))
         assertNull(calculator.invoke("good"))
         assertNull(calculator.invoke("11+(2"))
+        assertNull(calculator.invoke("11+)2"))
     }
 
 }
