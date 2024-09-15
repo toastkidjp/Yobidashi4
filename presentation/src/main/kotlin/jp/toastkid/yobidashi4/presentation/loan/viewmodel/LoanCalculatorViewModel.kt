@@ -1,13 +1,23 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.TestOnly
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
+import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
+import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
 import jp.toastkid.yobidashi4.presentation.component.DecimalVisualTransformation
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
@@ -82,6 +92,13 @@ class LoanCalculatorViewModel {
         onChange(inputChannel, value.text)
     }
 
+    private val lastPaymentResult = AtomicReference<LoanPayment?>(null)
+
+    @TestOnly
+    fun setLastPaymentResult(payment: LoanPayment) {
+        lastPaymentResult.set(payment)
+    }
+
     private val scheduleState = mutableStateListOf<PaymentDetail>()
 
     fun scheduleState(): List<PaymentDetail> = scheduleState
@@ -104,6 +121,8 @@ class LoanCalculatorViewModel {
                 )
             },
             {
+                lastPaymentResult.set(it)
+
                 result.value = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment,
                     it.totalInterestAmount()
                 )
@@ -142,5 +161,29 @@ class LoanCalculatorViewModel {
         if (d.isNaN()) "0" else d.roundToInt().toString()
 
     fun listState() = scrollState
+
+    fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+        if (keyEvent.type != KeyEventType.KeyDown) {
+            return false
+        }
+
+        if (keyEvent.isCtrlPressed && keyEvent.key == Key.P) {
+            val loanPayment = lastPaymentResult.get() ?: return true
+            LoanPaymentExporter().invoke(
+                Factor(
+                    extractLong(loanAmount.value.text),
+                    extractInt(loanTerm.value.text),
+                    extractDouble(interestRate.value.text),
+                    extractInt(downPayment.value.text),
+                    extractInt(managementFee.value.text),
+                    extractInt(renovationReserves.value.text)
+                ),
+                loanPayment
+            )
+            return@onKeyEvent true
+        }
+
+        return false
+    }
 
 }
