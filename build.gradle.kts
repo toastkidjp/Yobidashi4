@@ -1,11 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "2.0.20"
     id("org.jetbrains.compose") version "1.6.11"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
-    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
+    id("com.google.devtools.ksp") version "2.0.20-1.0.25"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
 }
 
@@ -61,8 +63,10 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile>() {
-        kotlinOptions.jvmTarget = org.jetbrains.kotlin.config.JvmTarget.JVM_17.description
-        kotlinOptions.freeCompilerArgs = listOf("-Xjvm-default=all")
+        kotlin {
+            compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+            compilerOptions.freeCompilerArgs = listOf("-Xjvm-default=all")
+        }
     }
 
     tasks.test {
