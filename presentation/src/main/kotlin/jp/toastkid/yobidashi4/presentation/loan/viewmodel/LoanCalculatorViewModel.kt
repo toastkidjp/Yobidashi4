@@ -111,14 +111,7 @@ class LoanCalculatorViewModel {
         DebouncedCalculatorService(
             inputChannel,
             {
-                Factor(
-                    extractLong(loanAmount.value.text),
-                    extractInt(loanTerm.value.text),
-                    extractDouble(interestRate.value.text),
-                    extractInt(downPayment.value.text),
-                    extractInt(managementFee.value.text),
-                    extractInt(renovationReserves.value.text)
-                )
+                makeFactor()
             },
             {
                 lastPaymentResult.set(it)
@@ -170,14 +163,7 @@ class LoanCalculatorViewModel {
         if (keyEvent.isCtrlPressed && keyEvent.key == Key.P) {
             val loanPayment = lastPaymentResult.get() ?: return true
             LoanPaymentExporter().invoke(
-                Factor(
-                    extractLong(loanAmount.value.text),
-                    extractInt(loanTerm.value.text),
-                    extractDouble(interestRate.value.text),
-                    extractInt(downPayment.value.text),
-                    extractInt(managementFee.value.text),
-                    extractInt(renovationReserves.value.text)
-                ),
+                makeFactor(),
                 loanPayment
             )
             return@onKeyEvent true
@@ -185,5 +171,14 @@ class LoanCalculatorViewModel {
 
         return false
     }
+
+    private fun makeFactor() = Factor(
+        extractLong(loanAmount.value.text),
+        extractInt(loanTerm.value.text),
+        extractDouble(interestRate.value.text),
+        extractInt(downPayment.value.text),
+        extractInt(managementFee.value.text),
+        extractInt(renovationReserves.value.text)
+    )
 
 }
