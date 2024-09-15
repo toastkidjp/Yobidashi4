@@ -1,7 +1,22 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
+import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
+import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNotSame
@@ -17,7 +32,15 @@ class LoanCalculatorViewModelTest {
     fun setUp() {
         subject = LoanCalculatorViewModel()
 
+        mockkConstructor(LoanPaymentExporter::class)
+        every { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) } just Runs
+
         subject.launch()
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
@@ -124,6 +147,16 @@ class LoanCalculatorViewModelTest {
     @Test
     fun listState() {
         assertEquals(0, subject.listState().firstVisibleItemIndex)
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEvent() {
+        subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
+
+        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
+
+        verify { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
 
 }
