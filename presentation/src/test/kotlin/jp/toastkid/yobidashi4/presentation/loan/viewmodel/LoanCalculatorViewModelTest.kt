@@ -189,4 +189,12 @@ class LoanCalculatorViewModelTest {
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEventWithoutLastPaymentResult() {
+        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
+
+        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+    }
+
 }
