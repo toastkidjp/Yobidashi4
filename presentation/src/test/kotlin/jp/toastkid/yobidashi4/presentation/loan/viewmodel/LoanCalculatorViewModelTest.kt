@@ -174,7 +174,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventNotKeyDown() {
         subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
 
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.Q, KeyEventType.KeyUp, isCtrlPressed = true))
+        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyUp, isCtrlPressed = true))
 
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
@@ -184,7 +184,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventWithoutCtrl() {
         subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
 
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.Q, KeyEventType.KeyUp, isCtrlPressed = false))
+        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = false))
 
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
