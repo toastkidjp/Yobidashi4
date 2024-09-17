@@ -65,7 +65,7 @@ allprojects {
     tasks.withType<KotlinCompile>() {
         kotlin {
             compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
-            compilerOptions.freeCompilerArgs = listOf("-Xjvm-default=all")
+            compilerOptions.freeCompilerArgs = listOf("-Xjvm-default=all", "-opt-in=kotlin.RequiresOptIn")
         }
     }
 
