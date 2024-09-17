@@ -21,6 +21,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
@@ -311,6 +312,22 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+    }
+
+    @Test
+    fun noopCommaInsertion() {
+        mockkConstructor(CommaInserter::class)
+        every { anyConstructed<CommaInserter>().invoke(any()) } returns null
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.Comma, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue("2000000", TextRange(0, "2000000".length)),
+            mockk(),
+            { assertEquals("2,000,000", it.text) }
+        )
+
+        assertFalse(consumed)
+        verify { anyConstructed<CommaInserter>().invoke(any()) }
     }
 
     @Test
