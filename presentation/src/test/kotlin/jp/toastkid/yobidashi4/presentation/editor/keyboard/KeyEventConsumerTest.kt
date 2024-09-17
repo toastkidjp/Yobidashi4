@@ -461,6 +461,7 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+        verify { controlAndLeftBracketCase.invoke(any(), any(), any()) }
     }
 
     @Test
