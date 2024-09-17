@@ -61,6 +61,7 @@ class KeyEventConsumerTest {
 
         subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, searchUrlFactory)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
+        every { controlAndLeftBracketCase.invoke(any(), any(), any()) } returns true
     }
 
     @AfterEach
@@ -445,6 +446,18 @@ class KeyEventConsumerTest {
             TextFieldValue("test", TextRange(0, 4)),
             mockk(),
             { assertEquals("(test)", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
+    fun controlAndLeftBracket() {
+        val consumed = subject.invoke(
+            KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue("test", TextRange(0, 4)),
+            mockk(),
+            { assertTrue(true) }
         )
 
         assertTrue(consumed)
