@@ -287,6 +287,18 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun noopMoveToLineEnd() {
+        val consumed = subject.invoke(
+            KeyEvent(Key.E, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue("Angel has fallen.\nHe has gone.", TextRange(5)),
+            null,
+            { fail() }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun commaInsertion() {
         val consumed = subject.invoke(
             KeyEvent(Key.Comma, KeyEventType.KeyDown, isCtrlPressed = true),
