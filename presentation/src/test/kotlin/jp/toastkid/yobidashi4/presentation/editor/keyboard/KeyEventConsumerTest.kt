@@ -8,6 +8,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
+import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -465,6 +466,19 @@ class KeyEventConsumerTest {
 
         assertTrue(consumed)
         verify { controlAndLeftBracketCase.invoke(any(), any(), any()) }
+    }
+
+    @Test
+    fun noopControlAndLeftBracketWithoutCtrl() {
+        val consumed = subject.invoke(
+            KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = false),
+            TextFieldValue("test", TextRange(0, 4)),
+            mockk(),
+            { assertTrue(true) }
+        )
+
+        assertFalse(consumed)
+        verify { controlAndLeftBracketCase wasNot Called }
     }
 
     @Test
