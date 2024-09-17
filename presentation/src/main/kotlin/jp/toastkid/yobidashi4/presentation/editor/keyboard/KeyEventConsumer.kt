@@ -30,9 +30,10 @@ import org.koin.core.component.inject
 
 class KeyEventConsumer(
     private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm,
+    private val controlAndLeftBracketCase: ControlAndLeftBracketCase = ControlAndLeftBracketCase(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory()
 ) {
-    
+
     operator fun invoke(
         it: KeyEvent,
         content: TextFieldValue,
@@ -236,32 +237,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.LeftBracket -> {
-                if (content.text.length <= selectionStartIndex) {
-                    return false
-                }
-                val nextCharacter = content.text.get(selectionStartIndex)
-                val target = when (nextCharacter) {
-                    '(' -> ')' to true
-                    ')' -> '(' to false
-                    '[' -> ']' to true
-                    ']' -> '[' to false
-                    '{' -> '}' to true
-                    '}' -> '{' to false
-                    '「' -> '」' to true
-                    '」' -> '「' to false
-                    '『' -> '』' to true
-                    '』' -> '『' to false
-                    else -> null
-                } ?: return false
-
-                val index = if (target.second) content.text.indexOf(target.first, selectionStartIndex + 1)
-                else content.text.lastIndexOf(target.first, selectionStartIndex - 1)
-                if (index == -1) {
-                    return false
-                }
-
-                setNewContent(content.copy(selection = TextRange(index, index + 1)))
-                true
+                return controlAndLeftBracketCase.invoke(content, selectionStartIndex, setNewContent)
             }
             it.isCtrlPressed && it.key == Key.RightBracket -> {
                 convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
