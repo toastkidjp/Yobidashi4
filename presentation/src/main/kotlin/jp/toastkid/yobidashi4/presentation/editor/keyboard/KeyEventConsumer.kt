@@ -31,6 +31,7 @@ import org.koin.core.component.inject
 class KeyEventConsumer(
     private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm,
     private val controlAndLeftBracketCase: ControlAndLeftBracketCase = ControlAndLeftBracketCase(),
+    private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory()
 ) {
 
@@ -207,54 +208,54 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.B -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     "**$it**"
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.I -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     "***$it***"
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.Two -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     "\"$it\""
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.Eight -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     "($it)"
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.LeftBracket -> {
                 return controlAndLeftBracketCase.invoke(content, selectionStartIndex, setNewContent)
             }
             it.isCtrlPressed && it.key == Key.RightBracket -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     "「$it」"
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.At -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     "```$it```"
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
-                convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     ExpressionTextCalculatorService().invoke(it)
-                }?.let(setNewContent)
+                }, setNewContent)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.N -> {
@@ -283,9 +284,9 @@ class KeyEventConsumer(
             it.isCtrlPressed && it.key == Key.Q -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isNotEmpty()) {
-                    convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                         BlockQuotation().invoke(it)
-                    }?.let(setNewContent)
+                    }, setNewContent)
                     return true
                 }
 
@@ -322,9 +323,9 @@ class KeyEventConsumer(
             it.isCtrlPressed && it.key == Key.L -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (isUrl(selected)) {
-                    convertSelectedText(content, selectionStartIndex, selectionEndIndex) {
+                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                         LinkDecoratorService().invoke(selected)
-                    }?.let(setNewContent)
+                    }, setNewContent)
                     return true
                 }
 
@@ -354,31 +355,5 @@ class KeyEventConsumer(
     }
 
     private fun isUrl(text: String) = text.startsWith("http://") || text.startsWith("https://")
-
-    private fun convertSelectedText(
-        content: TextFieldValue,
-        selectionStartIndex: Int,
-        selectionEndIndex: Int,
-        conversion: (String) -> String?
-    ): TextFieldValue? {
-        val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
-        if (selected.isEmpty()) {
-            return null
-        }
-
-        val converted = conversion(selected) ?: return null
-        val newText = StringBuilder(content.text)
-            .replace(
-                selectionStartIndex,
-                selectionEndIndex,
-                converted
-            )
-            .toString()
-        return TextFieldValue(
-            newText,
-            TextRange(selectionStartIndex, selectionStartIndex + converted.length),
-            content.composition
-        )
-    }
 
 }
