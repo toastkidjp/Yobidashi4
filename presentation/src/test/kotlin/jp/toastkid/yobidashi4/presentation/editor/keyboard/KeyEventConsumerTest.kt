@@ -46,6 +46,9 @@ class KeyEventConsumerTest {
     private lateinit var mainViewModel: MainViewModel
 
     @MockK
+    private lateinit var controlAndLeftBracketCase: ControlAndLeftBracketCase
+
+    @MockK
     private lateinit var searchUrlFactory: SearchUrlFactory
 
     @MockK
@@ -55,7 +58,7 @@ class KeyEventConsumerTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        subject = KeyEventConsumer(mainViewModel, searchUrlFactory = searchUrlFactory)
+        subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, searchUrlFactory)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
     }
 
