@@ -528,6 +528,21 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun noopSwitchEditable() {
+        every { mainViewModel.currentTab() } returns mockk()
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.N, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue("1+2", TextRange(0, 3)),
+            mockk(),
+            { fail() }
+        )
+
+        assertTrue(consumed)
+        verify { mainViewModel.currentTab() }
+    }
+
+    @Test
     fun openUrl() {
         every { mainViewModel.openUrl(any(), any()) } just Runs
 
