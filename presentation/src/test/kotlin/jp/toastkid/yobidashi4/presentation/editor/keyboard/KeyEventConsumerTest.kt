@@ -55,7 +55,7 @@ class KeyEventConsumerTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        subject = KeyEventConsumer(mainViewModel, searchUrlFactory)
+        subject = KeyEventConsumer(mainViewModel, searchUrlFactory = searchUrlFactory)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
     }
 
@@ -204,6 +204,25 @@ class KeyEventConsumerTest {
             TextFieldValue("Angel has fallen.\nHe has gone."),
             mockk(),
             {  }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
+    fun noopTaskListConversion() {
+        mockkConstructor(ListHeadAdder::class)
+        every { anyConstructed<ListHeadAdder>().invoke(any(), any()) } returns null
+
+        every { multiParagraph.getLineForOffset(any()) } returns 0
+        every { multiParagraph.getLineStart(0) } returns 0
+        every { multiParagraph.getLineEnd(0) } returns 17
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.Zero, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue("Angel has fallen.\nHe has gone.", TextRange(0, 30)),
+            multiParagraph,
+            { fail() }
         )
 
         assertFalse(consumed)
@@ -397,99 +416,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-    }
-
-    @Test
-    fun findBrace() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("{test}", TextRange(0)),
-            mockk(),
-            {
-                assertEquals("}", it.getSelectedText().text)
-                assertEquals(5, it.selection.start)
-                assertEquals(6, it.selection.end)
-            }
-        )
-
-        assertTrue(consumed)
-
-        val consumed2 = subject.invoke(
-            KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("{test}", TextRange(5, 6)),
-            mockk(),
-            {
-                assertEquals("{", it.getSelectedText().text)
-                assertEquals(0, it.selection.start)
-                assertEquals(1, it.selection.end)
-            }
-        )
-
-        assertTrue(consumed2)
-
-        val consumed3 = subject.invoke(
-            KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("「test」", TextRange(0)),
-            mockk(),
-            {
-                assertEquals("」", it.getSelectedText().text)
-                assertEquals(5, it.selection.start)
-                assertEquals(6, it.selection.end)
-            }
-        )
-
-        assertTrue(consumed3)
-
-        val consumed4 = subject.invoke(
-            KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("「test」", TextRange(5, 6)),
-            mockk(),
-            {
-                assertEquals("「", it.getSelectedText().text)
-                assertEquals(0, it.selection.start)
-                assertEquals(1, it.selection.end)
-            }
-        )
-
-        assertTrue(consumed4)
-
-        assertTrue(
-            subject.invoke(
-                KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-                TextFieldValue("『test』", TextRange(0)),
-                mockk(),
-                {
-                    assertEquals("』", it.getSelectedText().text)
-                    assertEquals(5, it.selection.start)
-                    assertEquals(6, it.selection.end)
-                }
-            )
-        )
-
-        assertTrue(
-            subject.invoke(
-                KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-                TextFieldValue("『test』", TextRange(5, 6)),
-                mockk(),
-                {
-                    assertEquals("『", it.getSelectedText().text)
-                    assertEquals(0, it.selection.start)
-                    assertEquals(1, it.selection.end)
-                }
-            )
-        )
-
-        assertFalse(
-            subject.invoke(
-                KeyEvent(Key.LeftBracket, KeyEventType.KeyDown, isCtrlPressed = true),
-                TextFieldValue("『test』", TextRange(1)),
-                mockk(),
-                {
-                    assertTrue(it.getSelectedText().text.isEmpty())
-                    assertEquals(1, it.selection.start)
-                }
-            )
-        )
     }
 
     @Test
