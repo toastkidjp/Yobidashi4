@@ -114,6 +114,18 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun noopDuplicateCurrentLine() {
+        val consumed = subject.invoke(
+            KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue("Angel has fallen.\nHe has gone."),
+            null,
+            { fail() }
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun noopListConversionIfNotSelectedAnyText() {
         val consumed = subject.invoke(
             KeyEvent(Key.Minus, KeyEventType.KeyDown, isCtrlPressed = true),
