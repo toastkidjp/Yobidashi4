@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -194,6 +195,15 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventWithoutLastPaymentResult() {
         subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
 
+        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun unConsumedCase() {
+        val invoked = subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.LanguageSwitch, KeyEventType.KeyDown))
+
+        assertFalse(invoked)
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
 
