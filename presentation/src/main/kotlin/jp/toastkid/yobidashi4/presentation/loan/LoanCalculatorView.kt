@@ -21,10 +21,13 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -37,8 +40,15 @@ import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewMode
 @Composable
 fun LoanCalculatorView() {
     val viewModel = remember { LoanCalculatorViewModel() }
+    val coroutineScope = rememberCoroutineScope()
 
-    Surface(elevation = 4.dp, color = MaterialTheme.colors.surface.copy(alpha = 0.75f)) {
+    val focusRequester = remember { FocusRequester() }
+
+    Surface(
+        elevation = 4.dp,
+        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
+        modifier = Modifier.onKeyEvent { viewModel.onKeyEvent(coroutineScope, it) }
+    ) {
         Row {
             Column(
                 Modifier
