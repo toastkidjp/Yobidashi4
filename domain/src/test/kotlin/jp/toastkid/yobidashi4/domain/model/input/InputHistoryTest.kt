@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.input
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
@@ -24,6 +25,17 @@ class InputHistoryTest {
 
         assertEquals("test", inputHistory.word)
         assertEquals(timestamp, inputHistory.timestamp)
+    }
+
+    @Test
+    fun fromIncludingDoubleTab() {
+        val timestamp = System.currentTimeMillis()
+        val text = "test\t\t$timestamp"
+
+        val inputHistory = InputHistory.from(text) ?: fail("This case must return non-null value.")
+
+        assertEquals("test", inputHistory.word)
+        assertNotEquals(timestamp, inputHistory.timestamp)
     }
 
     @Test
