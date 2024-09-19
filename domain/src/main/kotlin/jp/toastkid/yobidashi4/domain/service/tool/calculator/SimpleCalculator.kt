@@ -13,9 +13,11 @@ class SimpleCalculator {
     }
 
     private fun parse(chars: List<Char>): Double {
-        return getExpression(chars.filter { it != ' ' })
-            .also { if (it.rest.isNotEmpty()) throw RuntimeException("Unexpected character: ${it.rest.first()}") }
-            .value
+        val expression = getExpression(chars.filter { it != ' ' })
+        if (expression.rest.isNotEmpty()) {
+            throw RuntimeException("Unexpected character: ${expression.rest.first()}")
+        }
+        return expression.value
     }
 
     private fun getExpression(chars: List<Char>): Data {
@@ -51,9 +53,11 @@ class SimpleCalculator {
     }
 
     private fun getParenthesizedExpression(chars: List<Char>): Data {
-        return getExpression(chars)
-            .also { if (it.rest.firstOrNull() != ')') throw RuntimeException("Missing closing parenthesis") }
-            .let { Data(it.rest.drop(1), it.value) }
+        val expression = getExpression(chars)
+        if (expression.rest.firstOrNull() != ')') {
+            throw RuntimeException("Missing closing parenthesis")
+        }
+        return Data(expression.rest.drop(1), expression.value)
     }
 
     private fun getNumber(chars: List<Char>): Data {
