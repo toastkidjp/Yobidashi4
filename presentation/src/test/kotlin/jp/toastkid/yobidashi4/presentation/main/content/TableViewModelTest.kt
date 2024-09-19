@@ -58,7 +58,7 @@ class TableViewModelTest {
             )
         }
         every { mainViewModel.openPreview(any()) } just Runs
-        every { mainViewModel.edit(any()) } just Runs
+        every { mainViewModel.editWithTitle(any()) } just Runs
         val article = mockk<Article>()
         every { article.path() } returns mockk()
         every { articleFactory.withTitle(any()) } returns article
@@ -136,8 +136,7 @@ class TableViewModelTest {
     fun edit() {
         subject.edit("test")
 
-        verify { articleFactory.withTitle(any()) }
-        verify { mainViewModel.edit(any()) }
+        verify { mainViewModel.editWithTitle(any()) }
     }
 
     @Test
