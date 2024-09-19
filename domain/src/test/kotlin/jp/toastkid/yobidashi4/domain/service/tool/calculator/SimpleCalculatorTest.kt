@@ -50,6 +50,9 @@ class SimpleCalculatorTest {
         assertNull(calculator.invoke("good"))
         assertNull(calculator.invoke("11+(2"))
         assertNull(calculator.invoke("11+)2"))
+        assertNull(calculator.invoke("11++++++"))
+        assertNull(calculator.invoke("++++++"))
+        assertNull(calculator.invoke("3 @ 3 1"))
     }
 
 }
