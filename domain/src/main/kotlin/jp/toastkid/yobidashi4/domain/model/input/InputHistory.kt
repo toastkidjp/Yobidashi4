@@ -14,7 +14,12 @@ data class InputHistory(
             }
 
             val split = it.split(DELIMITER)
-            return InputHistory(split[0], split[1].toLong())
+            val timestamp = try {
+                split[1].toLong()
+            } catch (e: NumberFormatException) {
+                System.currentTimeMillis()
+            }
+            return InputHistory(split[0], timestamp)
         }
 
         fun withWord(word: String) = InputHistory(word, System.currentTimeMillis())
