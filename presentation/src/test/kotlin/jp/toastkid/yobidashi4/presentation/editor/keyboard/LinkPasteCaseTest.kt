@@ -58,6 +58,7 @@ class LinkPasteCaseTest {
 
         assertTrue(consumed)
         verify { selectedTextConversion.invoke(any(), any(), any(), any(), any()) }
+        verify(inverse = true) { anyConstructed<ClipboardFetcher>().invoke()  }
     }
 
     @Test
