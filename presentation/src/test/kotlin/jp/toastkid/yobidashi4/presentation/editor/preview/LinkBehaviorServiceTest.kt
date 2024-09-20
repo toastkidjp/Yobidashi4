@@ -90,7 +90,7 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testArticleUrlDoesNotExists() {
-        every { exists(any()) }.answers { false }
+        every { exists(any()) } returns false
 
         linkBehaviorService.invoke("internal-article://yahoo")
         verify(inverse = true) { viewModel.editWithTitle(any(), any()) }
