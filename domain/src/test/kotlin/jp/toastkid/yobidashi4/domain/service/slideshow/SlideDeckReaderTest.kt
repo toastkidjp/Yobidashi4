@@ -34,6 +34,7 @@ test
 ## Background
 ![background](https://www.yahoo.co.jp)
 
+[footer](Incorrect footer note
 [footer](Footer text)
 
 ## Image
