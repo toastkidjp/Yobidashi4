@@ -4,6 +4,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.Called
 import io.mockk.MockKAnnotations
+import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
@@ -13,7 +14,9 @@ import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorSer
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -74,6 +77,24 @@ class LinkPasteCaseTest {
 
         assertTrue(consumed)
         verify { selectedTextConversion.invoke(any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun noopClipboardCase() {
+        val selected = "https://test.yahoo.com"
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns null
+
+        val consumed = subject.invoke(
+            TextFieldValue(selected),
+            0,
+            0,
+            selectedTextConversion,
+            { fail() }
+        )
+
+        assertFalse(consumed)
+        verify { selectedTextConversion wasNot called }
     }
 
 }
