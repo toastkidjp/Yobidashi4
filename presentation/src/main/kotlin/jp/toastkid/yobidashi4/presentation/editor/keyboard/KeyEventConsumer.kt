@@ -17,7 +17,6 @@ import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.TableFormConverter
@@ -321,39 +320,11 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.L -> {
-                val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
-                if (isUrl(selected)) {
-                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                        LinkDecoratorService().invoke(selected)
-                    }, setNewContent)
-                    return true
-                }
-
-                val clipped = ClipboardFetcher().invoke() ?: return false
-                if (isUrl(clipped)) {
-                    val decoratedLink = LinkDecoratorService().invoke(clipped)
-                    val newText = StringBuilder(content.text)
-                        .insert(
-                            selectionStartIndex,
-                            decoratedLink
-                        )
-                        .toString()
-                    setNewContent(
-                        TextFieldValue(
-                            newText,
-                            TextRange(selectionStartIndex + decoratedLink.length + 1),
-                            content.composition
-                        )
-                    )
-                    return true
-                }
-
-                true
+                LinkPasteCase()
+                    .invoke(content, selectionStartIndex, selectionEndIndex, selectedTextConversion, setNewContent)
             }
             else -> false
         }
     }
-
-    private fun isUrl(text: String) = text.startsWith("http://") || text.startsWith("https://")
 
 }
