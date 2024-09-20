@@ -103,7 +103,7 @@ class LinkBehaviorServiceTest {
         linkBehaviorService.invoke("internal-article://yahoo")
 
         verify { exists(any()) }
-        verify { viewModel.editWithTitle(any(), any()) }
+        verify { viewModel.editWithTitle("yahoo", any()) }
     }
 
     @Test
