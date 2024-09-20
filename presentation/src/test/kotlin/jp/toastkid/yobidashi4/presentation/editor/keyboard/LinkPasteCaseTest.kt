@@ -41,25 +41,6 @@ class LinkPasteCaseTest {
     }
 
     @Test
-    fun pasteDecoratedLink() {
-        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
-        val decoratedLink = "[test](https://test.yahoo.com)"
-        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
-
-        val consumed = subject.invoke(
-            TextFieldValue("", TextRange(0)),
-            0,
-            0,
-            selectedTextConversion,
-            { assertEquals(decoratedLink, it.text) }
-        )
-
-        assertTrue(consumed)
-        verify { selectedTextConversion wasNot Called }
-    }
-
-    @Test
     fun toDecoratedLink() {
         val selected = "https://test.yahoo.com"
         mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
@@ -77,6 +58,25 @@ class LinkPasteCaseTest {
 
         assertTrue(consumed)
         verify { selectedTextConversion.invoke(any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun pasteDecoratedLink() {
+        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
+        val decoratedLink = "[test](https://test.yahoo.com)"
+        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
+
+        val consumed = subject.invoke(
+            TextFieldValue("", TextRange(0)),
+            0,
+            0,
+            selectedTextConversion,
+            { assertEquals(decoratedLink, it.text) }
+        )
+
+        assertTrue(consumed)
+        verify { selectedTextConversion wasNot Called }
     }
 
     @Test
