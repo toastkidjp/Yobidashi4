@@ -98,7 +98,7 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testArticleUrl() {
-        every { exists(any()) }.answers { true }
+        every { exists(any()) } returns true
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
