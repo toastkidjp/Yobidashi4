@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.editor.preview
 
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +20,6 @@ class LinkBehaviorService(
 ) : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
-
-    private val articleFactory: ArticleFactory by inject()
 
     operator fun invoke(url: String?) {
         if (url.isNullOrBlank()) {
