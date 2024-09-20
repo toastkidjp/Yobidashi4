@@ -80,7 +80,6 @@ data class NumberBoard(
 
     private fun initialIndex(n: Int) =
         when (n) {
-            in (0..2) -> 0
             in (3..5) -> 3
             in (6..8) -> 6
             else -> 0
