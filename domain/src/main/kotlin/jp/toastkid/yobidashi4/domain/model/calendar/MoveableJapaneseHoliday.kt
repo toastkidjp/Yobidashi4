@@ -33,40 +33,39 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
                 return emptyList()
             }
 
-            when (month) {
-                7 -> {
-                    return mutableListOf(
+            if (month == 7) {
+                return mutableListOf(
+                    Holiday(
+                        MARINE_DAY.title,
+                        month,
+                        when (year) {
+                            2020 -> 23
+                            2021 -> 22
+                            else -> calculateDate(year, month, MARINE_DAY.week)
+                        },
+                        HolidayCalendar.JAPAN.flag
+                    )
+                ).also {
+                    val specialYearsDate = when (year) {
+                        2020 -> 24
+                        2021 -> 23
+                        else -> null
+                    } ?: return@also
+
+                    it.add(
                         Holiday(
-                            MARINE_DAY.title,
+                            SPORTS_DAY.title,
                             month,
-                            when (year) {
-                                2020 -> 23
-                                2021 -> 22
-                                else -> calculateDate(year, month, MARINE_DAY.week)
-                            },
+                            specialYearsDate,
                             HolidayCalendar.JAPAN.flag
                         )
-                    ).also {
-                        val specialYearsDate = when (year) {
-                            2020 -> 24
-                            2021 -> 23
-                            else -> null
-                        } ?: return@also
-
-                        it.add(
-                            Holiday(
-                                SPORTS_DAY.title,
-                                month,
-                                specialYearsDate,
-                                HolidayCalendar.JAPAN.flag
-                            )
-                        )
-                    }
+                    )
                 }
-                10 -> {
-                    if (year == 2020 || year == 2021) {
-                        return emptyList()
-                    }
+            }
+
+            if (month == 10) {
+                if (year == 2020 || year == 2021) {
+                    return emptyList()
                 }
             }
 
