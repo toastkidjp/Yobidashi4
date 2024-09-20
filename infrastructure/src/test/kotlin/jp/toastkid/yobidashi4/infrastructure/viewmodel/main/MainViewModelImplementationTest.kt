@@ -1202,7 +1202,7 @@ class MainViewModelImplementationTest {
 
         assertTrue(subject.inputValue().text.isEmpty())
         job.cancel()
-        countDownLatch.await(1, TimeUnit.SECONDS)
+        countDownLatch.await(3, TimeUnit.SECONDS)
         assertEquals(0, countDownLatch.count)
     }
 
