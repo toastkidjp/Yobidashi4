@@ -85,7 +85,7 @@ class LinkBehaviorServiceTest {
 
         linkBehaviorService.invoke("https://www.yahoo.co.jp")
 
-        verify { viewModel.openUrl("https://www.yahoo.co.jp", any()) }
+        verify { viewModel.openUrl("https://www.yahoo.co.jp", false) }
     }
 
     @Test
