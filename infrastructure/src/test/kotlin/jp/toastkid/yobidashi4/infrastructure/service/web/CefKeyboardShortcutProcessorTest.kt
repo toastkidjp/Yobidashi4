@@ -156,6 +156,17 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun bookmarkWithNull() {
+        mockkConstructor(BookmarkInsertion::class)
+        every { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) } just Runs
+
+        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_B)
+
+        assertTrue(consumed)
+        verify { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) }
+    }
+
+    @Test
     fun reload() {
         every { browser.reload() } just Runs
 
