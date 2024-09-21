@@ -134,6 +134,15 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun pageDownWithNull() {
+        every { browser.executeJavaScript(any(), any(), any()) } just Runs
+
+        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, KeyEvent.VK_DOWN)
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun bookmark() {
         mockkConstructor(BookmarkInsertion::class)
         every { anyConstructed<BookmarkInsertion>().invoke(any<CefContextMenuParams>(), any()) } just Runs
