@@ -189,4 +189,14 @@ class WebViewPoolImplementationTest {
         assertEquals("1", subject.findId(cefBrowser))
     }
 
+    @Test
+    fun findId2() {
+        assertNull(subject.findId("test"))
+        assertNull(subject.findId(mockk()))
+
+        subject.component("1", "")
+
+        assertNull(subject.findId(mockk<CefBrowser>()))
+    }
+
 }
