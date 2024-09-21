@@ -696,7 +696,7 @@ class KeyEventConsumerTest {
             {  }
         )
 
-        assertFalse(consumed)
+        assertTrue(consumed)
     }
 
     @Test
@@ -732,6 +732,34 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+    }
+
+    @Test
+    fun noopCases() {
+        assertFalse(
+            subject.invoke(
+                KeyEvent(Key.Y, KeyEventType.KeyDown, isCtrlPressed = true),
+                TextFieldValue(),
+                mockk(),
+                { fail() }
+            )
+        )
+        assertFalse(
+            subject.invoke(
+                KeyEvent(Key.Y, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+                TextFieldValue(),
+                mockk(),
+                { fail() }
+            )
+        )
+        assertFalse(
+            subject.invoke(
+                KeyEvent(Key.Y, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
+                TextFieldValue(),
+                mockk(),
+                { fail() }
+            )
+        )
     }
 
 }
