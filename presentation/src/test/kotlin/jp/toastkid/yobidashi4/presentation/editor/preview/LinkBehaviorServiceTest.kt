@@ -14,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -96,14 +98,18 @@ class LinkBehaviorServiceTest {
         verify(inverse = true) { viewModel.editWithTitle(any(), any()) }
     }
 
-    @Test
-    fun testArticleUrl() {
-        every { exists(any()) } returns true
+    @ParameterizedTest
+    @CsvSource(
+        "false",
+        "true,",
+    )
+    fun testArticleUrl(returnsExists: Boolean) {
+        every { exists(any()) } returns returnsExists
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
         verify { exists(any()) }
-        verify { viewModel.editWithTitle("yahoo", any()) }
+        verify(inverse = !returnsExists) { viewModel.editWithTitle("yahoo", any()) }
     }
 
     @Test
