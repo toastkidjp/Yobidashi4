@@ -98,4 +98,23 @@ class LinkPasteCaseTest {
         verify { selectedTextConversion wasNot called }
     }
 
+    @Test
+    fun noopPasteBecauseClippingNotUrlCase() {
+        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns "not URL"
+        val decoratedLink = "[test](https://test.yahoo.com)"
+        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
+
+        val consumed = subject.invoke(
+            TextFieldValue("", TextRange(0)),
+            0,
+            0,
+            selectedTextConversion,
+            { fail() }
+        )
+
+        assertTrue(consumed)
+        verify { selectedTextConversion wasNot Called }
+    }
+
 }
