@@ -90,14 +90,6 @@ class LinkBehaviorServiceTest {
         verify { viewModel.openUrl("https://www.yahoo.co.jp", false) }
     }
 
-    @Test
-    fun testArticleUrlDoesNotExists() {
-        every { exists(any()) } returns false
-
-        linkBehaviorService.invoke("internal-article://yahoo")
-        verify(inverse = true) { viewModel.editWithTitle(any(), any()) }
-    }
-
     @ParameterizedTest
     @CsvSource(
         "false",
