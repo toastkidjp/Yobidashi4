@@ -22,7 +22,9 @@ class BookmarkInsertion : KoinComponent {
             else -> latestUrl
         } ?: return
 
-        val title = mainViewModel.currentTab()?.title() ?: url
+        val currentTab = mainViewModel.currentTab()
+        @Suppress("IfThenToElvis")
+        val title = if (currentTab != null) currentTab.title() else url
 
         invoke(title, url)
     }
