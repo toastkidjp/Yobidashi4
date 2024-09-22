@@ -8,6 +8,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -128,6 +129,23 @@ class PreviewKeyEventConsumerTest {
 
         assertTrue(consumed)
         verify { setNewContent.invoke(any()) }
+    }
+
+    @Test
+    fun noopCtrlShift() {
+        val setNewContent = mockk<(TextFieldValue) -> Unit>()
+        every { setNewContent.invoke(any()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue(),
+            mockk(),
+            setNewContent,
+            scrollBy
+        )
+
+        assertFalse(consumed)
+        verify { setNewContent wasNot Called }
     }
 
     @Test
