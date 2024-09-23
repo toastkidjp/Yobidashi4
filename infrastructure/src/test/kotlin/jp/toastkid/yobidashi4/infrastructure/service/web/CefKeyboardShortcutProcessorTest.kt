@@ -362,6 +362,18 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun reloadIgnoreCacheWithNull() {
+        val consumed = subject.invoke(
+            null,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_R
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun zoomIn() {
         every { browser.zoomLevel } returns 0.0
         every { browser.zoomLevel = any() } just Runs
