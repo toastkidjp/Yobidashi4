@@ -102,6 +102,7 @@ class LinkBehaviorServiceTest {
 
         verify { exists(any()) }
         verify(inverse = !returnsExists) { viewModel.editWithTitle("yahoo", any()) }
+        verify(inverse = returnsExists) { viewModel.showSnackbar(any()) }
     }
 
     @Test
