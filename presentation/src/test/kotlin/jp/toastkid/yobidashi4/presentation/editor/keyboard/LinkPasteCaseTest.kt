@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class LinkPasteCaseTest {
 
@@ -61,11 +63,15 @@ class LinkPasteCaseTest {
         verify(inverse = true) { anyConstructed<ClipboardFetcher>().invoke()  }
     }
 
-    @Test
-    fun pasteDecoratedLink() {
+    @ParameterizedTest
+    @CsvSource(
+        "https://test.yahoo.com",
+        "http://test.yahoo.com"
+    )
+    fun pasteDecoratedLink(url: String) {
         mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
-        val decoratedLink = "[test](https://test.yahoo.com)"
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns url
+        val decoratedLink = "[test]($url)"
         every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
 
         val consumed = subject.invoke(
