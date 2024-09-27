@@ -289,8 +289,8 @@ class KeyEventConsumer(
                     return true
                 }
 
-                val clipped = ClipboardFetcher().invoke() ?: return false
-                if (clipped.isNotEmpty()) {
+                val clipped = ClipboardFetcher().invoke()
+                if (!clipped.isNullOrEmpty()) {
                     val decoratedLink = BlockQuotation().invoke(clipped) ?: return false
                     val newText = StringBuilder(content.text)
                         .insert(
