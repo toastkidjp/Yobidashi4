@@ -48,7 +48,7 @@ internal class OffDayFinderServiceTest {
         every { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }.answers { Holiday("", 9, 22) }
         every { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }.answers { emptySet() }
         every { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any()) } returns false
-        every { userOffDayService.invoke(any(), any()) }.answers { false }
+        every { userOffDayService.invoke(any(), any()) } returns false
 
         offDayFinderService = OffDayFinderServiceImplementation()
     }
