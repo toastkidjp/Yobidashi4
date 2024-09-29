@@ -145,7 +145,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     "Copy tab's title",
                     icon = painterResource("images/icon/ic_clipboard.xml"),
                     onClick = viewModel::copyTabsTitle
-                    )
+                )
 
                 if (viewModel.currentIsWebTab()) {
                     Item(
