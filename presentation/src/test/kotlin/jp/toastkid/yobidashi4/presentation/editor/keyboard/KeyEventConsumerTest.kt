@@ -22,6 +22,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
@@ -697,6 +698,22 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+    }
+
+    @Test
+    fun noopQuoteInsertionWhenReturnsNullFromConversionResult() {
+        mockkConstructor(ClipboardFetcher::class, BlockQuotation::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
+        every { anyConstructed<BlockQuotation>().invoke(any()) } returns null
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue(""),
+            mockk(),
+            { fail() }
+        )
+
+        assertFalse(consumed)
     }
 
     @Test
