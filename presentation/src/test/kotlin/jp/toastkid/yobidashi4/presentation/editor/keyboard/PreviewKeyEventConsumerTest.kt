@@ -149,6 +149,23 @@ class PreviewKeyEventConsumerTest {
     }
 
     @Test
+    fun noopShift() {
+        val setNewContent = mockk<(TextFieldValue) -> Unit>()
+        every { setNewContent.invoke(any()) } just Runs
+
+        val consumed = previewKeyEventConsumer.invoke(
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = false, isShiftPressed = true),
+            TextFieldValue(),
+            mockk(),
+            setNewContent,
+            scrollBy
+        )
+
+        assertFalse(consumed)
+        verify { setNewContent wasNot Called }
+    }
+
+    @Test
     fun cutLine() {
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
