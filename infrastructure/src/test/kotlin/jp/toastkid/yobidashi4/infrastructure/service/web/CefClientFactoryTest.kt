@@ -296,6 +296,8 @@ class CefClientFactoryTest {
         handlerSlot.captured.onBeforeContextMenu(null, null, null, null)
         handlerSlot.captured.onBeforeContextMenu(mockk(), mockk(), null, model)
         handlerSlot.captured.onBeforeContextMenu(mockk(), mockk(), params, model)
+        every { params.selectionText } returns null
+        handlerSlot.captured.onBeforeContextMenu(mockk(), mockk(), params, model)
         handlerSlot.captured.onContextMenuCommand(mockk(), mockk(), params, 1, 1)
         handlerSlot.captured.onContextMenuCommand(mockk(), null, params, 1, 1)
 
