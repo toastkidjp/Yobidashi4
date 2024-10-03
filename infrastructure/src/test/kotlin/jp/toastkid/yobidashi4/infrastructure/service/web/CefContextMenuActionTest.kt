@@ -282,6 +282,18 @@ class CefContextMenuActionTest {
     }
 
     @Test
+    fun clipPageLinkWithSourceUrl() {
+        every { param.linkUrl } returns null
+
+        subject.invoke(browser, param, "test", ContextMenu.CLIP_PAGE_LINK.id)
+
+        verify { param.linkUrl }
+        verify { param.sourceUrl }
+        verify(inverse = true) { param.pageUrl }
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun clipPageLinkWithPageUrl() {
         every { param.linkUrl } returns null
         every { param.sourceUrl } returns null
