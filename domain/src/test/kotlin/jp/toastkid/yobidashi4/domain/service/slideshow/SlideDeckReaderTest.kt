@@ -26,6 +26,7 @@ class SlideDeckReaderTest {
         mockkStatic(Files::class)
         every { Files.lines(any()) } answers {
 """
+![background](
 ![background](https://www.yahoo.co.jp/all)
 
 # Title slide
