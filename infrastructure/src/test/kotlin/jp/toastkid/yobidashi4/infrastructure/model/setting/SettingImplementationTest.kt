@@ -150,6 +150,15 @@ user_off_day=12/29,12/30
     }
 
     @Test
+    fun editorFontFamilyWithNull() {
+        assertNull(subject.editorFontFamily())
+
+        subject.setEditorFontFamily(null)
+
+        assertNull(subject.editorFontFamily())
+    }
+
+    @Test
     fun editorFontSize() {
         assertEquals(14, subject.editorFontSize())
 
