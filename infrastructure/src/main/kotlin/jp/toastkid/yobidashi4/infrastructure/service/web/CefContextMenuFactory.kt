@@ -19,7 +19,7 @@ class CefContextMenuFactory {
         val enablePageUrl = params != null && params.pageUrl.isNullOrBlank().not()
         val usePlainTextMenu = params != null && params.linkUrl.isNullOrBlank() && params.sourceUrl.isNullOrBlank()
 
-        ContextMenu.values().filter {
+        ContextMenu.entries.filter {
             return@filter when (it.context) {
                 Context.IMAGE -> enableSourceUrl
                 Context.LINK -> enablePageUrl
