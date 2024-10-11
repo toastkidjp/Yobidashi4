@@ -23,7 +23,7 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     Surface(
-        color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
+        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         modifier = modifier.focusRequester(focusRequester)
     ) {
         MarkdownPreview(tab.markdown(), scrollState, modifier)
