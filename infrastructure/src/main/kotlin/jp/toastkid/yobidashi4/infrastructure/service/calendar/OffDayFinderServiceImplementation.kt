@@ -48,14 +48,14 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
             return true
         }
 
-        var firstOrNull = FixedJapaneseHoliday.values()
+        var firstOrNull = FixedJapaneseHoliday.entries
             .firstOrNull { month == it.month && date == it.date }
         if (firstOrNull == null) {
             if (month == 5 && date == 6 && dayOfWeek <= DayOfWeek.WEDNESDAY) {
                 return true
             }
             if (dayOfWeek == DayOfWeek.MONDAY) {
-                firstOrNull = FixedJapaneseHoliday.values()
+                firstOrNull = FixedJapaneseHoliday.entries
                     .firstOrNull { month == it.month && (date - 1) == it.date }
             }
         }
