@@ -13,6 +13,7 @@
     <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="temporary/logs/app.log" />
         <param name="Append" value="true" />
+        <param name="Encoding" value="UTF-8" />
         <param name="MaxFileSize" value="300KB" />
         <param name="MaxBackupIndex" value="50" />
         <layout class="org.apache.log4j.PatternLayout">
