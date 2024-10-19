@@ -18,7 +18,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
-    implementation("me.friwi:jcefmaven:122.1.10")
+    implementation("me.friwi:jcefmaven:127.3.1")
 
     implementation("io.insert-koin:koin-core:3.3.2")
     implementation("io.insert-koin:koin-annotations:1.0.3")
