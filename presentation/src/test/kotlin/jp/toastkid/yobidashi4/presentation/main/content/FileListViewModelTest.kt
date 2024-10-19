@@ -124,18 +124,44 @@ class FileListViewModelTest {
     @Test
     fun onKeyEventFromCell() {
         val path = mockk<Path>()
+        val fileListItem = mockk<FileListItem>()
+        every { fileListItem.editable } returns true
+        every { fileListItem.path } returns path
         subject = spyk(subject)
         every { subject.edit(any()) } just Runs
         every { mainViewModel.hideArticleList() } just Runs
 
         val consumed = subject.onKeyEventFromCell(
             androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyDown),
-            path
+            fileListItem
         )
 
         assertTrue(consumed)
         verify { subject.edit(any()) }
         verify { mainViewModel.hideArticleList() }
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEventFromCellWithNotEditableItem() {
+        val path = mockk<Path>()
+        val fileListItem = mockk<FileListItem>()
+        every { fileListItem.editable } returns false
+        every { fileListItem.path } returns path
+        subject = spyk(subject)
+        every { subject.edit(any()) } just Runs
+        every { mainViewModel.openFile(any()) } just Runs
+        every { mainViewModel.hideArticleList() } just Runs
+
+        val consumed = subject.onKeyEventFromCell(
+            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyDown),
+            fileListItem
+        )
+
+        assertTrue(consumed)
+        verify { mainViewModel.openFile(any()) }
+        verify(inverse = true) { subject.edit(any()) }
+        verify(inverse = true) { mainViewModel.hideArticleList() }
     }
 
     @OptIn(InternalComposeUiApi::class)
