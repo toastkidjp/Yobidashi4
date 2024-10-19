@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -17,10 +17,9 @@ import kotlinx.coroutines.withContext
 fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     val viewModel = remember { TextLineViewModel() }
 
-    ClickableText(
+    Text(
         viewModel.annotatedString(),
         style = textStyle,
-        onClick = ::print,
         modifier = modifier.onPointerEvent(PointerEventType.Release) {
             viewModel.onPointerReleased(it)
         },
