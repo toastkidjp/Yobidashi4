@@ -125,7 +125,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                 }
                             }
                             .onKeyEvent {
-                                viewModel.onKeyEventFromCell(it, fileListItem.path)
+                                viewModel.onKeyEventFromCell(it, fileListItem)
                             }
                             .semantics { contentDescription = fileListItem.path.nameWithoutExtension }
                     )
