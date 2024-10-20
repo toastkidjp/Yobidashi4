@@ -6,10 +6,9 @@ import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 
 data class MarkdownPreviewTab(
     private val path: Path,
-    private val markdown: Markdown
+    private val markdown: Markdown,
+    private val scrollPosition: Int = 0
 ) : ScrollableContentTab {
-
-    private var scrollPosition = 0
 
     override fun title(): String {
         return markdown.title()
@@ -19,14 +18,10 @@ data class MarkdownPreviewTab(
         return "images/icon/ic_markdown.xml"
     }
 
-    fun setScrollPosition(scrollPosition: Int) {
-        this.scrollPosition = scrollPosition
-    }
-
     override fun scrollPosition() = scrollPosition
 
     override fun withNewPosition(scrollPosition: Int): ScrollableContentTab {
-        return with(this.path).also { it.setScrollPosition(scrollPosition) }
+        return MarkdownPreviewTab(this.path, this.markdown, scrollPosition)
     }
 
     fun markdown() = markdown
