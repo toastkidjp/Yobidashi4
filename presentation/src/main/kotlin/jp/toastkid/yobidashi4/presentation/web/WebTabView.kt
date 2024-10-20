@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
+import java.awt.BorderLayout
 import java.awt.Color
+import javax.swing.JPanel
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,13 +24,12 @@ internal fun WebTabView(tab: WebTab) {
     val background = Color(MaterialTheme.colors.surface.toArgb())
 
     val viewModel = remember { WebTabViewModel() }
+    val container = remember { JPanel(BorderLayout()) }
 
     Column {
         SwingPanel(
             factory = {
-                val webUiComponent = viewModel.component(tab)
-                webUiComponent.background = background
-                webUiComponent
+                container
             },
             modifier = Modifier
                 .fillMaxSize()
@@ -40,6 +41,12 @@ internal fun WebTabView(tab: WebTab) {
     }
 
     LaunchedEffect(tab.id()) {
+        val webUiComponent = viewModel.component(tab)
+        webUiComponent.background = background
+        container.removeAll()
+        container.revalidate()
+        container.add(webUiComponent, BorderLayout.CENTER)
+
         withContext(Dispatchers.Unconfined) {
             viewModel.start(tab.id())
         }
