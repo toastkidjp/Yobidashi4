@@ -41,11 +41,11 @@ data class EditorTab(
         scroll = newPosition
     }
 
-    private var content: String = ""
+    private var content: CharSequence = ""
 
     fun getContent() = content
 
-    fun setContent(newContent: String?, resetEditing: Boolean) {
+    fun setContent(newContent: CharSequence?, resetEditing: Boolean) {
         editing.setCurrentSize((newContent ?: content).length)
         if (resetEditing) {
             editing.clear()
