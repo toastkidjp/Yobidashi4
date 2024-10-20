@@ -389,7 +389,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         tabs.filterIsInstance(EditorTab::class.java).forEach { editorTabFileStore(it) }
     }
 
-    override fun updateEditorContent(path: Path, text: String, caretPosition: Int, scroll: Double, resetEditing: Boolean) {
+    override fun updateEditorContent(path: Path, text: CharSequence, caretPosition: Int, scroll: Double, resetEditing: Boolean) {
         val editorTab = tabs.filterIsInstance(EditorTab::class.java).firstOrNull { it.path == path } ?: return
         editorTab.setContent(text, resetEditing)
         if (caretPosition != -1) {
