@@ -67,7 +67,7 @@ interface MainViewModel {
 
     fun saveCurrentEditorTab()
     fun saveAllEditorTab()
-    fun updateEditorContent(path: Path, text: String, caretPosition: Int = -1, scroll: Double = -1.0, resetEditing: Boolean)
+    fun updateEditorContent(path: Path, text: CharSequence, caretPosition: Int = -1, scroll: Double = -1.0, resetEditing: Boolean)
     fun openingEditor(): Boolean
     fun setShowWebSearch(newState: Boolean = true)
     fun updateWebTab(id: String, title: String, url: String?)
