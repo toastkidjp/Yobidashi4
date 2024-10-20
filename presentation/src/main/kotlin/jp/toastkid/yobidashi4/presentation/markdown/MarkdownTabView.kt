@@ -18,7 +18,7 @@ import org.koin.core.component.inject
 
 @Composable
 internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
-    val scrollState = rememberScrollState()
+    val scrollState = rememberScrollState(tab.scrollPosition())
     val focusRequester = remember { FocusRequester() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -29,11 +29,10 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
         MarkdownPreview(tab.markdown(), scrollState, modifier)
 
         DisposableEffect(tab) {
+            focusRequester.requestFocus()
             coroutineScope.launch {
                 scrollState.scrollTo(tab.scrollPosition())
             }
-
-            focusRequester.requestFocus()
 
             onDispose {
                 val mainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
