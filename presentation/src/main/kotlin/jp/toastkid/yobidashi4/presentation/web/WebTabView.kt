@@ -43,7 +43,9 @@ internal fun WebTabView(tab: WebTab) {
     LaunchedEffect(tab.id()) {
         val webUiComponent = viewModel.component(tab)
         webUiComponent.background = background
-        container.removeAll()
+        if (container.components.isNotEmpty()) {
+            container.remove(0)
+        }
         container.revalidate()
         container.add(webUiComponent, BorderLayout.CENTER)
 
