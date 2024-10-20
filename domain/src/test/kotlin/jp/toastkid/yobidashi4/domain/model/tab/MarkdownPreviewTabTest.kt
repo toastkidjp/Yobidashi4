@@ -55,15 +55,6 @@ class MarkdownPreviewTabTest {
     }
 
     @Test
-    fun setScrollPosition() {
-        assertEquals(0, tab.scrollPosition())
-
-        tab.setScrollPosition(10)
-
-        assertEquals(10, tab.scrollPosition())
-    }
-
-    @Test
     fun withNewPosition() {
         val withNewPosition = tab.withNewPosition(20)
 
