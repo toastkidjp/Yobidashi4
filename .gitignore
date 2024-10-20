@@ -18,6 +18,7 @@ build/
 *.log
 jcef-bundle/
 logs/
+.kotlin
 
 !gradle/wrapper/gradle-wrapper.properties
 cache/
