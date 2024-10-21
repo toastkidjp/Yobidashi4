@@ -23,12 +23,12 @@ data class EditorTab(val path: Path): Tab {
         return "images/icon/ic_edit.xml"
     }
 
-    private var caretPosition = 0
+    private val caretPosition = AtomicReference(0)
 
-    fun caretPosition() = caretPosition
+    fun caretPosition() = caretPosition.get()
 
     fun setCaretPosition(newPosition: Int) {
-        caretPosition = newPosition
+        caretPosition.set(newPosition)
     }
 
     private var scroll = 0.0
