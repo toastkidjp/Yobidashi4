@@ -31,12 +31,12 @@ data class EditorTab(val path: Path): Tab {
         caretPosition.set(newPosition)
     }
 
-    private var scroll = 0.0
+    private val scroll = AtomicReference(0.0)
 
-    fun scroll() = scroll
+    fun scroll() = scroll.get()
 
     fun setScroll(newPosition: Double) {
-        scroll = newPosition
+        scroll.set(newPosition)
     }
 
     private val preview: AtomicReference<Preview> = AtomicReference(Preview.CLOSE)
