@@ -25,7 +25,7 @@ data class EditorTab(val path: Path): Tab {
 
     private val caretPosition = AtomicReference(0)
 
-    fun caretPosition() = caretPosition.get()
+    fun caretPosition(): Int = caretPosition.get()
 
     fun setCaretPosition(newPosition: Int) {
         caretPosition.set(newPosition)
