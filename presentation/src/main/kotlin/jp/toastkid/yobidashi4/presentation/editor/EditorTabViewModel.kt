@@ -34,7 +34,7 @@ class EditorTabViewModel {
         tabHolder.set(tab)
     }
 
-    private val preview = mutableStateOf<Markdown>(Markdown(""))
+    private val preview = mutableStateOf(Markdown(""))
 
     fun preview() = preview.value
 
