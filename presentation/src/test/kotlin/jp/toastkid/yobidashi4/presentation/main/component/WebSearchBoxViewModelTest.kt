@@ -355,11 +355,11 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun switchSaveSearchHistory() {
-        assertTrue(subject.saveSearchHistory())
+        assertFalse(subject.saveSearchHistory())
 
         subject.switchSaveSearchHistory()
 
-        assertFalse(subject.saveSearchHistory())
+        assertTrue(subject.saveSearchHistory())
     }
 
 }
