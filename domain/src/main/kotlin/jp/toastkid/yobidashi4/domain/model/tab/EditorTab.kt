@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.tab
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.io.path.nameWithoutExtension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,12 +42,12 @@ data class EditorTab(
         scroll = newPosition
     }
 
-    private var content: CharSequence = ""
+    private val content: AtomicReference<CharSequence> = AtomicReference("")
 
-    fun getContent() = content
+    fun getContent() = content.get()
 
     fun setContent(newContent: CharSequence?, resetEditing: Boolean) {
-        editing.setCurrentSize((newContent ?: content).length)
+        editing.setCurrentSize((newContent ?: content.get()).length)
         if (resetEditing) {
             editing.clear()
         }
@@ -54,7 +55,7 @@ data class EditorTab(
         if (newContent.isNullOrBlank()) {
             return
         }
-        content = newContent
+        content.set(newContent)
 
         CoroutineScope(Dispatchers.IO).launch {
             _updateFlow.emit(System.currentTimeMillis())
@@ -77,7 +78,7 @@ data class EditorTab(
     }
 
     fun loadContent() {
-        content = Files.readString(path)
+        content.set(Files.readString(path))
     }
 
     private var editable = true
