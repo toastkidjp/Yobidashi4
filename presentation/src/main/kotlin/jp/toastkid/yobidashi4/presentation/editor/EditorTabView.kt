@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,8 +39,8 @@ internal fun EditorTabView(tab: EditorTab) {
                     )
                 }
 
-                if (viewModel.showPreview()) {
-                    MarkdownPreview(viewModel.preview(), rememberScrollState(), Modifier.weight(1f))
+                AnimatedVisibility(visible = viewModel.showPreview(), Modifier.weight(1f)) {
+                    MarkdownPreview(viewModel.preview(), rememberScrollState(), Modifier)
                 }
 
                 LaunchedEffect(tab) {
