@@ -41,7 +41,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     private val result = mutableStateOf("")
 
-    private val saveSearchHistory = mutableStateOf(true)
+    private val saveSearchHistory = mutableStateOf(false)
 
     fun setShowWebSearch(open: Boolean) {
         viewModel.setShowWebSearch(open)
