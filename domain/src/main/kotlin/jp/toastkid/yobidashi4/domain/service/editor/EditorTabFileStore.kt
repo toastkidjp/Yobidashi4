@@ -17,7 +17,7 @@ class EditorTabFileStore {
 
         CoroutineScope(dispatcher).launch {
             val text = tab.getContent()
-            val textArray = text.toByteArray()
+            val textArray = text.toString().toByteArray()
 
             if (textArray.isEmpty()) {
                 return@launch
