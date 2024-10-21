@@ -11,10 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-data class EditorTab(
-    val path: Path,
-    var preview: Preview = Preview.CLOSE
-): Tab {
+data class EditorTab(val path: Path): Tab {
 
     private val editing: Editing = Editing()
 
@@ -42,6 +39,8 @@ data class EditorTab(
         scroll = newPosition
     }
 
+    private val preview: AtomicReference<Preview> = AtomicReference(Preview.CLOSE)
+
     private val content: AtomicReference<CharSequence> = AtomicReference("")
 
     fun getContent(): CharSequence = content.get()
@@ -63,13 +62,13 @@ data class EditorTab(
     }
 
     fun switchPreview() {
-        preview = if (preview == Preview.HALF) Preview.CLOSE else Preview.HALF
+        preview.set(if (preview.get() == Preview.HALF) Preview.CLOSE else Preview.HALF)
         CoroutineScope(Dispatchers.IO).launch {
             _updateFlow.emit(System.currentTimeMillis())
         }
     }
 
-    fun showPreview() = preview == Preview.HALF
+    fun showPreview() = preview.get() == Preview.HALF
 
     private val _updateFlow = MutableSharedFlow<Long>()
 
