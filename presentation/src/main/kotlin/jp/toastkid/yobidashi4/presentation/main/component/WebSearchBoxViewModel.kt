@@ -7,8 +7,10 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -123,7 +125,11 @@ class WebSearchBoxViewModel : KoinComponent {
             viewModel.setShowWebSearch(false)
             return true
         }
-
+        if (it.type == KeyEventType.KeyDown && it.isCtrlPressed && it.key == Key.Two) {
+            val newText = "\"${query.value.text}\""
+            query.value = TextFieldValue(newText, TextRange(newText.length))
+            return true
+        }
         return false
     }
 
