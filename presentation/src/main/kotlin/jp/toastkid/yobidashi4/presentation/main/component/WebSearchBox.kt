@@ -78,7 +78,7 @@ internal fun WebSearchBox() {
                 ) {
                     if (viewModel.containsSwingContent()) {
                         LazyRow(modifier = Modifier.width(600.dp).height(60.dp)) {
-                            items(SearchSite.values()) {
+                            items(SearchSite.entries) {
                                 Image(
                                     painterResource(it.iconPath()),
                                     contentDescription = it.siteName,
@@ -90,7 +90,7 @@ internal fun WebSearchBox() {
                         }
                         return@DropdownMenu
                     }
-                    SearchSite.values().forEach {
+                    SearchSite.entries.forEach {
                         DropdownMenuItem(
                             onClick = {
                                 viewModel.choose(it)
