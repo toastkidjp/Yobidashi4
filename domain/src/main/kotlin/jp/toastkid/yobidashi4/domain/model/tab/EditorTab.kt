@@ -44,7 +44,7 @@ data class EditorTab(
 
     private val content: AtomicReference<CharSequence> = AtomicReference("")
 
-    fun getContent() = content.get()
+    fun getContent(): CharSequence = content.get()
 
     fun setContent(newContent: CharSequence?, resetEditing: Boolean) {
         editing.setCurrentSize((newContent ?: content.get()).length)
