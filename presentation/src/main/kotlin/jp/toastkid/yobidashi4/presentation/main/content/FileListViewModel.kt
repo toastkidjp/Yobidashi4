@@ -45,7 +45,7 @@ class FileListViewModel : KoinComponent {
 
     private val controlPressing = AtomicBoolean(false)
 
-    private var shiftPressing = false
+    private val shiftPressing = AtomicBoolean(false)
 
     private val keyword = mutableStateOf(TextFieldValue())
 
@@ -64,7 +64,7 @@ class FileListViewModel : KoinComponent {
 
     fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
         controlPressing.set(keyEvent.isCtrlPressed)
-        shiftPressing = keyEvent.isShiftPressed
+        shiftPressing.set(keyEvent.isShiftPressed)
 
         if (keyEvent.type != KeyEventType.KeyDown) {
             return false
@@ -134,7 +134,7 @@ class FileListViewModel : KoinComponent {
     fun onSingleClick(fileListItem: FileListItem) {
         val clickedIndex = items().indexOf(fileListItem)
 
-        if (shiftPressing) {
+        if (shiftPressing.get()) {
             val startIndex = articleStates.indexOfFirst { it.selected }
             val range =
                 if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
@@ -144,7 +144,7 @@ class FileListViewModel : KoinComponent {
             return
         }
 
-        if (controlPressing.get().not() && shiftPressing.not()) {
+        if (controlPressing.get().not() && shiftPressing.get().not()) {
             articleStates.mapIndexed { i, f -> i to f }
                 .filter { it.second.selected }
                 .forEach {
