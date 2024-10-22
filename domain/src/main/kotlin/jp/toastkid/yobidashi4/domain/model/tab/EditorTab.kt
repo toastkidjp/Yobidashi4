@@ -33,7 +33,7 @@ data class EditorTab(val path: Path): Tab {
 
     private val scroll = AtomicReference(0.0)
 
-    fun scroll() = scroll.get()
+    fun scroll(): Double = scroll.get()
 
     fun setScroll(newPosition: Double) {
         scroll.set(newPosition)
