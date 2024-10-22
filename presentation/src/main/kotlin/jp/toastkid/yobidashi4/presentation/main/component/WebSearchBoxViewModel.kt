@@ -121,15 +121,21 @@ class WebSearchBoxViewModel : KoinComponent {
     fun focusRequester() = focusRequester
 
     fun onKeyEvent(it: KeyEvent): Boolean {
-        if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) {
+        if (it.type != KeyEventType.KeyDown) {
+            return false
+        }
+
+        if (it.key == Key.Escape) {
             viewModel.setShowWebSearch(false)
             return true
         }
-        if (it.type == KeyEventType.KeyDown && it.isCtrlPressed && it.key == Key.Two) {
+
+        if (it.isCtrlPressed && it.key == Key.Two) {
             val newText = "\"${query.value.text}\""
             query.value = TextFieldValue(newText, TextRange(newText.length))
             return true
         }
+
         return false
     }
 
