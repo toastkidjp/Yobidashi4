@@ -17,6 +17,7 @@ import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
@@ -42,7 +43,7 @@ class FileListViewModel : KoinComponent {
 
     private val horizontalScrollState = ScrollState(0)
 
-    private var controlPressing = false
+    private val controlPressing = AtomicBoolean(false)
 
     private var shiftPressing = false
 
@@ -62,7 +63,7 @@ class FileListViewModel : KoinComponent {
     }
 
     fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
-        controlPressing = keyEvent.isCtrlPressed
+        controlPressing.set(keyEvent.isCtrlPressed)
         shiftPressing = keyEvent.isShiftPressed
 
         if (keyEvent.type != KeyEventType.KeyDown) {
@@ -143,7 +144,7 @@ class FileListViewModel : KoinComponent {
             return
         }
 
-        if (controlPressing.not() && shiftPressing.not()) {
+        if (controlPressing.get().not() && shiftPressing.not()) {
             articleStates.mapIndexed { i, f -> i to f }
                 .filter { it.second.selected }
                 .forEach {
