@@ -23,6 +23,7 @@ import java.awt.Desktop
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
@@ -423,12 +424,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         _showAggregationBox.value = newState
     }
 
-    private var initialAggregationType = 0
+    private val initialAggregationType = AtomicInteger(0)
 
-    override fun initialAggregationType(): Int = initialAggregationType
+    override fun initialAggregationType(): Int = initialAggregationType.get()
 
     override fun setInitialAggregationType(ordinal: Int) {
-        initialAggregationType = ordinal
+        initialAggregationType.set(ordinal)
     }
 
     // TODO Move other viewModel
