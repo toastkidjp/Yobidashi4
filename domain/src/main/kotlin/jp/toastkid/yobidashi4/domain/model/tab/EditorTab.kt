@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.tab
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.io.path.nameWithoutExtension
 import kotlinx.coroutines.CoroutineScope
@@ -80,12 +81,12 @@ data class EditorTab(val path: Path): Tab {
         content.set(Files.readString(path))
     }
 
-    private var editable = true
+    private val editable = AtomicBoolean(true)
 
-    fun editable() = editable
+    fun editable() = editable.get()
 
     fun switchEditable() {
-        editable = !editable
+        editable.set(editable.get().not())
     }
 
     enum class Preview {
