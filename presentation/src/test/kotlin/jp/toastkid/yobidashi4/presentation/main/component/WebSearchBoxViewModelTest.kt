@@ -240,6 +240,16 @@ class WebSearchBoxViewModelTest {
 
     @OptIn(InternalComposeUiApi::class)
     @Test
+    fun notConsumedOnKeyEventWithEightKey() {
+        val text = subject.query().text
+
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Eight, KeyEventType.KeyDown, isCtrlPressed = true))
+
+        assertFalse(consumed)
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
     fun notConsumedOnKeyEvent() {
         every { viewModel.setShowWebSearch(any()) } just Runs
 
