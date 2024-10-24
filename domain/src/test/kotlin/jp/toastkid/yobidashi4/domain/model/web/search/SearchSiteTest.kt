@@ -56,7 +56,7 @@ class SearchSiteTest {
 
     @Test
     fun iconPath() {
-        SearchSite.values().forEach { assertTrue(it.iconPath().isNotBlank()) }
+        SearchSite.entries.forEach { assertTrue(it.iconPath().isNotBlank()) }
     }
 
     @Test
