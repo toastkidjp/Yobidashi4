@@ -75,7 +75,6 @@ import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
 import kotlin.io.path.nameWithoutExtension
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun TabsView(modifier: Modifier) {
     val viewModel = remember { TabsViewModel() }
