@@ -41,10 +41,13 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_edit
+import jp.toastkid.yobidashi4.library.resources.ic_markdown
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
+import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -124,7 +127,7 @@ fun TableView(tab: TableTab) {
                                     }
                             ) {
                                 Icon(
-                                    painter = painterResource("images/icon/ic_markdown.xml"),
+                                    painter = painterResource(Res.drawable.ic_markdown),
                                     contentDescription = "Open preview",
                                     tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(vertical = 4.dp)
@@ -135,7 +138,7 @@ fun TableView(tab: TableTab) {
                                 )
 
                                 Icon(
-                                    painter = painterResource("images/icon/ic_edit.xml"),
+                                    painter = painterResource(Res.drawable.ic_edit),
                                     contentDescription = "Open file",
                                     tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(vertical = 4.dp)
