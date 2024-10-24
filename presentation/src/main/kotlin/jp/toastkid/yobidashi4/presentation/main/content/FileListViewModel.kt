@@ -134,7 +134,8 @@ class FileListViewModel : KoinComponent {
     fun onSingleClick(fileListItem: FileListItem) {
         val clickedIndex = items().indexOf(fileListItem)
 
-        if (shiftPressing.get()) {
+        val shift = shiftPressing.get()
+        if (shift) {
             val startIndex = articleStates.indexOfFirst { it.selected }
             val range =
                 if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex else (clickedIndex until startIndex)
@@ -144,7 +145,7 @@ class FileListViewModel : KoinComponent {
             return
         }
 
-        if (controlPressing.get().not() && shiftPressing.get().not()) {
+        if (controlPressing.get().not() && shift.not()) {
             articleStates.mapIndexed { i, f -> i to f }
                 .filter { it.second.selected }
                 .forEach {
