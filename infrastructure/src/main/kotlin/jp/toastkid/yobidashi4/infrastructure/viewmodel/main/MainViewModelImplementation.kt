@@ -449,7 +449,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     private val showInputBox = mutableStateOf(false)
-    private var inputBoxAction: ((String) -> Unit)? = null
+
+    private val inputBoxAction: AtomicReference<((String) -> Unit)?> = AtomicReference(null)
 
     override fun showInputBox(): Boolean {
         return showInputBox.value
@@ -457,14 +458,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun setShowInputBox(action: ((String) -> Unit)?) {
         showInputBox.value = action != null
-        inputBoxAction = action
+        inputBoxAction.set(action)
     }
 
     override fun invokeInputAction(input: String?) {
         if (input.isNullOrBlank()) {
             return
         }
-        inputBoxAction?.let { it(input) }
+        inputBoxAction.get()?.let { it(input) }
     }
 
     private val defaultWindowSize = DpSize(width = 1100.dp, height = 700.dp)
