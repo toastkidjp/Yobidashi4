@@ -14,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RouletteToolTabView() {
@@ -34,7 +36,7 @@ fun RouletteToolTabView() {
                     }
 
                     Icon(
-                        painterResource("images/icon/ic_clipboard.xml"),
+                        painterResource(Res.drawable.ic_clipboard),
                         "Clip result",
                         Modifier
                             .clickable(onClick = viewModel::clipResult)
