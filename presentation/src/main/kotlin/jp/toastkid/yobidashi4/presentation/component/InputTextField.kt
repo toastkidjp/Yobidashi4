@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.OffsetMapping
@@ -30,6 +29,9 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_clear_form
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun InputTextField(
@@ -143,7 +145,7 @@ fun MultiLineTextField(
         trailingIcon = {
             if (onClearInput !== emptyClearInputAction) {
                 Icon(
-                    painterResource("images/icon/ic_clear_form.xml"),
+                    painterResource(Res.drawable.ic_clear_form),
                     contentDescription = "Clear input.",
                     tint = MaterialTheme.colors.secondary,
                     modifier = Modifier.clickable(onClick = onClearInput)
