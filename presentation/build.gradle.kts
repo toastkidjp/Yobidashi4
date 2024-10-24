@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation(compose.components.resources)
 
     implementation(project(path = ":domain"))
 
@@ -30,4 +31,10 @@ dependencies {
 
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
     testImplementation(compose.desktop.uiTestJUnit4)
+}
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "jp.toastkid.yobidashi4.library.resources"
+    generateResClass = auto
 }
