@@ -1,16 +1,18 @@
 package jp.toastkid.yobidashi4.domain.model.markdown
 
+import java.util.concurrent.atomic.AtomicBoolean
+
 class ListLineBuilder {
 
     private val list: MutableList<String> = mutableListOf()
 
-    private var ordered: Boolean = false
+    private val ordered = AtomicBoolean(false)
 
     private var taskList: Boolean = false
 
     fun clear() {
         list.clear()
-        ordered = false
+        ordered.set(false)
         taskList = false
     }
 
@@ -19,7 +21,7 @@ class ListLineBuilder {
     }
 
     fun setOrdered() {
-        ordered = true
+        ordered.set(true)
     }
 
     fun setTaskList() {
@@ -28,6 +30,6 @@ class ListLineBuilder {
 
     fun isNotEmpty() = list.isNotEmpty()
 
-    fun build() = ListLine(list.toList(), ordered, taskList)
+    fun build() = ListLine(list.toList(), ordered.get(), taskList)
 
 }
