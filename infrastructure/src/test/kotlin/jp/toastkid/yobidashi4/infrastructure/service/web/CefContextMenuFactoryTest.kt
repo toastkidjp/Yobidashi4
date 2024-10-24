@@ -38,7 +38,7 @@ class CefContextMenuFactoryTest {
     fun test() {
         cefContextMenuFactory.invoke(params, model)
 
-        ContextMenu.values().filter { it.context != Context.PLAIN_TEXT }.forEach {
+        ContextMenu.entries.filter { it.context != Context.PLAIN_TEXT }.forEach {
             verify(exactly = 1) { model.addItem(it.id, it.text) }
         }
     }
@@ -50,7 +50,7 @@ class CefContextMenuFactoryTest {
 
         cefContextMenuFactory.invoke(params, model)
 
-        ContextMenu.values().filter { it.context == Context.PLAIN_TEXT }.forEach {
+        ContextMenu.entries.filter { it.context == Context.PLAIN_TEXT }.forEach {
             verify(exactly = 1) { model.addItem(it.id, it.text) }
         }
     }
@@ -62,7 +62,7 @@ class CefContextMenuFactoryTest {
 
         cefContextMenuFactory.invoke(params, model)
 
-        ContextMenu.values().filter { it.context == Context.PLAIN_TEXT }.forEach {
+        ContextMenu.entries.filter { it.context == Context.PLAIN_TEXT }.forEach {
             verify(exactly = 1) { model.addItem(it.id, it.text) }
         }
     }
