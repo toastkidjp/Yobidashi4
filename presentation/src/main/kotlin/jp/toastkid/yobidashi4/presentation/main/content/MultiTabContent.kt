@@ -22,11 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
@@ -36,6 +37,7 @@ import jp.toastkid.yobidashi4.presentation.time.WorldTimeView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -111,7 +113,7 @@ private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
 private fun ArticleListSwitch(onClick: () -> Unit, modifier: Modifier) {
     val visibility = remember { mutableStateOf(false) }
     Icon(
-        painterResource("images/icon/ic_left_panel_close.xml"),
+        painterResource(Res.drawable.ic_left_panel_close),
         contentDescription = "Clear input.",
         tint = MaterialTheme.colors.secondary,
         modifier = modifier
