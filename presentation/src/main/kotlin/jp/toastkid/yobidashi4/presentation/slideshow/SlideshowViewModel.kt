@@ -11,6 +11,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import java.net.URL
+import java.util.concurrent.atomic.AtomicInteger
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
@@ -29,7 +30,7 @@ class SlideshowViewModel {
 
     private var onFullscreenKeyReleased: (() -> Unit)? = null
 
-    private var maxSize = -1
+    private val maxSize = AtomicInteger(-1)
 
     fun launch(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit) {
         this.onEscapeKeyReleased = onEscapeKeyReleased
@@ -37,7 +38,7 @@ class SlideshowViewModel {
         deck.extractImageUrls().forEach {
             imageCache.get(it)
         }
-        maxSize = deck.slides.size
+        maxSize.set(deck.slides.size)
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -54,7 +55,7 @@ class SlideshowViewModel {
             }
             Key.DirectionRight -> {
                 coroutineScope.launch {
-                    pagerState.animateScrollToPage(min(maxSize - 1, pagerState.currentPage + 1))
+                    pagerState.animateScrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
                 }
                 true
             }
