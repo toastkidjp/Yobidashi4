@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.slideshow
 
+import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
@@ -10,7 +11,7 @@ class Slide {
 
     private var backgroundPath = ""
 
-    private var front = false
+    private val front = AtomicBoolean(false)
 
     private val lines = mutableListOf<Line>()
 
@@ -37,10 +38,10 @@ class Slide {
     fun background() = backgroundPath
 
     fun setFront(front: Boolean) {
-        this.front = front
+        this.front.set(front)
     }
 
-    fun isFront() = this.front
+    fun isFront() = this.front.get()
 
     fun addLines(lines: List<Line>) {
         this.lines.addAll(lines)
