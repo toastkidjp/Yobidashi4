@@ -317,7 +317,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         }
 
         Menu("User agent") {
-            UserAgent.values().forEach {
+            UserAgent.entries.forEach {
                 RadioButtonItem(it.title(), selected = viewModel.isSelectedUserAgent(it)) {
                     viewModel.chooseUserAgent(it)
                 }
