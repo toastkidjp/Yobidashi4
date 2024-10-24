@@ -69,7 +69,7 @@ fun CalendarView(tab: CalendarTab) {
                                 fontWeight = FontWeight.Bold,
                                 color = when (dayOfWeek) {
                                     DayOfWeek.SUNDAY -> Color(190, 50, 55)
-                                    DayOfWeek.SATURDAY -> SATURDAY_FG
+                                    DayOfWeek.SATURDAY ->  Color(55, 50, 190)
                                     else -> MaterialTheme.colors.onSurface
                                 }
                             )
@@ -172,5 +172,3 @@ private fun TopComponent(
         }
     }
 }
-
-private val SATURDAY_FG: Color = Color(55, 50, 190)
