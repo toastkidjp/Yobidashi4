@@ -18,6 +18,18 @@ import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_amazon
+import jp.toastkid.yobidashi4.library.resources.ic_filmarks
+import jp.toastkid.yobidashi4.library.resources.ic_github
+import jp.toastkid.yobidashi4.library.resources.ic_google_map
+import jp.toastkid.yobidashi4.library.resources.ic_image
+import jp.toastkid.yobidashi4.library.resources.ic_site_search
+import jp.toastkid.yobidashi4.library.resources.ic_video
+import jp.toastkid.yobidashi4.library.resources.ic_wikipedia
+import jp.toastkid.yobidashi4.library.resources.ic_yahoo_japan_image_search
+import jp.toastkid.yobidashi4.library.resources.ic_yahoo_japan_logo
+import jp.toastkid.yobidashi4.library.resources.ic_yahoo_japan_realtime_search
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -59,9 +71,7 @@ class WebSearchBoxViewModel : KoinComponent {
         openDropdown.value = false
     }
 
-    fun currentIconPath(): String {
-        return selectedSite.value.iconPath()
-    }
+    fun currentIconPath() = icon(selectedSite.value)
 
     fun currentSiteName(): String? {
         return selectedSite.value.siteName
@@ -200,4 +210,18 @@ class WebSearchBoxViewModel : KoinComponent {
         saveSearchHistory.value = saveSearchHistory.value.not()
     }
 
+    fun icon(searchSite: SearchSite) = when(searchSite) {
+        SearchSite.YAHOO_JAPAN -> Res.drawable.ic_yahoo_japan_logo
+        SearchSite.WIKIPEDIA -> Res.drawable.ic_wikipedia
+        SearchSite.GOOGLE_MAP -> Res.drawable.ic_google_map
+        SearchSite.IMAGE_YAHOO_JAPAN -> Res.drawable.ic_yahoo_japan_image_search
+        SearchSite.YOUTUBE -> Res.drawable.ic_video
+        SearchSite.REALTIME_YAHOO_JAPAN -> Res.drawable.ic_yahoo_japan_realtime_search
+        SearchSite.FILMARKS -> Res.drawable.ic_filmarks
+        SearchSite.AMAZON -> Res.drawable.ic_amazon
+        SearchSite.GITHUB -> Res.drawable.ic_github
+        SearchSite.SEARCH_WITH_IMAGE -> Res.drawable.ic_image
+        SearchSite.SITE_SEARCH -> Res.drawable.ic_site_search
+    }
+    
 }
