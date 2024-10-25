@@ -36,6 +36,9 @@ import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRe
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -62,9 +65,8 @@ class MainMenuViewModel : KoinComponent {
         return if (viewModel.openArticleList()) "Close article list" else "Open article list"
     }
 
-    fun switchArticleListIconPath(): String {
-        return "images/icon/ic_left_panel_${if (viewModel.openArticleList()) "close" else "open"}.xml"
-    }
+    fun switchArticleListIconPath() =
+        if (viewModel.openArticleList()) Res.drawable.ic_left_panel_close else Res.drawable.ic_left_panel_open
 
     fun switchArticleListShortcut(): KeyShortcut {
         return KeyShortcut(if (viewModel.openArticleList()) Key.DirectionLeft else Key.DirectionRight, ctrl = true, alt = true)
