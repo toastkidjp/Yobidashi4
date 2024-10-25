@@ -104,7 +104,7 @@ class WebSearchBoxViewModelTest {
 
         subject.choose(SearchSite.SEARCH_WITH_IMAGE)
 
-        assertEquals(SearchSite.SEARCH_WITH_IMAGE.iconPath(), subject.currentIconPath())
+        assertEquals(subject.icon(SearchSite.SEARCH_WITH_IMAGE), subject.currentIconPath())
         assertEquals(SearchSite.SEARCH_WITH_IMAGE.siteName, subject.currentSiteName())
         assertFalse(subject.openingDropdown())
     }
