@@ -30,13 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun WebSearchBox() {
@@ -80,7 +80,7 @@ internal fun WebSearchBox() {
                         LazyRow(modifier = Modifier.width(600.dp).height(60.dp)) {
                             items(SearchSite.entries) {
                                 Image(
-                                    painterResource(it.iconPath()),
+                                    painterResource(viewModel.icon(it)),
                                     contentDescription = it.siteName,
                                     modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
                                         viewModel.choose(it)
@@ -97,7 +97,7 @@ internal fun WebSearchBox() {
                             }
                         ) {
                             Image(
-                                painterResource(it.iconPath()),
+                                painterResource(viewModel.icon(it)),
                                 contentDescription = it.siteName,
                                 modifier = Modifier.size(48.dp).padding(8.dp)
                             )
