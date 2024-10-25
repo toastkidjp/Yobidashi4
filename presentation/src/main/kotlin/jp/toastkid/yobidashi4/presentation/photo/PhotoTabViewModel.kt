@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.IntOffset
 import java.nio.file.Files
 import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_down
+import jp.toastkid.yobidashi4.library.resources.ic_up
 import kotlin.math.max
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -57,7 +60,7 @@ class PhotoTabViewModel : KoinComponent {
 
     fun bitmap() = bitmap.value
 
-    fun handleIconPath() = "images/icon/ic_${if (openMenu.value) "down" else "up"}.xml"
+    fun handleIconPath() = if (openMenu.value) Res.drawable.ic_down else Res.drawable.ic_up
 
     fun switchMenu() {
         openMenu.value = openMenu.value.not()
