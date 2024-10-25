@@ -28,11 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun AggregationBox() {
@@ -83,7 +83,7 @@ internal fun AggregationBox() {
                         LazyRow(modifier = Modifier.width(300.dp).height(60.dp)) {
                             items(viewModel.items()) {
                                 Icon(
-                                    painterResource(it.iconPath()),
+                                    painterResource(viewModel.icon(it)),
                                     contentDescription = it.label(),
                                     modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
                                         viewModel.choose(it)
@@ -101,7 +101,7 @@ internal fun AggregationBox() {
                             }
                         ) {
                             Icon(
-                                painterResource(it.iconPath()),
+                                painterResource(viewModel.icon(it)),
                                 contentDescription = it.label(),
                                 modifier = Modifier.size(48.dp).padding(horizontal = 8.dp),
                                 tint = MaterialTheme.colors.onPrimary

@@ -28,6 +28,16 @@ import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_article_folder
+import jp.toastkid.yobidashi4.library.resources.ic_asset_management
+import jp.toastkid.yobidashi4.library.resources.ic_currency_yen
+import jp.toastkid.yobidashi4.library.resources.ic_find_in_page
+import jp.toastkid.yobidashi4.library.resources.ic_movie
+import jp.toastkid.yobidashi4.library.resources.ic_payments
+import jp.toastkid.yobidashi4.library.resources.ic_restaurant
+import jp.toastkid.yobidashi4.library.resources.ic_steps
+import jp.toastkid.yobidashi4.library.resources.icon
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -93,9 +103,7 @@ class AggregationBoxViewModel : KoinComponent {
         return selectedSite.value.label()
     }
 
-    fun selectedCategoryIcon(): String {
-        return selectedSite.value.iconPath()
-    }
+    fun selectedCategoryIcon() = icon(selectedSite.value)
 
     fun isCurrentSwingContent(): Boolean {
         return viewModel.currentTab() is WebTab
@@ -244,6 +252,18 @@ class AggregationBoxViewModel : KoinComponent {
         }
 
         query.value = TextFieldValue()
+    }
+
+    fun icon(articleAggregator: ArticleAggregator) =  when (articleAggregator) {
+        is ArticleLengthAggregatorService -> Res.drawable.ic_article_folder
+        is EatingOutCounterService -> Res.drawable.ic_restaurant
+        is FullTextArticleFinder -> Res.drawable.ic_find_in_page
+        is MovieMemoSubtitleExtractor -> Res.drawable.ic_movie
+        is Nikkei225AggregatorService -> Res.drawable.ic_currency_yen
+        is OutgoAggregatorService -> Res.drawable.ic_payments
+        is StepsAggregatorService -> Res.drawable.ic_steps
+        is StocksAggregatorService -> Res.drawable.ic_asset_management
+        else -> Res.drawable.icon
     }
 
 }
