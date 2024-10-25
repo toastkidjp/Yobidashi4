@@ -40,13 +40,17 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_brush
+import jp.toastkid.yobidashi4.library.resources.ic_flip
+import jp.toastkid.yobidashi4.library.resources.ic_rotate_left
+import jp.toastkid.yobidashi4.library.resources.ic_rotate_right
 import kotlin.io.path.extension
 import kotlin.io.path.name
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import androidx.compose.ui.res.painterResource as deprecatedResource
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -153,7 +157,7 @@ fun PhotoTabView(tab: PhotoTab) {
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Icon(
-                            deprecatedResource("images/icon/ic_rotate_left.xml"),
+                            painterResource(Res.drawable.ic_rotate_left),
                             contentDescription = "Rotation left",
                             tint = MaterialTheme.colors.onSurface,
                             modifier = Modifier.clickable {
@@ -164,7 +168,7 @@ fun PhotoTabView(tab: PhotoTab) {
                         )
 
                         Icon(
-                            deprecatedResource("images/icon/ic_rotate_right.xml"),
+                            painterResource(Res.drawable.ic_rotate_right),
                             contentDescription = "Rotation right",
                             tint = MaterialTheme.colors.onSurface,
                             modifier = Modifier
@@ -177,7 +181,7 @@ fun PhotoTabView(tab: PhotoTab) {
                         )
 
                         Icon(
-                            deprecatedResource("images/icon/ic_flip.xml"),
+                            painterResource(Res.drawable.ic_flip),
                             contentDescription = "Flip image",
                             tint = MaterialTheme.colors.onSurface,
                             modifier = Modifier
@@ -186,7 +190,7 @@ fun PhotoTabView(tab: PhotoTab) {
                         )
 
                         Icon(
-                            deprecatedResource("images/icon/ic_brush.xml"),
+                            painterResource(Res.drawable.ic_brush),
                             contentDescription = "Reverse color",
                             tint = Color(0xCCCDDC39),
                             modifier = Modifier
@@ -195,7 +199,7 @@ fun PhotoTabView(tab: PhotoTab) {
                         )
 
                         Icon(
-                            deprecatedResource("images/icon/ic_brush.xml"),
+                            painterResource(Res.drawable.ic_brush),
                             contentDescription = "Sepia filter",
                             tint = Color(0xDDFF5722),
                             modifier = Modifier
@@ -204,7 +208,7 @@ fun PhotoTabView(tab: PhotoTab) {
                         )
 
                         Icon(
-                            deprecatedResource("images/icon/ic_brush.xml"),
+                            painterResource(Res.drawable.ic_brush),
                             contentDescription = "Saturation",
                             tint = Color(0xFFAAAAAA),
                             modifier = Modifier
@@ -214,7 +218,7 @@ fun PhotoTabView(tab: PhotoTab) {
 
                         if (tab.path().extension == "gif") {
                             Icon(
-                                deprecatedResource("images/icon/ic_brush.xml"),
+                                painterResource(Res.drawable.ic_brush),
                                 contentDescription = "Divide GIF",
                                 tint = MaterialTheme.colors.onSurface,
                                 modifier = Modifier.clickable {
