@@ -1,9 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.loadImageBitmap
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_web
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.decodeToImageBitmap
 
 class LoadIconViewModel {
 
@@ -11,14 +14,13 @@ class LoadIconViewModel {
         return pathString != null && pathString.contains("images/icon/")
     }
 
-    fun defaultIconPath(): String {
-        return "images/icon/ic_web.xml"
-    }
+    fun defaultIconPath() = Res.drawable.ic_web
 
     fun contentDescription(): String {
         return "Icon"
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun loadBitmap(pathString: String?): ImageBitmap? {
         val path = Path.of(pathString)
         if (pathString == null || Files.exists(path).not()) {
@@ -27,7 +29,7 @@ class LoadIconViewModel {
 
         return Files.newInputStream(path).use { inputStream ->
             try {
-                loadImageBitmap(inputStream)
+                inputStream.readAllBytes().decodeToImageBitmap()
             } catch (e: IllegalArgumentException) {
                 null
             }

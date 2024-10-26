@@ -6,7 +6,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.res.painterResource as deprecatedResource
 
 @Composable
 internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
@@ -18,7 +19,7 @@ internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
 
     if (viewModel.useIcon(iconPath)) {
         Icon(
-            painterResource(iconPath),
+            deprecatedResource(iconPath),
             contentDescription = viewModel.contentDescription(),
             tint = MaterialTheme.colors.onPrimary,
             modifier = modifier
