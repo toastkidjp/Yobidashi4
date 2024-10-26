@@ -8,13 +8,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.icon
 import jp.toastkid.yobidashi4.presentation.main.content.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
@@ -26,6 +27,7 @@ import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -52,7 +54,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             title = "Yobidashi 4 ${LauncherJarTimestampReader().invoke() ?: ""}",
             state = mainViewModel.windowState(),
             visible = mainViewModel.windowVisible(),
-            icon = painterResource("images/icon.png")
+            icon = painterResource(Res.drawable.icon)
         ) {
             MainMenu(::exitApplication)
 
