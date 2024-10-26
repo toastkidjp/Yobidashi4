@@ -3,8 +3,11 @@ package jp.toastkid.yobidashi4.presentation.component
 import androidx.compose.ui.graphics.ImageBitmap
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_web
+import jp.toastkid.yobidashi4.presentation.main.content.mapper.TabIconMapper
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
 
@@ -34,6 +37,12 @@ class LoadIconViewModel {
                 null
             }
         }
+    }
+
+    private val tabIconMapper = TabIconMapper()
+
+    fun loadTabIcon(tab: Tab): DrawableResource? {
+        return tabIconMapper(tab)
     }
 
 }

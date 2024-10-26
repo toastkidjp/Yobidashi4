@@ -6,7 +6,7 @@ data class FileTab(
     private val title: String,
     val items: List<Path>,
     private val closeable: Boolean = true,
-    private val type: Type = Type.FIND
+    val type: Type = Type.FIND
 ): Tab {
 
     override fun title(): String = title

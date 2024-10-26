@@ -24,7 +24,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
@@ -56,7 +55,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.chat.ChatTabView
-import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import jp.toastkid.yobidashi4.presentation.component.TabIcon
 import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorView
 import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
@@ -122,7 +121,7 @@ internal fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            LoadIcon(iconPathState.value, Modifier.size(24.dp).padding(start = 4.dp))
+                            TabIcon(tab, Modifier.size(24.dp).padding(start = 4.dp))
 
                             Text(titleState.value,
                                 color = MaterialTheme.colors.onPrimary,
