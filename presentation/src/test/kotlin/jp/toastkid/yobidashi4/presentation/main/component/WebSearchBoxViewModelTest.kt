@@ -393,4 +393,9 @@ class WebSearchBoxViewModelTest {
         assertTrue(subject.saveSearchHistory())
     }
 
+    @Test
+    fun icon() {
+        assertEquals(SearchSite.entries.size, SearchSite.entries.map(subject::icon).toSet().size)
+    }
+
 }
