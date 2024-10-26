@@ -2,7 +2,9 @@ package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +35,7 @@ import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
 import jp.toastkid.yobidashi4.presentation.main.component.MemoryUsageBox
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBox
+import jp.toastkid.yobidashi4.presentation.main.drop.DropTarget
 import jp.toastkid.yobidashi4.presentation.time.WorldTimeView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MultiTabContent() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
@@ -82,7 +85,12 @@ fun MultiTabContent() {
                     }
                 }
 
-                TabsView(modifier = Modifier.fillMaxHeight().weight(1f))
+                TabsView(modifier = Modifier.fillMaxHeight().weight(1f)
+                    .dragAndDropTarget(
+                        shouldStartDragAndDrop = { true },
+                        target = DropTarget()
+                    )
+                )
             }
 
             WorldTimeArea(viewModel.openWorldTime(), modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End))
