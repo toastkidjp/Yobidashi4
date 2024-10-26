@@ -17,7 +17,6 @@ import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.icon
 import jp.toastkid.yobidashi4.presentation.main.content.MainScaffold
-import jp.toastkid.yobidashi4.presentation.main.drop.DropTargetFactory
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
 import jp.toastkid.yobidashi4.presentation.main.menu.TextContextMenuFactory
 import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
@@ -63,8 +62,6 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             ) {
                 MainScaffold()
             }
-
-            window.dropTarget = DropTargetFactory().invoke(mainViewModel::emitDroppedPath)
 
             LaunchedEffect(Unit) {
                 withContext(Dispatchers.IO) {
