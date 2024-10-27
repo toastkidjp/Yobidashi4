@@ -14,10 +14,9 @@ import kotlinx.coroutines.launch
 
 data class WebTab(
     private var title: String = "",
-    private var url: String = ""
+    private var url: String = "",
+    private val id: String = UUID.randomUUID().toString()
 ) : Tab {
-
-    private val id = UUID.randomUUID().toString()
 
     override fun title(): String = title
 
