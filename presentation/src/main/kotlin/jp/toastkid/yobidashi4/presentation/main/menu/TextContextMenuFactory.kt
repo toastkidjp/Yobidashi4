@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLocalization
 import jp.toastkid.yobidashi4.domain.service.text.TextCountMessageFactory
+import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 
 class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
@@ -59,6 +60,20 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                                 .findArticle(TextCountMessageFactory().invoke(textManager.selectedText.text))
                         }
                     )
+
+                    val secondaryClickItem = mainViewModel.getSecondaryClickItem()
+                    if (secondaryClickItem.isNotBlank()) {
+                        items.add(
+                            ContextMenuItem("Open") {
+                                LinkBehaviorService().invoke(secondaryClickItem)
+                            }
+                        )
+                        items.add(
+                            ContextMenuItem("Open background") {
+                                LinkBehaviorService().invoke(secondaryClickItem, true)
+                            }
+                        )
+                    }
 
                     items
                 }
