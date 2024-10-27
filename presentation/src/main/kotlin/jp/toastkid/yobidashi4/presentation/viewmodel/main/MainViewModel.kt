@@ -153,6 +153,10 @@ interface MainViewModel {
 
     fun selectedText(): String?
 
+    fun putSecondaryClickItem(item: String)
+
+    fun getSecondaryClickItem(): String
+
     fun trayState(): TrayState
 
     fun sendNotification(notificationEvent: NotificationEvent)
