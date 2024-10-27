@@ -21,13 +21,13 @@ class LinkBehaviorService(
 
     private val viewModel: MainViewModel by inject()
 
-    operator fun invoke(url: String?) {
+    operator fun invoke(url: String?, onBackground: Boolean = false) {
         if (url.isNullOrBlank()) {
             return
         }
 
         if (!internalLinkScheme.isInternalLink(url)) {
-            viewModel.openUrl(url, false)
+            viewModel.openUrl(url, onBackground)
             return
         }
 
