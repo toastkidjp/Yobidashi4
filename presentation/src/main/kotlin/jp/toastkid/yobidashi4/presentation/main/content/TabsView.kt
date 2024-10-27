@@ -121,7 +121,7 @@ internal fun TabsView(modifier: Modifier) {
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            TabIcon(tab, Modifier.size(24.dp).padding(start = 4.dp))
+                            TabIcon(tab, tab.iconPath(), Modifier.size(24.dp).padding(start = 4.dp))
 
                             Text(titleState.value,
                                 color = MaterialTheme.colors.onPrimary,
