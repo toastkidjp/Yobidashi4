@@ -716,6 +716,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         return selectedText.text
     }
 
+    private val secondaryClickItem = AtomicReference("")
+
+    override fun putSecondaryClickItem(item: String) {
+        secondaryClickItem.set(item)
+    }
+
+    override fun getSecondaryClickItem(): String = secondaryClickItem.get()
+
     private val trayState = TrayState()
 
     override fun trayState(): TrayState {
