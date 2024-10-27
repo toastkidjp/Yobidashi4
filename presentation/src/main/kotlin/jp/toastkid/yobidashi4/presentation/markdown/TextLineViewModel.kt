@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
@@ -43,16 +45,25 @@ class TextLineViewModel : KoinComponent {
         lastLayoutResult.value = layoutResult
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     fun onPointerReleased(it: PointerEvent) {
+        if (it.button == null) {
+            return
+        }
+
         val textLayoutResult = lastLayoutResult.value ?: return
         val offset = textLayoutResult.getOffsetForPosition(it.changes.first().position)
 
         val stringRange = annotatedString
             .value
             .getStringAnnotations(tag = "URL", start = offset, end = offset)
-            .firstOrNull() ?: return
+            .firstOrNull()
 
-        linkBehaviorService.invoke(stringRange.item)
+        if (it.button == PointerButton.Primary && stringRange != null) {
+            linkBehaviorService.invoke(stringRange.item)
+        }
+
+        vm.putSecondaryClickItem(if (it.button == PointerButton.Secondary && stringRange != null) stringRange.item else "")
     }
 
 }
