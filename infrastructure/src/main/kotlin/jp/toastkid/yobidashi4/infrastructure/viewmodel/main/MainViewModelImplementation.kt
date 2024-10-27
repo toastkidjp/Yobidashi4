@@ -289,7 +289,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun updateWebTab(id: String, title: String, url: String?) {
         val updated = _tabs.filterIsInstance<WebTab>().firstOrNull { it.id() == id } ?: return
 
-        updated.updateTitleAndUrl(title, url)
+        val indexOf = _tabs.indexOf(updated)
+        _tabs.set(indexOf, WebTab(title, url ?: updated.url(), updated.id()))
 
         url?.let {
             CoroutineScope(Dispatchers.IO).launch {

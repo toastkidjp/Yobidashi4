@@ -10,17 +10,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun TabIcon(tab: Tab, iconPath: String?, modifier: Modifier = Modifier) {
+internal fun TabIcon(tab: Tab, modifier: Modifier = Modifier) {
     val viewModel = remember { LoadIconViewModel() }
-
-    val bitmap = viewModel.loadBitmap(iconPath)
-    if (bitmap != null) {
-        Image(
-            bitmap,
-            contentDescription = viewModel.contentDescription(),
-            modifier = modifier
-        )
-    }
 
     val icon = viewModel.loadTabIcon(tab)
     if (icon != null) {
@@ -31,6 +22,15 @@ internal fun TabIcon(tab: Tab, iconPath: String?, modifier: Modifier = Modifier)
             modifier = modifier
         )
         return
+    }
+
+    val bitmap = viewModel.loadBitmap(tab.iconPath())
+    if (bitmap != null) {
+        Image(
+            bitmap,
+            contentDescription = viewModel.contentDescription(),
+            modifier = modifier
+        )
     }
 }
 
