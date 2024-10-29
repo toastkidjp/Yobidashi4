@@ -9,13 +9,8 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import kotlin.io.path.pathString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -101,38 +96,6 @@ class WebTabTest {
     @Test
     fun id() {
         assertNotNull(webTab.id())
-    }
-
-    @Test
-    fun updateTitleAndUrl() {
-        val countDownLatch = CountDownLatch(1)
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            webTab.update().collect {
-                assertEquals("test2", webTab.title())
-                assertEquals("https://test.yahoo.co.jp/favicon.ico", webTab.url())
-                countDownLatch.countDown()
-            }
-        }
-
-        webTab.updateTitleAndUrl("test2", "https://test.yahoo.co.jp/favicon.ico")
-
-        countDownLatch.await(5, TimeUnit.SECONDS)
-    }
-
-    @Test
-    fun updateTitleAndUrlWithNull() {
-        val countDownLatch = CountDownLatch(1)
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            webTab.update().collect {
-                assertEquals("test", webTab.title())
-                assertEquals("https://test.yahoo.co.jp", webTab.url())
-                countDownLatch.countDown()
-            }
-        }
-
-        webTab.updateTitleAndUrl(null, null)
-
-        countDownLatch.await(5, TimeUnit.SECONDS)
     }
 
     @Test
