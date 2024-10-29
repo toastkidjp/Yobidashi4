@@ -20,9 +20,9 @@ dependencies {
 
     implementation("me.friwi:jcefmaven:127.3.1")
 
-    implementation("io.insert-koin:koin-core:3.3.2")
-    implementation("io.insert-koin:koin-annotations:1.0.3")
-    ksp("io.insert-koin:koin-ksp-compiler:1.0.3")
+    implementation("io.insert-koin:koin-core:4.0.0")
+    implementation("io.insert-koin:koin-annotations:1.4.0")
+    ksp("io.insert-koin:koin-ksp-compiler:1.4.0")
 
     implementation("org.jsoup:jsoup:1.15.3")
     implementation("org.slf4j:slf4j-api:2.0.6")
