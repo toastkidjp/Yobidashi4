@@ -18,7 +18,6 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -215,7 +214,7 @@ class TextLineViewModelTest {
     @Test
     fun noopOnPointerReleased() {
         runBlocking {
-            subject.onPointerReleased(mockk())
+            subject.onPointerReleased(PointerEvent(emptyList()))
 
             verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
             verify(inverse = true) { anyConstructed<LinkGenerator>().invoke(any()) }
