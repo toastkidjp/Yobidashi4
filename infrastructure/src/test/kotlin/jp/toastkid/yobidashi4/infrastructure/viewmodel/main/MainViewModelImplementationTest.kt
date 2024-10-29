@@ -66,6 +66,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -695,27 +696,31 @@ class MainViewModelImplementationTest {
     fun updateWebTab() {
         val tab = mockk<WebTab>()
         every { tab.id() } returns "test"
-        every { tab.updateTitleAndUrl(any(), any()) } just Runs
         subject.openTab(tab)
         every { webHistoryRepository.add(any(), any()) } just Runs
 
         subject.updateWebTab("test", "New title", "https://www.newtitle.co.jp")
 
-        verify { tab.updateTitleAndUrl(any(), any()) }
+        assertNotSame(subject.tabs[0], tab)
+        assertEquals(tab.id(), (subject.tabs[0] as WebTab).id())
+        assertEquals("New title", subject.tabs[0].title())
     }
 
     @Test
     fun updateWebTabOnlyTitle() {
         val tab = mockk<WebTab>()
         every { tab.id() } returns "test"
-        every { tab.updateTitleAndUrl(any(), any()) } just Runs
+        every { tab.url() } returns "https://test.undef.com"
         subject.openTab(tab)
         every { webHistoryRepository.add(any(), any()) } just Runs
 
         subject.updateWebTab("test", "New title", null)
 
-        verify { tab.updateTitleAndUrl(any(), null) }
+        assertNotSame(subject.tabs[0], tab)
+        assertEquals(tab.id(), (subject.tabs[0] as WebTab).id())
+        assertEquals("New title", subject.tabs[0].title())
         verify { webHistoryRepository wasNot called }
+        verify { tab.url() }
     }
 
     @Test
