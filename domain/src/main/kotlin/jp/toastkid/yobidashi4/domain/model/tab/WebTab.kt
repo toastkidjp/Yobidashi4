@@ -5,12 +5,9 @@ import java.util.UUID
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.service.text.MarkdownLinkGenerator
 import kotlin.io.path.pathString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 
 data class WebTab(
     private var title: String = "",
@@ -51,14 +48,6 @@ data class WebTab(
 
     override fun update(): Flow<Long> {
         return _updateFlow.asSharedFlow()
-    }
-
-    fun updateTitleAndUrl(title: String?, url: String?) {
-        title?.let { this.title = title }
-        url?.let { this.url = url }
-        CoroutineScope(Dispatchers.Default).launch {
-            _updateFlow.emit(System.currentTimeMillis())
-        }
     }
 
     fun markdownLink() = MarkdownLinkGenerator().invoke(title, url)
