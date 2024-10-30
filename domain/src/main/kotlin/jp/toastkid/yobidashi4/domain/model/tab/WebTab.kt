@@ -53,5 +53,3 @@ data class WebTab(
     fun markdownLink() = MarkdownLinkGenerator().invoke(title, url)
 
 }
-
-private const val DEFAULT_ICON_PATH = "images/icon/ic_web.xml"
