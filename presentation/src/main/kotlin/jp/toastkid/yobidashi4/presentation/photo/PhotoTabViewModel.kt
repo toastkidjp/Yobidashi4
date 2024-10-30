@@ -14,7 +14,6 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import java.nio.file.Files
 import java.nio.file.Path
@@ -23,6 +22,8 @@ import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_down
 import jp.toastkid.yobidashi4.library.resources.ic_up
 import kotlin.math.max
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.decodeToImageBitmap
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -189,12 +190,13 @@ class PhotoTabViewModel : KoinComponent {
         updateColorFilter()
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun launch(path: Path) {
         focusRequester().requestFocus()
 
         val bufferedImage = Files.newInputStream(path).use { inputStream ->
             try {
-                loadImageBitmap(inputStream)
+                inputStream.readAllBytes().decodeToImageBitmap()
             } catch (e: IllegalArgumentException) {
                 null
             }
