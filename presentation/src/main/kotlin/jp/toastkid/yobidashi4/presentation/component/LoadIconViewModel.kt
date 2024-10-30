@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.ui.graphics.ImageBitmap
 import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_web
 import jp.toastkid.yobidashi4.presentation.main.content.mapper.TabIconMapper
@@ -24,13 +24,15 @@ class LoadIconViewModel {
     }
 
     @OptIn(ExperimentalResourceApi::class)
-    fun loadBitmap(pathString: String?): ImageBitmap? {
-        val path = Path.of(pathString)
-        if (pathString == null || Files.exists(path).not()) {
+    fun loadBitmap(url: String): ImageBitmap? {
+        val faviconFolder = WebIcon()
+        faviconFolder.makeFolderIfNeed()
+        val iconPath = faviconFolder.find(url) ?: return null
+        if (Files.exists(iconPath).not()) {
             return null
         }
 
-        return Files.newInputStream(path).use { inputStream ->
+        return Files.newInputStream(iconPath).use { inputStream ->
             try {
                 inputStream.readAllBytes().decodeToImageBitmap()
             } catch (e: IllegalArgumentException) {
