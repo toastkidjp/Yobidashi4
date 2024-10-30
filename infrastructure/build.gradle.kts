@@ -30,8 +30,8 @@ dependencies {
 
     implementation("com.google.zxing:core:3.4.1")
 
-    implementation("org.apache.lucene:lucene-core:9.10.0")
-    implementation("org.apache.lucene:lucene-queryparser:9.10.0") {
+    implementation("org.apache.lucene:lucene-core:9.11.0")
+    implementation("org.apache.lucene:lucene-queryparser:9.11.0") {
         exclude("org.apache.lucene", "lucene-sandbox")
     }
 }
