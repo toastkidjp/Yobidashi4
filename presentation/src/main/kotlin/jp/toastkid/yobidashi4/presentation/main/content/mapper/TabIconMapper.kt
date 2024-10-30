@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.content.mapper
 
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
@@ -26,7 +25,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_asset_management
 import jp.toastkid.yobidashi4.library.resources.ic_barcode
@@ -50,7 +48,6 @@ import jp.toastkid.yobidashi4.library.resources.ic_rename
 import jp.toastkid.yobidashi4.library.resources.ic_search
 import jp.toastkid.yobidashi4.library.resources.ic_shuffle
 import jp.toastkid.yobidashi4.library.resources.ic_text
-import jp.toastkid.yobidashi4.library.resources.ic_web
 import jp.toastkid.yobidashi4.library.resources.icon
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -82,23 +79,8 @@ class TabIconMapper {
             else -> Res.drawable.icon
         }
         is TextFileViewerTab -> if (tab.path().startsWith("temporary/logs/")) Res.drawable.ic_log else Res.drawable.ic_text
-        is WebTab -> mapWebTab(tab)
+        is WebTab -> null
         else -> Res.drawable.icon
-    }
-
-    private fun mapWebTab(tab: WebTab): DrawableResource? {
-        val url = tab.url()
-        if (url.isEmpty()) {
-            return Res.drawable.ic_web
-        }
-
-        val faviconFolder = WebIcon()
-        faviconFolder.makeFolderIfNeed()
-        val iconPath = faviconFolder.find(url) ?: return Res.drawable.ic_web
-        if (Files.exists(iconPath)) {
-            return null
-        }
-        return Res.drawable.ic_web
     }
 
 }
