@@ -83,7 +83,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             }
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            LoadIcon(viewModel.findIconPath(webHistory), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
+                            LoadIcon(webHistory.url, Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
                             Column(modifier = Modifier
                                 .combinedClickable(
                                     enabled = true,
