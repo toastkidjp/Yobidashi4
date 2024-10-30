@@ -39,7 +39,6 @@ import jp.toastkid.yobidashi4.library.resources.ic_elevation
 import jp.toastkid.yobidashi4.library.resources.ic_find_in_page
 import jp.toastkid.yobidashi4.library.resources.ic_history
 import jp.toastkid.yobidashi4.library.resources.ic_home
-import jp.toastkid.yobidashi4.library.resources.ic_image
 import jp.toastkid.yobidashi4.library.resources.ic_log
 import jp.toastkid.yobidashi4.library.resources.ic_markdown
 import jp.toastkid.yobidashi4.library.resources.ic_movie
@@ -69,7 +68,7 @@ class TabIconMapper {
         is FileRenameToolTab -> Res.drawable.ic_rename
         is LoanCalculatorTab -> Res.drawable.ic_home
         is MarkdownPreviewTab -> Res.drawable.ic_markdown
-        is PhotoTab -> Res.drawable.ic_image //TODO path.absolutePathString()
+        is PhotoTab -> null
         is RouletteToolTab -> Res.drawable.ic_shuffle
         is WebBookmarkTab -> Res.drawable.ic_bookmark
         is WebHistoryTab -> Res.drawable.ic_history
