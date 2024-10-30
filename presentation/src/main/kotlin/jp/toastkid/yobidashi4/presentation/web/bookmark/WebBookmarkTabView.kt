@@ -45,7 +45,6 @@ import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
-import kotlin.io.path.absolutePathString
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -148,7 +147,7 @@ private fun WebBookmarkItemRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            LoadIcon(iconPath?.absolutePathString(), Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
+            LoadIcon(bookmark.url, Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
             Column(modifier = Modifier
                 .padding(horizontal = 16.dp)
             ) {
