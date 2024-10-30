@@ -13,6 +13,8 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_web
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -82,7 +84,7 @@ class LoadIconKtTest {
     @Test
     fun bitmapIsNull() {
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns null
-        every { anyConstructed<LoadIconViewModel>().defaultIconPath() } returns "images/icon/ic_web.xml"
+        every { anyConstructed<LoadIconViewModel>().defaultIconPath() } returns Res.drawable.ic_web
 
         runDesktopComposeUiTest {
             setContent {
