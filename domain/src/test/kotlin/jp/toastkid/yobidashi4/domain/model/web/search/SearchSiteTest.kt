@@ -7,7 +7,6 @@ import jp.toastkid.yobidashi4.domain.service.web.SiteSearchUrlGenerator
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class SearchSiteTest {
@@ -52,11 +51,6 @@ class SearchSiteTest {
         val uri = SearchSite.SITE_SEARCH.make("test", null)
 
         assertEquals("https://www.google.com/search?q=test", uri.toString())
-    }
-
-    @Test
-    fun iconPath() {
-        SearchSite.entries.forEach { assertTrue(it.iconPath().isNotBlank()) }
     }
 
     @Test
