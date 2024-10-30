@@ -19,12 +19,6 @@ repositories {
     mavenCentral()
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 dependencies {
     implementation(project(path = ":domain"))
     implementation(project(path = ":presentation"))
@@ -61,6 +55,12 @@ allprojects {
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.0")
         testImplementation("io.mockk:mockk:1.10.6")
         testRuntimeOnly("net.bytebuddy:byte-buddy:1.15.7")
+    }
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
 
     tasks.withType<KotlinCompile>() {
