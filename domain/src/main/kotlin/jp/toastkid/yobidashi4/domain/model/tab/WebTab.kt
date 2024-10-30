@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 data class WebTab(
-    private var title: String = "",
+    private val title: String = "",
     private var url: String = "",
     private val id: String = UUID.randomUUID().toString()
 ) : Tab {
