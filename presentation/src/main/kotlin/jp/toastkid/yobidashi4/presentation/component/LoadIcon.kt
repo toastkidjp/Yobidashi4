@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -24,7 +25,11 @@ internal fun TabIcon(tab: Tab, modifier: Modifier = Modifier) {
         return
     }
 
-    val bitmap = viewModel.loadBitmap(tab.iconPath())
+    if (tab !is WebTab) {
+        return
+    }
+
+    val bitmap = viewModel.loadBitmap(tab.url())
     if (bitmap != null) {
         Image(
             bitmap,
