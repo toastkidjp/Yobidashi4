@@ -80,14 +80,6 @@ class LoadIconViewModelTest {
     }
 
     @Test
-    fun noopWithNullArgs() {
-        subject.loadBitmap(null)
-
-        verify(inverse = true) { Files.exists(any()) }
-        verify(inverse = true) { Files.newInputStream(any()) }
-    }
-
-    @Test
     fun loadBitmap() {
         subject.loadBitmap(iconPath)
 
