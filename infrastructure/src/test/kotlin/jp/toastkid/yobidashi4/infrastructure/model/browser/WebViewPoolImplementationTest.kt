@@ -44,6 +44,7 @@ class WebViewPoolImplementationTest {
         every { cefBrowser.devTools.uiComponent }.returns(mockk())
         every { cefBrowser.close(any()) }.just(Runs)
         every { cefBrowser.reload() }.just(Runs)
+        every { cefBrowser.stopLoad() } just Runs
 
         mockkConstructor(CefClientFactory::class)
         every { anyConstructed<CefClientFactory>().invoke() }.returns(cefClient)
