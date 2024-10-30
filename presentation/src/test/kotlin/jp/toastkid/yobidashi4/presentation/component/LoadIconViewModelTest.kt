@@ -2,12 +2,17 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.icon
+import jp.toastkid.yobidashi4.presentation.main.content.mapper.TabIconMapper
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -23,6 +28,9 @@ class LoadIconViewModelTest {
 
     @BeforeEach
     fun setUp() {
+        mockkConstructor(TabIconMapper::class)
+        every { anyConstructed<TabIconMapper>().invoke(any()) } returns Res.drawable.icon
+
         subject = LoadIconViewModel()
 
         mockkStatic(Files::class, Path::class)
@@ -85,6 +93,14 @@ class LoadIconViewModelTest {
 
         verify { Files.exists(any()) }
         verify { Files.newInputStream(any()) }
+    }
+
+    @Test
+    fun loadTabIcon() {
+        val tab = mockk<Tab>()
+        subject.loadTabIcon(tab)
+
+        verify { anyConstructed<TabIconMapper>().invoke(tab) }
     }
 
 }
