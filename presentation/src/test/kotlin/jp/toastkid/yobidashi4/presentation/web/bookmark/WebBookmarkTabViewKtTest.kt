@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.web.bookmark
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
@@ -27,6 +28,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
+import jp.toastkid.yobidashi4.presentation.component.LoadIconViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.io.path.absolutePathString
 import org.junit.jupiter.api.AfterEach
@@ -59,7 +61,7 @@ class WebBookmarkTabViewKtTest {
                 }
             )
         }
-        mockkConstructor(WebIcon::class, WebBookmarkTabViewModel::class)
+        mockkConstructor(WebIcon::class, WebBookmarkTabViewModel::class, LoadIconViewModel::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
         every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
         every { anyConstructed<WebIcon>().find(any()) } answers {
@@ -86,6 +88,7 @@ class WebBookmarkTabViewKtTest {
             Bookmark("test item", "https://www.yahoo.co.jp"),
             Bookmark("icon item", "https://www.icon.co.jp")
         )
+        every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
     }
 
     @AfterEach
