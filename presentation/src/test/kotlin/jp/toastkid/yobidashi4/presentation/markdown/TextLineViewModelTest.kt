@@ -56,10 +56,11 @@ class TextLineViewModelTest {
         }
         MockKAnnotations.init(this)
         every { viewModel.finderFlow() } returns flowOf(FindOrder.EMPTY)
+        every { viewModel.putSecondaryClickItem(any()) } just Runs
 
         mockkConstructor(LinkGenerator::class, KeywordHighlighter::class, LinkBehaviorService::class)
         every { anyConstructed<LinkGenerator>().invoke(any()) } returns "generated"
-        every { anyConstructed<LinkBehaviorService>().invoke(any()) } just Runs
+        every { anyConstructed<LinkBehaviorService>().invoke(any(), any()) } just Runs
 
         subject = TextLineViewModel()
     }
@@ -109,15 +110,16 @@ class TextLineViewModelTest {
                 scrollDelta = Offset.Zero
             )
             val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
-            every { pointerEvent.button } returns PointerButton.Secondary
+            every { pointerEvent.button } returns PointerButton.Primary
 
             subject.launch("test")
             textLayoutResult?.let {
                 subject.putLayoutResult(it)
             }
-            subject.onPointerReleased(PointerEvent(listOf(pointerInputChange)))
 
-            verify { anyConstructed<LinkBehaviorService>().invoke(any()) }
+            subject.onPointerReleased(pointerEvent)
+
+            verify { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
         }
     }
 
@@ -163,7 +165,7 @@ class TextLineViewModelTest {
             }
             subject.onPointerReleased(PointerEvent(listOf(pointerInputChange)))
 
-            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
         }
     }
 
@@ -206,7 +208,7 @@ class TextLineViewModelTest {
             }
             subject.onPointerReleased(PointerEvent(listOf(pointerInputChange)))
 
-            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
         }
     }
 
@@ -216,7 +218,7 @@ class TextLineViewModelTest {
         runBlocking {
             subject.onPointerReleased(PointerEvent(emptyList()))
 
-            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any()) }
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
             verify(inverse = true) { anyConstructed<LinkGenerator>().invoke(any()) }
         }
     }
