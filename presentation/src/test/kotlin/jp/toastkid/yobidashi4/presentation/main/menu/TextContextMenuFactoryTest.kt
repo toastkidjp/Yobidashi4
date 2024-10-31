@@ -46,6 +46,7 @@ class TextContextMenuFactoryTest {
         every { mainViewModel.setTextManager(any()) } just Runs
         every { mainViewModel.webSearch(any()) } just Runs
         every { mainViewModel.findArticle(any()) } just Runs
+        every { mainViewModel.getSecondaryClickItem() } returns "test"
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
         every { textManager.selectedText } returns AnnotatedString("test")
         every { textManager.cut } returns mockk()
