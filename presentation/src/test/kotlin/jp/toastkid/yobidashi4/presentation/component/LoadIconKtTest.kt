@@ -33,7 +33,7 @@ class LoadIconKtTest {
         every { Files.newInputStream(any()) } returns "".byteInputStream()
 
         mockkConstructor(LoadIconViewModel::class)
-        every { anyConstructed<LoadIconViewModel>().useIcon(any()) } returns false
+        every { anyConstructed<LoadIconViewModel>().defaultIconPath() } returns Res.drawable.ic_web
     }
 
     @AfterEach
@@ -53,30 +53,16 @@ class LoadIconKtTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun useIcon() {
-        every { anyConstructed<LoadIconViewModel>().useIcon(any()) } returns true
-
-        runDesktopComposeUiTest {
-            setContent {
-                LoadIcon("images/icon/ic_web.xml")
-
-                verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
-            }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
     fun bitmapIsNotNull() {
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
 
         runDesktopComposeUiTest {
             setContent {
                 LoadIcon("images/icon/ic_web.xml", Modifier)
-
-                verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
-                verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
             }
+
+            verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
+            verify(inverse = true) { anyConstructed<LoadIconViewModel>().defaultIconPath() }
         }
     }
 
@@ -84,16 +70,14 @@ class LoadIconKtTest {
     @Test
     fun bitmapIsNull() {
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns null
-        every { anyConstructed<LoadIconViewModel>().defaultIconPath() } returns Res.drawable.ic_web
 
         runDesktopComposeUiTest {
             setContent {
                 LoadIcon("images/icon/ic_web.xml", Modifier)
-
-                verify { anyConstructed<LoadIconViewModel>().useIcon(any()) }
-                verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
-                verify { anyConstructed<LoadIconViewModel>().defaultIconPath() }
             }
+
+            verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
+            verify { anyConstructed<LoadIconViewModel>().defaultIconPath() }
         }
     }
 
