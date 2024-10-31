@@ -97,6 +97,7 @@ kover {
                     classes("*ComposableSingletons*")
                     classes("*\$inject\$*")
                     packages("org.koin.ksp.generated")
+                    packages("jp.toastkid.yobidashi4.library.resources")
                 }
             }
         }
