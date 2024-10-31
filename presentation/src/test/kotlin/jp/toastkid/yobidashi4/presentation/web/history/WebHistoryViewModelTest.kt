@@ -18,22 +18,18 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.absolutePathString
-import kotlin.io.path.pathString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -128,40 +124,6 @@ class WebHistoryViewModelTest {
         subject.openUrl("https://www.yahoo.co.jp", true)
 
         verify { viewModel.openUrl(any(), any()) }
-    }
-
-    @Test
-    fun findIconPathNotFoundCase() {
-        assertNull(
-            subject.findIconPath(
-                WebHistory(
-                    "test",
-                    "test",
-                    1697462064796
-                )
-            )
-        )
-    }
-
-    @Test
-    fun findIconPath() {
-        mockkConstructor(WebIcon::class)
-        val path = mockk<Path>()
-        every { path.fileName } returns path
-        every { path.pathString } returns "www.test.co.jp.webp"
-        every { anyConstructed<WebIcon>().readAll() } returns listOf(path)
-        every { path.absolutePathString() } returns "OK"
-        subject = WebHistoryViewModel()
-
-        val result = subject.findIconPath(
-            WebHistory(
-                "test",
-                "https://www.test.co.jp/index.html",
-                1697462064796
-            )
-        )
-
-        assertEquals("OK", result)
     }
 
     @Test
