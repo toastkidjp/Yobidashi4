@@ -23,8 +23,6 @@ import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.absolutePathString
-import kotlin.io.path.pathString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -72,15 +70,6 @@ class WebHistoryViewModel : KoinComponent {
 
     fun openUrl(url: String, onBackground: Boolean) {
         viewModel.openUrl(url, onBackground)
-    }
-
-    fun findIconPath(history: WebHistory): String? {
-        val host = extractHost(history) ?: return null
-
-        return favicons.firstOrNull {
-            val startsWith = it.fileName.pathString.startsWith(host)
-            startsWith
-        }?.absolutePathString()
     }
 
     private fun extractHost(bookmark: WebHistory): String? {
