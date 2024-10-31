@@ -41,7 +41,6 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
@@ -71,7 +70,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
 
                     WebBookmarkItemRow(
                         bookmark,
-                        viewModel.findFaviconPath(bookmark.url),
                         {
                             viewModel.openUrl(bookmark.url, it)
                             viewModel.closeDropdown()
@@ -132,7 +130,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
 @Composable
 private fun WebBookmarkItemRow(
     bookmark: Bookmark,
-    iconPath: Path?,
     openUrl: (Boolean) -> Unit,
     browseUri: () -> Unit,
     clipText: (String) -> Unit,
