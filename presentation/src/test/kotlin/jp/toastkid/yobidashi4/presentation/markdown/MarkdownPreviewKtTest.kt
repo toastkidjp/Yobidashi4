@@ -13,8 +13,10 @@ import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.font.FontWeight
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
@@ -49,6 +51,7 @@ class MarkdownPreviewKtTest {
             )
         }
         every { mainViewModel.finderFlow() } returns emptyFlow()
+        every { mainViewModel.putSecondaryClickItem(any()) } just Runs
     }
 
     @AfterEach
