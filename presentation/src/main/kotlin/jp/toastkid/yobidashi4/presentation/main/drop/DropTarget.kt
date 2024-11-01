@@ -22,18 +22,18 @@ class DropTarget : DragAndDropTarget, KoinComponent {
 
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onDrop(event: DragAndDropEvent): Boolean {
-        val dtde = event.nativeEvent as? DropTargetDropEvent ?: return false
+        val dropTargetDropEvent = event.nativeEvent as? DropTargetDropEvent ?: return false
 
         try {
-            if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                dtde.acceptDrop(DnDConstants.ACTION_COPY)
-                val transferable = dtde.transferable
+            if (dropTargetDropEvent.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY)
+                val transferable = dropTargetDropEvent.transferable
                 val list = transferable.getTransferData(
                     DataFlavor.javaFileListFlavor
                 ) as List<*>
                 val files = list.filterIsInstance<File>().map(File::toPath).sortedBy(::sortKey)
                 mainViewModel.emitDroppedPath(files)
-                dtde.dropComplete(true)
+                dropTargetDropEvent.dropComplete(true)
                 return true
             }
         } catch (ex: UnsupportedFlavorException) {
@@ -41,7 +41,7 @@ class DropTarget : DragAndDropTarget, KoinComponent {
         } catch (ex: IOException) {
             LoggerFactory.getLogger(javaClass).warn("I/O error.", ex)
         }
-        dtde.rejectDrop()
+        dropTargetDropEvent.rejectDrop()
 
         return false
     }
