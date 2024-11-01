@@ -9,8 +9,6 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
-import java.net.MalformedURLException
-import java.net.URL
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -70,14 +68,6 @@ class WebHistoryViewModel : KoinComponent {
 
     fun openUrl(url: String, onBackground: Boolean) {
         viewModel.openUrl(url, onBackground)
-    }
-
-    private fun extractHost(bookmark: WebHistory): String? {
-        return try {
-            URL(bookmark.url).host.trim()
-        } catch (e: MalformedURLException) {
-            null
-        }
     }
 
     fun dateTimeString(webHistory: WebHistory): String {
