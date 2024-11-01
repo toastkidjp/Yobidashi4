@@ -212,7 +212,6 @@ class TextLineViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun noopOnPointerReleased() {
         runBlocking {
