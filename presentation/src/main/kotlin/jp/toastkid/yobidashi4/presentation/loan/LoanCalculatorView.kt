@@ -110,7 +110,7 @@ fun LoanCalculatorView() {
                         stickyHeader {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.animateItemPlacement()
+                                modifier = Modifier.animateItem()
                                     .drawBehind { drawRect(color) }
                             ) {
                                 Text(
