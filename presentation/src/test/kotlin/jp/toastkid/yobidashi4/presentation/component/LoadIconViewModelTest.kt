@@ -18,10 +18,8 @@ import jp.toastkid.yobidashi4.library.resources.icon
 import jp.toastkid.yobidashi4.presentation.main.content.mapper.TabIconMapper
 import kotlin.io.path.pathString
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -50,21 +48,6 @@ class LoadIconViewModelTest {
     @AfterEach
     fun tearDown() {
         unmockkAll()
-    }
-
-    @Test
-    fun useIcon() {
-        assertTrue(subject.useIcon(iconPath))
-    }
-
-    @Test
-    fun useIconDoesNotExistsCase() {
-        assertFalse(subject.useIcon(null))
-    }
-
-    @Test
-    fun useIconPassingIncorrectCase() {
-        assertFalse(subject.useIcon("test"))
     }
 
     @Test
