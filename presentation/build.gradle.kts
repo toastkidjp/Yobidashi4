@@ -25,9 +25,9 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
 
-    implementation("io.insert-koin:koin-core:4.0.0")
-    implementation("io.insert-koin:koin-annotations:1.4.0")
-    ksp("io.insert-koin:koin-ksp-compiler:1.4.0")
+    implementation(libraries.koin)
+    implementation(libraries.koinAnnotations)
+    ksp(libraries.koinKspCompiler)
 
     implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
     testImplementation(compose.desktop.uiTestJUnit4)
