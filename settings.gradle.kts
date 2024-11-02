@@ -8,6 +8,16 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libraries") {
+            library("koin", "io.insert-koin", "koin-core").version("4.0.0")
+            library("koinAnnotations", "io.insert-koin", "koin-annotations").version("1.4.0")
+            library("koinKspCompiler", "io.insert-koin", "koin-ksp-compiler").version("1.4.0")
+        }
+    }
+}
+
 include(":domain")
 include(":infrastructure")
 include(":presentation")
