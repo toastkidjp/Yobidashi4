@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor
 
 import androidx.compose.runtime.mutableStateOf
+import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -8,7 +9,7 @@ import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 
 class EditorTabViewModel {
 
-    private val tabHolder: AtomicReference<EditorTab> = AtomicReference()
+    private val tabHolder = AtomicReference(EditorTab(Path.of(".")))
 
     private val status = mutableStateOf("")
 
