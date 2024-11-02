@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
-import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -35,8 +34,6 @@ class WebHistoryViewModel : KoinComponent {
     private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss").withLocale(Locale.ENGLISH)
 
     private val list = mutableStateListOf<WebHistory>()
-
-    private val favicons = WebIcon().readAll()
 
     private val state = LazyListState()
 
