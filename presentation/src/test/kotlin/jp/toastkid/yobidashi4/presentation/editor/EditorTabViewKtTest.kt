@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.editor
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -16,7 +15,6 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.emptyFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -66,17 +64,18 @@ class EditorTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun editorTabView() {
+        val tab = EditorTab(mockk())
+
         runDesktopComposeUiTest {
+            mainClock.autoAdvance = false
+
             setContent {
-                val tab = EditorTab(mockk())
                 EditorTabView(tab)
-
-                LaunchedEffect(Unit) {
-                    tab.switchPreview()
-
-                    delay(1200L)
-                }
             }
+
+            tab.switchPreview()
+
+            mainClock.advanceTimeBy(2500L)
         }
     }
 }
