@@ -13,7 +13,7 @@ class EditorTabViewModel {
 
     private val status = mutableStateOf("")
 
-    fun status() = status.value
+    fun status(): String = status.value
 
     fun updateStatus(it: String) {
         val tab = tabHolder.get()
