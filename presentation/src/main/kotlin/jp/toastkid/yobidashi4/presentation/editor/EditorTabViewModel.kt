@@ -17,7 +17,7 @@ class EditorTabViewModel {
 
     fun updateStatus(it: String) {
         val tab = tabHolder.get()
-        val editableStatus = if (tab == null || tab.editable()) "" else "Not editable | "
+        val editableStatus = if (tab.editable()) "" else "Not editable | "
         status.value = editableStatus + it
     }
 
@@ -26,7 +26,7 @@ class EditorTabViewModel {
     fun showPreview() = showPreview.value
 
     private fun updatePreview() {
-        val tab = tabHolder.get() ?: return
+        val tab = tabHolder.get()
         showPreview.value = tab.showPreview()
         preview.value = MarkdownParser().invoke(tab.path)
     }
