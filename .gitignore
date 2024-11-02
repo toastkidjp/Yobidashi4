@@ -19,6 +19,7 @@ build/
 jcef-bundle/
 logs/
 .kotlin
+.run*/
 
 !gradle/wrapper/gradle-wrapper.properties
 cache/
