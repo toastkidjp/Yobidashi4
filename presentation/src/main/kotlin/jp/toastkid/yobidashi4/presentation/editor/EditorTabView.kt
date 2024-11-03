@@ -60,7 +60,6 @@ private fun StatusLabel(labelText: String, modifier: Modifier) {
     Box(
         contentAlignment = Alignment.BottomEnd,
         modifier = modifier.fillMaxWidth().padding(end = 8.dp)) {
-        val statusLabel = labelText
-        Text(statusLabel, fontSize = 16.sp)
+        Text(labelText, fontSize = 16.sp)
     }
 }
