@@ -1411,4 +1411,13 @@ class MainViewModelImplementationTest {
         verify { keywordSearch wasNot called }
     }
 
+    @Test
+    fun putSecondaryClickItem() {
+        assertTrue(subject.getSecondaryClickItem().isEmpty())
+
+        subject.putSecondaryClickItem("test")
+
+        assertEquals("test", subject.getSecondaryClickItem())
+    }
+
 }
