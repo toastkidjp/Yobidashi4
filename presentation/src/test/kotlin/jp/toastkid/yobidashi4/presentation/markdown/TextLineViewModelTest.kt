@@ -212,6 +212,32 @@ class TextLineViewModelTest {
         }
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun noopOnPointerReleasedWithoutLayout() {
+        val pointerInputChange = PointerInputChange(
+            id = PointerId(1),
+            uptimeMillis = 0,
+            position = Offset.Zero,
+            pressed = false,
+            previousUptimeMillis = 1,
+            previousPosition = Offset.Zero,
+            previousPressed = false,
+            isInitiallyConsumed = false,
+            type = PointerType.Touch,
+            scrollDelta = Offset.Zero
+        )
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
+
+        runBlocking {
+            subject.onPointerReleased(pointerEvent)
+
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
+            verify(inverse = true) { anyConstructed<LinkGenerator>().invoke(any()) }
+        }
+    }
+
     @Test
     fun noopOnPointerReleased() {
         runBlocking {
