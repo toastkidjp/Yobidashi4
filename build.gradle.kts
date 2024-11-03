@@ -32,8 +32,6 @@ dependencies {
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
 
     implementation(libraries.koin)
-    implementation(libraries.koinAnnotations)
-    ksp(libraries.koinKspCompiler)
 
     // Kover
     kover(project(path = ":domain"))
