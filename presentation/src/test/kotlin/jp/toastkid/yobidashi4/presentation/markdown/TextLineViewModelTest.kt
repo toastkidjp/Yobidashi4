@@ -123,6 +123,53 @@ class TextLineViewModelTest {
         }
     }
 
+
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
+    @Test
+    fun onPointerReleasedWithPrimaryButtonAndStringRangeIsNull() {
+        val annotatedString = buildAnnotatedString {
+            append("test https://www.yahoo.com")
+        }
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
+
+        var textLayoutResult: TextLayoutResult? = null
+        runDesktopComposeUiTest {
+            setContent {
+                Text(annotatedString, onTextLayout = {
+                    textLayoutResult = it
+                })
+            }
+        }
+
+        subject = TextLineViewModel()
+
+        runBlocking {
+            val pointerInputChange = PointerInputChange(
+                id = PointerId(1),
+                uptimeMillis = 0,
+                position = Offset.Zero,
+                pressed = false,
+                previousUptimeMillis = 1,
+                previousPosition = Offset.Zero,
+                previousPressed = false,
+                isInitiallyConsumed = false,
+                type = PointerType.Touch,
+                scrollDelta = Offset.Zero
+            )
+            val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+            every { pointerEvent.button } returns PointerButton.Primary
+
+            subject.launch("test")
+            textLayoutResult?.let {
+                subject.putLayoutResult(it)
+            }
+
+            subject.onPointerReleased(pointerEvent)
+
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
+        }
+    }
+
     @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
     @Test
     fun noopOnPointerReleasedIfAnnotationIsNotUrl() {
