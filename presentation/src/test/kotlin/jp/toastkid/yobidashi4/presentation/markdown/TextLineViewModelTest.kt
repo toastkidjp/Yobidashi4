@@ -213,6 +213,7 @@ class TextLineViewModelTest {
             subject.onPointerReleased(pointerEvent)
 
             verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
+            verify { viewModel.putSecondaryClickItem(any()) }
         }
     }
 
