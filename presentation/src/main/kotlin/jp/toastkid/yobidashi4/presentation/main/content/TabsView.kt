@@ -98,14 +98,11 @@ internal fun TabsView(modifier: Modifier) {
         ) {
             viewModel.tabs().forEachIndexed { index, tab ->
                 val titleState = remember { mutableStateOf(tab.title()) }
-                val iconPathState = remember { mutableStateOf(tab.iconPath()) }
                 LaunchedEffect("${index}_${tab.hashCode()}") {
                     titleState.value = tab.title()
-                    iconPathState.value = tab.iconPath()
 
                     tab.update().collect {
                         titleState.value = tab.title()
-                        iconPathState.value = tab.iconPath()
                     }
                 }
 
