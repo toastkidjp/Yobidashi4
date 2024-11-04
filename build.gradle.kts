@@ -25,7 +25,7 @@ dependencies {
     implementation(project(path = ":infrastructure"))
 
     implementation("org.jetbrains.compose.runtime:runtime:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation(libraries.kotlinSerialization)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
 
     implementation("org.slf4j:slf4j-api:2.0.6")
