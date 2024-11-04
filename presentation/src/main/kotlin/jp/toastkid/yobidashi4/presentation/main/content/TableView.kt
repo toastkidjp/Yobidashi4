@@ -110,7 +110,7 @@ fun TableView(tab: TableTab) {
 
                 items(viewModel.items(), { it.hashCode() }) { article ->
                     SelectionContainer {
-                        Column(modifier = Modifier.animateItemPlacement()) {
+                        Column(modifier = Modifier.animateItem()) {
                             val cursorOn = remember { mutableStateOf(false) }
                             val rowBackgroundColor = animateColorAsState(
                                 if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
