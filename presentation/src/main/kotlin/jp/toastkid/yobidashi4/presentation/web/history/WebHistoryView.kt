@@ -73,7 +73,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.onPointerEvent(awaitPointerEvent(), webHistory)
                             }
                         }
-                            .animateItemPlacement()
+                            .animateItem()
                             .drawBehind { drawRect(backgroundColor.value) }
                             .onPointerEvent(PointerEventType.Enter) {
                                 cursorOn.value = true
