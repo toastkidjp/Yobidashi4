@@ -13,10 +13,6 @@ import org.jetbrains.compose.resources.decodeToImageBitmap
 
 class LoadIconViewModel {
 
-    fun useIcon(pathString: String?): Boolean {
-        return pathString != null && pathString.contains("images/icon/")
-    }
-
     fun defaultIconPath() = Res.drawable.ic_web
 
     fun contentDescription(): String {
