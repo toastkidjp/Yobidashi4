@@ -73,7 +73,7 @@ internal fun NotificationListTabView() {
                         else Color.Transparent
                     )
                     Row(modifier = Modifier.fillMaxWidth()
-                        .animateItemPlacement()
+                        .animateItem()
                         .onPointerEvent(PointerEventType.Enter) {
                             headerCursorOn.value = true
                         }
