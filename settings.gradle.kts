@@ -14,6 +14,7 @@ dependencyResolutionManagement {
             library("koin", "io.insert-koin", "koin-core").version("4.0.0")
             library("koinAnnotations", "io.insert-koin", "koin-annotations").version("1.4.0")
             library("koinKspCompiler", "io.insert-koin", "koin-ksp-compiler").version("1.4.0")
+            library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.3.3")
         }
     }
 }
