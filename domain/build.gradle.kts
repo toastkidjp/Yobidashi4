@@ -10,5 +10,5 @@ version = "1.0.0"
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation(libraries.kotlinSerialization)
 }
