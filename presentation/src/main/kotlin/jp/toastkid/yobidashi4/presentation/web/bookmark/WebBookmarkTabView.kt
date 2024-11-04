@@ -88,7 +88,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                         viewModel.openingDropdown(bookmark),
                         viewModel::closeDropdown,
                         if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
-                        Modifier.animateItemPlacement()
+                        Modifier.animateItem()
                             .combinedClickable(
                                 enabled = true,
                                 onClick = {
