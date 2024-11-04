@@ -16,7 +16,7 @@ dependencies {
 
     implementation(compose.desktop.currentOs)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation(libraries.kotlinSerialization)
 
     implementation("me.friwi:jcefmaven:127.3.1")
 
