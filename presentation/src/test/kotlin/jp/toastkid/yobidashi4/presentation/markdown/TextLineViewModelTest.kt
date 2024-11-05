@@ -173,9 +173,10 @@ class TextLineViewModelTest {
     @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
     @Test
     fun onPointerReleasedWithSecondaryClick() {
+        val annotation = "https://www.yahoo.com"
         val annotatedString = buildAnnotatedString {
             append("test https://www.yahoo.com")
-            addStringAnnotation("URL", "https://www.yahoo.com", 0, 10)
+            addStringAnnotation("URL", annotation, 0, 10)
         }
         every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
 
@@ -213,7 +214,7 @@ class TextLineViewModelTest {
             subject.onPointerReleased(pointerEvent)
 
             verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
-            verify { viewModel.putSecondaryClickItem(any()) }
+            verify { viewModel.putSecondaryClickItem(annotation) }
         }
     }
 
