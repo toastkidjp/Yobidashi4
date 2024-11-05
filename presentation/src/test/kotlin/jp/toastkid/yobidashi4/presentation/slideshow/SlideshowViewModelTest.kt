@@ -228,7 +228,7 @@ class SlideshowViewModelTest {
     @Test
     fun loadImageNotHitCase() {
         every { anyConstructed<ImageCache>().get(any()) } returns null
-        val backgroundUrl = javaClass.classLoader.getResource("images/icon/ic_calendar.xml")?.toString() ?: return fail()
+        val backgroundUrl = javaClass.classLoader.getResource("icon/icon.png")?.toString() ?: return fail("Resource is not found.")
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } returns BufferedImage(1, 1, Image.SCALE_FAST)
 
