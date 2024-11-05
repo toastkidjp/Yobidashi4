@@ -83,7 +83,7 @@ internal fun CompoundInterestCalculatorView() {
 
                     items(viewModel.result().itemArrays().toList()) { columns ->
                         SelectionContainer {
-                            Row(modifier = Modifier.animateItemPlacement()) {
+                            Row(modifier = Modifier.animateItem()) {
                                 columns.forEach {
                                     Text(String.format("%,d", it), modifier = Modifier.weight(1f))
                                 }
