@@ -8,6 +8,4 @@ interface ArticleAggregator {
 
     fun label(): String
 
-    fun iconPath(): String
-
 }
