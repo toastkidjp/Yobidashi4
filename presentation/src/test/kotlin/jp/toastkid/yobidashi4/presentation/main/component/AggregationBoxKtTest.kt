@@ -21,6 +21,8 @@ import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_aggregation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -72,7 +74,7 @@ class AggregationBoxKtTest {
         )
         every { articlesReaderService.invoke() } returns Stream.empty()
         every { fullTextArticleFinder.label() } returns "Find article"
-        every { fullTextArticleFinder.iconPath() } returns ""
+        every { anyConstructed<AggregationBoxViewModel>().icon(any()) } returns Res.drawable.ic_aggregation
     }
 
     @AfterEach
