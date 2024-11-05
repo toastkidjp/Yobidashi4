@@ -44,7 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MultiTabContent() {
     val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
