@@ -8,12 +8,12 @@ class ListLineBuilder {
 
     private val ordered = AtomicBoolean(false)
 
-    private var taskList: Boolean = false
+    private val taskList = AtomicBoolean(false)
 
     fun clear() {
         list.clear()
         ordered.set(false)
-        taskList = false
+        taskList.set(false)
     }
 
     fun add(item: String) {
@@ -25,11 +25,11 @@ class ListLineBuilder {
     }
 
     fun setTaskList() {
-        taskList = true
+        taskList.set(true)
     }
 
     fun isNotEmpty() = list.isNotEmpty()
 
-    fun build() = ListLine(list.toList(), ordered.get(), taskList)
+    fun build() = ListLine(list.toList(), ordered.get(), taskList.get())
 
 }
