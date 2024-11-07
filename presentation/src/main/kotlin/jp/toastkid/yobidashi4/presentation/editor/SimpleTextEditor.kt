@@ -109,9 +109,7 @@ fun SimpleTextEditor(
 
             setStatus(viewModel.makeCharacterCountMessage(tab.getContent().length))
 
-            onDispose {
-                viewModel.dispose()
-            }
+            onDispose(viewModel::dispose)
         }
 
         VerticalScrollbar(adapter = viewModel.scrollbarAdapter(), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
