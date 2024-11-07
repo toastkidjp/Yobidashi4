@@ -19,9 +19,8 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
             return emptyList()
         }
 
-        return Files.readAllLines(path).filter { query.isNullOrBlank() || it.contains(query) }.mapNotNull {
-            InputHistory.from(it)
-        }
+        return Files.readAllLines(path).filter { query.isNullOrBlank() || it.contains(query) }
+            .mapNotNull(InputHistory::from)
     }
 
     override fun add(item: InputHistory) {
