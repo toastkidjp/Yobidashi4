@@ -26,7 +26,7 @@ dependencies {
 
     implementation("org.jetbrains.compose.runtime:runtime:1.6.0")
     implementation(libraries.kotlinSerialization)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
+    implementation(libraries.coroutines)
 
     implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("org.slf4j:slf4j-reload4j:2.0.6")
