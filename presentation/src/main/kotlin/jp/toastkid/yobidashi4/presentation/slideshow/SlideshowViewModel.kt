@@ -12,6 +12,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import java.net.URL
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
 import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
@@ -26,15 +27,15 @@ class SlideshowViewModel {
 
     private val sliderVisibility = mutableStateOf(false)
 
-    private var onEscapeKeyReleased: (() -> Unit)? = null
+    private val onEscapeKeyReleased = AtomicReference(EMPTY_ACTION)
 
-    private var onFullscreenKeyReleased: (() -> Unit)? = null
+    private val onFullscreenKeyReleased = AtomicReference(EMPTY_ACTION)
 
     private val maxSize = AtomicInteger(-1)
 
     fun launch(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit) {
-        this.onEscapeKeyReleased = onEscapeKeyReleased
-        this.onFullscreenKeyReleased = onFullscreenKeyReleased
+        this.onEscapeKeyReleased.set(onEscapeKeyReleased)
+        this.onFullscreenKeyReleased.set(onFullscreenKeyReleased)
         deck.extractImageUrls().forEach {
             imageCache.get(it)
         }
@@ -60,11 +61,11 @@ class SlideshowViewModel {
                 true
             }
             Key.Escape -> {
-                onEscapeKeyReleased?.invoke()
+                onEscapeKeyReleased.get().invoke()
                 true
             }
             Key.F5 -> {
-                onFullscreenKeyReleased?.invoke()
+                onFullscreenKeyReleased.get().invoke()
                 true
             }
             else -> false
@@ -95,3 +96,5 @@ class SlideshowViewModel {
     }
 
 }
+
+private val EMPTY_ACTION: () -> Unit = {}
