@@ -20,6 +20,13 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
+import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
+import jp.toastkid.yobidashi4.domain.service.aggregation.MovieMemoSubtitleExtractor
+import jp.toastkid.yobidashi4.domain.service.aggregation.Nikkei225AggregatorService
+import jp.toastkid.yobidashi4.domain.service.aggregation.OutgoAggregatorService
+import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
+import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
@@ -28,6 +35,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -188,7 +196,7 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun selectedCategoryIcon() {
-        assertTrue(subject.selectedCategoryIcon().isNotEmpty())
+        assertNotNull(subject.selectedCategoryIcon())
     }
 
     @Test
@@ -396,6 +404,23 @@ class AggregationBoxViewModelTest {
         val find = subject.label()
 
         assertNotEquals(normal, find)
+    }
+    
+    @Test
+    fun icon () {
+        val aggregators = setOf(
+            mockk(),
+            mockk<ArticleLengthAggregatorService>(),
+            mockk<EatingOutCounterService>(),
+            mockk<FullTextArticleFinder>(),
+            mockk<MovieMemoSubtitleExtractor>(),
+            mockk<Nikkei225AggregatorService>(),
+            mockk<OutgoAggregatorService>(),
+            mockk<StepsAggregatorService>(),
+            mockk<StocksAggregatorService>()
+        )
+
+        assertEquals(aggregators.size, aggregators.map(subject::icon).size)
     }
 
 }
