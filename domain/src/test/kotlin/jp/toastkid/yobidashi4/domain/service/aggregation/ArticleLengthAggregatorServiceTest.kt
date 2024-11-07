@@ -64,9 +64,4 @@ class ArticleLengthAggregatorServiceTest {
         assertTrue(articleLengthAggregatorService.label().isNotBlank())
     }
 
-    @Test
-    fun iconPath() {
-        assertTrue(articleLengthAggregatorService.iconPath().isNotBlank())
-    }
-
 }
