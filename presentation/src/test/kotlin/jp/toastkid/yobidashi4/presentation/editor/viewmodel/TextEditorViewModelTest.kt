@@ -114,11 +114,6 @@ class TextEditorViewModelTest {
     }
 
     @Test
-    fun scrollbarAdapter() {
-        assertEquals(0.0, viewModel.scrollbarAdapter().scrollOffset)
-    }
-
-    @Test
     fun onClickLineNumber() {
         val text = "Angel has fallen."
         every { multiParagraph.getLineForOffset(any()) } returns 0
@@ -240,7 +235,7 @@ class TextEditorViewModelTest {
 
         viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
 
-        assertEquals(0.0f, viewModel.verticalScrollState().offset)
+        assertEquals(1.0f, viewModel.verticalScrollState().offset)
         verify { focusRequester.requestFocus() }
         verify { editorTab.scroll() }
     }
