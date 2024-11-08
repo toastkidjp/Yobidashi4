@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.ScrollbarAdapter
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.text.TextFieldScrollState
@@ -54,8 +53,6 @@ class TextEditorViewModel : KoinComponent {
     private val previewKeyEventConsumer = PreviewKeyEventConsumer()
 
     private val verticalScrollState = TextFieldScrollState(Orientation.Vertical, 0)
-
-    private val adapter = ScrollbarAdapter(verticalScrollState)
 
     private val lineNumberScrollState = ScrollState(0)
 
@@ -112,8 +109,6 @@ class TextEditorViewModel : KoinComponent {
 
     fun verticalScrollState() = verticalScrollState
 
-    fun scrollbarAdapter() = adapter
-
     fun lineNumberScrollState() = lineNumberScrollState
 
     fun onClickLineNumber(it: Int) {
@@ -162,7 +157,7 @@ class TextEditorViewModel : KoinComponent {
 
         coroutineScope.launch {
             delay(ms)
-            adapter.scrollTo(tab.scroll())
+            verticalScrollState.offset = tab.scroll().toFloat()
             focusRequester().requestFocus()
         }
     }
