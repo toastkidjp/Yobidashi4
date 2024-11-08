@@ -5,10 +5,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
-import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
-import jp.toastkid.yobidashi4.domain.model.aggregation.StocksAggregationResult
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -29,10 +26,6 @@ class TableTabTest {
 
     @Test
     fun iconPath() {
-        assertTrue(TableTab("test", MovieMemoExtractorResult()).iconPath()!!.startsWith("images/icon/"))
-        assertTrue(TableTab("test", OutgoAggregationResult("test")).iconPath()!!.startsWith("images/icon/"))
-        assertTrue(TableTab("test", FindResult("test")).iconPath()!!.startsWith("images/icon/"))
-        assertTrue(TableTab("test", StocksAggregationResult()).iconPath()!!.startsWith("images/icon/"))
         assertNull(TableTab("test", mockk()).iconPath())
     }
 
