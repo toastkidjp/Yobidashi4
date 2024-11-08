@@ -15,10 +15,6 @@ class CalendarTab(
         return true
     }
 
-    override fun iconPath(): String {
-        return "images/icon/ic_calendar.xml"
-    }
-
     fun localDate(): LocalDate = LocalDate.of(year, month, 1)
 
 }
