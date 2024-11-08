@@ -106,9 +106,4 @@ class FullTextArticleFinderImplementationTest {
         assertTrue(subject.label().isNotBlank())
     }
 
-    @Test
-    fun iconPath() {
-        assertTrue(subject.iconPath().isNotBlank())
-    }
-
 }
