@@ -14,10 +14,6 @@ data class MarkdownPreviewTab(
         return markdown.title()
     }
 
-    override fun iconPath(): String? {
-        return "images/icon/ic_markdown.xml"
-    }
-
     override fun scrollPosition() = scrollPosition
 
     override fun withNewPosition(scrollPosition: Int): ScrollableContentTab {
