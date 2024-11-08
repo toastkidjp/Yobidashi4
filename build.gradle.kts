@@ -28,8 +28,8 @@ dependencies {
     implementation(libraries.kotlinSerialization)
     implementation(libraries.coroutines)
 
-    implementation("org.slf4j:slf4j-api:2.0.6")
-    implementation("org.slf4j:slf4j-reload4j:2.0.6")
+    implementation(libraries.slf4j)
+    implementation(libraries.reload4j)
 
     implementation(libraries.koin)
 
