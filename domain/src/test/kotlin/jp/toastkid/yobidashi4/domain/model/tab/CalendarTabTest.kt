@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.tab
 
 import java.time.Month
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,7 +28,7 @@ class CalendarTabTest {
 
     @Test
     fun iconPath() {
-        assertTrue(calendarTab.iconPath().startsWith("images/icon/"))
+        assertNull(calendarTab.iconPath())
     }
 
     @Test
