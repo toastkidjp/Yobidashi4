@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -112,7 +113,7 @@ fun SimpleTextEditor(
             onDispose(viewModel::dispose)
         }
 
-        VerticalScrollbar(adapter = viewModel.scrollbarAdapter(), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+        VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.verticalScrollState()), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
     }
 
     LaunchedEffect(viewModel.verticalScrollState().offset) {
