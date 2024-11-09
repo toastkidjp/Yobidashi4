@@ -15,7 +15,5 @@ data class FileTab(
 
     enum class Type(private val iconPath: String) {
         MUSIC("images/icon/ic_music.xml"), FIND("images/icon/ic_search.xml");
-
-        fun iconPath() = iconPath
     }
 }
