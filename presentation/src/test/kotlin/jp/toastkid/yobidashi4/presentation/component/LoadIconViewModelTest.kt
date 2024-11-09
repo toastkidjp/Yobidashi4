@@ -27,7 +27,7 @@ class LoadIconViewModelTest {
 
     private lateinit var subject: LoadIconViewModel
 
-    private val iconPath = "images/icon/ic_notification.xml"
+    private val iconPath = "https://test.yahoo.co.jp/favicon.ico"
 
     @BeforeEach
     fun setUp() {
