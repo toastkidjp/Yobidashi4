@@ -40,14 +40,14 @@ internal fun TabIcon(tab: Tab, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun LoadIcon(iconPath: String?, modifier: Modifier = Modifier) {
-    if (iconPath == null) {
+internal fun LoadIcon(url: String?, modifier: Modifier = Modifier) {
+    if (url == null) {
         return
     }
 
     val viewModel = remember { LoadIconViewModel() }
 
-    val bitmap = viewModel.loadBitmap(iconPath)
+    val bitmap = viewModel.loadBitmap(url)
     if (bitmap != null) {
         Image(
             bitmap,
