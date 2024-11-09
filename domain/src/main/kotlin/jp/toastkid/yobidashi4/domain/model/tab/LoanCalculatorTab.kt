@@ -5,7 +5,4 @@ class LoanCalculatorTab : Tab {
 
     override fun closeable(): Boolean = true
 
-    override fun iconPath(): String? {
-        return "images/icon/ic_home.xml"
-    }
 }
