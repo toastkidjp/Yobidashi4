@@ -149,16 +149,16 @@ class TextEditorViewModel : KoinComponent {
         lineNumberScrollState.scrollTo(verticalScrollState.offset.toInt())
     }
 
-    fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 500) {
+    fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 150) {
         if (tab.scroll() <= 0.0) {
             focusRequester().requestFocus()
             return
         }
 
         coroutineScope.launch {
+            focusRequester().requestFocus()
             delay(ms)
             verticalScrollState.offset = tab.scroll().toFloat()
-            focusRequester().requestFocus()
         }
     }
 
