@@ -42,7 +42,7 @@ fun launchMainApplication(exitProcessOnExit: Boolean = true) {
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
+private fun ApplicationScope.Application(localTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
     val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
 
     AppTheme(darkTheme = mainViewModel.darkMode()) {
@@ -58,7 +58,7 @@ private fun ApplicationScope.Application(LocalTextContextMenu: ProvidableComposi
             MainMenu(::exitApplication)
 
             CompositionLocalProvider(
-                LocalTextContextMenu provides TextContextMenuFactory(mainViewModel).invoke()
+                localTextContextMenu provides TextContextMenuFactory(mainViewModel).invoke()
             ) {
                 MainScaffold()
             }
