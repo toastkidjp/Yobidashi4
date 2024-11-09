@@ -13,10 +13,6 @@ data class WebTab(
 
     override fun closeable(): Boolean = true
 
-    override fun iconPath(): String? {
-        return null
-    }
-
     fun isReadableUrl() =
         url.startsWith("https://") || url.startsWith("http://")
 
