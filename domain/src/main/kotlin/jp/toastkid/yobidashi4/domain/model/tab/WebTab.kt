@@ -11,8 +11,6 @@ data class WebTab(
 
     override fun title(): String = title
 
-    override fun closeable(): Boolean = true
-
     fun isReadableUrl() =
         url.startsWith("https://") || url.startsWith("http://")
 
