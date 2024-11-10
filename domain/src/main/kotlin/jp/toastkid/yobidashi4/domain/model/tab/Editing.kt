@@ -1,22 +1,24 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
+import java.util.concurrent.atomic.AtomicBoolean
+
 class Editing {
 
-    private var editing = false
+    private val editing = AtomicBoolean(false)
 
     private var previousCount = -1
 
     fun setCurrentSize(size: Int) {
         if (previousCount != size) {
-            editing = previousCount != -1
+            editing.set(previousCount != -1)
             previousCount = size
         }
     }
 
-    fun shouldShowIndicator() = editing
+    fun shouldShowIndicator() = editing.get()
 
     fun clear() {
-        editing = false
+        editing.set(false)
     }
 
 }
