@@ -13,7 +13,7 @@ data class FileTab(
 
     override fun closeable(): Boolean = closeable
 
-    enum class Type(private val iconPath: String) {
-        MUSIC("images/icon/ic_music.xml"), FIND("images/icon/ic_search.xml");
+    enum class Type {
+        MUSIC, FIND;
     }
 }
