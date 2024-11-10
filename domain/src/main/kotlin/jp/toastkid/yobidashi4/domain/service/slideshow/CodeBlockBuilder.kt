@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.slideshow
 
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 
 class CodeBlockBuilder {
@@ -8,7 +9,7 @@ class CodeBlockBuilder {
 
     private val code = StringBuilder()
 
-    private var codeFormat = ""
+    private val codeFormat = AtomicReference("")
 
     fun append(line: String) {
         code.append(if (code.isNotEmpty()) LINE_SEPARATOR else "").append(line)
@@ -19,13 +20,14 @@ class CodeBlockBuilder {
     }
 
     fun build(): CodeBlockLine {
-        return CodeBlockLine(code.toString(), codeFormat)
+        return CodeBlockLine(code.toString(), codeFormat.get())
     }
 
     fun inCodeBlock() = isInCodeBlock
 
     fun initialize() {
         code.setLength(0)
+        codeFormat.set("")
         isInCodeBlock = false
     }
 
@@ -34,7 +36,7 @@ class CodeBlockBuilder {
     }
 
     fun setCodeFormat(codeFormat: String) {
-        this.codeFormat = codeFormat
+        this.codeFormat.set(codeFormat)
     }
 
     companion object {
