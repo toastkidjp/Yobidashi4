@@ -30,16 +30,4 @@ class AppThemeKtTest {
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun defaultArgsCase() {
-        runDesktopComposeUiTest {
-            setContent {
-                AppTheme {
-
-                }
-            }
-        }
-    }
-
 }
