@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean = false,
+    darkTheme: Boolean,
     content: @Composable  () -> Unit
 ) {
     val primary = Color(0xFF444499)
