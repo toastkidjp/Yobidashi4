@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
@@ -44,7 +45,7 @@ class TextEditorViewModel : KoinComponent {
 
     private var lastParagraph: MultiParagraph? = null
 
-    private var altPressed = false
+    private val altPressed = AtomicBoolean(false)
 
     private val lineCount = mutableStateOf(0)
 
@@ -67,7 +68,7 @@ class TextEditorViewModel : KoinComponent {
     fun content() = content.value
 
     fun onValueChange(it: TextFieldValue) {
-        if (altPressed) {
+        if (altPressed.get()) {
             return
         }
 
@@ -122,7 +123,7 @@ class TextEditorViewModel : KoinComponent {
     fun focusRequester() = focusRequester
 
     fun onKeyEvent(it: KeyEvent): Boolean {
-        altPressed = it.isAltPressed
+        altPressed.set(it.isAltPressed)
 
         return keyEventConsumer(
             it,
