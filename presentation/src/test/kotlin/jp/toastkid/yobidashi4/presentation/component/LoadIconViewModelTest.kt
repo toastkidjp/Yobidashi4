@@ -27,7 +27,7 @@ class LoadIconViewModelTest {
 
     private lateinit var subject: LoadIconViewModel
 
-    private val iconPath = "https://test.yahoo.co.jp/favicon.ico"
+    private val url = "https://test.yahoo.co.jp/favicon.ico"
 
     @BeforeEach
     fun setUp() {
@@ -64,7 +64,7 @@ class LoadIconViewModelTest {
     fun noopWithFileDoesNotExists() {
         every { Files.exists(any()) } returns false
 
-        subject.loadBitmap(iconPath)
+        subject.loadBitmap(url)
 
         verify { Files.exists(any()) }
         verify(inverse = true) { Files.newInputStream(any()) }
@@ -91,7 +91,7 @@ class LoadIconViewModelTest {
         every { Files.exists(any()) } returns true
         every { path.pathString } returns "path/to/favicon"
 
-        subject.loadBitmap(iconPath)
+        subject.loadBitmap(url)
 
         verify { Files.exists(any()) }
         verify { Files.newInputStream(any()) }
@@ -108,7 +108,7 @@ class LoadIconViewModelTest {
         every { inputStream.readAllBytes() } throws IllegalArgumentException()
         every { inputStream.close() } just Runs
 
-        val bitmap = subject.loadBitmap(iconPath)
+        val bitmap = subject.loadBitmap(url)
 
         assertNull(bitmap)
         verify { Files.exists(any()) }
