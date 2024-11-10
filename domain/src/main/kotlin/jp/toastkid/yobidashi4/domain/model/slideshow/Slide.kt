@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.slideshow
 
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
@@ -9,7 +10,7 @@ class Slide {
 
     private var title = ""
 
-    private var backgroundPath = ""
+    private val backgroundPath = AtomicReference("")
 
     private val front = AtomicBoolean(false)
 
@@ -32,10 +33,10 @@ class Slide {
     }
 
     fun setBackground(background: String) {
-        backgroundPath = background
+        backgroundPath.set(background)
     }
 
-    fun background() = backgroundPath
+    fun background() = backgroundPath.get()
 
     fun setFront(front: Boolean) {
         this.front.set(front)
@@ -55,6 +56,7 @@ class Slide {
 
     fun extractImageUrls(): Set<String> {
         val imageUrls = mutableSetOf<String>()
+        val backgroundPath = this.backgroundPath.get()
         if (backgroundPath.isNotBlank()) {
             imageUrls.add(backgroundPath)
         }
