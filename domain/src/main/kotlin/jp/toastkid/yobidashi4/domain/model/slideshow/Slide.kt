@@ -36,7 +36,7 @@ class Slide {
         backgroundPath.set(background)
     }
 
-    fun background() = backgroundPath.get()
+    fun background(): String = backgroundPath.get()
 
     fun setFront(front: Boolean) {
         this.front.set(front)
