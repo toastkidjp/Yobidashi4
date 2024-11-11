@@ -10,8 +10,4 @@ class ChatTab(private val chat: Chat = Chat()) : Tab {
         return "Chat"
     }
 
-    override fun iconPath(): String? {
-        return "images/icon/ic_chat.xml"
-    }
-
 }
