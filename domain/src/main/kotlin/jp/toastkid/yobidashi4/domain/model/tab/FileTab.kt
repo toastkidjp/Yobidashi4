@@ -11,8 +11,6 @@ data class FileTab(
 
     override fun title(): String = title
 
-    override fun closeable(): Boolean = closeable
-
     enum class Type {
         MUSIC, FIND;
     }
