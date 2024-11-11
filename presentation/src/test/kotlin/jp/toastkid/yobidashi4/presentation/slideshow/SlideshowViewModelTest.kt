@@ -113,6 +113,23 @@ class SlideshowViewModelTest {
 
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
+    fun onKeyEventEnter() {
+        runDesktopComposeUiTest {
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                subject.onKeyEvent(
+                    coroutineScope,
+                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true),
+                    pagerState
+                )
+
+                coVerify { pagerState.animateScrollToPage(any()) }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @Test
     fun onKeyEventF5() {
         runDesktopComposeUiTest {
             setContent {
