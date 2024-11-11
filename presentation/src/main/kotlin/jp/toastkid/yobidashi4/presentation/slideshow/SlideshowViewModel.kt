@@ -60,6 +60,12 @@ class SlideshowViewModel {
                 }
                 true
             }
+            Key.Enter -> {
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
+                }
+                true
+            }
             Key.Escape -> {
                 onEscapeKeyReleased.get().invoke()
                 true
