@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
@@ -37,7 +38,7 @@ import org.koin.core.component.inject
 @OptIn(ExperimentalFoundationApi::class)
 class TextEditorViewModel : KoinComponent {
 
-    private var tab: EditorTab = EditorTab(Path.of(""))
+    private val tab = AtomicReference(EditorTab(Path.of("")))
 
     private val mainViewModel: MainViewModel by inject()
 
@@ -76,6 +77,7 @@ class TextEditorViewModel : KoinComponent {
     }
 
     private fun applyStyle(it: TextFieldValue) {
+        val tab = this.tab.get()
         val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
         if (content.value.text != newContent.text) {
             mainViewModel.updateEditorContent(
@@ -151,6 +153,7 @@ class TextEditorViewModel : KoinComponent {
     }
 
     fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 150) {
+        val tab = this.tab.get()
         if (tab.scroll() <= 0.0) {
             focusRequester().requestFocus()
             return
@@ -179,7 +182,7 @@ class TextEditorViewModel : KoinComponent {
     }
 
     fun launchTab(tab: EditorTab, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        this.tab = tab
+        this.tab.set(tab)
 
         val newContent = TextFieldValue(tab.getContent().toString(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
@@ -222,7 +225,7 @@ class TextEditorViewModel : KoinComponent {
         val currentText = content.value.text
         if (currentText.isNotEmpty()) {
             mainViewModel.updateEditorContent(
-                tab.path,
+                tab.get().path,
                 currentText,
                 content.value.selection.start,
                 verticalScrollState.offset.toDouble(),
