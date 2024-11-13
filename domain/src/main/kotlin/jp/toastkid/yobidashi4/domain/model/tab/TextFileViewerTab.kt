@@ -8,10 +8,6 @@ class TextFileViewerTab(private val path: Path) : Tab {
         return path.fileName.toString()
     }
 
-    override fun closeable(): Boolean {
-        return true
-    }
-
     fun path() = path
 
 }
