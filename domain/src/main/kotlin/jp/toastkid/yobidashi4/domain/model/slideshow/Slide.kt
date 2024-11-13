@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
 
 class Slide {
 
-    private var title = ""
+    private val title = AtomicReference("")
 
     private val backgroundPath = AtomicReference("")
 
@@ -17,12 +17,12 @@ class Slide {
     private val lines = mutableListOf<Line>()
 
     fun setTitle(title: String) {
-        this.title = title
+        this.title.set(title)
     }
 
-    fun hasTitle() = this.title.isNotBlank()
+    fun hasTitle() = this.title.get().isNotBlank()
 
-    fun title() = this.title
+    fun title() = this.title.get()
 
     fun addText(line: String) {
         this.lines.add(TextLine(line))
