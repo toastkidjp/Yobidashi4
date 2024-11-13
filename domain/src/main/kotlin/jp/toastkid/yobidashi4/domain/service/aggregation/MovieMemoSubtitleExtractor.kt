@@ -27,6 +27,4 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
 
     override fun label() = "Movies"
 
-    override fun iconPath() = "images/icon/ic_movie.xml"
-
 }
