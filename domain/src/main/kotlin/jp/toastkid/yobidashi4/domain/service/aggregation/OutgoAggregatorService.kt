@@ -13,7 +13,4 @@ class OutgoAggregatorService(private val articlesReaderService: ArticlesReaderSe
 
     override fun label() = "Outgo"
 
-    override fun iconPath() = "images/icon/ic_payments.xml"
-
-
 }
