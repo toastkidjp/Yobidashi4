@@ -20,10 +20,6 @@ data class EditorTab(val path: Path): Tab {
 
     override fun closeable(): Boolean = editing.shouldShowIndicator().not()
 
-    override fun iconPath(): String {
-        return "images/icon/ic_edit.xml"
-    }
-
     private val caretPosition = AtomicReference(0)
 
     fun caretPosition(): Int = caretPosition.get()
