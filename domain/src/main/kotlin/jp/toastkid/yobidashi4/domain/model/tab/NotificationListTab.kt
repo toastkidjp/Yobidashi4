@@ -6,6 +6,4 @@ class NotificationListTab : Tab {
         return "Notifications"
     }
 
-    override fun iconPath() = "images/icon/ic_notification.xml"
-
 }
