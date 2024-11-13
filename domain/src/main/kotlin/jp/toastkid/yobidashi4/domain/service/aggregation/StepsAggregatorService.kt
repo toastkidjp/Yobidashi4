@@ -32,8 +32,6 @@ class StepsAggregatorService(private val articlesReaderService: ArticlesReaderSe
 
     override fun label() = "Steps"
 
-    override fun iconPath() = "images/icon/ic_steps.xml"
-
     companion object {
 
         private const val TARGET = "今日の歩数は"
