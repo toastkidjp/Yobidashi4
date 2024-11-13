@@ -44,7 +44,7 @@ class TextEditorViewModel : KoinComponent {
 
     private val content = mutableStateOf(TextFieldValue())
 
-    private var lastParagraph: MultiParagraph? = null
+    private val lastParagraph = AtomicReference<MultiParagraph?>(null)
 
     private val altPressed = AtomicBoolean(false)
 
@@ -94,7 +94,7 @@ class TextEditorViewModel : KoinComponent {
     private val lineHeights = mutableMapOf<Int, TextUnit>()
 
     fun setMultiParagraph(multiParagraph: MultiParagraph) {
-        lastParagraph = multiParagraph
+        lastParagraph.set(multiParagraph)
         if (lineCount.value != multiParagraph.lineCount) {
             lineCount.value = multiParagraph.lineCount
         }
@@ -115,7 +115,7 @@ class TextEditorViewModel : KoinComponent {
     fun lineNumberScrollState() = lineNumberScrollState
 
     fun onClickLineNumber(it: Int) {
-        val multiParagraph = lastParagraph ?: return
+        val multiParagraph = lastParagraph.get() ?: return
 
         content.value = content.value.copy(
             selection = TextRange(multiParagraph.getLineStart(it), multiParagraph.getLineEnd(it))
@@ -130,7 +130,7 @@ class TextEditorViewModel : KoinComponent {
         return keyEventConsumer(
             it,
             content.value,
-            lastParagraph,
+            lastParagraph.get(),
             ::applyStyle
         )
     }
@@ -139,7 +139,7 @@ class TextEditorViewModel : KoinComponent {
         return previewKeyEventConsumer.invoke(
             it,
             content.value,
-            lastParagraph,
+            lastParagraph.get(),
             ::applyStyle
         ) {
             coroutineScope.launch {
@@ -195,7 +195,7 @@ class TextEditorViewModel : KoinComponent {
     }
 
     fun currentLineOffset(): Offset {
-        val paragraph = lastParagraph ?: return Offset.Zero
+        val paragraph = lastParagraph.get() ?: return Offset.Zero
         val currentLine = paragraph.getLineForOffset(content.value.selection.start)
         return Offset(paragraph.getLineLeft(currentLine), paragraph.getLineTop(currentLine) - verticalScrollState.offset)
     }
@@ -233,7 +233,7 @@ class TextEditorViewModel : KoinComponent {
             )
         }
 
-        lastParagraph = null
+        lastParagraph.set(null)
         content.value = TextFieldValue()
     }
 
