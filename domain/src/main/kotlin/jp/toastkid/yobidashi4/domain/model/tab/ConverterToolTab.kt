@@ -6,8 +6,4 @@ class ConverterToolTab : Tab {
         return "Converter"
     }
 
-    override fun closeable(): Boolean {
-        return true
-    }
-
 }
