@@ -33,8 +33,6 @@ class StocksAggregatorService(private val articlesReaderService: ArticlesReaderS
 
     override fun label() = "Stock"
 
-    override fun iconPath() = "images/icon/ic_asset_management.xml"
-
     companion object {
 
         private const val TARGET = "評価額は"
