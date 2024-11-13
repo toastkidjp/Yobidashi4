@@ -11,10 +11,6 @@ class CalendarTab(
         return "Calendar"
     }
 
-    override fun closeable(): Boolean {
-        return true
-    }
-
     fun localDate(): LocalDate = LocalDate.of(year, month, 1)
 
 }
