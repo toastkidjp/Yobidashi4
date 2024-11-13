@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -27,7 +26,7 @@ class FileTabTest {
     fun music() {
         tab = FileTab("music", emptyList(), false, FileTab.Type.MUSIC)
         assertNotNull(tab.title())
-        assertFalse(tab.closeable())
+        assertTrue(tab.closeable())
         assertNull(tab.iconPath())
     }
 
