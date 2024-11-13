@@ -4,8 +4,6 @@ class WebBookmarkTab(private val scrollPosition: Int = 0) : ScrollableContentTab
 
     override fun title(): String = "Bookmark"
 
-    override fun closeable(): Boolean = true
-
     override fun scrollPosition(): Int = scrollPosition
 
     override fun withNewPosition(scrollPosition: Int): ScrollableContentTab {
