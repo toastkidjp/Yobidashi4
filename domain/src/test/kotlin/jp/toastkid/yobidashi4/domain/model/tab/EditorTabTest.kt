@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
@@ -117,7 +118,7 @@ class EditorTabTest {
 
     @Test
     fun iconPath() {
-        assertTrue(editorTab.iconPath().startsWith("images/icon/"))
+        assertNull(editorTab.iconPath())
     }
 
     @Test
