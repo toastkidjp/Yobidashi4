@@ -58,7 +58,7 @@ class LoadIconKtTest {
 
         runDesktopComposeUiTest {
             setContent {
-                LoadIcon("images/icon/ic_web.xml", Modifier)
+                LoadIcon("https://test.yahoo.co.jp/favicon.ico", Modifier)
             }
 
             verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
@@ -73,7 +73,7 @@ class LoadIconKtTest {
 
         runDesktopComposeUiTest {
             setContent {
-                LoadIcon("images/icon/ic_web.xml", Modifier)
+                LoadIcon("https://test.yahoo.co.jp/favicon.ico", Modifier)
             }
 
             verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
