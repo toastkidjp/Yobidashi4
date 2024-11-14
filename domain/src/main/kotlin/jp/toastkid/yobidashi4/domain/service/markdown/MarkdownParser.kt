@@ -17,7 +17,7 @@ class MarkdownParser {
     /** Table builder.  */
     private val tableBuilder = TableBuilder()
 
-    private var codeBlockBuilder = CodeBlockBuilder()
+    private val codeBlockBuilder = CodeBlockBuilder()
 
     private val imageExtractor = ImageExtractor()
 
