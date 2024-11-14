@@ -6,8 +6,4 @@ class FileRenameToolTab : Tab {
         return "File rename tool"
     }
 
-    override fun iconPath(): String? {
-        return "images/icon/ic_rename.xml"
-    }
-
 }
