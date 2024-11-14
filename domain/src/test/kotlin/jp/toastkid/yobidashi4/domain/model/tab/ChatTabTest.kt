@@ -5,6 +5,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -36,7 +37,7 @@ class ChatTabTest {
 
     @Test
     fun iconPath() {
-        assertTrue(subject.iconPath()?.isNotEmpty() ?: false)
+        assertNull(subject.iconPath())
     }
 
     @Test
