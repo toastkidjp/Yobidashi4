@@ -22,7 +22,7 @@ class Slide {
 
     fun hasTitle() = this.title.get().isNotBlank()
 
-    fun title() = this.title.get()
+    fun title(): String = this.title.get()
 
     fun addText(line: String) {
         this.lines.add(TextLine(line))
