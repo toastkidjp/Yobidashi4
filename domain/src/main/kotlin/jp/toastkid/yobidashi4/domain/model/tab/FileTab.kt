@@ -5,7 +5,6 @@ import java.nio.file.Path
 data class FileTab(
     private val title: String,
     val items: List<Path>,
-    private val closeable: Boolean = true,
     val type: Type = Type.FIND
 ): Tab {
 
