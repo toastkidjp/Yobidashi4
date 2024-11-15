@@ -705,16 +705,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     @OptIn(ExperimentalFoundationApi::class)
-    private var textManager: TextContextMenu.TextManager? = null
+    private val textManager = AtomicReference<TextContextMenu.TextManager?>(null)
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun setTextManager(textManager: TextContextMenu.TextManager) {
-        this.textManager = textManager
+        this.textManager.set(textManager)
     }
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun selectedText(): String? {
-        val textManager = this.textManager ?: return null
+        val textManager = this.textManager.get() ?: return null
         val selectedText = textManager.selectedText
         return selectedText.text
     }
