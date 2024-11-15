@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -58,6 +60,7 @@ fun Slideshow(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState { deck.slides.size }
     val viewModel = remember { SlideshowViewModel() }
+    val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(deck) {
         withContext(Dispatchers.IO) {
@@ -72,6 +75,7 @@ fun Slideshow(
             .onKeyEvent {
                 viewModel.onKeyEvent(coroutineScope, it, pagerState)
             }
+            .focusRequester(focusRequester)
     ) {
         Box(
             modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
@@ -94,6 +98,10 @@ fun Slideshow(
                 val slide = deck.slides.get(it)
 
                 SlideView(slide, viewModel::loadImage)
+
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
             }
 
             if (deck.footerText.isNotBlank()) {
