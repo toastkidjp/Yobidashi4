@@ -24,7 +24,7 @@ class FileTabTest {
 
     @Test
     fun music() {
-        tab = FileTab("music", emptyList(), false, FileTab.Type.MUSIC)
+        tab = FileTab("music", emptyList(), FileTab.Type.MUSIC)
         assertNotNull(tab.title())
         assertTrue(tab.closeable())
         assertNull(tab.iconPath())
