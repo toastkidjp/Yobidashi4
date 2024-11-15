@@ -77,7 +77,7 @@ class SlideshowViewModelTest {
         unmockkAll()
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventLeft() {
         runDesktopComposeUiTest {
