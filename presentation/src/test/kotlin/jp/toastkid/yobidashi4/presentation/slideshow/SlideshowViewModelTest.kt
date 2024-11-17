@@ -49,7 +49,6 @@ class SlideshowViewModelTest {
     @MockK
     private lateinit var pagerState: PagerState
 
-    @OptIn(ExperimentalFoundationApi::class)
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
