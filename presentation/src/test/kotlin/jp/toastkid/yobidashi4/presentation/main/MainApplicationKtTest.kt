@@ -84,7 +84,7 @@ class MainApplicationKtTest {
         every { mainViewModel.switchAggregationBox(any()) } just Runs
         every { mainViewModel.openFile(any()) } just Runs
         every { mainViewModel.openTab(any()) } just Runs
-        every { mainViewModel.openFileListTab(any(), any(), any(), any()) } just Runs
+        every { mainViewModel.openFileListTab(any(), any(), any()) } just Runs
         every { mainViewModel.openUrl(any(), any()) } just Runs
         every { mainViewModel.openTextFile(any()) } just Runs
         val tab = mockk<Tab>()
