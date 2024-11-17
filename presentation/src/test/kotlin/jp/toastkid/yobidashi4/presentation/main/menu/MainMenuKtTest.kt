@@ -62,7 +62,7 @@ class MainMenuKtTest {
         every { viewModel.switchAggregationBox(any()) } just Runs
         every { viewModel.openFile(any()) } just Runs
         every { viewModel.openTab(any()) } just Runs
-        every { viewModel.openFileListTab(any(), any(), any(), any()) } just Runs
+        every { viewModel.openFileListTab(any(), any(), any()) } just Runs
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.openTextFile(any()) } just Runs
         val tab = mockk<Tab>()
