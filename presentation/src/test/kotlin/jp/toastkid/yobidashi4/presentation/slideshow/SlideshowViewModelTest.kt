@@ -46,7 +46,6 @@ class SlideshowViewModelTest {
     @MockK
     private lateinit var onFullscreenKeyReleased: () -> Unit
 
-    @OptIn(ExperimentalFoundationApi::class)
     @MockK
     private lateinit var pagerState: PagerState
 
