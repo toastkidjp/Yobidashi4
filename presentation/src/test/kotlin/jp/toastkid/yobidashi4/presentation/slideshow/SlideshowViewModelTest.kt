@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -94,7 +95,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventRight() {
         runDesktopComposeUiTest {
@@ -267,4 +268,15 @@ class SlideshowViewModelTest {
 
         assertEquals(0f, subject.sliderAlpha())
     }
+
+    @Test
+    fun focusRequester() {
+        assertNotNull(subject.focusRequester())
+    }
+
+    @Test
+    fun requestFocus() {
+        subject.requestFocus()
+    }
+
 }
