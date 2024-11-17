@@ -327,7 +327,7 @@ class MainViewModelImplementationTest {
     fun openFileListTab() {
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
 
-        subject.openFileListTab("test", listOf(mockk(), mockk()), true, FileTab.Type.FIND)
+        subject.openFileListTab("test", listOf(mockk(), mockk()), FileTab.Type.FIND)
 
         verify { Files.getLastModifiedTime(any()) }
         assertEquals(1, subject.tabs.size)
