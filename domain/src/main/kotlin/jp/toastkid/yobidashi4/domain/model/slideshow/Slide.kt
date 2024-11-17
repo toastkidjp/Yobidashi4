@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
 
 class Slide {
 
-    private val title = AtomicReference("")
+    private val title: AtomicReference<String> = AtomicReference("")
 
     private val backgroundPath = AtomicReference("")
 
