@@ -44,7 +44,7 @@ interface MainViewModel {
 
     fun moveTabIndex(moveBy: Int)
     fun openTab(tab: Tab)
-    fun openFileListTab(title: String, items: Collection<Path>, closeable: Boolean, type: FileTab.Type)
+    fun openFileListTab(title: String, items: Collection<Path>, type: FileTab.Type)
     fun openFile(path: Path)
     fun openPreview(path: Path, onBackground: Boolean = false)
     fun openUrl(url: String, background: Boolean)
