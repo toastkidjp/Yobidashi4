@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
@@ -78,6 +79,8 @@ result.value = engine.eval(input.value.text).toString()
         mockkConstructor(SlideshowViewModel::class)
         every { anyConstructed<SlideshowViewModel>().showSlider() } just Runs
         every { anyConstructed<SlideshowViewModel>().hideSlider() } just Runs
+        every { anyConstructed<SlideshowViewModel>().focusRequester() } returns FocusRequester()
+        every { anyConstructed<SlideshowViewModel>().requestFocus() } just Runs
 
         slideDeck = SlideDeckReader(mockk()).invoke()
     }
@@ -119,6 +122,7 @@ result.value = engine.eval(input.value.text).toString()
                 }
             verify { anyConstructed<SlideshowViewModel>().showSlider() }
             verify { anyConstructed<SlideshowViewModel>().hideSlider() }
+            verify { anyConstructed<SlideshowViewModel>().requestFocus() }
         }
     }
 
