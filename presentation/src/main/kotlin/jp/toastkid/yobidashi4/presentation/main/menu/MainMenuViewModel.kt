@@ -138,7 +138,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun closeCurrentTab(ifEmpty: () -> Unit) {
-        if (viewModel.tabs.size != 0) {
+        if (viewModel.tabs.isNotEmpty()) {
             viewModel.closeCurrent()
             return
         }
