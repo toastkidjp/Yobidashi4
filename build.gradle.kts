@@ -24,7 +24,7 @@ dependencies {
     implementation(project(path = ":presentation"))
     implementation(project(path = ":infrastructure"))
 
-    implementation("org.jetbrains.compose.runtime:runtime:1.6.0")
+    implementation("org.jetbrains.compose.runtime:runtime:${libraries.versions.compose.get()}")
     implementation(libraries.kotlinSerialization)
     implementation(libraries.coroutines)
 
