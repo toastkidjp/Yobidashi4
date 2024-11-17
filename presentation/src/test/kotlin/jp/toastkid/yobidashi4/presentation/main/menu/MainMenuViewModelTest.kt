@@ -761,7 +761,7 @@ class MainMenuViewModelTest {
 
     @Test
     fun noopOpenMusicPlayerTab() {
-        every { mainViewModel.openFileListTab(any(), any(), any(), any()) } just Runs
+        every { mainViewModel.openFileListTab(any(), any(), any()) } just Runs
         every { setting.mediaFolderPath() } returns null
 
         subject.openMusicPlayerTab()
@@ -772,13 +772,13 @@ class MainMenuViewModelTest {
 
     @Test
     fun openMusicPlayerTab() {
-        every { mainViewModel.openFileListTab(any(), any(), any(), any()) } just Runs
+        every { mainViewModel.openFileListTab(any(), any(), any()) } just Runs
         every { setting.mediaFolderPath() } returns "/path/to/music"
 
         subject.openMusicPlayerTab()
 
         verify { setting.mediaFolderPath() }
-        verify { mainViewModel.openFileListTab(any(), any(), any(), any()) }
+        verify { mainViewModel.openFileListTab(any(), any(), any()) }
     }
 
     @Test
