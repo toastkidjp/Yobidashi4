@@ -302,7 +302,6 @@ class MainMenuViewModel : KoinComponent {
         viewModel.openFileListTab(
             "Music",
             MediaFileFinder().invoke(mediaFileFolderPath),
-            true,
             FileTab.Type.MUSIC
         )
     }
