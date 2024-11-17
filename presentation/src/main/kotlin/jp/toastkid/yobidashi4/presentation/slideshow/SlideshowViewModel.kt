@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.Key
@@ -32,6 +33,8 @@ class SlideshowViewModel {
     private val onFullscreenKeyReleased = AtomicReference(EMPTY_ACTION)
 
     private val maxSize = AtomicInteger(-1)
+
+    private val focusRequester = FocusRequester()
 
     fun launch(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit) {
         this.onEscapeKeyReleased.set(onEscapeKeyReleased)
@@ -99,6 +102,12 @@ class SlideshowViewModel {
 
     fun hideSlider() {
         sliderVisibility.value = false
+    }
+
+    fun focusRequester() = focusRequester
+
+    fun requestFocus() {
+        focusRequester.requestFocus()
     }
 
 }
