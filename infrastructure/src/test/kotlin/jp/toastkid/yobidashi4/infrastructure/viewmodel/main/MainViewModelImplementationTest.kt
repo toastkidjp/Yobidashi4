@@ -396,6 +396,8 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openPreviewOnBackground() {
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
         mockkObject(MarkdownPreviewTab)
         every { MarkdownPreviewTab.with(any()) } returns mockk()
 
@@ -407,6 +409,8 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openPreview() {
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns true
         mockkObject(MarkdownPreviewTab)
         every { MarkdownPreviewTab.with(any()) } returns mockk()
 
@@ -414,6 +418,21 @@ class MainViewModelImplementationTest {
 
         verify { MarkdownPreviewTab.with(any()) }
         assertEquals(0, subject.selected.value)
+    }
+
+    @Test
+    fun noopOpenPreviewIfFileIsNotFound() {
+        mockkStatic(Files::class)
+        every { Files.exists(any()) } returns false
+        mockkObject(MarkdownPreviewTab)
+        every { MarkdownPreviewTab.with(any()) } returns mockk()
+        subject = spyk(subject)
+        every { subject.showSnackbar(any(), any(), any()) } just Runs
+
+        subject.openPreview(mockk(), false)
+
+        verify(inverse = true) { MarkdownPreviewTab.with(any()) }
+        verify { subject.showSnackbar(any(), any(), any()) }
     }
 
     @Test
