@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
@@ -25,7 +26,7 @@ class TableViewModel : KoinComponent {
 
     private val articleStates = mutableStateListOf<Array<Any>>()
 
-    private var lastSorted = -1 to false
+    private val lastSorted = AtomicReference(-1 to false)
 
     private val focusRequester = FocusRequester()
 
@@ -58,8 +59,9 @@ class TableViewModel : KoinComponent {
     }
 
     fun sort(index: Int, aggregationResult: AggregationResult) {
-        val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
-        lastSorted = index to lastSortOrder.not()
+        val lastSort = this.lastSorted.get()
+        val lastSortOrder = if (lastSort.first == index) lastSort.second else false
+        this.lastSorted.set(index to lastSortOrder.not())
 
         sort(lastSortOrder, aggregationResult, index, articleStates)
     }
