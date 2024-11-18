@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,7 +21,7 @@ class RouletteToolTabTest {
 
     @Test
     fun iconPath() {
-        assertTrue(subject.iconPath().startsWith("images/icon/") ?: false)
+        assertNull(subject.iconPath())
     }
 
 }
