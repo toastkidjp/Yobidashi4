@@ -8,6 +8,7 @@ import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,7 +47,7 @@ class PhotoTabTest {
 
     @Test
     fun iconPath() {
-        assertEquals("/path/to/test.png", subject.iconPath())
+        assertNull(subject.iconPath())
     }
 
 }
