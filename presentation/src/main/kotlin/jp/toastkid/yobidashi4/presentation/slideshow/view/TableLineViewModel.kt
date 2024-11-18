@@ -2,11 +2,12 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.presentation.markdown.TableSortService
 
 class TableLineViewModel {
 
-    private var lastSorted = -1 to false
+    private val lastSorted = AtomicReference(-1 to false)
 
     private val tableData: MutableState<List<List<Any>>> =  mutableStateOf(emptyList())
 
@@ -32,8 +33,9 @@ class TableLineViewModel {
     }
 
     fun clickHeaderColumn(index: Int) {
+        val lastSorted = this.lastSorted.get()
         val lastSortOrder = if (lastSorted.first == index) lastSorted.second else false
-        lastSorted = index to lastSortOrder.not()
+        this.lastSorted.set(index to lastSortOrder.not())
 
         sort(lastSortOrder, index, tableData)
     }
