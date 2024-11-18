@@ -6,6 +6,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.presentation.editor.style.EditorTheme
 import kotlin.math.min
 
@@ -16,17 +17,17 @@ class TextEditorVisualTransformation(
 
     private val theme = EditorTheme()
 
-    private var transformedText: TransformedText? = null
+    private val transformedText = AtomicReference<TransformedText?>(null)
 
     override fun filter(text: AnnotatedString): TransformedText {
-        val last = transformedText
+        val last = transformedText.get()
         val substring = substring(last)
         if (last != null && content.value.composition == null && substring == text.text) {
             return last
         }
 
         val new = TransformedText(theme.codeString(text.text, darkMode), offsetMapping)
-        transformedText = new
+        transformedText.set(new)
         return new
     }
 
