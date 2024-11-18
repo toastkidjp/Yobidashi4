@@ -43,8 +43,6 @@ class Nikkei225AggregatorService(private val articlesReaderService: ArticlesRead
 
     override fun label() = "Nikkei 225"
 
-    override fun iconPath() = "images/icon/ic_currency_yen.xml"
-
     companion object {
 
         private const val TARGET_SUFFIX = "今日の日経平均株価終値"
