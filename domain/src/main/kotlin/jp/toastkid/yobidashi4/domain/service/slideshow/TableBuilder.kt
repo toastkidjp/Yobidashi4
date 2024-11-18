@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.slideshow
 
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 
 class TableBuilder {
@@ -9,13 +10,13 @@ class TableBuilder {
 
     private val active = AtomicBoolean(false)
 
-    private var columnNames: List<Any>? = null
+    private val columnNames = AtomicReference<List<Any>?>(null)
 
-    fun hasColumns(): Boolean = columnNames != null
+    fun hasColumns(): Boolean = columnNames.get() != null
 
     fun setColumns(line: String) {
         table.clear()
-        columnNames = line.split("|").filter { it.isNotEmpty() }
+        columnNames.set(line.split("|").filter { it.isNotEmpty() })
     }
 
     fun addTableLines(line: String) {
@@ -24,7 +25,7 @@ class TableBuilder {
         }
     }
 
-    fun build() = TableLine(columnNames ?: emptyList(), table.toList())
+    fun build() = TableLine(columnNames.get() ?: emptyList(), table.toList())
 
     fun active() = active.get()
 
@@ -38,7 +39,7 @@ class TableBuilder {
 
     fun clear() {
         table.clear()
-        columnNames = null
+        columnNames.set(null)
     }
 
     companion object {
