@@ -26,6 +26,4 @@ class ArticleLengthAggregatorService(
 
     override fun label() = "Article length"
 
-    override fun iconPath() = "images/icon/ic_article_folder.xml"
-
 }
