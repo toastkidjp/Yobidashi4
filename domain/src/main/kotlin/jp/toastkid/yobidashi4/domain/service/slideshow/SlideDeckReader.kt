@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.slideshow
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
@@ -11,7 +12,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 class SlideDeckReader(private val pathToMarkdown: Path) {
 
     /** Slide builder.  */
-    private var builder: Slide = Slide()
+    private val builder = AtomicReference(Slide())
 
     /** Table builder.  */
     private val tableBuilder = TableBuilder()
@@ -32,12 +33,14 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
             Files.lines(pathToMarkdown).use { lines ->
                 lines.forEach { line: String ->
                     if (line.startsWith("#")) {
-                        if (builder.hasTitle()) {
-                            builder.let {
+                        if (this.builder.get().hasTitle()) {
+                            this.builder.get().let {
                                 deck.add(it)
                             }
-                            builder = Slide()
+                            this.builder.set(Slide())
                         }
+
+                        val builder = this.builder.get()
                         if (line.startsWith("# ")) {
                             builder.setFront(true)
                         }
@@ -46,6 +49,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                         if (deck.title.isEmpty()) {
                             deck.title = titleText
                         }
+                        this.builder.set(builder)
                         return@forEach
                     }
                     if (line.startsWith("![")) {
@@ -55,12 +59,16 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                                     deck.background = it
                                     return@forEach
                                 }
-                                builder.setBackground(it)
+                                val slide = builder.get()
+                                slide.setBackground(it)
+                                this.builder.set(slide)
                             }
                             return@forEach
                         }
 
-                        builder.addLines(imageExtractor.invoke(line))
+                        val slide = builder.get()
+                        slide.addLines(imageExtractor.invoke(line))
+                        this.builder.set(slide)
                         return@forEach
                     }
                     if (line.startsWith("[footer](")) {
@@ -71,14 +79,18 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                         return@forEach
                     }
                     if (line.startsWith("> ")) {
-                        builder.addQuotedLines(line)
+                        val slide = builder.get()
+                        slide.addQuotedLines(line)
+                        this.builder.set(slide)
                         return@forEach
                     }
                     // Adding code block.
                     if (line.startsWith("```")) {
                         if (codeBlockBuilder.inCodeBlock()) {
                             codeBlockBuilder.build().let {
-                                builder.addLine(it)
+                                val slide = builder.get()
+                                slide.addLine(it)
+                                this.builder.set(slide)
                                 codeBlockBuilder.initialize()
                             }
                             return@forEach
@@ -114,17 +126,21 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     }
 
                     if (tableBuilder.active()) {
-                        builder.addLine(tableBuilder.build())
+                        val slide = builder.get()
+                        slide.addLine(tableBuilder.build())
+                        this.builder.set(slide)
                         tableBuilder.setInactive()
                         tableBuilder.clear()
                     }
                     // Not code.
                     if (line.isNotEmpty()) {
-                        builder.addText(line)
+                        val slide = this.builder.get()
+                        slide.addText(line)
+                        this.builder.set(slide)
                     }
                 }
                 builder.let {
-                    deck.add(it)
+                    deck.add(it.get())
                 }
             }
         } catch (e: IOException) {
