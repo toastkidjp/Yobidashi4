@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
@@ -20,6 +21,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import java.awt.Image
@@ -274,7 +276,15 @@ class SlideshowViewModelTest {
 
     @Test
     fun requestFocus() {
+        subject = spyk(subject)
+        val focusRequester = mockk<FocusRequester>()
+        every { subject.focusRequester() } returns focusRequester
+        every { focusRequester.requestFocus() } just Runs
+
         subject.requestFocus()
+
+        verify { subject.focusRequester() }
+        verify { focusRequester.requestFocus() }
     }
 
 }
