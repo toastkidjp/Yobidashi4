@@ -129,7 +129,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventF5() {
         runDesktopComposeUiTest {
