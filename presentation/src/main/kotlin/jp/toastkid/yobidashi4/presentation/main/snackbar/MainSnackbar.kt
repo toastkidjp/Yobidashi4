@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.main.snackbar
 
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.End
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -47,7 +48,8 @@ internal fun MainSnackbar(snackbarData: SnackbarData) {
             anchors = anchors,
             positionalThreshold = { it },
             velocityThreshold = { 124.dp.value },
-            animationSpec = spring(),
+            snapAnimationSpec = spring(),
+            decayAnimationSpec = exponentialDecay(),
             confirmValueChange = {
                 when (it) {
                     Start, End -> mainViewModel.dismissSnackbar()
