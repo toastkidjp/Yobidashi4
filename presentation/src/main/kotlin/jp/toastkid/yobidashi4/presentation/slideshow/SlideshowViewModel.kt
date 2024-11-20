@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
@@ -45,7 +44,6 @@ class SlideshowViewModel {
         maxSize.set(deck.slides.size)
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent, pagerState: PagerState): Boolean {
         if (it.type == KeyEventType.KeyDown) {
             return@onKeyEvent false
