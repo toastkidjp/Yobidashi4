@@ -22,10 +22,10 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
@@ -38,6 +38,10 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 @OptIn(InternalComposeUiApi::class)
 class KeyEventConsumerTest {
@@ -60,9 +64,19 @@ class KeyEventConsumerTest {
     @MockK
     private lateinit var multiParagraph: MultiParagraph
 
+    @MockK
+    private lateinit var linkDecoratorService: LinkDecoratorService
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { linkDecoratorService } bind(LinkDecoratorService::class)
+                }
+            )
+        }
 
         subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, SelectedTextConversion(), searchUrlFactory)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
@@ -71,6 +85,7 @@ class KeyEventConsumerTest {
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -718,10 +733,10 @@ class KeyEventConsumerTest {
 
     @Test
     fun pasteDecoratedLink() {
-        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
+        mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
         val decoratedLink = "[test](https://test.yahoo.com)"
-        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
+        every { linkDecoratorService.invoke(any()) } returns decoratedLink
 
         val consumed = subject.invoke(
             KeyEvent(Key.L, KeyEventType.KeyDown, isCtrlPressed = true),
@@ -736,10 +751,10 @@ class KeyEventConsumerTest {
     @Test
     fun toDecoratedLink() {
         val selected = "https://test.yahoo.com"
-        mockkConstructor(ClipboardFetcher::class, LinkDecoratorService::class)
+        mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns selected
         val decoratedLink = "[test]($selected)"
-        every { anyConstructed<LinkDecoratorService>().invoke(any()) } returns decoratedLink
+        every { linkDecoratorService.invoke(any()) } returns decoratedLink
 
         val consumed = subject.invoke(
             KeyEvent(Key.L, KeyEventType.KeyDown, isCtrlPressed = true),
