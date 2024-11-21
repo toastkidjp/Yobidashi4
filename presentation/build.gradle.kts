@@ -21,7 +21,6 @@ dependencies {
 
     implementation(project(path = ":domain"))
 
-    implementation("org.jsoup:jsoup:1.15.3")
     implementation(libraries.slf4j)
     implementation(libraries.reload4j)
 
