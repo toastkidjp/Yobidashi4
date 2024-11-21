@@ -28,7 +28,7 @@ dependencies {
     implementation(libraries.slf4j)
     implementation(libraries.reload4j)
 
-    implementation("com.google.zxing:core:3.4.1")
+    implementation(libraries.zxing)
 
     implementation("org.apache.lucene:lucene-core:9.11.0")
     implementation("org.apache.lucene:lucene-queryparser:9.11.0") {
