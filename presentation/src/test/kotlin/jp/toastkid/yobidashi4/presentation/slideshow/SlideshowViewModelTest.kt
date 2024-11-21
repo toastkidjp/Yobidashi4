@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
@@ -219,7 +218,7 @@ class SlideshowViewModelTest {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun otherKeyEvent() {
         runDesktopComposeUiTest {
