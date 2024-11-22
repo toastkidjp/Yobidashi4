@@ -19,6 +19,7 @@ dependencyResolutionManagement {
             library("slf4j", "org.slf4j", "slf4j-api").version("2.0.6")
             library("reload4j", "org.slf4j", "slf4j-reload4j").version("2.0.6")
             library("zxing", "com.google.zxing", "core").version("3.4.1")
+            library("jcef", "me.friwi", "jcefmaven").version("127.3.1")
             version("compose", "1.7.1")
         }
     }
