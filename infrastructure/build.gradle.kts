@@ -18,7 +18,7 @@ dependencies {
 
     implementation(libraries.kotlinSerialization)
 
-    implementation("me.friwi:jcefmaven:127.3.1")
+    implementation(libraries.jcef)
 
     implementation(libraries.koin)
     implementation(libraries.koinAnnotations)
