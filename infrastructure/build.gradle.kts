@@ -24,7 +24,7 @@ dependencies {
     implementation(libraries.koinAnnotations)
     ksp(libraries.koinKspCompiler)
 
-    implementation("org.jsoup:jsoup:1.15.3")
+    implementation(libraries.jsoup)
     implementation(libraries.slf4j)
     implementation(libraries.reload4j)
 
