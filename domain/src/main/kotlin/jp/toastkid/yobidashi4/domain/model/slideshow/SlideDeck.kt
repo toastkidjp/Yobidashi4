@@ -15,7 +15,7 @@ data class SlideDeck(
         if (background.isNotBlank()) {
             imageUrls.add(background)
         }
-        slides.map { it.extractImageUrls() }.flatten().forEach { imageUrls.add(it) }
+        slides.map { it.extractImageUrls() }.flatten().forEach(imageUrls::add)
         return imageUrls
     }
 }
