@@ -58,7 +58,7 @@ class WebHistoryViewModel : KoinComponent {
 
     private fun reloadItems() {
         list.clear()
-        repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach { list.add(it) }
+        repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach(list::add)
     }
 
     fun list(): List<WebHistory> = list
