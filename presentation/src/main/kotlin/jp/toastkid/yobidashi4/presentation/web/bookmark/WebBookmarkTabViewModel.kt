@@ -48,7 +48,7 @@ class WebBookmarkTabViewModel : KoinComponent {
         scrollAction.invoke(coroutineScope, key, controlDown)
 
     fun launch(coroutineScope: CoroutineScope, scrollPosition: Int) {
-        repository.list().forEach { bookmarks.add(it) }
+        repository.list().forEach(bookmarks::add)
         focusRequester().requestFocus()
         coroutineScope.launch {
             state.scrollToItem(scrollPosition)
