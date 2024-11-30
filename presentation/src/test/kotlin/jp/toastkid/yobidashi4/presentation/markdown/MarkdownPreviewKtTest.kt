@@ -17,8 +17,11 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.emptyFlow
@@ -63,10 +66,12 @@ class MarkdownPreviewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun test() {
+        val mocked = mockk<Markdown>()
         val content = MarkdownParser().invoke(
             "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```",
             "test"
         )
+        every { mocked.lines() } returns content.lines().plus(mockk<Line>())
 
         runDesktopComposeUiTest {
             setContent {
