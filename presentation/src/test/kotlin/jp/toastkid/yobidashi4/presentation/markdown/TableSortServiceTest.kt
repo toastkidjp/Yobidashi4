@@ -25,6 +25,7 @@ class TableSortServiceTest {
         val items = listOf(
             listOf("test", 1, 2.2),
             listOf("test2", -1, -1.2),
+            listOf("test3", -1, "test"),
         )
         subject.invoke(true, 0, items)
         subject.invoke(true, 0, items)
