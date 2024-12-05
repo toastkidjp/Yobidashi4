@@ -10,6 +10,7 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import java.nio.charset.MalformedInputException
 import java.nio.file.Files
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -79,6 +81,22 @@ class TextFileViewerTabViewModelTest {
             subject.launch(mockk(), Dispatchers.Unconfined)
 
             assertEquals(1, subject.textState().size)
+            verify { focusRequester.requestFocus() }
+        }
+    }
+
+    @Test
+    fun launchWithException() {
+        runBlocking {
+            subject = spyk(subject)
+            val focusRequester = mockk<FocusRequester>()
+            every { focusRequester.requestFocus() } just Runs
+            every { subject.focusRequester() } returns focusRequester
+            every { Files.readAllLines(any()) } throws MalformedInputException(-1)
+
+            subject.launch(mockk(), Dispatchers.Unconfined)
+
+            assertTrue(subject.textState().isEmpty())
             verify { focusRequester.requestFocus() }
         }
     }
