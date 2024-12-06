@@ -28,7 +28,7 @@ internal class UserOffDayServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { setting.userOffDay() } returns listOf(12 to 29, 12 to 30, 12 to 31)
+        every { setting.userOffDay() } returns listOf(2 to 22, 12 to 29, 12 to 30, 12 to 31)
 
         startKoin {
             modules(
@@ -56,6 +56,7 @@ internal class UserOffDayServiceTest {
 
     @Test
     fun findBy() {
+        assertTrue(userOffDayService.findBy(12).isNotEmpty())
         assertTrue(userOffDayService.findBy(6).isEmpty())
     }
 
