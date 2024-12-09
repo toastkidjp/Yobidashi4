@@ -67,4 +67,9 @@ class NumberBoardTest {
         assertFalse(NumberBoard.make().isCorrect(NumberBoard()))
     }
 
+    @Test
+    fun isCorrectOtherCase() {
+        NumberBoard.make().isCorrect(null)
+    }
+
 }
