@@ -15,6 +15,8 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -53,6 +55,9 @@ _
     @Test
     fun testInvoke() {
         val nikkei225AggregationResult = nikkei225AggregatorService.invoke("file")
+        assertFalse(nikkei225AggregationResult.isEmpty())
+        assertEquals(3, nikkei225AggregationResult.header().size)
+        assertTrue(nikkei225AggregationResult.title().isNotEmpty())
 
         val first = nikkei225AggregationResult.itemArrays().first()
         assertEquals("29,432.70", first[1])
