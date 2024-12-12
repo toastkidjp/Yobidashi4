@@ -84,22 +84,18 @@ class TabsViewKtTest {
         every { anyConstructed<TabsViewModel>().currentTabIndex(any()) } returns 0
         every { webTab.title() } returns "test"
         every { webTab.url() } returns "test"
-        every { webTab.iconPath() } returns "images/icon/ic_web.xml"
         every { webTab.closeable() } returns true
         every { webTab.update() } returns emptyFlow()
         every { markdownPreviewTab.title() } returns "test"
-        every { markdownPreviewTab.iconPath() } returns "images/icon/ic_web.xml"
         every { markdownPreviewTab.closeable() } returns false
         every { markdownPreviewTab.update() } returns emptyFlow()
         every { markdownPreviewTab.slideshowSourcePath() } returns mockk()
         every { tableTab.title() } returns "test"
-        every { tableTab.iconPath() } returns "images/icon/ic_web.xml"
         every { tableTab.closeable() } returns true
         every { tableTab.update() } returns emptyFlow()
         every { tableTab.reload() } just Runs
         every { tableTab.items() } returns StepsAggregationResult()
         every { editorTab.title() } returns "test"
-        every { editorTab.iconPath() } returns "images/icon/ic_web.xml"
         val editorTabsPath = mockk<Path>()
         every { editorTabsPath.nameWithoutExtension } returns "test"
         every { editorTab.path } returns editorTabsPath
