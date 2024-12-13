@@ -104,6 +104,10 @@ class FileListViewKtTest {
                     pressKey(Key.DirectionDown)
                     pressKey(Key.Enter)
                 }
+                .performMouseInput {
+                    enter()
+                    exit()
+                }
             verify { anyConstructed<FileListViewModel>().edit(any()) }
         }
     }
