@@ -126,6 +126,15 @@ internal fun WebSearchBox() {
                     .onKeyEvent(viewModel::onKeyEvent)
             )
 
+            if (viewModel.existsResult()) {
+                SelectionContainer {
+                    Text(
+                        viewModel.result(),
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
+                }
+            }
+
             Button(
                 onClick = viewModel::invokeSearch
             ) {
@@ -145,12 +154,6 @@ internal fun WebSearchBox() {
                 )
 
                 Text("Save search history")
-            }
-
-            if (viewModel.existsResult()) {
-                SelectionContainer {
-                    Text(viewModel.result())
-                }
             }
 
             LaunchedEffect(viewModel.showWebSearch()) {
