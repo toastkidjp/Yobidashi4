@@ -28,7 +28,7 @@ dependencies {
     implementation(libraries.koinAnnotations)
     ksp(libraries.koinKspCompiler)
 
-    implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
+    implementation("com.godaddy.android.colorpicker:compose-color-picker:1.1.2")
     testImplementation(compose.desktop.uiTestJUnit4)
 }
 
