@@ -127,6 +127,11 @@ internal fun WebSearchBox() {
             )
 
             if (viewModel.existsResult()) {
+                Text(
+                    " = ",
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+
                 SelectionContainer {
                     Text(
                         viewModel.result(),
