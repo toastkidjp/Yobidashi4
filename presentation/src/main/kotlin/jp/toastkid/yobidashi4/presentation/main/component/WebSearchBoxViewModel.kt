@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import java.text.DecimalFormat
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
@@ -88,8 +89,9 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun onValueChange(it: TextFieldValue) {
         query.value = it
-        val calculatorResult = calculator.invoke(query.value.text)
-        val toString = calculatorResult?.toString()
+        val toString = calculator.invoke(query.value.text)?.let {
+            formatter.format(it)
+        }
         result.value = when {
             toString == null -> ""
             toString.endsWith(".0") -> toString.substring(0, toString.lastIndexOf("."))
@@ -223,5 +225,7 @@ class WebSearchBoxViewModel : KoinComponent {
         SearchSite.SEARCH_WITH_IMAGE -> Res.drawable.ic_image
         SearchSite.SITE_SEARCH -> Res.drawable.ic_site_search
     }
-    
+
+    private val formatter = DecimalFormat("#,###.##")
+
 }
