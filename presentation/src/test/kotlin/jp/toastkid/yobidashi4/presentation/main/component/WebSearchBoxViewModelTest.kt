@@ -123,7 +123,10 @@ class WebSearchBoxViewModelTest {
         assertEquals("3", subject.result())
 
         subject.onValueChange(TextFieldValue("1/0"))
-        assertEquals("Infinity", subject.result())
+        assertEquals("∞", subject.result())
+
+        subject.onValueChange(TextFieldValue("10000000"))
+        assertEquals("10,000,000", subject.result())
 
         subject.onValueChange(TextFieldValue("1."))
         assertEquals("1", subject.result())
