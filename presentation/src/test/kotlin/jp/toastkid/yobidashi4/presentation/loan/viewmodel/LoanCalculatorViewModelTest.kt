@@ -117,6 +117,7 @@ class LoanCalculatorViewModelTest {
         assertEquals("0", subject.roundToIntSafely(Double.NaN))
         assertEquals("2", subject.roundToIntSafely(2.2))
         assertEquals("5", subject.roundToIntSafely(4.5))
+        assertEquals("1,120,004", subject.roundToIntSafely(1120004.17))
     }
 
     @Test
