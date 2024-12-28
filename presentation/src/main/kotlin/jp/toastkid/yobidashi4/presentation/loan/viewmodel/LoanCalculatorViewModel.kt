@@ -12,6 +12,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import java.text.DecimalFormat
 import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
@@ -150,8 +151,10 @@ class LoanCalculatorViewModel {
     private fun extractDouble(editText: String) =
         editText.toDoubleOrNull() ?: 0.0
 
+    fun format(l: Long) = decimalFormat.format(l)
+
     fun roundToIntSafely(d: Double) =
-        if (d.isNaN()) "0" else d.roundToInt().toString()
+        if (d.isNaN()) "0" else decimalFormat.format(d.roundToInt())
 
     fun listState() = scrollState
 
@@ -180,5 +183,7 @@ class LoanCalculatorViewModel {
         extractInt(managementFee.value.text),
         extractInt(renovationReserves.value.text)
     )
+
+    private val decimalFormat = DecimalFormat("#,###.##")
 
 }
