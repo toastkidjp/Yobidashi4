@@ -130,7 +130,7 @@ fun LoanCalculatorView() {
                                 )
                                 Text(viewModel.roundToIntSafely(it.principal), modifier = Modifier.weight(1f))
                                 Text(viewModel.roundToIntSafely(it.interest), modifier = Modifier.weight(1f))
-                                Text(it.amount.toString(), modifier = Modifier.weight(1f))
+                                Text(viewModel.format(it.amount), modifier = Modifier.weight(1f))
                             }
                         }
                     }
