@@ -33,7 +33,7 @@ class CompoundInterestCalculatorViewModelTest {
         subject.setCapitalInput(TextFieldValue("10000"))
 
         assertEquals("10000", subject.capitalInput().text)
-        assertEquals(20, subject.result().itemArrays().size)
+        assertEquals(20, subject.result().size)
 
         subject.clearCapitalInput()
 
@@ -47,7 +47,7 @@ class CompoundInterestCalculatorViewModelTest {
         subject.setInstallmentInput(TextFieldValue("10000"))
 
         assertEquals("10000", subject.installmentInput().text)
-        assertEquals(20, subject.result().itemArrays().size)
+        assertEquals(20, subject.result().size)
 
         subject.clearInstallmentInput()
 
@@ -61,7 +61,7 @@ class CompoundInterestCalculatorViewModelTest {
         subject.setAnnualInterestInput(TextFieldValue("0.1"))
 
         assertEquals("0.1", subject.annualInterestInput().text)
-        assertEquals(20, subject.result().itemArrays().size)
+        assertEquals(20, subject.result().size)
 
         subject.clearAnnualInterestInput()
 
@@ -75,7 +75,7 @@ class CompoundInterestCalculatorViewModelTest {
         subject.setYearInput(TextFieldValue("10"))
 
         assertEquals("10", subject.yearInput().text)
-        assertEquals(10, subject.result().itemArrays().size)
+        assertEquals(10, subject.result().size)
 
         subject.clearYearInput()
 
