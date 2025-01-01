@@ -68,7 +68,7 @@ class CompoundInterestCalculatorViewModel {
 
     private val result = mutableStateOf(CompoundInterestCalculationResult())
 
-    fun result() = result.value
+    fun result() = result.value.itemArrays().toList()
 
     private fun calculate() {
         CompoundInterestCalculatorInput.from(
