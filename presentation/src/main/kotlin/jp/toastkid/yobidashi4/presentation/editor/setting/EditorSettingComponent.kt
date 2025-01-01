@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.godaddy.android.colorpicker.ClassicColorPicker
+import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import java.awt.GraphicsEnvironment
 
 @Composable
@@ -31,21 +31,19 @@ internal fun EditorSettingComponent(modifier: Modifier) {
         Column {
             Text("Background color")
 
-            ClassicColorPicker(
-                color = viewModel.currentBackgroundColor(),
-                onColorChanged =viewModel::onBackgroundColorChanged,
+            HsvColorPicker(
+                controller = viewModel.currentBackgroundColor(),
                 modifier = Modifier.height(200.dp)
             )
 
             Text("Font color")
-            ClassicColorPicker(
-                color = viewModel.currentFontColor(),
-                onColorChanged = viewModel::onFontColorChanged,
+            HsvColorPicker(
+                controller = viewModel.currentFontColor(),
                 modifier = Modifier.height(200.dp)
             )
 
             Button(onClick = viewModel::commit,
-                colors = ButtonDefaults.buttonColors(backgroundColor = viewModel.currentBackgroundColor(), contentColor = viewModel.currentFontColor())
+                colors = ButtonDefaults.buttonColors(backgroundColor = viewModel.currentBackgroundColor().selectedColor.value, contentColor = viewModel.currentFontColor().selectedColor.value)
             ) {
                 Text("Commit colors")
             }
