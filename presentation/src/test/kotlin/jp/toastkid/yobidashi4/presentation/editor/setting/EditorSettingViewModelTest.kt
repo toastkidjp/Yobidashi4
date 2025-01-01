@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.setting
 
 import androidx.compose.ui.graphics.toArgb
-import com.godaddy.android.colorpicker.HsvColor
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -72,24 +71,24 @@ class EditorSettingViewModelTest {
 
     @Test
     fun currentBackgroundColor() {
-        assertEquals(Color.BLACK.rgb, subject.currentBackgroundColor().toArgb())
+        assertEquals(Color.BLACK.rgb, subject.currentBackgroundColor().selectedColor.value.toArgb())
     }
 
     @Test
     fun currentFontColor() {
-        assertEquals(Color.WHITE.rgb, subject.currentFontColor().toArgb())
+        assertEquals(Color.WHITE.rgb, subject.currentFontColor().selectedColor.value.toArgb())
     }
 
     @Test
     fun onBackgroundColorChanged() {
-        subject.onBackgroundColorChanged(HsvColor.DEFAULT)
+        subject.onBackgroundColorChanged(androidx.compose.ui.graphics.Color.Black)
 
         every { setting.setEditorBackgroundColor(any()) }
     }
 
     @Test
     fun onFontColorChanged() {
-        subject.onFontColorChanged(HsvColor.DEFAULT)
+        subject.onFontColorChanged(androidx.compose.ui.graphics.Color.Black)
 
         every { setting.setEditorForegroundColor(any()) }
     }
