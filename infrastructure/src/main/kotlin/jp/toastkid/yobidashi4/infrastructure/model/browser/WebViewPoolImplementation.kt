@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.model.browser
 
 import java.awt.Component
+import java.util.concurrent.atomic.AtomicReference
 import javax.swing.JDialog
 import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
@@ -18,6 +19,8 @@ class WebViewPoolImplementation : WebViewPool {
     private val client: CefClient = cefClientFactory.invoke()
 
     private val browsers = mutableMapOf<String, CefBrowser>()
+
+    private val lastId = AtomicReference("")
 
     override fun component(id: String, initialUrl: String): Component {
         val browser = getBrowser(id, initialUrl)
@@ -37,6 +40,8 @@ class WebViewPoolImplementation : WebViewPool {
     }
 
     private fun getBrowser(id: String, initialUrl: String): CefBrowser {
+        browsers.get(lastId.get())?.stopLoad()
+
         val browser = browsers.getOrElse(id) { client.createBrowser(initialUrl, false, false) }
         browsers.put(id, browser)
         return browser
