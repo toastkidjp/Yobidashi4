@@ -27,7 +27,7 @@ class CompoundInterestCalculatorViewKtTest {
                     CompoundInterestCalculatorInput(
                         1.0, 120000, 0.01, 10
                     )
-                )
+                ).itemArrays().toList()
     }
 
     @AfterEach
