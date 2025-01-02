@@ -94,7 +94,7 @@ fun MultiTabContent() {
             }
 
             Box(modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End)) {
-                WorldTimeArea(viewModel.openWorldTime(), Modifier)
+                WorldTimeArea(viewModel.openWorldTime())
 
                 if (viewModel.openWorldTime()) {
                     ArticleListSwitch(
