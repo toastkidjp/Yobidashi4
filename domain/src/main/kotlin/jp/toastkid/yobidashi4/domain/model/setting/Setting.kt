@@ -12,6 +12,8 @@ interface Setting {
 
     fun articleFolderPath(): Path
 
+    fun setArticleFolderPath(path: String)
+
     /*
     fun sorting(): String
 
