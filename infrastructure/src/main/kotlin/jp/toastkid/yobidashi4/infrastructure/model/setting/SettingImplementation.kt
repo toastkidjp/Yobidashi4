@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi4.infrastructure.model.setting
 
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.presentation.editor.setting.ColorDecoderService
+import org.koin.core.annotation.Single
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Properties
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.presentation.editor.setting.ColorDecoderService
 import kotlin.io.path.exists
-import org.koin.core.annotation.Single
 
 @Single
 class SettingImplementation : Setting {
@@ -36,6 +36,10 @@ class SettingImplementation : Setting {
     override fun  articleFolder(): String = properties.getProperty("article.folder") ?: ""
 
     override fun  articleFolderPath() = Path.of(articleFolder())
+
+    override fun setArticleFolderPath(path: String) {
+        properties.setProperty("article.folder", path)
+    }
 
     override fun  userOffDay(): List<Pair<Int, Int>> {
         val offDayString = properties.getProperty("user_off_day") ?: return emptyList()
