@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi4.presentation.time.WorldTimeView
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -77,6 +78,7 @@ fun MultiTabContent() {
 
                     if (viewModel.openArticleList()) {
                         ArticleListSwitch(
+                            Res.drawable.ic_left_panel_close,
                             viewModel::hideArticleList,
                             Modifier
                                 .align(Alignment.CenterEnd)
@@ -98,6 +100,7 @@ fun MultiTabContent() {
 
                 if (viewModel.openWorldTime()) {
                     ArticleListSwitch(
+                        Res.drawable.ic_left_panel_close,
                         viewModel::toggleWorldTime,
                         Modifier
                             .align(Alignment.CenterEnd)
@@ -129,10 +132,10 @@ private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun ArticleListSwitch(onClick: () -> Unit, modifier: Modifier) {
+private fun ArticleListSwitch(iconDrawableResource: DrawableResource, onClick: () -> Unit, modifier: Modifier) {
     val visibility = remember { mutableStateOf(false) }
     Icon(
-        painterResource(Res.drawable.ic_left_panel_close),
+        painterResource(iconDrawableResource),
         contentDescription = "Clear input.",
         tint = MaterialTheme.colors.secondary,
         modifier = modifier
