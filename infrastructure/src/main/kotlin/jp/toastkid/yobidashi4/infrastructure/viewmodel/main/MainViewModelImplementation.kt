@@ -19,14 +19,6 @@ import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
-import java.awt.Desktop
-import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicReference
-import java.util.stream.Collectors
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
@@ -49,11 +41,6 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinde
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
-import kotlin.io.path.inputStream
-import kotlin.io.path.nameWithoutExtension
-import kotlin.math.max
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -63,6 +50,20 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.awt.Desktop
+import java.net.URI
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
+import java.util.stream.Collectors
+import javax.imageio.ImageIO
+import javax.swing.JFileChooser
+import kotlin.io.path.extension
+import kotlin.io.path.inputStream
+import kotlin.io.path.nameWithoutExtension
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 @Single
 class MainViewModelImplementation : MainViewModel, KoinComponent {
@@ -569,6 +570,19 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun reloadAllArticle() {
+        if (Files.exists(setting.articleFolderPath()).not()) {
+            val fileChooser = JFileChooser()
+            fileChooser.dialogTitle = "Would you like to choose article folder?"
+            fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+            val result = fileChooser.showOpenDialog(null)
+            if (result != JFileChooser.APPROVE_OPTION) {
+                return
+            }
+
+            setting.setArticleFolderPath(fileChooser.selectedFile.absolutePath)
+            setting.save()
+        }
+
         _articles.addAll(topArticleLoaderService.invoke())
         _openArticleList.value = true
     }
