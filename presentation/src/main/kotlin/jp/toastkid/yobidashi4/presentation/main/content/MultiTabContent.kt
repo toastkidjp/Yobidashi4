@@ -27,7 +27,6 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
@@ -43,6 +42,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Path
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -93,7 +93,18 @@ fun MultiTabContent() {
                 )
             }
 
-            WorldTimeArea(viewModel.openWorldTime(), modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End))
+            Box(modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End)) {
+                WorldTimeArea(viewModel.openWorldTime(), Modifier)
+
+                if (viewModel.openWorldTime()) {
+                    ArticleListSwitch(
+                        viewModel::toggleWorldTime,
+                        Modifier
+                            .align(Alignment.CenterEnd)
+                            .semantics { contentDescription = "Close world time widget." }
+                    )
+                }
+            }
         }
     }
 
