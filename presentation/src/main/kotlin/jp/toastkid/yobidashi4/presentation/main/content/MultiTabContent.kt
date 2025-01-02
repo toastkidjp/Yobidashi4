@@ -148,10 +148,10 @@ private fun ArticleListSwitch(onClick: () -> Unit, modifier: Modifier) {
 }
 
 @Composable
-private fun WorldTimeArea(open: Boolean, modifier: Modifier = Modifier) {
+private fun WorldTimeArea(open: Boolean) {
     val width = animateDpAsState(if (open) 330.dp else 0.dp)
 
     WorldTimeView(
-        modifier = modifier.widthIn(max = width.value)
+        modifier = Modifier.widthIn(max = width.value)
     )
 }
