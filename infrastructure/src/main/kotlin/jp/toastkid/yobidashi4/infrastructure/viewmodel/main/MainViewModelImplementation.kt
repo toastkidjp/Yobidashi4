@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
+import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +59,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
-import javax.swing.JFileChooser
 import kotlin.io.path.extension
 import kotlin.io.path.inputStream
 import kotlin.io.path.nameWithoutExtension
@@ -571,16 +571,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun reloadAllArticle() {
         if (Files.exists(setting.articleFolderPath()).not()) {
-            val fileChooser = JFileChooser()
-            fileChooser.dialogTitle = "Would you like to choose article folder?"
-            fileChooser.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-            val result = fileChooser.showOpenDialog(null)
-            if (result != JFileChooser.APPROVE_OPTION) {
-                return
-            }
-
-            setting.setArticleFolderPath(fileChooser.selectedFile.absolutePath)
-            setting.save()
+            ArticleFolderRequestService().invoke()
         }
 
         _articles.addAll(topArticleLoaderService.invoke())
