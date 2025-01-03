@@ -25,17 +25,6 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Desktop
-import java.awt.image.BufferedImage
-import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
-import java.time.Month
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.stream.Stream
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
@@ -58,7 +47,7 @@ import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
-import kotlin.io.path.extension
+import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,6 +65,18 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Desktop
+import java.awt.image.BufferedImage
+import java.io.InputStream
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import java.time.Month
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.stream.Stream
+import javax.imageio.ImageIO
+import kotlin.io.path.extension
 
 class MainViewModelImplementationTest {
 
@@ -119,6 +120,7 @@ class MainViewModelImplementationTest {
                 }
             )
         }
+        every { setting.articleFolderPath() } returns mockk()
         every { setting.darkMode() } returns false
         every { setting.setDarkMode(any()) } just Runs
         every { setting.setUseCaseSensitiveInFinder(any()) } just Runs
@@ -1190,10 +1192,23 @@ class MainViewModelImplementationTest {
 
     @Test
     fun reloadAllArticle() {
+        every { Files.exists(any()) } returns true
+
         subject.reloadAllArticle()
 
         val articles = subject.articles()
         assertEquals(2, articles.size)
+    }
+
+    @Test
+    fun reloadAllArticleIfNotExistsFolder() {
+        every { Files.exists(any()) } returns false
+        mockkConstructor(ArticleFolderRequestService::class)
+        every { anyConstructed<ArticleFolderRequestService>().invoke() } just Runs
+
+        subject.reloadAllArticle()
+
+        verify { anyConstructed<ArticleFolderRequestService>().invoke() }
     }
 
     @Test
