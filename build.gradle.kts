@@ -78,6 +78,7 @@ allprojects {
             "--add-opens", "java.base/java.time=ALL-UNNAMED",
             "--add-opens", "java.base/java.time.chrono=ALL-UNNAMED",
             "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",
+            "--add-opens", "java.desktop/java.awt=ALL-UNNAMED",
             "--add-opens", "java.desktop/java.awt.dnd=ALL-UNNAMED"
         )
     }
