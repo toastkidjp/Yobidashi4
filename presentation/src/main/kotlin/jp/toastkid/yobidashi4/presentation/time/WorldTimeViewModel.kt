@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.time
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -63,6 +64,10 @@ class WorldTimeViewModel {
             "Asia/Ho_Chi_Minh" -> "\uD83C\uDDFB\uD83C\uDDF3 Ho Chi Minh"
             else -> timeZoneId
         }
+    }
+
+    fun onClickItem(it: WorldTime) {
+        ClipboardPutterService().invoke(label(it.timeZone()) + " " + it.time)
     }
 
 }
