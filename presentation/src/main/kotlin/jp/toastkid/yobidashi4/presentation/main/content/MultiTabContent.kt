@@ -29,6 +29,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
@@ -100,7 +101,7 @@ fun MultiTabContent() {
 
                 if (viewModel.openWorldTime()) {
                     ArticleListSwitch(
-                        Res.drawable.ic_left_panel_close,
+                        Res.drawable.ic_left_panel_open,
                         viewModel::toggleWorldTime,
                         Modifier
                             .align(Alignment.CenterEnd)
