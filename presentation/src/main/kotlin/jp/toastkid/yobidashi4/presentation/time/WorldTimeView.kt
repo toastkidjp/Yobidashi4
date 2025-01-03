@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -38,9 +37,7 @@ fun WorldTimeView(modifier: Modifier) {
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                             .animateItem()
                             .onClick {
-                                ClipboardPutterService().invoke(
-                                    viewModel.label(it.timeZone()) + " " + it.time
-                                )
+                                viewModel.onClickItem(it)
                             }
                     ) {
                         Text(
