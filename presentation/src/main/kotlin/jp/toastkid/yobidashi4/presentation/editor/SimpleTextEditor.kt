@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -98,7 +97,7 @@ fun SimpleTextEditor(
                     drawRect(
                         viewModel.currentLineHighlightColor(),
                         topLeft = currentLineOffset,
-                        size = Size(Float.MAX_VALUE, 30f)
+                        size = viewModel.getHighlightSize()
                     )
                 }
                 .semantics { contentDescription = "Editor input area" }
