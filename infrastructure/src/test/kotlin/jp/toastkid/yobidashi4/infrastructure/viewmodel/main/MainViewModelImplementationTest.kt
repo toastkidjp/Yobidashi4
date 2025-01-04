@@ -180,7 +180,6 @@ class MainViewModelImplementationTest {
         assertNotNull(subject.backgroundImage())
 
         every { setting.useBackground() } returns true
-        mockkStatic(Files::class, ImageIO::class)
         every { Files.exists(any()) } returns true
         every { Files.list(any()) } returns Stream.empty()
         every { ImageIO.read(any<InputStream>()) } returns BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB_PRE)
