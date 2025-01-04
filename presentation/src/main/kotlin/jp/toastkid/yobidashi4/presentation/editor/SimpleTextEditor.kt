@@ -30,6 +30,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -39,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class)
 @Composable
 fun SimpleTextEditor(
     tab: EditorTab,
@@ -76,15 +77,14 @@ fun SimpleTextEditor(
                                 }
                                     .semantics { contentDescription = "Line number $lineNumberText" }
                             ) {
-                                Text(lineNumberText, fontSize = 16.sp, fontFamily = FontFamily.Monospace,
-                                    textAlign = TextAlign.End, lineHeight = viewModel.getLineHeight(lineNumber))
+                                Text(lineNumberText, fontSize = 16.sp, fontFamily = FontFamily("MS Gothic"), textAlign = TextAlign.End, lineHeight = viewModel.getLineHeight(lineNumber))
                             }
                         }
                     }
                     it()
                 }
             },
-            textStyle = TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 16.sp, fontFamily = FontFamily.Monospace, lineHeight = 1.5.em),
+            textStyle = TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 16.sp, fontFamily = FontFamily("MS Gothic"), lineHeight = 1.5.em),
             scrollState = viewModel.verticalScrollState(),
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(viewModel.focusRequester())
