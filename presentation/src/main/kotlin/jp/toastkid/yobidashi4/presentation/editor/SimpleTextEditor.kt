@@ -76,7 +76,13 @@ fun SimpleTextEditor(
                                 }
                                     .semantics { contentDescription = "Line number $lineNumberText" }
                             ) {
-                                Text(lineNumberText, fontSize = 16.sp, fontFamily = FontFamily("MS Gothic"), textAlign = TextAlign.End, lineHeight = viewModel.getLineHeight(lineNumber))
+                                Text(
+                                    lineNumberText,
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily("MS Gothic"),
+                                    textAlign = TextAlign.End,
+                                    lineHeight = viewModel.getLineHeight(lineNumber)
+                                )
                             }
                         }
                     }
