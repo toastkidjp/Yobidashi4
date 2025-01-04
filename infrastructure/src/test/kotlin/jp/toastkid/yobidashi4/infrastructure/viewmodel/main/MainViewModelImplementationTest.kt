@@ -106,7 +106,7 @@ class MainViewModelImplementationTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockkStatic(Files::class, ImageIO::class)
+        mockkStatic(Files::class, ImageIO::class, Desktop::class)
 
         startKoin {
             modules(
@@ -132,7 +132,6 @@ class MainViewModelImplementationTest {
         every { aggregationResult.isEmpty() } returns false
         every { aggregationResult.title() } returns "test"
 
-        mockkStatic(Desktop::class)
         every { Desktop.getDesktop() } returns desktop
         every { desktop.open(any()) } just Runs
         every { desktop.browse(any()) } just Runs
