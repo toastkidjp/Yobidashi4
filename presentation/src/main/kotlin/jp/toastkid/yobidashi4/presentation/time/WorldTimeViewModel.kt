@@ -3,6 +3,9 @@ package jp.toastkid.yobidashi4.presentation.time
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -10,7 +13,9 @@ import java.time.zone.ZoneRulesException
 import java.util.Locale
 import java.util.TimeZone
 
-class WorldTimeViewModel {
+class WorldTimeViewModel : KoinComponent {
+
+    private val mainViewModel: MainViewModel by inject()
 
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss", Locale.ENGLISH)
 
@@ -68,6 +73,8 @@ class WorldTimeViewModel {
 
     fun onClickItem(it: WorldTime) {
         ClipboardPutterService().invoke(label(it.timeZone()) + " " + it.time)
+
+        mainViewModel.showSnackbar("Copy to clipboard.: ${label(it.timeZone()) + " " + it.time}")
     }
 
 }
