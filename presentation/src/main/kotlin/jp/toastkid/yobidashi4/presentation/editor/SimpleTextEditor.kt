@@ -83,7 +83,12 @@ fun SimpleTextEditor(
                     it()
                 }
             },
-            textStyle = TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 16.sp, fontFamily = FontFamily("MS Gothic"), lineHeight = 1.5.em),
+            textStyle = TextStyle(
+                color = MaterialTheme.colors.onSurface,
+                fontSize = 16.sp,
+                fontFamily = FontFamily("MS Gothic"),
+                lineHeight = 1.5.em
+            ),
             scrollState = viewModel.verticalScrollState(),
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(viewModel.focusRequester())
