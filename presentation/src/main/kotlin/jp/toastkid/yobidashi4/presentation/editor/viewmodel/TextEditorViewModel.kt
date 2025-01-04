@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.TextFieldScrollState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
@@ -17,9 +18,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
-import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
@@ -34,6 +32,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 @OptIn(ExperimentalFoundationApi::class)
 class TextEditorViewModel : KoinComponent {
@@ -99,16 +100,24 @@ class TextEditorViewModel : KoinComponent {
             lineCount.value = multiParagraph.lineCount
         }
 
+        val cursorRect = multiParagraph.getCursorRect(0)
+        val cursorSize = (cursorRect.bottom - cursorRect.top)
+        AtomicReference(Size(Float.MAX_VALUE, cursorSize.em.value))
+
         val lastLineHeights = (0 until lineCount.value).associateWith { multiParagraph.getLineHeight(it) }
         val distinct = lastLineHeights.values.distinct()
         val max = distinct.max()
         lineHeights.clear()
-        lastLineHeights.forEach { lineHeights.put(it.key, (1.55f * it.value / max).em) }
+        lastLineHeights.forEach { lineHeights.put(it.key, (1.5f * it.value / max).em) }
     }
 
     fun getLineHeight(lineNumber: Int): TextUnit {
-        return lineHeights.getOrElse(lineNumber, { 1.55.em })
+        return lineHeights.getOrElse(lineNumber, { 1.5.em })
     }
+
+    private val highlightSize = AtomicReference(Size(Float.MAX_VALUE, 37.em.value))
+
+    fun getHighlightSize() = highlightSize.get()
 
     fun verticalScrollState() = verticalScrollState
 
