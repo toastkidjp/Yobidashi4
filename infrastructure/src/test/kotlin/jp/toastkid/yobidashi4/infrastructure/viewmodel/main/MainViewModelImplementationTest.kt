@@ -353,7 +353,6 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openFile() {
-        mockkStatic(Files::class, Desktop::class)
         every { Files.exists(any()) } returns true
         val desktop = mockk<Desktop>()
         every { Desktop.getDesktop() } returns desktop
