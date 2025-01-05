@@ -100,9 +100,9 @@ class TextEditorViewModel : KoinComponent {
             lineCount.value = multiParagraph.lineCount
         }
 
-        val cursorRect = multiParagraph.getCursorRect(0)
+        val cursorRect = multiParagraph.getCursorRect(content.value.selection.start)
         val cursorSize = (cursorRect.bottom - cursorRect.top)
-        AtomicReference(Size(Float.MAX_VALUE, cursorSize.em.value))
+        highlightSize.set(Size(Float.MAX_VALUE, cursorSize.em.value))
 
         val lastLineHeights = (0 until lineCount.value).associateWith { multiParagraph.getLineHeight(it) }
         val distinct = lastLineHeights.values.distinct()
