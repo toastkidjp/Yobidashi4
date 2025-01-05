@@ -101,16 +101,20 @@ class TextEditorViewModel : KoinComponent {
             lineCount.value = multiParagraph.lineCount
         }
 
-        val cursorOffset = min(multiParagraph.intrinsics.annotatedString.text.length, content.value.selection.start)
-        val cursorRect = multiParagraph.getCursorRect(cursorOffset)
-        val cursorSize = (cursorRect.bottom - cursorRect.top)
-        highlightSize.set(Size(Float.MAX_VALUE, cursorSize.em.value))
+        setNewCurrentLineHighlight(multiParagraph)
 
         val lastLineHeights = (0 until lineCount.value).associateWith { multiParagraph.getLineHeight(it) }
         val distinct = lastLineHeights.values.distinct()
         val max = distinct.max()
         lineHeights.clear()
         lastLineHeights.forEach { lineHeights.put(it.key, (1.5f * it.value / max).em) }
+    }
+
+    private fun setNewCurrentLineHighlight(multiParagraph: MultiParagraph) {
+        val cursorOffset = min(multiParagraph.intrinsics.annotatedString.text.length, content.value.selection.start)
+        val cursorRect = multiParagraph.getCursorRect(cursorOffset)
+        val cursorSize = (cursorRect.bottom - cursorRect.top)
+        highlightSize.set(Size(Float.MAX_VALUE, cursorSize.em.value))
     }
 
     fun getLineHeight(lineNumber: Int): TextUnit {
