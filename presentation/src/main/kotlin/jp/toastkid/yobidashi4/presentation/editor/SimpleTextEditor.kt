@@ -123,7 +123,10 @@ fun SimpleTextEditor(
             onDispose(viewModel::dispose)
         }
 
-        VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.verticalScrollState()), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+        VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(viewModel.verticalScrollState()),
+            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+        )
     }
 
     LaunchedEffect(viewModel.verticalScrollState().offset) {
