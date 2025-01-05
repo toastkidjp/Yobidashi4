@@ -35,6 +35,7 @@ import org.koin.core.component.inject
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.min
 
 @OptIn(ExperimentalFoundationApi::class)
 class TextEditorViewModel : KoinComponent {
@@ -100,7 +101,8 @@ class TextEditorViewModel : KoinComponent {
             lineCount.value = multiParagraph.lineCount
         }
 
-        val cursorRect = multiParagraph.getCursorRect(content.value.selection.start)
+        val cursorOffset = min(multiParagraph.intrinsics.annotatedString.text.length, content.value.selection.start)
+        val cursorRect = multiParagraph.getCursorRect(cursorOffset)
         val cursorSize = (cursorRect.bottom - cursorRect.top)
         highlightSize.set(Size(Float.MAX_VALUE, cursorSize.em.value))
 
