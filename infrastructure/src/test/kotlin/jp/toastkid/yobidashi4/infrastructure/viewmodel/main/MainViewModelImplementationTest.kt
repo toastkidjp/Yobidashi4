@@ -652,7 +652,6 @@ class MainViewModelImplementationTest {
 
     @Test
     fun editWhenTabsHasAlreadyOpened() {
-        mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.readString(any()) } returns "test"
         val path = mockk<Path>()
