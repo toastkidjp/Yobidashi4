@@ -140,14 +140,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         val nextIndexCandidate = selected.value + moveBy
-        val nextIndex = if (nextIndexCandidate >= _tabs.size) {
-            0
-        } else if (nextIndexCandidate < 0) {
-            _tabs.lastIndex
-        } else {
-            nextIndexCandidate
-        }
+        val nextIndex = calculateNextIndex(nextIndexCandidate)
         setSelectedIndex(nextIndex)
+    }
+
+    private fun calculateNextIndex(nextIndexCandidate: Int) = if (nextIndexCandidate >= _tabs.size) {
+        0
+    } else if (nextIndexCandidate < 0) {
+        _tabs.lastIndex
+    } else {
+        nextIndexCandidate
     }
 
     private val _tabs = mutableStateListOf<Tab>()
