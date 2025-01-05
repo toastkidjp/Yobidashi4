@@ -688,7 +688,6 @@ class MainViewModelImplementationTest {
         val article = mockk<Article>()
         every { articleFactory.withTitle(any()) } returns article
         every { article.path() } returns mockk()
-        mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.readString(any()) } returns "test"
 
