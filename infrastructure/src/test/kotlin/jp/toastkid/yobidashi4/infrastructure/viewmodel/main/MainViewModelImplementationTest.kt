@@ -630,7 +630,6 @@ class MainViewModelImplementationTest {
 
     @Test
     fun noopEditWhenFileDoesNotExists() {
-        mockkStatic(Files::class)
         every { Files.exists(any()) } returns false
 
         subject.edit(mockk())
