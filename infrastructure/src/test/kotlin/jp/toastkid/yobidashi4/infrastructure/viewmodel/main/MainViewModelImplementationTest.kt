@@ -394,7 +394,6 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openPreviewOnBackground() {
-        mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         mockkObject(MarkdownPreviewTab)
         every { MarkdownPreviewTab.with(any()) } returns mockk()
