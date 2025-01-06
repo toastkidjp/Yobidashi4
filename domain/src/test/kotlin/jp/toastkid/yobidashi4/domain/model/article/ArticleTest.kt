@@ -80,7 +80,6 @@ internal class ArticleTest {
     fun testLastModifiedThrowingIoException() {
         val fileTime = mockk<FileTime>()
         every { fileTime.toMillis() }.throws(IOException())
-        mockkStatic(Files::class)
         every { Files.getLastModifiedTime(any()) }.returns(fileTime)
 
         val article = Article(path)
