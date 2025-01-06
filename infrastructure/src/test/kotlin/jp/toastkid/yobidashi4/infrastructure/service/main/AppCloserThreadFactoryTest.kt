@@ -5,12 +5,11 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockkObject
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.infrastructure.di.DependencyInjectionContainer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -42,11 +41,8 @@ class AppCloserThreadFactoryTest {
                 }
             )
         }
-
-        every { setting.save() } just Runs
-        every { webViewPool.disposeAll() } just Runs
-        mockkObject(DependencyInjectionContainer)
-        every { DependencyInjectionContainer.stop() } just Runs
+        mockkConstructor(AppCloserAction::class)
+        every { anyConstructed<AppCloserAction>().invoke() } just Runs
 
         subject = AppCloserThreadFactory()
     }
@@ -65,9 +61,7 @@ class AppCloserThreadFactoryTest {
             Thread.sleep(100L)
         }
 
-        verify { setting.save() }
-        verify { webViewPool.disposeAll() }
-        verify { DependencyInjectionContainer.stop() }
+        verify { anyConstructed<AppCloserAction>().invoke() }
     }
 
 }
