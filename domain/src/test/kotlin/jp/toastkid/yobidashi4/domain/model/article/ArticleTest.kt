@@ -52,7 +52,6 @@ internal class ArticleTest {
 
     @Test
     fun testMakeFile() {
-        mockkStatic(Files::class)
         every { Files.createFile(any()) }.returns(path)
         every { Files.write(any(), any<ByteArray>()) }.returns(path)
 
