@@ -7,16 +7,16 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
-import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import kotlin.io.path.nameWithoutExtension
 
 internal class ArticleTest {
 
@@ -28,6 +28,7 @@ internal class ArticleTest {
         MockKAnnotations.init(this)
         every { path.fileName }.returns(path)
         every { path.nameWithoutExtension }.returns("test")
+        mockkStatic(Files::class)
     }
 
     @AfterEach
@@ -43,7 +44,6 @@ internal class ArticleTest {
 
     @Test
     fun testCount() {
-        mockkStatic(Files::class)
         every { Files.readAllLines(any()) }.returns(listOf("test content", "is containing dummy text です"))
 
         val article = Article(path)
