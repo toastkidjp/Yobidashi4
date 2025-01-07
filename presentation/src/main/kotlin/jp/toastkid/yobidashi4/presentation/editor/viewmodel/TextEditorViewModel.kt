@@ -111,7 +111,10 @@ class TextEditorViewModel : KoinComponent {
     }
 
     private fun setNewCurrentLineHighlight(multiParagraph: MultiParagraph) {
-        val cursorOffset = min(multiParagraph.intrinsics.annotatedString.text.length, content.value.selection.start)
+        val cursorOffset = min(
+            multiParagraph.intrinsics.annotatedString.text.length,
+            content.value.selection.start
+        )
         val cursorRect = multiParagraph.getCursorRect(cursorOffset)
         val cursorSize = (cursorRect.bottom - cursorRect.top)
         highlightSize.set(Size(Float.MAX_VALUE, cursorSize.em.value))
