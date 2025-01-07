@@ -44,7 +44,7 @@ internal class OffDayFinderServiceTest {
         mockkConstructor(EquinoxDayCalculator::class)
         mockkConstructor(SpecialCaseOffDayCalculatorService::class)
         mockkConstructor(MoveableHolidayCalculatorService::class)
-        every { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }.answers { Holiday("", 3, 20) }
+        every { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) } returns Holiday("", 3, 20)
         every { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }.answers { Holiday("", 9, 22) }
         every { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }.answers { emptySet() }
         every { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any()) } returns false
