@@ -6,7 +6,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.time.DayOfWeek
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.MoveableHolidayCalculatorService
@@ -21,6 +20,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.time.DayOfWeek
 
 internal class OffDayFinderServiceTest {
 
@@ -136,7 +136,7 @@ internal class OffDayFinderServiceTest {
 
     @Test
     fun testUserOffDay() {
-        every { userOffDayService.invoke(any(), any()) }.answers { true }
+        every { userOffDayService.invoke(any(), any()) } returns true
 
         assertTrue(offDayFinderService(2020, 12, 29, DayOfWeek.TUESDAY))
 
