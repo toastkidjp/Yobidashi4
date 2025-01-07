@@ -100,7 +100,7 @@ internal class OffDayFinderServiceTest {
 
     @Test
     fun testSpecialCase2019ButNotOffDayCase() {
-        every { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }.answers { setOf(Holiday("", 5, 1)) }
+        every { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) } returns setOf(Holiday("", 5, 1))
 
         assertFalse(offDayFinderService(2019, 5, 11, DayOfWeek.SATURDAY))
 
