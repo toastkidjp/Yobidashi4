@@ -1,15 +1,15 @@
 package jp.toastkid.yobidashi4.infrastructure.model.browser
 
-import java.awt.Component
-import java.util.concurrent.atomic.AtomicReference
-import javax.swing.JDialog
-import javax.swing.WindowConstants
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.koin.core.annotation.Single
+import java.awt.Component
+import java.util.concurrent.atomic.AtomicReference
+import javax.swing.JDialog
+import javax.swing.WindowConstants
 
 @Single
 class WebViewPoolImplementation : WebViewPool {
@@ -71,11 +71,7 @@ class WebViewPoolImplementation : WebViewPool {
             return
         }
 
-        browsers.keys.mapNotNull { browsers.get(it) }.forEach {
-            it.close(true)
-            client.doClose(it)
-        }
-        browsers.clear()
+        ArrayList(browsers.keys).forEach { dispose(it) }
         client.dispose()
         CefApp.getInstance().dispose()
     }
