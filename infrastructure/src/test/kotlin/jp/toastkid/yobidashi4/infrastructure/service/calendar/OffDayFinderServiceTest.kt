@@ -123,7 +123,7 @@ internal class OffDayFinderServiceTest {
 
     @Test
     fun testMoveableCase() {
-        every { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any()) }.answers { true }
+        every { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any()) } returns true
 
         assertTrue(offDayFinderService(2020, 9, 21, DayOfWeek.MONDAY))
 
