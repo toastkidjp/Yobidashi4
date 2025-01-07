@@ -72,9 +72,10 @@ class WorldTimeViewModel : KoinComponent {
     }
 
     fun onClickItem(it: WorldTime) {
-        ClipboardPutterService().invoke(label(it.timeZone()) + " " + it.time)
+        val text = label(it.timeZone()) + " " + it.time
+        ClipboardPutterService().invoke(text)
 
-        mainViewModel.showSnackbar("Copy to clipboard.: ${label(it.timeZone()) + " " + it.time}")
+        mainViewModel.showSnackbar("Copy to clipboard.: $text")
     }
 
 }
