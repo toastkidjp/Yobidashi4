@@ -256,5 +256,3 @@ class TextEditorViewModel : KoinComponent {
     }
 
 }
-
-private const val CONVERSION_LIMIT_LENGTH = 4500
