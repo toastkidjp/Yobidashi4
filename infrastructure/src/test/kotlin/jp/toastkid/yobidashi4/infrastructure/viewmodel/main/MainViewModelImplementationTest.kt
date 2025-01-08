@@ -639,7 +639,6 @@ class MainViewModelImplementationTest {
 
     @Test
     fun edit() {
-        mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.readString(any()) } returns "test"
 
