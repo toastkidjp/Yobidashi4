@@ -28,7 +28,7 @@ class UserTemplateStreamReaderTest {
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
-        every { Files.newInputStream(any()) }.returns(mockk())
+        every { Files.newInputStream(any()) } returns mockk()
     }
 
     @AfterEach
