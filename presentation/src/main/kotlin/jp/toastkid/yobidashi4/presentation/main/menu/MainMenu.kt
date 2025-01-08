@@ -53,13 +53,13 @@ import jp.toastkid.yobidashi4.library.resources.ic_user_folder
 import jp.toastkid.yobidashi4.library.resources.ic_user_template
 import jp.toastkid.yobidashi4.library.resources.ic_wallpaper
 import jp.toastkid.yobidashi4.library.resources.ic_world_time
-import kotlin.math.min
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.math.min
 
 @Composable
 fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
@@ -441,6 +441,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 "Open article template",
                 icon = painterResource(Res.drawable.ic_user_template),
                 onClick = viewModel::openArticleTemplate
+            )
+
+            Item(
+                "Open properties",
+                onClick = viewModel::openProperty
             )
 
             Item(
