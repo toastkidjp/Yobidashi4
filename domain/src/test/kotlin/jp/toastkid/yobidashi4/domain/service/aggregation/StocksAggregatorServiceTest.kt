@@ -8,15 +8,15 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
-import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.stream.Stream
+import kotlin.io.path.nameWithoutExtension
 
 internal class StocksAggregatorServiceTest {
 
@@ -29,7 +29,7 @@ internal class StocksAggregatorServiceTest {
     @BeforeEach
     fun setUp() {
         val path = mockk<Path>()
-        every { path.nameWithoutExtension }.returns("file.md")
+        every { path.nameWithoutExtension } returns "file.md"
 
         mockkStatic(Files::class)
         val lines = """
