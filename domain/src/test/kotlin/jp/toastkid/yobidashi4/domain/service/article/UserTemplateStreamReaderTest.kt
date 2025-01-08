@@ -7,12 +7,12 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
 
 class UserTemplateStreamReaderTest {
 
@@ -27,7 +27,7 @@ class UserTemplateStreamReaderTest {
         every { Path.of(any<String>()) } returns mockk()
 
         mockkStatic(Files::class)
-        every { Files.exists(any()) }.returns(true)
+        every { Files.exists(any()) } returns true
         every { Files.newInputStream(any()) }.returns(mockk())
     }
 
