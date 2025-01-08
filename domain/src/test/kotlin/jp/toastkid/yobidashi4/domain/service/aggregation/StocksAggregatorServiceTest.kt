@@ -38,7 +38,7 @@ _
 _
 """.split("_").map { it.trim() }
 
-        every { Files.readAllLines(any()) }.returns(lines)
+        every { Files.readAllLines(any()) } returns lines
 
         MockKAnnotations.init(this)
         every { articlesReaderService.invoke() }.returns(Stream.of(path))
