@@ -46,7 +46,7 @@ class UserTemplateStreamReaderTest {
 
     @Test
     fun testReadingDefaultTemplateCase() {
-        every { Files.exists(any()) }.returns(false)
+        every { Files.exists(any()) } returns false
 
         val inputStream = userTemplateStreamReader.invoke()
 
