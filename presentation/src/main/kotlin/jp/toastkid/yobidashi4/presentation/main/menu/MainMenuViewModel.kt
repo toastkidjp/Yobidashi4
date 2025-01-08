@@ -4,10 +4,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
@@ -44,6 +40,10 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Files
+import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class MainMenuViewModel : KoinComponent {
 
@@ -390,6 +390,11 @@ class MainMenuViewModel : KoinComponent {
     fun openLogViewerTab() {
         val logFilePath = Path.of("temporary/logs/app.log")
         viewModel.openTextFile(logFilePath)
+    }
+
+    fun openProperty() {
+        val logFilePath = Path.of("user/setting.properties")
+        viewModel.openFile(logFilePath)
     }
 
 }
