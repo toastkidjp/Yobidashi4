@@ -5,6 +5,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -34,8 +35,8 @@ class TsuboCountConverterServiceTest {
     
     @Test
     fun test() {
-        Assertions.assertEquals("324.00", converter.firstInputAction("100"))
-        Assertions.assertEquals("50.00", converter.secondInputAction("162.00"))
+        assertEquals("324.00", converter.firstInputAction("100"))
+        assertEquals("50.00", converter.secondInputAction("162.00"))
     }
 
 }
