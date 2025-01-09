@@ -70,7 +70,7 @@ _
 評価額はxxx円、評価損益はyyyy円(+zz%)だった。
 _
 """.split("_").map { it.trim() }
-        every { Files.readAllLines(any()) }.returns(lines)
+        every { Files.readAllLines(any()) } returns lines
 
         val outgoAggregationResult = stocksAggregatorService.invoke("file")
 
