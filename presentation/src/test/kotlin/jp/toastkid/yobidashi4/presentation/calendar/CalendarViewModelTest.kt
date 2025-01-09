@@ -9,20 +9,21 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
-import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
+import java.time.LocalDate
 
 class CalendarViewModelTest {
 
@@ -66,7 +67,7 @@ class CalendarViewModelTest {
 
     @Test
     fun localDate() {
-        Assertions.assertNotNull(viewModel.localDate())
+        assertNotNull(viewModel.localDate())
     }
 
     @Test
