@@ -10,7 +10,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -76,10 +75,10 @@ _
         val outgoAggregationResult = stocksAggregatorService.invoke("file")
 
         outgoAggregationResult.itemArrays().firstOrNull()?.let {
-            Assertions.assertEquals("file", it[0])
-            Assertions.assertEquals(0, it[1])
-            Assertions.assertEquals(0, it[2])
-            Assertions.assertEquals(0.0, it[3])
+            assertEquals("file", it[0])
+            assertEquals(0, it[1])
+            assertEquals(0, it[2])
+            assertEquals(0.0, it[3])
         }
         verify(exactly = 1) { Files.readAllLines(any()) }
         verify(exactly = 1) { articlesReaderService.invoke() }
