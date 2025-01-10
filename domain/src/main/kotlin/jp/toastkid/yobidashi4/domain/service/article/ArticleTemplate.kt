@@ -5,6 +5,7 @@ import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Month
 
 class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val offDayFinderService: OffDayFinderService) {
     operator fun invoke(header: String): String {
@@ -126,12 +127,18 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val 
 
     private fun isMarketDay(): Boolean {
         val dayOfWeek = now.dayOfWeek
+        if (JapaneseStockMarketCloseDaysFinder().invoke(now.year, now.month, now.dayOfMonth)) {
+            return false
+        }
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY
                 && offDayFinderService.invoke(now.year, now.monthValue, now.dayOfMonth, dayOfWeek, false).not()
     }
 
     private fun isStockDay(): Boolean {
         val dayOfWeek = now.dayOfWeek
+        if (now.month == Month.JANUARY && now.dayOfMonth <= 3) {
+            return false
+        }
         return dayOfWeek != DayOfWeek.MONDAY && dayOfWeek != DayOfWeek.SUNDAY
     }
 
