@@ -84,7 +84,7 @@ class CalendarViewModelTest {
 
         viewModel.plusMonths(12)
 
-        Assertions.assertEquals(month, viewModel.localDate().month)
+        assertEquals(month, viewModel.localDate().month)
         Assertions.assertEquals(year + 1, viewModel.localDate().year)
     }
 
