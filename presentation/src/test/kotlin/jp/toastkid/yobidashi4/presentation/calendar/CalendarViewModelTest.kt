@@ -124,7 +124,7 @@ class CalendarViewModelTest {
 
     @Test
     fun getFirstDay() {
-        Assertions.assertEquals(1, viewModel.getFirstDay().dayOfMonth)
+        assertEquals(1, viewModel.getFirstDay().dayOfMonth)
     }
 
     @Test
