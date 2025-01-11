@@ -119,7 +119,7 @@ class CalendarViewModelTest {
 
         viewModel.moveToCurrentMonth()
 
-        Assertions.assertEquals(localDate + 1, viewModel.localDate().year)
+        assertEquals(localDate + 1, viewModel.localDate().year)
     }
 
     @Test
