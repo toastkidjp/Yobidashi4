@@ -74,7 +74,7 @@ class CalendarViewModelTest {
     fun plusMonths() {
         val month = viewModel.localDate().month
         viewModel.plusMonths(1)
-        Assertions.assertEquals(month + 1, viewModel.localDate().month)
+        assertEquals(month + 1, viewModel.localDate().month)
     }
 
     @Test
