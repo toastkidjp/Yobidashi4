@@ -92,7 +92,7 @@ class CalendarViewModelTest {
     fun setYear() {
         viewModel.setYear(2022)
 
-        Assertions.assertEquals(2022, viewModel.localDate().year)
+        assertEquals(2022, viewModel.localDate().year)
     }
 
     @Test
