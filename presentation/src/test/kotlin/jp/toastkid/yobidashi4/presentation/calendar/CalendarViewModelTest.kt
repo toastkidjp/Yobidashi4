@@ -16,6 +16,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -149,7 +150,7 @@ class CalendarViewModelTest {
     fun isToday() {
         assertAll(
             { assertTrue(viewModel.isToday(LocalDate.now().dayOfMonth)) },
-            { Assertions.assertFalse(viewModel.isToday(LocalDate.now().plusDays(1).dayOfMonth)) },
+            { assertFalse(viewModel.isToday(LocalDate.now().plusDays(1).dayOfMonth)) },
             {
                 viewModel.plusMonths(1)
                 Assertions.assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
