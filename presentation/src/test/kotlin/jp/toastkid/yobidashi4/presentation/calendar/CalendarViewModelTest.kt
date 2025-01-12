@@ -158,7 +158,7 @@ class CalendarViewModelTest {
             {
                 viewModel.moveToCurrentMonth()
                 viewModel.setYear(2020)
-                Assertions.assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
+                assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
             }
         )
     }
