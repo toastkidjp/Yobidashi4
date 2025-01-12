@@ -131,7 +131,7 @@ class CalendarViewModelTest {
     fun setYearInput() {
         viewModel.setYearInput(TextFieldValue("2023"))
 
-        Assertions.assertEquals("2023", viewModel.yearInput().text)
+        assertEquals("2023", viewModel.yearInput().text)
     }
 
     @Test
