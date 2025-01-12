@@ -14,6 +14,7 @@ import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -145,7 +146,7 @@ class CalendarViewModelTest {
 
     @Test
     fun isToday() {
-        Assertions.assertAll(
+        assertAll(
             { Assertions.assertTrue(viewModel.isToday(LocalDate.now().dayOfMonth)) },
             { Assertions.assertFalse(viewModel.isToday(LocalDate.now().plusDays(1).dayOfMonth)) },
             {
