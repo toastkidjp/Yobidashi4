@@ -153,7 +153,7 @@ class CalendarViewModelTest {
             { assertFalse(viewModel.isToday(LocalDate.now().plusDays(1).dayOfMonth)) },
             {
                 viewModel.plusMonths(1)
-                Assertions.assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
+                assertFalse(viewModel.isToday(LocalDate.now().dayOfMonth))
             },
             {
                 viewModel.moveToCurrentMonth()
