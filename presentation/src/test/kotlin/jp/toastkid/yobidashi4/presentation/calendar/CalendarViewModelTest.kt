@@ -165,7 +165,7 @@ class CalendarViewModelTest {
 
     @Test
     fun openDateArticle() {
-        Assertions.assertAll(
+        assertAll(
             {
                 viewModel.openDateArticle(20, true)
 
