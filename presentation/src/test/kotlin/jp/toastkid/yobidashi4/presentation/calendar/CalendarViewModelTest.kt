@@ -98,7 +98,7 @@ class CalendarViewModelTest {
     @Test
     fun moveMonth() {
         viewModel.moveMonth(1)
-        Assertions.assertEquals(1, viewModel.localDate().month.value)
+        assertEquals(1, viewModel.localDate().month.value)
     }
 
     @Test
