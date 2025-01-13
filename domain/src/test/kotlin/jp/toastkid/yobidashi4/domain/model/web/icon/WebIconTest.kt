@@ -7,16 +7,16 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Stream
-import kotlin.io.path.pathString
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.stream.Stream
+import kotlin.io.path.pathString
 
 class WebIconTest {
 
@@ -71,7 +71,7 @@ class WebIconTest {
     fun find() {
         val path1 = mockk<Path>()
         every { path1.fileName.pathString } returns "www.yahoo.co.jp.png"
-        every { Files.list(any()) } returns Stream.of(path1)
+        every { Files.list(any()) } answers { Stream.of(path1) }
 
         val find = webIcon.find("https://www.yahoo.co.jp")
 
