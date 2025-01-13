@@ -6,16 +6,16 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.stream.Stream
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 class LatestFileFinderTest {
 
@@ -39,9 +39,9 @@ class LatestFileFinderTest {
         val path2 = mockk<Path>()
         val path3 = mockk<Path>()
         val now = LocalDateTime.now()
-        every { Files.getLastModifiedTime(path) }.returns(FileTime.fromMillis(
+        every { Files.getLastModifiedTime(path) } returns FileTime.fromMillis(
             now.minusDays(8).toInstant(OffsetDateTime.now().offset).toEpochMilli())
-        )
+
         every { Files.getLastModifiedTime(path2) }.returns(FileTime.fromMillis(
             now.minusDays(6).toInstant(OffsetDateTime.now().offset).toEpochMilli())
         )
