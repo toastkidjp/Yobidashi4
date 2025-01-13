@@ -42,9 +42,9 @@ class LatestFileFinderTest {
         every { Files.getLastModifiedTime(path) } returns FileTime.fromMillis(
             now.minusDays(8).toInstant(OffsetDateTime.now().offset).toEpochMilli())
 
-        every { Files.getLastModifiedTime(path2) }.returns(FileTime.fromMillis(
+        every { Files.getLastModifiedTime(path2) } returns FileTime.fromMillis(
             now.minusDays(6).toInstant(OffsetDateTime.now().offset).toEpochMilli())
-        )
+
         every { Files.getLastModifiedTime(path3) }.returns(FileTime.fromMillis(
             now.minusDays(7).toInstant(OffsetDateTime.now().offset).toEpochMilli())
         )
