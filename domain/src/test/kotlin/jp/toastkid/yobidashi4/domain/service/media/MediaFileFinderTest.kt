@@ -8,17 +8,17 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 import kotlin.io.path.isDirectory
 import kotlin.io.path.isExecutable
 import kotlin.io.path.nameWithoutExtension
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 class MediaFileFinderTest {
 
@@ -45,7 +45,7 @@ class MediaFileFinderTest {
         every { Path.of(any<String>()) } returns root
 
         mockkStatic(Files::class)
-        every { Files.list(path) } returns Stream.of(mockk())
+        every { Files.list(path) } answers { Stream.of(mockk()) }
         every { Files.list(subFolder) } returns Stream.of(path)
         every { Files.list(root) } answers { Stream.of(path, subFolder) }
         every { Files.isDirectory(root) } returns true
