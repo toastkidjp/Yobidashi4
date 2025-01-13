@@ -10,18 +10,18 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
-import java.util.stream.Stream
-import kotlin.io.path.nameWithoutExtension
-import kotlin.io.path.pathString
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.store.FSDirectory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import java.util.stream.Stream
+import kotlin.io.path.nameWithoutExtension
+import kotlin.io.path.pathString
 
 class FullTextSearchIndexerTest {
 
@@ -51,7 +51,7 @@ class FullTextSearchIndexerTest {
         every { path1.nameWithoutExtension } returns "test"
         every { path1.pathString } returns "test.md"
 
-        every { Files.list(any()) } answers { Stream.of(path1) }
+        every { Files.list(any()) } returns Stream.of(path1)
         every { Files.readString(any()) } returns "test"
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(0)
 
