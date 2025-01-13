@@ -265,6 +265,11 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
+        if (Files.size(path) > 100_000) {
+            openFile(path)
+            return
+        }
+
         val tab = EditorTab(path)
         (tab as? EditorTab)?.loadContent()
         if (onBackground) {
