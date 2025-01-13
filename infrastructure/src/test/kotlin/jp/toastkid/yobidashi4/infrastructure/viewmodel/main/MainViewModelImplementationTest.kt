@@ -640,6 +640,7 @@ class MainViewModelImplementationTest {
     @Test
     fun edit() {
         every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 1
         every { Files.readString(any()) } returns "test"
 
         subject.edit(mockk(), true)
@@ -651,6 +652,7 @@ class MainViewModelImplementationTest {
     @Test
     fun editWhenTabsHasAlreadyOpened() {
         every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 1
         every { Files.readString(any()) } returns "test"
         val path = mockk<Path>()
         val tab = mockk<EditorTab>()
@@ -670,6 +672,7 @@ class MainViewModelImplementationTest {
         every { articleFactory.withTitle(any()) } returns article
         every { article.path() } returns mockk()
         every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 1
         every { Files.readString(any()) } returns "test"
 
         subject.editWithTitle("test")
@@ -685,6 +688,7 @@ class MainViewModelImplementationTest {
         every { articleFactory.withTitle(any()) } returns article
         every { article.path() } returns mockk()
         every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 1
         every { Files.readString(any()) } returns "test"
 
         subject.editWithTitle("test", true)
