@@ -650,6 +650,21 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun editOnOverSize() {
+        every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 100_001
+        every { Files.readString(any()) } returns "test"
+        subject = spyk(subject)
+        every { subject.openFile(any()) } just Runs
+
+        subject.edit(mockk(), true)
+
+        assertTrue(subject.tabs.isEmpty())
+        verify(inverse = true) { Files.readString(any()) }
+        verify { subject.openFile(any()) }
+    }
+
+    @Test
     fun editWhenTabsHasAlreadyOpened() {
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 1
