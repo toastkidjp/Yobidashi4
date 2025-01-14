@@ -12,19 +12,19 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import java.text.DecimalFormat
-import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
 import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
 import jp.toastkid.yobidashi4.presentation.component.DecimalVisualTransformation
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.roundToInt
 
 class LoanCalculatorViewModel {
 
@@ -39,7 +39,7 @@ class LoanCalculatorViewModel {
     fun loanAmount() = loanAmount.value
 
     fun setLoanAmount(value: TextFieldValue) {
-        loanAmount.value = value.copy(text = format(value.text))
+        loanAmount.value = value.copy(text = formatDecimalString(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -49,7 +49,7 @@ class LoanCalculatorViewModel {
     fun loanTerm() = loanTerm.value
 
     fun setLoanTerm(value: TextFieldValue) {
-        loanTerm.value = value.copy(text = format(value.text))
+        loanTerm.value = value.copy(text = formatDecimalString(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -59,7 +59,7 @@ class LoanCalculatorViewModel {
     fun interestRate() = interestRate.value
 
     fun setInterestRate(value: TextFieldValue) {
-        interestRate.value = value.copy(format(value.text))
+        interestRate.value = value.copy(formatDecimalString(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -69,7 +69,7 @@ class LoanCalculatorViewModel {
     fun downPayment() = downPayment.value
 
     fun setDownPayment(value: TextFieldValue) {
-        downPayment.value = value.copy(format(value.text))
+        downPayment.value = value.copy(formatDecimalString(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -79,7 +79,7 @@ class LoanCalculatorViewModel {
     fun managementFee() = managementFee.value
 
     fun setManagementFee(value: TextFieldValue) {
-        managementFee.value = value.copy(format(value.text))
+        managementFee.value = value.copy(formatDecimalString(value.text))
 
         onChange(inputChannel, value.text)
     }
@@ -89,7 +89,7 @@ class LoanCalculatorViewModel {
     fun renovationReserves() = renovationReserves.value
 
     fun setRenovationReserves(value: TextFieldValue) {
-        renovationReserves.value = value.copy(format(value.text))
+        renovationReserves.value = value.copy(formatDecimalString(value.text))
         onChange(inputChannel, value.text)
     }
 
@@ -107,7 +107,7 @@ class LoanCalculatorViewModel {
     private val inputChannel: Channel<String> = Channel()
 
     fun inputChannel() = inputChannel
-    
+
     fun launch() {
         DebouncedCalculatorService(
             inputChannel,
@@ -136,7 +136,7 @@ class LoanCalculatorViewModel {
 
     fun visualTransformation() = visualTransformation
 
-    private fun format(input: String): String {
+    private fun formatDecimalString(input: String): String {
         if (input.isBlank()) {
             return "0"
         }
