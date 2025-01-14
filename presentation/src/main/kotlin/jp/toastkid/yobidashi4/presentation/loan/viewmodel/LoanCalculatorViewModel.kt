@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
 import java.text.DecimalFormat
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToInt
@@ -185,5 +186,25 @@ class LoanCalculatorViewModel {
     )
 
     private val decimalFormat = DecimalFormat("#,###.##")
+
+    /**
+     * <= 2_000_000 5.5％
+     * <= 4_000_000 4.4％＋22,000
+     * else 3.3％＋66,000
+     */
+    fun brokerageFee(): String {
+        try {
+            val amount = extractLong(loanAmount.value.text)
+            val brokerageFee = when {
+                amount <= 2_000_000 -> (amount * 0.055)
+                amount <= 4_000_000 -> (amount * 0.044) + 22_000
+                else -> (amount * 0.033) + 66_000
+            }.toLong()
+            return "Brokerage fee: $brokerageFee"
+        } catch (e: NumberFormatException) {
+            LoggerFactory.getLogger("brokerageFee").warn("brokerageFee", e)
+        }
+        return "Error"
+    }
 
 }
