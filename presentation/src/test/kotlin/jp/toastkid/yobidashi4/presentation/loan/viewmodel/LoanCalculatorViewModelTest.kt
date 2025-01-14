@@ -14,6 +14,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
+import jp.toastkid.yobidashi4.presentation.loan.brokerageFee
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -206,6 +207,11 @@ class LoanCalculatorViewModelTest {
 
         assertFalse(invoked)
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun format() {
+        assertEquals("100,000", subject.format(100000))
     }
 
 }
