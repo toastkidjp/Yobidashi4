@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
-import org.slf4j.LoggerFactory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,7 +58,7 @@ fun LoanCalculatorView() {
                 SelectionContainer {
                     Column {
                         Text(text = viewModel.result(), fontSize = 18.sp)
-                        Text(text = brokerageFee(viewModel.loanAmount().text), fontSize = 18.sp)
+                        Text(text = viewModel.brokerageFee(), fontSize = 18.sp)
                     }
                 }
 
@@ -171,24 +170,4 @@ private fun LoanCalculatorInput(
         visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
-}
-
-/**
- * <= 2_000_000 5.5％
- * <= 4_000_000 4.4％＋22,000
- * else 3.3％＋66,000
- */
-fun brokerageFee(loanAmount: String): String {
-    try {
-        val amount = loanAmount.toLong()
-        val brokerageFee = when {
-            amount <= 2_000_000 -> (amount * 0.055)
-            amount <= 4_000_000 -> (amount * 0.044) + 22_000
-            else -> (amount * 0.033) + 66_000
-        }.toLong()
-        return "Brokerage fee: $brokerageFee"
-    } catch (e: NumberFormatException) {
-        LoggerFactory.getLogger("brokerageFee").warn("brokerageFee", e)
-    }
-    return "Error"
 }
