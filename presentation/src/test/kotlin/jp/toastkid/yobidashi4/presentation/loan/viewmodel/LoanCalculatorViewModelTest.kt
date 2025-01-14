@@ -14,7 +14,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
-import jp.toastkid.yobidashi4.presentation.loan.brokerageFee
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -212,6 +211,12 @@ class LoanCalculatorViewModelTest {
     @Test
     fun format() {
         assertEquals("100,000", subject.format(100000))
+    }
+
+    @Test
+    fun brokerageFee() {
+        subject.setLoanAmount(TextFieldValue("3000000"))
+        assertEquals("154000", subject.brokerageFee().split(" ").get(2))
     }
 
 }
