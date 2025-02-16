@@ -33,11 +33,6 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val 
                         return@forEach
                     }
 
-                    if (line.contains("{{yesterday}}")) {
-                        append(line.replace("{{yesterday}}", dateFormatter.format(now.minusDays(1)))).append("\n")
-                        return@forEach
-                    }
-
                     if (line.contains("{{workday}}")) {
                         inWorkdayBlock = true
                         return@forEach
@@ -104,6 +99,11 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val 
                         }
 
                         if (stockDay) {
+                            if (line.contains("{{yesterday}}")) {
+                                append(line.replace("{{yesterday}}", dateFormatter.format(now.minusDays(1)))).append("\n")
+                                return@forEach
+                            }
+
                             append(line).append("\n")
                             return@forEach
                         }
