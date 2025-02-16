@@ -194,10 +194,25 @@ test
     fun test_() {
         mockkConstructor(UserTemplateStreamReader::class)
         every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+{{stock}}
 ## {{yesterday}} の基準価額より
+{{stock}}
         """.trimIndent().byteInputStream())
         val content = ArticleTemplate(LocalDate.of(2025, 2, 18), offDayFinderService).invoke("test")
+        println(content)
         assertTrue(content.contains("## 2025/02/17 の基準価額より"))
+    }
+
+    @Test
+    fun test_2() {
+        mockkConstructor(UserTemplateStreamReader::class)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+{{stock}}
+## {{yesterday}} の基準価額より
+{{stock}}
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2025, 2, 17), offDayFinderService).invoke("test")
+        assertTrue(content.trim().isEmpty())
     }
 
 }
