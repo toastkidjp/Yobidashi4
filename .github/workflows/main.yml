@@ -48,6 +48,14 @@ jobs:
           path: "~/.gradle/caches"
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle-
-
+      - name: ja_JP.UTF-8
+        run: |
+            sudo locale-gen ja_JP.UTF-8
+            sudo update-locale LANG=ja_JP.UTF-8
+      - name: date
+        run: |
+            date
       - name: kover
+        env:
+          TZ: 'Asia/Tokyo'
         run: "./gradlew koverHtmlReport"
