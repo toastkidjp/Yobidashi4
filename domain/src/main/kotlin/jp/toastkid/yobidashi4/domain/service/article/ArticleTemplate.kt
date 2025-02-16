@@ -6,8 +6,12 @@ import java.nio.charset.StandardCharsets
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
+import java.time.format.DateTimeFormatter
 
 class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val offDayFinderService: OffDayFinderService) {
+
+    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+
     operator fun invoke(header: String): String {
         val inputStream = UserTemplateStreamReader().invoke() ?: return ""
 
@@ -26,6 +30,11 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val 
                 it.readLines().forEach { line ->
                     if (line.contains("{{title}}")) {
                         append(line.replace("{{title}}", header)).append("\n")
+                        return@forEach
+                    }
+
+                    if (line.contains("{{yesterday}}")) {
+                        append(line.replace("{{yesterday}}", dateFormatter.format(now.minusDays(1)))).append("\n")
                         return@forEach
                     }
 
