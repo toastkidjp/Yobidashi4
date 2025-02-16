@@ -5,7 +5,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
 import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.article.OozumoTemplate
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 internal class ArticleTemplateTest {
 
@@ -188,6 +188,16 @@ test
         """.trimIndent().byteInputStream())
         val content = ArticleTemplate(LocalDate.of(2023, 2, 23), offDayFinderService).invoke("test")
         assertTrue(content.contains("test"))
+    }
+
+    @Test
+    fun test_() {
+        mockkConstructor(UserTemplateStreamReader::class)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+## {{yesterday}} の基準価額より
+        """.trimIndent().byteInputStream())
+        val content = ArticleTemplate(LocalDate.of(2025, 2, 18), offDayFinderService).invoke("test")
+        assertTrue(content.contains("## 2025/02/17 の基準価額より"))
     }
 
 }
