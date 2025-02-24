@@ -17,7 +17,7 @@ dependencyResolutionManagement {
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.3.3")
             library("coroutines", "org.jetbrains.kotlinx", "kotlinx-coroutines-core-jvm").version("1.6.1")
             library("slf4j", "org.slf4j", "slf4j-api").version("2.0.16")
-            library("reload4j", "org.slf4j", "slf4j-reload4j").version("2.0.6")
+            library("reload4j", "org.slf4j", "slf4j-reload4j").version("2.0.16")
             library("zxing", "com.google.zxing", "core").version("3.4.1")
             library("jcef", "me.friwi", "jcefmaven").version("132.3.1")
             library("jsoup", "org.jsoup", "jsoup").version("1.18.3")
