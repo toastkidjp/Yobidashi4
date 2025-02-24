@@ -62,7 +62,7 @@ jobs:
       - name: kover
         env:
           TZ: 'Asia/Tokyo'
-          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
+          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
         run: "./gradlew koverHtmlReport"
 
       - name: Upload Unit Test Results
