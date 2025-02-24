@@ -898,6 +898,21 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun noopMakeNewArticleWithInvalidInput() {
+        subject = spyk(subject)
+        every { subject.showSnackbar(any()) } just Runs
+        val slot = slot<(String) -> Unit>()
+        every { subject.setShowInputBox(capture(slot)) } just Runs
+        every { Files.list(any()) } returns Stream.empty()
+
+        subject.makeNewArticle()
+        slot.captured.invoke("CI/CD")
+
+        verify { subject.showSnackbar(any()) }
+        verify(inverse = true) { Files.list(any()) }
+    }
+
+    @Test
     fun noopMakeNewArticleIfExistsPath() {
         val extension = "png"
         val path = mockk<Path>()
