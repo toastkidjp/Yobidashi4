@@ -100,7 +100,13 @@ class ArticleTemplate(private val now: LocalDate = LocalDate.now(), private val 
 
                         if (stockDay) {
                             if (line.contains("{{yesterday}}")) {
-                                append(line.replace("{{yesterday}}", dateFormatter.format(now.minusDays(1)))).append("\n")
+                                append(
+                                    line.replace(
+                                        "{{yesterday}}",
+                                        dateFormatter.format(now.minusDays(1))
+                                    )
+                                )
+                                    .append("\n")
                                 return@forEach
                             }
 
