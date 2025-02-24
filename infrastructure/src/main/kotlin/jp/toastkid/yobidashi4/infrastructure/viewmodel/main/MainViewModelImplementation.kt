@@ -375,6 +375,11 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun makeNewArticle() {
         setShowInputBox { input ->
+            if (validateFileName(input)) {
+                showSnackbar("Invalid file name. : $input")
+                return@setShowInputBox
+            }
+
             if (existsArticle(input, setting.articleFolderPath())) {
                 return@setShowInputBox
             }
@@ -384,6 +389,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             addNewArticle(article.path())
             edit(article.path())
         }
+    }
+
+    private fun validateFileName(name: String): Boolean {
+        return name.contains("/")
     }
 
     private fun existsArticle(input: String, articleFolderPath: Path): Boolean {
