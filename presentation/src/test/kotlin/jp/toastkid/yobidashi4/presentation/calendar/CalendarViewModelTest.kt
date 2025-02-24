@@ -207,7 +207,7 @@ class CalendarViewModelTest {
         val month = viewModel.month()
 
         assertEquals(5, month.size)
-        Assertions.assertTrue(month.flatMap { it.days() }.any { it.offDay })
+        assertTrue(month.flatMap { it.days() }.any { it.offDay })
     }
 
     @Test
