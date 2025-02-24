@@ -26,6 +26,16 @@ jobs:
 
       - name: build
         run: "./gradlew packageUberJarForCurrentOS"
+        env:
+          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
+
+      - name: upload-artifact
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: UberJar
+          path: |
+            build/compose/jars
 
   test:
     strategy:
@@ -48,9 +58,11 @@ jobs:
           path: "~/.gradle/caches"
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle-
+
       - name: kover
         env:
           TZ: 'Asia/Tokyo'
+          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
         run: "./gradlew koverHtmlReport"
 
       - name: Upload Unit Test Results
