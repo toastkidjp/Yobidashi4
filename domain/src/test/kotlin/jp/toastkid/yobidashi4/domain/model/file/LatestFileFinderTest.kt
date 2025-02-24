@@ -48,7 +48,7 @@ class LatestFileFinderTest {
         every { Files.getLastModifiedTime(path3) } returns FileTime.fromMillis(
             now.minusDays(7).toInstant(OffsetDateTime.now().offset).toEpochMilli())
 
-        every { Files.list(any()) }.returns(Stream.of(path, path2, path3))
+        every { Files.list(any()) } returns (Stream.of(path, path2, path3))
 
         val paths = subject.invoke(mockk(), now.minusDays(7))
 
