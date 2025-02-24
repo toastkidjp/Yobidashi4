@@ -199,7 +199,6 @@ test
 {{stock}}
         """.trimIndent().byteInputStream())
         val content = ArticleTemplate(LocalDate.of(2025, 2, 18), offDayFinderService).invoke("test")
-        println(content)
         assertTrue(content.contains("## 2025/02/17 の基準価額より"))
     }
 
