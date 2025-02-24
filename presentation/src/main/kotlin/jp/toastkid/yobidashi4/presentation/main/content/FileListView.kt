@@ -38,9 +38,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
+import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -78,7 +78,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                     )
                 }
 
-                itemsIndexed(viewModel.items(), key = { _, fileListItem -> fileListItem.path}) { index, fileListItem ->
+                itemsIndexed(viewModel.items(), key = { i, fileListItem -> "${i}_" + fileListItem.path}) { index, fileListItem ->
                     val underlay = if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f)
                     else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f)
                     else Color.Transparent
