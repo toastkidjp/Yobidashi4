@@ -8,7 +8,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
-import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
@@ -43,6 +42,7 @@ class WebViewPoolImplementationTest {
         every { cefBrowser.close(any()) }.just(Runs)
         every { cefBrowser.reload() }.just(Runs)
         every { cefBrowser.stopLoad() } just Runs
+        every { cefBrowser.openDevTools() } just Runs
 
         mockkConstructor(CefClientFactory::class)
         every { anyConstructed<CefClientFactory>().invoke() }.returns(cefClient)
@@ -159,12 +159,9 @@ class WebViewPoolImplementationTest {
 
     @Test
     fun switchDevTools() {
-        subject = spyk(subject)
-        every { subject.devTools(any()) } just Runs
-
         subject.switchDevTools("test")
 
-        verify { subject.devTools(any()) }
+        verify { cefBrowser.openDevTools() }
     }
 
     @Test
