@@ -25,10 +25,6 @@ class WebViewPoolImplementation : WebViewPool {
         return browser.uiComponent
     }
 
-    override fun devTools(id: String) {
-        getBrowser(id, "").openDevTools()
-    }
-
     override fun find(id: String, text: String, forward: Boolean) {
         getBrowser(id, "").find(text, forward, true, true)
     }
@@ -50,7 +46,7 @@ class WebViewPoolImplementation : WebViewPool {
     }
 
     override fun switchDevTools(id: String) {
-        devTools(id)
+        getBrowser(id, "").openDevTools()
     }
 
     override fun dispose(id: String) {
