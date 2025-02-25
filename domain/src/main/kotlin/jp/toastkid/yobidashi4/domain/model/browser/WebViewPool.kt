@@ -4,7 +4,7 @@ import java.awt.Component
 
 interface WebViewPool {
     fun component(id: String, initialUrl: String): Component
-    fun devTools(id: String): Component
+    fun devTools(id: String)
     fun dispose(id: String)
     fun disposeAll()
     fun find(id: String, text: String, forward: Boolean)
