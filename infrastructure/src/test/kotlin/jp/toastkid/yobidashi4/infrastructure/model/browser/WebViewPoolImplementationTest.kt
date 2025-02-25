@@ -8,6 +8,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
@@ -20,8 +21,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.awt.Component
-import javax.swing.JDialog
 
 class WebViewPoolImplementationTest {
 
@@ -160,15 +159,12 @@ class WebViewPoolImplementationTest {
 
     @Test
     fun switchDevTools() {
-        mockkConstructor(JDialog::class)
-        every { anyConstructed<JDialog>().defaultCloseOperation = any() } just Runs
-        every { anyConstructed<JDialog>().setSize(any(), any()) } just Runs
-        every { anyConstructed<JDialog>().add(any<Component>()) } returns mockk()
-        every { anyConstructed<JDialog>().isVisible = any() } just Runs
+        subject = spyk(subject)
+        every { subject.devTools(any()) } just Runs
 
         subject.switchDevTools("test")
 
-        verify { anyConstructed<JDialog>().isVisible = any() }
+        verify { subject.devTools(any()) }
     }
 
     @Test
