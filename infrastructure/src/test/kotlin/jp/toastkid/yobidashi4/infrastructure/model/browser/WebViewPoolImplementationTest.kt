@@ -10,8 +10,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Component
-import javax.swing.JDialog
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
 import org.cef.CefApp
 import org.cef.CefClient
@@ -22,6 +20,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.awt.Component
+import javax.swing.JDialog
 
 class WebViewPoolImplementationTest {
 
@@ -41,7 +41,6 @@ class WebViewPoolImplementationTest {
         every { cefClient.doClose(any()) } returns true
         every { cefClient.dispose() } just Runs
         every { cefBrowser.uiComponent }.returns(mockk())
-        every { cefBrowser.devTools.uiComponent }.returns(mockk())
         every { cefBrowser.close(any()) }.just(Runs)
         every { cefBrowser.reload() }.just(Runs)
         every { cefBrowser.stopLoad() } just Runs
@@ -59,14 +58,6 @@ class WebViewPoolImplementationTest {
     @AfterEach
     fun tearDown() {
         unmockkAll()
-    }
-
-
-    @Test
-    fun devTools() {
-        subject.devTools("test")
-
-        verify { cefBrowser.devTools.uiComponent }
     }
 
     @Test
