@@ -15,17 +15,18 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.IntOffset
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_down
 import jp.toastkid.yobidashi4.library.resources.ic_up
-import kotlin.math.max
+import kotlinx.coroutines.Dispatchers
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.math.max
 
 class PhotoTabViewModel : KoinComponent {
 
@@ -215,5 +216,7 @@ class PhotoTabViewModel : KoinComponent {
     suspend fun divideGif(path: Path) {
         gifDivider.invoke(path)
     }
+
+    fun ioDispatcher() = Dispatchers.IO
 
 }

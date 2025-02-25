@@ -45,12 +45,11 @@ import jp.toastkid.yobidashi4.library.resources.ic_brush
 import jp.toastkid.yobidashi4.library.resources.ic_flip
 import jp.toastkid.yobidashi4.library.resources.ic_rotate_left
 import jp.toastkid.yobidashi4.library.resources.ic_rotate_right
-import kotlin.io.path.extension
-import kotlin.io.path.name
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import kotlin.io.path.extension
+import kotlin.io.path.name
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -222,7 +221,7 @@ fun PhotoTabView(tab: PhotoTab) {
                                 contentDescription = "Divide GIF",
                                 tint = MaterialTheme.colors.onSurface,
                                 modifier = Modifier.clickable {
-                                    CoroutineScope(Dispatchers.IO).launch {
+                                    CoroutineScope(viewModel.ioDispatcher()).launch {
                                         viewModel.divideGif(tab.path())
                                     }
                                 }

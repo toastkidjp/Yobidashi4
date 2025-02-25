@@ -22,11 +22,12 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 
 class PhotoTabViewKtTest {
 
@@ -94,6 +95,7 @@ class PhotoTabViewKtTest {
     @Test
     fun divideGif() {
         coEvery { anyConstructed<PhotoTabViewModel>().divideGif(any()) } just Runs
+        coEvery { anyConstructed<PhotoTabViewModel>().ioDispatcher() } returns Dispatchers.Unconfined
         every { path.toString() } returns "test.gif"
         tab = PhotoTab(path)
 
