@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.editor.setting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -16,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import java.awt.GraphicsEnvironment
 
 @Composable
@@ -31,16 +29,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
         Column {
             Text("Background color")
 
-            HsvColorPicker(
-                controller = viewModel.currentBackgroundColor(),
-                modifier = Modifier.height(200.dp)
-            )
-
             Text("Font color")
-            HsvColorPicker(
-                controller = viewModel.currentFontColor(),
-                modifier = Modifier.height(200.dp)
-            )
 
             Button(onClick = viewModel::commit,
                 colors = ButtonDefaults.buttonColors(backgroundColor = viewModel.currentBackgroundColor().selectedColor.value, contentColor = viewModel.currentFontColor().selectedColor.value)
