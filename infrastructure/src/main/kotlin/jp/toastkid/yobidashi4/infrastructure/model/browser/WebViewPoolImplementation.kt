@@ -8,8 +8,6 @@ import org.cef.browser.CefBrowser
 import org.koin.core.annotation.Single
 import java.awt.Component
 import java.util.concurrent.atomic.AtomicReference
-import javax.swing.JDialog
-import javax.swing.WindowConstants
 
 @Single
 class WebViewPoolImplementation : WebViewPool {
@@ -27,8 +25,8 @@ class WebViewPoolImplementation : WebViewPool {
         return browser.uiComponent
     }
 
-    override fun devTools(id: String): Component {
-        return getBrowser(id, "").devTools.uiComponent
+    override fun devTools(id: String) {
+        getBrowser(id, "").openDevTools()
     }
 
     override fun find(id: String, text: String, forward: Boolean) {
@@ -52,11 +50,7 @@ class WebViewPoolImplementation : WebViewPool {
     }
 
     override fun switchDevTools(id: String) {
-        val devToolsDialog = JDialog()
-        devToolsDialog.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
-        devToolsDialog.setSize(800, 600)
-        devToolsDialog.add(devTools(id))
-        devToolsDialog.isVisible = true
+        devTools(id)
     }
 
     override fun dispose(id: String) {
