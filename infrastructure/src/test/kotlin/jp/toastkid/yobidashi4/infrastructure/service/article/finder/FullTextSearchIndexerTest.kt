@@ -51,7 +51,7 @@ class FullTextSearchIndexerTest {
         every { path1.nameWithoutExtension } returns "test"
         every { path1.pathString } returns "test.md"
 
-        every { Files.list(any()) } returns Stream.of(path1)
+        every { Files.list(any()) } answers { Stream.of(path1) }
         every { Files.readString(any()) } returns "test"
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(0)
 
