@@ -4,8 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
@@ -27,16 +25,6 @@ internal fun EditorSettingComponent(modifier: Modifier) {
         modifier = modifier.padding(8.dp)
     ) {
         Column {
-            Text("Background color")
-
-            Text("Font color")
-
-            Button(onClick = viewModel::commit,
-                colors = ButtonDefaults.buttonColors(backgroundColor = viewModel.currentBackgroundColor().selectedColor.value, contentColor = viewModel.currentFontColor().selectedColor.value)
-            ) {
-                Text("Commit colors")
-            }
-
             EditorSettingDropdown(
                 GraphicsEnvironment.getLocalGraphicsEnvironment().availableFontFamilyNames.toList(),
                 "Font family: ${viewModel.editorFontFamily()}",
