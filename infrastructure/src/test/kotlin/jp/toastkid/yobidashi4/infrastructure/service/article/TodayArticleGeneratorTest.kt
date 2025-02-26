@@ -11,8 +11,6 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -26,6 +24,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
 
 class TodayArticleGeneratorTest {
 
@@ -37,6 +37,9 @@ class TodayArticleGeneratorTest {
 
     @MockK
     private lateinit var setting: Setting
+
+    @MockK
+    private lateinit var articleFolder: Path
 
     @MockK
     private lateinit var path: Path
@@ -60,15 +63,16 @@ class TodayArticleGeneratorTest {
             )
         }
 
-        every { setting.articleFolderPath() }.returns(path)
-        every { path.resolve(any<String>()) }.returns(path)
+        every { setting.articleFolderPath() }.returns(articleFolder)
+        every { articleFolder.resolve(any<String>()) }.returns(path)
         every { articleFactory.withTitle(any()) }.returns(article)
         every { article.getTitle() } returns "title"
         every { article.makeFile(any()) }.just(Runs)
         every { offDayFinderService.invoke(any(), any(), any(), any(), any()) } returns false
 
         mockkStatic(Files::class)
-        every { Files.exists(any()) }.returns(false)
+        every { Files.exists(articleFolder) }.returns(true)
+        every { Files.exists(path) }.returns(false)
 
         mockkConstructor(ArticleTitleGenerator::class)
         every { anyConstructed<ArticleTitleGenerator>().invoke(any()) }.returns("2023-03-08(Wed)")
@@ -101,15 +105,27 @@ class TodayArticleGeneratorTest {
 
         todayArticleGenerator.invoke()
 
-        verify(inverse = true) { Files.exists(any()) }
+        verify(inverse = true) { Files.exists(path) }
     }
 
     @Test
     fun existsCase() {
-        every { Files.exists(any()) }.returns(true)
+        every { Files.exists(path) }.returns(true)
 
         todayArticleGenerator.invoke()
 
+        verify(inverse = true) { articleFactory.withTitle(any()) }
+        verify(inverse = true) { article.makeFile(any()) }
+    }
+
+    @Test
+    fun articleFolderDoesNotExistsCase() {
+        every { Files.exists(articleFolder) }.returns(false)
+        every { Files.exists(path) }.returns(true)
+
+        todayArticleGenerator.invoke()
+
+        verify(inverse = true) { anyConstructed<ArticleTitleGenerator>().invoke(any()) }
         verify(inverse = true) { articleFactory.withTitle(any()) }
         verify(inverse = true) { article.makeFile(any()) }
     }
