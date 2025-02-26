@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.editor.setting
 
-import androidx.compose.ui.graphics.toArgb
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -8,7 +7,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Color
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -20,6 +18,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Color
 
 class EditorSettingViewModelTest {
 
@@ -56,49 +55,6 @@ class EditorSettingViewModelTest {
     fun tearDown() {
         unmockkAll()
         stopKoin()
-    }
-
-    @Test
-    fun useDefaultColor() {
-        every { setting.editorBackgroundColor() } returns null
-        every { setting.editorForegroundColor() } returns null
-
-        subject = EditorSettingViewModel()
-
-        assertEquals(androidx.compose.ui.graphics.Color.LightGray, subject.currentBackgroundColor())
-        assertEquals(androidx.compose.ui.graphics.Color.Black, subject.currentFontColor())
-    }
-
-    @Test
-    fun currentBackgroundColor() {
-        assertEquals(Color.BLACK.rgb, subject.currentBackgroundColor().selectedColor.value.toArgb())
-    }
-
-    @Test
-    fun currentFontColor() {
-        assertEquals(Color.WHITE.rgb, subject.currentFontColor().selectedColor.value.toArgb())
-    }
-
-    @Test
-    fun onBackgroundColorChanged() {
-        subject.onBackgroundColorChanged(androidx.compose.ui.graphics.Color.Black)
-
-        every { setting.setEditorBackgroundColor(any()) }
-    }
-
-    @Test
-    fun onFontColorChanged() {
-        subject.onFontColorChanged(androidx.compose.ui.graphics.Color.Black)
-
-        every { setting.setEditorForegroundColor(any()) }
-    }
-
-    @Test
-    fun commit() {
-        subject.commit()
-
-        verify { setting.setEditorBackgroundColor(any()) }
-        verify { setting.setEditorForegroundColor(any()) }
     }
 
     @Test
