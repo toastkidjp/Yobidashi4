@@ -337,4 +337,10 @@ class TextEditorViewModelTest {
     fun makeCharacterCountMessage() {
         assertEquals("Character: 200", viewModel.makeCharacterCountMessage(200))
     }
+
+    @Test
+    fun getHighlightSize() {
+        assertNotNull(viewModel.getHighlightSize())
+    }
+
 }
