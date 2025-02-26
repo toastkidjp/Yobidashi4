@@ -4,10 +4,13 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.MultiParagraphIntrinsics
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
@@ -78,6 +81,10 @@ class TextEditorViewModelTest {
         every { mainViewModel.darkMode() } returns true
         mockkConstructor(FindOrderReceiver::class)
         every { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) } just Runs
+        val multiParagraphIntrinsics = mockk<MultiParagraphIntrinsics>()
+        every { multiParagraphIntrinsics.annotatedString } returns AnnotatedString("test")
+        every { multiParagraph.intrinsics } returns multiParagraphIntrinsics
+        every { multiParagraph.getCursorRect(any()) } returns Rect(Offset.Zero, 20f)
 
         viewModel = TextEditorViewModel()
     }
@@ -129,10 +136,10 @@ class TextEditorViewModelTest {
         viewModel.onClickLineNumber(0)
 
         assertEquals(text, viewModel.content().getSelectedText().text)
-        assertEquals(1.55.em, viewModel.getLineHeight(-1))
-        assertEquals(1.25.em, viewModel.getLineHeight(0))
-        assertEquals(1.55.em, viewModel.getLineHeight(1))
-        assertEquals(1.5.em, viewModel.getLineHeight(2))
+        assertEquals(1.5.em, viewModel.getLineHeight(-1))
+        assertEquals(1.2096775.em, viewModel.getLineHeight(0))
+        assertEquals(1.5.em, viewModel.getLineHeight(1))
+        assertEquals(1.451613.em, viewModel.getLineHeight(2))
         verify { multiParagraph.getLineHeight(0) }
         verify { multiParagraph.getLineHeight(1) }
         verify { multiParagraph.getLineHeight(2) }
