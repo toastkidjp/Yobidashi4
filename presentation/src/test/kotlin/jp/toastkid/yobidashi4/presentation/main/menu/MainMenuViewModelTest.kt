@@ -12,8 +12,6 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
@@ -55,6 +53,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
 
 class MainMenuViewModelTest {
 
@@ -951,6 +951,15 @@ class MainMenuViewModelTest {
         subject.toDefaultWindowSize()
 
         verify { mainViewModel.toDefaultWindowSize() }
+    }
+
+    @Test
+    fun openProperty() {
+        every { mainViewModel.openFile(any()) } just Runs
+
+        subject.openProperty()
+
+        verify { mainViewModel.openFile(any()) }
     }
 
 }
