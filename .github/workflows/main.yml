@@ -85,7 +85,7 @@ jobs:
             build/reports/kover
 
       - name: Download Artifacts
-        if: success() || failure()
+        if: ${{ success() }}
         uses: actions/download-artifact@v4
         with:
           path: artifacts
