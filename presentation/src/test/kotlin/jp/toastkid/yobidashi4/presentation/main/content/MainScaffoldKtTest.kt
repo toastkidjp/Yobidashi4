@@ -18,9 +18,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
@@ -30,7 +27,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -38,6 +34,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import kotlin.io.path.extension
 
 class MainScaffoldKtTest {
 
@@ -212,6 +212,31 @@ class MainScaffoldKtTest {
                 }
 
             verify { mainViewModel.hideArticleList() }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun toggleWorldTimeArea() {
+        every { mainViewModel.openWorldTime() } returns true
+        every { mainViewModel.toggleWorldTime() } just Runs
+
+        runDesktopComposeUiTest {
+            setContent {
+                MainScaffold()
+            }
+
+            val listSwitch = onNodeWithContentDescription("Close world time widget.", useUnmergedTree = true)
+            listSwitch
+                .performMouseInput {
+                    enter()
+                    exit()
+                    enter()
+                    click()
+                    exit()
+                }
+
+            verify { mainViewModel.toggleWorldTime() }
         }
     }
 
