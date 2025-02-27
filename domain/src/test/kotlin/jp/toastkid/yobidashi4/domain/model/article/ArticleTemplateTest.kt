@@ -191,7 +191,7 @@ test
     }
 
     @Test
-    fun test_() {
+    fun testStockDayTitle() {
         mockkConstructor(UserTemplateStreamReader::class)
         every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
 {{stock}}
