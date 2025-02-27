@@ -46,7 +46,7 @@ class MediaFileFinderTest {
 
         mockkStatic(Files::class)
         every { Files.list(path) } answers { Stream.of(mockk()) }
-        every { Files.list(subFolder) } returns Stream.of(path)
+        every { Files.list(subFolder) } answers { Stream.of(path) }
         every { Files.list(root) } answers { Stream.of(path, subFolder) }
         every { Files.isDirectory(root) } returns true
         every { Files.isDirectory(path) } returns false
