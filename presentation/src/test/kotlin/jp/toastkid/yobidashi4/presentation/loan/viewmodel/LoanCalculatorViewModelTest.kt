@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class LoanCalculatorViewModelTest {
 
@@ -213,10 +215,17 @@ class LoanCalculatorViewModelTest {
         assertEquals("100,000", subject.format(100000))
     }
 
-    @Test
-    fun brokerageFee() {
-        subject.setLoanAmount(TextFieldValue("3000000"))
-        assertEquals("154000", subject.brokerageFee().split(" ").get(2))
+    @CsvSource(
+        "3000000, 154000",
+        "10000000, 396000",
+        "20000000, 726000",
+        "30000000, 1056000",
+        "40000000, 1386000",
+    )
+    @ParameterizedTest
+    fun brokerageFee(amount: String, expected: String) {
+        subject.setLoanAmount(TextFieldValue(amount))
+        assertEquals(expected, subject.brokerageFee().split(" ").get(2))
     }
 
 }
