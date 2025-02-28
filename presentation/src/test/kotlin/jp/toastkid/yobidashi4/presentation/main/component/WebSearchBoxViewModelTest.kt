@@ -394,6 +394,10 @@ class WebSearchBoxViewModelTest {
         subject.switchSaveSearchHistory()
 
         assertTrue(subject.saveSearchHistory())
+
+        subject.setSaveSearchHistory(false)
+
+        assertFalse(subject.saveSearchHistory())
     }
 
     @Test
