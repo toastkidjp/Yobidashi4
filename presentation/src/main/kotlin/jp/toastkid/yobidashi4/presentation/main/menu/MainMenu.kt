@@ -7,7 +7,6 @@ import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
-import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_aggregation
 import jp.toastkid.yobidashi4.library.resources.ic_article_folder
@@ -53,12 +52,7 @@ import jp.toastkid.yobidashi4.library.resources.ic_user_folder
 import jp.toastkid.yobidashi4.library.resources.ic_user_template
 import jp.toastkid.yobidashi4.library.resources.ic_wallpaper
 import jp.toastkid.yobidashi4.library.resources.ic_world_time
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import kotlin.math.min
 
 @Composable
@@ -378,12 +372,9 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item(
                 "Restart",
-                icon = painterResource(Res.drawable.ic_restart)
-            ) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    object : KoinComponent { val notification: ScheduledNotification by inject() }.notification.start()
-                }
-            }
+                icon = painterResource(Res.drawable.ic_restart),
+                onClick = viewModel::restartNotification
+            )
 
             Item(
                 "Open file",
