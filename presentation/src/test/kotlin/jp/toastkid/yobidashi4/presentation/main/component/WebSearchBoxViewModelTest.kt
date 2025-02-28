@@ -131,6 +131,9 @@ class WebSearchBoxViewModelTest {
         subject.onValueChange(TextFieldValue("1."))
         assertEquals("1", subject.result())
 
+        subject.onValueChange(TextFieldValue("12.0"))
+        assertEquals("12", subject.result())
+
         subject.clearInput()
 
         assertTrue(subject.query().text.isEmpty())
