@@ -3,6 +3,8 @@ package jp.toastkid.yobidashi4.presentation.main.menu
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -38,8 +40,10 @@ import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
+import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -73,6 +77,9 @@ class MainMenuViewModelTest {
     private lateinit var webBookmarkRepository: BookmarkRepository
 
     @MockK
+    private lateinit var notification: ScheduledNotification
+
+    @MockK
     private lateinit var notificationEventRepository: NotificationEventRepository
 
     @BeforeEach
@@ -86,6 +93,7 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { asynchronousArticleIndexerService } bind (AsynchronousArticleIndexerService::class)
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
+                    single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { notificationEventRepository } bind (NotificationEventRepository::class)
                 }
             )
@@ -93,6 +101,7 @@ class MainMenuViewModelTest {
         every { mainViewModel.tabs } returns emptyList()
         every { asynchronousArticleIndexerService.invoke(any()) } just Runs
         every { setting.userAgentName() } returns "test"
+        coEvery { notification.start(any()) } just Runs
 
         subject = MainMenuViewModel()
     }
@@ -821,6 +830,13 @@ class MainMenuViewModelTest {
         subject.openNotificationList()
 
         verify { mainViewModel.openTab(any<NotificationListTab>()) }
+    }
+
+    @Test
+    fun restartNotification() {
+        subject.restartNotification(Dispatchers.Unconfined)
+
+        coVerify { notification.start(any()) }
     }
 
     @Test
