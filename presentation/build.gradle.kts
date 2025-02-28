@@ -28,7 +28,6 @@ dependencies {
     implementation(libraries.koinAnnotations)
     ksp(libraries.koinKspCompiler)
 
-    implementation("com.github.skydoves:colorpicker-compose:1.1.2")
     testImplementation(compose.desktop.uiTestJUnit4)
 }
 
