@@ -153,11 +153,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     icon = painterResource(Res.drawable.ic_replace),
                     onClick = viewModel::switchFind
                 )
-
-                Item(
-                    "Editor's Color & Font",
-                    onClick = viewModel::openEditorSetting
-                )
             }
         }
 
