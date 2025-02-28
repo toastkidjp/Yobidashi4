@@ -1357,6 +1357,7 @@ class MainViewModelImplementationTest {
         }
 
         subject.emitDroppedPath(listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif").map(::makePath))
+        Thread.sleep(1000)
         verify(exactly = 6) { subject.edit(any(), any()) }
         verify(exactly = 4) { subject.openTab(any()) }
 
