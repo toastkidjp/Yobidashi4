@@ -32,12 +32,16 @@ import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRe
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
+import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Files
@@ -328,6 +332,14 @@ class MainMenuViewModel : KoinComponent {
 
     fun openNotificationList() {
         viewModel.openTab(NotificationListTab())
+    }
+
+    private val notification: ScheduledNotification by inject()
+
+    fun restartNotification(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        CoroutineScope(dispatcher).launch {
+            notification.start()
+        }
     }
 
     fun openNotificationFile() {
