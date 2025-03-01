@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.File
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -141,3 +142,44 @@ compose.desktop {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }*/
+
+tasks.register("readCoverageSummary") {
+    var started = false
+    val keys = arrayOf(
+        "Class",
+        "Method",
+        "Branch",
+        "Line",
+        "Instruction"
+    );
+    val map = mutableMapOf<String, String>()
+    val buffer = StringBuffer()
+    val lines = File("build/reports/kover/html/index.html").readText().split("\n")
+    for (i in (0 until lines.size)) {
+        val line = lines[i]
+        if (line.contains("<td class=\"name\">all classes</td>")) {
+            started = true
+        }
+        if (!started) {
+            continue
+        }
+        if (line.contains("<span class=\"percent\">")) {
+            buffer.append(lines[i + 1].trim())
+            continue
+        }
+        if (line.contains("<span class=\"absValue\">")) {
+            buffer.append(" ").append(lines[i + 1].trim())
+            map.put("${keys.get(map.size)}", buffer.toString())
+            buffer.setLength(0);
+            continue
+        }
+        if (line.contains("</table>")) {
+            break
+        }
+    }
+
+    doLast {
+        println("| Category | Coverage(%)\n|:---|:---")
+        map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
+    }
+}
