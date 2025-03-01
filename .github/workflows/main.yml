@@ -63,7 +63,7 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        run: "./gradlew koverXmlReport"
+        run: "./gradlew koverHtmlReport"
 
       - name: Upload Unit Test Results
         if: ${{ always() }}
@@ -83,6 +83,13 @@ jobs:
           name: Kover Results
           path: |
             build/reports/kover
+
+      - name: Print summary
+        if: ${{ success() }}
+        with:
+          name: Kover Results
+          path: |
+            echo "$(gradlew readCoverageSummary)" >> $GITHUB_STEP_SUMMARY
 
       - name: Download Artifacts
         if: ${{ success() }}
