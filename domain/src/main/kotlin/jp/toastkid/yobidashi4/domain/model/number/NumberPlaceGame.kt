@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NumberPlaceGame(
-    private val correct: NumberBoard = NumberBoard(),
-    private val masked: NumberBoard = NumberBoard(),
-    private val solving: NumberBoard = NumberBoard()
+    private val correct: NumberBoard = NumberBoard.makeWithZero(),
+    private val masked: NumberBoard = NumberBoard.makeWithZero(),
+    private val solving: NumberBoard = NumberBoard.makeWithZero()
 ) {
 
     fun initialize(maskingCount: Int) {
