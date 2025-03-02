@@ -90,7 +90,7 @@ jobs:
 
       - name: Store summary
         if: ${{ success() }}
-        run: ./gradlew readCoverageSummary >> $GITHUB_STEP_SUMMARY
+        run: ./gradlew storeCoverageSummary
 
       - name: Download Artifacts
         if: ${{ success() }}
