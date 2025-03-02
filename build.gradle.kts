@@ -143,7 +143,7 @@ tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }*/
 
-tasks.register("readCoverageSummary") {
+fun readCoverages(): MutableMap<String, String> {
     var started = false
     val keys = arrayOf(
         "Class",
@@ -177,9 +177,27 @@ tasks.register("readCoverageSummary") {
             break
         }
     }
+    return map
+}
+
+tasks.register("printCoverageSummary") {
+    val map = readCoverages()
 
     doLast {
         println("| Category | Coverage(%)\n|:---|:---")
         map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
+    }
+}
+
+tasks.register("storeCoverageSummary") {
+    val map = readCoverages()
+
+    doLast {
+        val buffer = StringBuilder()
+        buffer.append("| Category | Coverage(%)\n|:---|:---")
+        map.map { "| ${it.key} | ${it.value}\n" }.forEach(buffer::append)
+        Runtime.getRuntime().exec(
+            arrayOf("echo", buffer.toString(), ">>", "\$GITHUB_STEP_SUMMARY")
+        )
     }
 }
