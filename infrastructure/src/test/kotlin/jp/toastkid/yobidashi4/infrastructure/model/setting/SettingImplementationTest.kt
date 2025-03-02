@@ -6,14 +6,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.StringWriter
-import java.nio.file.Files
-import java.nio.file.Path
-import kotlin.io.path.exists
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -22,6 +14,14 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.StringWriter
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.exists
 
 class SettingImplementationTest {
 
@@ -241,6 +241,13 @@ user_off_day=12/29,12/30
     @Test
     fun chatApiKey() {
         assertNull(subject.chatApiKey())
+    }
+
+    @Test
+    fun test() {
+        subject.setArticleFolderPath("test")
+
+        assertEquals("test", subject.articleFolder())
     }
 
 }
