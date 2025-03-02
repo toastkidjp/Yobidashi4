@@ -86,8 +86,7 @@ data class NumberBoard(
     }
 
     fun masked(maskNumberCount: Int): NumberBoard {
-        val newBoard = NumberBoard()
-        newBoard.fillZero()
+        val newBoard = makeWithZero()
         newBoard.copyFrom(this)
         val random = Random()
         val randomPair = mutableSetOf<String>()
@@ -160,6 +159,13 @@ data class NumberBoard(
             numberBoard.placeRandom()
             return numberBoard
         }
+
+        fun makeWithZero(): NumberBoard {
+            val newBoard = NumberBoard()
+            newBoard.fillZero()
+            return newBoard
+        }
+
     }
 
 }
