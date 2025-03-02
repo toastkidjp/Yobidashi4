@@ -14,6 +14,7 @@ class NumberBoardTest {
     @BeforeEach
     fun setUp() {
         numberBoard = NumberBoard()
+        numberBoard.fillZero()
     }
 
     @AfterEach
@@ -46,6 +47,7 @@ class NumberBoardTest {
     fun copyFrom() {
         numberBoard.placeRandom()
         val copied = NumberBoard()
+        copied.fillZero()
         copied.copyFrom(numberBoard)
 
         numberBoard.rows().forEachIndexed { index, list ->
@@ -64,7 +66,9 @@ class NumberBoardTest {
 
     @Test
     fun makeRandom() {
-        assertFalse(NumberBoard.make().isCorrect(NumberBoard()))
+        val correct = NumberBoard()
+        correct.fillZero()
+        assertFalse(NumberBoard.make().isCorrect(correct))
     }
 
     @Test
