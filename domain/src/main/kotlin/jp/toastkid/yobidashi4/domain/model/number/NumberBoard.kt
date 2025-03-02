@@ -8,21 +8,15 @@
 
 package jp.toastkid.yobidashi4.domain.model.number
 
+import kotlinx.serialization.Serializable
 import java.util.LinkedList
 import java.util.Queue
 import java.util.Random
-import kotlinx.serialization.Serializable
 
 @Serializable
 data class NumberBoard(
     private val rows: MutableList<MutableList<Int>> = mutableListOf()
 ) {
-
-    init {
-        if (rows.isEmpty()) {
-            fillZero()
-        }
-    }
 
     fun fillZero() {
         rows.clear()
@@ -93,6 +87,7 @@ data class NumberBoard(
 
     fun masked(maskNumberCount: Int): NumberBoard {
         val newBoard = NumberBoard()
+        newBoard.fillZero()
         newBoard.copyFrom(this)
         val random = Random()
         val randomPair = mutableSetOf<String>()
@@ -161,6 +156,7 @@ data class NumberBoard(
 
         fun make(): NumberBoard {
             val numberBoard = NumberBoard()
+            numberBoard.fillZero()
             numberBoard.placeRandom()
             return numberBoard
         }
