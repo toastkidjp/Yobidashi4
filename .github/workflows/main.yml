@@ -86,6 +86,10 @@ jobs:
 
       - name: Print summary
         if: ${{ success() }}
+        run: ./gradlew readCoverageSummary
+
+      - name: Store summary
+        if: ${{ success() }}
         run: ./gradlew readCoverageSummary >> $GITHUB_STEP_SUMMARY
 
       - name: Download Artifacts
