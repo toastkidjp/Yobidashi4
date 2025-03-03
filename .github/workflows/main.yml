@@ -86,7 +86,7 @@ jobs:
 
       - name: Print summary
         if: ${{ success() }}
-        run: ./gradlew readCoverageSummary
+        run: ./gradlew printCoverageSummary
 
       - name: Store summary
         if: ${{ success() }}
