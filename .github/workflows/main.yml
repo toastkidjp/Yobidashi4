@@ -90,7 +90,10 @@ jobs:
 
       - name: Store summary
         if: ${{ success() }}
-        run: ./gradlew storeCoverageSummary
+        run: |
+          ./gradlew printCoverageSummary >> $GITHUB_STEP_SUMMARY
+          cat $GITHUB_STEP_SUMMARY
+        shell: bash
 
       - name: Download Artifacts
         if: ${{ success() }}
