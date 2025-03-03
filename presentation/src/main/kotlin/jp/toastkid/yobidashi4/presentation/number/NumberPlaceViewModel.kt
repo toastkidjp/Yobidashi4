@@ -16,7 +16,6 @@ import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.number.NumberBoard
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -27,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Files
 
 class NumberPlaceViewModel : KoinComponent {
 
@@ -38,7 +38,7 @@ class NumberPlaceViewModel : KoinComponent {
 
     private val _game = mutableStateOf(NumberPlaceGame())
 
-    private val _mask = mutableStateOf(NumberBoard())
+    private val _mask = mutableStateOf(NumberBoard.makeWithZero())
 
     private val _loading = mutableStateOf(false)
 
