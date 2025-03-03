@@ -19,7 +19,6 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.number.NumberBoard
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -38,6 +37,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
 
 class NumberPlaceViewModelTest {
 
@@ -105,7 +105,7 @@ class NumberPlaceViewModelTest {
         val slot = slot<(Boolean) -> Unit>()
         val game = mockk<NumberPlaceGame>()
         every { game.place(any(), any(), any(), capture(slot)) } just Runs
-        every { game.masked() } returns NumberBoard()
+        every { game.masked() } returns NumberBoard.makeWithZero()
         every { game.pickSolving(any(), any()) } returns 1
         val callbackSlot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(callbackSlot)) } just Runs
