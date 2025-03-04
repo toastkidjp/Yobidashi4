@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.editor
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.spyk
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +38,16 @@ class EditorTabViewModelTest {
     fun updateStatus() {
         subject.updateStatus("test")
         assertEquals("test", subject.status())
+    }
+
+    @Test
+    fun updateStatus2() {
+        mockkConstructor(EditorTab::class)
+        every { anyConstructed<EditorTab>().editable() } returns false
+        subject = EditorTabViewModel()
+
+        subject.updateStatus("test")
+        assertEquals("Not editable | test", subject.status())
     }
 
     @Test
