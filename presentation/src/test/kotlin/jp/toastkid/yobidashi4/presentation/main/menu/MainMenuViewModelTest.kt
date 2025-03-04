@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -95,6 +96,9 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { notificationEventRepository } bind (NotificationEventRepository::class)
+                    single(qualifier = null) { object : IoContextProvider {
+                        override operator fun invoke() = Dispatchers.Unconfined
+                    } } bind (IoContextProvider::class)
                 }
             )
         }
