@@ -91,6 +91,7 @@ jobs:
       - name: Store summary
         if: ${{ success() }}
         run: |
+          echo "## Test coverage" >> $GITHUB_STEP_SUMMARY
           ./gradlew printCoverageSummary >> $GITHUB_STEP_SUMMARY
           cat $GITHUB_STEP_SUMMARY
         shell: bash
