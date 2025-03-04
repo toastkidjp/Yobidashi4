@@ -154,8 +154,7 @@ data class NumberBoard private constructor(
         private const val BOARD_SIZE = 9
 
         fun make(): NumberBoard {
-            val numberBoard = NumberBoard()
-            numberBoard.fillZero()
+            val numberBoard = makeWithZero()
             numberBoard.placeRandom()
             return numberBoard
         }
