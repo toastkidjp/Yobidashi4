@@ -10,6 +10,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -76,6 +77,27 @@ class EditorTabViewKtTest {
             tab.switchPreview()
 
             mainClock.advanceTimeBy(2500L)
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun preview() {
+        val tab = EditorTab(mockk())
+        mockkConstructor(EditorTabViewModel::class)
+        every { anyConstructed<EditorTabViewModel>().showPreview() } returns true
+        every { anyConstructed<EditorTabViewModel>().preview() } returns Markdown("Test")
+
+        runDesktopComposeUiTest {
+            mainClock.autoAdvance = false
+
+            setContent {
+                EditorTabView(tab)
+            }
+            mainClock.advanceTimeBy(2500L)
+
+            verify { anyConstructed<EditorTabViewModel>().showPreview() }
+            verify { anyConstructed<EditorTabViewModel>().preview() }
         }
     }
 }
