@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
@@ -88,6 +89,8 @@ class MainMenuViewModel : KoinComponent {
         asynchronousArticleIndexerService.invoke(Dispatchers.IO)
     }
 
+    private val ioContextProvider: IoContextProvider by inject()
+
     fun dumpLatest() {
         ZipArchiver().invoke(
             LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
@@ -96,7 +99,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun dumpAll() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioContextProvider()).launch {
             ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
             viewModel.openFile(Path.of("."))
         }
