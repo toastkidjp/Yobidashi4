@@ -188,16 +188,3 @@ tasks.register("printCoverageSummary") {
         map.map { "| ${it.key} | ${it.value}" }.forEach(::println)
     }
 }
-
-tasks.register("storeCoverageSummary") {
-    val map = readCoverages()
-
-    doLast {
-        val buffer = StringBuilder()
-        buffer.append("| Category | Coverage(%)\n|:---|:---")
-        map.map { "| ${it.key} | ${it.value}\n" }.forEach(buffer::append)
-        Runtime.getRuntime().exec(
-            arrayOf("echo", buffer.toString(), ">>", "\$GITHUB_STEP_SUMMARY")
-        )
-    }
-}
