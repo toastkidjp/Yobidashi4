@@ -96,8 +96,10 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun dumpAll() {
-        ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
-        viewModel.openFile(Path.of("."))
+        CoroutineScope(Dispatchers.IO).launch {
+            ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
+            viewModel.openFile(Path.of("."))
+        }
     }
 
     fun openArticleFolder() {
