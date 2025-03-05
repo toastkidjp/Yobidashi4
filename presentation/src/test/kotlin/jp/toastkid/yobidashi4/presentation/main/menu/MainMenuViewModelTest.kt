@@ -43,6 +43,7 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleI
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.test.TestIoContextProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -96,9 +97,7 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { notificationEventRepository } bind (NotificationEventRepository::class)
-                    single(qualifier = null) { object : IoContextProvider {
-                        override operator fun invoke() = Dispatchers.Unconfined
-                    } } bind (IoContextProvider::class)
+                    single(qualifier = null) { TestIoContextProvider() } bind (IoContextProvider::class)
                 }
             )
         }
