@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
+import java.text.DecimalFormat
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.min
@@ -67,6 +68,8 @@ class TextEditorViewModel : KoinComponent {
     private val setting: Setting by inject()
 
     private val conversionLimit = setting.editorConversionLimit()
+
+    private val formatter = DecimalFormat("#,###.##")
 
     fun content() = content.value
 
@@ -236,7 +239,7 @@ class TextEditorViewModel : KoinComponent {
     }
 
     fun makeCharacterCountMessage(count: Int): String {
-        return "Character: $count"
+        return "Character: ${formatter.format(count)}"
     }
 
     fun dispose() {
