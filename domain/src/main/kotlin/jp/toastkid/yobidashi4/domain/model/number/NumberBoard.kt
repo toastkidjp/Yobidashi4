@@ -14,7 +14,7 @@ import java.util.Queue
 import java.util.Random
 
 @Serializable
-data class NumberBoard private constructor(
+data class NumberBoard(
     private val rows: MutableList<MutableList<Int>> = mutableListOf()
 ) {
 
