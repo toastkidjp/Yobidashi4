@@ -92,10 +92,12 @@ class MainMenuViewModel : KoinComponent {
     private val ioContextProvider: IoContextProvider by inject()
 
     fun dumpLatest() {
-        ZipArchiver().invoke(
-            LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
-        )
-        viewModel.openFile(Path.of("."))
+        CoroutineScope(ioContextProvider()).launch {
+            ZipArchiver().invoke(
+                LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1))
+            )
+            viewModel.openFile(Path.of("."))
+        }
     }
 
     fun dumpAll() {
