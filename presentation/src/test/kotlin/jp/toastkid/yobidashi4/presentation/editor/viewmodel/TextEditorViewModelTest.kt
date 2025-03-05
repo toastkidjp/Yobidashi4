@@ -343,6 +343,7 @@ class TextEditorViewModelTest {
     @Test
     fun makeCharacterCountMessage() {
         assertEquals("Character: 200", viewModel.makeCharacterCountMessage(200))
+        assertEquals("Character: 2,000", viewModel.makeCharacterCountMessage(2000))
     }
 
     @Test
