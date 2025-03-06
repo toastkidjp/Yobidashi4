@@ -28,8 +28,7 @@ class WebIconTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockkStatic(Path::class)
-        mockkStatic(Files::class)
+        mockkStatic(Path::class, Files::class)
         every { Path.of(any<String>()) } returns path
 
         webIcon = WebIcon()
