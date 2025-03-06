@@ -41,7 +41,7 @@ class EditorTabViewModelTest {
     }
 
     @Test
-    fun updateStatus2() {
+    fun updateStatusOnNotEditableCase() {
         mockkConstructor(EditorTab::class)
         every { anyConstructed<EditorTab>().editable() } returns false
         subject = EditorTabViewModel()
