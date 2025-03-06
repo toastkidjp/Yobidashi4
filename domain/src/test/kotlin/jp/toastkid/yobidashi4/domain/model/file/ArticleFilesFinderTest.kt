@@ -6,14 +6,14 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
-import java.util.stream.Stream
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import java.util.stream.Stream
 
 class ArticleFilesFinderTest {
 
@@ -36,11 +36,13 @@ class ArticleFilesFinderTest {
         val path3 = mockk<Path>()
         every { path3.fileName.toString() } returns "『2021-01-02』"
 
-        every { Files.list(any()) } returns Stream.of(
-            mockk<Path>().also { every { it.fileName.toString() } returns "2021-01-02" },
-            mockk<Path>().also { every { it.fileName.toString() } returns "Test" },
-            path3
-        )
+        every { Files.list(any()) } answers {
+            Stream.of(
+                mockk<Path>().also { every { it.fileName.toString() } returns "2021-01-02" },
+                mockk<Path>().also { every { it.fileName.toString() } returns "Test" },
+                path3
+            )
+        }
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
 
         val paths = subject.invoke(mockk())
