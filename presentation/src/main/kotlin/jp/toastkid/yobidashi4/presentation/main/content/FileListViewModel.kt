@@ -16,20 +16,20 @@ import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.text.input.TextFieldValue
-import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
-import kotlin.io.path.nameWithoutExtension
-import kotlin.math.max
-import kotlin.math.min
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.io.path.extension
+import kotlin.io.path.nameWithoutExtension
+import kotlin.math.max
+import kotlin.math.min
 
 class FileListViewModel : KoinComponent {
 
@@ -165,12 +165,13 @@ class FileListViewModel : KoinComponent {
     }
 
     fun onDoubleClick(fileListItem: FileListItem) {
-        if (fileListItem.editable) {
-            viewModel.hideArticleList()
-            viewModel.edit(fileListItem.path)
-        } else {
+        if (fileListItem.editable.not()) {
             viewModel.openFile(fileListItem.path)
+            return
         }
+
+        viewModel.hideArticleList()
+        viewModel.edit(fileListItem.path)
     }
 
     private val currentFocusItem = mutableStateOf<FileListItem?>(null)
