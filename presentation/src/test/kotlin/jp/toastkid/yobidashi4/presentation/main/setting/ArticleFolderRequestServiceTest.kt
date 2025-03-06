@@ -66,7 +66,7 @@ class ArticleFolderRequestServiceTest {
     }
 
     @Test
-    fun invoke2() {
+    fun invokeCancelCase() {
         every { anyConstructed<JFileChooser>().showOpenDialog(any()) } returns JFileChooser.CANCEL_OPTION
 
         subject.invoke()
