@@ -88,7 +88,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun updateFinderIndex() {
-        asynchronousArticleIndexerService.invoke(Dispatchers.IO)
+        asynchronousArticleIndexerService.invoke(ioContextProvider())
     }
 
     fun dumpLatest() {
