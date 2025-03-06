@@ -344,7 +344,7 @@ class MainMenuViewModel : KoinComponent {
     private val notification: ScheduledNotification by inject()
 
     fun restartNotification(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        CoroutineScope(dispatcher).launch {
+        CoroutineScope(ioContextProvider()).launch {
             notification.start()
         }
     }
