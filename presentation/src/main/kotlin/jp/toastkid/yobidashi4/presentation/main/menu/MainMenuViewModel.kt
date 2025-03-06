@@ -62,6 +62,8 @@ class MainMenuViewModel : KoinComponent {
 
     private val currentUserAgent = mutableStateOf(UserAgent.findByName(setting.userAgentName()))
 
+    private val ioContextProvider: IoContextProvider by inject()
+
     fun makeNewArticle() {
         viewModel.makeNewArticle()
     }
@@ -88,8 +90,6 @@ class MainMenuViewModel : KoinComponent {
     fun updateFinderIndex() {
         asynchronousArticleIndexerService.invoke(Dispatchers.IO)
     }
-
-    private val ioContextProvider: IoContextProvider by inject()
 
     fun dumpLatest() {
         CoroutineScope(ioContextProvider()).launch {
