@@ -35,7 +35,7 @@ class SettingImplementation : Setting {
 
     override fun  articleFolder(): String = properties.getProperty("article.folder") ?: ""
 
-    override fun  articleFolderPath() = Path.of(articleFolder())
+    override fun  articleFolderPath(): Path = Path.of(articleFolder())
 
     override fun setArticleFolderPath(path: String) {
         properties.setProperty("article.folder", path)
