@@ -78,6 +78,15 @@ internal class OffDayFinderServiceTest {
     }
 
     @Test
+    fun testVernalEquinoxDay1979() {
+        assertTrue(offDayFinderService(1979, 3, 20, DayOfWeek.FRIDAY))
+
+        verify(exactly = 1) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(1979) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
+    }
+
+    @Test
     fun testAutumnalEquinoxDay() {
         assertTrue(offDayFinderService(2020, 9, 22, DayOfWeek.FRIDAY))
 
