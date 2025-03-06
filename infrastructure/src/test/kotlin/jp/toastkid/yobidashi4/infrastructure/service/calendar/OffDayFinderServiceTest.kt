@@ -148,6 +148,19 @@ internal class OffDayFinderServiceTest {
     }
 
     @Test
+    fun testUserOffDayFlagOff() {
+        every { userOffDayService.invoke(any(), any()) } returns true
+
+        assertFalse(offDayFinderService(2020, 12, 29, DayOfWeek.TUESDAY, false))
+
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) }
+        verify(inverse = true) { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(2020) }
+        verify(exactly = 1) { anyConstructed<SpecialCaseOffDayCalculatorService>().invoke(any(), any()) }
+        verify(exactly = 1) { anyConstructed<MoveableHolidayCalculatorService>().invoke(any(), any(), any())}
+        verify(inverse = true) { userOffDayService.invoke(any(), any())}
+    }
+
+    @Test
     fun testMay6() {
         assertTrue(offDayFinderService(2020, 5, 6, DayOfWeek.WEDNESDAY))
 
