@@ -1,16 +1,16 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.chat
 
+import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
+import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
+import jp.toastkid.yobidashi4.infrastructure.service.chat.ChatStreamParser
+import org.koin.core.annotation.Single
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.URL
 import java.nio.charset.StandardCharsets
-import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
-import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
-import jp.toastkid.yobidashi4.infrastructure.service.chat.ChatStreamParser
-import org.koin.core.annotation.Single
-import org.slf4j.LoggerFactory
 
 @Single
 class ChatApi(private val apiKey: String) : ChatRepository {
@@ -19,7 +19,7 @@ class ChatApi(private val apiKey: String) : ChatRepository {
 
     override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
         val connection = httpUrlConnectionFactory.invoke(
-            URL("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:streamGenerateContent?alt=sse&key=$apiKey")
+            URL("https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=$apiKey")
         ) ?: return
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
