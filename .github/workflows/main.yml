@@ -7,6 +7,7 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 1
 
     steps:
       - uses: actions/checkout@v4
@@ -60,6 +61,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle-
 
       - name: kover
+        timeout-minutes: 15
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
