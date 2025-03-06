@@ -26,6 +26,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle-
 
       - name: build
+        timeout-minutes: 5
         run: "./gradlew packageUberJarForCurrentOS"
         env:
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
