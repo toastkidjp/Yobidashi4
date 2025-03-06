@@ -7,13 +7,13 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.IOException
-import java.nio.file.Files
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.nio.file.Files
 
 class SlideDeckReaderTest {
 
@@ -24,7 +24,7 @@ class SlideDeckReaderTest {
         slideDeckReader = SlideDeckReader(mockk())
 
         mockkStatic(Files::class)
-        every { Files.lines(any()) } answers {
+        every { Files.lines(any()) } returns
 """
 ![background](
 ![background](https://www.yahoo.co.jp/all)
@@ -66,7 +66,7 @@ result.value = engine.eval(input.value.text).toString()
 
 # 完
         """.split("\n").stream()
-        }
+
     }
 
     @AfterEach
