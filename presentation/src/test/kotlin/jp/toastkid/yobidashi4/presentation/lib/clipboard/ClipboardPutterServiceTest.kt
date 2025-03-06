@@ -1,17 +1,19 @@
 package jp.toastkid.yobidashi4.presentation.lib.clipboard
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Image
-import java.awt.datatransfer.Clipboard
-import java.io.IOException
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.awt.Image
+import java.awt.datatransfer.Clipboard
+import java.io.IOException
 
 internal class ClipboardPutterServiceTest {
 
@@ -25,7 +27,7 @@ internal class ClipboardPutterServiceTest {
         MockKAnnotations.init(this)
         clipboardPutterService = ClipboardPutterService(clipboard)
 
-        every { clipboard.setContents(any(), any()) }.answers { Unit }
+        every { clipboard.setContents(any(), any()) } just Runs
     }
 
     @AfterEach
