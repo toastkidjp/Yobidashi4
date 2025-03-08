@@ -77,7 +77,7 @@ jobs:
         timeout-minutes: 15
         env:
           TZ: 'Asia/Tokyo'
-          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo -Xms3072M -Xmx4128M'
+          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
         run: "./gradlew koverHtmlReport"
 
       - name: Upload Unit Test Results
