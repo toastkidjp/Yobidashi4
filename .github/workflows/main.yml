@@ -93,6 +93,14 @@ jobs:
           path: |
             build/reports/kover
 
+      - name: Upload Kotlin build report
+        timeout-minutes: 2
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kover Results
+          path: |
+            build/reports/kotlin-build
+
       - name: Print summary
         timeout-minutes: 1
         if: ${{ success() }}
