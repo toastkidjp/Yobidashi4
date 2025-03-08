@@ -71,7 +71,9 @@ allprojects {
 
     tasks.test {
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        maxHeapSize = "4G"
+        forkEvery = 0
+        maxHeapSize = "8G"
+        minHeapSize = "2G"
         useJUnitPlatform()
         jvmArgs(
             "--add-opens", "java.base/java.nio.file=ALL-UNNAMED",
