@@ -17,14 +17,8 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
-
-      - name: "Cache ~/.gradle/caches"
-        timeout-minutes: 3
-        uses: actions/cache@preview
-        with:
-          path: "~/.gradle/caches"
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle-
+          cache: gradle
+          cache-dependency-path: ~/.gradle/caches"
 
       - name: build
         timeout-minutes: 5
@@ -64,14 +58,8 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
-
-      - name: "Cache ~/.gradle/caches"
-        timeout-minutes: 3
-        uses: actions/cache@preview
-        with:
-          path: "~/.gradle/caches"
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle-
+          cache: gradle
+          cache-dependency-path: ~/.gradle/caches"
 
       - name: kover
         timeout-minutes: 15
