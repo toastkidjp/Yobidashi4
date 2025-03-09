@@ -11,8 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import javax.swing.JPopupMenu
-import javax.swing.UIManager
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.icon
@@ -29,10 +27,10 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import javax.swing.JPopupMenu
 
 @OptIn(ExperimentalFoundationApi::class)
 fun launchMainApplication(exitProcessOnExit: Boolean = true) {
-    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
 
     application(exitProcessOnExit) {
