@@ -17,10 +17,11 @@ class ChatApi(private val apiKey: String) : ChatRepository {
 
     private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
 
+    private val url =
+        URL("https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=$apiKey")
+
     override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
-        val connection = httpUrlConnectionFactory.invoke(
-            URL("https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=$apiKey")
-        ) ?: return
+        val connection = httpUrlConnectionFactory.invoke(url) ?: return
         connection.setRequestProperty("Content-Type", "application/json")
         connection.requestMethod = "POST"
         connection.doInput = true
