@@ -10,9 +10,9 @@ import java.util.zip.ZipOutputStream
 
 class ZipArchiver {
 
-    operator fun invoke(paths: Collection<Path>) {
+    operator fun invoke(paths: Collection<Path>, fileName: String = DESTINATION) {
         try {
-            ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Path.of(DESTINATION)))).use {
+            ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Path.of(fileName)))).use {
                 createZip(it, paths)
             }
         } catch (e: IOException) {
