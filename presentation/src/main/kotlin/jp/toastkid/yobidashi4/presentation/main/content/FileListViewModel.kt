@@ -222,7 +222,10 @@ class FileListViewModel : KoinComponent {
     }
 
     private fun useSelectedFile(pathIfEmpty: Path?, action: (Path) -> Unit) {
-        articleStates.filter { it.selected }.map { it.path }.ifEmpty { if (pathIfEmpty == null) emptyList() else listOf(pathIfEmpty) }.forEach(action)
+        articleStates.filter { it.selected }
+            .map { it.path }
+            .ifEmpty { if (pathIfEmpty == null) emptyList() else listOf(pathIfEmpty) }
+            .forEach(action)
     }
 
     fun slideshow(path: Path) {
