@@ -22,11 +22,8 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -34,6 +31,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.nameWithoutExtension
 
 class FileListViewKtTest {
 
@@ -84,11 +84,20 @@ class FileListViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun fileListView() {
+        val path = mockk<Path>()
+        every { path.nameWithoutExtension } returns "none-sub-text.txt"
+        val element = mockk<FileListItem>()
+        every { element.path } returns path
+        every { element.editable } returns true
+        every { element.selected } returns false
+        every { element.subText() } returns null
+
         every { anyConstructed<FileListViewModel>().items() } returns listOf(
             makeMockElement("test-list-item1", true),
             makeMockElement("test-list-item2"),
             makeMockElement("test-list-item3"),
-            makeMockElement("test-list-item4")
+            makeMockElement("test-list-item4"),
+            element
         )
 
         runDesktopComposeUiTest {
