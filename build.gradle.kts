@@ -1,6 +1,6 @@
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.File
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -58,13 +58,13 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 
     tasks.withType<KotlinCompile>() {
         kotlin {
-            compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+            compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
             compilerOptions.freeCompilerArgs = listOf("-Xjvm-default=all", "-opt-in=kotlin.RequiresOptIn")
         }
     }
