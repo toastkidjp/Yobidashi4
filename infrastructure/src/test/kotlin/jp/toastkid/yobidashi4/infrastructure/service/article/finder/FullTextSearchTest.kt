@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -17,18 +18,14 @@ import org.apache.lucene.store.FSDirectory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-@Disabled("Because Lucene 10.x contains breaking modification.")
 class FullTextSearchTest {
 
     private lateinit var subject: FullTextSearch
 
-    private lateinit var indexSearcher: IndexSearcher
-
     @MockK
-    private lateinit var indexReader: DirectoryReader
+    private lateinit var indexSearcher: IndexSearcher
 
     @MockK
     private lateinit var storedFields: StoredFields
@@ -36,18 +33,9 @@ class FullTextSearchTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { indexReader.storedFields() } returns storedFields
-        val leafReaderContext = mockk<CompositeReaderContext>()
-        every { leafReaderContext.reader() } returns indexReader
-        every { indexReader.context } returns leafReaderContext
 
-        val fsDirectory = mockk<FSDirectory>()
-        every { fsDirectory.listAll() } returns arrayOf("segments_0")
-        val checksumIndexInput = mockk<ChecksumIndexInput>()
-        every { checksumIndexInput.readByte() } returns 1
-        every { fsDirectory.openChecksumInput(any()) } returns checksumIndexInput
-        indexSearcher = IndexSearcher(DirectoryReader.open(fsDirectory))
-        //IndexSearcher()
+        mockkConstructor(DocumentGetterAdapter::class)
+        every { anyConstructed<DocumentGetterAdapter>().invoke() } returns storedFields
         every { indexSearcher.search(any(), any<Int>()) } returns mockk()
         every { storedFields.document(any()) } returns mockk()
 
