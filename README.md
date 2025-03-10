@@ -9,5 +9,8 @@ Yobidashi4
 
 This app is GUI editor and web browser for me.
 
-More
+## Requirements
+Java 21
+
+## More
 https://toastkidjp.github.io/documents/yobidashi4.html
