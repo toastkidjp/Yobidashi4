@@ -209,14 +209,14 @@ class MainMenuViewModelTest {
     fun dumpLatest() {
         every { setting.articleFolderPath() } returns mockk()
         mockkConstructor(ZipArchiver::class, ArticleFilesFinder::class, LatestFileFinder::class)
-        every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
+        every { anyConstructed<ZipArchiver>().invoke(any(), any()) } just Runs
         every { anyConstructed<ArticleFilesFinder>().invoke(any()) } returns mutableListOf()
         every { anyConstructed<LatestFileFinder>().invoke(any(), any()) } returns mutableListOf()
         every { mainViewModel.openFile(any()) } just Runs
 
         subject.dumpLatest()
 
-        verify { anyConstructed<ZipArchiver>().invoke(any()) }
+        verify { anyConstructed<ZipArchiver>().invoke(any(), any()) }
         verify { mainViewModel.openFile(any()) }
     }
 
