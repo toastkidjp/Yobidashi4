@@ -26,7 +26,7 @@ internal class ArticleTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { path.fileName }.returns(path)
+        every { path.fileName } returns path
         every { path.nameWithoutExtension }.returns("test")
         mockkStatic(Files::class)
     }
