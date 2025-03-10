@@ -28,9 +28,11 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import javax.swing.JPopupMenu
+import javax.swing.UIManager
 
 @OptIn(ExperimentalFoundationApi::class)
 fun launchMainApplication(exitProcessOnExit: Boolean = true) {
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     JPopupMenu.setDefaultLightWeightPopupEnabled(false)
 
     application(exitProcessOnExit) {
