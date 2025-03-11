@@ -3,13 +3,12 @@ package jp.toastkid.yobidashi4.presentation.lib.clipboard
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import java.awt.datatransfer.Clipboard
-import java.awt.datatransfer.Transferable
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.awt.datatransfer.Clipboard
+import java.awt.datatransfer.Transferable
 
 internal class ClipboardFetcherTest {
 
@@ -48,7 +47,7 @@ internal class ClipboardFetcherTest {
     @Test
     fun test() {
         every { transferable.isDataFlavorSupported(any()) }.returns(true)
-        every { transferable.getTransferData(any()) }.returns("test")
+        every { transferable.getTransferData(any()) } returns "test"
 
         assertEquals("test", clipboardFetcher.invoke())
     }
