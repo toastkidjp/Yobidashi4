@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.apache.lucene.index.CompositeReaderContext
@@ -16,10 +17,12 @@ class DocumentGetterAdapterTest {
 
     private lateinit var subject: DocumentGetterAdapter
 
+    @MockK
+    private lateinit var indexReader: DirectoryReader
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        val indexReader = mockk<DirectoryReader>()
         val context = mockk<CompositeReaderContext>()
         val field = context::class.java.superclass.getDeclaredField("isTopLevel")
         field.isAccessible = true
