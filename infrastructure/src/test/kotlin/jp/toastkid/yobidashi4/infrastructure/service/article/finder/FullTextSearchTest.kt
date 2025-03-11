@@ -4,8 +4,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.apache.lucene.index.CompositeReaderContext
@@ -30,14 +30,29 @@ class FullTextSearchTest {
     @MockK
     private lateinit var storedFields: StoredFields
 
+    @MockK
+    private lateinit var indexReader: DirectoryReader
+
+    @MockK
+    private lateinit var context: CompositeReaderContext
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkConstructor(DocumentGetterAdapter::class)
-        every { anyConstructed<DocumentGetterAdapter>().invoke() } returns storedFields
-        every { indexSearcher.search(any(), any<Int>()) } returns mockk()
         every { storedFields.document(any()) } returns mockk()
+
+        val field = context::class.java.superclass.getDeclaredField("isTopLevel")
+        field.isAccessible = true
+        field.set(context, true)
+        every { context.reader() } returns indexReader
+        every { context.leaves() } returns emptyList()
+        every { indexReader.context } returns context
+        every { indexReader.leaves() } returns emptyList()
+        every { indexReader.maxDoc() } returns 1
+        every { indexReader.storedFields() } returns storedFields
+        indexSearcher = spyk(IndexSearcher(indexReader))
+        every { indexSearcher.search(any(), any<Int>()) } returns mockk()
 
         subject = FullTextSearch(indexSearcher)
     }
