@@ -17,7 +17,7 @@ class FullTextSearch constructor(private val indexSearcher: IndexSearcher) {
 
     private val queryParser: QueryParser = QueryParser("content", StandardAnalyzer())
 
-    private val indexReader = DocumentGetterAdapter(indexSearcher)
+    private val indexReader = indexSearcher.indexReader
 
     @Throws(IOException::class, ParseException::class)
     fun search(searchQueryInput: String): TopDocs? {
@@ -29,7 +29,7 @@ class FullTextSearch constructor(private val indexSearcher: IndexSearcher) {
 
     @Throws(CorruptIndexException::class, IOException::class)
     fun getDocument(scoreDoc: ScoreDoc): Document? {
-        return indexReader.invoke().document(scoreDoc.doc)
+        return indexReader.storedFields().document(scoreDoc.doc)
     }
 
     companion object {
