@@ -20,10 +20,12 @@ class DocumentGetterAdapterTest {
     @MockK
     private lateinit var indexReader: DirectoryReader
 
+    @MockK
+    private lateinit var context: CompositeReaderContext
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        val context = mockk<CompositeReaderContext>()
         val field = context::class.java.superclass.getDeclaredField("isTopLevel")
         field.isAccessible = true
         field.set(context, true)
