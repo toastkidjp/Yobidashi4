@@ -25,7 +25,7 @@ internal class ArticleTemplateTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { offDayFinderService.invoke(any(), any(), any(), any(), any()) }.returns(false)
+        every { offDayFinderService.invoke(any(), any(), any(), any(), any()) } returns false
 
         articleTemplate = ArticleTemplate(offDayFinderService = offDayFinderService)
     }
