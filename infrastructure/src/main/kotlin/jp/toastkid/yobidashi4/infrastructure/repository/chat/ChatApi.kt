@@ -13,7 +13,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @Single
-class ChatApi(private val apiKey: String) : ChatRepository {
+class ChatApi(apiKey: String) : ChatRepository {
 
     private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
 
