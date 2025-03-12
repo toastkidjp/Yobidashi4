@@ -46,7 +46,7 @@ internal class ClipboardFetcherTest {
 
     @Test
     fun test() {
-        every { transferable.isDataFlavorSupported(any()) }.returns(true)
+        every { transferable.isDataFlavorSupported(any()) } returns true
         every { transferable.getTransferData(any()) } returns "test"
 
         assertEquals("test", clipboardFetcher.invoke())
