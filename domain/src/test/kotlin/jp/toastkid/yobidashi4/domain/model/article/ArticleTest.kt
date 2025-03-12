@@ -27,7 +27,7 @@ internal class ArticleTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { path.fileName } returns path
-        every { path.nameWithoutExtension }.returns("test")
+        every { path.nameWithoutExtension } returns "test"
         mockkStatic(Files::class)
     }
 
