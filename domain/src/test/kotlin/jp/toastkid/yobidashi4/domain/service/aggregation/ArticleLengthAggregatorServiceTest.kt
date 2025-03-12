@@ -34,7 +34,7 @@ class ArticleLengthAggregatorServiceTest {
         every { path.nameWithoutExtension } returns "file.md"
 
         mockkStatic(Files::class)
-        every { Files.readAllBytes(any()) }.returns("test content".toByteArray())
+        every { Files.readAllBytes(any()) } returns "test content".toByteArray()
 
         MockKAnnotations.init(this)
         every { articlesReaderService.invoke() }.returns(Stream.of(path))
