@@ -44,7 +44,7 @@ internal class ArticleTemplateTest {
     @Test
     fun noopIfReaderReturnsNull() {
         mockkConstructor(UserTemplateStreamReader::class)
-        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns(null)
+        every { anyConstructed<UserTemplateStreamReader>().invoke() } returns null
 
         val content = articleTemplate.invoke("test")
         assertTrue(content.isEmpty())
