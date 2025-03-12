@@ -224,9 +224,13 @@ class FileListViewModel : KoinComponent {
     private fun useSelectedFile(pathIfEmpty: Path?, action: (Path) -> Unit) {
         articleStates.filter { it.selected }
             .map { it.path }
-            .ifEmpty { if (pathIfEmpty == null) emptyList() else listOf(pathIfEmpty) }
+            .ifEmpty { makeSubstitute(pathIfEmpty) }
             .forEach(action)
     }
+
+    private fun makeSubstitute(pathIfEmpty: Path?) =
+        if (pathIfEmpty == null) emptyList()
+        else listOf(pathIfEmpty)
 
     fun slideshow(path: Path) {
         viewModel.slideshow(path)
