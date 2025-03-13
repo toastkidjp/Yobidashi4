@@ -13,17 +13,17 @@ class TableSorter {
     ) {
         val swap = if (lastSortOrder)
             if (aggregationResult.columnClass(index) == Int::class.java) {
-                articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
+                articleStates.sortedBy { it[index].toString().toInt() }
             } else if (aggregationResult.columnClass(index) == Double::class.java) {
-                articleStates.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
+                articleStates.sortedBy { it[index].toString().toDouble() }
             } else {
                 articleStates.sortedBy { it[index].toString() }
             }
         else
             if (aggregationResult.columnClass(index) == Int::class.java) {
-                articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
+                articleStates.sortedByDescending { it[index].toString().toInt() }
             } else if (aggregationResult.columnClass(index) == Double::class.java) {
-                articleStates.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
+                articleStates.sortedByDescending { it[index].toString().toDouble() }
             } else {
                 articleStates.sortedByDescending { it[index].toString() }
             }
