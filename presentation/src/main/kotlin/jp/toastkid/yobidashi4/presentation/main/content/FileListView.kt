@@ -187,9 +187,7 @@ private fun FileListItemRow(
         ) {
             DropdownMenuItem(
                 onClick = {
-                    selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach {
-                        openFile(it)
-                    }
+                    selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach(openFile)
                     closeOption()
                 }
             ) {
