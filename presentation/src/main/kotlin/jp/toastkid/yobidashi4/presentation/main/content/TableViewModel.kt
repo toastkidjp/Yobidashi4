@@ -3,20 +3,20 @@ package jp.toastkid.yobidashi4.presentation.main.content
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
-import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
+import jp.toastkid.yobidashi4.presentation.main.content.sort.TableSorter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.util.concurrent.atomic.AtomicReference
 
 class TableViewModel : KoinComponent {
 
@@ -37,6 +37,8 @@ class TableViewModel : KoinComponent {
     private val highlighter = KeywordHighlighter()
 
     private val query = mutableStateOf("")
+
+    private val tableSorter = TableSorter()
 
     fun items() = articleStates
 
@@ -63,7 +65,7 @@ class TableViewModel : KoinComponent {
         val lastSortOrder = if (lastSort.first == index) lastSort.second else false
         this.lastSorted.set(index to lastSortOrder.not())
 
-        sort(lastSortOrder, aggregationResult, index, articleStates)
+        tableSorter(lastSortOrder, aggregationResult, index, articleStates)
     }
 
     fun openMarkdownPreview(title: String) {
@@ -73,33 +75,6 @@ class TableViewModel : KoinComponent {
 
     fun edit(title: String) {
         mainViewModel.editWithTitle(title)
-    }
-
-    private fun sort(
-        lastSortOrder: Boolean,
-        aggregationResult: AggregationResult,
-        index: Int,
-        articleStates: SnapshotStateList<Array<Any>>
-    ) {
-        val swap = if (lastSortOrder)
-            if (aggregationResult.columnClass(index) == Int::class.java) {
-                articleStates.sortedBy { it[index].toString().toIntOrNull() ?: 0 }
-            } else if (aggregationResult.columnClass(index) == Double::class.java) {
-                articleStates.sortedBy { it[index].toString().toDoubleOrNull() ?: 0.0 }
-            } else {
-                articleStates.sortedBy { it[index].toString() }
-            }
-        else
-            if (aggregationResult.columnClass(index) == Int::class.java) {
-                articleStates.sortedByDescending { it[index].toString().toIntOrNull() ?: 0 }
-            } else if (aggregationResult.columnClass(index) == Double::class.java) {
-                articleStates.sortedByDescending { it[index].toString().toDoubleOrNull() ?: 0.0 }
-            } else {
-                articleStates.sortedByDescending { it[index].toString() }
-            }
-
-        articleStates.clear()
-        articleStates.addAll(swap)
     }
 
     fun highlight(text: String) = highlighter(text, query.value.replace("\"", ""))
