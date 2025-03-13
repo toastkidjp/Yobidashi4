@@ -32,6 +32,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.time.LocalDateTime
 
 class NotificationListTabViewKtTest {
 
@@ -105,14 +106,15 @@ class NotificationListTabViewKtTest {
     fun notFirst() {
         every { anyConstructed<NotificationListTabViewModel>().listState() } returns LazyListState(2)
         val item = NotificationEvent.makeDefault()
-        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(item)
+        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(item, NotificationEvent("2nd", "2nd", LocalDateTime.now()))
 
         runDesktopComposeUiTest {
             setContent {
                 NotificationListTabView()
             }
 
-            onNode(hasText("Update"), true)
+            onAllNodes(hasText("Update"), true)
+                .get(1)
                 .onParent()
                 .performClick()
                 .performKeyInput {
