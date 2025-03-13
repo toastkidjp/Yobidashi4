@@ -44,7 +44,7 @@ internal class ArticleTest {
 
     @Test
     fun testCount() {
-        every { Files.readAllLines(any()) }.returns(listOf("test content", "is containing dummy text です"))
+        every { Files.readAllLines(any()) } returns listOf("test content", "is containing dummy text です")
 
         val article = Article(path)
         assertEquals(39, article.count())
