@@ -27,18 +27,14 @@ class TableSortServiceTest {
             listOf("test2", -1, -1.2),
             listOf("test3", -1, "test"),
         )
-        subject.invoke(true, 0, items)
-        subject.invoke(true, 0, items)
-        subject.invoke(true, 1, items)
-        subject.invoke(true, 1, items)
-        subject.invoke(true, 2, items)
-        subject.invoke(true, 2, items)
-        subject.invoke(false, 0, items)
-        subject.invoke(false, 0, items)
-        subject.invoke(false, 1, items)
-        subject.invoke(false, 1, items)
-        subject.invoke(false, 2, items)
-        subject.invoke(false, 2, items)
+        (0..2).forEach {
+            subject.invoke(true, it, items)
+            subject.invoke(true, it, items)
+            subject.invoke(true, it, items)
+            subject.invoke(false, it, items)
+            subject.invoke(false, it, items)
+            subject.invoke(false, it, items)
+        }
         assertNull(subject.invoke(false, 2, emptyList()))
     }
 
