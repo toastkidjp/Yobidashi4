@@ -12,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
-import java.awt.BorderLayout
-import java.awt.Color
-import javax.swing.JPanel
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.awt.BorderLayout
+import java.awt.Color
+import javax.swing.JPanel
 
 @Composable
 internal fun WebTabView(tab: WebTab) {
