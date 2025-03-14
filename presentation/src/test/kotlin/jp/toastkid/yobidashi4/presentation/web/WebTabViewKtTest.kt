@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.web
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.window.Window
@@ -12,7 +14,6 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Panel
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -24,6 +25,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Panel
 
 class WebTabViewKtTest {
 
@@ -67,8 +69,17 @@ class WebTabViewKtTest {
     fun webTabView() {
         runDesktopComposeUiTest {
             setContent {
+                val tabs = mutableListOf(
+                    WebTab("test", "https://www.yahoo.com"),
+                    WebTab("test2", "https://www.yahoo.co.jp")
+                )
+
+                val index = remember { mutableStateOf(0) }
+
                 Window({}, visible = false) {
-                    WebTabView(WebTab("test", "https://www.yahoo.com"))
+                    WebTabView(tabs[index.value])
+
+                    index.value = 1
                 }
             }
 
