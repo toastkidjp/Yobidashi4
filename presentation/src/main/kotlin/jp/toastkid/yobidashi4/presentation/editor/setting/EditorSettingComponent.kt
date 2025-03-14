@@ -29,9 +29,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
                 GraphicsEnvironment.getLocalGraphicsEnvironment().availableFontFamilyNames.toList(),
                 "Font family: ${viewModel.editorFontFamily()}",
                 viewModel.isOpenFontFamily(),
-                {
-                    viewModel.closeFontFamily()
-                },
+                viewModel::closeFontFamily,
                 {
                     viewModel.setEditorFontFamily(it.toString())
                 },
