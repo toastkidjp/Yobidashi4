@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.net.MalformedURLException
-import java.net.URL
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.WebIconDownloader
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
+import java.net.MalformedURLException
+import java.net.URI
 
 @Single
 class WebIconLoaderServiceImplementation : WebIconLoaderService {
@@ -21,7 +21,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         webIcon.makeFolderIfNeed()
 
         val targetUrl = try {
-            URL(browserUrl)
+            URI(browserUrl).toURL()
         } catch (e: MalformedURLException) {
             LoggerFactory.getLogger(javaClass).warn("URL is malformed.", e)
             return
@@ -42,7 +42,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
                 it
             }
         }
-            .forEach { webIconDownloader(URL(it), webIcon.faviconFolder(), targetUrl.host) }
+            .forEach { webIconDownloader(URI(it).toURL(), webIcon.faviconFolder(), targetUrl.host) }
     }
 
 }
