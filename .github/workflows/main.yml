@@ -38,7 +38,6 @@ jobs:
         timeout-minutes: 5
         if: ${{ success() }}
         env:
-          TZ: 'Asia/Tokyo'
           GH_TOKEN: ${{ github.token }}
         run: |
           tag_title="v0.9.1_latest"
