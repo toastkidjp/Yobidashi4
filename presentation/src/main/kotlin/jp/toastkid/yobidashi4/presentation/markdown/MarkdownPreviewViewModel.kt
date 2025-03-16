@@ -7,12 +7,12 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.text.font.FontWeight
-import java.io.IOException
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
+import java.io.IOException
+import java.net.URI
+import javax.imageio.ImageIO
 
 class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
 
@@ -28,7 +28,9 @@ class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
 
     fun loadBitmap(source: String): ImageBitmap? {
         val bufferedImage = try {
-            ImageIO.read(URL(source))
+            ImageIO.read(URI(source).toURL())
+        } catch (e: IllegalArgumentException) {
+            return null
         } catch (e: IOException) {
             return null
         } ?: return null
