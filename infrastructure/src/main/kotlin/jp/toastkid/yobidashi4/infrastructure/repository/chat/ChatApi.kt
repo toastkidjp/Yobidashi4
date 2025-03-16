@@ -9,7 +9,7 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-import java.net.URL
+import java.net.URI
 import java.nio.charset.StandardCharsets
 
 @Single
@@ -18,7 +18,7 @@ class ChatApi(apiKey: String) : ChatRepository {
     private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
 
     private val url =
-        URL("https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=$apiKey")
+        URI("https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=$apiKey").toURL()
 
     override fun request(content: String, streamLineConsumer: (String?) -> Unit) {
         val connection = httpUrlConnectionFactory.invoke(url) ?: return
