@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.web.icon
 
-import java.net.URL
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -24,7 +24,7 @@ class WebIcon {
         }
 
         return Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
-            val startsWith = it.fileName.pathString.startsWith(URL(url).host.trim())
+            val startsWith = it.fileName.pathString.startsWith(URI(url).host.trim())
             startsWith
         }
     }
