@@ -8,14 +8,15 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.net.HttpURLConnection
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.HttpURLConnection
+import java.net.URI
+import java.net.URL
+import java.nio.file.Files
+import java.nio.file.Path
 
 class WebIconDownloaderTest {
 
@@ -41,7 +42,7 @@ class WebIconDownloaderTest {
         every { Files.exists(any()) } returns false
         every { Files.write(any(), any<ByteArray>()) } returns mockk()
 
-        url = URL("https://www.yahoo.co.jp/favicon.ico")
+        url = URI("https://www.yahoo.co.jp/favicon.ico").toURL()
         every { urlConnection.responseCode } returns 200
         every { urlConnection.inputStream } returns "test".byteInputStream()
 
