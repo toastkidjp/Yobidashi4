@@ -34,7 +34,7 @@ jobs:
           path: |
             build/compose/jars/*.jar
 
-      - name: Make release
+      - name: Upload artifacts to release
         timeout-minutes: 5
         if: ${{ success() }}
         env:
