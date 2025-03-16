@@ -4,13 +4,13 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.net.MalformedURLException
-import java.net.URL
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.io.IOException
+import java.net.URL
 
 internal class LinkDecoratorServiceImplementationTest {
 
@@ -35,7 +35,7 @@ internal class LinkDecoratorServiceImplementationTest {
     @Test
     fun testException() {
         mockkStatic(Jsoup::class)
-        every { Jsoup.parse(any<URL>(), any()) }.throws(MalformedURLException())
+        every { Jsoup.parse(any<URL>(), any()) }.throws(IOException())
 
         assertEquals("https://www.yahoo.co.jp", LinkDecoratorServiceImplementation().invoke("https://www.yahoo.co.jp"))
     }
