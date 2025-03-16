@@ -41,7 +41,7 @@ jobs:
           TZ: 'Asia/Tokyo'
           GH_TOKEN: ${{ github.token }}
         run: |
-          current_date=$(date "+%Y%m%d_%H%M%S")
+          current_date=$(date "+%Y%m%d")
           tag_title="v0.9.1_${{ matrix.os }}_${current_date}"
           echo ${tag_title}
           gh release create ${tag_title} --title ${tag_title} build/compose/jars/*.jar
