@@ -62,10 +62,21 @@ allprojects {
         }
     }
 
+    tasks.withType<JavaCompile>().configureEach {
+        options.compilerArgs.addAll(arrayOf(
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"))
+    }
+
     tasks.withType<KotlinCompile>() {
+
         kotlin {
             compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
-            compilerOptions.freeCompilerArgs = listOf("-Xjvm-default=all", "-opt-in=kotlin.RequiresOptIn")
+            compilerOptions.freeCompilerArgs = listOf(
+                "-Xjvm-default=all",
+                "-opt-in=kotlin.RequiresOptIn",
+                "-Xadd-modules=jdk.incubator.vector"
+            )
         }
     }
 
