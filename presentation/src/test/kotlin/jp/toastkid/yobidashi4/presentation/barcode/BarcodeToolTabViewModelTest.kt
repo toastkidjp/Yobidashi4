@@ -13,10 +13,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Image
-import java.awt.image.BufferedImage
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeDecoder
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -32,6 +28,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Image
+import java.awt.image.BufferedImage
+import java.net.URL
+import javax.imageio.ImageIO
 
 class BarcodeToolTabViewModelTest {
 
@@ -101,11 +101,15 @@ class BarcodeToolTabViewModelTest {
     @Test
     fun setDecodeInputValue() {
         assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
+        mockkStatic(ImageIO::class)
+        val image = mockk<BufferedImage>()
+        every { ImageIO.read(any<URL>()) } returns image
 
-        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("test"))
+        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("https://test.com"))
 
-        assertEquals("test", barcodeToolTabViewModel.decodeInputValue().text)
-        verify { barcodeDecoder wasNot called }
+        assertEquals("https://test.com", barcodeToolTabViewModel.decodeInputValue().text)
+        verify { ImageIO.read(any<URL>()) }
+        verify { barcodeDecoder.invoke(any()) }
     }
 
     @Test
