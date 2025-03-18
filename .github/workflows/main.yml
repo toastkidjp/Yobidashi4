@@ -18,7 +18,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag_title='v0.9.2_$(date "+%Y%m%d")'
+          current_date=$(date "+%Y%m%d")
+          tag_title="v0.9.2_${current_date}"
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
           RELEASE_EXISTS=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases/tags/${tag_title}" | jq -r '.message')
           if [[ "$RELEASE_EXISTS" == "Not Found" ]]; then
