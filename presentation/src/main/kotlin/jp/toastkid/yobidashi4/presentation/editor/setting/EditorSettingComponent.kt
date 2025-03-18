@@ -40,9 +40,7 @@ internal fun EditorSettingComponent(modifier: Modifier) {
                 (12 .. 24).toList(),
                 "Font Size: ${viewModel.editorFontSize()}",
                 viewModel.isOpenFontSize(),
-                {
-                    viewModel.closeFontSize()
-                },
+                viewModel::closeFontSize,
                 viewModel::setEditorFontSize,
                 Modifier.clickable(onClick = viewModel::openFontSize)
             )
