@@ -94,6 +94,13 @@ class WebIconTest {
     }
 
     @Test
+    fun test() {
+        val find = webIcon.find("http://1ch小相撲.xyz/")
+
+        assertNull(find)
+    }
+
+    @Test
     fun readAll() {
         every { Files.list(any()) } returns Stream.of(mockk())
 
