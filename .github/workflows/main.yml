@@ -16,6 +16,7 @@ jobs:
       - name: Check if release exists
         id: check_release
         env:
+          TZ: 'Asia/Tokyo'
           GH_TOKEN: ${{ github.token }}
         run: |
           current_date=$(date "+%Y%m%d")
