@@ -1,7 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -34,8 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ChatTabView(chatTab: ChatTab) {
@@ -106,11 +112,23 @@ private fun MessageList(
                     color = nameColor(it.role),
                     modifier = Modifier.padding(horizontal = 4.dp).weight(0.2f)
                 )
+
                 MessageContent(
                     it.text,
                     modifier = Modifier.padding(horizontal = 4.dp).weight(1f)
                 )
             }
+
+            Row(horizontalArrangement = Arrangement.End) {
+                Icon(
+                    painterResource(Res.drawable.ic_clipboard),
+                    contentDescription = "Clip this message.",
+                    modifier = Modifier.clickable {
+                        ClipboardPutterService().invoke(it.text)
+                    }
+                )
+            }
+
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
             LaunchedEffect(chatMessages.last().text.length) {
