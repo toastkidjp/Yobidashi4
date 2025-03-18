@@ -113,6 +113,16 @@ class BarcodeToolTabViewModelTest {
     }
 
     @Test
+    fun setDecodeInputValueWithIncorrectUrl() {
+        assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
+
+        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("test"))
+
+        assertEquals("test", barcodeToolTabViewModel.decodeInputValue().text)
+        verify { barcodeDecoder wasNot called }
+    }
+
+    @Test
     fun setDecodeInputValueIfPassedEmptyValue() {
         assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
         mockkStatic(ImageIO::class)
