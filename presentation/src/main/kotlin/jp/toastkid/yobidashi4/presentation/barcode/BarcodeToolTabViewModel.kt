@@ -51,6 +51,9 @@ class BarcodeToolTabViewModel : KoinComponent {
         if (value.text.isNotBlank()) {
             val image = try {
                 ImageIO.read(URI(value.text).toURL())
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+                null
             } catch (e: IOException) {
                 e.printStackTrace()
                 null
