@@ -23,8 +23,10 @@ class WebIcon {
             return null
         }
 
+        val uri = URI(url).host?.trim() ?: return null
+
         return Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
-            val startsWith = it.fileName.pathString.startsWith(URI(url).host.trim())
+            val startsWith = it.fileName.pathString.startsWith(uri)
             startsWith
         }
     }
