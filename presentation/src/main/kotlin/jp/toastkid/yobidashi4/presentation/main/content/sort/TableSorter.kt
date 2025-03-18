@@ -14,13 +14,7 @@ class TableSorter {
         val swap = if (lastSortOrder)
             sortBy(index, articleStates, aggregationResult.columnClass(index))
         else
-            if (aggregationResult.columnClass(index) == Int::class.java) {
-                articleStates.sortedByDescending { it[index].toString().toInt() }
-            } else if (aggregationResult.columnClass(index) == Double::class.java) {
-                articleStates.sortedByDescending { it[index].toString().toDouble() }
-            } else {
-                articleStates.sortedByDescending { it[index].toString() }
-            }
+            sortByDescending(aggregationResult, index, articleStates)
 
         articleStates.clear()
         articleStates.addAll(swap)
@@ -40,6 +34,18 @@ class TableSorter {
         else -> {
             articleStates.sortedBy { it[index].toString() }
         }
+    }
+
+    private fun sortByDescending(
+        aggregationResult: AggregationResult,
+        index: Int,
+        articleStates: SnapshotStateList<Array<Any>>
+    ) = if (aggregationResult.columnClass(index) == Int::class.java) {
+        articleStates.sortedByDescending { it[index].toString().toInt() }
+    } else if (aggregationResult.columnClass(index) == Double::class.java) {
+        articleStates.sortedByDescending { it[index].toString().toDouble() }
+    } else {
+        articleStates.sortedByDescending { it[index].toString() }
     }
 
 }
