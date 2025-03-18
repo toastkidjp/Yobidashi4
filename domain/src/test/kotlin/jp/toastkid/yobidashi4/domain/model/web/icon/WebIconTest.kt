@@ -94,7 +94,7 @@ class WebIconTest {
     }
 
     @Test
-    fun test() {
+    fun findJapaneseDomainCase() {
         val find = webIcon.find("http://1ch小相撲.xyz/")
 
         assertNull(find)
