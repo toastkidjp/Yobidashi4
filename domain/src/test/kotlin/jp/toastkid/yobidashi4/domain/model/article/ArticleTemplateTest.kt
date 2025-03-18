@@ -53,11 +53,13 @@ internal class ArticleTemplateTest {
     @Test
     fun testContainsWorkDay() {
         mockkConstructor(UserTemplateStreamReader::class)
-        every { anyConstructed<UserTemplateStreamReader>().invoke() } returns """
+        every { anyConstructed<UserTemplateStreamReader>().invoke() } answers {
+            """
             {{workday}}
 test
             {{/workday}}
         """.trimIndent().byteInputStream()
+        }
         val content = ArticleTemplate(LocalDate.of(2023, 2, 23), offDayFinderService).invoke("test")
         assertTrue(content.contains("test"))
     }
