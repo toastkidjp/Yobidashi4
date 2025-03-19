@@ -4,14 +4,15 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.HttpURLConnection
+import java.net.URI
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class HttpUrlConnectionFactoryTest {
 
@@ -30,7 +31,7 @@ class HttpUrlConnectionFactoryTest {
     @Test
     fun invoke() {
         val url = mockk<URL>()
-        val openConnection = URL("https://www.yahoo.co.jp").openConnection()
+        val openConnection = URI("https://www.yahoo.co.jp").toURL().openConnection()
         every { url.openConnection() } returns openConnection
 
         val urlConnection = subject.invoke(url)
