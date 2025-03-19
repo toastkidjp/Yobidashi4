@@ -11,6 +11,8 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.check_release.outputs.tag_title }}
     steps:
       - uses: actions/checkout@v4
       - name: Check if release exists
@@ -32,6 +34,7 @@ jobs:
           fi
         shell: bash
       - name: Create Release
+        id: create_release
         if: steps.check_release.outputs.release_exists == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -77,8 +80,9 @@ jobs:
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
         run: |
-          tag_title="v0.9.1_latest"
+          tag_title=$RELEASE_TAG
           gh release upload ${tag_title} build/compose/jars/*.jar --clobber
         shell: bash
 
