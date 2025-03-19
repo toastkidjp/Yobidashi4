@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
@@ -13,6 +11,8 @@ import org.cef.browser.CefBrowser
 import org.cef.callback.CefContextMenuParams
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.net.URI
+import javax.imageio.ImageIO
 
 class CefContextMenuAction : KoinComponent {
 
@@ -64,7 +64,7 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.QUICK_STORE_IMAGE.id -> {
                 val sourceUrl = params?.sourceUrl ?: return
-                QuickStoreActionBehavior().invoke(URL(sourceUrl))
+                QuickStoreActionBehavior().invoke(URI(sourceUrl).toURL())
             }
 
             ContextMenu.ADD_BOOKMARK.id -> {
@@ -73,7 +73,7 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.CLIP_IMAGE.id -> {
                 val sourceUrl = params?.sourceUrl ?: return
-                val image = ImageIO.read(URL(sourceUrl)) ?: return
+                val image = ImageIO.read(URI(sourceUrl).toURL()) ?: return
                 ClipboardPutterService().invoke(image)
             }
 
