@@ -68,7 +68,7 @@ class WebIconDownloaderTest {
     @Test
     fun urlNotIncludeExtensionCase() {
         every { folder.resolve(any<String>()) } returns imagePath
-        url = URL("https://www.yahoo.co.jp/favicon")
+        url = URI("https://www.yahoo.co.jp/favicon").toURL()
 
         subject.invoke(url, folder, "test")
 
@@ -80,7 +80,7 @@ class WebIconDownloaderTest {
     @Test
     fun urlEndDotCase() {
         every { folder.resolve(any<String>()) } returns imagePath
-        url = URL("https://www.yahoo.co.jp/favicon.")
+        url = URI("https://www.yahoo.co.jp/favicon").toURL()
 
         subject.invoke(url, folder, "test")
 
