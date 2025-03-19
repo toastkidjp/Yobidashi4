@@ -53,7 +53,7 @@ internal class ArticleTest {
     @Test
     fun testMakeFile() {
         every { Files.createFile(any()) } returns path
-        every { Files.write(any(), any<ByteArray>()) }.returns(path)
+        every { Files.write(any(), any<ByteArray>()) } returns path
 
         Article(path).makeFile { "test" }
 
