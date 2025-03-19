@@ -10,16 +10,16 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import java.net.URL
+import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
+import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.net.URI
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
-import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import kotlin.math.max
 import kotlin.math.min
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class SlideshowViewModel {
 
@@ -85,7 +85,7 @@ class SlideshowViewModel {
             return fromCache
         }
 
-        val bitmap = ImageIO.read(URL(backgroundUrl)).toComposeImageBitmap()
+        val bitmap = ImageIO.read(URI(backgroundUrl).toURL()).toComposeImageBitmap()
         imageCache.put(backgroundUrl, bitmap)
         return bitmap
     }
