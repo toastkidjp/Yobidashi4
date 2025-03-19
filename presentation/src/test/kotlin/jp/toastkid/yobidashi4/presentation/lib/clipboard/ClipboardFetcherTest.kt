@@ -31,7 +31,7 @@ internal class ClipboardFetcherTest {
 
     @Test
     fun testReturnNull() {
-        every { transferable.isDataFlavorSupported(any()) }.returns(false)
+        every { transferable.isDataFlavorSupported(any()) } returns false
 
         assertNull(clipboardFetcher.invoke())
     }
