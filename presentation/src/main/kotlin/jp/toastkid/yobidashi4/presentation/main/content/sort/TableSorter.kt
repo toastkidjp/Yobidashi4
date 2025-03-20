@@ -35,15 +35,9 @@ class TableSorter {
         articleStates: SnapshotStateList<Array<Any>>,
         anyClass: Class<out Any>
     ) = when (anyClass) {
-        Int::class.java -> {
-            articleStates.sortedByDescending { it[index].toString().toInt() }
-        }
-        Double::class.java -> {
-            articleStates.sortedByDescending { it[index].toString().toDouble() }
-        }
-        else -> {
-            articleStates.sortedByDescending { it[index].toString() }
-        }
+        Int::class.java -> articleStates.sortedByDescending { it[index].toString().toInt() }
+        Double::class.java -> articleStates.sortedByDescending { it[index].toString().toDouble() }
+        else -> articleStates.sortedByDescending { it[index].toString() }
     }
 
 }
