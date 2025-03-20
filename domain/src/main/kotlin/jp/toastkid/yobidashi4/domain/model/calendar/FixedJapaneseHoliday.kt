@@ -28,7 +28,7 @@ enum class FixedJapaneseHoliday(val month: Int, val date: Int, val japaneseTitle
                 }
         }
 
-        private inline fun calculateDate(year: Int, it: FixedJapaneseHoliday): Int {
+        private fun calculateDate(year: Int, it: FixedJapaneseHoliday): Int {
             if (it != MOUNTAIN_DAY) {
                 return it.date
             }
