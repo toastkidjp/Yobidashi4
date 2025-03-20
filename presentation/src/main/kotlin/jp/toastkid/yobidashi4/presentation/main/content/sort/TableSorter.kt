@@ -40,12 +40,16 @@ class TableSorter {
         index: Int,
         articleStates: SnapshotStateList<Array<Any>>,
         anyClass: Class<out Any>
-    ) = if (anyClass == Int::class.java) {
-        articleStates.sortedByDescending { it[index].toString().toInt() }
-    } else if (anyClass == Double::class.java) {
-        articleStates.sortedByDescending { it[index].toString().toDouble() }
-    } else {
-        articleStates.sortedByDescending { it[index].toString() }
+    ) = when (anyClass) {
+        Int::class.java -> {
+            articleStates.sortedByDescending { it[index].toString().toInt() }
+        }
+        Double::class.java -> {
+            articleStates.sortedByDescending { it[index].toString().toDouble() }
+        }
+        else -> {
+            articleStates.sortedByDescending { it[index].toString() }
+        }
     }
 
 }
