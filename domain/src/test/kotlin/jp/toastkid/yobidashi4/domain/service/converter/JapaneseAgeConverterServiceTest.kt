@@ -3,14 +3,14 @@ package jp.toastkid.yobidashi4.domain.service.converter
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.time.LocalDate
-import java.time.chrono.JapaneseDate
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.chrono.JapaneseDate
 
 class JapaneseAgeConverterServiceTest {
 
@@ -21,7 +21,7 @@ class JapaneseAgeConverterServiceTest {
         japaneseAgeConverterService = JapaneseAgeConverterService()
 
         mockkStatic(JapaneseDate::class)
-        every { JapaneseDate.now() }.returns(JapaneseDate.of(2023, 8, 27))
+        every { JapaneseDate.now() } returns JapaneseDate.of(2023, 8, 27)
         mockkStatic(LocalDate::class)
         every { LocalDate.now() }.returns(LocalDate.of(2023, 8, 27))
     }
