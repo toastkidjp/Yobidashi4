@@ -69,7 +69,7 @@ internal class ArticleTest {
     @Test
     fun testLastModified() {
         val fileTime = mockk<FileTime>()
-        every { fileTime.toMillis() }.returns(42L)
+        every { fileTime.toMillis() } returns 42L
         every { Files.getLastModifiedTime(any()) }.returns(fileTime)
 
         val article = Article(path)
