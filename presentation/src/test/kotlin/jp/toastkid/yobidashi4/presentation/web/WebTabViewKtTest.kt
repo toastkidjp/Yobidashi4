@@ -83,7 +83,7 @@ class WebTabViewKtTest {
                 }
             }
 
-            verify { webViewPool.component(any(), any()) }
+            verify(exactly = 2) { webViewPool.component(any(), any()) }
         }
     }
 
