@@ -2,10 +2,8 @@ package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -101,31 +99,28 @@ private fun MessageList(
 
     LazyColumn(state = listState) {
         items(chatMessages) {
-            Row(
-                verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.padding(4.dp)
+            MessageContent(
+                it.text,
+                modifier = Modifier.padding(4.dp).padding(horizontal = 4.dp)
+            )
+
+            Box(
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     name(it.role),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = nameColor(it.role),
-                    modifier = Modifier.padding(horizontal = 4.dp).weight(0.2f)
+                    modifier = Modifier.padding(horizontal = 4.dp).align(Alignment.BottomStart)
                 )
 
-                MessageContent(
-                    it.text,
-                    modifier = Modifier.padding(horizontal = 4.dp).weight(1f)
-                )
-            }
-
-            Row(horizontalArrangement = Arrangement.End) {
                 Icon(
                     painterResource(Res.drawable.ic_clipboard),
                     contentDescription = "Clip this message.",
                     modifier = Modifier.clickable {
                         ClipboardPutterService().invoke(it.text)
-                    }
+                    }.align(Alignment.BottomEnd)
                 )
             }
 
