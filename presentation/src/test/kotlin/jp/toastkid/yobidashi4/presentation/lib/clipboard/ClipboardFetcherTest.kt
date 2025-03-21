@@ -24,7 +24,7 @@ internal class ClipboardFetcherTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { clipboard.getContents(any()) }.returns(transferable)
+        every { clipboard.getContents(any()) } returns transferable
 
         clipboardFetcher = ClipboardFetcher(clipboard)
     }
