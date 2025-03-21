@@ -17,11 +17,13 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -64,6 +66,9 @@ class ChatTabViewModelTest {
         every { service.send(any()) } returns ""
         every { service.setChat(any()) } just Runs
         every { service.messages() } returns emptyList()
+
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
         subject = ChatTabViewModel()
     }
@@ -230,6 +235,13 @@ class ChatTabViewModelTest {
                 assertFalse(consumed)
             }
         }
+    }
+
+    @Test
+    fun clipText() {
+        subject.clipText("test")
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
 }
