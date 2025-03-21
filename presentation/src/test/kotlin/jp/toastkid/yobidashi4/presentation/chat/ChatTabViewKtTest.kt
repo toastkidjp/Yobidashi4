@@ -64,6 +64,7 @@ class ChatTabViewKtTest {
         )
         every { anyConstructed<ChatTabViewModel>().launch(any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().update(any()) } just Runs
+        every { anyConstructed<ChatTabViewModel>().clipText(any()) } just Runs
         every { tab.chat() } returns mockk()
     }
 
@@ -94,7 +95,7 @@ class ChatTabViewKtTest {
                 .onFirst()
                 .performClick()
 
-            verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+            verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
         }
     }
 
