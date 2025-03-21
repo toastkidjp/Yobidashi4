@@ -107,6 +107,8 @@ class ChatTabViewModel : KoinComponent {
 
     fun clipText(text: String) {
         clipboardPutterService.invoke(text)
+
+        mainViewModel.showSnackbar("Clipped text.")
     }
 
 }
