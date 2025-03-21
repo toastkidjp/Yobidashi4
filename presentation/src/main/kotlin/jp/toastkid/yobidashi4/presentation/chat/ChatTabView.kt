@@ -37,7 +37,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
@@ -57,7 +56,8 @@ fun ChatTabView(chatTab: ChatTab) {
                         viewModel.scrollState(),
                         viewModel.messages(),
                         viewModel::name,
-                        viewModel::nameColor
+                        viewModel::nameColor,
+                        viewModel::clipText
                     )
                 }
                 VerticalScrollbar(
@@ -93,7 +93,8 @@ private fun MessageList(
     listState: LazyListState,
     chatMessages: List<ChatMessage>,
     name: (String) -> String,
-    nameColor: (String) -> Color
+    nameColor: (String) -> Color,
+    clipText: (String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -119,7 +120,7 @@ private fun MessageList(
                     painterResource(Res.drawable.ic_clipboard),
                     contentDescription = "Clip this message.",
                     modifier = Modifier.clickable {
-                        ClipboardPutterService().invoke(it.text)
+                        clipText(it.text)
                     }.align(Alignment.BottomEnd)
                 )
             }
