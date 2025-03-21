@@ -4,6 +4,8 @@ import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -100,10 +102,13 @@ private fun MessageList(
 
     LazyColumn(state = listState) {
         items(chatMessages) {
-            MessageContent(
-                it.text,
-                modifier = Modifier.padding(4.dp).padding(horizontal = 4.dp)
-            )
+            Row {
+                Spacer(modifier = Modifier.weight(0.2f))
+                MessageContent(
+                    it.text,
+                    modifier = Modifier.padding(4.dp).padding(horizontal = 4.dp).weight(0.8f)
+                )
+            }
 
             Box(
                 modifier = Modifier.fillMaxWidth()
