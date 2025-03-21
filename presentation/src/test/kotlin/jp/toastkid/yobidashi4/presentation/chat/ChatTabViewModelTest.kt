@@ -66,6 +66,7 @@ class ChatTabViewModelTest {
         every { service.send(any()) } returns ""
         every { service.setChat(any()) } just Runs
         every { service.messages() } returns emptyList()
+        every { mainViewModel.showSnackbar(any()) } just Runs
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
@@ -242,6 +243,7 @@ class ChatTabViewModelTest {
         subject.clipText("test")
 
         verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+        verify { mainViewModel.showSnackbar(any()) }
     }
 
 }
