@@ -34,6 +34,8 @@ class ChatTabViewModel : KoinComponent {
 
     private val scrollState = LazyListState()
 
+    private val clipboardPutterService = ClipboardPutterService()
+
     fun messages(): List<ChatMessage> = service.messages()
 
     suspend fun send() {
@@ -104,7 +106,7 @@ class ChatTabViewModel : KoinComponent {
     }
 
     fun clipText(text: String) {
-        ClipboardPutterService().invoke(text)
+        clipboardPutterService.invoke(text)
     }
 
 }
