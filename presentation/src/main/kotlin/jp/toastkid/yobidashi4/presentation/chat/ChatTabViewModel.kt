@@ -13,6 +13,7 @@ import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -100,6 +101,10 @@ class ChatTabViewModel : KoinComponent {
 
     fun nameColor(role: String): Color {
         return Color(if (role == "model") 0xFF86EEC7 else 0xFFFFD54F)
+    }
+
+    fun clipText(text: String) {
+        ClipboardPutterService().invoke(text)
     }
 
 }
