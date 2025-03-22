@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.20"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
     // Apply the application plugin to add support for building a CLI application in Java.
-    id("com.google.devtools.ksp") version "2.0.20-1.0.25"
+    id("com.google.devtools.ksp") version "2.1.20-1.0.31"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
 }
 
