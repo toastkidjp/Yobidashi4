@@ -34,6 +34,10 @@ class LoanCalculatorViewModel {
 
     fun result() = result.value
 
+    private val totalInterest = mutableStateOf("")
+
+    fun totalInterest() = totalInterest.value
+
     private val loanAmount = mutableStateOf(TextFieldValue("35000000"))
 
     fun loanAmount() = loanAmount.value
@@ -117,9 +121,10 @@ class LoanCalculatorViewModel {
             {
                 lastPaymentResult.set(it)
 
-                result.value = String.format("月々の支払額: %,d (金利総額 %,d)", it.monthlyPayment,
-                    it.totalInterestAmount()
-                )
+                result.value = String.format("月々の支払額: %,d", it.monthlyPayment)
+
+                totalInterest.value = String.format("金利総額 %,d", it.totalInterestAmount())
+
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
             }
