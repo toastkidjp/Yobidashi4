@@ -123,7 +123,7 @@ class LoanCalculatorViewModel {
 
                 result.value = String.format("Monthly payment: %,d", it.monthlyPayment)
 
-                totalInterest.value = String.format("金利総額 %,d", it.totalInterestAmount())
+                totalInterest.value = String.format("Amount of interest: %,d", it.totalInterestAmount())
 
                 scheduleState.clear()
                 scheduleState.addAll(it.paymentSchedule)
