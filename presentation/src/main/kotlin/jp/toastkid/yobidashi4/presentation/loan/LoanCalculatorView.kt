@@ -58,6 +58,7 @@ fun LoanCalculatorView() {
                 SelectionContainer {
                     Column {
                         Text(text = viewModel.result(), fontSize = 18.sp)
+                        Text(text = viewModel.totalInterest(), fontSize = 18.sp)
                         Text(text = viewModel.brokerageFee(), fontSize = 18.sp)
                     }
                 }
