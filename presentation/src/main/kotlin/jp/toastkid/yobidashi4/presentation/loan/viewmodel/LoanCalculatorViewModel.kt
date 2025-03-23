@@ -34,6 +34,8 @@ class LoanCalculatorViewModel {
 
     fun result() = result.value
 
+    private val brokerageFee = AtomicReference("")
+
     private val totalInterest = mutableStateOf("")
 
     fun totalInterest() = totalInterest.value
@@ -44,6 +46,8 @@ class LoanCalculatorViewModel {
 
     fun setLoanAmount(value: TextFieldValue) {
         loanAmount.value = value.copy(text = formatDecimalString(value.text))
+
+        brokerageFee.set(calculateBrokerageFee())
 
         onChange(inputChannel, value.text)
     }
@@ -196,14 +200,16 @@ class LoanCalculatorViewModel {
      * <= 4_000_000 4.4％＋22,000
      * else 3.3％＋66,000
      */
-    fun brokerageFee(): String {
+    fun calculateBrokerageFee(): String {
         val amount = extractLong(loanAmount.value.text)
         val brokerageFee = when {
             amount <= 2_000_000 -> (amount * 0.055)
             amount <= 4_000_000 -> (amount * 0.044) + 22_000
             else -> (amount * 0.033) + 66_000
         }.toLong()
-        return "Brokerage fee: $brokerageFee"
+        return "Brokerage fee: ${String.format("Monthly payment: %,d", brokerageFee)}"
     }
+
+    fun brokerageFee(): String = brokerageFee.get()
 
 }
