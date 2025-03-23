@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version libraries.versions.kotlin
     id("org.jetbrains.compose") version libraries.versions.compose
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.20"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.21"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20"
     // Apply the application plugin to add support for building a CLI application in Java.
     id("com.google.devtools.ksp") version "2.1.20-1.0.31"
     id("org.jetbrains.kotlinx.kover") version libraries.versions.kover
