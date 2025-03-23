@@ -121,7 +121,7 @@ class LoanCalculatorViewModel {
             {
                 lastPaymentResult.set(it)
 
-                result.value = String.format("月々の支払額: %,d", it.monthlyPayment)
+                result.value = String.format("Monthly payment: %,d", it.monthlyPayment)
 
                 totalInterest.value = String.format("金利総額 %,d", it.totalInterestAmount())
 
