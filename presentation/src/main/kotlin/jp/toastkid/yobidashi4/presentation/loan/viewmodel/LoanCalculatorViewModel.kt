@@ -200,7 +200,7 @@ class LoanCalculatorViewModel {
      * <= 4_000_000 4.4％＋22,000
      * else 3.3％＋66,000
      */
-    fun calculateBrokerageFee(): String {
+    private fun calculateBrokerageFee(): String {
         val amount = extractLong(loanAmount.value.text)
         val brokerageFee = when {
             amount <= 2_000_000 -> (amount * 0.055)
