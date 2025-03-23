@@ -19,7 +19,9 @@ import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_down
 import jp.toastkid.yobidashi4.library.resources.ic_up
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
 import org.koin.core.component.KoinComponent
@@ -213,8 +215,10 @@ class PhotoTabViewModel : KoinComponent {
         rotationZ.value = 0f
     }
 
-    suspend fun divideGif(path: Path) {
-        gifDivider.invoke(path)
+    fun divideGif(path: Path) {
+        CoroutineScope(ioDispatcher()).launch {
+            gifDivider.invoke(path)
+        }
     }
 
     fun ioDispatcher() = Dispatchers.IO
