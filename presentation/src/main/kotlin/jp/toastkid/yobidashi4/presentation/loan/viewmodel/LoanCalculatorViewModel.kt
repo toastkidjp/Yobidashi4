@@ -207,7 +207,7 @@ class LoanCalculatorViewModel {
             amount <= 4_000_000 -> (amount * 0.044) + 22_000
             else -> (amount * 0.033) + 66_000
         }.toLong()
-        return "Brokerage fee: ${String.format("Monthly payment: %,d", brokerageFee)}"
+        return String.format("Brokerage fee: %,d", brokerageFee)
     }
 
     fun brokerageFee(): String = brokerageFee.get()
