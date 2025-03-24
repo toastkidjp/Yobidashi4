@@ -216,11 +216,14 @@ class LoanCalculatorViewModelTest {
     }
 
     @CsvSource(
-        "3000000, 154000",
-        "10000000, 396000",
-        "20000000, 726000",
-        "30000000, 1056000",
-        "40000000, 1386000",
+        value = [
+            "3000000; 154,000",
+            "10000000; 396,000",
+            "20000000; 726,000",
+            "30000000; 1,056,000",
+            "40000000; 1,386,000",
+        ],
+        delimiter = ';'
     )
     @ParameterizedTest
     fun brokerageFee(amount: String, expected: String) {
