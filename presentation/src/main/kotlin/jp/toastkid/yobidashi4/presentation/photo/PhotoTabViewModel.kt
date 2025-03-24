@@ -221,6 +221,6 @@ class PhotoTabViewModel : KoinComponent {
         }
     }
 
-    fun ioDispatcher() = Dispatchers.IO
+    private fun ioDispatcher() = Dispatchers.IO
 
 }
