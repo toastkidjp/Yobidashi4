@@ -25,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,8 +40,6 @@ import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewMode
 fun LoanCalculatorView() {
     val viewModel = remember { LoanCalculatorViewModel() }
     val coroutineScope = rememberCoroutineScope()
-
-    val focusRequester = remember { FocusRequester() }
 
     Surface(
         elevation = 4.dp,
