@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_down
 import jp.toastkid.yobidashi4.library.resources.ic_up
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
@@ -223,7 +222,5 @@ class PhotoTabViewModel : KoinComponent {
             gifDivider.invoke(path)
         }
     }
-
-    private fun ioDispatcher() = Dispatchers.IO
 
 }
