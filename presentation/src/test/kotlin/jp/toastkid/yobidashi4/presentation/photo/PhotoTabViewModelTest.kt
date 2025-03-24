@@ -18,12 +18,9 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.File
-import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Path
-import javax.imageio.ImageIO
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -37,6 +34,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.io.File
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
+import javax.imageio.ImageIO
 
 @OptIn(InternalComposeUiApi::class)
 class PhotoTabViewModelTest {
@@ -45,6 +47,9 @@ class PhotoTabViewModelTest {
 
     @MockK
     private lateinit var gifDivider: GifDivider
+
+    @MockK
+    private lateinit var ioContextProvider: IoContextProvider
 
     @BeforeEach
     fun setUp() {
@@ -57,10 +62,12 @@ class PhotoTabViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { gifDivider } bind (GifDivider::class)
+                    single(qualifier = null) { ioContextProvider } bind (IoContextProvider::class)
                 }
             )
         }
         coEvery { gifDivider.invoke(any()) } just Runs
+        coEvery { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
         subject = PhotoTabViewModel()
     }
