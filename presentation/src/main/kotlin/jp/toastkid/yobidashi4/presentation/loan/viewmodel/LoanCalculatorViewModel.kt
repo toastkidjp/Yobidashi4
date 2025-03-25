@@ -119,9 +119,7 @@ class LoanCalculatorViewModel {
     fun launch() {
         DebouncedCalculatorService(
             inputChannel,
-            {
-                makeFactor()
-            },
+            ::makeFactor,
             {
                 lastPaymentResult.set(it)
 
