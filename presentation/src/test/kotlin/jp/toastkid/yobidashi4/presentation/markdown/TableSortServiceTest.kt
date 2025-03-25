@@ -26,6 +26,8 @@ class TableSortServiceTest {
             listOf("test", 1, 2.2),
             listOf("test2", -1, -1.2),
             listOf("test3", -1, "test"),
+            listOf("test4", "x", 2),
+            listOf("test5", 0.2, 1),
         )
         (0..2).forEach {
             subject.invoke(true, it, items)
