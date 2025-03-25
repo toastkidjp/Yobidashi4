@@ -76,7 +76,7 @@ class MarkdownPreviewKtTest {
         runDesktopComposeUiTest {
             setContent {
                 MarkdownPreview(
-                    content,
+                    mocked,
                     rememberScrollState(),
                     Modifier
                 )
