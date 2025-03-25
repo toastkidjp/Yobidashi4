@@ -158,7 +158,7 @@ class LoanCalculatorViewModel {
     private fun extractDouble(editText: String) =
         editText.toDoubleOrNull() ?: 0.0
 
-    fun format(l: Long) = decimalFormat.format(l)
+    fun format(l: Long): String = decimalFormat.format(l)
 
     fun roundToIntSafely(d: Double) =
         if (d.isNaN()) "0" else decimalFormat.format(d.roundToInt())
