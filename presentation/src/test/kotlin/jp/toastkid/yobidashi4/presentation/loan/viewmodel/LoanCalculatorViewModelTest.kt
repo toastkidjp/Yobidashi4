@@ -14,8 +14,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -158,7 +156,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEvent() {
         subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
 
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
+        subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
 
         verify { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
@@ -168,7 +166,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventNotP() {
         subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
 
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true))
+        subject.onKeyEvent(KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true))
 
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
@@ -178,7 +176,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventNotKeyDown() {
         subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
 
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyUp, isCtrlPressed = true))
+        subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyUp, isCtrlPressed = true))
 
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
@@ -188,7 +186,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventWithoutCtrl() {
         subject.setLastPaymentResult(LoanPayment(30_000, listOf()))
 
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = false))
+        subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = false))
 
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
@@ -196,7 +194,7 @@ class LoanCalculatorViewModelTest {
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEventWithoutLastPaymentResult() {
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
+        subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
 
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
     }
@@ -204,7 +202,7 @@ class LoanCalculatorViewModelTest {
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun unConsumedCase() {
-        val invoked = subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.LanguageSwitch, KeyEventType.KeyDown))
+        val invoked = subject.onKeyEvent(KeyEvent(Key.LanguageSwitch, KeyEventType.KeyDown))
 
         assertFalse(invoked)
         verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
