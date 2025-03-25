@@ -160,7 +160,7 @@ class LoanCalculatorViewModel {
 
     fun format(l: Long): String = decimalFormat.format(l)
 
-    fun roundToIntSafely(d: Double) =
+    fun roundToIntSafely(d: Double): String =
         if (d.isNaN()) "0" else decimalFormat.format(d.roundToInt())
 
     fun listState() = scrollState
