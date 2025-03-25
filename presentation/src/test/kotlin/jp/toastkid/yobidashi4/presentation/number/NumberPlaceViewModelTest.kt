@@ -274,6 +274,26 @@ class NumberPlaceViewModelTest {
     }
 
     @Test
+    fun startWhenProviderReturnsNull() {
+        mockkConstructor(GameFileProvider::class)
+        every { anyConstructed<GameFileProvider>().invoke() } returns null
+        mockkStatic(Files::class)
+        every { Files.size(any()) } returns 1L
+        val game = mockk<NumberPlaceGame>()
+        val numberBoard = mockk<NumberBoard>()
+        every { game.masked() } returns numberBoard
+        every { numberBoard.rows() } returns emptyList()
+        every { repository.load(any()) } returns game
+        every { setting.getMaskingCount() } returns 1
+
+        runBlocking {
+            numberPlaceViewModel.start()
+
+            verify { setting.getMaskingCount() }
+        }
+    }
+
+    @Test
     fun startWhenLoadedGameIsNull() {
         mockkConstructor(GameFileProvider::class)
         every { anyConstructed<GameFileProvider>().invoke() } returns mockk()
