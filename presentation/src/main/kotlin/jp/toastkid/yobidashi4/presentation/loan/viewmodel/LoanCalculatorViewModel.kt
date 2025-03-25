@@ -165,7 +165,7 @@ class LoanCalculatorViewModel {
 
     fun listState() = scrollState
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+    fun onKeyEvent(keyEvent: KeyEvent): Boolean {
         if (keyEvent.type != KeyEventType.KeyDown) {
             return false
         }
