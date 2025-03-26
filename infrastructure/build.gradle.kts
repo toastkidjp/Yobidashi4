@@ -36,6 +36,10 @@ dependencies {
     }
 }
 
+ksp {
+    arg("KOIN_DEFAULT_MODULE","false")
+}
+
 // KSP - To use generated sources
 sourceSets.main {
     java.srcDirs("build/generated/ksp/main/kotlin")
