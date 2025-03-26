@@ -42,7 +42,7 @@ fun LoanCalculatorView() {
     Surface(
         elevation = 4.dp,
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
-        modifier = Modifier.onKeyEvent { viewModel.onKeyEvent(it) }
+        modifier = Modifier.onKeyEvent(viewModel::onKeyEvent)
     ) {
         Row {
             Column(
