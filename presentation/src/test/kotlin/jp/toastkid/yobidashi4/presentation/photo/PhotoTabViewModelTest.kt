@@ -21,7 +21,6 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -290,9 +289,7 @@ class PhotoTabViewModelTest {
 
     @Test
     fun divideGif() {
-        runTest {
-            subject.divideGif(mockk())
-        }
+        subject.divideGif(mockk())
 
         coVerify { gifDivider.invoke(any()) }
     }
