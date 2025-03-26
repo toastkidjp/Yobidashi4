@@ -22,7 +22,6 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -87,9 +86,6 @@ class ChatTabViewKtTest {
                 .performKeyInput {
                     pressKey(Key.DirectionDown, 1000L)
                 }
-
-            mockkConstructor(ClipboardPutterService::class)
-            every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
             onAllNodesWithContentDescription("Clip this message.", useUnmergedTree = true)
                 .onFirst()
