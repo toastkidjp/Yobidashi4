@@ -197,10 +197,9 @@ class NumberPlaceViewModel : KoinComponent {
     ) {
         mainViewModel.showSnackbar(
             if (done) "Well done!" else "Incorrect...",
-            if (done) "Next game" else ""
-        ) {
-            onAction()
-        }
+            if (done) "Next game" else "",
+            onAction
+        )
     }
 
     fun fontSize() = 32.sp
