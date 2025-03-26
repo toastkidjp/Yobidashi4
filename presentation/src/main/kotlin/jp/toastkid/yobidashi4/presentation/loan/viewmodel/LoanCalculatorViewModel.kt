@@ -176,7 +176,7 @@ class LoanCalculatorViewModel {
                 makeFactor(),
                 loanPayment
             )
-            return@onKeyEvent true
+            return true
         }
 
         return false
