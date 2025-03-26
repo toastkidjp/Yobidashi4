@@ -226,7 +226,7 @@ class LoanCalculatorViewModelTest {
     @ParameterizedTest
     fun brokerageFee(amount: String, expected: String) {
         subject.setLoanAmount(TextFieldValue(amount))
-        assertEquals(expected, subject.brokerageFee().split(" ").get(2))
+        assertEquals(expected, subject.brokerageFee().split(" ")[2])
     }
 
 }
