@@ -36,3 +36,7 @@ compose.resources {
     packageOfResClass = "jp.toastkid.yobidashi4.library.resources"
     generateResClass = auto
 }
+
+ksp {
+    arg("KOIN_DEFAULT_MODULE","false")
+}
