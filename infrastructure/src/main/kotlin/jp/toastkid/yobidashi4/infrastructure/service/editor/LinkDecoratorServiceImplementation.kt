@@ -10,8 +10,9 @@ import java.net.URI
 class LinkDecoratorServiceImplementation : LinkDecoratorService {
 
     override operator fun invoke(link: String): String {
+        val trimmedLink = link.trim()
         val url = try {
-            URI(link.trim()).toURL()
+            URI(trimmedLink).toURL()
         } catch (e: IllegalArgumentException) {
             return link
         }
@@ -21,7 +22,7 @@ class LinkDecoratorServiceImplementation : LinkDecoratorService {
         } catch (e: IOException) {
             return link
         }
-        return "[$title]($link)"
+        return "[$title]($trimmedLink)"
     }
 
 }
