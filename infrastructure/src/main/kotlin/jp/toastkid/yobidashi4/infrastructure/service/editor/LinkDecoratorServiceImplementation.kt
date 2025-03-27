@@ -11,7 +11,7 @@ class LinkDecoratorServiceImplementation : LinkDecoratorService {
 
     override operator fun invoke(link: String): String {
         val url = try {
-            URI(link).toURL()
+            URI(link.trim()).toURL()
         } catch (e: IllegalArgumentException) {
             return link
         }
