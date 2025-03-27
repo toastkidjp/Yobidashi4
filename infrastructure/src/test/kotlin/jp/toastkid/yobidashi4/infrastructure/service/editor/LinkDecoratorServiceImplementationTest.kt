@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.junit.jupiter.api.AfterEach
@@ -38,6 +39,19 @@ internal class LinkDecoratorServiceImplementationTest {
         every { Jsoup.parse(any<URL>(), any()) }.throws(IOException())
 
         assertEquals("https://www.yahoo.co.jp", LinkDecoratorServiceImplementation().invoke("https://www.yahoo.co.jp"))
+    }
+
+    @Test
+    fun trim() {
+        mockkStatic(Jsoup::class)
+        val document = mockk<Document>()
+        every { Jsoup.parse(any<URL>(), any()) }.returns(document)
+        every { document.title() } returns "Yahoo! JAPAN"
+
+        LinkDecoratorServiceImplementation()
+            .invoke("https://ja.wikipedia.org/wiki/MSCI#%E9%81%8E%E5%8E%BB%E3%81%AE%E5%88%A9%E5%9B%9E%E3%82%8A\n")
+
+        verify { Jsoup.parse(any<URL>(), any()) }
     }
 
 }
