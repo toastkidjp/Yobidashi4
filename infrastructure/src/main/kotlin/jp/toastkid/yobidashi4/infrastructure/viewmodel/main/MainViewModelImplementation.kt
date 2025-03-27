@@ -289,7 +289,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         val urlString = if (uri.startsWith("http://") || uri.startsWith("https://")) {
-            uri
+            uri.trim()
         } else {
             (currentTab() as? WebTab)?.url()
         } ?: return
