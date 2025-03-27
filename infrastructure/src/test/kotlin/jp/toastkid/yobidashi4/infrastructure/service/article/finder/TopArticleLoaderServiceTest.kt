@@ -8,9 +8,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.attribute.FileTime
-import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -19,6 +16,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import java.util.stream.Stream
+import kotlin.io.path.nameWithoutExtension
 
 class TopArticleLoaderServiceTest {
 
@@ -43,7 +45,13 @@ class TopArticleLoaderServiceTest {
         every { setting.articleFolderPath() }.returns(mockk())
 
         mockkStatic(Files::class)
-        every { Files.list(any()) }.returns(Stream.of(mockk(), mockk()))
+        val path1 = mockk<Path>()
+        every { path1.nameWithoutExtension } returns "test.md"
+        val path2 = mockk<Path>()
+        every { path2.nameWithoutExtension } returns "test.jar"
+        val path3 = mockk<Path>()
+        every { path3.nameWithoutExtension } returns "test.txt"
+        every { Files.list(any()) }.returns(Stream.of(path1, path2, path3))
         every { Files.getLastModifiedTime(any()) }.returns(FileTime.fromMillis(System.currentTimeMillis()))
     }
 
