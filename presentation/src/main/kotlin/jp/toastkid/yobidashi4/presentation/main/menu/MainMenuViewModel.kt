@@ -247,6 +247,10 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openChatTab() {
+        if (setting.chatApiKey().isNullOrBlank()) {
+            viewModel.showSnackbar("Please set Gemini's API key if you need to use this function?")
+            return
+        }
         viewModel.openTab(ChatTab(Chat(mutableStateListOf())))
     }
 
