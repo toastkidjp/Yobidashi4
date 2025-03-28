@@ -639,6 +639,18 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun openChatTabWithoutApiKey() {
+        every { setting.chatApiKey() } returns null
+        every { mainViewModel.openTab(any()) } just Runs
+        every { mainViewModel.showSnackbar(any()) } just Runs
+
+        subject.openChatTab()
+
+        verify(inverse = true) { mainViewModel.openTab(any<ChatTab>()) }
+        verify { mainViewModel.showSnackbar(any()) }
+    }
+
+    @Test
     fun openBookmarkTab() {
         every { mainViewModel.openTab(any()) } just Runs
 
