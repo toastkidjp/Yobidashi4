@@ -14,8 +14,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toOffset
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -93,7 +91,7 @@ class PhotoTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun divideGif() {
-        coEvery { anyConstructed<PhotoTabViewModel>().divideGif(any()) } just Runs
+        every { anyConstructed<PhotoTabViewModel>().divideGif(any()) } just Runs
         every { path.toString() } returns "test.gif"
         tab = PhotoTab(path)
 
@@ -104,7 +102,7 @@ class PhotoTabViewKtTest {
             onNodeWithContentDescription("Switch menu", useUnmergedTree = true).performClick()
             onNodeWithContentDescription("Divide GIF", useUnmergedTree = true).performClick()
 
-            coVerify { anyConstructed<PhotoTabViewModel>().divideGif(any()) }
+            verify { anyConstructed<PhotoTabViewModel>().divideGif(any()) }
         }
     }
 
