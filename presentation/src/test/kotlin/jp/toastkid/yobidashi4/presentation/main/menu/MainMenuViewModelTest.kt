@@ -629,11 +629,13 @@ class MainMenuViewModelTest {
 
     @Test
     fun openChatTab() {
+        every { setting.chatApiKey() } returns "any-key"
         every { mainViewModel.openTab(any()) } just Runs
 
         subject.openChatTab()
 
         verify { mainViewModel.openTab(any<ChatTab>()) }
+        verify(inverse = true) { mainViewModel.showSnackbar(any()) }
     }
 
     @Test
