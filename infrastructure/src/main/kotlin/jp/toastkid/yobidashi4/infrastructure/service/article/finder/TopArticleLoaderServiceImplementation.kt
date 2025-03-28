@@ -6,6 +6,7 @@ import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Files
+import java.nio.file.Path
 import java.util.stream.Collectors
 import kotlin.io.path.extension
 
@@ -16,7 +17,7 @@ class TopArticleLoaderServiceImplementation : KoinComponent, TopArticleLoaderSer
 
     private val targetExtensions = setOf("txt", "md")
 
-    override operator fun invoke() =
+    override operator fun invoke(): List<Path> =
         Files.list(setting.articleFolderPath())
             .filter { item -> targetExtensions.contains(item.extension) }
             .sorted { o1, o2 -> -Files.getLastModifiedTime(o1).compareTo(Files.getLastModifiedTime(o2)) }
