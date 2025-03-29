@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -32,6 +33,10 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import java.nio.file.Path
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -55,6 +60,13 @@ fun SettingEditorView() {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Button(onClick = {}) {
                             Text("Save")
+                        }
+                        Button(onClick = {
+                            val logFilePath = Path.of("user/setting.properties")
+                            object : KoinComponent { val vm: MainViewModel by inject() }
+                                .vm.openFile(logFilePath)
+                        }, Modifier.padding(start = 4.dp)) {
+                            Text("Open")
                         }
                     }
                 }
