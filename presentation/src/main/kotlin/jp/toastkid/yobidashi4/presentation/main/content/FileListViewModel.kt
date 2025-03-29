@@ -85,7 +85,7 @@ class FileListViewModel : KoinComponent {
             coroutineScope.launch {
                 listState.scrollToItem(min(items().size - 1, listState.firstVisibleItemIndex + 1), 0)
             }
-            return@onKeyEvent true
+            return true
         }
 
         return false
