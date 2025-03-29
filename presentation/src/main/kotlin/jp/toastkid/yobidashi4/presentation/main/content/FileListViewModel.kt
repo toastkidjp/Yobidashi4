@@ -79,7 +79,7 @@ class FileListViewModel : KoinComponent {
             coroutineScope.launch {
                 listState.scrollToItem(max(0, listState.firstVisibleItemIndex - 1), 0)
             }
-            return@onKeyEvent true
+            return true
         }
         if (keyEvent.key == Key.DirectionDown) {
             coroutineScope.launch {
