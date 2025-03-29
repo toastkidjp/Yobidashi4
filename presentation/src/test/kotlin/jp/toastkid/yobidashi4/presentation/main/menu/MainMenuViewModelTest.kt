@@ -988,11 +988,11 @@ class MainMenuViewModelTest {
 
     @Test
     fun openProperty() {
-        every { mainViewModel.openFile(any()) } just Runs
+        every { mainViewModel.openTab(any()) } just Runs
 
         subject.openProperty()
 
-        verify { mainViewModel.openFile(any()) }
+        verify { mainViewModel.openTab(any()) }
     }
 
 }
