@@ -23,6 +23,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -82,9 +83,11 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 }
 
                 itemsIndexed(viewModel.items(), key = { i, fileListItem -> "${i}_" + fileListItem.path}) { index, fileListItem ->
-                    val underlay = if (fileListItem.selected) oddBackground
-                    else if (index % 2 == 0) evenBackground
-                    else Color.Transparent
+                    val underlay = derivedStateOf {
+                        if (fileListItem.selected) oddBackground
+                        else if (index % 2 == 0) evenBackground
+                        else Color.Transparent
+                    }
                     val cursorOn = viewModel.focusingItem(fileListItem)
                     val backgroundColor = animateColorAsState(
                         if (cursorOn) MaterialTheme.colors.primary else Color.Transparent
@@ -115,7 +118,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                     viewModel.onDoubleClick(fileListItem)
                                 }
                             )
-                            .drawBehind { drawRect(underlay) }
+                            .drawBehind { drawRect(underlay.value) }
                             .onPointerEvent(PointerEventType.Enter) {
                                 viewModel.focusItem(fileListItem)
                             }
