@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.RouletteToolTab
+import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -417,8 +418,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openProperty() {
-        val logFilePath = Path.of("user/setting.properties")
-        viewModel.openFile(logFilePath)
+        viewModel.openTab(SettingEditorTab())
     }
 
 }
