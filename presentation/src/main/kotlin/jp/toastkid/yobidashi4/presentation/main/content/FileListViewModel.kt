@@ -73,7 +73,7 @@ class FileListViewModel : KoinComponent {
         if (keyEvent.isCtrlPressed && keyEvent.key == Key.Z) {
             ZipArchiver().invoke(articleStates.filter { it.selected }.map { it.path })
             viewModel.openFile(Path.of("."))
-            return@onKeyEvent true
+            return true
         }
         if (keyEvent.key == Key.DirectionUp) {
             coroutineScope.launch {
