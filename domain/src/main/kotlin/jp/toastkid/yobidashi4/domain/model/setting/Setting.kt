@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.setting
 
+import java.awt.Color
 import java.nio.file.Path
 
 interface Setting {
@@ -26,13 +27,13 @@ interface Setting {
 
     fun useCaseSensitiveInFinder(): Boolean
 
-    fun setEditorBackgroundColor(color: java.awt.Color?)
+    fun setEditorBackgroundColor(color: Color?)
 
-    fun editorBackgroundColor(): java.awt.Color?
+    fun editorBackgroundColor(): Color?
 
-    fun setEditorForegroundColor(color: java.awt.Color?)
+    fun setEditorForegroundColor(color: Color?)
 
-    fun editorForegroundColor(): java.awt.Color?
+    fun editorForegroundColor(): Color?
 
     fun resetEditorColorSetting()
 
@@ -69,5 +70,9 @@ interface Setting {
     fun chatApiKey(): String?
 
     fun save()
+
+    fun items(): Map<Any, Any>
+
+    fun update(key: String, text: String)
 
 }
