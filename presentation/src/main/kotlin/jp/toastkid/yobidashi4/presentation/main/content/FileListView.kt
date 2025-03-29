@@ -54,6 +54,9 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
     val coroutineScope = rememberCoroutineScope()
 
+    val oddBackground = MaterialTheme.colors.primary.copy(alpha = 0.5f)
+    val evenBackground = MaterialTheme.colors.surface.copy(alpha = 0.5f)
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
@@ -79,8 +82,8 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 }
 
                 itemsIndexed(viewModel.items(), key = { i, fileListItem -> "${i}_" + fileListItem.path}) { index, fileListItem ->
-                    val underlay = if (fileListItem.selected) MaterialTheme.colors.primary.copy(alpha = 0.5f)
-                    else if (index % 2 == 0) MaterialTheme.colors.surface.copy(alpha = 0.5f)
+                    val underlay = if (fileListItem.selected) oddBackground
+                    else if (index % 2 == 0) evenBackground
                     else Color.Transparent
                     val cursorOn = viewModel.focusingItem(fileListItem)
                     val backgroundColor = animateColorAsState(
