@@ -47,6 +47,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import jp.toastkid.yobidashi4.domain.model.tab.Reloadable
 import jp.toastkid.yobidashi4.domain.model.tab.RouletteToolTab
+import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
@@ -66,6 +67,7 @@ import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.photo.PhotoTabView
+import jp.toastkid.yobidashi4.presentation.setting.SettingEditorView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.tool.notification.NotificationListTabView
 import jp.toastkid.yobidashi4.presentation.tool.roulette.RouletteToolTabView
@@ -180,6 +182,7 @@ internal fun TabsView(modifier: Modifier) {
             is NotificationListTab -> NotificationListTabView()
             is ChatTab -> ChatTabView(currentTab)
             is PhotoTab -> PhotoTabView(currentTab)
+            is SettingEditorTab -> SettingEditorView()
             else -> Unit
         }
     }
