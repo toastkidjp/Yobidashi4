@@ -147,6 +147,12 @@ class SettingImplementation : Setting {
         return properties.getProperty("chat_api_key")?.toString()
     }
 
+    override fun items() = properties.toMap()
+
+    override fun update(key: String, text: String) {
+        properties.put(key, text)
+    }
+
 }
 
 private const val PATH = "user/setting.properties"
