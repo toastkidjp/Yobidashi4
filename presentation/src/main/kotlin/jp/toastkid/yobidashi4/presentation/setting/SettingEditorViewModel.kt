@@ -6,11 +6,15 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Path
 
 class SettingEditorViewModel : KoinComponent {
+
+    private val viewModel: MainViewModel by inject()
 
     private val setting: Setting by inject()
 
@@ -45,6 +49,11 @@ class SettingEditorViewModel : KoinComponent {
         }
         items.set(index, key to it)
         //setting.update(key, it.text)
+    }
+
+    fun openFile() {
+        val logFilePath = Path.of("user/setting.properties")
+        viewModel.openFile(logFilePath)
     }
 
 }
