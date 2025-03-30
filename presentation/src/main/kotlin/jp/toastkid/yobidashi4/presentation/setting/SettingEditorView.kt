@@ -33,10 +33,6 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import java.nio.file.Path
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -62,9 +58,7 @@ fun SettingEditorView() {
                             Text("Save")
                         }
                         Button(onClick = {
-                            val logFilePath = Path.of("user/setting.properties")
-                            object : KoinComponent { val vm: MainViewModel by inject() }
-                                .vm.openFile(logFilePath)
+                            viewModel.openFile()
                         }, Modifier.padding(start = 4.dp)) {
                             Text("Open")
                         }
