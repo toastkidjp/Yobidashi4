@@ -20,20 +20,19 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
+import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.nameWithoutExtension
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.AfterEach
@@ -43,6 +42,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
+import kotlin.io.path.nameWithoutExtension
 
 class TabsViewKtTest {
 
@@ -115,7 +116,8 @@ class TabsViewKtTest {
             editorTab,
             BarcodeToolTab(),
             NotificationListTab(),
-            ChatTab()
+            ChatTab(),
+            SettingEditorTab()
         )
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
     }
@@ -142,6 +144,11 @@ class TabsViewKtTest {
 
             verify { anyConstructed<TabsViewModel>().setSelectedIndex(any()) }
             verify { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) }
+
+            (0 until TabsViewModel().tabs().size).forEach {
+                onNodeWithContentDescription("tab_$it", useUnmergedTree = true)
+                    .performClick()
+            }
 
             onNodeWithContentDescription("Close button 0", useUnmergedTree = true)
                 .performClick()
