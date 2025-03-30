@@ -54,7 +54,7 @@ fun SettingEditorView() {
             ) {
                 stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        Button(onClick = {}) {
+                        Button(onClick = { viewModel.save() }) {
                             Text("Save")
                         }
                         Button(onClick = viewModel::openFile, Modifier.padding(start = 4.dp)) {
@@ -64,7 +64,6 @@ fun SettingEditorView() {
                 }
 
                 itemsIndexed(viewModel.items(), { _, item -> item.first }) { index, item ->
-                    val titleState = remember { mutableStateOf(item.second) }
                     val headerCursorOn = mutableStateOf(false)
                     val headerColumnBackgroundColor = animateColorAsState(
                         if (headerCursorOn.value) MaterialTheme.colors.primary
@@ -80,13 +79,18 @@ fun SettingEditorView() {
                         }
                         .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     ) {
+                        val state = mutableStateOf(item.second)
                         SingleLineTextField(
-                            titleState.value,
+                            state.value,
                             item.first,
                             {
+                                state.value = it
                                 viewModel.update(item.first, it)
                             },
-                            { viewModel.update(item.first, TextFieldValue()) }
+                            {
+                                state.value = TextFieldValue()
+                                viewModel.update(item.first, TextFieldValue())
+                            }
                         )
                     }
                 }
