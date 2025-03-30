@@ -55,4 +55,13 @@ class SettingEditorViewModel : KoinComponent {
         viewModel.openFile(logFilePath)
     }
 
+    fun save() {
+        items.filter {
+            it.second.text.isNotBlank()
+        }.forEach {
+            setting.update(it.first, it.second.text)
+        }
+        setting.save()
+    }
+
 }
