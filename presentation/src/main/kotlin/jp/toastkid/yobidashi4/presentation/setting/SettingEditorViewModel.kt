@@ -39,7 +39,6 @@ class SettingEditorViewModel : KoinComponent {
         setting.items().forEach { entry ->
             items.add(entry.key.toString() to TextFieldValue(entry.value.toString()))
         }
-        println("Set ${items.size}")
     }
 
     fun update(key: String, it: TextFieldValue) {
