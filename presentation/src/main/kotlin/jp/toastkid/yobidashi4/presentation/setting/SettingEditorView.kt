@@ -57,9 +57,7 @@ fun SettingEditorView() {
                         Button(onClick = {}) {
                             Text("Save")
                         }
-                        Button(onClick = {
-                            viewModel.openFile()
-                        }, Modifier.padding(start = 4.dp)) {
+                        Button(onClick = viewModel::openFile, Modifier.padding(start = 4.dp)) {
                             Text("Open")
                         }
                     }
