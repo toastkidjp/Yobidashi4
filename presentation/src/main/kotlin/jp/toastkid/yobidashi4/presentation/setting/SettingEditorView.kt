@@ -54,7 +54,7 @@ fun SettingEditorView() {
             ) {
                 stickyHeader {
                     Row(modifier = Modifier.fillMaxWidth()) {
-                        Button(onClick = { viewModel.save() }) {
+                        Button(onClick = viewModel::save) {
                             Text("Save")
                         }
                         Button(onClick = viewModel::openFile, Modifier.padding(start = 4.dp)) {
