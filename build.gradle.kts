@@ -143,6 +143,7 @@ compose.desktop {
 
         buildTypes.release {
             proguard {
+                version.set("7.4.0")
                 configurationFiles.from(project.file("compose-desktop.pro"))
                 obfuscate.set(true)
                 joinOutputJars.set(true)
