@@ -136,6 +136,12 @@ class TabsViewKtTest {
                 TabsView(Modifier)
             }
 
+            (0 until TabsViewModel().tabs().size)
+                .map { onNodeWithContentDescription("tab_$it", useUnmergedTree = true) }
+                .forEach {
+                    it.performClick()
+                }
+
             onNode(hasText("Barcode tool")).assertExists("Not found!")
                 .performMouseInput {
                     click()
@@ -144,11 +150,6 @@ class TabsViewKtTest {
 
             verify { anyConstructed<TabsViewModel>().setSelectedIndex(any()) }
             verify { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) }
-
-            (0 until TabsViewModel().tabs().size).forEach {
-                onNodeWithContentDescription("tab_$it", useUnmergedTree = true)
-                    .performClick()
-            }
 
             onNodeWithContentDescription("Close button 0", useUnmergedTree = true)
                 .performClick()
