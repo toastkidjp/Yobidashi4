@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.setting
 
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -82,6 +83,13 @@ class SettingEditorViewModelTest {
 
     @Test
     fun update() {
+        every { setting.items() } returns mapOf("test" to "value")
+        subject.start()
+
+        subject.update("a", TextFieldValue("unused"))
+        subject.update("test", TextFieldValue("updated"))
+
+        assertEquals("updated", subject.items().first().second.text)
     }
 
     @Test
