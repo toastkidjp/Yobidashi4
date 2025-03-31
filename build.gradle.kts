@@ -167,7 +167,13 @@ fun readCoverages(): MutableMap<String, String> {
     );
     val map = mutableMapOf<String, String>()
     val buffer = StringBuffer()
-    val lines = File("build/reports/kover/html/index.html").readText().split("\n")
+
+    val file = File("build/reports/kover/html/index.html")
+    if (file.exists().not()) {
+        return map
+    }
+
+    val lines = file.readText().split("\n")
     for (i in (0 until lines.size)) {
         val line = lines[i]
         if (line.contains("<td class=\"name\">all classes</td>")) {
