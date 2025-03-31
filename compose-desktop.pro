@@ -1,5 +1,5 @@
 #-ignorewarnings
-
+-dontnote **
 
 # JSR 305 annotations are for embedding nullability information.
 -dontwarn javax.annotation.**
@@ -16,6 +16,7 @@
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
 -dontwarn jogamp.**
+-dontwarn com.jogamp.nativewindow.**
 -dontwarn com.jogamp.newt.javafx.**
 -dontwarn com.jogamp.newt.swt.**
 -dontwarn com.jogamp.newt.nativewindow.javafx.**
@@ -23,7 +24,17 @@
 -dontwarn com.jogamp.opengl.javafx.**
 -dontwarn com.jogamp.opengl.swt.**
 -dontwarn org.apache.commons.compress.**
+-dontwarn org.jsoup.**
+-dontwarn org.cef.browser.mac.CefBrowserWindowMac**
+-dontwarn org.apache.lucene.**
+-dontwarn org.apache.log4j.**
 
+-keep class java.util.Map {*;}
+-keep class java.util.Map$Entry {*;}
+-keep class org.objectweb.asm.Attribute {*;}
+-keep class org.apache.commons.compress.harmony.pack200.PackingOptions {*;}
+-keep class org.apache.commons.compress.harmony.pack200.NewAttribute {*;}
+-keep class org.objectweb.asm.Attribute {*;}
 -keep class org.ocpsoft.prettytime.i18n** { *; }
 -keep class kotlinx.serialization.internal.** {*;}
 -keep class org.apache.lucene.** {*;}
@@ -31,3 +42,147 @@
 -keep class org.objectweb.** {*;}
 -keep class org.tukaani.** {*;}
 -keep class com.github.luben.** {*;}
+-keep class com.jogamp.nativewindow.** {*;}
+-keep class org.apache.log4j.net.** {*;}
+-keep class org.apache.lucene.** {*;}
+-keep class com.jogamp.common.** {*;}
+-keep class org.apache.commons.** {*;}
+-keep class org.apache.log4j.net.** {*;}
+-keep class org.slf4j.** {*;}
+-keep class com.google.gson.** {*;}
+-keep class com.jogamp.common.** {*;}
+-keep class jogamp.nativewindow.** {*;}
+-keep class jogamp.newt.** {*;}
+-keep class jogamp.opengl.awt.** {*;}
+-keep class jogamp.opengl.util.** {*;}
+-keep class kotlinx.serialization.internal.** {*;}
+-keep class org.apache.commons.compress.** {*;}
+-keep class org.apache.commons.io.** {*;}
+-keep class org.apache.commons.lang3.** {*;}
+
+
+
+
+-keep class com.jogamp.newt.Display { *; }
+-keep class com.jogamp.newt.Display$PointerIcon { *; }
+-keep class com.jogamp.newt.MonitorDevice { *; }
+-keep class com.jogamp.newt.MonitorMode { *; }
+-keep class com.jogamp.newt.MonitorMode$SizeAndRRate { *; }
+-keep class com.jogamp.newt.Screen { *; }
+-keep class com.jogamp.newt.Window { *; }
+-keep class com.jogamp.newt.Window$FocusRunnable { *; }
+-keep class com.jogamp.newt.event.GestureHandler { *; }
+-keep class com.jogamp.newt.event.GestureHandler$GestureListener { *; }
+-keep class com.jogamp.newt.event.KeyEvent { *; }
+-keep class com.jogamp.newt.event.KeyListener { *; }
+-keep class com.jogamp.newt.event.MonitorEvent { *; }
+
+-keep class com.jogamp.newt.event.MonitorModeListener{*;}
+-keep class com.jogamp.newt.event.MouseEvent{*;}
+-keep class com.jogamp.newt.event.MouseEvent$PointerType{*;}
+-keep class com.jogamp.newt.event.MouseListener{*;}
+-keep class com.jogamp.newt.event.NEWTEvent{*;}
+-keep class com.jogamp.newt.event.NEWTEventListener{*;}
+-keep class com.jogamp.newt.event.WindowEvent{*;}
+-keep class com.jogamp.newt.event.WindowListener{*;}
+-keep class com.jogamp.newt.event.WindowUpdateEvent{*;}
+-keep class com.jogamp.newt.util.EDTUtil{*;}
+-keep class com.jogamp.opengl.GL{*;}
+-keep class com.jogamp.opengl.GL2ES2{*;}
+-keep class com.jogamp.opengl.GLArrayData{*;}
+-keep class com.jogamp.opengl.GLAutoDrawable{*;}
+-keep class com.jogamp.opengl.GLCapabilitiesImmutable{*;}
+-keep class com.jogamp.opengl.GLContext{*;}
+-keep class com.jogamp.opengl.GLRunnable2{*;}
+-keep class com.jogamp.opengl.math.FovHVHalves{*;}
+-keep class com.jogamp.opengl.util.GLArrayDataEditable{*;}
+-keep class com.jogamp.opengl.util.GLArrayDataWrapper{*;}
+-keep class com.jogamp.opengl.util.PMVMatrix{*;}
+-keep class com.jogamp.opengl.util.TileRenderer{*;}
+-keep class com.jogamp.opengl.util.av.AudioSink$AudioFormat{*;}
+-keep class com.jogamp.opengl.util.av.GLMediaPlayer$GLMediaEventListener{*;}
+-keep class com.jogamp.opengl.util.av.GLMediaPlayer$State{*;}
+-keep class com.jogamp.opengl.util.av.GLMediaPlayer$StreamException{*;}
+-keep class com.jogamp.opengl.util.awt.AWTGLPixelBuffer{*;}
+-keep class com.jogamp.opengl.util.glsl.ShaderCode{*;}
+-keep class com.jogamp.opengl.util.glsl.ShaderProgram{*;}
+-keep class com.jogamp.opengl.util.glsl.ShaderState{*;}
+-keep class com.jogamp.opengl.util.glsl.fixedfunc.ShaderSelectionMode{*;}
+-keep class com.jogamp.opengl.util.stereo.EyeParameter{*;}
+-keep class com.jogamp.opengl.util.stereo.StereoDeviceConfig{*;}
+-keep class com.jogamp.opengl.util.stereo.StereoDeviceFactory{*;}
+-keep class com.jogamp.opengl.util.stereo.generic.GenericStereoDeviceConfig{*;}
+-keep class com.jogamp.opengl.util.texture.Texture{*;}
+-keep class com.jogamp.opengl.util.texture.TextureData$ColorSpace{*;}
+-keep class com.jogamp.opengl.util.texture.TextureSequence$TextureFrame{*;}
+-keep class jogamp.common.os.elf.ElfHeaderPart1{*;}
+-keep class jogamp.opengl.GLContextImpl{*;}
+-keep class kotlinx.serialization.DeserializationStrategy{*;}
+-keep class kotlinx.serialization.KSerializer{*;}
+-keep class kotlinx.serialization.SerializationStrategy{*;}
+-keep class kotlinx.serialization.descriptors.ClassSerialDescriptorBuilder{*;}
+-keep class kotlinx.serialization.descriptors.PrimitiveKind{*;}
+-keep class kotlinx.serialization.descriptors.SerialDescriptor{*;}
+-keep class kotlinx.serialization.encoding.CompositeDecoder{*;}
+-keep class kotlinx.serialization.encoding.CompositeEncoder{*;}
+-keep class kotlinx.serialization.encoding.Decoder{*;}
+-keep class kotlinx.serialization.encoding.Encoder{*;}
+-keep class org.apache.log4j.Layout{*;}
+-keep class org.apache.log4j.Level{*;}
+-keep class org.apache.log4j.Logger{*;}
+-keep class org.apache.log4j.Priority{*;}
+-keep class org.apache.log4j.spi.ErrorHandler{*;}
+-keep class org.apache.log4j.spi.Filter{*;}
+-keep class org.apache.log4j.spi.LoggerRepository{*;}
+-keep class org.apache.log4j.spi.LoggingEvent{*;}
+-keep class org.apache.log4j.spi.TriggeringEventEvaluator{*;}
+-keep class com.sun.javafx.tk.TKStage{*;}
+-keep class javafx.application.Platform{*;}
+-keep class javafx.stage.Window{*;}
+-keep class javax.jms.JMSException{*;}
+-keep class javax.jms.Message{*;}
+-keep class javax.jms.MessageListener{*;}
+-keep class javax.jms.ObjectMessage{*;}
+-keep class javax.jms.Session{*;}
+-keep class javax.jms.Topic{*;}
+-keep class javax.jms.TopicConnection{*;}
+-keep class javax.jms.TopicConnectionFactory{*;}
+-keep class javax.jms.TopicPublisher{*;}
+-keep class javax.jms.TopicSession{*;}
+-keep class javax.jms.TopicSubscriber{*;}
+-keep class javax.mail.Authenticator{*;}
+-keep class javax.mail.Message{*;}
+-keep class javax.mail.Message$RecipientType{*;}
+-keep class javax.mail.MessagingException{*;}
+-keep class javax.mail.Multipart{*;}
+-keep class javax.mail.PasswordAuthentication{*;}
+-keep class javax.mail.Session{*;}
+-keep class javax.mail.Transport{*;}
+-keep class javax.mail.internet.AddressException{*;}
+-keep class javax.mail.internet.InternetAddress{*;}
+-keep class javax.mail.internet.InternetHeaders{*;}
+-keep class javax.mail.internet.MimeBodyPart{*;}
+-keep class javax.mail.internet.MimeMessage{*;}
+-keep class javax.mail.internet.MimeMultipart{*;}
+-keep class javax.mail.internet.MimeUtility{*;}
+-keep class org.apache.lucene.sandbox.queries.FuzzyLikeThisQuery{*;}
+-keep class org.eclipse.swt.SWT{*;}
+-keep class org.eclipse.swt.graphics.GCData{*;}
+-keep class org.eclipse.swt.graphics.Point{*;}
+-keep class org.eclipse.swt.graphics.Rectangle{*;}
+-keep class org.eclipse.swt.internal.DPIUtil{*;}
+-keep class org.eclipse.swt.widgets.Control{*;}
+-keep class org.eclipse.swt.widgets.Display{*;}
+-keep class org.eclipse.swt.widgets.Scrollable{*;}
+-keep class org.jspecify.annotations.NullMarked{*;}
+-keep class org.jspecify.annotations.Nullable{*;}
+-keep class sun.lwawt.LWComponentPeer{*;}
+-keep class sun.lwawt.PlatformWindow{*;}
+-keep class sun.lwawt.macosx.CFRetainedResource{*;}
+-keep class sun.lwawt.macosx.CFRetainedResource$CFNativeAction{*;}
+-keep class sun.lwawt.macosx.CPlatformWindow{*;}
+-keep class java.lang.invoke.MethodHandle{*;}
+-keep class java.lang.invoke.VarHandle{*;}
+-keep interface javax.jms.MessageListener { *; }
+-keep interface javax.mail.Authenticator { *; }
+-keep interface sun.lwawt.macosx.CFRetainedResource$CFNativeAction {*;}
