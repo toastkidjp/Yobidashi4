@@ -586,6 +586,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun reloadAllArticle() {
+        _articles.clear()
         if (Files.exists(setting.articleFolderPath()).not()) {
             ArticleFolderRequestService().invoke()
         }
