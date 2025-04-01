@@ -95,8 +95,11 @@ fun SettingEditorView() {
                     }
                 }
             }
-            VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(
-                Alignment.CenterEnd))
+
+            VerticalScrollbar(
+                adapter = rememberScrollbarAdapter(viewModel.listState()),
+                modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+            )
         }
     }
 
