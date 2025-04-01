@@ -21,16 +21,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
-import kotlin.io.path.nameWithoutExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -41,6 +39,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
+import kotlin.io.path.extension
+import kotlin.io.path.nameWithoutExtension
 
 class FileListViewModelTest {
 
@@ -64,6 +67,11 @@ class FileListViewModelTest {
         every { mainViewModel.openFile(any()) } just Runs
         every { mainViewModel.edit(any(), any()) } just Runs
         every { mainViewModel.hideArticleList() } just Runs
+
+        mockkStatic(Files::class)
+        every { Files.getLastModifiedTime(any()) } answers { FileTime.fromMillis(System.currentTimeMillis()) }
+        every { Files.exists(any()) } returns true
+        every { Files.size(any()) } returns 10000
 
         subject = FileListViewModel()
     }
