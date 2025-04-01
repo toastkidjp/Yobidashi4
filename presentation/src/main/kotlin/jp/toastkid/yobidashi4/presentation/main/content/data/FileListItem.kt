@@ -8,19 +8,26 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicReference
 
 @Immutable
 data class FileListItem(
     val path: Path,
     val selected: Boolean = false,
-    val editable: Boolean = false
+    val editable: Boolean = false,
 ) {
 
-    fun reverseSelection() = FileListItem(path, selected.not(), editable)
+    private val subText = AtomicReference("")
 
-    fun unselect() = FileListItem(path, false, editable)
+    private val sortKey = AtomicLong(-1L)
 
-    fun subText(): String? {
+    init {
+        subText.set(makeSubText())
+        sortKey.set(Files.getLastModifiedTime(path).toMillis())
+    }
+
+    private fun makeSubText(): String? {
         if (Files.exists(path).not()) {
             return null
         }
@@ -34,6 +41,14 @@ data class FileListItem(
                 .format(dateTimeFormatter)
         }"
     }
+
+    fun reverseSelection() = FileListItem(path, selected.not(), editable)
+
+    fun unselect() = FileListItem(path, false, editable)
+
+    fun subText(): String? = subText.get()
+
+    fun sortKey(): Long = sortKey.get()
 
 }
 
