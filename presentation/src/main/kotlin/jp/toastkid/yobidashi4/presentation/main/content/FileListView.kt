@@ -4,10 +4,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -39,8 +42,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_reload
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
+import org.jetbrains.compose.resources.painterResource
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
@@ -74,12 +80,26 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                     .semantics { contentDescription = "File list" }
             ) {
                 stickyHeader {
-                    SingleLineTextField(
-                        viewModel.keyword(),
-                        "Keyword",
-                        viewModel::onValueChange,
-                        viewModel::clearInput
-                    )
+                    Row {
+                        SingleLineTextField(
+                            viewModel.keyword(),
+                            "Keyword",
+                            viewModel::onValueChange,
+                            viewModel::clearInput,
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        Icon(
+                            painterResource(Res.drawable.ic_reload),
+                            contentDescription = "Reload file list",
+                            tint = MaterialTheme.colors.secondary,
+                            modifier = Modifier.clickable(onClick = {
+                                viewModel.start(paths)
+                            })
+                                .padding(8.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
                 }
 
                 itemsIndexed(viewModel.items(), key = { i, fileListItem -> "${i}_" + fileListItem.path}) { index, fileListItem ->
