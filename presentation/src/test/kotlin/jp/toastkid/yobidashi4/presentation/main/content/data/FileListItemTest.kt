@@ -6,9 +6,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -16,6 +13,9 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.FileTime
 
 class FileListItemTest {
 
@@ -28,6 +28,8 @@ class FileListItemTest {
 
         mockkStatic(Files::class)
         every { Files.exists(path) } returns true
+        every { Files.getLastModifiedTime(any()) } answers { FileTime.fromMillis(System.currentTimeMillis()) }
+        every { Files.size(any()) } returns 10000
     }
 
     @AfterEach
@@ -55,8 +57,8 @@ class FileListItemTest {
 
     @Test
     fun subTextIsNull() {
-        val fileListItem = FileListItem(path, true, true)
         every { Files.exists(path) } returns false
+        val fileListItem = FileListItem(path, true, true)
 
         assertNull(fileListItem.subText())
     }
