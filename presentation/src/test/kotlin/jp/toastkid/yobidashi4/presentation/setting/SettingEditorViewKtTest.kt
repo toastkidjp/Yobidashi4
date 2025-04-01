@@ -45,6 +45,7 @@ class SettingEditorViewKtTest {
         }
 
         every { anyConstructed<SettingEditorViewModel>().start() } just Runs
+        every { anyConstructed<SettingEditorViewModel>().save() } just Runs
         every { anyConstructed<SettingEditorViewModel>().openFile() } just Runs
     }
 
@@ -62,9 +63,11 @@ class SettingEditorViewKtTest {
                 SettingEditorView()
             }
 
+            onNodeWithText("Save").performClick()
             onNodeWithText("Open").performClick()
 
             verify { anyConstructed<SettingEditorViewModel>().start() }
+            verify { anyConstructed<SettingEditorViewModel>().save() }
             verify { anyConstructed<SettingEditorViewModel>().openFile() }
         }
     }
