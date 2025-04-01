@@ -101,4 +101,21 @@ class SettingEditorViewModelTest {
         verify { viewModel.openFile(any()) }
     }
 
+    @Test
+    fun save() {
+        every { setting.items() } returns mapOf(
+            "test" to "value",
+            "empty" to "y"
+        )
+        subject.start()
+        subject.update("empty", TextFieldValue(""))
+        every { setting.update(any(), any()) } just Runs
+        every { setting.save() } just Runs
+
+        subject.save()
+
+        verify { setting.update(any(), any()) }
+        verify { setting.save() }
+    }
+
 }
