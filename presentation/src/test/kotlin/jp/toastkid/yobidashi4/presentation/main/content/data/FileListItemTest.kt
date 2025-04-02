@@ -80,7 +80,7 @@ class FileListItemTest {
     fun subTextUnder1M() {
         every { Files.size(any()) } returns 123456
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(1702169756151)
-        val fileListItem = FileListItem(path, true, true)
+        val fileListItem = FileListItem(path, selected = true, editable = true)
 
         val subText = fileListItem.subText()
 
