@@ -106,7 +106,10 @@ class NotificationListTabViewKtTest {
     fun notFirst() {
         every { anyConstructed<NotificationListTabViewModel>().listState() } returns LazyListState(2)
         val item = NotificationEvent.makeDefault()
-        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(item, NotificationEvent("2nd", "2nd", LocalDateTime.now()))
+        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(
+            item,
+            NotificationEvent("2nd", "2nd", LocalDateTime.now())
+        )
 
         runDesktopComposeUiTest {
             setContent {
