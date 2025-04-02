@@ -146,7 +146,7 @@ class FileListViewModel : KoinComponent {
             return
         }
 
-        if (controlPressing.get().not() && shift.not()) {
+        if (controlPressing.get().not()) {
             articleStates.mapIndexed { i, f -> i to f }
                 .filter { it.second.selected }
                 .forEach {
