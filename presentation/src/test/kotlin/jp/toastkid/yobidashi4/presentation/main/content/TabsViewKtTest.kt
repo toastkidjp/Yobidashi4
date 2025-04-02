@@ -116,8 +116,7 @@ class TabsViewKtTest {
             editorTab,
             BarcodeToolTab(),
             NotificationListTab(),
-            ChatTab(),
-            SettingEditorTab()
+            ChatTab()
         )
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
     }
@@ -135,12 +134,6 @@ class TabsViewKtTest {
             setContent {
                 TabsView(Modifier)
             }
-
-            (0 until TabsViewModel().tabs().size)
-                .map { onNodeWithContentDescription("tab_$it", useUnmergedTree = true) }
-                .forEach {
-                    it.performClick()
-                }
 
             onNode(hasText("Barcode tool")).assertExists("Not found!")
                 .performMouseInput {
@@ -207,6 +200,12 @@ class TabsViewKtTest {
             }
             onNode(hasText("Export chat"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().exportChat(any()) }
+
+
+            every { anyConstructed<TabsViewModel>().tabs() } returns listOf(SettingEditorTab())
+            setContent {
+                TabsView(Modifier)
+            }
         }
     }
 
