@@ -51,7 +51,10 @@ internal class LinkDecoratorServiceImplementationTest {
             .invoke("https://ja.wikipedia.org/wiki/MSCI#%E9%81%8E%E5%8E%BB%E3%81%AE%E5%88%A9%E5%9B%9E%E3%82%8A\n")
 
         verify { Jsoup.parse(any<URL>(), any()) }
-        assertEquals("[Yahoo! JAPAN](https://ja.wikipedia.org/wiki/MSCI#%E9%81%8E%E5%8E%BB%E3%81%AE%E5%88%A9%E5%9B%9E%E3%82%8A)", actual)
+        assertEquals(
+            "[Yahoo! JAPAN](https://ja.wikipedia.org/wiki/MSCI#%E9%81%8E%E5%8E%BB%E3%81%AE%E5%88%A9%E5%9B%9E%E3%82%8A)",
+            actual
+        )
     }
 
 }
