@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -28,6 +30,10 @@ class SettingEditorViewModel : KoinComponent {
     private val items = mutableStateListOf<Pair<String, TextFieldValue>>()
 
     fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+        if (keyEvent.type != KeyEventType.KeyDown) {
+            return false
+        }
+
         return when {
             keyEvent.isCtrlPressed && keyEvent.key == Key.O -> {
                 openFile()
