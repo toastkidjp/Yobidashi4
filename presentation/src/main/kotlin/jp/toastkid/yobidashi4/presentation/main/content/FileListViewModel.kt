@@ -35,7 +35,7 @@ class FileListViewModel : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
 
-    private val completeItems = mutableStateListOf<FileListItem>()
+    private val completeItems = mutableListOf<FileListItem>()
 
     private val articleStates = mutableStateListOf<FileListItem>()
 
