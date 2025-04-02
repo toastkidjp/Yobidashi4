@@ -33,6 +33,10 @@ class SettingEditorViewModel : KoinComponent {
                 openFile()
                 return true
             }
+            keyEvent.isCtrlPressed && keyEvent.key == Key.S -> {
+                save()
+                return true
+            }
             else -> false
         }
     }
