@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -78,6 +79,21 @@ class SettingEditorViewModelTest {
 
         assertTrue(onKeyEvent)
         verify { subject.openFile() }
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEventWithOAndWithoutCtrl() {
+        subject = spyk(subject)
+        every { subject.openFile() } just Runs
+
+        val onKeyEvent = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = false)
+        )
+
+        assertFalse(onKeyEvent)
+        verify(inverse = true) { subject.openFile() }
     }
 
     @Test
