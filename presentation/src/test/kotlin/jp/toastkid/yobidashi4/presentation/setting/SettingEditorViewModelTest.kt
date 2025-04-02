@@ -1,13 +1,16 @@
 package jp.toastkid.yobidashi4.presentation.setting
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -17,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -59,6 +63,21 @@ class SettingEditorViewModelTest {
     @Test
     fun onKeyEvent() {
         subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.PageUp))
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEventWithO() {
+        subject = spyk(subject)
+        every { subject.openFile() } just Runs
+
+        val onKeyEvent = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true)
+        )
+
+        assertTrue(onKeyEvent)
+        verify { subject.openFile() }
     }
 
     @Test
