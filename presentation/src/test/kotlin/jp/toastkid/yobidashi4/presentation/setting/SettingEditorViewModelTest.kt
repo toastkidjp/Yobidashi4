@@ -61,9 +61,10 @@ class SettingEditorViewModelTest {
         unmockkAll()
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.PageUp))
+        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.AppSwitch, KeyEventType.KeyDown))
     }
 
     @OptIn(InternalComposeUiApi::class)
