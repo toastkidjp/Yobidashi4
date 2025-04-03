@@ -51,7 +51,7 @@ class SettingEditorViewModel : KoinComponent {
 
     fun listState() = listState
 
-    fun items() = items
+    fun items(): List<Pair<String, TextFieldValue>> = items
 
     fun start() {
         items.clear()
