@@ -1,9 +1,14 @@
 package jp.toastkid.yobidashi4.presentation.setting
 
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.withKeyDown
+import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -44,6 +49,11 @@ class SettingEditorViewKtTest {
             )
         }
 
+        every { anyConstructed<SettingEditorViewModel>().items() } returns listOf(
+            "test" to TextFieldValue(),
+            "test2" to TextFieldValue(),
+            "test3" to TextFieldValue("cursor_target")
+        )
         every { anyConstructed<SettingEditorViewModel>().start() } just Runs
         every { anyConstructed<SettingEditorViewModel>().save() } just Runs
         every { anyConstructed<SettingEditorViewModel>().openFile() } just Runs
@@ -65,6 +75,16 @@ class SettingEditorViewKtTest {
 
             onNodeWithText("Save").performClick()
             onNodeWithText("Open").performClick()
+            onNodeWithText("Open").performKeyInput {
+                withKeyDown(Key.CtrlLeft) {
+                    keyDown(Key.O)
+                }
+                keyUp(Key.O)
+            }
+            onNodeWithText("cursor_target").performMouseInput {
+                enter()
+                exit()
+            }
 
             verify { anyConstructed<SettingEditorViewModel>().start() }
             verify { anyConstructed<SettingEditorViewModel>().save() }
