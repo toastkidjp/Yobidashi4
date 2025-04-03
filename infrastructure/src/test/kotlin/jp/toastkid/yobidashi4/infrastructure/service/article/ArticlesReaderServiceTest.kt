@@ -8,8 +8,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -18,6 +16,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
 
 class ArticlesReaderServiceTest {
 
@@ -39,7 +39,7 @@ class ArticlesReaderServiceTest {
         MockKAnnotations.init(this)
 
         mockkStatic(Files::class)
-        every { Files.list(any<Path>()) }.returns(mockk())
+        every { Files.list(any<Path>()) } returns mockk()
         every { setting.articleFolderPath() } returns mockk()
 
         mockkStatic(Path::class)
