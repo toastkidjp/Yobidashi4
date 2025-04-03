@@ -47,7 +47,7 @@ class FileListItemTest {
 
     @Test
     fun testEditable() {
-        val fileListItem = FileListItem(path, true, true)
+        val fileListItem = FileListItem(path, selected = true, editable = true)
         assertTrue(fileListItem.selected)
         assertFalse(fileListItem.unselect().selected)
         assertFalse(fileListItem.reverseSelection().selected)
