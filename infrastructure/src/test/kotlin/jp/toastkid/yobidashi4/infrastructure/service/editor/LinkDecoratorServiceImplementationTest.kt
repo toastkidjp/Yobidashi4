@@ -20,7 +20,7 @@ internal class LinkDecoratorServiceImplementationTest {
     fun setUp() {
         mockkStatic(Jsoup::class)
         val document = mockk<Document>()
-        every { Jsoup.parse(any<URL>(), any()) }.returns(document)
+        every { Jsoup.parse(any<URL>(), any()) } returns document
         every { document.title() } returns "Yahoo! JAPAN"
     }
 
