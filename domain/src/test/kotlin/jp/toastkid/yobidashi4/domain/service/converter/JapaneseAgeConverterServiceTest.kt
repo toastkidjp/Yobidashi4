@@ -23,7 +23,7 @@ class JapaneseAgeConverterServiceTest {
         mockkStatic(JapaneseDate::class)
         every { JapaneseDate.now() } returns JapaneseDate.of(2023, 8, 27)
         mockkStatic(LocalDate::class)
-        every { LocalDate.now() }.returns(LocalDate.of(2023, 8, 27))
+        every { LocalDate.now() } returns LocalDate.of(2023, 8, 27)
     }
 
     @AfterEach
