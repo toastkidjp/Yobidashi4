@@ -7,7 +7,6 @@ import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
@@ -17,6 +16,7 @@ import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Path
 
 class TabsViewModel  : KoinComponent {
 
@@ -71,6 +71,10 @@ class TabsViewModel  : KoinComponent {
 
     fun closeOtherTabs() {
         viewModel.closeOtherTabs()
+    }
+
+    fun openFile(path: Path) {
+        viewModel.openFile(path)
     }
 
     fun edit(path: Path) {
