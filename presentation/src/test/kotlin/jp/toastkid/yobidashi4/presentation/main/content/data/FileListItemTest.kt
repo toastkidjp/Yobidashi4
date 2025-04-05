@@ -58,7 +58,7 @@ class FileListItemTest {
     @Test
     fun subTextIsNull() {
         every { Files.exists(path) } returns false
-        val fileListItem = FileListItem(path, true, true)
+        val fileListItem = FileListItem(path, selected = true, editable = true)
 
         assertNull(fileListItem.subText())
     }
