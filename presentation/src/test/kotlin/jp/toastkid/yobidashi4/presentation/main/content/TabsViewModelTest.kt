@@ -28,6 +28,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -63,6 +64,9 @@ class TabsViewModelTest {
                 }
             )
         }
+
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
         subject = TabsViewModel()
     }
@@ -184,6 +188,13 @@ class TabsViewModelTest {
         subject.openFile(mockk())
         
         verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun clipText() {
+        subject.clipText("test")
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
     @Test
