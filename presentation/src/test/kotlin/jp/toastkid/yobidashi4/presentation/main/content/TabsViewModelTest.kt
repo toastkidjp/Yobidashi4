@@ -22,7 +22,6 @@ import io.mockk.unmockkConstructor
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
@@ -41,6 +40,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
 
 class TabsViewModelTest {
     
@@ -178,11 +178,20 @@ class TabsViewModelTest {
     }
 
     @Test
+    fun openFile() {
+        every { mainViewModel.openFile(any()) } just Runs
+        
+        subject.openFile(mockk())
+        
+        verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
     fun edit() {
         every { mainViewModel.edit(any(), any()) } just Runs
-        
+
         subject.edit(mockk())
-        
+
         verify { mainViewModel.edit(any(), any()) }
     }
 
