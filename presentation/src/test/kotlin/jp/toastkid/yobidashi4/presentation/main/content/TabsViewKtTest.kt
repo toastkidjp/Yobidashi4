@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.emptyFlow
@@ -73,7 +72,7 @@ class TabsViewKtTest {
             )
         }
 
-        mockkConstructor(TabsViewModel::class, TextFileViewerTabViewModel::class, ClipboardPutterService::class)
+        mockkConstructor(TabsViewModel::class, TextFileViewerTabViewModel::class)
         every { anyConstructed<TabsViewModel>().tabIsEmpty() } returns false
         every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns false
         val mockk = mockk<TextFileViewerTab>()
@@ -119,7 +118,7 @@ class TabsViewKtTest {
             NotificationListTab(),
             ChatTab()
         )
-        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+        every { anyConstructed<TabsViewModel>().clipText(any<String>()) } just Runs
     }
 
     @AfterEach
@@ -164,13 +163,13 @@ class TabsViewKtTest {
             }
 
             onNode(hasText("Copy title"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+            verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
 
             onNode(hasText("Close other tabs"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().closeOtherTabs() }
 
             onNode(hasText("Copy URL"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+            verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
 
             every { anyConstructed<TabsViewModel>().tabs() } returns listOf(markdownPreviewTab)
             setContent {
@@ -194,7 +193,7 @@ class TabsViewKtTest {
                 TabsView(Modifier)
             }
             onNode(hasText("Clip internal link"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+            verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
             onNode(hasText("Open with editor"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().openFile(any()) }
 
