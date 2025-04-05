@@ -13,6 +13,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -75,6 +76,10 @@ class TabsViewModel  : KoinComponent {
 
     fun openFile(path: Path) {
         viewModel.openFile(path)
+    }
+
+    fun clipText(text: String) {
+        ClipboardPutterService().invoke(text)
     }
 
     fun edit(path: Path) {
