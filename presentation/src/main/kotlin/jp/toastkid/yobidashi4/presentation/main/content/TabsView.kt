@@ -146,9 +146,7 @@ internal fun TabsView(modifier: Modifier) {
                             viewModel.openingDropdown(tab),
                             tab,
                             viewModel::closeOtherTabs,
-                            {
-                                viewModel.openFile(it)
-                            },
+                            viewModel::openFile,
                             {
                                 ClipboardPutterService().invoke(it)
                             },
