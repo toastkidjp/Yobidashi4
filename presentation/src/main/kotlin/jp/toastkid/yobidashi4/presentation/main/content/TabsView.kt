@@ -74,6 +74,7 @@ import jp.toastkid.yobidashi4.presentation.tool.roulette.RouletteToolTabView
 import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
+import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
 @Composable
@@ -117,6 +118,7 @@ internal fun TabsView(modifier: Modifier) {
                                 viewModel.onPointerEvent(awaitPointerEvent(), tab)
                             }
                         }
+                        .semantics { contentDescription = "tab_$index" }
                 ) {
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -144,6 +146,9 @@ internal fun TabsView(modifier: Modifier) {
                             viewModel.openingDropdown(tab),
                             tab,
                             viewModel::closeOtherTabs,
+                            {
+                                viewModel.openFile(it)
+                            },
                             {
                                 ClipboardPutterService().invoke(it)
                             },
@@ -193,6 +198,7 @@ private fun TabOptionMenu(
     openingDropdownMenu: Boolean,
     tab: Tab,
     closeOtherTabs: () -> Unit,
+    openFile: (Path) -> Unit,
     clipText: (String) -> Unit,
     edit: (MarkdownPreviewTab) -> Unit,
     exportTable: (TableTab) -> Unit,
@@ -262,6 +268,14 @@ private fun TabOptionMenu(
         }
 
         if (tab is EditorTab) {
+            DropdownMenuItem(
+                onClick = {
+                    openFile(tab.path)
+                    close()
+                }
+            ) {
+                Text("Open with editor")
+            }
             DropdownMenuItem(
                 onClick = {
                     clipText("[[${tab.path.nameWithoutExtension}]]")
