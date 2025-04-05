@@ -32,7 +32,7 @@ class EatingOutCounterServiceTest {
         every { path.nameWithoutExtension } returns "2024-03-18.md"
 
         mockkStatic(Files::class)
-        every { Files.readAllLines(any()) }.returns(
+        every { Files.readAllLines(any()) } returns
             """
 ## Text
 
@@ -49,7 +49,6 @@ class EatingOutCounterServiceTest {
 | (外食) マッシュルームとひき肉のスパゲッティ | 1100円
 | ユニバースターゴールド | 268円
 """.split("\n").map { it.trim() }
-        )
 
         MockKAnnotations.init(this)
         every { articlesReaderService.invoke() }.returns(Stream.of(path))
