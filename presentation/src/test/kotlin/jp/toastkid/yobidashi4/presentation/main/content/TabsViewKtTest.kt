@@ -104,6 +104,7 @@ class TabsViewKtTest {
         every { editorTab.update() } returns flowOf(1, 2, 3)
         every { anyConstructed<TabsViewModel>().setSelectedIndex(any()) } just Runs
         every { anyConstructed<TabsViewModel>().edit(any()) } just Runs
+        every { anyConstructed<TabsViewModel>().openFile(any()) } just Runs
         every { anyConstructed<TabsViewModel>().removeTabAt(any()) } just Runs
         every { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) } just Runs
         every { anyConstructed<TabsViewModel>().closeOtherTabs() } just Runs
@@ -182,6 +183,7 @@ class TabsViewKtTest {
             setContent {
                 TabsView(Modifier)
             }
+
             onNode(hasText("Reload"), useUnmergedTree = true).onParent().performClick()
             verify { tableTab.reload() }
             onNode(hasText("Export table"), useUnmergedTree = true).onParent().performClick()
@@ -193,6 +195,8 @@ class TabsViewKtTest {
             }
             onNode(hasText("Clip internal link"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+            onNode(hasText("Open with editor"), useUnmergedTree = true).onParent().performClick()
+            verify { anyConstructed<TabsViewModel>().openFile(any()) }
 
             every { anyConstructed<TabsViewModel>().tabs() } returns listOf(ChatTab())
             setContent {
