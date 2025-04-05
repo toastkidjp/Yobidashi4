@@ -97,6 +97,21 @@ class SettingEditorViewModelTest {
         verify(inverse = true) { subject.openFile() }
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun noopOnKeyEventWithKeyUp() {
+        subject = spyk(subject)
+        every { subject.openFile() } just Runs
+
+        val onKeyEvent = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.O, KeyEventType.KeyUp, isCtrlPressed = true)
+        )
+
+        assertFalse(onKeyEvent)
+        verify(inverse = true) { subject.openFile() }
+    }
+
     @Test
     fun listState() {
         assertNotNull(subject.listState())
