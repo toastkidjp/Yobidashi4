@@ -51,7 +51,7 @@ class EatingOutCounterServiceTest {
 """.split("\n").map { it.trim() }
 
         MockKAnnotations.init(this)
-        every { articlesReaderService.invoke() }.returns(Stream.of(path))
+        every { articlesReaderService.invoke() } returns Stream.of(path)
 
         aggregatorService = EatingOutCounterService(articlesReaderService)
     }
