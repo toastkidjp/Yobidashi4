@@ -61,7 +61,6 @@ import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorVi
 import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
 import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
@@ -148,7 +147,7 @@ internal fun TabsView(modifier: Modifier) {
                             viewModel::closeOtherTabs,
                             viewModel::openFile,
                             {
-                                ClipboardPutterService().invoke(it)
+                                viewModel.clipText(it)
                             },
                             {
                                 viewModel.edit(it.slideshowSourcePath())
