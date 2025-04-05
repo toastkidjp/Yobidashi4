@@ -25,6 +25,8 @@ class TabsViewModel  : KoinComponent {
 
     private val chatExporter: ChatExporter by inject()
 
+    private val clipboardPutterService = ClipboardPutterService()
+
     fun tabIsEmpty() = viewModel.tabs.isEmpty()
 
     fun selectedTabIndex() = viewModel.selected.value
@@ -79,7 +81,7 @@ class TabsViewModel  : KoinComponent {
     }
 
     fun clipText(text: String) {
-        ClipboardPutterService().invoke(text)
+        clipboardPutterService.invoke(text)
     }
 
     fun edit(path: Path) {
