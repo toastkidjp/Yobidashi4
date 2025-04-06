@@ -63,7 +63,7 @@ fun SettingEditorView() {
                     }
                 }
 
-                itemsIndexed(viewModel.items(), { _, item -> item.first }) { index, item ->
+                itemsIndexed(viewModel.items(), { _, item -> item.first }) { _, item ->
                     val headerCursorOn = mutableStateOf(false)
                     val headerColumnBackgroundColor = animateColorAsState(
                         if (headerCursorOn.value) MaterialTheme.colors.primary
