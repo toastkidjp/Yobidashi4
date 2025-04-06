@@ -218,9 +218,9 @@ class TabsViewKtTest {
     @Test
     fun dropdownSettingEditorTab() {
         every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(SettingEditorTab())
 
         runDesktopComposeUiTest {
-            every { anyConstructed<TabsViewModel>().tabs() } returns listOf(SettingEditorTab())
             setContent {
                 TabsView(Modifier)
             }
