@@ -203,8 +203,15 @@ class TabsViewKtTest {
             }
             onNode(hasText("Export chat"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().exportChat(any()) }
+        }
+    }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun dropdownSettingEditorTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
 
+        runDesktopComposeUiTest {
             every { anyConstructed<TabsViewModel>().tabs() } returns listOf(SettingEditorTab())
             setContent {
                 TabsView(Modifier)
