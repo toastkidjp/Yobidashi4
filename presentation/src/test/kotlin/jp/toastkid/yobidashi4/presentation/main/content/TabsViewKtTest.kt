@@ -177,8 +177,16 @@ class TabsViewKtTest {
             }
             onNode(hasText("Edit"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().edit(any()) }
+        }
+    }
 
-            every { anyConstructed<TabsViewModel>().tabs() } returns listOf(tableTab)
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun dropdownTableTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(tableTab)
+
+        runDesktopComposeUiTest {
             setContent {
                 TabsView(Modifier)
             }
