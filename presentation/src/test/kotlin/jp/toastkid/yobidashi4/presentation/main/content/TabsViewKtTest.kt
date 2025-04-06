@@ -187,8 +187,16 @@ class TabsViewKtTest {
             verify { tableTab.reload() }
             onNode(hasText("Export table"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().exportTable(any()) }
+        }
+    }
 
-            every { anyConstructed<TabsViewModel>().tabs() } returns listOf(editorTab)
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun dropdownEditorTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(editorTab)
+
+        runDesktopComposeUiTest {
             setContent {
                 TabsView(Modifier)
             }
