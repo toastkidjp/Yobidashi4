@@ -196,7 +196,15 @@ class TabsViewKtTest {
             verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
             onNode(hasText("Open with editor"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().openFile(any()) }
+        }
+    }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun dropdownChatTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+
+        runDesktopComposeUiTest {
             every { anyConstructed<TabsViewModel>().tabs() } returns listOf(ChatTab())
             setContent {
                 TabsView(Modifier)
