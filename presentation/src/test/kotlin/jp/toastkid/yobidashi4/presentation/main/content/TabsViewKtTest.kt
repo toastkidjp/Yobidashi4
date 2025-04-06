@@ -210,6 +210,7 @@ class TabsViewKtTest {
                 TabsView(Modifier)
             }
             onNode(hasText("Export chat"), useUnmergedTree = true).onParent().performClick()
+
             verify { anyConstructed<TabsViewModel>().exportChat(any()) }
         }
     }
