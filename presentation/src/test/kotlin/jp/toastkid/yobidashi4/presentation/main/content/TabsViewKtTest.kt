@@ -170,11 +170,20 @@ class TabsViewKtTest {
 
             onNode(hasText("Copy URL"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
+        }
+    }
 
-            every { anyConstructed<TabsViewModel>().tabs() } returns listOf(markdownPreviewTab)
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun dropdownMarkdownPreviewTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(markdownPreviewTab)
+
+        runDesktopComposeUiTest {
             setContent {
                 TabsView(Modifier)
             }
+
             onNode(hasText("Edit"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().edit(any()) }
         }
