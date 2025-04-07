@@ -791,7 +791,7 @@ class KeyEventConsumerTest {
             { assertEquals("10月21日ABCホールにて", it.text) }
         )
 
-        assertTrue(consumed)
+        assertFalse(consumed)
     }
 
     @Test
