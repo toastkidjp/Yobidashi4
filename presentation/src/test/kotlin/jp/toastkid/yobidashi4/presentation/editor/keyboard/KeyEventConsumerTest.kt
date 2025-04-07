@@ -13,7 +13,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
@@ -46,7 +45,6 @@ import org.koin.dsl.module
 @OptIn(InternalComposeUiApi::class)
 class KeyEventConsumerTest {
 
-    @InjectMockKs
     private lateinit var subject: KeyEventConsumer
 
     @MockK
