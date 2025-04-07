@@ -75,7 +75,10 @@ fun MultiTabContent() {
         Box(modifier = Modifier.fillMaxWidth()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box {
-                    ArticleListView(viewModel.openArticleList(), viewModel.articles())
+                    ArticleListView(
+                        viewModel.openArticleList(),
+                        viewModel.articles()
+                    )
 
                     if (viewModel.openArticleList()) {
                         ArticleListSwitch(
@@ -123,12 +126,10 @@ fun MultiTabContent() {
 private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
     val width = animateDpAsState(if (openArticleList) 330.dp else 0.dp)
 
-    if (articles.isNotEmpty()) {
-        FileListView(
-            articles,
-            modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)
-        )
-    }
+    FileListView(
+        articles,
+        modifier = Modifier.widthIn(max = width.value).wrapContentWidth(Alignment.Start)
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
