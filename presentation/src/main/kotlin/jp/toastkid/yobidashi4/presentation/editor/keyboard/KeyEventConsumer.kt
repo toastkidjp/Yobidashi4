@@ -32,7 +32,8 @@ class KeyEventConsumer(
     private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm,
     private val controlAndLeftBracketCase: ControlAndLeftBracketCase = ControlAndLeftBracketCase(),
     private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
-    private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory()
+    private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
+    private val toHalfWidth: ToHalfWidth = ToHalfWidth()
 ) {
 
     operator fun invoke(
@@ -215,7 +216,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.H -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    ToHalfWidth()(it)
+                    toHalfWidth(it)
                 }, setNewContent)
                 true
             }
