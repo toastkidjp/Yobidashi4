@@ -795,6 +795,20 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun toHalfWidthWithoutShift() {
+        val selected = "１０月２１日ＡＢＣホールにて"
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.H, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = false),
+            TextFieldValue(selected, TextRange(0, selected.length)),
+            mockk(),
+            { assertEquals("10月21日ABCホールにて", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun noopCases() {
         assertFalse(
             subject.invoke(
