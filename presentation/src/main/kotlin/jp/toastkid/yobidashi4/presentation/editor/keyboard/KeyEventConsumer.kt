@@ -20,12 +20,13 @@ import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCa
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.TableFormConverter
+import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ToHalfWidth
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.math.max
-import kotlin.math.min
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.math.max
+import kotlin.math.min
 
 class KeyEventConsumer(
     private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm,
@@ -209,6 +210,12 @@ class KeyEventConsumer(
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                     if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
+                }, setNewContent)
+                true
+            }
+            it.isCtrlPressed && it.isShiftPressed && it.key == Key.H -> {
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
+                    ToHalfWidth()(it)
                 }, setNewContent)
                 true
             }
