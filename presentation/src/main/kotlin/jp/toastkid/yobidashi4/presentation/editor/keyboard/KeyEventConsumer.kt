@@ -215,9 +215,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.H -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    toHalfWidth(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, toHalfWidth::invoke, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.B -> {
