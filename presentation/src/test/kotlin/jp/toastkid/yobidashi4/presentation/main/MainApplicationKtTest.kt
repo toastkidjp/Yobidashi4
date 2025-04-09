@@ -17,7 +17,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
@@ -33,6 +32,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
 
 class MainApplicationKtTest {
 
@@ -45,6 +45,7 @@ class MainApplicationKtTest {
     @MockK
     private lateinit var notification: ScheduledNotification
 
+    @OptIn(ExperimentalFoundationApi::class)
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -56,6 +57,7 @@ class MainApplicationKtTest {
         every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
         coEvery { mainViewModel.launchDroppedPathFlow() } just Runs
         every { mainViewModel.trayState() } returns TrayState()
+        every { mainViewModel.setTextManager(any()) } just Runs
         coEvery { notification.start(any()) } just Runs
         every { notification.notificationFlow() } returns MutableSharedFlow()
 
