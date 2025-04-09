@@ -9,7 +9,7 @@ class TrimmingService {
 
         val converted = text.trimEnd().split(lineSeparator)
                 .asSequence()
-                .map { it.trim() }
+                .map(String::trim)
                 .reduce { str1, str2 -> str1 + lineSeparator + str2 }
         return if (text.endsWith(lineSeparator)) converted.plus(lineSeparator) else converted
     }
