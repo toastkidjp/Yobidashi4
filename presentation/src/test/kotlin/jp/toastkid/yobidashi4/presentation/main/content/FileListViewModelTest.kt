@@ -340,7 +340,7 @@ class FileListViewModelTest {
 
     @OptIn(InternalComposeUiApi::class)
     @Test
-    fun onSingleClickWithUnselection() {
+    fun onSingleClickWithUnSelection() {
         subject.start(
             listOf(
                 mockk<Path>().also { every { it.extension } returns "md" },
