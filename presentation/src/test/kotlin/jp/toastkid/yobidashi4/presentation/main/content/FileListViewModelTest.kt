@@ -338,6 +338,22 @@ class FileListViewModelTest {
         subject.onSingleClick(subject.items().first())
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onSingleClickWithUnselection() {
+        subject.start(
+            listOf(
+                mockk<Path>().also { every { it.extension } returns "md" },
+                mockk<Path>().also { every { it.extension } returns "txt" },
+                mockk<Path>().also { every { it.extension } returns "exe" },
+                mockk<Path>().also { every { it.extension } returns "html" }
+            )
+        )
+        subject.onSingleClick(subject.items().last())
+
+        subject.onSingleClick(subject.items().first())
+    }
+
     @Test
     fun onLongClick() {
         val path = mockk<Path>()
