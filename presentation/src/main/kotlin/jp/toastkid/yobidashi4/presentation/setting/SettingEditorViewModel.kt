@@ -55,8 +55,10 @@ class SettingEditorViewModel : KoinComponent {
 
     fun start() {
         items.clear()
-        setting.items().forEach { entry ->
-            items.add(entry.key.toString() to TextFieldValue(entry.value.toString()))
+        setting.items().map {
+            it.key.toString() to TextFieldValue(it.value.toString())
+        }.forEach {
+            items.add(it)
         }
     }
 
