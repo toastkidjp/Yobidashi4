@@ -18,7 +18,7 @@ class MediaFileFinder {
         return readFromFolder(folder).union(
             Files.list(folder)
                 .filter(Path::isDirectory)
-                .map { readFromFolder(it) }
+                .map(::readFromFolder)
                 .flatMap { it.stream() }
                 .collect(Collectors.toList())
         )
