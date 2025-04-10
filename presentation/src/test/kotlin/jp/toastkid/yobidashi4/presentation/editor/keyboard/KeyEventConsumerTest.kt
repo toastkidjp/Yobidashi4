@@ -65,6 +65,9 @@ class KeyEventConsumerTest {
     @MockK
     private lateinit var linkDecoratorService: LinkDecoratorService
 
+    @MockK
+    private lateinit var expressionTextCalculatorService: ExpressionTextCalculatorService
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -78,6 +81,7 @@ class KeyEventConsumerTest {
 
         subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, SelectedTextConversion(), searchUrlFactory)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
+        every { expressionTextCalculatorService.invoke(any()) } returns "3"
         every { controlAndLeftBracketCase.invoke(any(), any(), any()) } returns true
     }
 
@@ -533,16 +537,13 @@ class KeyEventConsumerTest {
 
     @Test
     fun calculate() {
-        mockkConstructor(ExpressionTextCalculatorService::class)
-        every { anyConstructed<ExpressionTextCalculatorService>().invoke(any()) } returns "3"
-
         val consumed = subject.invoke(
             KeyEvent(Key.C, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldValue("1+2", TextRange(0, 3)),
             mockk(),
             {
                 assertEquals("3", it.getSelectedText().text)
-                verify { anyConstructed<ExpressionTextCalculatorService>().invoke("1+2") }
+                verify { expressionTextCalculatorService.invoke("1+2") }
             }
         )
 
