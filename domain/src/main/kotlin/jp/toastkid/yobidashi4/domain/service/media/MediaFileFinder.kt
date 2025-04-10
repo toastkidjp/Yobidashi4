@@ -26,9 +26,7 @@ class MediaFileFinder {
 
     private fun readFromFolder(folder: Path): List<Path> {
         return Files.list(folder)
-            .filter {
-                isKeep(it)
-            }
+            .filter(::isKeep)
             .collect(Collectors.toList())
     }
 
