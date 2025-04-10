@@ -82,6 +82,7 @@ class KeyEventConsumerTest {
         subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
         every { expressionTextCalculatorService.invoke(any()) } returns "3"
+        every { selectedTextConversion.invoke(any(), any(), any(), any(), any()) } returns true
         every { controlAndLeftBracketCase.invoke(any(), any(), any()) } returns true
     }
 
