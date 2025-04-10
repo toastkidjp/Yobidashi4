@@ -2,10 +2,14 @@ package jp.toastkid.yobidashi4.presentation.setting
 
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.withKeyDown
 import androidx.compose.ui.text.input.TextFieldValue
@@ -81,7 +85,17 @@ class SettingEditorViewKtTest {
                 }
                 keyUp(Key.O)
             }
-            onNodeWithText("cursor_target").performMouseInput {
+
+            val input = onNodeWithText("cursor_target")
+            input.performKeyInput {
+                keyDown(Key.O)
+                keyUp(Key.O)
+                pressKey(Key.I)
+            }
+
+            val clearInput = onAllNodesWithContentDescription("Clear input.").onFirst()
+            clearInput.performClick()
+            clearInput.onParent().performMouseInput {
                 enter()
                 exit()
             }
