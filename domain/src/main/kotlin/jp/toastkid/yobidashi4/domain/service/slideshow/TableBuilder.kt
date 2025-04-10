@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.domain.service.slideshow
 
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 
 class TableBuilder {
 
@@ -16,7 +16,7 @@ class TableBuilder {
 
     fun setColumns(line: String) {
         table.clear()
-        columnNames.set(line.split("|").filter { it.isNotEmpty() })
+        columnNames.set(line.split("|").filter(CharSequence::isNotEmpty))
     }
 
     fun addTableLines(line: String) {
