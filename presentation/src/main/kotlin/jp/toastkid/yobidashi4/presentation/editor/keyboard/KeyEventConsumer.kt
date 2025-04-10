@@ -259,9 +259,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    expressionTextCalculatorService.invoke(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, expressionTextCalculatorService::invoke, setNewContent)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.N -> {
