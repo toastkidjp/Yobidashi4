@@ -40,7 +40,11 @@ internal fun EditorTabView(tab: EditorTab) {
                 }
 
                 AnimatedVisibility(visible = viewModel.showPreview(), Modifier.weight(1f)) {
-                    MarkdownPreview(viewModel.preview(), rememberScrollState(), Modifier)
+                    MarkdownPreview(
+                        viewModel.preview(),
+                        rememberScrollState(),
+                        Modifier
+                    )
                 }
 
                 LaunchedEffect(tab) {
