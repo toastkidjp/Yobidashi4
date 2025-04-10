@@ -352,6 +352,7 @@ class FileListViewModelTest {
         subject.onSingleClick(subject.items().last())
 
         subject.onSingleClick(subject.items().first())
+        assertEquals(1, subject.items().filter { it.selected }.size)
     }
 
     @Test
