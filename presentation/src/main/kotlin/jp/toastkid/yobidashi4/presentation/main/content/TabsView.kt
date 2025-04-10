@@ -146,9 +146,7 @@ internal fun TabsView(modifier: Modifier) {
                             tab,
                             viewModel::closeOtherTabs,
                             viewModel::openFile,
-                            {
-                                viewModel.clipText(it)
-                            },
+                            viewModel::clipText,
                             {
                                 viewModel.edit(it.slideshowSourcePath())
                             },
