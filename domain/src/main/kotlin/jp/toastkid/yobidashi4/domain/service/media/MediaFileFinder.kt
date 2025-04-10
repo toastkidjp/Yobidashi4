@@ -30,7 +30,7 @@ class MediaFileFinder {
             .collect(Collectors.toList())
     }
 
-    private fun isKeep(it: Path) = it.isDirectory().not()
+    private fun isKeep(it: Path): Boolean = it.isDirectory().not()
             && prefixes.all { prefix -> it.nameWithoutExtension.startsWith(prefix).not() }
             && it.isExecutable()
 
