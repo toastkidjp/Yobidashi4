@@ -33,7 +33,8 @@ class KeyEventConsumer(
     private val controlAndLeftBracketCase: ControlAndLeftBracketCase = ControlAndLeftBracketCase(),
     private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
-    private val toHalfWidth: ToHalfWidth = ToHalfWidth()
+    private val toHalfWidth: ToHalfWidth = ToHalfWidth(),
+    private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService()
 ) {
 
     operator fun invoke(
@@ -259,7 +260,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    ExpressionTextCalculatorService().invoke(it)
+                    expressionTextCalculatorService.invoke(it)
                 }, setNewContent)
                 true
             }
