@@ -9,7 +9,7 @@ class MovieMemoExtractorResult : AggregationResult {
     }
 
     override fun itemArrays(): Collection<Array<Any>> {
-        return items.map { it.toArray() }
+        return items.map(MovieMemo::toArray)
     }
 
     override fun title(): String {
