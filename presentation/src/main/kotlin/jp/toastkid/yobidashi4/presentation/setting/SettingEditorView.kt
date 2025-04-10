@@ -64,20 +64,20 @@ fun SettingEditorView() {
                 }
 
                 itemsIndexed(viewModel.items(), { _, item -> item.first }) { _, item ->
-                    val headerCursorOn = mutableStateOf(false)
-                    val headerColumnBackgroundColor = animateColorAsState(
-                        if (headerCursorOn.value) MaterialTheme.colors.primary
+                    val cursorOn = mutableStateOf(false)
+                    val columnBackgroundColor = animateColorAsState(
+                        if (cursorOn.value) MaterialTheme.colors.primary
                         else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
                         else Color.Transparent
                     )
                     Row(modifier = Modifier.fillMaxWidth().animateItem()
                         .onPointerEvent(PointerEventType.Enter) {
-                            headerCursorOn.value = true
+                            cursorOn.value = true
                         }
                         .onPointerEvent(PointerEventType.Exit) {
-                            headerCursorOn.value = false
+                            cursorOn.value = false
                         }
-                        .drawBehind { drawRect(headerColumnBackgroundColor.value) }
+                        .drawBehind { drawRect(columnBackgroundColor.value) }
                     ) {
                         val state = mutableStateOf(item.second)
                         SingleLineTextField(
