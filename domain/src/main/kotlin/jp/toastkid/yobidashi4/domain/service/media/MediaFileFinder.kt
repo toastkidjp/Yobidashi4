@@ -31,10 +31,9 @@ class MediaFileFinder {
     }
 
     private fun isKeep(it: Path) = (it.isDirectory().not()
-            && it.nameWithoutExtension.startsWith("AlbumArt").not()
-            && it.nameWithoutExtension.startsWith("Folder").not()
-            && it.nameWithoutExtension.startsWith("iTunes").not()
-            && it.nameWithoutExtension.startsWith("desktop").not()
+            && prefixes.all { prefix -> it.nameWithoutExtension.startsWith(prefix).not() }
             && it.isExecutable())
 
 }
+
+private val prefixes = setOf("AlbumArt", "Folder", "iTunes", "desktop")
