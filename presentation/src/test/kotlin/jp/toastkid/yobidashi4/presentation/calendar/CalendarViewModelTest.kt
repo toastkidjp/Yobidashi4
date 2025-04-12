@@ -242,4 +242,27 @@ class CalendarViewModelTest {
         verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
     }
 
+    @Test
+    fun japaneseYear() {
+        assertTrue(viewModel.japaneseYear().isEmpty())
+        viewModel.setYear(1168)
+        assertTrue(viewModel.japaneseYear().isEmpty())
+        viewModel.setYear(1869)
+        assertTrue(viewModel.japaneseYear().isEmpty())
+        viewModel.setYear(1872)
+        assertTrue(viewModel.japaneseYear().isEmpty())
+        viewModel.setYear(1873)
+        assertEquals("明治6", viewModel.japaneseYear())
+        viewModel.setYear(1913)
+        assertEquals("大正2", viewModel.japaneseYear())
+        viewModel.setYear(1990)
+        assertEquals("平成2", viewModel.japaneseYear())
+        viewModel.setYear(2018)
+        assertEquals("平成30", viewModel.japaneseYear())
+        viewModel.setYear(2019)
+        assertEquals("平成31", viewModel.japaneseYear())
+        viewModel.setYear(2020)
+        assertEquals("令和2", viewModel.japaneseYear())
+    }
+
 }
