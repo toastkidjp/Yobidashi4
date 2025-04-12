@@ -266,6 +266,11 @@ class KeyEventConsumer(
                 (mainViewModel.currentTab() as? EditorTab)?.switchEditable()
                 true
             }
+            it.isCtrlPressed && it.key == Key.O -> {
+                val tab = mainViewModel.currentTab() as? EditorTab ?: return false
+                mainViewModel.openFile(tab.path)
+                true
+            }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.O -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isEmpty()) {
