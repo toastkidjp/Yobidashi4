@@ -30,12 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
-import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
-import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,6 +49,7 @@ fun CalendarView(tab: CalendarTab) {
         Column {
             TopComponent(
                 calendarViewModel.yearInput(),
+                calendarViewModel.japaneseYear(),
                 calendarViewModel.localDate().month.value,
                 calendarViewModel.openingMonthChooser(),
                 calendarViewModel::openMonthChooser,
@@ -112,6 +113,7 @@ fun CalendarView(tab: CalendarTab) {
 @Composable
 private fun TopComponent(
     yearInput: TextFieldValue,
+    japaneseYear: String,
     currentMonth: Int,
     openingMonthChooser: Boolean,
     openMonthChooser: () -> Unit,
@@ -137,9 +139,14 @@ private fun TopComponent(
                 yearInput,
                 "Year",
                 setYearInput,
-                modifier = Modifier.widthIn(100.dp)
+                modifier = Modifier.widthIn(60.dp)
             )
         }
+
+        Text(
+            japaneseYear,
+            modifier = Modifier.widthIn(60.dp)
+        )
 
         Text("/", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
 
