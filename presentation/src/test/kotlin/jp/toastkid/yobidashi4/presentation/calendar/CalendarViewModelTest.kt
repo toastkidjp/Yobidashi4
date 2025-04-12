@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -242,20 +244,18 @@ class CalendarViewModelTest {
         verify { mainViewModel.updateCalendarTab(any(), any(), any()) }
     }
 
-    @Test
-    fun japaneseYear() {
-        viewModel.setYear(1873)
-        assertEquals("明治6", viewModel.japaneseYear())
-        viewModel.setYear(1913)
-        assertEquals("大正2", viewModel.japaneseYear())
-        viewModel.setYear(1990)
-        assertEquals("平成2", viewModel.japaneseYear())
-        viewModel.setYear(2018)
-        assertEquals("平成30", viewModel.japaneseYear())
-        viewModel.setYear(2019)
-        assertEquals("平成31", viewModel.japaneseYear())
-        viewModel.setYear(2020)
-        assertEquals("令和2", viewModel.japaneseYear())
+    @CsvSource(value = [
+        "1873, 明治6",
+        "1913, 大正2",
+        "1990, 平成2",
+        "2018, 平成30",
+        "2019, 平成31",
+        "2020, 令和2",
+    ])
+    @ParameterizedTest
+    fun japaneseYear(year: Int, expected: String) {
+        viewModel.setYear(year)
+        assertEquals(expected, viewModel.japaneseYear())
     }
 
     @Test
