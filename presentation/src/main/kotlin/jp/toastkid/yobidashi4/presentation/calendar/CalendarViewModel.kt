@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi4.presentation.calendar
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
-import java.time.DayOfWeek
-import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -13,6 +11,11 @@ import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.chrono.JapaneseDate
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicReference
 
 class CalendarViewModel : KoinComponent {
 
@@ -49,6 +52,12 @@ class CalendarViewModel : KoinComponent {
 
     fun setYear(year: Int) {
         localDateState.value = localDateState.value.withYear(year)
+        if (year < 1873) {
+            return
+        }
+        japaneseYear.set(
+            JapaneseDate.of(year, localDateState.value.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
+        )
     }
 
     fun moveMonth(month: Int) {
@@ -80,6 +89,10 @@ class CalendarViewModel : KoinComponent {
             setYear(it)
         }
     }
+
+    private val japaneseYear = AtomicReference("")
+
+    fun japaneseYear() = japaneseYear.get()
 
     fun isToday(date: Int): Boolean {
         val value = localDate()
