@@ -20,6 +20,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
@@ -659,6 +660,23 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
         verify { mainViewModel.currentTab() }
         verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun noopOpenFileIfCurrentTabIsNotEditorTab() {
+        every { mainViewModel.currentTab() } returns mockk<WebTab>()
+        every { mainViewModel.openFile(any()) } just Runs
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue(),
+            mockk(),
+            {  }
+        )
+
+        assertFalse(consumed)
+        verify { mainViewModel.currentTab() }
+        verify(inverse = true) { mainViewModel.openFile(any()) }
     }
 
     @Test
