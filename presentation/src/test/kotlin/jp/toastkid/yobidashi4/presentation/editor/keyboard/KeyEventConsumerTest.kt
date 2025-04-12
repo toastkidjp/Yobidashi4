@@ -643,6 +643,25 @@ class KeyEventConsumerTest {
     }
 
     @Test
+    fun openFile() {
+        val editorTab = mockk<EditorTab>()
+        every { editorTab.path } returns mockk()
+        every { mainViewModel.currentTab() } returns editorTab
+        every { mainViewModel.openFile(any()) } just Runs
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true),
+            TextFieldValue(),
+            mockk(),
+            {  }
+        )
+
+        assertTrue(consumed)
+        verify { mainViewModel.currentTab() }
+        verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
     fun noopCombineLines() {
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
