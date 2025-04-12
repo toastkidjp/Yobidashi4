@@ -51,13 +51,12 @@ class CalendarViewModel : KoinComponent {
     }
 
     fun setYear(year: Int) {
-        localDateState.value = localDateState.value.withYear(year)
-        if (year < 1873) {
-            return
+        if (year >= 1873) {
+            japaneseYear.set(
+                JapaneseDate.of(year, localDateState.value.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
+            )
         }
-        japaneseYear.set(
-            JapaneseDate.of(year, localDateState.value.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
-        )
+        localDateState.value = localDateState.value.withYear(year)
     }
 
     fun moveMonth(month: Int) {
