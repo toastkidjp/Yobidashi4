@@ -154,7 +154,7 @@ private fun TopComponent(
             Box(modifier = Modifier.clickable(onClick = openMonthChooser)) {
                 Text("$currentMonth", fontSize = 16.sp)
                 DropdownMenu(expanded = openingMonthChooser, onDismissRequest = closeMonthChooser) {
-                    Month.values().forEach {
+                    Month.entries.forEach {
                         DropdownMenuItem(onClick = {
                             moveMonth(it.value)
                             closeMonthChooser()
