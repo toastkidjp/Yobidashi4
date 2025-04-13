@@ -45,6 +45,8 @@ class CalendarViewModel : KoinComponent {
             japaneseYear.set(
                 JapaneseDate.of(year, newDate.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
             )
+        } else {
+            japaneseYear.set("")
         }
         localDateState.value = newDate
     }
