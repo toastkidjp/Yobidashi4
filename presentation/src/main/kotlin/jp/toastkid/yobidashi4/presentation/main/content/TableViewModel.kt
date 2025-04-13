@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.util.Formatter
 import java.util.concurrent.atomic.AtomicReference
 
 class TableViewModel : KoinComponent {
@@ -39,6 +40,8 @@ class TableViewModel : KoinComponent {
     private val query = mutableStateOf("")
 
     private val tableSorter = TableSorter()
+
+    private val formatter = Formatter()
 
     fun items() = articleStates
 
@@ -81,7 +84,7 @@ class TableViewModel : KoinComponent {
     fun highlight(text: String) = highlighter(text, query.value.replace("\"", ""))
 
     fun makeText(any: Any): String {
-        return if (any is Int) String.format("%,d", any) else any.toString()
+        return if (any is Int) formatter.format("%,d", any).toString() else any.toString()
     }
 
     fun makeWeight(index: Int): Float {
