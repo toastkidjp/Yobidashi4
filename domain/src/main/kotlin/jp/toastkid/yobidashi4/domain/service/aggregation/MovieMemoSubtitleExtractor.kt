@@ -13,9 +13,7 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
         articlesReaderService.invoke()
                 .parallel()
                 .filter { it.fileName.toString().startsWith(keyword) }
-                .map {
-                    findMovieNames(it)
-                }
+                .map(::findMovieNames)
                 .filter(::keepIsNotEmpty)
                 .forEach {
                    it.second.forEach { line -> result.add(it.first, line) }
