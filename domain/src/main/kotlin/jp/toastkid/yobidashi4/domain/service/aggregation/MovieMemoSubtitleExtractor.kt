@@ -24,7 +24,7 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
     private fun findMovieNames(it: Path) =
         it.nameWithoutExtension to
             Files.readAllLines(it)
-                .filter { line -> keepSpecificLine(line) }
+                .filter(::keepSpecificLine)
                 .map { line -> line.substring(line.indexOf(" ")).trim() }
 
     private fun keepSpecificLine(line: String) = line.startsWith("##") && line.contains("年、")
