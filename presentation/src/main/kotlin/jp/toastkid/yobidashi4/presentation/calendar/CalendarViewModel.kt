@@ -39,10 +39,14 @@ class CalendarViewModel : KoinComponent {
 
     fun localDate(): LocalDate = localDateState.value
 
+    private fun setNewLocalDate(newDate: LocalDate) {
+        localDateState.value = newDate
+    }
+
     fun plusMonths(i: Long) {
         val year = localDateState.value.year
 
-        localDateState.value = localDateState.value.plusMonths(i)
+        setNewLocalDate(localDateState.value.plusMonths(i))
 
         val nextYear = localDateState.value.year
         if (year != nextYear) {
@@ -56,17 +60,17 @@ class CalendarViewModel : KoinComponent {
                 JapaneseDate.of(year, localDateState.value.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
             )
         }
-        localDateState.value = localDateState.value.withYear(year)
+        setNewLocalDate(localDateState.value.withYear(year))
     }
 
     fun moveMonth(month: Int) {
-        localDateState.value = localDateState.value.withMonth(month)
+        setNewLocalDate(localDateState.value.withMonth(month))
     }
 
     fun moveToCurrentMonth() {
         val year = localDateState.value.year
 
-        localDateState.value = LocalDate.now()
+        setNewLocalDate(LocalDate.now())
 
         val nextYear = localDateState.value.year
         if (year != nextYear) {
@@ -161,7 +165,7 @@ class CalendarViewModel : KoinComponent {
     }
 
     fun launch(date: LocalDate) {
-        localDateState.value = date
+        setNewLocalDate(date)
         yearInput.value = TextFieldValue("${localDate().year}")
     }
 
