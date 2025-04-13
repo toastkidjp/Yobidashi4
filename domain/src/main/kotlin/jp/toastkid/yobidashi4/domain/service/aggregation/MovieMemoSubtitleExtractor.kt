@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.aggregation
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import java.nio.file.Files
+import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
 class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesReaderService) : ArticleAggregator {
@@ -13,10 +14,7 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
                 .parallel()
                 .filter { it.fileName.toString().startsWith(keyword) }
                 .map {
-                    it.nameWithoutExtension to
-                        Files.readAllLines(it)
-                                .filter { line -> line.startsWith("##") && line.contains("年、") }
-                                .map { line -> line.substring(line.indexOf(" ")).trim() }
+                    findMovieNames(it)
                 }
                 .filter(::keepIsNotEmpty)
                 .forEach {
@@ -24,6 +22,12 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
                 }
         return result
     }
+
+    private fun findMovieNames(it: Path) =
+        it.nameWithoutExtension to
+            Files.readAllLines(it)
+                .filter { line -> line.startsWith("##") && line.contains("年、") }
+                .map { line -> line.substring(line.indexOf(" ")).trim() }
 
     private fun keepIsNotEmpty(it: Pair<String, List<String>>) = it.second.isNotEmpty()
 
