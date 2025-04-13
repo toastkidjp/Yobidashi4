@@ -45,7 +45,7 @@ class CalendarViewModel : KoinComponent {
         localDateState.value = newDate
     }
 
-    private fun makeJapaneseYearLabel(year: Int, newDate: LocalDate): String? = if (year >= 1873)
+    private fun makeJapaneseYearLabel(year: Int, newDate: LocalDate): String = if (year >= 1873)
         JapaneseDate.of(year, newDate.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
     else
         ""
