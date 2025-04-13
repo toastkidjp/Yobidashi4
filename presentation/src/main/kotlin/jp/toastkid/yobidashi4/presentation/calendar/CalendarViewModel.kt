@@ -40,6 +40,12 @@ class CalendarViewModel : KoinComponent {
     fun localDate(): LocalDate = localDateState.value
 
     private fun setNewLocalDate(newDate: LocalDate) {
+        val year = newDate.year
+        if (year >= 1873) {
+            japaneseYear.set(
+                JapaneseDate.of(year, newDate.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
+            )
+        }
         localDateState.value = newDate
     }
 
@@ -55,11 +61,6 @@ class CalendarViewModel : KoinComponent {
     }
 
     fun setYear(year: Int) {
-        if (year >= 1873) {
-            japaneseYear.set(
-                JapaneseDate.of(year, localDateState.value.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
-            )
-        }
         setNewLocalDate(localDateState.value.withYear(year))
     }
 
