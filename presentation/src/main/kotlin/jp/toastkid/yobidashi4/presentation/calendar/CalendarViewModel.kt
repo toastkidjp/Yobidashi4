@@ -41,9 +41,7 @@ class CalendarViewModel : KoinComponent {
 
     private fun setNewLocalDate(newDate: LocalDate) {
         val year = newDate.year
-        japaneseYear.set(
-            makeJapaneseYearLabel(year, newDate)
-        )
+        japaneseYear.set(makeJapaneseYearLabel(year, newDate))
         localDateState.value = newDate
     }
 
