@@ -26,7 +26,7 @@ class TableViewModel : KoinComponent {
 
     private val articleStates = mutableStateListOf<Array<Any>>()
 
-    private val lastSorted = AtomicReference(-1 to false)
+    private val lastSorted = AtomicReference(0 to true)
 
     private val focusRequester = FocusRequester()
 
@@ -54,6 +54,7 @@ class TableViewModel : KoinComponent {
         articleStates.clear()
         val aggregationResult = tab.items()
         articleStates.addAll(aggregationResult.itemArrays())
+        sort(0, aggregationResult)
         focusRequester().requestFocus()
 
         query.value = if (aggregationResult is FindResult) aggregationResult.keyword() else ""
