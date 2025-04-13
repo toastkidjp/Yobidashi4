@@ -12,12 +12,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.datatransfer.Transferable
-import java.awt.datatransfer.UnsupportedFlavorException
-import java.awt.dnd.DropTargetDropEvent
-import java.io.File
-import java.io.IOException
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -26,6 +20,12 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.datatransfer.Transferable
+import java.awt.datatransfer.UnsupportedFlavorException
+import java.awt.dnd.DropTargetDropEvent
+import java.io.File
+import java.io.IOException
+import java.nio.file.Path
 
 class DropTargetTest {
     
@@ -63,9 +63,11 @@ class DropTargetTest {
         every { event.rejectDrop() } just Runs
         every { event.transferable } returns transferable
         val file = mockk<File>()
-        every { transferable.getTransferData(any()) } returns listOf(file)
+        val file2 = mockk<File>()
+        every { transferable.getTransferData(any()) } returns listOf(file, file2)
         val path = mockk<Path>()
         every { file.toPath() } returns path
+        every { file2.toPath() } returns path
         every { path.fileName.toString() } returns "test"
         every { dragAndDropEvent.nativeEvent } returns event
         every { mainViewModel.emitDroppedPath(any()) } just Runs
