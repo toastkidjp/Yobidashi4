@@ -271,4 +271,11 @@ class CalendarViewModelTest {
         assertTrue(viewModel.japaneseYear().isEmpty())
     }
 
+    @Test
+    fun clearJapaneseYear() {
+        viewModel.setYear(2022)
+        viewModel.setYear(1872)
+        assertTrue(viewModel.japaneseYear().isEmpty())
+    }
+
 }
