@@ -42,13 +42,15 @@ class CalendarViewModel : KoinComponent {
     private fun setNewLocalDate(newDate: LocalDate) {
         val year = newDate.year
         japaneseYear.set(
-            if (year >= 1873)
-                JapaneseDate.of(year, newDate.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
-            else
-                ""
+            makeJapaneseYearLabel(year, newDate)
         )
         localDateState.value = newDate
     }
+
+    private fun makeJapaneseYearLabel(year: Int, newDate: LocalDate): String? = if (year >= 1873)
+        JapaneseDate.of(year, newDate.month.value, 1).format(DateTimeFormatter.ofPattern("Gy"))
+    else
+        ""
 
     fun plusMonths(i: Long) {
         val year = localDateState.value.year
