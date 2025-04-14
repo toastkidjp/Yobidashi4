@@ -25,6 +25,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
@@ -63,7 +65,7 @@ class ChatTabViewModelTest {
             )
         }
 
-        every { service.send(any()) } returns ""
+        every { service.send(any(), any()) } returns ""
         every { service.setChat(any()) } just Runs
         every { service.messages() } returns emptyList()
         every { mainViewModel.showSnackbar(any()) } just Runs
@@ -91,9 +93,9 @@ class ChatTabViewModelTest {
     @Test
     fun noopSend() {
         runBlocking {
-            subject.send()
+            subject.send(CoroutineScope(Dispatchers.Unconfined))
 
-            verify(inverse = true) { service.send(any()) }
+            verify(inverse = true) { service.send(any(), any()) }
         }
     }
 
@@ -105,9 +107,9 @@ class ChatTabViewModelTest {
                 rememberCoroutineScope().launch {
                     subject.onValueChanged(TextFieldValue("test"))
 
-                    subject.send()
+                    subject.send(CoroutineScope(Dispatchers.Unconfined))
 
-                    verify { service.send(any()) }
+                    verify { service.send(any(), any()) }
                 }
             }
         }
@@ -176,7 +178,7 @@ class ChatTabViewModelTest {
         runDesktopComposeUiTest {
             setContent {
                 subject = spyk(subject)
-                coEvery { subject.send() } just Runs
+                coEvery { subject.send(any()) } just Runs
                 subject.onValueChanged(TextFieldValue("test"))
 
                 val coroutineScope = rememberCoroutineScope()
