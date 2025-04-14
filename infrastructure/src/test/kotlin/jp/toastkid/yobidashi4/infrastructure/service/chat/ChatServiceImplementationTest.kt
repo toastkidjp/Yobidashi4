@@ -77,6 +77,7 @@ class ChatServiceImplementationTest {
         verify { chat.addUserText(any()) }
         verify { chat.makeContent() }
         verify { repository.request(any(), any()) }
+        verify { callback.invoke() }
     }
 
     @Test
