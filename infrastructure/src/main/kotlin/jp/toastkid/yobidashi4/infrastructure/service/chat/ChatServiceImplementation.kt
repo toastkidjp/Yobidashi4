@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.chat
 
-import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -10,6 +9,7 @@ import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.ParametersHolder
+import java.util.concurrent.atomic.AtomicReference
 
 @Single
 class ChatServiceImplementation : ChatService, KoinComponent {
@@ -20,7 +20,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
 
     private val repository: ChatRepository by inject(parameters = { ParametersHolder(mutableListOf(setting.chatApiKey())) })
 
-    override fun send(text: String): String? {
+    override fun send(text: String, onUpdate: () -> Unit): String? {
         val chat = chatHolder.get()
         chat.addUserText(text)
 
@@ -30,6 +30,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
             }
 
             chat.addModelText(it)
+            onUpdate()
         }
 
         return null
