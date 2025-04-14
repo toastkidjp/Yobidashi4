@@ -21,7 +21,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -39,7 +38,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -98,8 +96,6 @@ private fun MessageList(
     nameColor: (String) -> Color,
     clipText: (String) -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     LazyColumn(state = listState) {
         items(chatMessages) {
             Row {
@@ -131,12 +127,6 @@ private fun MessageList(
             }
 
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-
-            LaunchedEffect(chatMessages.last().text.length) {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(listState.layoutInfo.totalItemsCount)
-                }
-            }
         }
     }
 }
