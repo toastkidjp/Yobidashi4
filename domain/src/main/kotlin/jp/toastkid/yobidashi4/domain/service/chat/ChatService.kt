@@ -5,7 +5,7 @@ import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 
 interface ChatService {
 
-    fun send(text: String): String?
+    fun send(text: String, onUpdate: () -> Unit): String?
 
     fun setChat(chat: Chat)
 
