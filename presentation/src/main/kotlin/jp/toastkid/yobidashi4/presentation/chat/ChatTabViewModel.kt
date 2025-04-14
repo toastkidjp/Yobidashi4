@@ -38,7 +38,7 @@ class ChatTabViewModel : KoinComponent {
 
     fun messages(): List<ChatMessage> = service.messages()
 
-    suspend fun send() {
+    suspend fun send(coroutineScope: CoroutineScope) {
         val text = textInput.value.text
         if (text.isBlank()) {
             return
@@ -48,7 +48,11 @@ class ChatTabViewModel : KoinComponent {
 
         labelState.value = "Connecting in progress..."
         withContext(Dispatchers.IO) {
-            service.send(text)
+            service.send(text) {
+                coroutineScope.launch {
+                    scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
+                }
+            }
         }
         labelState.value = DEFAULT_LABEL
     }
@@ -93,7 +97,7 @@ class ChatTabViewModel : KoinComponent {
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
         if (textInput().composition == null && it.isCtrlPressed && it.key == Key.Enter) {
             coroutineScope.launch {
-                send()
+                send(coroutineScope)
             }
             return true
         }
