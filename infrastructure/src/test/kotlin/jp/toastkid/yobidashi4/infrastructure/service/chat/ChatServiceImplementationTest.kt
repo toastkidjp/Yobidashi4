@@ -33,6 +33,9 @@ class ChatServiceImplementationTest {
     @MockK
     private lateinit var repository: ChatRepository
 
+    @MockK
+    private lateinit var callback: () -> Unit
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -46,6 +49,7 @@ class ChatServiceImplementationTest {
             )
         }
         every { setting.chatApiKey() } returns "test-key"
+        every { callback.invoke() } just Runs
 
         subject = ChatServiceImplementation()
     }
@@ -66,7 +70,7 @@ class ChatServiceImplementationTest {
         every { repository.request(any(), capture(capturingSlot)) } just Runs
         subject.setChat(chat)
 
-        subject.send("test")
+        subject.send("test", callback)
         capturingSlot.captured.invoke("test")
         capturingSlot.captured.invoke(null)
 
@@ -84,7 +88,7 @@ class ChatServiceImplementationTest {
         every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
 
-        subject.send("test")
+        subject.send("test", callback)
 
         verify { chat.addUserText(any()) }
         verify(inverse = true) { chat.addModelText(any()) }
