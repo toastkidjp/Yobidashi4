@@ -23,6 +23,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
     override fun send(text: String, onUpdate: () -> Unit): String? {
         val chat = chatHolder.get()
         chat.addUserText(text)
+        onUpdate()
 
         repository.request(chat.makeContent()) {
             if (it == null) {
