@@ -6,8 +6,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
@@ -21,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.math.max
 
 class ChatTabViewModel : KoinComponent {
 
@@ -55,6 +58,28 @@ class ChatTabViewModel : KoinComponent {
             }
         }
         labelState.value = DEFAULT_LABEL
+    }
+
+    fun onChatListKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+        if (keyEvent.type != KeyEventType.KeyDown) {
+            return false
+        }
+
+        return when {
+            keyEvent.key == Key.DirectionUp -> {
+                coroutineScope.launch {
+                    scrollState.scrollToItem(max(0, scrollState.firstVisibleItemIndex - 1), 0)
+                }
+                return true
+            }
+            keyEvent.key == Key.DirectionDown -> {
+                coroutineScope.launch {
+                    scrollState.scrollToItem(kotlin.math.min(scrollState.layoutInfo.totalItemsCount - 1, scrollState.firstVisibleItemIndex + 1), 0)
+                }
+                return true
+            }
+            else -> false
+        }
     }
 
     fun textInput() = textInput.value
