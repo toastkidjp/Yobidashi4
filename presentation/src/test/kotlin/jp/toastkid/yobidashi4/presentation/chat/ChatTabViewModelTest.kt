@@ -248,4 +248,21 @@ class ChatTabViewModelTest {
         verify { mainViewModel.showSnackbar(any()) }
     }
 
+    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
+    @Test
+    fun onChatListKeyEvent() {
+        runDesktopComposeUiTest {
+            setContent {
+                subject = spyk(subject)
+
+                val coroutineScope = rememberCoroutineScope()
+                val consumed = subject.onChatListKeyEvent(
+                    coroutineScope,
+                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
+                )
+                assertTrue(consumed)
+            }
+        }
+    }
+
 }
