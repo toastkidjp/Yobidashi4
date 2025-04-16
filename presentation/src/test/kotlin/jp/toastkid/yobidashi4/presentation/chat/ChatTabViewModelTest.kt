@@ -253,8 +253,6 @@ class ChatTabViewModelTest {
     fun onChatListKeyEvent() {
         runDesktopComposeUiTest {
             setContent {
-                subject = spyk(subject)
-
                 mapOf(
                     KeyEvent(Key.DirectionUp, KeyEventType.KeyDown) to true,
                     KeyEvent(Key.DirectionDown, KeyEventType.KeyDown) to true,
