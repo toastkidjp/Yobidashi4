@@ -72,6 +72,12 @@ class ChatTabViewModel : KoinComponent {
                 }
                 return true
             }
+            keyEvent.key == Key.DirectionDown && keyEvent.isCtrlPressed -> {
+                coroutineScope.launch {
+                    scrollState.scrollToItem(scrollState.layoutInfo.totalItemsCount - 1, 0)
+                }
+                return true
+            }
             keyEvent.key == Key.DirectionUp -> {
                 coroutineScope.launch {
                     scrollState.scrollToItem(max(0, scrollState.firstVisibleItemIndex - 1), 0)
