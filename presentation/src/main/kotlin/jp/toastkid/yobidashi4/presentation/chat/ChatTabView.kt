@@ -49,7 +49,11 @@ fun ChatTabView(chatTab: ChatTab) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        Column(modifier = Modifier.onKeyEvent { viewModel.onChatListKeyEvent(coroutineScope, it) }) {
+        Column(
+            modifier = Modifier
+                .onKeyEvent { viewModel.onChatListKeyEvent(coroutineScope, it) }
+                .semantics { contentDescription = "Chat list" }
+        ) {
             Box(Modifier.padding(8.dp).weight(1f)) {
                 SelectionContainer {
                     MessageList(
