@@ -255,30 +255,19 @@ class ChatTabViewModelTest {
             setContent {
                 subject = spyk(subject)
 
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onChatListKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
-                )
-                assertTrue(consumed)
-
-                val consumedDown = subject.onChatListKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.DirectionDown, KeyEventType.KeyDown)
-                )
-                assertTrue(consumedDown)
-
-                val consumed1 = subject.onChatListKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.DirectionUp, KeyEventType.KeyUp)
-                )
-                assertFalse(consumed1)
-
-                val consumed2 = subject.onChatListKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Q, KeyEventType.KeyUp)
-                )
-                assertFalse(consumed2)
+                mapOf(
+                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown) to true,
+                    KeyEvent(Key.DirectionDown, KeyEventType.KeyDown) to true,
+                    KeyEvent(Key.DirectionUp, KeyEventType.KeyUp) to false,
+                    KeyEvent(Key.Q, KeyEventType.KeyUp) to false
+                ).forEach {
+                    val coroutineScope = rememberCoroutineScope()
+                    val consumed = subject.onChatListKeyEvent(
+                        coroutineScope,
+                        it.key
+                    )
+                    assertEquals(it.value, consumed)
+                }
             }
         }
     }
