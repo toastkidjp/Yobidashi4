@@ -92,6 +92,13 @@ class ChatTabViewKtTest {
                 .performClick()
 
             verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
+
+            onNodeWithContentDescription("Chat list", useUnmergedTree = true)
+                .performClick()
+                .performKeyInput {
+                    pressKey(Key.DirectionUp)
+                    pressKey(Key.DirectionDown)
+                }
         }
     }
 
