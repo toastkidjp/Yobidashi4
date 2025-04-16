@@ -273,6 +273,12 @@ class ChatTabViewModelTest {
                     KeyEvent(Key.DirectionUp, KeyEventType.KeyUp)
                 )
                 assertFalse(consumed1)
+
+                val consumed2 = subject.onChatListKeyEvent(
+                    coroutineScope,
+                    KeyEvent(Key.Q, KeyEventType.KeyUp)
+                )
+                assertFalse(consumed2)
             }
         }
     }
