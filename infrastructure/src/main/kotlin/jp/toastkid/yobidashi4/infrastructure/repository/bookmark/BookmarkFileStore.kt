@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.bookmark
 
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import org.koin.core.annotation.Single
+import java.nio.file.Files
+import java.nio.file.Path
 
 @Single
 class BookmarkFileStore : BookmarkRepository {
@@ -32,7 +32,7 @@ class BookmarkFileStore : BookmarkRepository {
             Files.createDirectories(path.parent)
         }
 
-        Files.write(path, list.map { "${it.title}\t${it.url}" })
+        Files.write(path, list.map(Bookmark::toTsv))
     }
 
     override fun delete(item: Bookmark) {
