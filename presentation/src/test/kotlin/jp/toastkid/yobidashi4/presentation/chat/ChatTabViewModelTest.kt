@@ -254,6 +254,7 @@ class ChatTabViewModelTest {
         runDesktopComposeUiTest {
             setContent {
                 mapOf(
+                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true) to true,
                     KeyEvent(Key.DirectionUp, KeyEventType.KeyDown) to true,
                     KeyEvent(Key.DirectionDown, KeyEventType.KeyDown) to true,
                     KeyEvent(Key.DirectionUp, KeyEventType.KeyUp) to false,
