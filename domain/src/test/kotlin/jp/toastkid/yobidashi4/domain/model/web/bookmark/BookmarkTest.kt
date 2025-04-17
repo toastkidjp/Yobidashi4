@@ -8,6 +8,12 @@ import org.junit.jupiter.api.Test
 class BookmarkTest {
 
     @Test
+    fun toTsv() {
+        val bookmark = Bookmark("test-title", "https://test.co.jp")
+        assertEquals("test-title\thttps://test.co.jp", bookmark.toTsv())
+    }
+
+    @Test
     fun fromWebTab() {
         val title = "title"
         val url = "https://test.co.jp"
