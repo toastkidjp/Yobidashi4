@@ -10,6 +10,8 @@ data class Bookmark(
     val folder: Boolean = false
 ) {
 
+    fun toTsv() = "${title}\t${url}"
+
     companion object {
         fun fromWebTab(webTab: WebTab): Bookmark {
             return Bookmark(webTab.title(), webTab.url())
