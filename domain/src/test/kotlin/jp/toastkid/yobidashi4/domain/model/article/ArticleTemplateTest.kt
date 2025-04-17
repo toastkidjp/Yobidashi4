@@ -93,11 +93,11 @@ test
     @Test
     fun testDoesNotContainsBeltDay() {
         mockkConstructor(UserTemplateStreamReader::class)
-        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+        every { anyConstructed<UserTemplateStreamReader>().invoke() } returns """
             {{belt}}
 test
             {{/belt}}
-        """.trimIndent().byteInputStream())
+        """.trimIndent().byteInputStream()
         val content = ArticleTemplate(LocalDate.of(2024, 1, 27), offDayFinderService).invoke("test")
         assertTrue(content.trim().isEmpty())
     }
