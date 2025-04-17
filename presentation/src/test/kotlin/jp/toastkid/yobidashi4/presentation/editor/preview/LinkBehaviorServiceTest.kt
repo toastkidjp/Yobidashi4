@@ -92,7 +92,7 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testWebUrlOnBackground() {
-        every { internalLinkScheme.isInternalLink(any()) }.returns(false)
+        every { internalLinkScheme.isInternalLink(any()) } returns false
 
         linkBehaviorService.invoke("https://www.yahoo.co.jp", true)
 
