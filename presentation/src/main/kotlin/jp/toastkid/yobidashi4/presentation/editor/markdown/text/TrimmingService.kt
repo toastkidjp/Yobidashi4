@@ -7,11 +7,11 @@ class TrimmingService {
             return text
         }
 
-        val converted = text.trimEnd().split(lineSeparator)
+        val converted = text.trimEnd().split(LINE_SEPARATOR)
                 .asSequence()
                 .map(String::trim)
-                .reduce { str1, str2 -> str1 + lineSeparator + str2 }
-        return if (text.endsWith(lineSeparator)) converted.plus(lineSeparator) else converted
+                .reduce { str1, str2 -> str1 + LINE_SEPARATOR + str2 }
+        return if (text.endsWith(LINE_SEPARATOR)) converted.plus(LINE_SEPARATOR) else converted
     }
 
     companion object {
@@ -19,7 +19,7 @@ class TrimmingService {
         /**
          * If you use this app in other environment, you should use appropriate line separator.
          */
-        private const val lineSeparator = "\n"
+        private const val LINE_SEPARATOR = "\n"
 
     }
 
