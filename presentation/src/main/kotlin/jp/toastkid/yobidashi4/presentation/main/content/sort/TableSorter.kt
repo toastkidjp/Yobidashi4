@@ -11,10 +11,11 @@ class TableSorter {
         index: Int,
         articleStates: SnapshotStateList<Array<Any>>
     ) {
-        val swap = if (lastSortOrder)
-            sortBy(index, articleStates, aggregationResult.columnClass(index))
-        else
-            sortByDescending(index, articleStates, aggregationResult.columnClass(index))
+        val swap =
+            if (lastSortOrder)
+                sortBy(index, articleStates, aggregationResult.columnClass(index))
+            else
+                sortByDescending(index, articleStates, aggregationResult.columnClass(index))
 
         articleStates.clear()
         articleStates.addAll(swap)
