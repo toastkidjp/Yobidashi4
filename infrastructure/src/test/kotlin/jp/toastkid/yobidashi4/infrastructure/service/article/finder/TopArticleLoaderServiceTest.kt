@@ -51,7 +51,7 @@ class TopArticleLoaderServiceTest {
         every { path2.nameWithoutExtension } returns "test.jar"
         val path3 = mockk<Path>()
         every { path3.nameWithoutExtension } returns "test.txt"
-        every { Files.list(any()) }.returns(Stream.of(path1, path2, path3))
+        every { Files.list(any()) } answers { Stream.of(path1, path2, path3) }
         every { Files.getLastModifiedTime(any()) }.returns(FileTime.fromMillis(System.currentTimeMillis()))
     }
 
