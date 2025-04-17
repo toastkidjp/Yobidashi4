@@ -152,7 +152,7 @@ class TabsViewKtTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun dropdown() {
+    fun dropdownWebTab() {
         every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
 
         runDesktopComposeUiTest {
