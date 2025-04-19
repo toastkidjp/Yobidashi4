@@ -69,6 +69,9 @@ class KeyEventConsumerTest {
     @MockK
     private lateinit var expressionTextCalculatorService: ExpressionTextCalculatorService
 
+    @MockK
+    private lateinit var blockQuotation: BlockQuotation
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -80,7 +83,7 @@ class KeyEventConsumerTest {
             )
         }
 
-        subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory)
+        subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory, blockQuotation = blockQuotation)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
         every { expressionTextCalculatorService.invoke(any()) } returns "3"
         every { selectedTextConversion.invoke(any(), any(), any(), any(), any()) } returns true
@@ -726,6 +729,7 @@ class KeyEventConsumerTest {
     fun quoteInsertion() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
+        every { blockQuotation.invoke(any()) } returns "> test"
 
         val consumed = subject.invoke(
             KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true),
@@ -754,9 +758,9 @@ class KeyEventConsumerTest {
 
     @Test
     fun noopQuoteInsertionWhenReturnsNullFromConversionResult() {
-        mockkConstructor(ClipboardFetcher::class, BlockQuotation::class)
+        mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
-        every { anyConstructed<BlockQuotation>().invoke(any()) } returns null
+        every { blockQuotation.invoke(any()) } returns null
 
         val consumed = subject.invoke(
             KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true),
