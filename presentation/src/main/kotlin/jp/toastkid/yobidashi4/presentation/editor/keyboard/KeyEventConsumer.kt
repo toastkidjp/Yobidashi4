@@ -228,7 +228,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.Two -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    "\"$it\""
+                    doubleQuote(it)
                 }, setNewContent)
                 true
             }
@@ -331,6 +331,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun doubleQuote(it: String) = "\"$it\""
 
     private fun italic(it: String) = "***$it***"
 
