@@ -243,7 +243,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.At -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    "```$it```"
+                    surroundCodeFence(it)
                 }, setNewContent)
                 true
             }
@@ -323,6 +323,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun surroundCodeFence(it: String) = "```$it```"
 
     private fun surroundMultibyteBrackets(it: String) = "「$it」"
 
