@@ -105,11 +105,11 @@ test
     @Test
     fun testContainsMarketDay() {
         mockkConstructor(UserTemplateStreamReader::class)
-        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+        every { anyConstructed<UserTemplateStreamReader>().invoke() } returns """
             {{market}}
 test
             {{/market}}
-        """.trimIndent().byteInputStream())
+        """.trimIndent().byteInputStream()
         val content = ArticleTemplate(LocalDate.of(2023, 2, 22), offDayFinderService).invoke("test")
         assertTrue(content.contains("test"))
     }
