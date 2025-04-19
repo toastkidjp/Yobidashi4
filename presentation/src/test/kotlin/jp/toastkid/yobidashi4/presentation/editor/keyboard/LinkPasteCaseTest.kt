@@ -8,6 +8,7 @@ import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
@@ -64,6 +65,8 @@ class LinkPasteCaseTest {
         every { anyConstructed<ClipboardFetcher>().invoke() } returns selected
         val decoratedLink = "[test]($selected)"
         every { linkDecoratorService.invoke(any()) } returns decoratedLink
+        val capturingSlot = slot<(String) -> String?>()
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot), any()) } returns true
 
         val consumed = subject.invoke(
             TextFieldValue(selected, TextRange(0)),
@@ -75,6 +78,8 @@ class LinkPasteCaseTest {
 
         assertTrue(consumed)
         verify { selectedTextConversion.invoke(any(), any(), any(), any(), any()) }
+        assertTrue(capturingSlot.isCaptured)
+        assertEquals("[test](https://test.yahoo.com)", capturingSlot.captured.invoke("test"))
         verify(inverse = true) { anyConstructed<ClipboardFetcher>().invoke()  }
     }
 
