@@ -220,7 +220,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.B -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    "**$it**"
+                    bold(it)
                 }, setNewContent)
                 true
             }
@@ -335,6 +335,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun bold(it: String) = "**$it**"
 
     private fun switchCase(it: String) = if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
 
