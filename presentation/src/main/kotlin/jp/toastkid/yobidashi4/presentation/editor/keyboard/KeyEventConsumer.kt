@@ -211,9 +211,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    switchCase(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::switchCase, setNewContent)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.H -> {
