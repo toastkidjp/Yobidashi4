@@ -219,9 +219,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.B -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    bold(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::bold, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.I -> {
