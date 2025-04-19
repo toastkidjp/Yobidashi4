@@ -227,9 +227,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.Two -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    doubleQuote(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::doubleQuote, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.Eight -> {
