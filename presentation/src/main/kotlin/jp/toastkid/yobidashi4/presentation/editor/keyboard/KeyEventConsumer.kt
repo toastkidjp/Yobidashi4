@@ -224,7 +224,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.I -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    "***$it***"
+                    italic(it)
                 }, setNewContent)
                 true
             }
@@ -333,6 +333,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun italic(it: String) = "***$it***"
 
     private fun bold(it: String) = "**$it**"
 
