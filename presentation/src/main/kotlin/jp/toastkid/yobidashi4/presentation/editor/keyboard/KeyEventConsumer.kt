@@ -238,9 +238,7 @@ class KeyEventConsumer(
                 return controlAndLeftBracketCase.invoke(content, selectionStartIndex, setNewContent)
             }
             it.isCtrlPressed && it.key == Key.RightBracket -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    surroundMultibyteBrackets(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundMultibyteBrackets, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.At -> {
