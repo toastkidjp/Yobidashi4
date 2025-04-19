@@ -288,9 +288,7 @@ class KeyEventConsumer(
             it.isCtrlPressed && it.key == Key.Q -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isNotEmpty()) {
-                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                        blockQuotation.invoke(it)
-                    }, setNewContent)
+                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, blockQuotation::invoke, setNewContent)
                     return true
                 }
 
