@@ -231,9 +231,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.Eight -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    surroundBrackets(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundBrackets, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.LeftBracket -> {
