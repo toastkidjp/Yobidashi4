@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.calendar
 
-import java.time.DayOfWeek
 import jp.toastkid.yobidashi4.domain.model.calendar.FixedJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
@@ -10,6 +9,7 @@ import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.DayOfWeek
 
 @Single
 class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
@@ -27,7 +27,7 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
             return false
         }
 
-        if (month == 3 && date == equinoxDayCalculator.calculateVernalEquinoxDay(year)?.day) {
+        if (month == 3 && isVernalEquinoxDay(year, date)) {
             return true
         }
 
@@ -60,6 +60,11 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
             }
         }
         return firstOrNull != null
+    }
+
+    private fun isVernalEquinoxDay(year: Int, date: Int): Boolean {
+        val vernalEquinoxDay = equinoxDayCalculator.calculateVernalEquinoxDay(year) ?: return false
+        return date == vernalEquinoxDay.day
     }
 
 }
