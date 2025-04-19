@@ -34,7 +34,8 @@ class KeyEventConsumer(
     private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
     private val toHalfWidth: ToHalfWidth = ToHalfWidth(),
-    private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService()
+    private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService(),
+    private val blockQuotation: BlockQuotation = BlockQuotation()
 ) {
 
     operator fun invoke(
@@ -294,14 +295,14 @@ class KeyEventConsumer(
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isNotEmpty()) {
                     selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                        BlockQuotation().invoke(it)
+                        blockQuotation.invoke(it)
                     }, setNewContent)
                     return true
                 }
 
                 val clipped = ClipboardFetcher().invoke()
                 if (!clipped.isNullOrEmpty()) {
-                    val decoratedLink = BlockQuotation().invoke(clipped) ?: return false
+                    val decoratedLink = blockQuotation.invoke(clipped) ?: return false
                     val newText = StringBuilder(content.text)
                         .insert(
                             selectionStartIndex,
