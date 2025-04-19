@@ -212,7 +212,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
+                    switchCase(it)
                 }, setNewContent)
                 true
             }
@@ -337,5 +337,7 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun switchCase(it: String) = if (it.toCharArray()[0].isUpperCase()) it.lowercase() else it.uppercase()
 
 }
