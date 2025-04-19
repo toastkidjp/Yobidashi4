@@ -239,7 +239,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.RightBracket -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    "「$it」"
+                    surroundMultibyteBrackets(it)
                 }, setNewContent)
                 true
             }
@@ -325,6 +325,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun surroundMultibyteBrackets(it: String) = "「$it」"
 
     private fun surroundBrackets(it: String) = "($it)"
 
