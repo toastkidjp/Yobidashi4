@@ -232,7 +232,7 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.Eight -> {
                 selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    "($it)"
+                    surroundBrackets(it)
                 }, setNewContent)
                 true
             }
@@ -327,6 +327,8 @@ class KeyEventConsumer(
             else -> false
         }
     }
+
+    private fun surroundBrackets(it: String) = "($it)"
 
     private fun doubleQuote(it: String) = "\"$it\""
 
