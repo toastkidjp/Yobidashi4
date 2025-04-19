@@ -31,7 +31,7 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
             return true
         }
 
-        if (month == 9 && date == equinoxDayCalculator.calculateAutumnalEquinoxDay(year)?.day) {
+        if (month == 9 && isAutumnalEquinoxDay(year, date)) {
             return true
         }
 
@@ -65,6 +65,11 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
     private fun isVernalEquinoxDay(year: Int, date: Int): Boolean {
         val vernalEquinoxDay = equinoxDayCalculator.calculateVernalEquinoxDay(year) ?: return false
         return date == vernalEquinoxDay.day
+    }
+
+    private fun isAutumnalEquinoxDay(year: Int, date: Int): Boolean {
+        val autumnalEquinoxDay = equinoxDayCalculator.calculateAutumnalEquinoxDay(year) ?: return false
+        return date == autumnalEquinoxDay.day
     }
 
 }
