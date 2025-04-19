@@ -223,9 +223,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.I -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    italic(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::italic, setNewContent)
                 true
             }
             it.isCtrlPressed && it.key == Key.Two -> {
