@@ -30,7 +30,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
                 return@request
             }
 
-            chat.addModelText(it)
+            chat.addModelText(it.replace("\"", ""))
             onUpdate()
         }
 
