@@ -72,9 +72,11 @@ class ChatServiceImplementationTest {
 
         subject.send("test", callback)
         capturingSlot.captured.invoke("test")
+        capturingSlot.captured.invoke("\"Escaped\"")
         capturingSlot.captured.invoke(null)
 
         verify { chat.addUserText(any()) }
+        verify { chat.addModelText("Escaped") }
         verify { chat.makeContent() }
         verify { repository.request(any(), any()) }
         verify { callback.invoke() }
