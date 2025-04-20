@@ -27,6 +27,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
+import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
@@ -764,6 +765,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         trayState().sendNotification(
             Notification(notificationEvent.title, notificationEvent.text, Notification.Type.Info)
         )
+    }
+
+    override fun openInputHistory(category: String) {
+        openTab(InputHistoryTab(category))
     }
 
 }
