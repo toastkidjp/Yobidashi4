@@ -1,15 +1,11 @@
 package jp.toastkid.yobidashi4.domain.service.markdown
 
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
-import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLine
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
@@ -22,6 +18,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -146,13 +143,9 @@ First description
 
     @Test
     fun exceptionCase() {
-        val ioException = mockk<IOException>()
-        every { ioException.printStackTrace() } just Runs
-        every { Files.lines(path) } throws ioException
+        every { Files.lines(path) } throws IOException()
 
-        markdownParser.invoke(path)
-
-        verify { ioException.printStackTrace() }
+        assertThrows<IOException> { markdownParser.invoke(path) }
     }
 
 }
