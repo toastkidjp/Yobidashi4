@@ -1,8 +1,5 @@
 package jp.toastkid.yobidashi4.domain.service.markdown
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLineBuilder
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
@@ -10,6 +7,10 @@ import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.service.slideshow.CodeBlockBuilder
 import jp.toastkid.yobidashi4.domain.service.slideshow.ImageExtractor
 import jp.toastkid.yobidashi4.domain.service.slideshow.TableBuilder
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.regex.Pattern
+import java.util.stream.Stream
 import kotlin.io.path.nameWithoutExtension
 
 class MarkdownParser {
@@ -28,6 +29,8 @@ class MarkdownParser {
     private val orderedListPrefixPattern = "^[0-9]+\\.".toRegex()
 
     private val horizontalRulePattern = "^-{3,}$".toRegex()
+
+    private val codeFencePattern = Pattern.compile("```(.+?)```", Pattern.DOTALL)
 
     operator fun invoke(path: Path): Markdown {
         return invoke(Files.lines(path), path.nameWithoutExtension)
@@ -64,7 +67,7 @@ class MarkdownParser {
                 return@forEach
             }
             // Adding code block.
-            if (line.startsWith("```")) {
+            if (line.startsWith("```") && !codeFencePattern.matcher(line).find()) {
                 if (codeBlockBuilder.inCodeBlock()) {
                     codeBlockBuilder.build().let {
                         markdown.add(it)
