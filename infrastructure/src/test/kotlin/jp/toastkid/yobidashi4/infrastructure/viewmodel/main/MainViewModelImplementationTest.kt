@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
+import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
@@ -1477,6 +1478,13 @@ class MainViewModelImplementationTest {
         subject.putSecondaryClickItem("test")
 
         assertEquals("test", subject.getSecondaryClickItem())
+    }
+
+    @Test
+    fun openInputHistory() {
+        subject.openInputHistory("test")
+
+        assertTrue(subject.tabs.first() is InputHistoryTab)
     }
 
 }
