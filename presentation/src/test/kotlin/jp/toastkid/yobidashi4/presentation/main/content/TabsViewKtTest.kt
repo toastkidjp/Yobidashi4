@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
@@ -245,6 +246,19 @@ class TabsViewKtTest {
     fun dropdownSettingEditorTab() {
         every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
         every { anyConstructed<TabsViewModel>().tabs() } returns listOf(SettingEditorTab())
+
+        runDesktopComposeUiTest {
+            setContent {
+                TabsView(Modifier)
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun inputHistoryTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(InputHistoryTab("test"))
 
         runDesktopComposeUiTest {
             setContent {
