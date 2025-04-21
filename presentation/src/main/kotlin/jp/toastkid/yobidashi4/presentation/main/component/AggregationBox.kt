@@ -31,6 +31,8 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_history
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 import org.jetbrains.compose.resources.painterResource
 
@@ -135,6 +137,12 @@ internal fun AggregationBox() {
             ) {
                 Text("Start")
             }
+
+            Icon(
+                painterResource(Res.drawable.ic_history),
+                contentDescription = "History",
+                modifier = Modifier.padding(start = 4.dp).clickable { viewModel.openHistory() }
+            )
         }
     }
 
