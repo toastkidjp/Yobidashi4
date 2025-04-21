@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
+import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
@@ -61,6 +62,7 @@ import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorVi
 import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
 import jp.toastkid.yobidashi4.presentation.editor.EditorTabView
 import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
+import jp.toastkid.yobidashi4.presentation.input.InputHistoryView
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
@@ -183,6 +185,7 @@ internal fun TabsView(modifier: Modifier) {
             is ChatTab -> ChatTabView(currentTab)
             is PhotoTab -> PhotoTabView(currentTab)
             is SettingEditorTab -> SettingEditorView()
+            is InputHistoryTab -> InputHistoryView(currentTab)
             else -> Unit
         }
     }
