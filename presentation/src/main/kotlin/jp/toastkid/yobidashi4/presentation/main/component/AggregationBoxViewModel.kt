@@ -13,8 +13,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -42,6 +40,8 @@ import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AggregationBoxViewModel : KoinComponent {
 
@@ -264,6 +264,10 @@ class AggregationBoxViewModel : KoinComponent {
         is StepsAggregatorService -> Res.drawable.ic_steps
         is StocksAggregatorService -> Res.drawable.ic_asset_management
         else -> Res.drawable.icon
+    }
+
+    fun openHistory() {
+        viewModel.openInputHistory("aggregation_keyword")
     }
 
 }
