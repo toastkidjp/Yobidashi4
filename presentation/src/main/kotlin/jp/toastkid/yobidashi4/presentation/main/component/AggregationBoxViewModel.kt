@@ -50,6 +50,8 @@ class AggregationBoxViewModel : KoinComponent {
 
     private val articlesReaderService: ArticlesReaderService by inject()
 
+    private val aggregationInvoker = AggregationInvoker()
+
     private val focusRequester = FocusRequester()
 
     private val keyword = mutableStateOf(TextFieldValue())
@@ -200,7 +202,7 @@ class AggregationBoxViewModel : KoinComponent {
             dateHistoryService.add(query)
         }
 
-        AggregationInvoker().invoke(aggregator, query)
+        aggregationInvoker.invoke(aggregator, query)
     }
 
     private fun getQuery() = if (requireSecondInput()) keyword.value.text else query.value.text
