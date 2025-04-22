@@ -14,7 +14,6 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
-import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleAggregator
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
@@ -201,15 +200,7 @@ class AggregationBoxViewModel : KoinComponent {
             dateHistoryService.add(query)
         }
 
-        val result = aggregator.invoke(query.trim())
-        if (result.isEmpty()) {
-            viewModel.showSnackbar("Finding by \"$query\" has not get any result.")
-            return
-        }
-
-        viewModel.openTab(TableTab(result.title(), result, true, reloadAction = { invokeAggregation(viewModel, query, aggregator) }))
-
-        viewModel.switchAggregationBox(false)
+        AggregationInvoker().invoke(aggregator, query)
     }
 
     private fun getQuery() = if (requireSecondInput()) keyword.value.text else query.value.text
