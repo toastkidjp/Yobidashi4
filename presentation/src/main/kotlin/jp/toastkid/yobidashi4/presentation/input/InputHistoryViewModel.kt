@@ -3,12 +3,12 @@ package jp.toastkid.yobidashi4.presentation.input
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.input.pointer.PointerEvent
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
+import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
-import jp.toastkid.yobidashi4.presentation.main.component.AggregationBoxViewModel
+import jp.toastkid.yobidashi4.presentation.main.component.AggregationInvoker
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -25,7 +25,9 @@ class InputHistoryViewModel : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
-    private val aggregator = AggregationBoxViewModel()
+    private val keywordSearch: FullTextArticleFinder by inject()
+
+    private val aggregator = AggregationInvoker()
 
     private val inputHistoryServiceHolder = AtomicReference<InputHistoryService>()
 
@@ -44,15 +46,11 @@ class InputHistoryViewModel : KoinComponent {
     }
 
     fun open(inputHistory: InputHistory) {
-        aggregator.choose(aggregator.items().last())
-        aggregator.onDateInputValueChange(TextFieldValue(inputHistory.word))
-        aggregator.onSearch()
+        aggregator.invoke(keywordSearch, inputHistory.word)
     }
 
     fun openOnBackground(inputHistory: InputHistory) {
-        aggregator.choose(aggregator.items().last())
-        aggregator.onDateInputValueChange(TextFieldValue(inputHistory.word))
-        aggregator.onSearch()
+        aggregator.invoke(keywordSearch, inputHistory.word)
     }
 
     fun dateTimeString(inputHistory: InputHistory): String {
