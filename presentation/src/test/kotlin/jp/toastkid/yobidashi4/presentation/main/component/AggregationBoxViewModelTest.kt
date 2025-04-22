@@ -15,7 +15,6 @@ import io.mockk.mockkConstructor
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
@@ -43,6 +42,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.util.stream.Stream
 
 @OptIn(InternalComposeUiApi::class)
 class AggregationBoxViewModelTest {
@@ -74,7 +74,7 @@ class AggregationBoxViewModelTest {
         every { mainViewModel.initialAggregationType() } returns 0
         every { mainViewModel.switchAggregationBox(any()) } just Runs
         every { mainViewModel.showAggregationBox() } returns true
-        every { articlesReaderService.invoke() } returns Stream.empty()
+        every { articlesReaderService.invoke() } answers { Stream.empty() }
 
         mockkConstructor(InputHistoryService::class)
         every { anyConstructed<InputHistoryService>().add(any()) } just Runs
@@ -421,6 +421,15 @@ class AggregationBoxViewModelTest {
         )
 
         assertEquals(aggregators.size, aggregators.map(subject::icon).size)
+    }
+
+    @Test
+    fun openHistory() {
+        every { mainViewModel.openInputHistory(any()) } just Runs
+
+        subject.openHistory()
+
+        verify { mainViewModel.openInputHistory(any()) }
     }
 
 }
