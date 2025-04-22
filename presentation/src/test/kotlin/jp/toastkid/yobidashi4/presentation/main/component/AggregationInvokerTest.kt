@@ -6,9 +6,12 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleAggregator
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -61,6 +64,22 @@ class AggregationInvokerTest {
         verify { aggregationResult.isEmpty() }
         verify { articleAggregator.invoke(any()) }
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
+    }
+
+    @Test
+    fun invoke2() {
+        val aggregationResult = mockk<AggregationResult>()
+        every { aggregationResult.isEmpty() } returns false
+        every { aggregationResult.title() } returns "test"
+        every { articleAggregator.invoke(any()) } returns aggregationResult
+        val capturingSlot = slot<Tab>()
+        every { mainViewModel.openTab(capture(capturingSlot)) } just Runs
+        every { mainViewModel.switchAggregationBox(any()) } just Runs
+
+        subject.invoke(articleAggregator, "test")
+        (capturingSlot.captured as TableTab).reload()
+
+        verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
     }
 
 }
