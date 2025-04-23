@@ -141,7 +141,10 @@ internal fun AggregationBox() {
             Icon(
                 painterResource(Res.drawable.ic_history),
                 contentDescription = "History",
-                modifier = Modifier.padding(start = 4.dp).clickable(onClick = viewModel::openHistory)
+                modifier = Modifier
+                    .padding(4.dp)
+                    .clickable(onClick = viewModel::openHistory)
+                    .padding(start = 4.dp)
             )
         }
     }
