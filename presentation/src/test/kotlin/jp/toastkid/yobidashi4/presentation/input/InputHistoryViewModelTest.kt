@@ -61,6 +61,7 @@ class InputHistoryViewModelTest {
         every { articlesReaderService.invoke() } returns Stream.empty()
         mockkConstructor(InputHistoryService::class)
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
+        every { anyConstructed<InputHistoryService>().all(any()) } just Runs
 
         subject = InputHistoryViewModel()
     }
@@ -107,6 +108,8 @@ class InputHistoryViewModelTest {
                 val coroutineScope = rememberCoroutineScope()
                 subject.launch(coroutineScope, InputHistoryTab("test"))
                 subject.delete(InputHistory("test", 1))
+
+                verify { anyConstructed<InputHistoryService>().all(any()) }
             }
         }
     }
