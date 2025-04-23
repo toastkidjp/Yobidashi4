@@ -63,7 +63,10 @@ class InputHistoryViewModel : KoinComponent {
         coroutineScope.launch {
             listState.scrollToItem(tab.scrollPosition())
         }
-        inputHistoryServiceHolder.set(InputHistoryService(tab.category))
+
+        val inputHistoryService = InputHistoryService(tab.category)
+        inputHistoryService.all(items)
+        inputHistoryServiceHolder.set(inputHistoryService)
     }
 
     fun onDispose(tab: ScrollableContentTab) {
