@@ -15,6 +15,11 @@ class InputHistoryService(private val context: String) : KoinComponent {
 
     private val repository: InputHistoryRepository by inject(parameters = { ParametersHolder(mutableListOf(context)) })
 
+    fun all(items: MutableList<InputHistory>) {
+        items.clear()
+        items.addAll(repository.list())
+    }
+
     fun filter(items: MutableList<InputHistory>, query: String?) {
         items.clear()
         items.addAll(repository.filter(query).takeLast(5))
