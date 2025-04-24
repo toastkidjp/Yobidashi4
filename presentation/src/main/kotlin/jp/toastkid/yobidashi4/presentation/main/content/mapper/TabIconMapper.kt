@@ -13,6 +13,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
+import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
@@ -80,6 +81,7 @@ class TabIconMapper {
         }
         is TextFileViewerTab -> if (tab.path().startsWith("temporary/logs/")) Res.drawable.ic_log else Res.drawable.ic_text
         is WebTab -> null
+        is InputHistoryTab -> Res.drawable.ic_history
         else -> Res.drawable.icon
     }
 
