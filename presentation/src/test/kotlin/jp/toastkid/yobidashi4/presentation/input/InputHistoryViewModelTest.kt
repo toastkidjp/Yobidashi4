@@ -17,6 +17,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
+import jp.toastkid.yobidashi4.presentation.main.component.AggregationInvoker
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -60,9 +61,10 @@ class InputHistoryViewModelTest {
         every { mainViewModel.initialAggregationType() } returns 0
         every { keywordSearch.invoke(any()) } returns mockk()
         every { articlesReaderService.invoke() } returns Stream.empty()
-        mockkConstructor(InputHistoryService::class)
+        mockkConstructor(InputHistoryService::class, AggregationInvoker::class)
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
         every { anyConstructed<InputHistoryService>().all(any()) } just Runs
+        every { anyConstructed<AggregationInvoker>().invoke(any(), any()) } just Runs
 
         subject = InputHistoryViewModel()
     }
@@ -90,10 +92,16 @@ class InputHistoryViewModelTest {
 
     @Test
     fun open() {
+        subject.open(mockk())
+
+        verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
     }
 
     @Test
     fun openOnBackground() {
+        subject.open(mockk())
+
+        verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
     }
 
     @Test
