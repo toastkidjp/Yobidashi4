@@ -7,8 +7,6 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.MovieMemoExtractorResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
@@ -22,6 +20,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
+import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
@@ -39,6 +38,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
 
 class TabIconMapperTest {
 
@@ -110,7 +111,8 @@ class TabIconMapperTest {
             mockk<WebBookmarkTab>(),
             mockk<WebHistoryTab>(),
             emptyWebTab,
-            webTab
+            webTab,
+            mockk<InputHistoryTab>(),
         )
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns false
