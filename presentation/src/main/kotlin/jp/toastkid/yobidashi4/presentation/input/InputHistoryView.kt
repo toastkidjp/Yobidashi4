@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -32,13 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
-import jp.toastkid.yobidashi4.library.resources.Res
-import jp.toastkid.yobidashi4.library.resources.ic_tab_close
-import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -97,12 +95,12 @@ fun InputHistoryView(tab: InputHistoryTab) {
                                 Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                             }
 
-                            Icon(
-                                painterResource(Res.drawable.ic_tab_close),
-                                contentDescription = "Delete item ${item.word}",
+                            Text(
+                                "x",
                                 modifier = Modifier.clickable {
                                     viewModel.delete(item)
                                 }
+                                    .semantics { contentDescription = "Delete item ${item.word}" }
                             )
                         }
                     }
