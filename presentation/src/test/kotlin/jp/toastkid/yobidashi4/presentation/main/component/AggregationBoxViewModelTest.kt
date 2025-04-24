@@ -12,12 +12,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
-import jp.toastkid.yobidashi4.domain.model.tab.Tab
-import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleLengthAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
@@ -76,11 +72,12 @@ class AggregationBoxViewModelTest {
         every { mainViewModel.showAggregationBox() } returns true
         every { articlesReaderService.invoke() } answers { Stream.empty() }
 
-        mockkConstructor(InputHistoryService::class)
+        mockkConstructor(InputHistoryService::class, AggregationInvoker::class)
         every { anyConstructed<InputHistoryService>().add(any()) } just Runs
         every { anyConstructed<InputHistoryService>().clear(any()) } just Runs
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
         every { anyConstructed<InputHistoryService>().filter(any(), any()) } just Runs
+        every { anyConstructed<AggregationInvoker>().invoke(any(), any()) } just Runs
 
         every { keywordSearch.label() } returns "Find article"
 
@@ -270,21 +267,11 @@ class AggregationBoxViewModelTest {
 
         assertEquals("Find article", subject.selectedCategoryName())
 
-        val result = mockk<AggregationResult>()
-        every { result.isEmpty() } returns false
-        every { result.title() } returns "test"
-        every { keywordSearch.invoke(any()) } returns result
-        every { mainViewModel.openTab(any()) } just Runs
         subject.onDateInputValueChange(TextFieldValue("test"))
-        val slot = slot<Tab>()
-        every { mainViewModel.openTab(capture(slot)) } just Runs
 
         subject.onSearch()
-        (slot.captured as TableTab).reload()
 
-        verify { keywordSearch.invoke(any()) }
-        verify { mainViewModel.openTab(any()) }
-        verify { mainViewModel.switchAggregationBox(false) }
+        verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
     }
 
     @Test
@@ -302,18 +289,16 @@ class AggregationBoxViewModelTest {
 
         subject.onSearch()
 
-        verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
         verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
+        verify(inverse = true) { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
     }
 
     @Test
     fun onSearchReturnsEmptyResult() {
-        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
-
         subject.onSearch()
 
-        verify { mainViewModel.showSnackbar(any(), any(), any()) }
         verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
+        verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
     }
 
     @Test
