@@ -143,6 +143,7 @@ internal fun AggregationBox() {
                 contentDescription = "History",
                 tint = MaterialTheme.colors.secondary,
                 modifier = Modifier
+                    .size(40.dp)
                     .padding(4.dp)
                     .clickable(onClick = viewModel::openHistory)
                     .padding(start = 4.dp)
