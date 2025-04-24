@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinde
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -97,7 +98,7 @@ class InputHistoryViewModelTest {
 
     @Test
     fun dateTimeString() {
-        println(subject.dateTimeString(InputHistory("test", System.currentTimeMillis())))
+        assertEquals("2025-04-23(Wed)09:55:47", subject.dateTimeString(InputHistory("test", 1745369747982)))
     }
 
     @OptIn(ExperimentalTestApi::class)
