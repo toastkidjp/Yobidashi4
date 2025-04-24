@@ -39,7 +39,7 @@ class InputHistoryViewModel : KoinComponent {
 
     fun listState() = listState
 
-    fun items() = items
+    fun items(): List<InputHistory> = items
 
     fun onPointerEvent(event: PointerEvent, inputHistory: InputHistory) {
 
