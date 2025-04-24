@@ -80,6 +80,8 @@ class AggregationInvokerTest {
         (capturingSlot.captured as TableTab).reload()
 
         verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
+        verify { mainViewModel.openTab(any()) }
+        verify { mainViewModel.switchAggregationBox(any()) }
     }
 
 }
