@@ -97,9 +97,9 @@ fun InputHistoryView(tab: InputHistoryTab) {
 
                             Text(
                                 "x",
-                                modifier = Modifier.clickable {
-                                    viewModel.delete(item)
-                                }
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .clickable { viewModel.delete(item) }
                                     .semantics { contentDescription = "Delete item ${item.word}" }
                             )
                         }
