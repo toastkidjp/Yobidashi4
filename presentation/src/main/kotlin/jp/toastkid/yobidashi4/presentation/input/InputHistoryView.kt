@@ -96,15 +96,15 @@ fun InputHistoryView(tab: InputHistoryTab) {
                                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                             }
-                        }
 
-                        Icon(
-                            painterResource(Res.drawable.ic_tab_close),
-                            contentDescription = "Delete item ${item.word}",
-                            modifier = Modifier.clickable {
-                                viewModel.delete(item)
-                            }
-                        )
+                            Icon(
+                                painterResource(Res.drawable.ic_tab_close),
+                                contentDescription = "Delete item ${item.word}",
+                                modifier = Modifier.clickable {
+                                    viewModel.delete(item)
+                                }
+                            )
+                        }
                     }
                 }
             }
