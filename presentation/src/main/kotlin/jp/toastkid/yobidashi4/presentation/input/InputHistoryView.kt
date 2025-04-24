@@ -36,6 +36,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 
@@ -76,6 +77,7 @@ fun InputHistoryView(tab: InputHistoryTab) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 "x",
+                                fontSize = 16.sp,
                                 modifier = Modifier
                                     .size(44.dp)
                                     .padding(4.dp)
