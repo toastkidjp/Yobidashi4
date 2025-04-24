@@ -66,6 +66,19 @@ class InputHistoryServiceTest {
     }
 
     @Test
+    fun all() {
+        val items = mockk<MutableList<InputHistory>>()
+        every { items.clear() } just Runs
+        every { items.addAll(any()) } returns true
+
+        subject.all(items)
+
+        verify { items.clear() }
+        verify { items.addAll(any()) }
+        verify { inputHistoryRepository.list() }
+    }
+
+    @Test
     fun filter() {
         val items = mockk<MutableList<InputHistory>>()
         every { items.clear() } just Runs
