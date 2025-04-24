@@ -138,7 +138,7 @@ class AggregationBoxViewModel : KoinComponent {
     fun keyword() = keyword.value
 
     fun onSearch() {
-        invokeAggregation(viewModel, getQuery(), selectedSite.value)
+        invokeAggregation(getQuery(), selectedSite.value)
     }
 
     private val keywordHistoryService: InputHistoryService = InputHistoryService("aggregation_keyword")
@@ -188,7 +188,6 @@ class AggregationBoxViewModel : KoinComponent {
     }
 
     private fun invokeAggregation(
-        viewModel: MainViewModel,
         query: String,
         aggregator: ArticleAggregator
     ) {
