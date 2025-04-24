@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -73,6 +74,15 @@ fun InputHistoryView(tab: InputHistoryTab) {
                             }
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                "x",
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .padding(4.dp)
+                                    .padding(start = 8.dp)
+                                    .clickable { viewModel.delete(item) }
+                                    .semantics { contentDescription = "Delete item ${item.word}" }
+                            )
                             Column(modifier = Modifier
                                 .combinedClickable(
                                     enabled = true,
@@ -83,7 +93,7 @@ fun InputHistoryView(tab: InputHistoryTab) {
                                         viewModel.openOnBackground(item)
                                     }
                                 )
-                                .padding(horizontal = 16.dp)
+                                .padding(start = 4.dp)
                             ) {
                                 val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
 
@@ -94,14 +104,6 @@ fun InputHistoryView(tab: InputHistoryTab) {
                                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                             }
-
-                            Text(
-                                "x",
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .clickable { viewModel.delete(item) }
-                                    .semantics { contentDescription = "Delete item ${item.word}" }
-                            )
                         }
                     }
                 }
