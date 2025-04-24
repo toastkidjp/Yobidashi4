@@ -138,7 +138,18 @@ class AggregationBoxViewModel : KoinComponent {
     fun keyword() = keyword.value
 
     fun onSearch() {
-        invokeAggregation(getQuery(), selectedSite.value)
+        val query = getQuery()
+        if (query.isBlank()) {
+            return
+        }
+
+        if (requireSecondInput()) {
+            keywordHistoryService.add(query)
+        } else {
+            dateHistoryService.add(query)
+        }
+
+        aggregationInvoker.invoke(selectedSite.value, query)
     }
 
     private val keywordHistoryService: InputHistoryService = InputHistoryService("aggregation_keyword")
@@ -185,23 +196,6 @@ class AggregationBoxViewModel : KoinComponent {
         }
 
         dateHistoryService.clear(dateHistories)
-    }
-
-    private fun invokeAggregation(
-        query: String,
-        aggregator: ArticleAggregator
-    ) {
-        if (query.isBlank()) {
-            return
-        }
-
-        if (requireSecondInput()) {
-            keywordHistoryService.add(query)
-        } else {
-            dateHistoryService.add(query)
-        }
-
-        aggregationInvoker.invoke(aggregator, query)
     }
 
     private fun getQuery() = if (requireSecondInput()) keyword.value.text else query.value.text
