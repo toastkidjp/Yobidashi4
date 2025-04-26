@@ -14,6 +14,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
@@ -88,6 +89,13 @@ class InputHistoryViewKtTest {
                 }
             onNodeWithContentDescription("Delete item test", useUnmergedTree = true)
                 .performClick()
+
+            verify { anyConstructed<InputHistoryViewModel>().open(any()) }
+            verify { anyConstructed<InputHistoryViewModel>().openOnBackground(any()) }
+            verify { anyConstructed<InputHistoryViewModel>().delete(any()) }
+            verify { anyConstructed<InputHistoryViewModel>().dateTimeString(any()) }
+            verify { anyConstructed<InputHistoryViewModel>().items() }
+            verify { anyConstructed<InputHistoryViewModel>().launch(any(), any()) }
         }
     }
 }
