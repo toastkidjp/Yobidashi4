@@ -113,7 +113,7 @@ fun TableView(tab: TableTab) {
                 items(viewModel.items(), Any::hashCode) {
                     TableRow(
                         it,
-                        { viewModel.openMarkdownPreview(it) },
+                        viewModel::openMarkdownPreview,
                         { viewModel.edit(it) },
                         { viewModel.highlight(it) },
                         { viewModel.makeText(it) }
