@@ -99,7 +99,7 @@ class InputHistoryViewModelTest {
 
     @Test
     fun openOnBackground() {
-        subject.open(mockk())
+        subject.open(InputHistory("test", 1))
 
         verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
     }
