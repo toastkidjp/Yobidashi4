@@ -27,7 +27,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,6 +48,7 @@ import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_edit
 import jp.toastkid.yobidashi4.library.resources.ic_markdown
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -124,10 +124,9 @@ fun TableView(tab: TableTab) {
             HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
                 Alignment.BottomCenter))
 
-            LaunchedEffect(tab) {
-                viewModel.start(tab)
-            }
             DisposableEffect(tab) {
+                coroutineScope.launch { viewModel.start(tab) }
+
                 onDispose {
                     viewModel.onDispose(tab)
                 }
