@@ -113,7 +113,7 @@ class KeyEventConsumerTest {
             KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("Angel has fallen.", TextRange(6, 9)),
             mockk(),
-            { assertEquals("Angel hashas fallen.", it.text) }
+            { assertEquals("Angel has fallen.", it.text) }
         )
 
         assertTrue(consumed)
