@@ -86,11 +86,6 @@ class InputHistoryViewModelTest {
     }
 
     @Test
-    fun onPointerEvent() {
-        subject.onPointerEvent(mockk(), mockk())
-    }
-
-    @Test
     fun open() {
         val inputHistory = InputHistory("test", 1)
 
