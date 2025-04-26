@@ -42,6 +42,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
+import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -63,7 +64,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                 userScrollEnabled = true,
                 modifier = Modifier.padding(end = 16.dp)
             ) {
-                items(viewModel.list(), key = { it.hashCode() }) { webHistory ->
+                items(viewModel.list(), key = WebHistory::hashCode) { webHistory ->
                     val cursorOn = remember { mutableStateOf(false) }
                     val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
