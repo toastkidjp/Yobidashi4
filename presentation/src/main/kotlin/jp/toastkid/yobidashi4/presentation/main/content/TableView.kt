@@ -125,7 +125,9 @@ fun TableView(tab: TableTab) {
                 Alignment.BottomCenter))
 
             DisposableEffect(tab) {
-                coroutineScope.launch { viewModel.start(tab) }
+                coroutineScope.launch {
+                    viewModel.start(tab)
+                }
 
                 onDispose {
                     viewModel.onDispose(tab)
