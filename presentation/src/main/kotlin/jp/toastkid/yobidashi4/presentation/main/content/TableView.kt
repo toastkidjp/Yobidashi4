@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -41,6 +42,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.library.resources.Res
@@ -108,75 +110,14 @@ fun TableView(tab: TableTab) {
                     Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                 }
 
-                items(viewModel.items(), Any::hashCode) { article ->
-                    SelectionContainer {
-                        Column(modifier = Modifier.animateItem()) {
-                            val cursorOn = remember { mutableStateOf(false) }
-                            val rowBackgroundColor = animateColorAsState(
-                                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
-                            )
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth()
-                                    .drawBehind { drawRect(rowBackgroundColor.value) }
-                                    .onPointerEvent(PointerEventType.Enter) {
-                                        cursorOn.value = true
-                                    }
-                                    .onPointerEvent(PointerEventType.Exit) {
-                                        cursorOn.value = false
-                                    }
-                            ) {
-                                Icon(
-                                    painter = painterResource(Res.drawable.ic_markdown),
-                                    contentDescription = "Open preview",
-                                    tint = MaterialTheme.colors.secondary,
-                                    modifier = Modifier.padding(vertical = 4.dp)
-                                        .padding(start = 8.dp)
-                                        .clickable {
-                                            viewModel.openMarkdownPreview(article[0].toString())
-                                        }
-                                )
-
-                                Icon(
-                                    painter = painterResource(Res.drawable.ic_edit),
-                                    contentDescription = "Open file",
-                                    tint = MaterialTheme.colors.secondary,
-                                    modifier = Modifier.padding(vertical = 4.dp)
-                                        .padding(start = 4.dp)
-                                        .clickable {
-                                            viewModel.edit(article[0].toString())
-                                        }
-                                )
-
-                                article.forEachIndexed { index, any ->
-                                    if (index != 0) {
-                                        VerticalDivider(modifier = Modifier.heightIn(min = 36.dp).padding(vertical = 1.dp))
-                                    }
-                                    if (any is Collection<*>) {
-                                        Column(modifier = Modifier.weight(1f)) {
-                                            any.forEach { line ->
-                                                Text(
-                                                    viewModel.highlight(line.toString()),
-                                                    modifier = Modifier
-                                                        .padding(horizontal = 16.dp)
-                                                )
-                                                Divider(modifier = Modifier.padding(start = 8.dp))
-                                            }
-                                        }
-                                        return@forEachIndexed
-                                    }
-                                    Text(
-                                        viewModel.makeText(any),
-                                        color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
-                                        modifier = Modifier
-                                            .weight(if (index == 0) 0.4f else 1f)
-                                            .padding(horizontal = 16.dp)
-                                    )
-                                }
-                            }
-                            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
-                        }
-                    }
+                items(viewModel.items(), Any::hashCode) {
+                    TableRow(
+                        it,
+                        { viewModel.openMarkdownPreview(it) },
+                        { viewModel.edit(it) },
+                        { viewModel.highlight(it) },
+                        { viewModel.makeText(it) }
+                    )
                 }
             }
             VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
@@ -191,6 +132,85 @@ fun TableView(tab: TableTab) {
                     viewModel.onDispose(tab)
                 }
             }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalComposeUiApi::class)
+private fun LazyItemScope.TableRow(
+    article: Array<Any>,
+    openMarkdownPreview: (String) -> Unit,
+    edit: (String) -> Unit,
+    highlight: (String) -> AnnotatedString,
+    makeText: (Any) -> String
+) {
+    SelectionContainer {
+        Column(modifier = Modifier.animateItem()) {
+            val cursorOn = remember { mutableStateOf(false) }
+            val rowBackgroundColor = animateColorAsState(
+                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+                    .drawBehind { drawRect(rowBackgroundColor.value) }
+                    .onPointerEvent(PointerEventType.Enter) {
+                        cursorOn.value = true
+                    }
+                    .onPointerEvent(PointerEventType.Exit) {
+                        cursorOn.value = false
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_markdown),
+                    contentDescription = "Open preview",
+                    tint = MaterialTheme.colors.secondary,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                        .padding(start = 8.dp)
+                        .clickable {
+                            openMarkdownPreview(article[0].toString())
+                        }
+                )
+
+                Icon(
+                    painter = painterResource(Res.drawable.ic_edit),
+                    contentDescription = "Open file",
+                    tint = MaterialTheme.colors.secondary,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                        .padding(start = 4.dp)
+                        .clickable {
+                            edit(article[0].toString())
+                        }
+                )
+
+                article.forEachIndexed { index, any ->
+                    if (index != 0) {
+                        VerticalDivider(modifier = Modifier.heightIn(min = 36.dp).padding(vertical = 1.dp))
+                    }
+                    if (any is Collection<*>) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            any.forEach { line ->
+                                Text(
+                                    highlight(line.toString()),
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp)
+                                )
+                                Divider(modifier = Modifier.padding(start = 8.dp))
+                            }
+                        }
+                        return@forEachIndexed
+                    }
+                    Text(
+                        makeText(any),
+                        color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                        modifier = Modifier
+                            .weight(if (index == 0) 0.4f else 1f)
+                            .padding(horizontal = 16.dp)
+                    )
+                }
+            }
+            Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
         }
     }
 }
