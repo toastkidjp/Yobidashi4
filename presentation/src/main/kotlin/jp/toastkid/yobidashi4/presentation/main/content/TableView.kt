@@ -108,7 +108,7 @@ fun TableView(tab: TableTab) {
                     Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
                 }
 
-                items(viewModel.items(), { it.hashCode() }) { article ->
+                items(viewModel.items(), Any::hashCode) { article ->
                     SelectionContainer {
                         Column(modifier = Modifier.animateItem()) {
                             val cursorOn = remember { mutableStateOf(false) }
