@@ -242,9 +242,7 @@ class KeyEventConsumer(
                 true
             }
             it.isCtrlPressed && it.key == Key.At -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
-                    surroundCodeFence(it)
-                }, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundCodeFence, setNewContent)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
