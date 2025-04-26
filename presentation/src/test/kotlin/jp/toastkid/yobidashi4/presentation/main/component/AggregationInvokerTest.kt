@@ -67,7 +67,7 @@ class AggregationInvokerTest {
     }
 
     @Test
-    fun invoke2() {
+    fun invoke() {
         val aggregationResult = mockk<AggregationResult>()
         every { aggregationResult.isEmpty() } returns false
         every { aggregationResult.title() } returns "test"
