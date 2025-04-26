@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.input
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.input.pointer.PointerEvent
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
@@ -40,10 +39,6 @@ class InputHistoryViewModel : KoinComponent {
     fun listState() = listState
 
     fun items(): List<InputHistory> = items
-
-    fun onPointerEvent(event: PointerEvent, inputHistory: InputHistory) {
-
-    }
 
     fun open(inputHistory: InputHistory) {
         aggregator.invoke(keywordSearch, inputHistory.word)
