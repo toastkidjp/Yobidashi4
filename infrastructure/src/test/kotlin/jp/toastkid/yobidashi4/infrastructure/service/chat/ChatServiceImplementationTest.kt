@@ -12,6 +12,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
+import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -66,13 +67,13 @@ class ChatServiceImplementationTest {
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
         every { chat.makeContent() } returns ""
-        val capturingSlot = slot<(String?) -> Unit>()
+        val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { repository.request(any(), capture(capturingSlot)) } just Runs
         subject.setChat(chat)
 
         subject.send("test", callback)
-        capturingSlot.captured.invoke("test")
-        capturingSlot.captured.invoke("\"Escaped\"")
+        capturingSlot.captured.invoke(ChatResponseItem("test"))
+        capturingSlot.captured.invoke(ChatResponseItem("\"Escaped\""))
         capturingSlot.captured.invoke(null)
 
         verify { chat.addUserText(any()) }
