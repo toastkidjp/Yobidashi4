@@ -10,14 +10,15 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.net.HttpURLConnection
+import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 import jp.toastkid.yobidashi4.infrastructure.service.chat.ChatStreamParser
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.net.HttpURLConnection
 
 class ChatApiTest {
 
@@ -42,7 +43,7 @@ class ChatApiTest {
         every { connection.responseCode } returns 200
 
         mockkConstructor(ChatStreamParser::class, HttpUrlConnectionFactory::class)
-        every { anyConstructed<ChatStreamParser>().invoke(any()) } returns "test"
+        every { anyConstructed<ChatStreamParser>().invoke(any()) } returns ChatResponseItem("test")
         every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns connection
 
         subject = ChatApi("test-key")
@@ -76,7 +77,7 @@ class ChatApiTest {
 
     @Test
     fun requestWhenParseResultIsNullCase() {
-        val consumer: (String?) -> Unit = mockk()
+        val consumer: (ChatResponseItem?) -> Unit = mockk()
         every { anyConstructed<ChatStreamParser>().invoke(any()) } returns null
         every { consumer.invoke(any()) } just Runs
 
