@@ -16,13 +16,20 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         texts.set(texts.lastIndex, element.copy(text = element.text + text))
     }
 
+    fun addModelImage(base64Image: String) {
+        val element = texts.last()
+        texts.set(texts.lastIndex, element.copy(image = base64Image))
+    }
+
     fun list(): List<ChatMessage> = texts
 
-    fun makeContent() = """
+    fun makeContent(useImage: Boolean = false) = """
       {
         "contents": [
-          ${texts.joinToString(",") { "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${it.text.replace("\"", "\\\"").replace("'", "\\'")}'} ]}" }}
+          ${texts.filter { it.text.isNotBlank() }.joinToString(",") { "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${it.text.replace("\"", "\\\"").replace("'", "\\'")}'}" +
+            " ${ if (it.image.isNullOrBlank().not()) ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}" else "" } ]}" }}
         ],
+        ${if (useImage) "\"generationConfig\":{\"responseModalities\":[\"TEXT\",\"IMAGE\"]}," else "" }
         "safetySettings": [
             {
                 "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
