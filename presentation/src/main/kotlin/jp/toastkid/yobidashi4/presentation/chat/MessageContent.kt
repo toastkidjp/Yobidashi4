@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.io.ByteArrayInputStream
+import java.nio.file.Path
 import java.util.Base64
 import javax.imageio.ImageIO
 
@@ -53,7 +58,19 @@ internal fun MessageContent(
                 ByteArrayInputStream(Base64.getDecoder().decode(base64Image)).use {
                     ImageIO.read(it)
                 }.toPainter(),
-                contentDescription = text
+                contentDescription = text,
+                modifier = Modifier.clickable {
+                    val image = ByteArrayInputStream(Base64.getDecoder().decode(base64Image))
+                        .use { ImageIO.read(it) }
+                    ImageIO.write(image, "png", Path.of("user/download/${System.currentTimeMillis()}.png").toFile())
+                    val mainViewModel = object : KoinComponent {
+                        val vm: MainViewModel by inject()
+                    }.vm
+                    mainViewModel
+                        .showSnackbar("Store image file.", "Open") {
+                            mainViewModel.openFile(Path.of("user/download"))
+                        }
+                }
             )
         }
     }
