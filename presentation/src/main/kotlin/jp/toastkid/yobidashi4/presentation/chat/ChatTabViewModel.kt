@@ -41,6 +41,14 @@ class ChatTabViewModel : KoinComponent {
 
     fun messages(): List<ChatMessage> = service.messages()
 
+    private val useImageGeneration = mutableStateOf(false)
+
+    fun useImageGeneration() = useImageGeneration.value
+
+    fun switchImageGeneration(newState: Boolean) {
+        useImageGeneration.value = newState
+    }
+
     suspend fun send(coroutineScope: CoroutineScope) {
         val text = textInput.value.text
         if (text.isBlank()) {
@@ -51,7 +59,7 @@ class ChatTabViewModel : KoinComponent {
 
         labelState.value = "Connecting in progress..."
         withContext(Dispatchers.IO) {
-            service.send(text) {
+            service.send(text, useImageGeneration.value) {
                 coroutineScope.launch {
                     scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
                 }
