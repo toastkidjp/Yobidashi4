@@ -14,6 +14,12 @@ class MessageContentKtTest {
             setContent {
                 MessageContent(
                     "test\n* **test**\n* ***Good***",
+                    null,
+                    Modifier
+                )
+                MessageContent(
+                    "image",
+                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBASfqKgwAAAAASUVORK5CYII=",
                     Modifier
                 )
             }
