@@ -26,8 +26,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
     fun makeContent(useImage: Boolean = false) = """
       {
         "contents": [
-          ${texts.filter { it.text.isNotBlank() }.joinToString(",") { "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${it.text.replace("\"", "\\\"").replace("'", "\\'")}'}" +
-            " ${ if (it.image.isNullOrBlank().not()) ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}" else "" } ]}" }}
+          ${makeContents()}
         ],
         ${if (useImage) "\"generationConfig\":{\"responseModalities\":[\"TEXT\",\"IMAGE\"]}," else "" }
         "safetySettings": [
@@ -46,5 +45,18 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         ]
       }
     """.trimIndent()
+
+    private fun makeContents() =
+        texts
+            .filter { it.text.isNotBlank() }
+            .joinToString(",") {
+            "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${
+                it.text.replace("\"", "\\\"").replace("'", "\\'")
+            }'}" +
+                    " ${
+                        if (it.image.isNullOrBlank().not()) ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}" 
+                        else ""
+                    } ]}"
+        }
 
 }
