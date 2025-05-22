@@ -10,14 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toPainter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.io.ByteArrayInputStream
-import java.util.Base64
-import javax.imageio.ImageIO
 
 @Composable
 internal fun MessageContent(
@@ -51,9 +47,7 @@ internal fun MessageContent(
 
         if (base64Image != null) {
             Image(
-                ByteArrayInputStream(Base64.getDecoder().decode(base64Image)).use {
-                    ImageIO.read(it)
-                }.toPainter(),
+                viewModel.image(base64Image),
                 contentDescription = text,
                 modifier = Modifier.clickable {
                     viewModel.storeImage(base64Image)
