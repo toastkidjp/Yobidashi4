@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.AnnotatedString
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
-import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,13 +20,11 @@ class MessageContentViewModel : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
-    private val imageCache: ImageCache by inject()
+    private val imageHolder = AtomicReference<ImageBitmap>()
 
     fun lineText(listLine: Boolean, text: String): AnnotatedString {
         return keywordHighlighter(if (listLine) text.substring(2) else text)
     }
-
-    private val imageHolder = AtomicReference<ImageBitmap>()
 
     fun image(base64Image: String): ImageBitmap {
         val current = imageHolder.get()
@@ -42,7 +39,7 @@ class MessageContentViewModel : KoinComponent {
     }
 
     fun storeImage(base64Image: String) {
-        val image = loadImage(base64Image)
+        val image = image(base64Image)
         ImageIO.write(image.toAwtImage(), "png", Path.of("user/download/${System.currentTimeMillis()}.png").toFile())
         mainViewModel
             .showSnackbar("Store image file.", "Open") {
@@ -51,17 +48,9 @@ class MessageContentViewModel : KoinComponent {
     }
 
     private fun loadImage(base64Image: String): ImageBitmap {
-        val candidate = imageCache.get(base64Image)
-
-        if (candidate != null) {
-            return candidate
-        }
-
-        val imageBitmap = ByteArrayInputStream(Base64.getDecoder().decode(base64Image))
+        return ByteArrayInputStream(Base64.getDecoder().decode(base64Image))
             .use { ImageIO.read(it) }
             .toComposeImageBitmap()
-        imageCache.put(base64Image, imageBitmap)
-        return imageBitmap
     }
 
 }
