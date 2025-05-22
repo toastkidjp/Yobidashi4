@@ -111,9 +111,9 @@ class KeyEventConsumerTest {
     fun duplicateSelectedText() {
         val consumed = subject.invoke(
             KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("Angel has fallen.", TextRange(6, 9)),
+            TextFieldValue("Angel has fallen.", TextRange(6, 10)),
             mockk(),
-            { assertEquals("Angel has fallen.", it.text) }
+            { assertEquals("Angel has has fallen.", it.text) }
         )
 
         assertTrue(consumed)
