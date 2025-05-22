@@ -21,8 +21,7 @@ class ChatApi(
 
     private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
 
-    private val url =
-        URI("$apiUrl$apiKey").toURL()
+    private val url = URI("$apiUrl$apiKey").toURL()
 
     override fun request(content: String, streamLineConsumer: (ChatResponseItem?) -> Unit) {
         val connection = httpUrlConnectionFactory.invoke(url) ?: return
