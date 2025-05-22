@@ -114,7 +114,7 @@ fun TableView(tab: TableTab) {
                     TableRow(
                         it,
                         viewModel::openMarkdownPreview,
-                        { viewModel.edit(it) },
+                        viewModel::edit,
                         { viewModel.highlight(it) },
                         viewModel::makeText
                     )
