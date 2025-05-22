@@ -12,6 +12,7 @@ import org.koin.core.component.inject
 import java.io.ByteArrayInputStream
 import java.nio.file.Path
 import java.util.Base64
+import java.util.concurrent.atomic.AtomicReference
 import javax.imageio.ImageIO
 
 class MessageContentViewModel : KoinComponent {
@@ -24,6 +25,20 @@ class MessageContentViewModel : KoinComponent {
 
     fun lineText(listLine: Boolean, text: String): AnnotatedString {
         return keywordHighlighter(if (listLine) text.substring(2) else text)
+    }
+
+    private val imageHolder = AtomicReference<ImageBitmap>()
+
+    fun image(base64Image: String): ImageBitmap {
+        val current = imageHolder.get()
+        if (current != null) {
+            return current
+        }
+
+        val loadImage = loadImage(base64Image)
+        imageHolder.set(loadImage)
+
+        return imageHolder.get()
     }
 
     fun storeImage(base64Image: String) {
