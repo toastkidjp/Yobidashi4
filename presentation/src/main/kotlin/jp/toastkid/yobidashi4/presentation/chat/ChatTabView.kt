@@ -66,9 +66,8 @@ fun ChatTabView(chatTab: ChatTab) {
                     )
                 }
                 VerticalScrollbar(
-                    adapter = rememberScrollbarAdapter(viewModel.scrollState()), modifier = Modifier.fillMaxHeight().align(
-                        Alignment.CenterEnd
-                    )
+                    adapter = rememberScrollbarAdapter(viewModel.scrollState()),
+                    modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
                 )
             }
 
