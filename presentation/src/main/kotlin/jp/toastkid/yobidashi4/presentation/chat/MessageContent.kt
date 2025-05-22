@@ -1,20 +1,24 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
+import androidx.compose.foundation.ContextMenuArea
+import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun MessageContent(
     text: String,
@@ -46,13 +50,22 @@ internal fun MessageContent(
         }
 
         if (base64Image != null) {
-            Image(
-                viewModel.image(base64Image),
-                contentDescription = text,
-                modifier = Modifier.clickable {
-                    viewModel.storeImage(base64Image)
+            DisableSelection {
+                ContextMenuArea(
+                    {
+                        listOf(
+                            ContextMenuItem("Store image") {
+                                viewModel.storeImage(base64Image)
+                            }
+                        )
+                    }
+                ) {
+                    Image(
+                        viewModel.image(base64Image),
+                        contentDescription = text,
+                    )
                 }
-            )
+            }
         }
     }
 }
