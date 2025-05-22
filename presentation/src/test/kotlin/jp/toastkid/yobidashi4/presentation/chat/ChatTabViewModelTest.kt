@@ -65,7 +65,7 @@ class ChatTabViewModelTest {
             )
         }
 
-        every { service.send(any(), any()) } returns ""
+        every { service.send(any(), any(), any()) } returns ""
         every { service.setChat(any()) } just Runs
         every { service.messages() } returns emptyList()
         every { mainViewModel.showSnackbar(any()) } just Runs
@@ -95,7 +95,7 @@ class ChatTabViewModelTest {
         runBlocking {
             subject.send(CoroutineScope(Dispatchers.Unconfined))
 
-            verify(inverse = true) { service.send(any(), any()) }
+            verify(inverse = true) { service.send(any(), any(), any()) }
         }
     }
 
@@ -109,7 +109,7 @@ class ChatTabViewModelTest {
 
                     subject.send(CoroutineScope(Dispatchers.Unconfined))
 
-                    verify { service.send(any(), any()) }
+                    verify { service.send(any(), any(), any()) }
                 }
             }
         }
