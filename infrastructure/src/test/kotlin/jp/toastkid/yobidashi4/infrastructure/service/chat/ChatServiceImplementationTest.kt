@@ -66,7 +66,7 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
-        every { chat.makeContent() } returns ""
+        every { chat.makeContent(any()) } returns ""
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { repository.request(any(), capture(capturingSlot)) } just Runs
         subject.setChat(chat)
@@ -78,7 +78,7 @@ class ChatServiceImplementationTest {
 
         verify { chat.addUserText(any()) }
         verify { chat.addModelText("Escaped") }
-        verify { chat.makeContent() }
+        verify { chat.makeContent(any()) }
         verify { repository.request(any(), any()) }
         verify { callback.invoke() }
     }
@@ -88,7 +88,7 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
-        every { chat.makeContent() } returns ""
+        every { chat.makeContent(any()) } returns ""
         every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
 
@@ -96,7 +96,7 @@ class ChatServiceImplementationTest {
 
         verify { chat.addUserText(any()) }
         verify(inverse = true) { chat.addModelText(any()) }
-        verify { chat.makeContent() }
+        verify { chat.makeContent(any()) }
         verify { repository.request(any(), any()) }
     }
 
