@@ -14,9 +14,9 @@ data class ChatResponseItem(
 
     companion object {
 
-        private val ERROR = ChatResponseItem("[ERROR}", error = true)
+        private val ERROR = ChatResponseItem("[ERROR]", error = true)
 
-        private val OTHER = ChatResponseItem("[OTHER}", error = true)
+        private val OTHER = ChatResponseItem("[OTHER]", error = true)
 
         fun error() = ERROR
 
