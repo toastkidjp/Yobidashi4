@@ -71,7 +71,7 @@ class ChatServiceImplementationTest {
         every { repository.request(any(), capture(capturingSlot)) } just Runs
         subject.setChat(chat)
 
-        subject.send("test", callback)
+        subject.send("test", false, callback)
         capturingSlot.captured.invoke(ChatResponseItem("test"))
         capturingSlot.captured.invoke(ChatResponseItem("\"Escaped\""))
         capturingSlot.captured.invoke(null)
@@ -92,7 +92,7 @@ class ChatServiceImplementationTest {
         every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
 
-        subject.send("test", callback)
+        subject.send("test", true, callback)
 
         verify { chat.addUserText(any()) }
         verify(inverse = true) { chat.addModelText(any()) }
