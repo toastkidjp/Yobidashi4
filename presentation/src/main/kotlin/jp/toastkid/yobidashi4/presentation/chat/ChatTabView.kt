@@ -71,7 +71,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
             }
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     viewModel.useImageGeneration(),
                     onCheckedChange = viewModel::switchImageGeneration,
