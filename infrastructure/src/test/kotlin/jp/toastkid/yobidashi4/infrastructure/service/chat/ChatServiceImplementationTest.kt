@@ -96,7 +96,7 @@ class ChatServiceImplementationTest {
 
         verify { chat.addUserText(any()) }
         verify(inverse = true) { chat.addModelText(any()) }
-        verify { chat.makeContent(any()) }
+        verify { chat.makeContent(true) }
         verify { repository.request(any(), any()) }
     }
 
