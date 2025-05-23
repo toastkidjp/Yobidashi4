@@ -11,6 +11,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
+import jp.toastkid.yobidashi4.infrastructure.model.chat.CHAT
 import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 import jp.toastkid.yobidashi4.infrastructure.service.chat.ChatStreamParser
 import org.junit.jupiter.api.AfterEach
@@ -46,7 +47,7 @@ class ChatApiTest {
         every { anyConstructed<ChatStreamParser>().invoke(any()) } returns ChatResponseItem("test")
         every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns connection
 
-        subject = ChatApi("test-key")
+        subject = ChatApi("test-key", CHAT)
     }
 
     @AfterEach
