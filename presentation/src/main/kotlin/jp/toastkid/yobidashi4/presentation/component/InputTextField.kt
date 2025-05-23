@@ -58,9 +58,7 @@ internal fun InputTextField(
             onClearInput = clearButton,
             keyboardActions = KeyboardActions(onSearch = onSearch),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            visualTransformation = {
-                TransformedText(AnnotatedString(it.replace("\n".toRegex(), " ")), OffsetMapping.Identity)
-            },
+            visualTransformation = SingleLineTransformation(),
             modifier = modifier.onFocusChanged(onFocusChanged)
         )
 
@@ -95,6 +93,17 @@ internal fun InputTextField(
     }
 }
 
+private class SingleLineTransformation : VisualTransformation {
+
+    override fun filter(text: AnnotatedString): TransformedText {
+        return TransformedText(
+            AnnotatedString(text.replace("\n".toRegex(), " ")),
+            OffsetMapping.Identity
+        )
+    }
+
+}
+
 private val emptyClearInputAction = {}
 
 @Composable
@@ -106,7 +115,7 @@ fun SingleLineTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    visualTransformation: VisualTransformation = SingleLineTransformation(),
     modifier: Modifier = Modifier
 ) {
     MultiLineTextField(
