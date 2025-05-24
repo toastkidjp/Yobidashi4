@@ -79,7 +79,6 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
                 Text(
                     "Use image generation",
-                    modifier = Modifier.padding(start = 4.dp)
                 )
             }
 
