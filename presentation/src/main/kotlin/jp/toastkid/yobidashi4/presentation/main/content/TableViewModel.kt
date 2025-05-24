@@ -81,7 +81,7 @@ class TableViewModel : KoinComponent {
     fun highlight(text: String) = highlighter(text, query.value.replace("\"", ""))
 
     fun makeText(any: Any): String {
-        return if (any is Int) String.format("%,d", any).toString() else any.toString()
+        return if (any is Int) String.format("%,d", any) else any.toString()
     }
 
     fun makeWeight(index: Int): Float {
