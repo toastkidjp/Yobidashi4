@@ -50,13 +50,18 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         texts
             .filter { it.text.isNotBlank() }
             .joinToString(",") {
-            "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${
-                it.text.replace("\"", "\\\"").replace("'", "\\'")
-            }'}" +
-                    " ${
-                        if (it.image.isNullOrBlank().not()) ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}" 
-                        else ""
-                    } ]}"
+                toContent(it)
         }
+
+    private fun toContent(it: ChatMessage) =
+        "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${
+            it.text.replace("\"", "\\\"").replace("'", "\\'")
+        }'}" +
+                " ${
+                    if (it.image.isNullOrBlank()
+                            .not()
+                    ) ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}"
+                    else ""
+                } ]}"
 
 }
