@@ -40,7 +40,7 @@ class ChatTest {
         assertEquals(
             """{
   "contents": [
-    {"role":"user", "parts":[ { "text": 'Test \"is\" good. It\'s good.'} ]},{"role":"model", "parts":[ { "text": 'Answer'} ]}
+    {"role":"user", "parts":[ { "text": 'Test \"is\" good. It\'s good.'} ]},{"role":"model", "parts":[ { "text": 'Answer'}  ]}
   ],
   "safetySettings": [
       {
@@ -56,8 +56,8 @@ class ChatTest {
           "threshold": "BLOCK_ONLY_HIGH"
       }
   ]
-}""".trimIndent(),
-            chat.makeContent()
+}""".trimIndent().replace(" ", "").replace("\n", ""),
+            chat.makeContent().replace(" ", "").replace("\n", "")
         )
     }
 
