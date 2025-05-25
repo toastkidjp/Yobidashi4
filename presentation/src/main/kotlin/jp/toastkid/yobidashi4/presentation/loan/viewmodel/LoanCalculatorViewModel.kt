@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.TestOnly
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
@@ -22,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.TestOnly
 import java.text.DecimalFormat
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToInt
