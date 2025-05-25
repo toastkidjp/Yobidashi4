@@ -22,9 +22,10 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         webIcon.makeFolderIfNeed()
 
         val targetUrl = extractTargetUri(browserUrl)
+        val baseUrl = if (targetUrl == null) "" else "${targetUrl.protocol}://${targetUrl.host}"
 
         if (iconUrls.isEmpty()) {
-            iconUrls.add("${targetUrl?.protocol}://${targetUrl?.host}/favicon.ico")
+            iconUrls.add("$baseUrl/favicon.ico")
         }
 
         if (iconUrls.size > 1) {
@@ -33,7 +34,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
 
         iconUrls.map {
             if (it.startsWith("/")) {
-                "${targetUrl?.protocol}://${targetUrl?.host}$it"
+                "$baseUrl$it"
             } else {
                 it
             }
