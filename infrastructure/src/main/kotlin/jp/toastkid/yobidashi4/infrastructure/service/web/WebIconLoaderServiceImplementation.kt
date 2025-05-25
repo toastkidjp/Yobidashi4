@@ -56,7 +56,11 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         }
 
         try {
-            return URI(uriString).toURL()
+            val uri = URI(uriString)
+            if (uri.isAbsolute.not()) {
+                return null
+            }
+            return uri.toURL()
         } catch (e: MalformedURLException) {
             LoggerFactory.getLogger(javaClass).warn("URL is malformed.", e)
             return null
