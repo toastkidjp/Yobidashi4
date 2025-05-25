@@ -8,6 +8,7 @@ import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import java.net.MalformedURLException
 import java.net.URI
+import java.net.URL
 
 @Single
 class WebIconLoaderServiceImplementation : WebIconLoaderService {
@@ -42,7 +43,15 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
                 it
             }
         }
-            .forEach { webIconDownloader(URI(it).toURL(), webIcon.faviconFolder(), targetUrl.host) }
+            .forEach { webIconDownloader(toUrl(it)!!, webIcon.faviconFolder(), targetUrl.host) }
+    }
+
+    private fun toUrl(it: String): URL? {
+        val uri = URI(it)
+        if (uri.isAbsolute.not()) {
+            return null
+        }
+        return uri.toURL()
     }
 
 }
