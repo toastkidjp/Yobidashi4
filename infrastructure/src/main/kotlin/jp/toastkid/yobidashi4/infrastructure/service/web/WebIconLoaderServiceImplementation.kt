@@ -51,6 +51,10 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
     }
 
     private fun extractTargetUri(uriString: String?): URL? {
+        if (uriString.isNullOrBlank()) {
+            return null
+        }
+
         try {
             return URI(uriString).toURL()
         } catch (e: MalformedURLException) {
