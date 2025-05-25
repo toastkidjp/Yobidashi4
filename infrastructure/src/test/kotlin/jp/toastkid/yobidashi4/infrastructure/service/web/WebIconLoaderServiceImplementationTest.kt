@@ -49,6 +49,13 @@ class WebIconLoaderServiceImplementationTest {
     }
 
     @Test
+    fun notAbsoluteInputCase() {
+        subject.invoke("", "/test")
+
+        verify(inverse = true) { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+    }
+
+    @Test
     fun iconUrlsIsEmptyCase() {
         every { anyConstructed<IconUrlFinder>().invoke(any()) } returns emptyList()
 
