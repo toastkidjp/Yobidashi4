@@ -24,7 +24,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         val targetUrl = extractTargetUri(browserUrl)
         val baseUrl = if (targetUrl == null) "" else "${targetUrl.protocol}://${targetUrl.host}"
 
-        if (iconUrls.isEmpty()) {
+        if (iconUrls.isEmpty() && baseUrl.isNotBlank()) {
             iconUrls.add("$baseUrl/favicon.ico")
         }
 
@@ -33,7 +33,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         }
 
         iconUrls.map {
-            if (it.startsWith("/")) {
+            if (it.startsWith("/") && baseUrl.isNotBlank()) {
                 "$baseUrl$it"
             } else {
                 it
