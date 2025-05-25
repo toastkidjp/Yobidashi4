@@ -43,7 +43,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
                 it
             }
         }
-            .mapNotNull { toUrl(it) }
+            .mapNotNull(::toUrl)
             .forEach { webIconDownloader(it, webIcon.faviconFolder(), targetUrl.host) }
     }
 
