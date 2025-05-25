@@ -21,15 +21,10 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
         val webIcon = WebIcon()
         webIcon.makeFolderIfNeed()
 
-        val targetUrl = try {
-            URI(browserUrl).toURL()
-        } catch (e: MalformedURLException) {
-            LoggerFactory.getLogger(javaClass).warn("URL is malformed.", e)
-            return
-        }
+        val targetUrl = extractTargetUri(browserUrl)
 
         if (iconUrls.isEmpty()) {
-            iconUrls.add("${targetUrl.protocol}://${targetUrl.host}/favicon.ico")
+            iconUrls.add("${targetUrl?.protocol}://${targetUrl?.host}/favicon.ico")
         }
 
         if (iconUrls.size > 1) {
@@ -38,13 +33,13 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
 
         iconUrls.map {
             if (it.startsWith("/")) {
-                "${targetUrl.protocol}://${targetUrl.host}$it"
+                "${targetUrl?.protocol}://${targetUrl?.host}$it"
             } else {
                 it
             }
         }
             .mapNotNull(::toUrl)
-            .forEach { webIconDownloader(it, webIcon.faviconFolder(), targetUrl.host) }
+            .forEach { webIconDownloader(it, webIcon.faviconFolder(), targetUrl?.host) }
     }
 
     private fun toUrl(it: String): URL? {
@@ -53,6 +48,15 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
             return null
         }
         return uri.toURL()
+    }
+
+    private fun extractTargetUri(uriString: String?): URL? {
+        try {
+            return URI(uriString).toURL()
+        } catch (e: MalformedURLException) {
+            LoggerFactory.getLogger(javaClass).warn("URL is malformed.", e)
+            return null
+        }
     }
 
 }
