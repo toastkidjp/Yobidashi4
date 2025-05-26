@@ -30,14 +30,15 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
             iconUrls.removeIf { it.endsWith(".ico") }
         }
 
-        iconUrls.map {
-            if (it.startsWith("/") && baseUrl.isNotBlank()) {
-                "$baseUrl$it"
-            } else {
-                it
-            }
+        iconUrls.mapNotNull {
+            toUrl(
+                if (it.startsWith("/") && baseUrl.isNotBlank()) {
+                    "$baseUrl$it"
+                } else {
+                    it
+                }
+            )
         }
-            .mapNotNull(::toUrl)
             .forEach { webIconDownloader(it, webIcon.faviconFolder(), targetUrl?.host) }
     }
 
