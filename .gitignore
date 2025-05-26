@@ -28,3 +28,4 @@ temporary/
 DawnCache/
 GPUCache/
 MediaDeviceSalts*
+local.properties
