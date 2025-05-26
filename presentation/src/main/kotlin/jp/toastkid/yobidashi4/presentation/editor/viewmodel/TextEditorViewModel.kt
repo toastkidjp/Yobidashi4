@@ -110,7 +110,10 @@ class TextEditorViewModel : KoinComponent {
         val distinct = lastLineHeights.values.distinct()
         val max = distinct.max()
         lineHeights.clear()
-        lastLineHeights.forEach { lineHeights.put(it.key, (1.5f * it.value / max).em) }
+        lastLineHeights.forEach {
+            val baseline = it.value
+            lineHeights.put(it.key, ((baseline / max) * 1.5f).em)
+        }
     }
 
     private fun setNewCurrentLineHighlight(multiParagraph: MultiParagraph) {
