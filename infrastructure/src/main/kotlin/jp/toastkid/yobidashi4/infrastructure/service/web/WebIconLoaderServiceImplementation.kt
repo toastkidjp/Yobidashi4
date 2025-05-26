@@ -13,10 +13,11 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
 
     private val webIconDownloader = WebIconDownloader()
 
+    private val webIcon = WebIcon()
+
     override operator fun invoke(htmlSource: String, browserUrl: String?) {
         val iconUrls = IconUrlFinder().invoke(htmlSource).toMutableList()
 
-        val webIcon = WebIcon()
         webIcon.makeFolderIfNeed()
 
         val targetUrl = extractTargetUri(browserUrl)
