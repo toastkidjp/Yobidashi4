@@ -49,9 +49,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
     private fun makeContents() =
         texts
             .filter { it.text.isNotBlank() }
-            .joinToString(",") {
-                toContent(it)
-        }
+            .joinToString(",", transform = ::toContent)
 
     private fun toContent(it: ChatMessage) =
         "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${
