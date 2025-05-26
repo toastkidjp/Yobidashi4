@@ -5,8 +5,6 @@ import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.WebIconDownloader
 import org.koin.core.annotation.Single
-import org.slf4j.LoggerFactory
-import java.net.MalformedURLException
 import java.net.URI
 import java.net.URL
 
@@ -56,12 +54,7 @@ class WebIconLoaderServiceImplementation : WebIconLoaderService {
             return null
         }
 
-        try {
-            return toUrl(uriString)
-        } catch (e: MalformedURLException) {
-            LoggerFactory.getLogger(javaClass).warn("URL is malformed.", e)
-            return null
-        }
+        return toUrl(uriString)
     }
 
 }
