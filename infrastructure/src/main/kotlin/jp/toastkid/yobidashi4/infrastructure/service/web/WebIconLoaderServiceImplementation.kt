@@ -9,13 +9,11 @@ import java.net.URI
 import java.net.URL
 
 @Single
-class WebIconLoaderServiceImplementation : WebIconLoaderService {
-
-    private val webIconDownloader = WebIconDownloader()
-
-    private val webIcon = WebIcon()
-
-    private val iconUrlFinder = IconUrlFinder()
+class WebIconLoaderServiceImplementation(
+    private val webIconDownloader: WebIconDownloader = WebIconDownloader(),
+    private val webIcon: WebIcon = WebIcon(),
+    private val iconUrlFinder: IconUrlFinder = IconUrlFinder()
+) : WebIconLoaderService {
 
     override operator fun invoke(htmlSource: String, browserUrl: String?) {
         val iconUrls = iconUrlFinder.invoke(htmlSource).toMutableList()
