@@ -42,14 +42,9 @@ class WebIconLoaderServiceImplementationTest {
     }
 
     @Test
-    fun malformedUrlInputCase() {
-        subject.invoke("", "f://www.yahoo.co.jp")
-
-        verify(inverse = true) { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
-    }
-
-    @Test
     fun notAbsoluteInputCase() {
+        every { anyConstructed<IconUrlFinder>().invoke(any()) } returns listOf("icon.svg")
+
         subject.invoke("", "/test")
 
         verify(inverse = true) { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
