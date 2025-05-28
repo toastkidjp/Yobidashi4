@@ -33,6 +33,14 @@ class ChatTest {
     }
 
     @Test
+    fun addModelImage() {
+        chat.addModelText("With image")
+        chat.addModelImage("image")
+
+        assertEquals(1, chat.list().size)
+    }
+
+    @Test
     fun makeContent() {
         chat.addUserText("Test \"is\" good. It's good.")
         chat.addModelText("Answer")
