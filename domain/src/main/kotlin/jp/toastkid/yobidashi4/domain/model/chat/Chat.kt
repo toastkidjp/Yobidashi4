@@ -56,10 +56,10 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
             it.text.replace("\"", "\\\"").replace("'", "\\'")
         }'}" +
                 " ${
-                    if (it.image.isNullOrBlank()
-                            .not()
-                    ) ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}"
-                    else ""
+                    if (it.image.isNullOrBlank().not()) 
+                        ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}"
+                    else
+                        ""
                 } ]}"
 
 }
