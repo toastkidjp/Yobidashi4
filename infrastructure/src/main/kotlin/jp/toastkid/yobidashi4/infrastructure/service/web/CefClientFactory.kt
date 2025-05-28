@@ -1,8 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.awt.event.KeyEvent
-import java.util.concurrent.atomic.AtomicReference
-import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.infrastructure.service.web.download.DownloadFolder
@@ -20,7 +17,6 @@ import org.cef.handler.CefDownloadHandlerAdapter
 import org.cef.handler.CefKeyboardHandler
 import org.cef.handler.CefKeyboardHandlerAdapter
 import org.cef.handler.CefLifeSpanHandlerAdapter
-import org.cef.handler.CefLoadHandlerAdapter
 import org.cef.handler.CefRequestHandlerAdapter
 import org.cef.handler.CefResourceRequestHandler
 import org.cef.handler.CefResourceRequestHandlerAdapter
@@ -29,6 +25,9 @@ import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.awt.event.KeyEvent
+import java.util.concurrent.atomic.AtomicReference
+import javax.swing.SwingUtilities
 
 class CefClientFactory : KoinComponent {
 
@@ -38,32 +37,13 @@ class CefClientFactory : KoinComponent {
 
     private val adHosts = AdHosts.make()
 
+    private val loadHandler = LoadHandler()
+
     operator fun invoke(): CefClient {
         val selectedText = AtomicReference("")
 
         val client = cefAppFactory.invoke().createClient()
-        client.addLoadHandler(object : CefLoadHandlerAdapter() {
-
-            private val webIconLoaderService = WebIconLoaderServiceImplementation()
-
-            override fun onLoadingStateChange(
-                browser: CefBrowser?,
-                isLoading: Boolean,
-                canGoBack: Boolean,
-                canGoForward: Boolean
-            ) {
-                super.onLoadingStateChange(browser, isLoading, canGoBack, canGoForward)
-                if (browser == null) {
-                    return
-                }
-
-                if (isLoading.not() && browser.url?.startsWith("http") == true) {
-                    browser.getSource {
-                        webIconLoaderService.invoke(it, browser.url)
-                    }
-                }
-            }
-        })
+        client.addLoadHandler(loadHandler)
 
         client.addLifeSpanHandler(object : CefLifeSpanHandlerAdapter() {
             override fun onBeforePopup(
