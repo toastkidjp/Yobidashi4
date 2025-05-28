@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.chat
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
@@ -33,7 +34,7 @@ class ChatStreamParserTest {
         assertEquals("""**材料 (1人分)**
 
 **スープ**
-* 豚骨または""".trimIndent(), subject.invoke(line))
+* 豚骨または""".trimIndent(), subject.invoke(line)?.message())
     }
 
     @Test
@@ -48,6 +49,7 @@ class ChatStreamParserTest {
 
         assertEquals("[ERROR]", item.message())
         assertTrue(item.error())
+        assertFalse(item.image())
     }
 
     @Test
