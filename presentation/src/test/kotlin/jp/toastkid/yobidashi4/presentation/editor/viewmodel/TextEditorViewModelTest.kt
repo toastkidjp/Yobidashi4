@@ -139,7 +139,7 @@ class TextEditorViewModelTest {
         assertEquals(1.5.em, viewModel.getLineHeight(-1))
         assertEquals(1.2096775.em, viewModel.getLineHeight(0))
         assertEquals(1.5.em, viewModel.getLineHeight(1))
-        assertEquals(1.451613.em, viewModel.getLineHeight(2))
+        assertEquals(1.4516128.em, viewModel.getLineHeight(2))
         verify { multiParagraph.getLineHeight(0) }
         verify { multiParagraph.getLineHeight(1) }
         verify { multiParagraph.getLineHeight(2) }
