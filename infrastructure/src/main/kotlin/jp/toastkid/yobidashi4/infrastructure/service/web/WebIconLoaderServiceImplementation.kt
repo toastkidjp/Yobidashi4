@@ -5,6 +5,7 @@ import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.WebIconDownloader
 import org.koin.core.annotation.Single
+import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.URL
 
@@ -46,6 +47,7 @@ class WebIconLoaderServiceImplementation(
     private fun toUrl(it: String): URL? {
         val uri = URI(it)
         if (uri.isAbsolute.not()) {
+            LoggerFactory.getLogger(javaClass).warn("Not absolute url: $it")
             return null
         }
         return uri.toURL()
