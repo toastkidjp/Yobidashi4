@@ -17,6 +17,10 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
     }
 
     fun addModelImage(base64Image: String) {
+        if (texts.isEmpty()) {
+            return
+        }
+
         val element = texts.last()
         texts.set(texts.lastIndex, element.copy(image = base64Image))
     }
