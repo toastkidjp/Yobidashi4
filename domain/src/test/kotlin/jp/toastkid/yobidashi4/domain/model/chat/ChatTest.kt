@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.chat
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -38,6 +39,13 @@ class ChatTest {
         chat.addModelImage("image")
 
         assertEquals(1, chat.list().size)
+    }
+
+    @Test
+    fun addModelImageIfTextsIsEmptyCase() {
+        chat.addModelImage("image")
+
+        assertTrue(chat.list().isEmpty())
     }
 
     @Test
