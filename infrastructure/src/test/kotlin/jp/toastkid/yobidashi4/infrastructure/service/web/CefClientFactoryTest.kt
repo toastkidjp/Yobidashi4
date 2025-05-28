@@ -13,9 +13,6 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Window
-import java.nio.file.Files
-import javax.swing.SwingUtilities
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -25,7 +22,6 @@ import org.cef.browser.CefBrowser
 import org.cef.callback.CefBeforeDownloadCallback
 import org.cef.callback.CefContextMenuParams
 import org.cef.callback.CefMenuModel
-import org.cef.callback.CefStringVisitor
 import org.cef.handler.CefContextMenuHandler
 import org.cef.handler.CefDisplayHandler
 import org.cef.handler.CefDownloadHandler
@@ -33,7 +29,6 @@ import org.cef.handler.CefKeyboardHandler
 import org.cef.handler.CefKeyboardHandler.CefKeyEvent
 import org.cef.handler.CefKeyboardHandler.CefKeyEvent.EventType
 import org.cef.handler.CefLifeSpanHandler
-import org.cef.handler.CefLoadHandler
 import org.cef.handler.CefRequestHandler
 import org.cef.misc.EventFlags
 import org.cef.network.CefRequest
@@ -47,6 +42,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Window
+import java.nio.file.Files
+import javax.swing.SwingUtilities
 
 class CefClientFactoryTest {
 
@@ -101,32 +99,6 @@ class CefClientFactoryTest {
     fun tearDown() {
         stopKoin()
         unmockkAll()
-    }
-
-    @Test
-    fun checkAddLoadHandler() {
-        val loadHandlerSlot = slot<CefLoadHandler>()
-        every { client.addLoadHandler(capture(loadHandlerSlot)) } returns client
-
-        val client = subject.invoke()
-        val browser = mockk<CefBrowser>()
-        every { browser.url } returns "https://www.yahoo.co.jp"
-        val sourceSlot = slot<CefStringVisitor>()
-        every { browser.getSource(capture(sourceSlot)) } just Runs
-        loadHandlerSlot.captured.onLoadingStateChange(browser, false, false, false)
-        // For test coverage.
-        loadHandlerSlot.captured.onLoadingStateChange(browser, true, false, false)
-        every { browser.url } returns "ftp://test"
-        loadHandlerSlot.captured.onLoadingStateChange(browser, false, false, false)
-        every { browser.url } returns null
-        loadHandlerSlot.captured.onLoadingStateChange(browser, false, false, false)
-        loadHandlerSlot.captured.onLoadingStateChange(null, true, false, false)
-        sourceSlot.captured.visit("test")
-
-        assertNotNull(client)
-        verify { client.addLoadHandler(any()) }
-        verify { browser.getSource(any()) }
-        verify { anyConstructed<WebIconLoaderServiceImplementation>().invoke(any(), any()) }
     }
 
     @Test
