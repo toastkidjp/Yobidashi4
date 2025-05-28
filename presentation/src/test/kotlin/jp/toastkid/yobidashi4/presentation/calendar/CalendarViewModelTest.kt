@@ -257,6 +257,7 @@ class CalendarViewModelTest {
     @ParameterizedTest
     fun japaneseYear(year: Int, expected: String) {
         viewModel.setYear(year)
+        viewModel.moveMonth(1)
         assertEquals(expected, viewModel.japaneseYear())
     }
 
