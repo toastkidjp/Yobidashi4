@@ -3,8 +3,9 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockkConstructor
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
@@ -18,15 +19,25 @@ class WebIconLoaderServiceImplementationTest {
 
     private lateinit var subject: WebIconLoaderServiceImplementation
 
+    @MockK
+    private lateinit var webIconDownloader: WebIconDownloader
+
+    @MockK
+    private lateinit var webIcon: WebIcon
+
+    @MockK
+    private lateinit var iconUrlFinder: IconUrlFinder
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockkConstructor(WebIconDownloader::class, IconUrlFinder::class, WebIcon::class)
-        every { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) } just Runs
-        every { anyConstructed<IconUrlFinder>().invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg")
-        every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
 
-        subject = WebIconLoaderServiceImplementation()
+        every { webIconDownloader.invoke(any(), any(), any()) } just Runs
+        every { webIcon.makeFolderIfNeed() } just Runs
+        every { webIcon.faviconFolder() } returns mockk()
+        every { iconUrlFinder.invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg")
+
+        subject = WebIconLoaderServiceImplementation(webIconDownloader, webIcon, iconUrlFinder)
     }
 
     @AfterEach
@@ -38,34 +49,34 @@ class WebIconLoaderServiceImplementationTest {
     fun invoke() {
         subject.invoke("", "https://www.yahoo.co.jp")
 
-        verify { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+        verify { webIconDownloader.invoke(any(), any(), any()) }
     }
 
     @Test
     fun notAbsoluteInputCase() {
-        every { anyConstructed<IconUrlFinder>().invoke(any()) } returns listOf("icon.svg")
+        every { iconUrlFinder.invoke(any()) } returns listOf("icon.svg")
 
         subject.invoke("", "/test")
 
-        verify(inverse = true) { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+        verify(inverse = true) { webIconDownloader.invoke(any(), any(), any()) }
     }
 
     @Test
     fun iconUrlsIsEmptyCase() {
-        every { anyConstructed<IconUrlFinder>().invoke(any()) } returns emptyList()
+        every { iconUrlFinder.invoke(any()) } returns emptyList()
 
         subject.invoke("", "https://www.yahoo.co.jp")
 
-        verify { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+        verify { webIconDownloader.invoke(any(), any(), any()) }
     }
 
     @Test
     fun pluralIconUrlCase() {
-        every { anyConstructed<IconUrlFinder>().invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg", "https://www.yahoo.co.jp/icon.ico", "/test.png")
+        every { iconUrlFinder.invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg", "https://www.yahoo.co.jp/icon.ico", "/test.png")
 
         subject.invoke("", "https://www.yahoo.co.jp")
 
-        verify { anyConstructed<WebIconDownloader>().invoke(any(), any(), any()) }
+        verify { webIconDownloader.invoke(any(), any(), any()) }
     }
 
 }
