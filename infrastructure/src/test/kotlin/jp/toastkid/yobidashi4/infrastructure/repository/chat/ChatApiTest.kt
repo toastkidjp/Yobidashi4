@@ -57,7 +57,7 @@ class ChatApiTest {
 
     @Test
     fun request() {
-        subject.request("{test}", {})
+        subject.request("{test}") {}
 
         verify { anyConstructed<ChatStreamParser>().invoke(any()) }
     }
