@@ -270,6 +270,7 @@ class ChatTabViewModelTest {
                     KeyEvent(Key.DirectionUp, KeyEventType.KeyDown) to true,
                     KeyEvent(Key.DirectionDown, KeyEventType.KeyDown) to true,
                     KeyEvent(Key.DirectionUp, KeyEventType.KeyUp) to false,
+                    KeyEvent(Key.Q, KeyEventType.KeyDown) to false,
                     KeyEvent(Key.Q, KeyEventType.KeyUp) to false
                 ).forEach {
                     val coroutineScope = rememberCoroutineScope()
