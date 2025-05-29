@@ -6,7 +6,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,6 +15,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
 
 class ArticleFactoryImplementationTest {
 
@@ -42,7 +42,7 @@ class ArticleFactoryImplementationTest {
         }
         MockKAnnotations.init(this)
         mockkStatic(Path::class)
-        every { Path.of(any(), any()) }.returns(path)
+        every { Path.of(any(), any()) } returns path
         every { path.fileName }.returns(fileName)
         every { fileName.toString() } returns "test.md"
         every { setting.articleFolder() } returns "test"
