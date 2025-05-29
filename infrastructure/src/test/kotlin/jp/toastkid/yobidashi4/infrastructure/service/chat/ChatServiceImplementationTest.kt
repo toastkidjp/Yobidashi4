@@ -78,7 +78,7 @@ class ChatServiceImplementationTest {
 
         verify { chat.addUserText(any()) }
         verify { chat.addModelText("Escaped") }
-        verify { chat.makeContent(any()) }
+        verify { chat.makeContent(false) }
         verify { repository.request(any(), any()) }
         verify { callback.invoke() }
     }
