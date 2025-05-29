@@ -57,7 +57,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
     private fun toContent(it: ChatMessage) =
         "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${
-            it.text.replace("\"", "\\\"").replace("'", "\\'")
+            escape(it.text)
         }'}" +
                 " ${
                     if (it.image.isNullOrBlank().not()) 
@@ -65,5 +65,8 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
                     else
                         ""
                 } ]}"
+
+    private fun escape(text: String) =
+        text.replace("\"", "\\\"").replace("'", "\\'")
 
 }
