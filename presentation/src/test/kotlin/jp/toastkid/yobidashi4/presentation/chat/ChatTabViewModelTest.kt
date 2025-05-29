@@ -18,11 +18,13 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -52,6 +54,9 @@ class ChatTabViewModelTest {
     @MockK
     private lateinit var service: ChatService
 
+    @MockK
+    private lateinit var ioContextProvider: IoContextProvider
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -61,6 +66,7 @@ class ChatTabViewModelTest {
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier=null) { service } bind(ChatService::class)
+                    single(qualifier=null) { ioContextProvider } bind(IoContextProvider::class)
                 }
             )
         }
@@ -69,6 +75,7 @@ class ChatTabViewModelTest {
         every { service.setChat(any()) } just Runs
         every { service.messages() } returns emptyList()
         every { mainViewModel.showSnackbar(any()) } just Runs
+        every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
@@ -102,12 +109,16 @@ class ChatTabViewModelTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun send() {
+        val capturingSlot = slot<() -> Unit>()
+        every { service.send(any(), any(), capture(capturingSlot)) } returns ""
+
         runDesktopComposeUiTest {
             setContent {
                 rememberCoroutineScope().launch {
                     subject.onValueChanged(TextFieldValue("test"))
 
                     subject.send(CoroutineScope(Dispatchers.Unconfined))
+                    capturingSlot.captured.invoke()
 
                     verify { service.send(any(), any(), any()) }
                 }
