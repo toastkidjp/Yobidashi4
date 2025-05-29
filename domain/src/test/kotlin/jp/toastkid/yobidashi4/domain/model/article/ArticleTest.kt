@@ -89,7 +89,7 @@ internal class ArticleTest {
     @Test
     fun testLastModifiedThrowingIoExceptionFromFiles() {
         val fileTime = mockk<FileTime>()
-        every { fileTime.toMillis() }.returns(42L)
+        every { fileTime.toMillis() } returns 42L
         every { Files.getLastModifiedTime(any()) } throws IOException()
 
         val article = Article(path)
