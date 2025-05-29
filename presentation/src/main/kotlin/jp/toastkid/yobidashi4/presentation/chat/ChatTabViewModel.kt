@@ -15,10 +15,10 @@ import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -39,6 +39,8 @@ class ChatTabViewModel : KoinComponent {
 
     private val clipboardPutterService = ClipboardPutterService()
 
+    private val ioContextProvider: IoContextProvider by inject()
+
     fun messages(): List<ChatMessage> = service.messages()
 
     private val useImageGeneration = mutableStateOf(false)
@@ -58,7 +60,7 @@ class ChatTabViewModel : KoinComponent {
         textInput.value = TextFieldValue()
 
         labelState.value = "Connecting in progress..."
-        withContext(Dispatchers.IO) {
+        withContext(ioContextProvider()) {
             service.send(text, useImageGeneration.value) {
                 coroutineScope.launch {
                     scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
