@@ -112,9 +112,8 @@ class KeyEventConsumerTest {
         val consumed = subject.invoke(
             KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldValue("Angel has fallen.", TextRange(6, 10)),
-            mockk(),
-            { assertEquals("Angel has has fallen.", it.text) }
-        )
+            mockk()
+        ) { assertEquals("Angel has has fallen.", it.text) }
 
         assertTrue(consumed)
     }
