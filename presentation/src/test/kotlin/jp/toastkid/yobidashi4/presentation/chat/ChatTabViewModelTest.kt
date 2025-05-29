@@ -272,4 +272,13 @@ class ChatTabViewModelTest {
         }
     }
 
+    @Test
+    fun switchImageGeneration() {
+        assertFalse(subject.useImageGeneration())
+
+        subject.switchImageGeneration(true)
+
+        assertTrue(subject.useImageGeneration())
+    }
+
 }
