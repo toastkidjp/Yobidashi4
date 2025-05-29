@@ -2,6 +2,9 @@ package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.MouseButton
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
@@ -41,6 +44,12 @@ class MessageContentKtTest {
                     Modifier
                 )
             }
+
+            onNodeWithContentDescription("image", useUnmergedTree = true)
+                .performMouseInput {
+                    enter()
+                    press(MouseButton.Secondary)
+                }
         }
     }
 
