@@ -3,9 +3,27 @@ package jp.toastkid.yobidashi4.presentation.chat
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class MessageContentKtTest {
+
+    @BeforeEach
+    fun setUp() {
+        mockkConstructor(MessageContentViewModel::class)
+        every { anyConstructed<MessageContentViewModel>().storeImage(any()) } just Runs
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
+    }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
