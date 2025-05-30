@@ -38,6 +38,7 @@ class ChatStreamParserTest {
 **スープ**
 * 豚骨または""".trimIndent(), item.message()
         )
+        assertFalse(item.error())
     }
 
     @Test
