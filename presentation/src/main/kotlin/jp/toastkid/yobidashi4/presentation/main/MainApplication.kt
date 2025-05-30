@@ -43,7 +43,12 @@ fun launchMainApplication(exitProcessOnExit: Boolean = true) {
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun ApplicationScope.Application(localTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
-    val mainViewModel = remember { object : KoinComponent { val viewModel: MainViewModel by inject() }.viewModel }
+    val koin = remember {
+        object : KoinComponent {
+            val viewModel: MainViewModel by inject()
+        }
+    }
+    val mainViewModel = remember { koin.viewModel }
 
     AppTheme(darkTheme = mainViewModel.darkMode()) {
         MainTray()
