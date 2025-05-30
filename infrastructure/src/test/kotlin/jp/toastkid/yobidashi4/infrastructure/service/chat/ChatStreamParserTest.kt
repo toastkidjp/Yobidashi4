@@ -31,7 +31,7 @@ class ChatStreamParserTest {
 
     @Test
     fun invoke() {
-        val item = subject.invoke(line)
+        val item = subject.invoke(line) ?: return fail()
 
         assertEquals("""**材料 (1人分)**
 
