@@ -68,6 +68,7 @@ class ChatStreamParserTest {
             subject.invoke("data: {\"candidates\": [{\"content\": {\"parts\": [{\"inlineData\": {\"mimeType\": \"image/png\",\"data\": \"base64encoded-image\" } }],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 8,\"candidatesTokenCount\": 1341,\"totalTokenCount\": 1349,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 8}],\"candidatesTokensDetails\": [{\"modality\": \"IMAGE\",\"tokenCount\": 1290}]}}") ?: fail()
 
         assertEquals("base64encoded-image", item.message())
+        assertFalse(item.error())
         assertTrue(item.image())
     }
 
