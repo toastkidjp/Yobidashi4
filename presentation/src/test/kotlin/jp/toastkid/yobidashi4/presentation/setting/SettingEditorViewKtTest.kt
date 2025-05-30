@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.withKeyDown
@@ -55,7 +56,7 @@ class SettingEditorViewKtTest {
 
         every { anyConstructed<SettingEditorViewModel>().items() } returns listOf(
             "test" to TextFieldValue(),
-            "test2" to TextFieldValue(),
+            "test2" to TextFieldValue("test2"),
             "test3" to TextFieldValue("cursor_target")
         )
         every { anyConstructed<SettingEditorViewModel>().start() } just Runs
@@ -92,6 +93,9 @@ class SettingEditorViewKtTest {
                 keyUp(Key.O)
                 pressKey(Key.I)
             }
+
+            val textInput = onNodeWithText("test2")
+            textInput.performTextInput("Good")
 
             val clearInput = onAllNodesWithContentDescription("Clear input.").onFirst()
             clearInput.performClick()
