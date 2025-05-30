@@ -36,7 +36,8 @@ class ChatStreamParserTest {
         assertEquals("""**材料 (1人分)**
 
 **スープ**
-* 豚骨または""".trimIndent(), item?.message())
+* 豚骨または""".trimIndent(), item.message()
+        )
     }
 
     @Test
