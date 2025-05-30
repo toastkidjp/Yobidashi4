@@ -59,6 +59,7 @@ class ChatStreamParserTest {
 
         assertEquals("[OTHER]", item.message())
         assertTrue(item.error())
+        assertFalse(item.image())
     }
 
     @Test
