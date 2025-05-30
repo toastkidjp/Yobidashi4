@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.icon
@@ -22,7 +23,6 @@ import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.main.tray.MainTray
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.KoinComponent
@@ -46,9 +46,11 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
     val koin = remember {
         object : KoinComponent {
             val viewModel: MainViewModel by inject()
+            val ioContextProvider: IoContextProvider by inject()
         }
     }
     val mainViewModel = remember { koin.viewModel }
+    val ioContextProvider = remember { koin.ioContextProvider }
 
     AppTheme(darkTheme = mainViewModel.darkMode()) {
         MainTray()
@@ -69,7 +71,7 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
             }
 
             LaunchedEffect(Unit) {
-                withContext(Dispatchers.IO) {
+                withContext(ioContextProvider()) {
                     mainViewModel.launchDroppedPathFlow()
                 }
             }
@@ -85,17 +87,17 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
     }.notification
 
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
+        withContext(ioContextProvider()) {
             notification.start()
         }
     }
 
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
+        withContext(ioContextProvider()) {
             mainViewModel.loadBackgroundImage()
         }
 
-        withContext(Dispatchers.IO) {
+        withContext(ioContextProvider()) {
             notification
                 .notificationFlow()
                 .collect(mainViewModel::sendNotification)
