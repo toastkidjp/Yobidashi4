@@ -108,4 +108,35 @@ class ChatTest {
         )
     }
 
+    @Test
+    fun makeContentWithImageAndFlag() {
+        chat.addUserText("Test \"is\" good. It's good.")
+        chat.addModelText("Answer")
+        chat.addModelImage("Image")
+
+        assertEquals(
+            """{
+  "contents": [
+    {"role":"user", "parts":[ { "text": 'Test \"is\" good. It\'s good.'} ]},{"role":"model", "parts":[ { "text": 'Answer'},{"inline_data":{"mime_type":"image/jpeg","data":"Image"}}  ]}
+  ],
+  "generationConfig":{"responseModalities":["TEXT","IMAGE"]},
+  "safetySettings": [
+      {
+          "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+          "threshold": "BLOCK_ONLY_HIGH"
+      },
+      {
+          "category": "HARM_CATEGORY_HARASSMENT",
+          "threshold": "BLOCK_ONLY_HIGH"
+      },
+      {
+          "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+          "threshold": "BLOCK_ONLY_HIGH"
+      }
+  ]
+}""".trimIndent().replace(" ", "").replace("\n", ""),
+            chat.makeContent(true).replace(" ", "").replace("\n", "")
+        )
+    }
+
 }
