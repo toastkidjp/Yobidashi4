@@ -62,6 +62,15 @@ class WebIconLoaderServiceImplementationTest {
     }
 
     @Test
+    fun emptyBrowserUrlCase() {
+        every { iconUrlFinder.invoke(any()) } returns listOf("icon.svg")
+
+        subject.invoke("", "")
+
+        verify(inverse = true) { webIconDownloader.invoke(any(), any(), any()) }
+    }
+
+    @Test
     fun iconUrlsIsEmptyCase() {
         every { iconUrlFinder.invoke(any()) } returns emptyList()
 
