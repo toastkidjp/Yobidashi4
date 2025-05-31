@@ -12,7 +12,6 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -31,6 +30,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.event.KeyEvent
 
 class CefKeyboardShortcutProcessorTest {
 
@@ -387,6 +387,18 @@ class CefKeyboardShortcutProcessorTest {
 
         assertTrue(consumed)
         verify { browser.zoomLevel = 0.25 }
+    }
+
+    @Test
+    fun noopZoomInWithoutBrowser() {
+        val consumed = subject.invoke(
+            null,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            187
+        )
+
+        assertTrue(consumed)
     }
 
     @Test
