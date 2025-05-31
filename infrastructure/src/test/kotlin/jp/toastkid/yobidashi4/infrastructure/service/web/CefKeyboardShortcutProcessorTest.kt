@@ -417,4 +417,16 @@ class CefKeyboardShortcutProcessorTest {
         verify { browser.zoomLevel = 0.0 }
     }
 
+    @Test
+    fun noopZoomOutWithoutBrowser() {
+        val consumed = subject.invoke(
+            null,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_CONTROL_DOWN,
+            189
+        )
+
+        assertTrue(consumed)
+    }
+
 }
