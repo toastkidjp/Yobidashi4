@@ -241,6 +241,10 @@ user_off_day=12/29,12/30
     @Test
     fun chatApiKey() {
         assertNull(subject.chatApiKey())
+
+        subject.update("chat_api_key", "test")
+
+        assertEquals("test", subject.chatApiKey())
     }
 
     @Test
