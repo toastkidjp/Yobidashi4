@@ -80,7 +80,7 @@ class WebIconDownloaderTest {
     @Test
     fun urlEndDotCase() {
         every { folder.resolve(any<String>()) } returns imagePath
-        url = URI("https://www.yahoo.co.jp/favicon").toURL()
+        url = URI("https://www.yahoo.co.jp/favicon.").toURL()
 
         subject.invoke(url, folder, "test")
 
