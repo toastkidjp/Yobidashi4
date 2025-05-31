@@ -255,4 +255,10 @@ user_off_day=12/29,12/30
         assertTrue(subject.items().isEmpty())
     }
 
+    @Test
+    fun update() {
+        subject.update("test", "new value")
+        assertEquals("new value", subject.items().get("test"))
+    }
+
 }
