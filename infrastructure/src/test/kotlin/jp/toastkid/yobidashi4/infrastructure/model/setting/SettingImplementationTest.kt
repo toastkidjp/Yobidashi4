@@ -250,4 +250,9 @@ user_off_day=12/29,12/30
         assertEquals("test", subject.articleFolder())
     }
 
+    @Test
+    fun items() {
+        assertTrue(subject.items().isEmpty())
+    }
+
 }
