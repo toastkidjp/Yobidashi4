@@ -452,8 +452,10 @@ class KeyEventConsumerTest {
             mockk(),
             { assertEquals("***test***", it.text) }
         )
+        val capturedConversionResult = conversionCapturingSlot.captured.invoke("test")
 
         assertTrue(consumed)
+        assertEquals("***test***", capturedConversionResult)
     }
 
     @Test
