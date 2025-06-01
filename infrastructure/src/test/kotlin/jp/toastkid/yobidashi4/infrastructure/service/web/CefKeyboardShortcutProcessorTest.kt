@@ -208,6 +208,13 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun noopBackWithoutBrowser() {
+        val consumed = subject.invoke(null, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_ALT_DOWN, KeyEvent.VK_LEFT)
+
+        assertTrue(consumed)
+    }
+
+    @Test
     fun forward() {
         every { browser.canGoForward() } returns true
         every { browser.goForward() } just Runs
