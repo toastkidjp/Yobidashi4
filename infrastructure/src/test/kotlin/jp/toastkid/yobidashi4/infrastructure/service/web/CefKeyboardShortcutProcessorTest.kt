@@ -467,4 +467,12 @@ class CefKeyboardShortcutProcessorTest {
         verify(inverse = true) { anyConstructed<ScreenshotExporter>().invoke(any()) }
     }
 
+    @Test
+    fun noopWithControlDown() {
+        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_CONTROL_DOWN, -1)
+
+        assertFalse(consumed)
+        verify { browser wasNot Called }
+    }
+
 }
