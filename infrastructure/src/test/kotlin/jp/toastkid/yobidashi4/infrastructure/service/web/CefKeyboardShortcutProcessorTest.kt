@@ -451,4 +451,20 @@ class CefKeyboardShortcutProcessorTest {
         verify { browser wasNot Called }
     }
 
+    @Test
+    fun noopPrintScreenshotWithoutShiftDown() {
+        mockkConstructor(ScreenshotExporter::class)
+        every { anyConstructed<ScreenshotExporter>().invoke(any()) } just Runs
+
+        val consumed = subject.invoke(
+            null,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_ALT_DOWN,
+            KeyEvent.VK_P
+        )
+
+        assertFalse(consumed)
+        verify(inverse = true) { anyConstructed<ScreenshotExporter>().invoke(any()) }
+    }
+
 }
