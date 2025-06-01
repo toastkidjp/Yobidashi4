@@ -443,4 +443,12 @@ class CefKeyboardShortcutProcessorTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun noopForwardWithoutAltDown() {
+        val consumed = subject.invoke(browser, CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP, EventFlags.EVENTFLAG_COMMAND_DOWN, KeyEvent.VK_RIGHT)
+
+        assertFalse(consumed)
+        verify { browser wasNot Called }
+    }
+
 }
