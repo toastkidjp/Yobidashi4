@@ -17,6 +17,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
@@ -72,6 +73,8 @@ class KeyEventConsumerTest {
     @MockK
     private lateinit var blockQuotation: BlockQuotation
 
+    private val conversionCapturingSlot = slot<(String) -> String?>()
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -86,7 +89,7 @@ class KeyEventConsumerTest {
         subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory, blockQuotation = blockQuotation)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
         every { expressionTextCalculatorService.invoke(any()) } returns "3"
-        every { selectedTextConversion.invoke(any(), any(), any(), any(), any()) } returns true
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(conversionCapturingSlot), any()) } returns true
         every { controlAndLeftBracketCase.invoke(any(), any(), any()) } returns true
     }
 
@@ -94,6 +97,7 @@ class KeyEventConsumerTest {
     fun tearDown() {
         stopKoin()
         unmockkAll()
+        conversionCapturingSlot.clear()
     }
 
     @Test
@@ -534,8 +538,10 @@ class KeyEventConsumerTest {
             mockk(),
             { assertEquals("```test```", it.getSelectedText().text) }
         )
+        val capturedConversionResult = conversionCapturingSlot.captured.invoke("test")
 
         assertTrue(consumed)
+        assertEquals("```test```", capturedConversionResult)
     }
 
     @Test
