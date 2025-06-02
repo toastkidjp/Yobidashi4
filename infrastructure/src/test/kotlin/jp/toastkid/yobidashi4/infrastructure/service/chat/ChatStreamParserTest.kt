@@ -39,6 +39,7 @@ class ChatStreamParserTest {
 * 豚骨または""".trimIndent(), item.message()
         )
         assertFalse(item.error())
+        assertFalse(item.image())
     }
 
     @Test
@@ -74,6 +75,11 @@ class ChatStreamParserTest {
         assertEquals("base64encoded-image", item.message())
         assertFalse(item.error())
         assertTrue(item.image())
+    }
+
+    @Test
+    fun irregularCase() {
+        assertNull(subject.invoke("data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"\"}],\"role\": \"model\"},\"finishReason\": \"STOP\"}],\"usageMetadata\": {\"promptTokenCount\": 712,\"candidatesTokenCount\": 19,\"totalTokenCount\": 731,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 712}],\"candidatesTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 19}]},\"modelVersion\": \"gemini-2.0-flash\",\"responseId\": \"gVc8aKuXPNHB7dcPwf7a4QY\"}\n"))
     }
 
 }
