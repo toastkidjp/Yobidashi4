@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi4.domain.service.aggregation
 
-import java.nio.file.Files
-import java.util.stream.Collectors
 import jp.toastkid.yobidashi4.domain.model.aggregation.OutgoAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import java.nio.file.Files
+import java.util.stream.Collectors
 import kotlin.io.path.nameWithoutExtension
 
 internal class OutgoCalculationBehavior(
