@@ -1,23 +1,22 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.web
 
+import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
+import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
+import org.koin.core.annotation.Single
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
-import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
-import org.koin.core.annotation.Single
 
 @Single
 class WebHistoryFileStore : WebHistoryRepository {
 
     override fun add(title: String, url: String) {
         val webHistories = readAll()
-        val firstOrNull = webHistories.firstOrNull { it.title == title && it.url == url }
+        val firstOrNull = webHistories.firstOrNull { it.title == title && it.url == url } ?: WebHistory(title, url, System.currentTimeMillis())
 
-        val item = firstOrNull?.copy(lastVisitedTime = System.currentTimeMillis(), visitingCount = firstOrNull.visitingCount + 1)
-            ?: WebHistory(title, url, System.currentTimeMillis())
+        val item = firstOrNull.copy(lastVisitedTime = System.currentTimeMillis(), visitingCount = firstOrNull.visitingCount + 1)
 
         val key = title + url
         val filtered = webHistories.filter { it.title + it.url != key }
