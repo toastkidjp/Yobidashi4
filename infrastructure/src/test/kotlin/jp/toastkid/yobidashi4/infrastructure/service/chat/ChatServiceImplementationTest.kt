@@ -66,6 +66,7 @@ class ChatServiceImplementationTest {
         val chat = mockk<Chat>()
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
+        every { chat.addModelImage(any()) } just Runs
         every { chat.makeContent(any()) } returns ""
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { repository.request(any(), capture(capturingSlot)) } just Runs
@@ -74,11 +75,13 @@ class ChatServiceImplementationTest {
         subject.send("test", false, callback)
         capturingSlot.captured.invoke(ChatResponseItem("test"))
         capturingSlot.captured.invoke(ChatResponseItem("\"Escaped\""))
+        capturingSlot.captured.invoke(ChatResponseItem("image", image = true))
         capturingSlot.captured.invoke(null)
 
         verify { chat.addUserText(any()) }
         verify { chat.addModelText("Escaped") }
         verify { chat.makeContent(false) }
+        verify { chat.addModelImage(any()) }
         verify { repository.request(any(), any()) }
         verify { callback.invoke() }
     }
