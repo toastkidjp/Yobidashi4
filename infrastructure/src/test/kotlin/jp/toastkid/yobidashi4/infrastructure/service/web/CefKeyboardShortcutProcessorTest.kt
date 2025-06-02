@@ -287,6 +287,20 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun noopAltAndControlCombination() {
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_ALT_DOWN or EventFlags.EVENTFLAG_CONTROL_DOWN,
+            KeyEvent.VK_Z
+        )
+
+        assertFalse(consumed)
+        verify { viewModel wasNot Called }
+        verify { selectedText wasNot Called }
+    }
+
+    @Test
     fun printScreenshot() {
         mockkConstructor(ScreenshotExporter::class)
         every { anyConstructed<ScreenshotExporter>().invoke(any()) } just Runs
