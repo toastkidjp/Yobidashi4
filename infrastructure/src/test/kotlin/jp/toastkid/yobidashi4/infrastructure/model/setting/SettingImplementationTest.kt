@@ -236,6 +236,10 @@ user_off_day=12/29,12/30
         subject.switchUseBackground()
 
         assertFalse(subject.useBackground())
+
+        subject.update("use_background", "test")
+
+        assertTrue(subject.useBackground())
     }
 
     @Test
