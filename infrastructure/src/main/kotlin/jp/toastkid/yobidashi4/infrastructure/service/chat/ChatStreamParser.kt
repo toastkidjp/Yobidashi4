@@ -19,12 +19,13 @@ class ChatStreamParser {
         val imageMatcher = imagePattern.matcher(line)
         val base64 = if (imageMatcher.find()) imageMatcher.group(2) else null
 
-        if (message.isNullOrBlank() && base64.isNullOrBlank()) {
+        val messageText = message ?: base64 ?: ""
+        if (messageText.isEmpty()) {
             return null
         }
 
         return ChatResponseItem(
-            message = message ?: base64 ?: "",
+            message = messageText,
             image = base64 != null
         )
     }
