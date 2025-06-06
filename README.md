@@ -1,6 +1,7 @@
 Yobidashi4
 ====
 
+[![Build](https://github.com/toastkidjp/Yobidashi4/actions/workflows/main.yml/badge.svg)](https://github.com/toastkidjp/Yobidashi4/actions/workflows/main.yml)
 [![license](https://img.shields.io/github/license/toastkidjp/Yobidashi4.svg)](./LICENSE)
 [![GitHub release](https://img.shields.io/github/release/toastkidjp/Yobidashi4.svg)](https://github.com/toastkidjp/Yobidashi4/releases)
 [![GitHub issues](https://img.shields.io/github/issues/toastkidjp/Yobidashi4.svg)](https://github.com/toastkidjp/Yobidashi4/issues)
