@@ -218,6 +218,10 @@ user_off_day=12/29,12/30
         subject.setMaskingCount(3)
 
         assertEquals(3, subject.getMaskingCount())
+
+        subject.update("number_place_masking_count", "invalid")
+
+        assertEquals(20, subject.getMaskingCount())
     }
 
     @Test
