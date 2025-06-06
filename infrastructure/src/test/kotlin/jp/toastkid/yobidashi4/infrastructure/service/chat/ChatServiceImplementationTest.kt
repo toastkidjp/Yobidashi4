@@ -37,6 +37,9 @@ class ChatServiceImplementationTest {
     @MockK
     private lateinit var callback: () -> Unit
 
+    @MockK
+    private lateinit var chat: Chat
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -51,6 +54,9 @@ class ChatServiceImplementationTest {
         }
         every { setting.chatApiKey() } returns "test-key"
         every { callback.invoke() } just Runs
+        every { chat.addUserText(any()) } just Runs
+        every { chat.addModelText(any()) } just Runs
+        every { chat.addModelImage(any()) } just Runs
 
         subject = ChatServiceImplementation()
     }
@@ -63,10 +69,6 @@ class ChatServiceImplementationTest {
 
     @Test
     fun send() {
-        val chat = mockk<Chat>()
-        every { chat.addUserText(any()) } just Runs
-        every { chat.addModelText(any()) } just Runs
-        every { chat.addModelImage(any()) } just Runs
         every { chat.makeContent(any()) } returns ""
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { repository.request(any(), capture(capturingSlot)) } just Runs
@@ -88,9 +90,6 @@ class ChatServiceImplementationTest {
 
     @Test
     fun sendWhenReceiveNullResponse() {
-        val chat = mockk<Chat>()
-        every { chat.addUserText(any()) } just Runs
-        every { chat.addModelText(any()) } just Runs
         every { chat.makeContent(any()) } returns ""
         every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
