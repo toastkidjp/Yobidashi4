@@ -132,6 +132,15 @@ user_off_day=12/29,12/30
     }
 
     @Test
+    fun setEditorForegroundColorWithNull() {
+        assertNull(subject.editorForegroundColor())
+
+        subject.setEditorForegroundColor(null)
+
+        assertEquals(java.awt.Color.BLACK,  subject.editorForegroundColor())
+    }
+
+    @Test
     fun resetEditorColorSetting() {
         subject.setEditorForegroundColor(java.awt.Color.WHITE)
 
