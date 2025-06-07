@@ -56,7 +56,8 @@ internal fun MessageContent(
                                 viewModel.storeImage(base64Image)
                             }
                         )
-                    }
+                    },
+                    state = viewModel.contextMenuState()
                 ) {
                     Image(
                         viewModel.image(base64Image),
