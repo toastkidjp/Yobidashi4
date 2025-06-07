@@ -179,6 +179,10 @@ user_off_day=12/29,12/30
         subject.setEditorFontSize(null)
 
         assertEquals(1, subject.editorFontSize())
+
+        subject.update("editor_font_size", "test")
+
+        assertEquals(14, subject.editorFontSize())
     }
 
     @Test
