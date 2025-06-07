@@ -119,6 +119,7 @@ user_off_day=12/29,12/30
         assertEquals(java.awt.Color(225, 225, 225, 255),  subject.editorBackgroundColor())
 
         subject.setEditorBackgroundColor(java.awt.Color.BLACK)
+        subject.setEditorBackgroundColor(null)
     }
 
     @Test
