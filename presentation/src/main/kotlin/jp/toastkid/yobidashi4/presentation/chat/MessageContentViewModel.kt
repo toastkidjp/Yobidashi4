@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
+import androidx.compose.foundation.ContextMenuState
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
@@ -21,6 +22,8 @@ class MessageContentViewModel : KoinComponent {
     private val mainViewModel: MainViewModel by inject()
 
     private val imageHolder = AtomicReference<ImageBitmap>()
+
+    private val contextMenuState = ContextMenuState()
 
     fun lineText(listLine: Boolean, text: String): AnnotatedString {
         return keywordHighlighter(if (listLine) text.substring(2) else text)
@@ -52,5 +55,7 @@ class MessageContentViewModel : KoinComponent {
             .use { ImageIO.read(it) }
             .toComposeImageBitmap()
     }
+
+    fun contextMenuState() = contextMenuState
 
 }
