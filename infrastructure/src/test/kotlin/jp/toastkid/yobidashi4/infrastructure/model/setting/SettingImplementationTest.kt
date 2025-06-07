@@ -188,6 +188,10 @@ user_off_day=12/29,12/30
     @Test
     fun editorConversionLimit() {
         assertTrue(subject.editorConversionLimit() > 0)
+
+        subject.update("editor_conversion_limit", "test")
+
+        assertEquals(4500, subject.editorConversionLimit())
     }
 
     @Test
