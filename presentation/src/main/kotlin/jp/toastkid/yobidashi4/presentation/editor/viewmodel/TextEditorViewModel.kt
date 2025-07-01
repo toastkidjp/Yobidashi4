@@ -126,10 +126,6 @@ class TextEditorViewModel : KoinComponent {
         highlightSize.set(Size(Float.MAX_VALUE, cursorSize.em.value))
     }
 
-    fun getLineHeight(lineNumber: Int): TextUnit {
-        return lineHeights.getOrElse(lineNumber, { 1.5.em })
-    }
-
     private val highlightSize = AtomicReference(Size(Float.MAX_VALUE, 37.em.value))
 
     fun getHighlightSize() = highlightSize.get()
