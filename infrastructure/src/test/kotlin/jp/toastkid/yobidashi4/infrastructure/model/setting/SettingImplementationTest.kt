@@ -192,6 +192,10 @@ user_off_day=12/29,12/30
         subject.update("editor_conversion_limit", "test")
 
         assertEquals(4500, subject.editorConversionLimit())
+
+        subject.update("editor_conversion_limit", "3000")
+
+        assertEquals(3000, subject.editorConversionLimit())
     }
 
     @Test
