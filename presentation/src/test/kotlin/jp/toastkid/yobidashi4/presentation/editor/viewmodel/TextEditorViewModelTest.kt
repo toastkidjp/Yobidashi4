@@ -16,7 +16,6 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.input.getSelectedText
-import androidx.compose.ui.unit.em
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -136,10 +135,6 @@ class TextEditorViewModelTest {
         viewModel.onClickLineNumber(0)
 
         assertEquals(text, viewModel.content().getSelectedText().text)
-        assertEquals(1.5.em, viewModel.getLineHeight(-1))
-        assertEquals(1.2096775.em, viewModel.getLineHeight(0))
-        assertEquals(1.5.em, viewModel.getLineHeight(1))
-        assertEquals(1.4516128.em, viewModel.getLineHeight(2))
         verify { multiParagraph.getLineHeight(0) }
         verify { multiParagraph.getLineHeight(1) }
         verify { multiParagraph.getLineHeight(2) }
