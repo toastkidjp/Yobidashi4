@@ -13,6 +13,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -99,6 +100,11 @@ class MessageContentViewModelTest {
         verify { ImageIO.write(any(), any(), any<File>()) }
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
         verify { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun contextMenuState() {
+        assertNotNull(subject.contextMenuState())
     }
 
 }
