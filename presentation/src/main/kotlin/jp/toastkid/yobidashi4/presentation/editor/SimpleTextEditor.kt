@@ -32,6 +32,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -81,7 +82,13 @@ fun SimpleTextEditor(
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily("MS Gothic"),
                                     textAlign = TextAlign.End,
-                                    lineHeight = viewModel.getLineHeight(lineNumber)
+                                    style = TextStyle(
+                                        lineHeight = 1.5.em,
+                                        lineHeightStyle = LineHeightStyle(
+                                            alignment = LineHeightStyle.Alignment.Center,
+                                            trim = LineHeightStyle.Trim.None
+                                        )
+                                    )
                                 )
                             }
                         }
@@ -93,7 +100,11 @@ fun SimpleTextEditor(
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 16.sp,
                 fontFamily = FontFamily("MS Gothic"),
-                lineHeight = 1.5.em
+                lineHeight = 1.5.em,
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Center,
+                    trim = LineHeightStyle.Trim.None
+                )
             ),
             scrollState = viewModel.verticalScrollState(),
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
