@@ -324,7 +324,7 @@ class TextEditorViewModelTest {
 
     @Test
     fun visualTransformationOverLimit() {
-        val text = (0..20_000).map { it.toString() }.joinToString()
+        val text = (0..20_000).joinToString { it.toString() }
         viewModel.onValueChange(TextFieldValue(text))
 
         val visualTransformation = viewModel.visualTransformation()
