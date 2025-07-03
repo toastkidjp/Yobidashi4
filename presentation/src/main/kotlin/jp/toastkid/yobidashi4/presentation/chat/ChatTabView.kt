@@ -72,7 +72,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
             }
 
-            Box {
+            Box(modifier = Modifier.fillMaxWidth()) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         viewModel.useImageGeneration(),
