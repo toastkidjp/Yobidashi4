@@ -74,12 +74,12 @@ fun ChatTabView(chatTab: ChatTab) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     viewModel.useImageGeneration(),
-                    onCheckedChange = viewModel::switchImageGeneration,
+                    onCheckedChange = viewModel::setImageGeneration,
                     modifier = Modifier.semantics { contentDescription = "Use image generation ${viewModel.useImageGeneration()}" }
                 )
                 Text(
                     "Use image generation",
-                    modifier = Modifier.clickable { viewModel.switchImageGeneration(viewModel.useImageGeneration().not()) }
+                    modifier = Modifier.clickable { viewModel.setImageGeneration(viewModel.useImageGeneration().not()) }
                 )
             }
 
