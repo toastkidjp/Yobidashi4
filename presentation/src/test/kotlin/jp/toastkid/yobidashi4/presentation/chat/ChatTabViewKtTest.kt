@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.chat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -63,6 +64,8 @@ class ChatTabViewKtTest {
         )
         every { anyConstructed<ChatTabViewModel>().launch(any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().update(any()) } just Runs
+        every { anyConstructed<ChatTabViewModel>().switchImageGeneration() } just Runs
+        every { anyConstructed<ChatTabViewModel>().clearChat() } just Runs
         every { anyConstructed<ChatTabViewModel>().clipText(any()) } just Runs
         every { tab.chat() } returns mockk()
     }
@@ -99,6 +102,10 @@ class ChatTabViewKtTest {
                     pressKey(Key.DirectionUp)
                     pressKey(Key.DirectionDown)
                 }
+
+            onNode(hasText("Use image generation"), useUnmergedTree = true)
+                .performClick()
+            verify { anyConstructed<ChatTabViewModel>().switchImageGeneration() }
         }
     }
 
