@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -71,16 +72,27 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    viewModel.useImageGeneration(),
-                    onCheckedChange = viewModel::setImageGeneration,
-                    modifier = Modifier.semantics { contentDescription = "Use image generation ${viewModel.useImageGeneration()}" }
-                )
-                Text(
-                    "Use image generation",
-                    modifier = Modifier.clickable { viewModel.switchImageGeneration() }
-                )
+            Box {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        viewModel.useImageGeneration(),
+                        onCheckedChange = viewModel::setImageGeneration,
+                        modifier = Modifier.semantics { contentDescription = "Use image generation ${viewModel.useImageGeneration()}" }
+                    )
+                    Text(
+                        "Use image generation",
+                        modifier = Modifier.clickable { viewModel.switchImageGeneration() }
+                    )
+                }
+
+                Button(
+                    {
+                        viewModel.clearChat()
+                    },
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
+                    Text("Clear chat")
+                }
             }
 
             MultiLineTextField(
