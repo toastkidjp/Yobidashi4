@@ -49,6 +49,15 @@ class ChatTest {
     }
 
     @Test
+    fun clearMessages() {
+        chat.addModelImage("image")
+
+        chat.clearMessages()
+
+        assertTrue(chat.list().isEmpty())
+    }
+
+    @Test
     fun makeContent() {
         chat.addUserText("Test \"is\" good. It's good.")
         chat.addModelText("Answer")
