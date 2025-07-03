@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.awt.event.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.infrastructure.service.web.screenshot.ScreenshotExporter
@@ -10,6 +9,7 @@ import org.cef.handler.CefKeyboardHandler
 import org.cef.misc.EventFlags
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.awt.event.KeyEvent
 
 class CefKeyboardShortcutProcessor(
     private val selectedText: () -> String
@@ -62,7 +62,7 @@ class CefKeyboardShortcutProcessor(
         }
         if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == 189) {
             browser?.let {
-                it.zoomLevel = it.zoomLevel - 0.25
+                it.zoomLevel -= 0.25
             }
             return true
         }
