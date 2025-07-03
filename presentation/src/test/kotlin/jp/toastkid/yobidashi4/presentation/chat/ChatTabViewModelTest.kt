@@ -141,7 +141,7 @@ class ChatTabViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } returns true
+        every { focusRequester.requestFocus() } just Runs
 
         subject.launch(mockk())
 
@@ -285,10 +285,10 @@ class ChatTabViewModelTest {
     }
 
     @Test
-    fun switchImageGeneration() {
+    fun setImageGeneration() {
         assertFalse(subject.useImageGeneration())
 
-        subject.switchImageGeneration(true)
+        subject.setImageGeneration(true)
 
         assertTrue(subject.useImageGeneration())
     }
