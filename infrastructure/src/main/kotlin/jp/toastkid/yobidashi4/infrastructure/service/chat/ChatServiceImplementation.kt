@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.chat
 
-import androidx.compose.runtime.mutableStateListOf
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -65,7 +64,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
     }
 
     override fun clearMessages() {
-        chatHolder.set(Chat(mutableStateListOf()))
+        chatHolder.get().clearMessages()
     }
 
 }
