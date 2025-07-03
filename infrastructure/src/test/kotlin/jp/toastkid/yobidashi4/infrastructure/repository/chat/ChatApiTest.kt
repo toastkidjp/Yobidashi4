@@ -73,7 +73,7 @@ class ChatApiTest {
     fun requestConnectionNullCase() {
         every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns null
 
-        subject.request("{test}", {})
+        subject.request("{test}") {}
     }
 
     @Test
