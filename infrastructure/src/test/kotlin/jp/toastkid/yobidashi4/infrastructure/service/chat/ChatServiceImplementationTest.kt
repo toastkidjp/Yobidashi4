@@ -106,7 +106,6 @@ class ChatServiceImplementationTest {
     fun accessors() {
         assertTrue(subject.getChat().list().isEmpty())
 
-        val chat = mockk<Chat>()
         every { chat.list() } returns listOf(mockk(), mockk())
 
         subject.setChat(chat)
@@ -115,6 +114,15 @@ class ChatServiceImplementationTest {
         assertSame(chat, gotChat)
         assertEquals(2, gotChat.list().size)
         assertEquals(2, subject.messages().size)
+    }
+
+    @Test
+    fun clearMessages() {
+        val chat1 = subject.getChat()
+
+        subject.clearMessages()
+
+        assertSame(chat1, subject.getChat())
     }
 
 }
