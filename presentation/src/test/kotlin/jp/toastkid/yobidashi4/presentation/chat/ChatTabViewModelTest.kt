@@ -293,4 +293,13 @@ class ChatTabViewModelTest {
         assertTrue(subject.useImageGeneration())
     }
 
+    @Test
+    fun clearChat() {
+        every { service.clearMessages() } just Runs
+
+        subject.clearChat()
+
+        verify { service.clearMessages() }
+    }
+
 }
