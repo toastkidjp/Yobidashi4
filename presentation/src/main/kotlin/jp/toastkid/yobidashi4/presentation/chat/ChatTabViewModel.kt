@@ -51,6 +51,10 @@ class ChatTabViewModel : KoinComponent {
         useImageGeneration.value = newState
     }
 
+    fun switchImageGeneration() {
+        useImageGeneration.value = useImageGeneration.value.not()
+    }
+
     suspend fun send(coroutineScope: CoroutineScope) {
         val text = textInput.value.text
         if (text.isBlank()) {
