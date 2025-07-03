@@ -47,7 +47,7 @@ class ChatTabViewModel : KoinComponent {
 
     fun useImageGeneration() = useImageGeneration.value
 
-    fun switchImageGeneration(newState: Boolean) {
+    fun setImageGeneration(newState: Boolean) {
         useImageGeneration.value = newState
     }
 
