@@ -166,6 +166,10 @@ class ChatTabViewModel : KoinComponent {
         mainViewModel.showSnackbar("Clipped text.")
     }
 
+    fun clearChat() {
+        service.clearMessages()
+    }
+
 }
 
 private const val DEFAULT_LABEL = "Please would you input any sentences which you know something?"
