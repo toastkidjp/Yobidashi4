@@ -13,6 +13,7 @@ import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -62,7 +63,7 @@ class ChatTabViewKtTest {
             ChatMessage("user", "test"),
             ChatMessage("model", "test")
         )
-        every { anyConstructed<ChatTabViewModel>().launch(any()) } just Runs
+        coEvery { anyConstructed<ChatTabViewModel>().launch(any(), any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().update(any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().switchImageGeneration() } just Runs
         every { anyConstructed<ChatTabViewModel>().clearChat() } just Runs
