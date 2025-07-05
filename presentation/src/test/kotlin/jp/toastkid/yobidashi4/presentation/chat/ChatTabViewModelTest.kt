@@ -143,22 +143,23 @@ class ChatTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } just Runs
 
-        subject.launch(mockk())
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.launch(mockk(), 1)
 
-        verify { subject.focusRequester() }
-        verify { service.setChat(any()) }
+            verify { subject.focusRequester() }
+            verify { service.setChat(any()) }
+        }
     }
 
     @Test
     fun update() {
         val chatTab = mockk<ChatTab>()
-        every { mainViewModel.replaceTab(any(),  any()) } just Runs
+        every { mainViewModel.updateScrollableTab(any(),  any()) } just Runs
         every { service.getChat() } returns mockk()
 
         subject.update(chatTab)
 
-        verify { mainViewModel.replaceTab(any(),  any()) }
-        verify { service.getChat() }
+        verify { mainViewModel.updateScrollableTab(any(),  any()) }
     }
 
     @Test
