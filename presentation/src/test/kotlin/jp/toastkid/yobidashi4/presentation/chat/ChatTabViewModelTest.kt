@@ -291,6 +291,10 @@ class ChatTabViewModelTest {
         subject.setImageGeneration(true)
 
         assertTrue(subject.useImageGeneration())
+
+        subject.switchImageGeneration()
+
+        assertFalse(subject.useImageGeneration())
     }
 
     @Test
