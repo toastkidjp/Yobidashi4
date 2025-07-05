@@ -86,9 +86,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 }
 
                 Button(
-                    {
-                        viewModel.clearChat()
-                    },
+                    viewModel::clearChat,
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
                     Text("Clear chat")
