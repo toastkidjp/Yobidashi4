@@ -118,13 +118,16 @@ class ChatTabViewModel : KoinComponent {
         return focusRequester
     }
 
-    fun launch(chat: Chat) {
+    suspend fun launch(chat: Chat, scrollPosition: Int) {
         service.setChat(chat)
+        if (scrollState.firstVisibleItemScrollOffset != scrollPosition) {
+            scrollState.scrollToItem(scrollPosition)
+        }
         focusRequester().requestFocus()
     }
 
     fun update(chatTab: ChatTab) {
-        mainViewModel.replaceTab(chatTab,  ChatTab(service.getChat()))
+        mainViewModel.updateScrollableTab(chatTab,  scrollState.firstVisibleItemScrollOffset)
     }
 
     private val labelState = mutableStateOf(DEFAULT_LABEL)
