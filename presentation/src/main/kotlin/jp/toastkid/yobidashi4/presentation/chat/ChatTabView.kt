@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -106,7 +107,9 @@ fun ChatTabView(chatTab: ChatTab) {
     }
 
     DisposableEffect(chatTab) {
-        viewModel.launch(chatTab.chat())
+        coroutineScope.launch {
+            viewModel.launch(chatTab.chat(), chatTab.scrollPosition())
+        }
 
         onDispose {
             viewModel.update(chatTab)
