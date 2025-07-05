@@ -81,7 +81,7 @@ fun ChatTabView(chatTab: ChatTab) {
                     )
                     Text(
                         "Use image generation",
-                        modifier = Modifier.clickable { viewModel.switchImageGeneration() }
+                        modifier = Modifier.clickable(onClick = viewModel::switchImageGeneration)
                     )
                 }
 
