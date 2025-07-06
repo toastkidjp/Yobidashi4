@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.infrastructure.service.web.download
+package jp.toastkid.yobidashi4.domain.model.download
 
 import java.nio.file.Files
 import java.nio.file.Path
