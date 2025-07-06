@@ -92,16 +92,6 @@ class MainMenuViewModel : KoinComponent {
         asynchronousArticleIndexerService.invoke(ioContextProvider())
     }
 
-    fun dumpLatest() {
-        CoroutineScope(ioContextProvider()).launch {
-            ZipArchiver().invoke(
-                LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
-                "latestArticles.zip"
-            )
-            viewModel.openFile(Path.of("."))
-        }
-    }
-
     fun dumpAll() {
         CoroutineScope(ioContextProvider()).launch {
             ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
