@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.chat
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -11,12 +13,11 @@ import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.ParametersHolder
-import java.util.concurrent.atomic.AtomicReference
 
 @Single
 class ChatServiceImplementation : ChatService, KoinComponent {
 
-    private val chatHolder: AtomicReference<Chat> = AtomicReference(Chat())
+    private val chatHolder: MutableState<Chat> = mutableStateOf(Chat())
 
     private val setting: Setting by inject()
 
@@ -29,7 +30,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
     })
 
     override fun send(text: String, image: Boolean, onUpdate: () -> Unit): String? {
-        val chat = chatHolder.get()
+        val chat = chatHolder.value
         chat.addUserText(text)
         onUpdate()
 
@@ -52,19 +53,19 @@ class ChatServiceImplementation : ChatService, KoinComponent {
     }
 
     override fun setChat(chat: Chat) {
-        chatHolder.set(chat)
+        chatHolder.value = (chat)
     }
 
     override fun getChat(): Chat {
-        return chatHolder.get()
+        return chatHolder.value
     }
 
     override fun messages(): List<ChatMessage> {
-        return chatHolder.get().list()
+        return chatHolder.value.list()
     }
 
     override fun clearMessages() {
-        chatHolder.get().clearMessages()
+        chatHolder.value.clearMessages()
     }
 
 }
