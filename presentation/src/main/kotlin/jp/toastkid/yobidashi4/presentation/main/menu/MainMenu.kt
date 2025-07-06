@@ -89,12 +89,6 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             )
 
             Item(
-                "Dump latest",
-                icon = painterResource(Res.drawable.ic_dump),
-                onClick = viewModel::dumpLatest
-            )
-
-            Item(
                 "Dump all",
                 icon = painterResource(Res.drawable.ic_dump),
                 onClick = viewModel::dumpAll
