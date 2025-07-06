@@ -13,7 +13,7 @@ import io.mockk.verify
 import java.io.InputStream
 import java.net.URL
 import java.nio.file.Files
-import jp.toastkid.yobidashi4.infrastructure.service.web.download.DownloadFolder
+import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
