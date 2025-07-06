@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web.menu
 
-import java.net.URL
-import java.nio.file.Files
-import jp.toastkid.yobidashi4.infrastructure.service.web.download.DownloadFolder
+import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
+import java.nio.file.Files
 
 class QuickStoreActionBehavior {
 

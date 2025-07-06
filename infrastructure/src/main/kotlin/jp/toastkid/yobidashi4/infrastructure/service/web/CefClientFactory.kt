@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
-import jp.toastkid.yobidashi4.infrastructure.service.web.download.DownloadFolder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
