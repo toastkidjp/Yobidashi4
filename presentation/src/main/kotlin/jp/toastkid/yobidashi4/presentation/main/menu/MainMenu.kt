@@ -94,7 +94,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 onClick = viewModel::dumpLatest
             )
 
-            Item("Dump all", onClick = viewModel::dumpAll)
+            Item(
+                "Dump all",
+                icon = painterResource(Res.drawable.ic_dump),
+                onClick = viewModel::dumpAll
+            )
 
             Item(
                 "Open article folder",
