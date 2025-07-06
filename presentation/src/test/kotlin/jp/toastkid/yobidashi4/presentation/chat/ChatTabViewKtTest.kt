@@ -69,6 +69,7 @@ class ChatTabViewKtTest {
         every { anyConstructed<ChatTabViewModel>().clearChat() } just Runs
         every { anyConstructed<ChatTabViewModel>().clipText(any()) } just Runs
         every { tab.chat() } returns mockk()
+        every { tab.scrollPosition() } returns 0
     }
 
     @AfterEach
