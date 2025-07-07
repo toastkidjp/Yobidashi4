@@ -5,7 +5,8 @@ import org.jsoup.Jsoup
 class IconUrlFinder {
 
     operator fun invoke(htmlSource: String) =
-        Jsoup.parse(htmlSource).select("link")
+        Jsoup.parse(htmlSource)
+            .select("link")
             .filter { elem -> elem.attr("rel").contains("icon") }
             .map { it.attr("href") }
 
