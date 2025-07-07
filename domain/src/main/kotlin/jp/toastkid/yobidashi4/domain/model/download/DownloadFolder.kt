@@ -65,5 +65,5 @@ private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
 
 private val formatter = DecimalFormat("###").also {
     it.minimumIntegerDigits = 3
-    it.maximumIntegerDigits = 3;
+    it.maximumIntegerDigits = 3
 }
