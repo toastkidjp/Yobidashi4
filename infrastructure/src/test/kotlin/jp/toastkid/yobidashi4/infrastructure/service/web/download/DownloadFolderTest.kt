@@ -8,6 +8,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -75,6 +76,11 @@ class DownloadFolderTest {
 
         assertTrue(subject.assignQuickStorePath("test.png").name.endsWith("_001.png"))
         assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false").name.endsWith("_000.jpg"))
+    }
+
+    @Test
+    fun getPath() {
+        assertSame(subject.getPath(), subject.getPath())
     }
 
 }
