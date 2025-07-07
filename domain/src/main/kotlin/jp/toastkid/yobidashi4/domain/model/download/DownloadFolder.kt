@@ -64,6 +64,6 @@ private val downloadFolder = Path.of("user/download")
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
 
 private val formatter = DecimalFormat("###").also {
-    it.minimumIntegerDigits = 3;
+    it.minimumIntegerDigits = 3
     it.maximumIntegerDigits = 3;
 }
