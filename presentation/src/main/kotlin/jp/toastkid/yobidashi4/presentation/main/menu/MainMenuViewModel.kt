@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
+import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -114,7 +115,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openDownloadFolder() {
-        viewModel.openFile(Path.of("user/download"))
+        viewModel.openFile(DownloadFolder().getPath())
     }
 
     fun useEditorMenu(): Boolean {
