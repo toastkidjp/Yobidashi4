@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
@@ -249,7 +248,7 @@ class MainMenuViewModel : KoinComponent {
             viewModel.showSnackbar("Please set Gemini's API key if you need to use this function?")
             return
         }
-        viewModel.openTab(ChatTab(Chat(mutableStateListOf())))
+        viewModel.openTab(ChatTab(Chat()))
     }
 
     fun openBookmarkTab() {
