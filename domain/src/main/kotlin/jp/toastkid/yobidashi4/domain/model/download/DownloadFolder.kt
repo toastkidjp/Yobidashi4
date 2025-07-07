@@ -55,6 +55,8 @@ class DownloadFolder {
     private fun makeCandidateName(path: Path, suffix: Int) =
         "${path.nameWithoutExtension}_${formatter.format(suffix)}${if (path.extension.isNotEmpty()) "." else ""}${path.extension}"
 
+    fun getPath() = downloadFolder
+
 }
 
 private val downloadFolder = Path.of("user/download")
