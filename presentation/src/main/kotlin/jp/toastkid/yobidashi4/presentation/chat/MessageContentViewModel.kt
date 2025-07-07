@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.AnnotatedString
+import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -46,7 +47,7 @@ class MessageContentViewModel : KoinComponent {
         ImageIO.write(image.toAwtImage(), "png", Path.of("user/download/${System.currentTimeMillis()}.png").toFile())
         mainViewModel
             .showSnackbar("Store image file.", "Open") {
-                mainViewModel.openFile(Path.of("user/download"))
+                mainViewModel.openFile(DownloadFolder().getPath())
             }
     }
 
