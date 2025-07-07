@@ -2,10 +2,11 @@ package jp.toastkid.yobidashi4.domain.service.chat
 
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
+import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 
 interface ChatService {
 
-    fun send(text: String, image: Boolean, onUpdate: () -> Unit): String?
+    fun send(text: String, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String?
 
     fun setChat(chat: Chat)
 
