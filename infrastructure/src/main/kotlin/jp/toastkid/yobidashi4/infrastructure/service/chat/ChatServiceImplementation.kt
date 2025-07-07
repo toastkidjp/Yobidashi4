@@ -4,6 +4,7 @@ import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
+import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.infrastructure.model.chat.CHAT
 import jp.toastkid.yobidashi4.infrastructure.model.chat.IMAGE_GENERATOR
@@ -28,24 +29,13 @@ class ChatServiceImplementation : ChatService, KoinComponent {
         ParametersHolder(mutableListOf(setting.chatApiKey(), IMAGE_GENERATOR))
     })
 
-    override fun send(text: String, image: Boolean, onUpdate: () -> Unit): String? {
+    override fun send(text: String, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String? {
         val chat = chatHolder.get()
         chat.addUserText(text)
-        onUpdate()
 
         (if (image) imageGeneratorRepository else repository)
             .request(chat.makeContent(image)) {
-            if (it == null) {
-                return@request
-            }
-
-            if (it.image()) {
-                chat.addModelImage(it.message())
-            } else {
-                chat.addModelText(it.message().replace("\"", ""))
-            }
-
-            onUpdate()
+            onUpdate(it)
         }
 
         return null
