@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
@@ -41,7 +42,9 @@ class ChatTabViewModel : KoinComponent {
 
     private val ioContextProvider: IoContextProvider by inject()
 
-    fun messages(): List<ChatMessage> = service.messages()
+    private val messages = mutableStateListOf<ChatMessage>()
+
+    fun messages(): List<ChatMessage> = messages
 
     private val useImageGeneration = mutableStateOf(false)
 
@@ -62,10 +65,32 @@ class ChatTabViewModel : KoinComponent {
         }
 
         textInput.value = TextFieldValue()
+        messages.add(ChatMessage("user", text))
 
         labelState.value = "Connecting in progress..."
         withContext(ioContextProvider()) {
             service.send(text, useImageGeneration.value) {
+                if (it == null) {
+                    return@send
+                }
+
+                if (it.image()) {
+                    if (messages.isEmpty()) {
+                        return@send
+                    }
+
+                    val element = messages.last()
+                    messages.set(messages.lastIndex, element.copy(image = it.message()))
+                } else {
+                    val newText = it.message().replace("\"", "")
+                    if (messages.isEmpty() || messages.last().role != "model") {
+                        messages.add(ChatMessage("model", newText))
+                        return@send
+                    }
+
+                    val element = messages.last()
+                    messages.set(messages.lastIndex, element.copy(text = element.text + newText))
+                }
                 coroutineScope.launch {
                     scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
                 }
@@ -119,6 +144,8 @@ class ChatTabViewModel : KoinComponent {
     }
 
     suspend fun launch(chat: Chat, scrollPosition: Int) {
+        messages.clear()
+        messages.addAll(chat.list())
         service.setChat(chat)
         if (scrollState.firstVisibleItemScrollOffset != scrollPosition) {
             scrollState.scrollToItem(scrollPosition)
@@ -127,7 +154,13 @@ class ChatTabViewModel : KoinComponent {
     }
 
     fun update(chatTab: ChatTab) {
-        mainViewModel.updateScrollableTab(chatTab,  scrollState.firstVisibleItemScrollOffset)
+        mainViewModel.replaceTab(
+            chatTab,
+            ChatTab(
+                Chat(messages.toMutableList()),
+                scrollState.firstVisibleItemScrollOffset
+            )
+        )
     }
 
     private val labelState = mutableStateOf(DEFAULT_LABEL)
@@ -171,6 +204,7 @@ class ChatTabViewModel : KoinComponent {
 
     fun clearChat() {
         service.clearMessages()
+        messages.clear()
     }
 
 }
