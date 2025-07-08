@@ -66,6 +66,9 @@ class ChatTabViewModel : KoinComponent {
 
         textInput.value = TextFieldValue()
         messages.add(ChatMessage("user", text))
+        coroutineScope.launch {
+            scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
+        }
 
         labelState.value = "Connecting in progress..."
         withContext(ioContextProvider()) {
