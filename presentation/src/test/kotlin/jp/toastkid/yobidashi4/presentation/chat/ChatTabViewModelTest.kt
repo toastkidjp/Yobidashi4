@@ -155,12 +155,12 @@ class ChatTabViewModelTest {
     @Test
     fun update() {
         val chatTab = mockk<ChatTab>()
-        every { mainViewModel.updateScrollableTab(any(),  any()) } just Runs
+        every { mainViewModel.replaceTab(any(),  any()) } just Runs
         every { service.getChat() } returns mockk()
 
         subject.update(chatTab)
 
-        verify { mainViewModel.updateScrollableTab(any(),  any()) }
+        verify { mainViewModel.replaceTab(any(),  any()) }
     }
 
     @Test
