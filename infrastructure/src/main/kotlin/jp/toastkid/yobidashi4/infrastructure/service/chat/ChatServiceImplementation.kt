@@ -31,7 +31,6 @@ class ChatServiceImplementation : ChatService, KoinComponent {
 
     override fun send(text: String, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String? {
         val chat = chatHolder.get()
-        chat.addUserText(text)
 
         (if (image) imageGeneratorRepository else repository)
             .request(chat.makeContent(image)) {
