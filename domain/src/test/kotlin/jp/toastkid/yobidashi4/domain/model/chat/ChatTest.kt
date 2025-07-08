@@ -16,8 +16,12 @@ class ChatTest {
 
     @Test
     fun list() {
-        chat.addUserText("test")
-        chat.addModelText("test")
+        chat = Chat(
+            mutableListOf(
+                ChatMessage("user", "Test \"is\" good. It's good."),
+                ChatMessage("model", "Answer")
+            )
+        )
 
         val list = chat.list()
         assertEquals(2, list.size)
@@ -26,32 +30,7 @@ class ChatTest {
     }
 
     @Test
-    fun addModelTextsWithEmptyList() {
-        chat.addModelText("Greed")
-        chat.addModelText(" is good.")
-
-        assertEquals("Greed is good.", chat.list().last().text)
-    }
-
-    @Test
-    fun addModelImage() {
-        chat.addModelText("With image")
-        chat.addModelImage("image")
-
-        assertEquals(1, chat.list().size)
-    }
-
-    @Test
-    fun addModelImageIfTextsIsEmptyCase() {
-        chat.addModelImage("image")
-
-        assertTrue(chat.list().isEmpty())
-    }
-
-    @Test
     fun clearMessages() {
-        chat.addModelImage("image")
-
         chat.clearMessages()
 
         assertTrue(chat.list().isEmpty())
@@ -59,8 +38,12 @@ class ChatTest {
 
     @Test
     fun makeContent() {
-        chat.addUserText("Test \"is\" good. It's good.")
-        chat.addModelText("Answer")
+        chat = Chat(
+            mutableListOf(
+                ChatMessage("user", "Test \"is\" good. It's good."),
+                ChatMessage("model", "Answer")
+            )
+        )
 
         assertEquals(
             """{
@@ -89,9 +72,12 @@ class ChatTest {
 
     @Test
     fun makeContentWithImage() {
-        chat.addUserText("Test \"is\" good. It's good.")
-        chat.addModelText("Answer")
-        chat.addModelImage("Image")
+        chat = Chat(
+            mutableListOf(
+                ChatMessage("user", "Test \"is\" good. It's good."),
+                ChatMessage("model", "Answer", image = "Image")
+            )
+        )
 
         assertEquals(
             """{
@@ -119,9 +105,12 @@ class ChatTest {
 
     @Test
     fun makeContentWithImageAndFlag() {
-        chat.addUserText("Test \"is\" good. It's good.")
-        chat.addModelText("Answer")
-        chat.addModelImage("Image")
+        chat = Chat(
+            mutableListOf(
+                ChatMessage("user", "Test \"is\" good. It's good."),
+                ChatMessage("model", "Answer", image = "Image")
+            )
+        )
 
         assertEquals(
             """{
