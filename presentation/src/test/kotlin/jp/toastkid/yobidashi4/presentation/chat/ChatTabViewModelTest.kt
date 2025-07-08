@@ -22,6 +22,8 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.chat.Chat
+import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
@@ -144,7 +146,7 @@ class ChatTabViewModelTest {
         every { focusRequester.requestFocus() } just Runs
 
         CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.launch(mockk(), 1)
+            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1)
 
             verify { subject.focusRequester() }
             verify { service.setChat(any()) }
