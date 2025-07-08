@@ -52,8 +52,4 @@ class ChatServiceImplementation : ChatService, KoinComponent {
         return chatHolder.get().list()
     }
 
-    override fun clearMessages() {
-        chatHolder.get().clearMessages()
-    }
-
 }
