@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -73,33 +74,37 @@ class ChatTabViewModel : KoinComponent {
         labelState.value = "Connecting in progress..."
         withContext(ioContextProvider()) {
             service.send(text, useImageGeneration.value) {
-                if (it == null) {
-                    return@send
-                }
-
-                if (it.image()) {
-                    if (messages.isEmpty()) {
-                        return@send
-                    }
-
-                    val element = messages.last()
-                    messages.set(messages.lastIndex, element.copy(image = it.message()))
-                } else {
-                    val newText = it.message().replace("\"", "")
-                    if (messages.isEmpty() || messages.last().role != "model") {
-                        messages.add(ChatMessage("model", newText))
-                        return@send
-                    }
-
-                    val element = messages.last()
-                    messages.set(messages.lastIndex, element.copy(text = element.text + newText))
-                }
+                onReceive(it)
                 coroutineScope.launch {
                     scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
                 }
             }
         }
         labelState.value = DEFAULT_LABEL
+    }
+
+    private fun onReceive(it: ChatResponseItem?) {
+        if (it == null) {
+            return
+        }
+
+        if (it.image()) {
+            if (messages.isEmpty()) {
+                return
+            }
+
+            val element = messages.last()
+            messages.set(messages.lastIndex, element.copy(image = it.message()))
+        } else {
+            val newText = it.message().replace("\"", "")
+            if (messages.isEmpty() || messages.last().role != "model") {
+                messages.add(ChatMessage("model", newText))
+                return
+            }
+
+            val element = messages.last()
+            messages.set(messages.lastIndex, element.copy(text = element.text + newText))
+        }
     }
 
     fun onChatListKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
