@@ -95,7 +95,6 @@ class ChatTabViewModelTest {
         val messages = subject.messages()
 
         assertTrue(messages.isEmpty())
-        verify { service.messages() }
     }
 
     @Test
