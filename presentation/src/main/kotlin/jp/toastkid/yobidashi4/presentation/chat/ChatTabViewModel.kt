@@ -206,7 +206,6 @@ class ChatTabViewModel : KoinComponent {
     }
 
     fun clearChat() {
-        service.clearMessages()
         messages.clear()
     }
 
