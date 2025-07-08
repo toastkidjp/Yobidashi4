@@ -23,6 +23,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -109,7 +110,7 @@ class ChatTabViewModelTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun send() {
-        val capturingSlot = slot<() -> Unit>()
+        val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { service.send(any(), any(), capture(capturingSlot)) } returns ""
 
         runDesktopComposeUiTest {
@@ -118,7 +119,7 @@ class ChatTabViewModelTest {
                     subject.onValueChanged(TextFieldValue("test"))
 
                     subject.send(CoroutineScope(Dispatchers.Unconfined))
-                    capturingSlot.captured.invoke()
+                    capturingSlot.captured.invoke(ChatResponseItem("Answer"))
 
                     verify { service.send(any(), any(), any()) }
                 }
