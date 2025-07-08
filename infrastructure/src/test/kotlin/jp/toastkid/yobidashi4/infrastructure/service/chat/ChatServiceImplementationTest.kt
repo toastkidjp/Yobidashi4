@@ -54,9 +54,6 @@ class ChatServiceImplementationTest {
         }
         every { setting.chatApiKey() } returns "test-key"
         every { callback.invoke(any()) } just Runs
-        every { chat.addUserText(any()) } just Runs
-        every { chat.addModelText(any()) } just Runs
-        every { chat.addModelImage(any()) } just Runs
 
         subject = ChatServiceImplementation()
     }
@@ -80,10 +77,7 @@ class ChatServiceImplementationTest {
         capturingSlot.captured.invoke(ChatResponseItem("image", image = true))
         capturingSlot.captured.invoke(null)
 
-        verify { chat.addUserText(any()) }
-        verify { chat.addModelText("Escaped") }
         verify { chat.makeContent(false) }
-        verify { chat.addModelImage(any()) }
         verify { repository.request(any(), any()) }
         verify { callback.invoke(any()) }
     }
@@ -96,8 +90,6 @@ class ChatServiceImplementationTest {
 
         subject.send("test", true, callback)
 
-        verify { chat.addUserText(any()) }
-        verify(inverse = true) { chat.addModelText(any()) }
         verify { chat.makeContent(true) }
         verify { repository.request(any(), any()) }
     }
