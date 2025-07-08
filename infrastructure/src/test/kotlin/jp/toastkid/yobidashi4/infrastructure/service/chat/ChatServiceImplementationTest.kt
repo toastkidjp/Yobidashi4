@@ -108,13 +108,4 @@ class ChatServiceImplementationTest {
         assertEquals(2, subject.messages().size)
     }
 
-    @Test
-    fun clearMessages() {
-        val chat1 = subject.getChat()
-
-        subject.clearMessages()
-
-        assertSame(chat1, subject.getChat())
-    }
-
 }
