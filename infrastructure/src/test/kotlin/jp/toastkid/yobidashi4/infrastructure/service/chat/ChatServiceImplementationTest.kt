@@ -35,7 +35,7 @@ class ChatServiceImplementationTest {
     private lateinit var repository: ChatRepository
 
     @MockK
-    private lateinit var callback: () -> Unit
+    private lateinit var callback: (ChatResponseItem?) -> Unit
 
     @MockK
     private lateinit var chat: Chat
@@ -53,7 +53,7 @@ class ChatServiceImplementationTest {
             )
         }
         every { setting.chatApiKey() } returns "test-key"
-        every { callback.invoke() } just Runs
+        every { callback.invoke(any()) } just Runs
         every { chat.addUserText(any()) } just Runs
         every { chat.addModelText(any()) } just Runs
         every { chat.addModelImage(any()) } just Runs
@@ -85,7 +85,7 @@ class ChatServiceImplementationTest {
         verify { chat.makeContent(false) }
         verify { chat.addModelImage(any()) }
         verify { repository.request(any(), any()) }
-        verify { callback.invoke() }
+        verify { callback.invoke(any()) }
     }
 
     @Test
