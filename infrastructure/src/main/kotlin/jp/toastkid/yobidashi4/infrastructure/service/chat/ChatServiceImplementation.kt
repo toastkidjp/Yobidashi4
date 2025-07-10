@@ -29,8 +29,8 @@ class ChatServiceImplementation : ChatService, KoinComponent {
         ParametersHolder(mutableListOf(setting.chatApiKey(), IMAGE_GENERATOR))
     })
 
-    override fun send(text: String, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String? {
-        val chat = chatHolder.get()
+    override fun send(messages: MutableList<ChatMessage>, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String? {
+        val chat = Chat(messages)
 
         (if (image) imageGeneratorRepository else repository)
             .request(chat.makeContent(image)) {
