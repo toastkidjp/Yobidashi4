@@ -93,6 +93,11 @@ class ChatTabViewModel : KoinComponent {
                 return
             }
 
+            if (messages.isEmpty() || messages.last().role != "model") {
+                messages.add(ChatMessage("model", text = "", image = it.message()))
+                return
+            }
+
             val element = messages.last()
             messages.set(messages.lastIndex, element.copy(image = it.message()))
             return
