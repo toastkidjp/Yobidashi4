@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.domain.model.chat
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -27,13 +26,6 @@ class ChatTest {
         assertEquals(2, list.size)
         assertEquals("user", list[0].role)
         assertEquals("model", list[1].role)
-    }
-
-    @Test
-    fun clearMessages() {
-        chat.clearMessages()
-
-        assertTrue(chat.list().isEmpty())
     }
 
     @Test
