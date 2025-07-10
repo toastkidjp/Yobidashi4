@@ -96,18 +96,18 @@ class ChatTabViewModel : KoinComponent {
         addText(it)
     }
 
-    private fun addImage(it: ChatResponseItem) {
+    private fun addImage(item: ChatResponseItem) {
         if (messages.isEmpty()) {
             return
         }
 
         if (messages.isEmpty() || messages.last().role != "model") {
-            messages.add(ChatMessage("model", text = "", image = it.message()))
+            messages.add(ChatMessage("model", text = "", image = item.message()))
             return
         }
 
         val element = messages.last()
-        messages.set(messages.lastIndex, element.copy(image = it.message()))
+        messages.set(messages.lastIndex, element.copy(image = item.message()))
     }
 
     private fun addText(item: ChatResponseItem) {
