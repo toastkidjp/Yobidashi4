@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.notification
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.web.history.DELIMITER
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import org.koin.core.annotation.Single
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 
 /**
  * <pre>
@@ -62,7 +62,7 @@ class NotificationEventFileStore : NotificationEventRepository {
     override fun deleteAt(index: Int) {
         Files.write(
             path,
-            readAll().filterIndexed { i, _ -> i != index }.map { it.toTsv() }
+            readAll().filterIndexed { i, _ -> i != index }.map(NotificationEvent::toTsv)
         )
     }
 
