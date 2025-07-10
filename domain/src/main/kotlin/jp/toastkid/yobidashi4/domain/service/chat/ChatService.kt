@@ -6,7 +6,7 @@ import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 
 interface ChatService {
 
-    fun send(text: String, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String?
+    fun send(messages: MutableList<ChatMessage>, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String?
 
     fun setChat(chat: Chat)
 
