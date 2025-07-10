@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.input
 
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import org.koin.core.annotation.Single
+import java.nio.file.Files
+import java.nio.file.Path
 
 @Single
 class InputHistoryFileStore(private val context: String) : InputHistoryRepository {
@@ -44,7 +44,7 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
             Files.createDirectories(path().parent)
         }
 
-        Files.write(path(), list.sortedByDescending { it.timestamp }.distinctBy { it.word }.map(InputHistory::toTsv))
+        Files.write(path(), list.sortedByDescending(InputHistory::timestamp).distinctBy { it.word }.map(InputHistory::toTsv))
     }
 
     private fun path(): Path {
