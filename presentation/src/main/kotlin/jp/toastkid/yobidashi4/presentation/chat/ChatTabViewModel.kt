@@ -73,7 +73,7 @@ class ChatTabViewModel : KoinComponent {
 
         labelState.value = "Connecting in progress..."
         withContext(ioContextProvider()) {
-            service.send(text, useImageGeneration.value) {
+            service.send(messages, useImageGeneration.value) {
                 onReceive(it)
                 coroutineScope.launch {
                     scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
