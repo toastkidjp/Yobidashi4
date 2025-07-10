@@ -8,7 +8,7 @@ class IconUrlFinder {
     operator fun invoke(htmlSource: String) =
         Jsoup.parse(htmlSource)
             .select("link")
-            .filter { elem -> extractIcon(elem) }
+            .filter(::extractIcon)
             .map { it.attr("href") }
 
     private fun extractIcon(elem: Element) = elem.attr("rel").contains("icon")
