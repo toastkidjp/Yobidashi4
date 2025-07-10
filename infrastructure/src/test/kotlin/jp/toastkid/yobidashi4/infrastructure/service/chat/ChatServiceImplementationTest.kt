@@ -67,10 +67,8 @@ class ChatServiceImplementationTest {
 
     @Test
     fun send() {
-        every { chat.makeContent(any()) } returns ""
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { repository.request(any(), capture(capturingSlot)) } just Runs
-        subject.setChat(chat)
 
         subject.send(mutableListOf(ChatMessage("user", "test")), false, callback)
         capturingSlot.captured.invoke(ChatResponseItem("test"))
@@ -78,20 +76,16 @@ class ChatServiceImplementationTest {
         capturingSlot.captured.invoke(ChatResponseItem("image", image = true))
         capturingSlot.captured.invoke(null)
 
-        verify { chat.makeContent(false) }
         verify { repository.request(any(), any()) }
         verify { callback.invoke(any()) }
     }
 
     @Test
     fun sendWhenReceiveNullResponse() {
-        every { chat.makeContent(any()) } returns ""
         every { repository.request(any(), any()) } just Runs
-        subject.setChat(chat)
 
         subject.send(mutableListOf(ChatMessage("user", "test")), true, callback)
 
-        verify { chat.makeContent(true) }
         verify { repository.request(any(), any()) }
     }
 
