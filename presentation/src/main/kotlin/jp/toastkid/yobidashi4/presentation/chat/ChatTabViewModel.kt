@@ -89,21 +89,25 @@ class ChatTabViewModel : KoinComponent {
         }
 
         if (it.image()) {
-            if (messages.isEmpty()) {
-                return
-            }
-
-            if (messages.isEmpty() || messages.last().role != "model") {
-                messages.add(ChatMessage("model", text = "", image = it.message()))
-                return
-            }
-
-            val element = messages.last()
-            messages.set(messages.lastIndex, element.copy(image = it.message()))
+            addImage(it)
             return
         }
 
         addText(it)
+    }
+
+    private fun addImage(it: ChatResponseItem) {
+        if (messages.isEmpty()) {
+            return
+        }
+
+        if (messages.isEmpty() || messages.last().role != "model") {
+            messages.add(ChatMessage("model", text = "", image = it.message()))
+            return
+        }
+
+        val element = messages.last()
+        messages.set(messages.lastIndex, element.copy(image = it.message()))
     }
 
     private fun addText(it: ChatResponseItem) {
