@@ -10,6 +10,7 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
+import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
@@ -71,7 +72,7 @@ class ChatServiceImplementationTest {
         every { repository.request(any(), capture(capturingSlot)) } just Runs
         subject.setChat(chat)
 
-        subject.send("test", false, callback)
+        subject.send(mutableListOf(ChatMessage("user", "test")), false, callback)
         capturingSlot.captured.invoke(ChatResponseItem("test"))
         capturingSlot.captured.invoke(ChatResponseItem("\"Escaped\""))
         capturingSlot.captured.invoke(ChatResponseItem("image", image = true))
@@ -88,7 +89,7 @@ class ChatServiceImplementationTest {
         every { repository.request(any(), any()) } just Runs
         subject.setChat(chat)
 
-        subject.send("test", true, callback)
+        subject.send(mutableListOf(ChatMessage("user", "test")), true, callback)
 
         verify { chat.makeContent(true) }
         verify { repository.request(any(), any()) }
