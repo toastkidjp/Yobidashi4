@@ -110,8 +110,8 @@ class ChatTabViewModel : KoinComponent {
         messages.set(messages.lastIndex, element.copy(image = it.message()))
     }
 
-    private fun addText(it: ChatResponseItem) {
-        val newText = it.message().replace("\"", "")
+    private fun addText(item: ChatResponseItem) {
+        val newText = item.message().replace("\"", "")
         if (messages.isEmpty() || messages.last().role != "model") {
             messages.add(ChatMessage("model", newText))
             return
