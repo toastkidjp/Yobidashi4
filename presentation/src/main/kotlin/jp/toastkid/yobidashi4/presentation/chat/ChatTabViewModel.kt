@@ -95,16 +95,17 @@ class ChatTabViewModel : KoinComponent {
 
             val element = messages.last()
             messages.set(messages.lastIndex, element.copy(image = it.message()))
-        } else {
-            val newText = it.message().replace("\"", "")
-            if (messages.isEmpty() || messages.last().role != "model") {
-                messages.add(ChatMessage("model", newText))
-                return
-            }
-
-            val element = messages.last()
-            messages.set(messages.lastIndex, element.copy(text = element.text + newText))
+            return
         }
+
+        val newText = it.message().replace("\"", "")
+        if (messages.isEmpty() || messages.last().role != "model") {
+            messages.add(ChatMessage("model", newText))
+            return
+        }
+
+        val element = messages.last()
+        messages.set(messages.lastIndex, element.copy(text = element.text + newText))
     }
 
     fun onChatListKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
