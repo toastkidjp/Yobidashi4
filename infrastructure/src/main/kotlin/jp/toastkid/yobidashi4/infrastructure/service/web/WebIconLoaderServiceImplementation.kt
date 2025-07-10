@@ -32,6 +32,7 @@ class WebIconLoaderServiceImplementation(
             iconUrls.removeIf { it.endsWith(".ico") }
         }
 
+        val targetHost = targetUrl?.host
         iconUrls.mapNotNull {
             toUrl(
                 if (it.startsWith("/") && baseUrl.isNotBlank()) {
@@ -41,7 +42,7 @@ class WebIconLoaderServiceImplementation(
                 }
             )
         }
-            .forEach { webIconDownloader(it, webIcon.faviconFolder(), targetUrl?.host) }
+            .forEach { webIconDownloader(it, webIcon.faviconFolder(), targetHost) }
     }
 
     private fun toUrl(it: String): URL? {
