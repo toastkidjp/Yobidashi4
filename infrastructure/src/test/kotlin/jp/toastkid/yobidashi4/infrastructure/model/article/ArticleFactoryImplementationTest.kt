@@ -43,7 +43,7 @@ class ArticleFactoryImplementationTest {
         MockKAnnotations.init(this)
         mockkStatic(Path::class)
         every { Path.of(any(), any()) } returns path
-        every { path.fileName }.returns(fileName)
+        every { path.fileName } returns fileName
         every { fileName.toString() } returns "test.md"
         every { setting.articleFolder() } returns "test"
     }
