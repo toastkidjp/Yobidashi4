@@ -4,7 +4,7 @@ data class WebHistory(
     val title: String,
     val url: String,
     val lastVisitedTime: Long = -1,
-    val visitingCount: Int = 1
+    val visitingCount: Int = 0
 ) {
     fun toTsv() = "$title$DELIMITER$url$DELIMITER$lastVisitedTime$DELIMITER$visitingCount"
 
