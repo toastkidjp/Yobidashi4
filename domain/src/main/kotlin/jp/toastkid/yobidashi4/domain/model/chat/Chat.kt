@@ -4,10 +4,6 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
     fun list(): List<ChatMessage> = texts
 
-    fun clearMessages() {
-        texts.clear()
-    }
-
     fun makeContent(useImage: Boolean = false) = """
       {
         "contents": [
