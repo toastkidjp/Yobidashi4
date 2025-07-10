@@ -103,6 +103,10 @@ class ChatTabViewModel : KoinComponent {
             return
         }
 
+        addText(it)
+    }
+
+    private fun addText(it: ChatResponseItem) {
         val newText = it.message().replace("\"", "")
         if (messages.isEmpty() || messages.last().role != "model") {
             messages.add(ChatMessage("model", newText))
