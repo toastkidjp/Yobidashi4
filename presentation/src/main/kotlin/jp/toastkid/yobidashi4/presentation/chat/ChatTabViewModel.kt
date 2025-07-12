@@ -83,17 +83,17 @@ class ChatTabViewModel : KoinComponent {
         labelState.value = DEFAULT_LABEL
     }
 
-    private fun onReceive(it: ChatResponseItem?) {
-        if (it == null) {
+    private fun onReceive(item: ChatResponseItem?) {
+        if (item == null) {
             return
         }
 
-        if (it.image()) {
-            addImage(it)
+        if (item.image()) {
+            addImage(item)
             return
         }
 
-        addText(it)
+        addText(item)
     }
 
     private fun addImage(item: ChatResponseItem) {
