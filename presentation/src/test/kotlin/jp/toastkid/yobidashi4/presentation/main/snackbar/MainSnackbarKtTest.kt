@@ -107,7 +107,7 @@ class MainSnackbarKtTest {
                 }
             }
 
-            onNode(hasText("test-snackbar",)).performTouchInput {
+            onNode(hasText("test-snackbar")).performTouchInput {
                 swipeRight(0f, 400f)
             }
         }
