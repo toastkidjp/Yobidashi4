@@ -15,6 +15,7 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
+import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
@@ -210,6 +211,7 @@ class MainMenuViewModelTest {
         mockkConstructor(ZipArchiver::class, ArticleFilesFinder::class)
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
         every { anyConstructed<ArticleFilesFinder>().invoke(any()) } returns mutableListOf()
+        every { anyConstructed<LatestFileFinder>().invoke(any(), any()) } returns mutableListOf()
         every { mainViewModel.openFile(any()) } just Runs
 
         subject.dumpAll()
