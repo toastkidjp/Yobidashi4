@@ -66,7 +66,13 @@ class ChatTabViewModel : KoinComponent {
         }
 
         textInput.value = TextFieldValue()
-        messages.add(ChatMessage("user", text))
+        messages.add(
+            ChatMessage(
+                "user",
+                if (useImageGeneration.value) text + "\n画像は著作権及び肖像権に問題のない形で出力してください。画像に文字を入れてはいけません。文字が入っていることを確認したら罰金\$100を科します"
+                else text
+            )
+        )
         coroutineScope.launch {
             scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
         }
