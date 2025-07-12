@@ -11,7 +11,7 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libraries") {
-            library("koin", "io.insert-koin", "koin-core").version("4.0.2")
+            library("koin", "io.insert-koin", "koin-core").version("4.0.3")
             library("koinAnnotations", "io.insert-koin", "koin-annotations").version("2.0.0")
             library("koinKspCompiler", "io.insert-koin", "koin-ksp-compiler").version("2.0.0")
             library("kotlinSerialization", "org.jetbrains.kotlinx", "kotlinx-serialization-json").version("1.8.0")
