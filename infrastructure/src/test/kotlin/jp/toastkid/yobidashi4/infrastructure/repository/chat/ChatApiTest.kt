@@ -66,7 +66,7 @@ class ChatApiTest {
     fun requestFailureCase() {
         every { connection.responseCode } returns 500
 
-        subject.request("{test}", {})
+        subject.request("{test}") {}
     }
 
     @Test
