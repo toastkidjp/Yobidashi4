@@ -48,7 +48,7 @@ class WebViewPoolImplementationTest {
         every { anyConstructed<CefClientFactory>().invoke() }.returns(cefClient)
 
         mockkStatic(CefApp::class)
-        every { CefApp.getInstance().dispose() }.just(Runs)
+        every { CefApp.getInstance().dispose() } just Runs
         every { CefApp.getState() }.returns(CefApp.CefAppState.INITIALIZED)
 
         subject = WebViewPoolImplementation()
