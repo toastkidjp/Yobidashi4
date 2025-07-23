@@ -45,7 +45,7 @@ class WebViewPoolImplementationTest {
         every { cefBrowser.openDevTools() } just Runs
 
         mockkConstructor(CefClientFactory::class)
-        every { anyConstructed<CefClientFactory>().invoke() }.returns(cefClient)
+        every { anyConstructed<CefClientFactory>().invoke() } returns cefClient
 
         mockkStatic(CefApp::class)
         every { CefApp.getInstance().dispose() } just Runs
