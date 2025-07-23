@@ -153,6 +153,7 @@ class ChatTabViewModelTest {
 
             verify { subject.focusRequester() }
             verify { service.setChat(any()) }
+            verify { focusRequester.requestFocus() }
         }
     }
 
