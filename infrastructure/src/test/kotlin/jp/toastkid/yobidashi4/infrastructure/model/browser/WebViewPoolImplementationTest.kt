@@ -35,7 +35,7 @@ class WebViewPoolImplementationTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { cefClient.createBrowser(any(), any(), any()) }.returns(cefBrowser)
+        every { cefClient.createBrowser(any(), any(), any()) } returns cefBrowser
         every { cefClient.doClose(any()) } returns true
         every { cefClient.dispose() } just Runs
         every { cefBrowser.uiComponent } returns mockk()
