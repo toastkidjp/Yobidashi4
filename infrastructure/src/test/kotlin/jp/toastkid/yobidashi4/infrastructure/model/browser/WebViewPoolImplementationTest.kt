@@ -39,7 +39,7 @@ class WebViewPoolImplementationTest {
         every { cefClient.doClose(any()) } returns true
         every { cefClient.dispose() } just Runs
         every { cefBrowser.uiComponent }.returns(mockk())
-        every { cefBrowser.close(any()) }.just(Runs)
+        every { cefBrowser.close(any()) } just Runs
         every { cefBrowser.reload() }.just(Runs)
         every { cefBrowser.stopLoad() } just Runs
         every { cefBrowser.openDevTools() } just Runs
