@@ -8,8 +8,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.IOException
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -18,6 +16,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.io.IOException
+import java.nio.file.Path
 
 class MediaPlayerInvokerTest {
 
@@ -38,7 +38,7 @@ class MediaPlayerInvokerTest {
         MockKAnnotations.init(this)
 
         mockkStatic(Runtime::class)
-        every { Runtime.getRuntime() }.returns(runtime)
+        every { Runtime.getRuntime() } returns runtime
         every { runtime.exec(any<Array<String>>()) }.returns(mockk())
         every { setting.mediaPlayerPath() }.returns("path/to/media_player.ext")
         every { path.toAbsolutePath() }.returns(path)
