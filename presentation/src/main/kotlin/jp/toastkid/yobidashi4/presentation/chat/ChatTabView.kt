@@ -154,9 +154,10 @@ private fun MessageList(
                 Icon(
                     painterResource(Res.drawable.ic_clipboard),
                     contentDescription = "Clip this message.",
-                    modifier = Modifier.clickable {
-                        clipText(it.text)
-                    }.align(Alignment.BottomEnd)
+                    modifier = Modifier
+                        .clickable {
+                            clipText(it.text)
+                        }.align(Alignment.BottomEnd)
                         .padding(end = 8.dp)
                 )
             }
