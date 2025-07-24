@@ -157,7 +157,8 @@ private fun MessageList(
                     modifier = Modifier
                         .clickable {
                             clipText(it.text)
-                        }.align(Alignment.BottomEnd)
+                        }
+                        .align(Alignment.BottomEnd)
                         .padding(end = 8.dp)
                 )
             }
