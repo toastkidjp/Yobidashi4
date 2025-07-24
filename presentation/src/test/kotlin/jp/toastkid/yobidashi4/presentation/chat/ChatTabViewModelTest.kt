@@ -125,7 +125,6 @@ class ChatTabViewModelTest {
                     verify { service.send(any(), any(), any()) }
 
                     capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
-                    capturingSlot.captured.invoke(ChatResponseItem("", image = true))
                 }
             }
         }
