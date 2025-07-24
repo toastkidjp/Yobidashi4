@@ -102,7 +102,8 @@ fun ChatTabView(chatTab: ChatTab) {
                 viewModel::onValueChanged,
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
-                    .fillMaxWidth().weight(0.2f)
+                    .fillMaxWidth()
+                    .weight(0.2f)
                     .onKeyEvent { viewModel.onKeyEvent(coroutineScope, it) }
                     .semantics { contentDescription = "Input message box." }
             )
