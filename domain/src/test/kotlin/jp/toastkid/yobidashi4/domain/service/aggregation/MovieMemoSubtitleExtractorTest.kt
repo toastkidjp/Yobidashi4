@@ -8,15 +8,15 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Stream
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.stream.Stream
 
 internal class MovieMemoSubtitleExtractorTest {
 
@@ -30,7 +30,7 @@ internal class MovieMemoSubtitleExtractorTest {
     fun setUp() {
         val path = mockk<Path>()
         val fileName = mockk<Path>()
-        every { path.getFileName() }.returns(fileName)
+        every { path.getFileName() } returns fileName
         every { fileName.toString() }.returns("file.md")
 
         mockkStatic(Files::class)
