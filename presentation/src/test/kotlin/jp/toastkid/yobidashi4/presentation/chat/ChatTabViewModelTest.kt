@@ -131,6 +131,26 @@ class ChatTabViewModelTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun sendAndReceiveImage() {
+        val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
+        every { service.send(any(), any(), capture(capturingSlot)) } returns ""
+
+        runDesktopComposeUiTest {
+            setContent {
+                rememberCoroutineScope().launch {
+                    subject.onValueChanged(TextFieldValue("test"))
+
+                    subject.send(CoroutineScope(Dispatchers.Unconfined))
+
+                    verify { service.send(any(), any(), any()) }
+                    capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
+                }
+            }
+        }
+    }
+
     @Test
     fun textInput() {
         assertTrue(subject.textInput().text.isEmpty())
