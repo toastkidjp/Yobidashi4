@@ -63,7 +63,7 @@ class TodayArticleGeneratorTest {
             )
         }
 
-        every { setting.articleFolderPath() }.returns(articleFolder)
+        every { setting.articleFolderPath() } returns articleFolder
         every { articleFolder.resolve(any<String>()) }.returns(path)
         every { articleFactory.withTitle(any()) }.returns(article)
         every { article.getTitle() } returns "title"
