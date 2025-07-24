@@ -78,7 +78,8 @@ fun ChatTabView(chatTab: ChatTab) {
                     Checkbox(
                         viewModel.useImageGeneration(),
                         onCheckedChange = viewModel::setImageGeneration,
-                        modifier = Modifier.semantics { contentDescription = "Use image generation ${viewModel.useImageGeneration()}" }
+                        modifier = Modifier
+                            .semantics { contentDescription = "Use image generation ${viewModel.useImageGeneration()}" }
                     )
                     Text(
                         "Use image generation",
