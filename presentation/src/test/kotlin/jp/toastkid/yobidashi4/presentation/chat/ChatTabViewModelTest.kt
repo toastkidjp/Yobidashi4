@@ -121,6 +121,7 @@ class ChatTabViewModelTest {
 
                     subject.send(CoroutineScope(Dispatchers.Unconfined))
                     capturingSlot.captured.invoke(ChatResponseItem("Answer"))
+                    capturingSlot.captured.invoke(ChatResponseItem("on going"))
 
                     verify { service.send(any(), any(), any()) }
 
