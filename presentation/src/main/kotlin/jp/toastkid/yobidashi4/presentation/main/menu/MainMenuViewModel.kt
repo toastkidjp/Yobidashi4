@@ -100,7 +100,7 @@ class MainMenuViewModel : KoinComponent {
         CoroutineScope(ioContextProvider()).launch {
             ZipArchiver().invoke(
                 LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
-                "latestArticles.zip"
+                "latestArticles${LocalDateTime.now().format(DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss"))}.zip"
             )
         }
     }
