@@ -269,9 +269,9 @@ class MainMenuViewModel : KoinComponent {
         switchAggregationBox(0)
     }
 
-    private fun switchAggregationBox(initialChoosed: Int) {
+    private fun switchAggregationBox(initialChosen: Int) {
         if (viewModel.showAggregationBox().not()) {
-            viewModel.setInitialAggregationType(initialChoosed)
+            viewModel.setInitialAggregationType(initialChosen)
         }
         viewModel.switchAggregationBox(viewModel.showAggregationBox().not())
     }
