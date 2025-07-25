@@ -370,7 +370,8 @@ class MainMenuViewModel : KoinComponent {
         }
     }
 
-    private fun makeCurrentTimeSuffix(): String = LocalDateTime.now().format(currentTimeSuffixDateTimeFormatter)
+    private fun makeCurrentTimeSuffix(): String =
+        LocalDateTime.now().format(currentTimeSuffixDateTimeFormatter)
 
     fun toggleFullscreenLabel(): String {
         return viewModel.toggleFullscreenLabel()
