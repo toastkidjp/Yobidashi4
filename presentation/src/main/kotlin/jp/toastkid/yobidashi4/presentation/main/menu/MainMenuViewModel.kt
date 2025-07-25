@@ -65,6 +65,8 @@ class MainMenuViewModel : KoinComponent {
 
     private val ioContextProvider: IoContextProvider by inject()
 
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss")
+
     fun makeNewArticle() {
         viewModel.makeNewArticle()
     }
@@ -100,7 +102,7 @@ class MainMenuViewModel : KoinComponent {
         CoroutineScope(ioContextProvider()).launch {
             ZipArchiver().invoke(
                 LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
-                "latestArticles${LocalDateTime.now().format(DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss"))}.zip"
+                "latestArticles${LocalDateTime.now().format(dateTimeFormatter)}.zip"
             )
         }
     }
@@ -360,7 +362,7 @@ class MainMenuViewModel : KoinComponent {
         viewModel.showSnackbar("Done export.", "Open") {
             val path = Path.of(
                 "notification${
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss"))
+                    LocalDateTime.now().format(dateTimeFormatter)
                 }.tsv"
             )
             Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
