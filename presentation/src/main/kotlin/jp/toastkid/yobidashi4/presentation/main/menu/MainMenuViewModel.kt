@@ -102,7 +102,7 @@ class MainMenuViewModel : KoinComponent {
         CoroutineScope(ioContextProvider()).launch {
             ZipArchiver().invoke(
                 LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
-                "latestArticles${LocalDateTime.now().format(dateTimeFormatter)}.zip"
+                "latestArticles${makeCurrentTimeSuffix()}.zip"
             )
         }
     }
@@ -362,13 +362,15 @@ class MainMenuViewModel : KoinComponent {
         viewModel.showSnackbar("Done export.", "Open") {
             val path = Path.of(
                 "notification${
-                    LocalDateTime.now().format(dateTimeFormatter)
+                    makeCurrentTimeSuffix()
                 }.tsv"
             )
             Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
             viewModel.openFile(Path.of("."))
         }
     }
+
+    private fun makeCurrentTimeSuffix(): String? = LocalDateTime.now().format(dateTimeFormatter)
 
     fun toggleFullscreenLabel(): String {
         return viewModel.toggleFullscreenLabel()
