@@ -65,7 +65,7 @@ class MainMenuViewModel : KoinComponent {
 
     private val ioContextProvider: IoContextProvider by inject()
 
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss")
+    private val currentTimeSuffixDateTimeFormatter = DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss")
 
     fun makeNewArticle() {
         viewModel.makeNewArticle()
@@ -370,7 +370,7 @@ class MainMenuViewModel : KoinComponent {
         }
     }
 
-    private fun makeCurrentTimeSuffix(): String? = LocalDateTime.now().format(dateTimeFormatter)
+    private fun makeCurrentTimeSuffix(): String? = LocalDateTime.now().format(currentTimeSuffixDateTimeFormatter)
 
     fun toggleFullscreenLabel(): String {
         return viewModel.toggleFullscreenLabel()
