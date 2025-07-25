@@ -25,6 +25,9 @@ class ZipArchiverTest {
     private lateinit var zipArchiver: ZipArchiver
 
     @MockK
+    private lateinit var outputFolder: Path
+
+    @MockK
     private lateinit var path: Path
 
     @MockK
@@ -35,11 +38,13 @@ class ZipArchiverTest {
         MockKAnnotations.init(this)
 
         mockkStatic(Path::class)
-        every { Path.of(any<String>()) } returns mockk()
+        every { outputFolder.resolve(any<String>()) } returns mockk()
         mockkStatic(Files::class)
         every { Files.newOutputStream(any()) } returns ByteArrayOutputStream()
         every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
         every { Files.newInputStream(path) } returns "test".byteInputStream()
+        every { Files.exists(any()) } returns true
+        every { Files.createDirectories(any()) } returns mockk()
 
         every { path.fileName } returns fileName
         every { fileName.toString() } returns "file.md"
@@ -54,7 +59,6 @@ class ZipArchiverTest {
     fun invoke() {
         zipArchiver.invoke(listOf(path))
 
-        verify { Path.of(any<String>()) }
         verify { Files.newOutputStream(any()) }
         verify { path.fileName }
         verify { fileName.toString() }
