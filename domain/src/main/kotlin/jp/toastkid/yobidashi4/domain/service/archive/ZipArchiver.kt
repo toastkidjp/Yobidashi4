@@ -8,11 +8,17 @@ import java.nio.file.Path
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-class ZipArchiver {
+class ZipArchiver(
+    private val outputFolder: Path = Path.of("user/archive")
+) {
 
     operator fun invoke(paths: Collection<Path>, fileName: String = DESTINATION) {
         try {
-            ZipOutputStream(BufferedOutputStream(Files.newOutputStream(Path.of(fileName)))).use {
+            if (Files.exists(outputFolder).not()) {
+                Files.createDirectories(outputFolder)
+            }
+
+            ZipOutputStream(BufferedOutputStream(Files.newOutputStream(outputFolder.resolve(fileName)))).use {
                 createZip(it, paths)
             }
         } catch (e: IOException) {
