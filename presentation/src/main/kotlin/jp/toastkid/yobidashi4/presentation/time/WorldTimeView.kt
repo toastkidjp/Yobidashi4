@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.onClick
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -123,6 +124,13 @@ fun WorldTimeView(modifier: Modifier) {
                                         )
                                     }
                                 }
+                            }
+
+                            Button(
+                                onClick = viewModel::setDefault,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) {
+                                Text("Default")
                             }
                         }
                     }
