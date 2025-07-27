@@ -120,6 +120,7 @@ class ChatTabViewModelTest {
                     subject.onValueChanged(TextFieldValue("test"))
 
                     subject.send(CoroutineScope(Dispatchers.Unconfined))
+                    capturingSlot.captured.invoke(null)
                     capturingSlot.captured.invoke(ChatResponseItem("Answer"))
                     capturingSlot.captured.invoke(ChatResponseItem("on going"))
 
