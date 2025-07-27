@@ -50,7 +50,7 @@ class WorldTimeViewModel : KoinComponent {
     fun pickupTimeZone() = pickupTimeZone
 
     fun start() {
-        updateItems()
+        setCurrentTime(ZonedDateTime.now())
     }
 
     fun updateItems() {
