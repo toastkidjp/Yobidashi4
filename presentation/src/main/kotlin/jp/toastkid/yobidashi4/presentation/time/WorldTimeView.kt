@@ -2,14 +2,18 @@ package jp.toastkid.yobidashi4.presentation.time
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.onClick
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -34,6 +38,96 @@ fun WorldTimeView(modifier: Modifier) {
     ) {
         Box {
             LazyColumn(state = viewModel.listState()) {
+                stickyHeader {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.clickable(onClick = viewModel::openChooser).padding(horizontal = 8.dp)
+                        ) {
+                            Text(
+                                viewModel.currentTimezoneLabel(),
+                            )
+                            DropdownMenu(
+                                viewModel.openingChooser(),
+                                viewModel::closeChooser
+                            ) {
+                                viewModel.pickupTimeZone().forEach {
+                                    DropdownMenuItem(
+                                        {
+                                            viewModel.choose(it)
+                                        }
+                                    ) {
+                                        Text(viewModel.label(it))
+                                    }
+                                }
+                            }
+                        }
+
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.clickable(onClick = viewModel::openHourChooser).padding(start = 8.dp)
+                        ) {
+                            Text(
+                                viewModel.currentHour(),
+                                fontSize = 24.sp
+                            )
+                            DropdownMenu(
+                                viewModel.openingHourChooser(),
+                                viewModel::closeHourChooser
+                            ) {
+                                (0..23).forEach {
+                                    DropdownMenuItem(
+                                        {
+                                            viewModel.chooseHour(it)
+                                        }
+                                    ) {
+                                        Text(
+                                            "$it",
+                                            fontSize = 24.sp,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        Text(
+                            ":",
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.clickable {
+                                viewModel.openMinuteChooser()
+                            }
+                        ) {
+                            Text(
+                                viewModel.currentMinute(),
+                                fontSize = 24.sp
+                            )
+                            DropdownMenu(
+                                viewModel.openingMinuteChooser(),
+                                viewModel::closeMinuteChooser
+                            ) {
+                                (0..59).forEach {
+                                    DropdownMenuItem(
+                                        {
+                                            viewModel.chooseMinute(it)
+                                        }
+                                    ) {
+                                        Text(
+                                            "$it",
+                                            fontSize = 24.sp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 items(viewModel.items(), { it }) {
                     Column(
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
