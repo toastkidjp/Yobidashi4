@@ -131,6 +131,7 @@ class ChatTabViewModelTest {
                     subject.send(CoroutineScope(Dispatchers.Unconfined))
                     capturingSlot.captured.invoke(null)
                     capturingSlot.captured.invoke(ChatResponseItem("Answer"))
+                    assertEquals(2, subject.messages().size)
                 }
             }
         }
