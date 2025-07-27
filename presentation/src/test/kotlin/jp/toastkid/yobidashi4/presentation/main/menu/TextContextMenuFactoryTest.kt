@@ -16,8 +16,10 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -100,6 +102,33 @@ class TextContextMenuFactoryTest {
 
             onNode(hasText("Find article")).performClick()
             verify { mainViewModel.findArticle(any()) }
+        }
+    }
+
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun getSecondaryClickItemCase() {
+        every { mainViewModel.getSecondaryClickItem() } returns "secondary"
+        mockkConstructor(LinkBehaviorService::class)
+        every { anyConstructed<LinkBehaviorService>().invoke(any(), any()) } just Runs
+        every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
+
+        val textContextMenu = textContextMenuFactory.invoke()
+        assertNotNull(textContextMenu)
+
+        runDesktopComposeUiTest {
+            setContent {
+                textContextMenu.Area(textManager, state) {
+
+                }
+            }
+
+            onNode(hasText("Open")).performClick()
+            verify { anyConstructed<LinkBehaviorService>().invoke(any(), false) }
+
+            onNode(hasText("Open background")).performClick()
+            verify { anyConstructed<LinkBehaviorService>().invoke(any(), true) }
         }
     }
 
