@@ -127,6 +127,10 @@ class ChatTabViewModelTest {
                     verify { service.send(any(), any(), any()) }
 
                     capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
+
+                    subject.send(CoroutineScope(Dispatchers.Unconfined))
+                    capturingSlot.captured.invoke(null)
+                    capturingSlot.captured.invoke(ChatResponseItem("Answer"))
                 }
             }
         }
