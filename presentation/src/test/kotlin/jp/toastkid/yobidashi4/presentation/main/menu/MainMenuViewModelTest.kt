@@ -218,6 +218,7 @@ class MainMenuViewModelTest {
 
         verify { anyConstructed<ZipArchiver>().invoke(any()) }
         verify { mainViewModel.openFile(any()) }
+        verify { anyConstructed<ZipArchiver>().outputFolder() }
     }
 
     @Test
