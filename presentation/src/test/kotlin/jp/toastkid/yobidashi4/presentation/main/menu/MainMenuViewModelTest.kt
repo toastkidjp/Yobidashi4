@@ -45,7 +45,6 @@ import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.test.TestIoContextProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -837,7 +836,7 @@ class MainMenuViewModelTest {
 
     @Test
     fun restartNotification() {
-        subject.restartNotification(Dispatchers.Unconfined)
+        subject.restartNotification()
 
         coVerify { notification.start(any()) }
     }
