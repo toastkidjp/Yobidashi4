@@ -43,6 +43,8 @@ class ZipArchiver(
         }
     }
 
+    fun outputFolder() = outputFolder
+
     companion object {
         private const val DESTINATION = "articles.zip"
     }
