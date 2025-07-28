@@ -4,17 +4,23 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
-import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicReference
 
-class TextFileViewerTabViewModel {
+class TextFileViewerTabViewModel : KoinComponent {
+
+    private val mainViewModel: MainViewModel by inject()
 
     private val listState = LazyListState()
 
@@ -24,8 +30,17 @@ class TextFileViewerTabViewModel {
 
     private val focusRequester = FocusRequester()
 
-    fun keyboardScrollAction(coroutineScope: CoroutineScope, key: Key, isCtrlPressed: Boolean) =
-        keyboardScrollAction.invoke(coroutineScope, key, isCtrlPressed)
+    private val lastPath = AtomicReference<Path>()
+
+    fun keyboardScrollAction(coroutineScope: CoroutineScope, key: Key, isCtrlPressed: Boolean): Boolean {
+        if (isCtrlPressed && key == Key.O) {
+            val path = lastPath.get()
+            mainViewModel.openFile(path)
+            return true
+        }
+
+        return keyboardScrollAction.invoke(coroutineScope, key, isCtrlPressed)
+    }
 
     fun focusRequester(): FocusRequester = focusRequester
 
@@ -49,6 +64,8 @@ class TextFileViewerTabViewModel {
         if (Files.exists(path).not()) {
             return
         }
+
+        lastPath.set(path)
 
         withContext(dispatcher) {
             try {
