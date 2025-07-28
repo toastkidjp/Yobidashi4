@@ -62,6 +62,8 @@ class ZipArchiverTest {
         verify { Files.newOutputStream(any()) }
         verify { path.fileName }
         verify { fileName.toString() }
+        verify { Files.exists(any()) }
+        verify(inverse = true) { Files.createDirectories(any()) }
     }
 
     @Test
@@ -97,6 +99,16 @@ class ZipArchiverTest {
         zipArchiver.invoke(listOf(path))
 
         verify { mockk.printStackTrace() }
+    }
+
+    @Test
+    fun makeFoldersIfNeeds() {
+        every { Files.exists(any()) } returns false
+
+        zipArchiver.invoke(emptyList())
+
+        verify { Files.exists(any()) }
+        verify { Files.createDirectories(any()) }
     }
 
 }
