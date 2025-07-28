@@ -40,9 +40,7 @@ import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -347,7 +345,7 @@ class MainMenuViewModel : KoinComponent {
 
     private val notification: ScheduledNotification by inject()
 
-    fun restartNotification(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    fun restartNotification() {
         CoroutineScope(ioContextProvider()).launch {
             notification.start()
         }
