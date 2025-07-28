@@ -96,7 +96,7 @@ class MainMenuViewModel : KoinComponent {
         val zipArchiver = ZipArchiver()
         CoroutineScope(ioContextProvider()).launch {
             zipArchiver.invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
-            viewModel.openFile(Path.of("."))
+            viewModel.openFile(zipArchiver.outputFolder())
         }
         CoroutineScope(ioContextProvider()).launch {
             zipArchiver.invoke(
