@@ -93,12 +93,13 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun dumpAll() {
+        val zipArchiver = ZipArchiver()
         CoroutineScope(ioContextProvider()).launch {
-            ZipArchiver().invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
+            zipArchiver.invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
             viewModel.openFile(Path.of("."))
         }
         CoroutineScope(ioContextProvider()).launch {
-            ZipArchiver().invoke(
+            zipArchiver.invoke(
                 LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
                 "latestArticles${makeCurrentTimeSuffix()}.zip"
             )
