@@ -2,16 +2,17 @@ package jp.toastkid.yobidashi4.presentation.log.viewer
 
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.charset.MalformedInputException
-import java.nio.file.Files
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -21,13 +22,33 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import java.nio.charset.MalformedInputException
+import java.nio.file.Files
 
 class TextFileViewerTabViewModelTest {
 
     private lateinit var subject: TextFileViewerTabViewModel
 
+    @MockK
+    private lateinit var mainViewModel: MainViewModel
+
     @BeforeEach
     fun setUp() {
+        MockKAnnotations.init(this)
+
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
+                }
+            )
+        }
+        every { mainViewModel.openFile(any()) } just Runs
+
         subject = TextFileViewerTabViewModel()
 
         mockkStatic(Files::class)
@@ -36,6 +57,7 @@ class TextFileViewerTabViewModelTest {
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
