@@ -64,8 +64,7 @@ class DownloadFolderTest {
 
     @Test
     fun assignQuickStorePath() {
-        val assignQuickStorePath = subject.assignQuickStorePath("test.png")
-        assertTrue(assignQuickStorePath.name.endsWith("_000.png"))
+        assertTrue(subject.assignQuickStorePath("test.png").name.endsWith("_000.png"))
         assertTrue(subject.assignQuickStorePath("test.jpg").name.endsWith("_000.jpg"))
         assertTrue(subject.assignQuickStorePath("test").name.endsWith("_000.png"))
 
