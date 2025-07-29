@@ -11,6 +11,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
@@ -109,6 +110,11 @@ class ZipArchiverTest {
 
         verify { Files.exists(any()) }
         verify { Files.createDirectories(any()) }
+    }
+
+    @Test
+    fun outputFolder() {
+        assertSame(outputFolder, zipArchiver.outputFolder())
     }
 
 }
