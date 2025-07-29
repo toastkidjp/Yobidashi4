@@ -76,6 +76,8 @@ class DownloadFolderTest {
 
         assertTrue(subject.assignQuickStorePath("test.png").name.endsWith("_001.png"))
         assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false").name.endsWith("_000.jpg"))
+        assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false&w=100&h=110").name.endsWith("_000.jpg"))
+        assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg&w=100&h=110").name.endsWith("_000.jpg"))
     }
 
     @Test
