@@ -35,6 +35,10 @@ class DownloadFolder {
         if (lastIndexOf != -1) {
             extension.set(extension.get().substring(0, lastIndexOf))
         }
+        val lastIndexOfAmpersand = extension.get().indexOf("&")
+        if (lastIndexOfAmpersand != -1) {
+            extension.set(extension.get().substring(0, lastIndexOfAmpersand))
+        }
         return resolveUnusedPath("${dateTimeFormatter.format(LocalDateTime.now())}${extension.get()}")
     }
 
