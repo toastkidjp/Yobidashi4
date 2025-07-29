@@ -67,7 +67,10 @@ class DownloadFolderTest {
         assertTrue(subject.assignQuickStorePath("test.png").name.endsWith("_000.png"))
         assertTrue(subject.assignQuickStorePath("test.jpg").name.endsWith("_000.jpg"))
         assertTrue(subject.assignQuickStorePath("test").name.endsWith("_000.png"))
+    }
 
+    @Test
+    fun assignQuickStorePathWithExists() {
         every { Files.exists(any()) } answers {
             val path = this.args.get(0) as? Path ?: return@answers false
             return@answers path.name.endsWith("_000.png")
