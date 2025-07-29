@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.text.DateFormat
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class WorldTimeViewModelTest {
 
@@ -114,6 +116,14 @@ class WorldTimeViewModelTest {
     @Test
     fun label() {
         assertEquals("\uD83C\uDDEF\uD83C\uDDF5 Tokyo", subject.label("Asia/Tokyo"))
+    }
+
+    @Test
+    fun setDefault() {
+        subject.setCurrentTime(ZonedDateTime.now(ZoneId.of("UTC")))
+        subject.setDefault()
+
+        assertEquals(ZonedDateTime.now().zone.id, subject.currentTimezoneLabel())
     }
 
 }
