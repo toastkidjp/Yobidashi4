@@ -209,7 +209,8 @@ class MainMenuViewModelTest {
         every { setting.articleFolderPath() } returns mockk()
         mockkConstructor(ZipArchiver::class, ArticleFilesFinder::class, LatestFileFinder::class)
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
-        every { anyConstructed<ZipArchiver>().outputFolder() } returns mockk()
+        val outputFolder = mockk<Path>()
+        every { anyConstructed<ZipArchiver>().outputFolder() } returns outputFolder
         every { anyConstructed<ArticleFilesFinder>().invoke(any()) } returns mutableListOf()
         every { anyConstructed<LatestFileFinder>().invoke(any(), any()) } returns mutableListOf()
         every { mainViewModel.openFile(any()) } just Runs
@@ -217,7 +218,7 @@ class MainMenuViewModelTest {
         subject.dumpAll()
 
         verify { anyConstructed<ZipArchiver>().invoke(any()) }
-        verify { mainViewModel.openFile(any()) }
+        verify { mainViewModel.openFile(outputFolder) }
         verify { anyConstructed<ZipArchiver>().outputFolder() }
     }
 
