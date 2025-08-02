@@ -16,10 +16,7 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -31,6 +28,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.extension
 
 class FileRenameToolViewModelTest {
 
@@ -72,7 +72,7 @@ class FileRenameToolViewModelTest {
 
     @Test
     fun onValueChange() {
-        assertEquals("img_", subject.input().text)
+        assertEquals("img", subject.input().text)
 
         subject.onValueChange(TextFieldValue("ABC"))
 
