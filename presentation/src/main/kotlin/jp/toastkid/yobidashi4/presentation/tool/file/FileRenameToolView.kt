@@ -57,7 +57,16 @@ fun FileRenameToolView() {
             Box {
                 LazyColumn(state = viewModel.listState()) {
                     items(viewModel.items()) { path ->
-                        Text(path.fileName.toString())
+                        Row {
+                            Text(path.fileName.toString())
+                            Button(onClick = {
+                                viewModel.remove(path)
+                            },
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) {
+                                Text("x")
+                            }
+                        }
                     }
                 }
                 VerticalScrollbar(
