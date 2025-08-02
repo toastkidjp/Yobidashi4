@@ -42,8 +42,7 @@ class FileRenameToolViewModel : KoinComponent {
             return
         }
 
-        val size = paths.size
-        val pattern = "0".repeat(size.toString().length)
+        val pattern = "0".repeat(paths.size.toString().length)
         val decimalFormat = DecimalFormat(pattern)
         paths.forEachIndexed { i, p ->
             Files.copy(p, p.resolveSibling("${input.value.text}_${decimalFormat.format(i + 1)}.${p.extension}"))
