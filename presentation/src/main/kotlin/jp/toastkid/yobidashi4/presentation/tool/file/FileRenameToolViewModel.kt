@@ -14,6 +14,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Files
 import java.nio.file.Path
+import java.text.DecimalFormat
 import kotlin.io.path.extension
 
 class FileRenameToolViewModel : KoinComponent {
@@ -41,8 +42,10 @@ class FileRenameToolViewModel : KoinComponent {
             return
         }
 
+        val size = paths.size
+        val decimalFormat = DecimalFormat("#".repeat(size.toString().length))
         paths.forEachIndexed { i, p ->
-            Files.copy(p, p.resolveSibling("${input.value.text}_${i + 1}.${p.extension}"))
+            Files.copy(p, p.resolveSibling("${input.value.text}_${decimalFormat.format(i + 1)}.${p.extension}"))
         }
 
         viewModel
