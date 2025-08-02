@@ -9,12 +9,12 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.extension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.extension
 
 class FileRenameToolViewModel : KoinComponent {
 
@@ -85,6 +85,10 @@ class FileRenameToolViewModel : KoinComponent {
 
     fun clearInput() {
         input.value = TextFieldValue()
+    }
+
+    fun remove(path: java.nio.file.Path) {
+        paths.remove(path)
     }
 
 }
