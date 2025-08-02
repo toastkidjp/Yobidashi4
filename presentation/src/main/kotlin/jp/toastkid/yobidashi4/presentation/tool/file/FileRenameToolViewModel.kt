@@ -23,7 +23,7 @@ class FileRenameToolViewModel : KoinComponent {
 
     private val paths = mutableStateListOf<Path>()
 
-    private val input = mutableStateOf(TextFieldValue("img_"))
+    private val input = mutableStateOf(TextFieldValue("img"))
 
     private val listState = LazyListState()
 
