@@ -90,7 +90,7 @@ class FileRenameToolViewModel : KoinComponent {
         input.value = TextFieldValue()
     }
 
-    fun remove(path: java.nio.file.Path) {
+    fun remove(path: Path) {
         paths.remove(path)
     }
 
