@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,13 +60,14 @@ fun FileRenameToolView() {
                     items(viewModel.items()) { path ->
                         Row {
                             Text(path.fileName.toString())
-                            Button(onClick = {
-                                viewModel.remove(path)
-                            },
+                            Text(
+                                "x",
+                                color = MaterialTheme.colors.secondary,
                                 modifier = Modifier.padding(horizontal = 8.dp)
-                            ) {
-                                Text("x")
-                            }
+                                    .clickable {
+                                        viewModel.remove(path)
+                                    }
+                            )
                         }
                     }
                 }
