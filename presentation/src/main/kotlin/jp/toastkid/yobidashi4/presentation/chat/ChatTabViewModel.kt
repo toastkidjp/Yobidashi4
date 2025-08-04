@@ -50,6 +50,10 @@ class ChatTabViewModel : KoinComponent {
 
     private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_0_FLASH)
 
+    private val iconMapper = ChatModelIconMapper()
+
+    fun currentModelIcon() = iconMapper(currentModel.value)
+
     fun currentModelLabel() = currentModel.value.label()
 
     fun chooseModel(model: GenerativeAiModel) {
