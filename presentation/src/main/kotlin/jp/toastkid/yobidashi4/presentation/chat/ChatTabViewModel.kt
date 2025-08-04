@@ -14,6 +14,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
@@ -47,6 +48,28 @@ class ChatTabViewModel : KoinComponent {
 
     fun messages(): List<ChatMessage> = messages
 
+    private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_0_FLASH)
+
+    fun currentModelLabel() = currentModel.value.label()
+
+    fun chooseModel(model: GenerativeAiModel) {
+        currentModel.value = model
+    }
+
+    private val openModelChooser = mutableStateOf(false)
+
+    fun openModelChooser() {
+        openModelChooser.value = true
+    }
+
+    fun closeModelChooser() {
+        openModelChooser.value = false
+    }
+
+    fun openingModelChooser(): Boolean {
+        return openModelChooser.value
+    }
+
     private val useImageGeneration = mutableStateOf(false)
 
     fun useImageGeneration() = useImageGeneration.value
@@ -69,7 +92,7 @@ class ChatTabViewModel : KoinComponent {
         messages.add(
             ChatMessage(
                 "user",
-                if (useImageGeneration.value) "$text\n画像は著作権及び肖像権に問題のない形で出力してください。画像に文字を入れてはいけません。文字が入っていることを確認したら罰金\$100を科します"
+                if (currentModel.value.image()) "$text\n画像は著作権及び肖像権に問題のない形で出力してください。画像に文字を入れてはいけません。文字が入っていることを確認したら罰金\$100を科します"
                 else text
             )
         )
@@ -79,7 +102,7 @@ class ChatTabViewModel : KoinComponent {
 
         labelState.value = "Connecting in progress..."
         withContext(ioContextProvider()) {
-            service.send(messages, useImageGeneration.value) {
+            service.send(messages, currentModel.value) {
                 onReceive(it)
                 coroutineScope.launch {
                     scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
