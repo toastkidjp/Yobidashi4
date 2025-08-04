@@ -100,6 +100,7 @@ fun ChatTabView(chatTab: ChatTab) {
                             modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
                         ) {
                             Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.padding(4.dp)
                             ) {
                                 Icon(
