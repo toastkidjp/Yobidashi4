@@ -58,7 +58,7 @@ fun FileRenameToolView() {
             Box {
                 LazyColumn(state = viewModel.listState()) {
                     items(viewModel.items()) { path ->
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(path.fileName.toString())
                             Text(
                                 "x",
