@@ -18,7 +18,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -75,8 +74,10 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
             }
 
-            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 16.dp)
+                ) {
                     Box {
                         DropdownMenu(
                             viewModel.openingModelChooser(),
@@ -96,17 +97,20 @@ fun ChatTabView(chatTab: ChatTab) {
                         Surface(
                             elevation = 2.dp
                         ) {
-                            Text(
-                                viewModel.currentModelLabel(),
-                                modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
-                            )
+                            Row {
+                                Text(
+                                    viewModel.currentModelLabel(),
+                                    modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                                        .padding(start = 4.dp)
+                                )
+                            }
                         }
                     }
                 }
 
                 Button(
                     viewModel::clearChat,
-                    modifier = Modifier.align(Alignment.CenterEnd)
+                    modifier = Modifier.align(Alignment.CenterEnd).padding(end = 8.dp)
                 ) {
                     Text("Clear chat")
                 }
