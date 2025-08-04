@@ -15,8 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
@@ -75,16 +77,27 @@ fun ChatTabView(chatTab: ChatTab) {
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        viewModel.useImageGeneration(),
-                        onCheckedChange = viewModel::setImageGeneration,
-                        modifier = Modifier
-                            .semantics { contentDescription = "Use image generation ${viewModel.useImageGeneration()}" }
-                    )
-                    Text(
-                        "Use image generation",
-                        modifier = Modifier.clickable(onClick = viewModel::switchImageGeneration)
-                    )
+                    Box {
+                        DropdownMenu(
+                            viewModel.openingModelChooser(),
+                            { viewModel.closeModelChooser() }
+                        ) {
+                            GenerativeAiModel.entries.forEach { model ->
+                                DropdownMenuItem(
+                                    {
+                                        viewModel.chooseModel(model)
+                                        viewModel.closeModelChooser()
+                                    }
+                                ) {
+                                    Text(model.label())
+                                }
+                            }
+                        }
+                        Text(
+                            viewModel.currentModelLabel(),
+                            modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                        )
+                    }
                 }
 
                 Button(
