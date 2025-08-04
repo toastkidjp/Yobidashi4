@@ -63,7 +63,7 @@ fun FileRenameToolView() {
                             Text(
                                 "x",
                                 color = MaterialTheme.colors.secondary,
-                                modifier = Modifier.padding(horizontal = 8.dp)
+                                modifier = Modifier.padding(8.dp)
                                     .clickable {
                                         viewModel.remove(path)
                                     }
