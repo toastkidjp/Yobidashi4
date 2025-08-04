@@ -18,6 +18,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -98,6 +99,10 @@ fun ChatTabView(chatTab: ChatTab) {
                             elevation = 2.dp
                         ) {
                             Row {
+                                Icon(
+                                    painter = painterResource(viewModel.currentModelIcon()),
+                                    contentDescription = viewModel.currentModelLabel()
+                                )
                                 Text(
                                     viewModel.currentModelLabel(),
                                     modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
