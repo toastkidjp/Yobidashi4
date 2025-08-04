@@ -2,12 +2,11 @@ package jp.toastkid.yobidashi4.infrastructure.service.chat
 
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatRepository
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
-import jp.toastkid.yobidashi4.infrastructure.model.chat.CHAT
-import jp.toastkid.yobidashi4.infrastructure.model.chat.IMAGE_GENERATOR
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,19 +20,23 @@ class ChatServiceImplementation : ChatService, KoinComponent {
 
     private val setting: Setting by inject()
 
-    private val repository: ChatRepository by inject(parameters = {
-        ParametersHolder(mutableListOf(setting.chatApiKey(), CHAT))
-    })
+    private fun loadRepositories(): Map<GenerativeAiModel, ChatRepository> {
+        return GenerativeAiModel.entries.map { model ->
+            val repository: ChatRepository by inject(parameters = {
+                ParametersHolder(mutableListOf(setting.chatApiKey(), model.url()))
+            })
+            return@map model to repository
+        }.toMap<GenerativeAiModel, ChatRepository>()
+    }
 
-    private val imageGeneratorRepository: ChatRepository by inject(parameters = {
-        ParametersHolder(mutableListOf(setting.chatApiKey(), IMAGE_GENERATOR))
-    })
+    private val repositories = loadRepositories()
 
-    override fun send(messages: MutableList<ChatMessage>, image: Boolean, onUpdate: (ChatResponseItem?) -> Unit): String? {
+    override fun send(messages: MutableList<ChatMessage>, model: GenerativeAiModel, onUpdate: (ChatResponseItem?) -> Unit): String? {
         val chat = Chat(messages)
 
-        (if (image) imageGeneratorRepository else repository)
-            .request(chat.makeContent(image)) {
+        val repository = repositories.get(model) ?: return null
+        repository
+            .request(chat.makeContent(model.image())) {
             onUpdate(it)
         }
 
