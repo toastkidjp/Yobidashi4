@@ -93,10 +93,14 @@ fun ChatTabView(chatTab: ChatTab) {
                                 }
                             }
                         }
-                        Text(
-                            viewModel.currentModelLabel(),
-                            modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
-                        )
+                        Surface(
+                            elevation = 2.dp
+                        ) {
+                            Text(
+                                viewModel.currentModelLabel(),
+                                modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                            )
+                        }
                     }
                 }
 
