@@ -96,7 +96,8 @@ fun ChatTabView(chatTab: ChatTab) {
                             }
                         }
                         Surface(
-                            elevation = 2.dp
+                            elevation = 2.dp,
+                            modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
                         ) {
                             Row(
                                 modifier = Modifier.padding(4.dp)
@@ -107,8 +108,7 @@ fun ChatTabView(chatTab: ChatTab) {
                                 )
                                 Text(
                                     viewModel.currentModelLabel(),
-                                    modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
-                                        .padding(start = 4.dp)
+                                    modifier = Modifier.padding(start = 4.dp)
                                 )
                             }
                         }
