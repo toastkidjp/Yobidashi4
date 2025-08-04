@@ -76,42 +76,41 @@ fun ChatTabView(chatTab: ChatTab) {
             }
 
             Box(modifier = Modifier.fillMaxWidth()) {
-                Row(verticalAlignment = Alignment.CenterVertically,
+                Box(
+                    contentAlignment = Alignment.CenterStart,
                     modifier = Modifier.padding(start = 16.dp)
                 ) {
-                    Box {
-                        DropdownMenu(
-                            viewModel.openingModelChooser(),
-                            { viewModel.closeModelChooser() }
-                        ) {
-                            GenerativeAiModel.entries.forEach { model ->
-                                DropdownMenuItem(
-                                    {
-                                        viewModel.chooseModel(model)
-                                        viewModel.closeModelChooser()
-                                    }
-                                ) {
-                                    Text(model.label())
+                    DropdownMenu(
+                        viewModel.openingModelChooser(),
+                        { viewModel.closeModelChooser() }
+                    ) {
+                        GenerativeAiModel.entries.forEach { model ->
+                            DropdownMenuItem(
+                                {
+                                    viewModel.chooseModel(model)
+                                    viewModel.closeModelChooser()
                                 }
+                            ) {
+                                Text(model.label())
                             }
                         }
-                        Surface(
-                            elevation = 2.dp,
-                            modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                    }
+                    Surface(
+                        elevation = 2.dp,
+                        modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(4.dp)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(4.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(viewModel.currentModelIcon()),
-                                    contentDescription = viewModel.currentModelLabel()
-                                )
-                                Text(
-                                    viewModel.currentModelLabel(),
-                                    modifier = Modifier.padding(start = 4.dp)
-                                )
-                            }
+                            Icon(
+                                painter = painterResource(viewModel.currentModelIcon()),
+                                contentDescription = viewModel.currentModelLabel()
+                            )
+                            Text(
+                                viewModel.currentModelLabel(),
+                                modifier = Modifier.padding(start = 4.dp)
+                            )
                         }
                     }
                 }
