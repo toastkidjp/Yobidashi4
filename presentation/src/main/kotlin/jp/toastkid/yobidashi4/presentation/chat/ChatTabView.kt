@@ -75,7 +75,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
             }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box {
                         DropdownMenu(
@@ -102,7 +102,7 @@ fun ChatTabView(chatTab: ChatTab) {
 
                 Button(
                     viewModel::clearChat,
-                    modifier = Modifier.align(Alignment.CenterEnd).padding(end = 8.dp)
+                    modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
                     Text("Clear chat")
                 }
