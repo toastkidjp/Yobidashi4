@@ -98,7 +98,9 @@ fun ChatTabView(chatTab: ChatTab) {
                         Surface(
                             elevation = 2.dp
                         ) {
-                            Row {
+                            Row(
+                                modifier = Modifier.padding(4.dp)
+                            ) {
                                 Icon(
                                     painter = painterResource(viewModel.currentModelIcon()),
                                     contentDescription = viewModel.currentModelLabel()
