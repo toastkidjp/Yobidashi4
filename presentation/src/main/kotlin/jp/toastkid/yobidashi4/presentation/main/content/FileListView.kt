@@ -64,6 +64,10 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
     val oddBackground = MaterialTheme.colors.primary.copy(alpha = 0.5f)
     val evenBackground = MaterialTheme.colors.surface.copy(alpha = 0.5f)
 
+    val stickyHeaderBackgroundColor =
+        if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+        else Color.Transparent
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
@@ -80,7 +84,12 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                     .semantics { contentDescription = "File list" }
             ) {
                 stickyHeader {
-                    Row {
+                    Row(
+                        modifier = Modifier
+                            .drawBehind {
+                                drawRect(stickyHeaderBackgroundColor)
+                            }
+                    ) {
                         SingleLineTextField(
                             viewModel.keyword(),
                             "Keyword",
