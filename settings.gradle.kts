@@ -26,6 +26,10 @@ dependencyResolutionManagement {
             version("kotlin", "2.2.0")
             version("ksp", "2.2.0-2.0.2")
         }
+
+        create("testLibraries") {
+            version("junit", "5.11.0")
+        }
     }
 }
 
