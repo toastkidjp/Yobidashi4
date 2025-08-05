@@ -40,6 +40,8 @@ dependencies {
     kover(project(path = ":infrastructure"))
 }
 
+val junitVersion = testLibraries.versions.junit.get()
+
 allprojects {
     repositories {
         google()
@@ -49,9 +51,9 @@ allprojects {
     apply(plugin = "kotlin")
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.0")
-        testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.0")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.0")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+        testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         testImplementation("io.mockk:mockk:1.10.6")
         testRuntimeOnly("net.bytebuddy:byte-buddy:1.15.7")
