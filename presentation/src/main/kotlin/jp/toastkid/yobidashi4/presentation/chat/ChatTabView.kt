@@ -96,7 +96,7 @@ fun ChatTabView(chatTab: ChatTab) {
                         }
                     }
                     Surface(
-                        elevation = 2.dp,
+                        elevation = 4.dp,
                         modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
                     ) {
                         Row(
