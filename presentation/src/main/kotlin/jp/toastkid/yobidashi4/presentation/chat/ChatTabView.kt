@@ -101,6 +101,7 @@ fun ChatTabView(chatTab: ChatTab) {
                     Surface(
                         elevation = 4.dp,
                         modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
+                            .semantics { contentDescription = "Model chooser" }
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
