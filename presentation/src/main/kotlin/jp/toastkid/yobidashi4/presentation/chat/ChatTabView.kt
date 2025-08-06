@@ -75,10 +75,13 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
             }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Box(
                     contentAlignment = Alignment.CenterStart,
                     modifier = Modifier.padding(start = 8.dp)
+                        .align(Alignment.CenterStart)
                 ) {
                     DropdownMenu(
                         viewModel.openingModelChooser(),
