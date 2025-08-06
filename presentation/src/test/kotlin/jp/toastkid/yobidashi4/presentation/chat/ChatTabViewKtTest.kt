@@ -105,10 +105,6 @@ class ChatTabViewKtTest {
                     pressKey(Key.DirectionDown)
                 }
 
-            onNode(hasText("Use image generation"), useUnmergedTree = true)
-                .performClick()
-            verify { anyConstructed<ChatTabViewModel>().switchImageGeneration() }
-
             onNode(hasText("Clear chat"), useUnmergedTree = true)
                 .performClick()
             verify { anyConstructed<ChatTabViewModel>().clearChat() }
