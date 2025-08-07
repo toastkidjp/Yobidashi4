@@ -67,6 +67,21 @@ class TextFileViewerTabViewModelTest {
     }
 
     @Test
+    fun openWithKeyboardShortcut() {
+        runBlocking {
+            subject = spyk(subject)
+            val focusRequester = mockk<FocusRequester>()
+            every { focusRequester.requestFocus() } just Runs
+            every { subject.focusRequester() } returns focusRequester
+            every { Files.readAllLines(any()) } returns listOf("test")
+            subject.launch(mockk(), Dispatchers.Unconfined)
+            subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.O, true)
+
+            verify { mainViewModel.openFile(any()) }
+        }
+    }
+
+    @Test
     fun focusRequester() {
         assertNotNull(subject.focusRequester())
     }
