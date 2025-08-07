@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -9,10 +11,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import java.nio.file.Path
+import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 
 class FileRenameToolViewKtTest {
 
@@ -24,6 +27,7 @@ class FileRenameToolViewKtTest {
         every { element.toString() } returns "test"
         every { anyConstructed<FileRenameToolViewModel>().items() } returns listOf(element)
         every { anyConstructed<FileRenameToolViewModel>().dispose() } just Runs
+        every { anyConstructed<FileRenameToolViewModel>().remove(any()) } just Runs
         coEvery { anyConstructed<FileRenameToolViewModel>().collectDroppedPaths() } just Runs
     }
 
@@ -39,6 +43,9 @@ class FileRenameToolViewKtTest {
             setContent {
                 FileRenameToolView()
             }
+
+            onNodeWithText("x").performClick()
+            verify { anyConstructed<FileRenameToolViewModel>().remove(any()) }
         }
     }
 }
