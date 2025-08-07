@@ -28,6 +28,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.nio.charset.MalformedInputException
 import java.nio.file.Files
+import java.nio.file.Path
 
 class TextFileViewerTabViewModelTest {
 
@@ -74,10 +75,11 @@ class TextFileViewerTabViewModelTest {
             every { focusRequester.requestFocus() } just Runs
             every { subject.focusRequester() } returns focusRequester
             every { Files.readAllLines(any()) } returns listOf("test")
-            subject.launch(mockk(), Dispatchers.Unconfined)
+            val path = mockk<Path>()
+            subject.launch(path, Dispatchers.Unconfined)
             subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.O, true)
 
-            verify { mainViewModel.openFile(any()) }
+            verify { mainViewModel.openFile(path) }
         }
     }
 
