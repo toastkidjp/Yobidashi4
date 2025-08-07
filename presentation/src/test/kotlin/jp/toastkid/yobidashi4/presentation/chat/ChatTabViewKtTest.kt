@@ -108,6 +108,15 @@ class ChatTabViewKtTest {
             onNode(hasText("Clear chat"), useUnmergedTree = true)
                 .performClick()
             verify { anyConstructed<ChatTabViewModel>().clearChat() }
+
+            onNodeWithContentDescription("Model chooser", useUnmergedTree = true)
+                .performClick()
+
+            onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
+                .performClick()
+
+            onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
+                .assertDoesNotExist()
         }
     }
 
