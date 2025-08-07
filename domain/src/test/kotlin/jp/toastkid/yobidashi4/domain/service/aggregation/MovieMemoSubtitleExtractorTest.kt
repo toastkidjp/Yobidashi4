@@ -34,15 +34,12 @@ internal class MovieMemoSubtitleExtractorTest {
         every { fileName.toString() }.returns("file.md")
 
         mockkStatic(Files::class)
-        every { Files.readAllLines(any()) }
-            .returns(
-                listOf(
-                    "## 『ミッション：インポッシブル(原題：MISSION:IMPOSSIBLE)』(1996年、アメリカ合衆国)",
-                    "## 『JSA』(2001、韓国)",
-                    "## 『WBS』",
-                    "年、",
-                )
-            )
+        every { Files.readAllLines(any()) } returns listOf(
+            "## 『ミッション：インポッシブル(原題：MISSION:IMPOSSIBLE)』(1996年、アメリカ合衆国)",
+            "## 『JSA』(2001、韓国)",
+            "## 『WBS』",
+            "年、",
+        )
 
         MockKAnnotations.init(this)
         every { articlesReaderService.invoke() }.returns(Stream.of(path))
