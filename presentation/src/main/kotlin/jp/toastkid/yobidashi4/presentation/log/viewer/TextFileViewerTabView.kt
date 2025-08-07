@@ -45,7 +45,7 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
         }
             .focusRequester(viewModel.focusRequester())
     ) {
-        Box() {
+        Box {
             SelectionContainer {
                 LazyColumn(state = viewModel.listState()) {
                     itemsIndexed(viewModel.textState(), { index, line -> "$index${line.hashCode()}" }) { index, line ->
