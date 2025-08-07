@@ -92,6 +92,9 @@ fun ChatTabView(chatTab: ChatTab) {
                                 {
                                     viewModel.chooseModel(model)
                                     viewModel.closeModelChooser()
+                                },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "chooserItem-${model.label()}"
                                 }
                             ) {
                                 Text(model.label())
