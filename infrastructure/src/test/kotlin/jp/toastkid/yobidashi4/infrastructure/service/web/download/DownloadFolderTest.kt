@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.name
@@ -69,17 +71,23 @@ class DownloadFolderTest {
         assertTrue(subject.assignQuickStorePath("test").name.endsWith("_000.png"))
     }
 
-    @Test
-    fun assignQuickStorePathWithExists() {
+    @ParameterizedTest
+    @CsvSource(value = [
+        "test.png,_001.png",
+        "https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false,_000.jpg",
+        "https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false&w=100&h=110,_000.jpg",
+        "https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg&w=100&h=110\",_000.jpg",
+    ])
+    fun assignQuickStorePathWithExists(
+        parameter: String,
+        expected: String
+    ) {
         every { Files.exists(any()) } answers {
             val path = this.args.get(0) as? Path ?: return@answers false
             return@answers path.name.endsWith("_000.png")
         }
 
-        assertTrue(subject.assignQuickStorePath("test.png").name.endsWith("_001.png"))
-        assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false").name.endsWith("_000.jpg"))
-        assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg?errorImage=false&w=100&h=110").name.endsWith("_000.jpg"))
-        assertTrue(subject.assignQuickStorePath("https://test-img.jp/images/v3/FUTqMOrVt9rHy.jpg&w=100&h=110").name.endsWith("_000.jpg"))
+        assertTrue(subject.assignQuickStorePath(parameter).name.endsWith(expected))
     }
 
     @Test
