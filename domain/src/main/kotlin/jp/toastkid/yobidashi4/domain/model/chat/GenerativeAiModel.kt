@@ -7,9 +7,9 @@ enum class GenerativeAiModel(
     private val image: Boolean = false
 ) {
 
-    GEMINI_2_0_FLASH(
-        "Gemini 2.0 Flash",
-        "gemini-2.0-flash",
+    GEMINI_2_5_FLASH(
+        "Gemini 2.5 Flash",
+        "gemini-2.5-flash",
         "v1"
     ),
     GEMINI_2_0_FLASH_IMAGE(
@@ -17,7 +17,13 @@ enum class GenerativeAiModel(
         "gemini-2.0-flash-preview-image-generation",
         "v1beta",
         true
-    );
+    ),
+    GEMINI_2_0_FLASH(
+        "Gemini 2.0 Flash",
+        "gemini-2.0-flash",
+        "v1"
+    )
+    ;
 
     fun label(): String = label
 
