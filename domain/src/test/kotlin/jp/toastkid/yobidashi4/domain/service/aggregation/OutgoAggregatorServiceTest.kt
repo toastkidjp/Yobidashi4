@@ -50,7 +50,7 @@ _
         every { Files.readAllLines(any()) }.returns(lines)
 
         MockKAnnotations.init(this)
-        every { articlesReaderService.invoke() } returns Stream.of(path)
+        every { articlesReaderService.invoke() } answers { Stream.of(path) }
     }
 
     @AfterEach
