@@ -85,7 +85,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 ) {
                     DropdownMenu(
                         viewModel.openingModelChooser(),
-                        { viewModel.closeModelChooser() }
+                        viewModel::closeModelChooser
                     ) {
                         GenerativeAiModel.entries.forEach { model ->
                             DropdownMenuItem(
