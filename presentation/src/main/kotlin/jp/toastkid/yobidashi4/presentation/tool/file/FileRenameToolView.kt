@@ -20,6 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
@@ -70,6 +72,7 @@ fun FileRenameToolView() {
                                     .clickable {
                                         viewModel.remove(path)
                                     }
+                                    .semantics { contentDescription = "Delete ${path.fileName.toString()}" }
                             )
                         }
                     }
