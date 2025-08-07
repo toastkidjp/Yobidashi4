@@ -36,9 +36,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
 
         val repository = repositories.get(model) ?: return null
         repository
-            .request(chat.makeContent(model.image())) {
-            onUpdate(it)
-        }
+            .request(chat.makeContent(model.image()), onUpdate)
 
         return null
     }
