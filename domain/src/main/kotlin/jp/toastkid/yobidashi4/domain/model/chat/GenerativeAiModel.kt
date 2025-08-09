@@ -15,7 +15,7 @@ enum class GenerativeAiModel(
     GEMINI_2_5_FLASH_LITE(
         "Gemini 2.5 Flash Lite",
         "gemini-2.5-flash-lite",
-        "v1"
+        "v1beta"
     ),
     GEMINI_2_0_FLASH_IMAGE(
         "Image generation",
