@@ -97,7 +97,19 @@ fun ChatTabView(chatTab: ChatTab) {
                                     contentDescription = "chooserItem-${model.label()}"
                                 }
                             ) {
-                                Text(model.label())
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(4.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(viewModel.modelIcon(model)),
+                                        contentDescription = model.label()
+                                    )
+                                    Text(
+                                        model.label(),
+                                        modifier = Modifier.padding(start = 4.dp)
+                                    )
+                                }
                             }
                         }
                     }
