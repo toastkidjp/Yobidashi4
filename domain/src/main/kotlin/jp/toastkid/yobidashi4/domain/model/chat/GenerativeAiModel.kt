@@ -38,7 +38,8 @@ enum class GenerativeAiModel(
     fun label(): String = label
 
     fun url(): String {
-        return "https://generativelanguage.googleapis.com/${versionPath}/models/${urlParameter}:streamGenerateContent?alt=sse&key="
+        return "https://generativelanguage.googleapis.com/${versionPath}/models/${urlParameter}" +
+                ":streamGenerateContent?alt=sse&key="
     }
 
     fun image() = image
