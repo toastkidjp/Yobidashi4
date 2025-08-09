@@ -52,6 +52,8 @@ class ChatTabViewModel : KoinComponent {
 
     private val iconMapper = ChatModelIconMapper()
 
+    fun modelIcon(model: GenerativeAiModel) = iconMapper(model)
+
     fun currentModelIcon() = iconMapper(currentModel.value)
 
     fun currentModelLabel() = currentModel.value.label()
