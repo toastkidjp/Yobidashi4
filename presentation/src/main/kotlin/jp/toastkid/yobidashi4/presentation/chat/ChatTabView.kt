@@ -43,6 +43,7 @@ import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -97,19 +98,7 @@ fun ChatTabView(chatTab: ChatTab) {
                                     contentDescription = "chooserItem-${model.label()}"
                                 }
                             ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(4.dp)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(viewModel.modelIcon(model)),
-                                        contentDescription = model.label()
-                                    )
-                                    Text(
-                                        model.label(),
-                                        modifier = Modifier.padding(start = 4.dp)
-                                    )
-                                }
+                                GenerativeAiModelLabel(model.label(), viewModel.modelIcon(model))
                             }
                         }
                     }
@@ -165,6 +154,26 @@ fun ChatTabView(chatTab: ChatTab) {
         onDispose {
             viewModel.update(chatTab)
         }
+    }
+}
+
+@Composable
+private fun GenerativeAiModelLabel(
+    label: String,
+    drawableResource: DrawableResource
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(4.dp)
+    ) {
+        Icon(
+            painter = painterResource(drawableResource),
+            contentDescription = label
+        )
+        Text(
+            label,
+            modifier = Modifier.padding(start = 4.dp)
+        )
     }
 }
 
