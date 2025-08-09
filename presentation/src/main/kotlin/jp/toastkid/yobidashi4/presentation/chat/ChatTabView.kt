@@ -115,8 +115,8 @@ fun ChatTabView(chatTab: ChatTab) {
                                         cursorOn.value = false
                                     }
                                     .semantics {
-                                    contentDescription = "chooserItem-${model.label()}"
-                                }
+                                        contentDescription = "chooserItem-${model.label()}"
+                                    }
                             ) {
                                 val fontColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
                                 GenerativeAiModelLabel(model.label(), viewModel.modelIcon(model), fontColor)
