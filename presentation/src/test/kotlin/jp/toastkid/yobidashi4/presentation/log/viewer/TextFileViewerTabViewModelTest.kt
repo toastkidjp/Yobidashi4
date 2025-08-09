@@ -100,7 +100,9 @@ class TextFileViewerTabViewModelTest {
             val focusRequester = mockk<FocusRequester>()
             every { focusRequester.requestFocus() } just Runs
             every { subject.focusRequester() } returns focusRequester
-            every { Files.readAllLines(any()) } returns listOf("test", "test", "test", "test", "test","test", "test", "test", "test", "test", "test")
+            every { Files.readAllLines(any()) } returns listOf(
+                "test", "test", "test", "test", "test","test", "test", "test", "test", "test", "test"
+            )
             subject.launch(mockk(), Dispatchers.Unconfined)
 
             println(subject.lineNumber(0))
