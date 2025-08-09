@@ -48,7 +48,7 @@ class ChatTabViewModel : KoinComponent {
 
     fun messages(): List<ChatMessage> = messages
 
-    private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_5_FLASH)
+    private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)
 
     private val iconMapper = ChatModelIconMapper()
 
