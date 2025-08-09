@@ -11,7 +11,7 @@ class GenerativeAiModelTest {
 
         assertTrue(
             GenerativeAiModel.entries.filter { it != GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE }
-                .none { it.image() }
+                .none(GenerativeAiModel::image)
         )
     }
 
