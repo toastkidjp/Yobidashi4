@@ -178,7 +178,8 @@ private fun GenerativeAiModelLabel(
     ) {
         Icon(
             painter = painterResource(drawableResource),
-            contentDescription = label
+            contentDescription = label,
+            tint = labelColor
         )
         Text(
             label,
