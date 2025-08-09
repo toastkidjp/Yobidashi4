@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -113,6 +114,10 @@ class ChatTabViewKtTest {
                 .performClick()
 
             onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
+                .performMouseInput {
+                    enter()
+                    exit()
+                }
                 .performClick()
 
             onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
