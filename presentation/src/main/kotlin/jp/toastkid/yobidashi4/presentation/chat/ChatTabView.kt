@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,13 +25,18 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -46,6 +52,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ChatTabView(chatTab: ChatTab) {
     val viewModel = remember { ChatTabViewModel() }
@@ -89,16 +96,30 @@ fun ChatTabView(chatTab: ChatTab) {
                         viewModel::closeModelChooser
                     ) {
                         GenerativeAiModel.entries.forEach { model ->
+                            val cursorOn = remember { mutableStateOf(false) }
+                            val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
+
                             DropdownMenuItem(
                                 {
                                     viewModel.chooseModel(model)
                                     viewModel.closeModelChooser()
                                 },
-                                modifier = Modifier.semantics {
+                                modifier = Modifier
+                                    .drawBehind {
+                                        drawRect(backgroundColor.value)
+                                    }
+                                    .onPointerEvent(PointerEventType.Enter) {
+                                        cursorOn.value = true
+                                    }
+                                    .onPointerEvent(PointerEventType.Exit) {
+                                        cursorOn.value = false
+                                    }
+                                    .semantics {
                                     contentDescription = "chooserItem-${model.label()}"
                                 }
                             ) {
-                                GenerativeAiModelLabel(model.label(), viewModel.modelIcon(model))
+                                val fontColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+                                GenerativeAiModelLabel(model.label(), viewModel.modelIcon(model), fontColor)
                             }
                         }
                     }
@@ -148,7 +169,8 @@ fun ChatTabView(chatTab: ChatTab) {
 @Composable
 private fun GenerativeAiModelLabel(
     label: String,
-    drawableResource: DrawableResource
+    drawableResource: DrawableResource,
+    labelColor: Color = MaterialTheme.colors.onSurface
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -160,6 +182,7 @@ private fun GenerativeAiModelLabel(
         )
         Text(
             label,
+            color = labelColor,
             modifier = Modifier.padding(start = 4.dp)
         )
     }
