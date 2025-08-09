@@ -107,19 +107,7 @@ fun ChatTabView(chatTab: ChatTab) {
                         modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
                             .semantics { contentDescription = "Model chooser" }
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(4.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(viewModel.currentModelIcon()),
-                                contentDescription = viewModel.currentModelLabel()
-                            )
-                            Text(
-                                viewModel.currentModelLabel(),
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
+                        GenerativeAiModelLabel(viewModel.currentModelLabel(), viewModel.currentModelIcon())
                     }
                 }
 
