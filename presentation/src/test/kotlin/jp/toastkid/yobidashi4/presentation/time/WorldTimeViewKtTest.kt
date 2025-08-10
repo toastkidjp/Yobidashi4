@@ -58,6 +58,9 @@ class WorldTimeViewKtTest {
                 .performClick()
 
             verify { mainViewModel.showSnackbar(any(), any(), any()) }
+
+            onNodeWithContentDescription("Timezone chooser", useUnmergedTree = true)
+                .performClick()
         }
     }
 }
