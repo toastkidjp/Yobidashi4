@@ -65,7 +65,7 @@ internal fun AggregationBox() {
                         Icon(
                             painterResource(viewModel.selectedCategoryIcon()),
                             contentDescription = viewModel.selectedCategoryName(),
-                            tint = MaterialTheme.colors.onPrimary,
+                            tint = MaterialTheme.colors.secondary,
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
