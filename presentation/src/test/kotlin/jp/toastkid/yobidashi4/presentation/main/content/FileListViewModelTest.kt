@@ -622,4 +622,20 @@ class FileListViewModelTest {
         verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun selectedFiles() {
+        subject.start(
+            listOf(
+                mockk<Path>().also { every { it.extension } returns "md" },
+                mockk<Path>().also { every { it.extension } returns "txt" },
+                mockk<Path>().also { every { it.extension } returns "exe" },
+                mockk<Path>().also { every { it.extension } returns "html" }
+            )
+        )
+        subject.onSingleClick(subject.items().last())
+
+        assertEquals(1, subject.selectedFiles().size)
+    }
+
 }
