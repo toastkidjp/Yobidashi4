@@ -56,7 +56,8 @@ fun WorldTimeView(modifier: Modifier) {
                                     DropdownMenuItem(
                                         {
                                             viewModel.choose(it)
-                                        }
+                                        },
+                                        modifier = Modifier.semantics { contentDescription = "Timezone chooser's item ${viewModel.label(it)}" }
                                     ) {
                                         Text(viewModel.label(it))
                                     }
