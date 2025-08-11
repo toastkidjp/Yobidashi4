@@ -61,6 +61,9 @@ class WorldTimeViewKtTest {
 
             onNodeWithContentDescription("Timezone chooser", useUnmergedTree = true)
                 .performClick()
+
+            onNodeWithContentDescription("Timezone chooser's item UTC", useUnmergedTree = true)
+                .performClick()
         }
     }
 }
