@@ -43,7 +43,10 @@ fun WorldTimeView(modifier: Modifier) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier.clickable(onClick = viewModel::openChooser).padding(horizontal = 8.dp).semantics { contentDescription = "Timezone chooser" }
+                            modifier = Modifier
+                                .clickable(onClick = viewModel::openChooser)
+                                .padding(horizontal = 8.dp)
+                                .semantics { contentDescription = "Timezone chooser" }
                         ) {
                             Text(
                                 viewModel.currentTimezoneLabel(),
