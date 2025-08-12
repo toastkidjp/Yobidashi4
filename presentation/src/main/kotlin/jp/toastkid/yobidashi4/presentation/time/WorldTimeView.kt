@@ -123,7 +123,8 @@ fun WorldTimeView(modifier: Modifier) {
                                     DropdownMenuItem(
                                         {
                                             viewModel.chooseMinute(it)
-                                        }
+                                        },
+                                        modifier = Modifier.semantics { contentDescription = "Minute chooser's item $it" }
                                     ) {
                                         Text(
                                             "$it",
