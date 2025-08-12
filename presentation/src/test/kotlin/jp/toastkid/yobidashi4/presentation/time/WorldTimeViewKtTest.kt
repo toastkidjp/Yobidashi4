@@ -70,6 +70,12 @@ class WorldTimeViewKtTest {
 
             onNodeWithContentDescription("Hour chooser's item 21", useUnmergedTree = true)
                 .performClick()
+
+            onNodeWithContentDescription("Minute chooser", useUnmergedTree = true)
+                .performClick()
+
+            onNodeWithContentDescription("Minute chooser's item 18", useUnmergedTree = true)
+                .performClick()
         }
     }
 }
