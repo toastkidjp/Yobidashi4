@@ -166,6 +166,7 @@ fun WorldTimeView(modifier: Modifier) {
                     Column(
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                             .animateItem()
+                            .fillMaxWidth()
                             .drawBehind { drawRect(backgroundColor.value) }
                             .onPointerEvent(PointerEventType.Enter) {
                                 cursorOn.value = true
