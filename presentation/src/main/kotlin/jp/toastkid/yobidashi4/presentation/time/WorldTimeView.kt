@@ -60,7 +60,8 @@ fun WorldTimeView(modifier: Modifier) {
                                         {
                                             viewModel.choose(it)
                                         },
-                                        modifier = Modifier.semantics { contentDescription = "Timezone chooser's item ${viewModel.label(it)}" }
+                                        modifier = Modifier
+                                            .semantics { contentDescription = "Timezone chooser's item ${viewModel.label(it)}" }
                                     ) {
                                         Text(viewModel.label(it))
                                     }
