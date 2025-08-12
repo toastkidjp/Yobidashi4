@@ -181,6 +181,7 @@ fun WorldTimeView(modifier: Modifier) {
                     ) {
                         Text(
                             viewModel.label(it.timeZone()),
+                            color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                             fontSize = 16.sp,
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
