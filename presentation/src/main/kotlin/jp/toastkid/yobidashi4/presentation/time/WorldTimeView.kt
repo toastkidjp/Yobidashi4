@@ -109,6 +109,7 @@ fun WorldTimeView(modifier: Modifier) {
                             modifier = Modifier.clickable {
                                 viewModel.openMinuteChooser()
                             }
+                                .semantics { contentDescription = "Minute chooser" }
                         ) {
                             Text(
                                 viewModel.currentMinute(),
