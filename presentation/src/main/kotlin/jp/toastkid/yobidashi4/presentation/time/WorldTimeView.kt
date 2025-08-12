@@ -44,14 +44,16 @@ fun WorldTimeView(modifier: Modifier) {
             LazyColumn(state = viewModel.listState()) {
                 stickyHeader {
                     val backgroundColor = animateColorAsState(
-                        if (viewModel.listState().firstVisibleItemIndex != 0) Color.Transparent
-                        else MaterialTheme.colors.surface
+                        if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+                        else Color.Transparent
                     )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.drawBehind { drawRect(backgroundColor.value) }
+                    ) {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
-                                .drawBehind { drawRect(backgroundColor.value) }
                                 .clickable(onClick = viewModel::openChooser)
                                 .padding(horizontal = 8.dp)
                                 .semantics { contentDescription = "Timezone chooser" }
