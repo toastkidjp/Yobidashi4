@@ -133,13 +133,13 @@ fun WorldTimeView(modifier: Modifier) {
                                     }
                                 }
                             }
+                        }
 
-                            Button(
-                                onClick = viewModel::setDefault,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            ) {
-                                Text("Default")
-                            }
+                        Button(
+                            onClick = viewModel::setDefault,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        ) {
+                            Text("Default")
                         }
                     }
                 }
