@@ -185,7 +185,11 @@ fun WorldTimeView(modifier: Modifier) {
                             fontSize = 16.sp,
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
-                        Text(it.time, fontSize = 14.sp)
+                        Text(
+                            it.time,
+                            color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                            fontSize = 14.sp
+                        )
                     }
 
                     Divider(modifier = Modifier.padding(horizontal = 8.dp))
