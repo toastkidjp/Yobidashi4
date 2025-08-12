@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.time
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
@@ -23,6 +24,8 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -40,10 +43,15 @@ fun WorldTimeView(modifier: Modifier) {
         Box {
             LazyColumn(state = viewModel.listState()) {
                 stickyHeader {
+                    val backgroundColor = animateColorAsState(
+                        if (viewModel.listState().firstVisibleItemIndex != 0) Color.Transparent
+                        else MaterialTheme.colors.surface
+                    )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
+                                .drawBehind { drawRect(backgroundColor.value) }
                                 .clickable(onClick = viewModel::openChooser)
                                 .padding(horizontal = 8.dp)
                                 .semantics { contentDescription = "Timezone chooser" }
