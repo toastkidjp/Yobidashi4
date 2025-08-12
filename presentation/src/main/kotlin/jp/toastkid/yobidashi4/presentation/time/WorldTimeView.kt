@@ -79,13 +79,14 @@ fun WorldTimeView(modifier: Modifier) {
                             )
                             DropdownMenu(
                                 viewModel.openingHourChooser(),
-                                viewModel::closeHourChooser
+                                viewModel::closeHourChooser,
                             ) {
                                 (0..23).forEach {
                                     DropdownMenuItem(
                                         {
                                             viewModel.chooseHour(it)
-                                        }
+                                        },
+                                        modifier = Modifier.semantics { contentDescription = "Hour chooser's item $it" }
                                     ) {
                                         Text(
                                             "$it",
