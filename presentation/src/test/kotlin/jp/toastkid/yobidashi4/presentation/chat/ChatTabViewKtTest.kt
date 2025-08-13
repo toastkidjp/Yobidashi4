@@ -122,6 +122,7 @@ class ChatTabViewKtTest {
                     exit()
                     click()
                 }
+                .assertDoesNotExist()
 
             onNodeWithContentDescription(contentDescription, useUnmergedTree = true)
                 .assertDoesNotExist()
