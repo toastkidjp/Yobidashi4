@@ -140,7 +140,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
                 Item(
                     "Save all",
-                    shortcut = KeyShortcut(Key.S, ctrl = true, shift = true),
+                    shortcut = KeyShortcut(Key.S, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey(), shift = true),
                     icon = painterResource(Res.drawable.ic_save),
                     onClick = viewModel::saveAllEditorTab
                 )
