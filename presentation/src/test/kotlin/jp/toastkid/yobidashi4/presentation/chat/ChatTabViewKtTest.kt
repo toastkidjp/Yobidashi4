@@ -114,14 +114,15 @@ class ChatTabViewKtTest {
             onNodeWithContentDescription("Model chooser", useUnmergedTree = true)
                 .performClick()
 
-            onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
+            val contentDescription = "chooserItem-Image generation"
+            onNodeWithContentDescription(contentDescription, useUnmergedTree = true)
                 .performMouseInput {
                     enter()
                     exit()
                     click()
                 }
 
-            onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
+            onNodeWithContentDescription(contentDescription, useUnmergedTree = true)
                 .assertDoesNotExist()
         }
     }
