@@ -65,6 +65,8 @@ class MainMenuViewModel : KoinComponent {
 
     private val currentTimeSuffixDateTimeFormatter = DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss")
 
+    private val useMetaKey: Boolean = System.getProperty("os.name").contains("Mac")
+
     fun makeNewArticle() {
         viewModel.makeNewArticle()
     }
@@ -420,5 +422,7 @@ class MainMenuViewModel : KoinComponent {
     fun openProperty() {
         viewModel.openTab(SettingEditorTab())
     }
+
+    fun useMetaKey() = useMetaKey
 
 }
