@@ -24,6 +24,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -114,7 +115,7 @@ class ChatTabViewKtTest {
             onNodeWithContentDescription("Model chooser", useUnmergedTree = true)
                 .performClick()
 
-            val contentDescription = "chooserItem-Image generation"
+            val contentDescription = "chooserItem-${GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE.label()}"
             onNodeWithContentDescription(contentDescription, useUnmergedTree = true)
                 .performMouseInput {
                     enter()
