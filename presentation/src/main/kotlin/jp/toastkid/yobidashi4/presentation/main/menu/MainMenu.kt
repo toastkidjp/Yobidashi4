@@ -139,6 +139,13 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 )
 
                 Item(
+                    "Save for Mac",
+                    shortcut = KeyShortcut(Key.S, meta = true),
+                    icon = painterResource(Res.drawable.ic_save),
+                    onClick = viewModel::saveCurrentEditorTab
+                )
+
+                Item(
                     "Save all",
                     shortcut = KeyShortcut(Key.S, ctrl = true, shift = true),
                     icon = painterResource(Res.drawable.ic_save),
