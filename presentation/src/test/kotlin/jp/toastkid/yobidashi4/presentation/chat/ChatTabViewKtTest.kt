@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.chat
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
@@ -117,8 +118,8 @@ class ChatTabViewKtTest {
                 .performMouseInput {
                     enter()
                     exit()
+                    click()
                 }
-                .performClick()
 
             onNodeWithContentDescription("chooserItem-Image generation", useUnmergedTree = true)
                 .assertDoesNotExist()
