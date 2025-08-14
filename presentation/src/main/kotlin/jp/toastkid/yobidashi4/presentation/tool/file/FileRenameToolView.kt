@@ -72,7 +72,7 @@ fun FileRenameToolView() {
                                     .clickable {
                                         viewModel.remove(path)
                                     }
-                                    .semantics { contentDescription = "Delete ${path.fileName.toString()}" }
+                                    .semantics { contentDescription = "Delete ${path.fileName}" }
                             )
                         }
                     }
