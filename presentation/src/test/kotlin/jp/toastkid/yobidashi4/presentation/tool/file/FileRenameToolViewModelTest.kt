@@ -174,4 +174,9 @@ class FileRenameToolViewModelTest {
         verify { mainViewModel.unregisterDroppedPathReceiver() }
     }
 
+    @Test
+    fun remove() {
+        subject.remove(mockk())
+    }
+
 }
