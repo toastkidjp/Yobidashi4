@@ -97,7 +97,10 @@ fun ChatTabView(chatTab: ChatTab) {
                     ) {
                         GenerativeAiModel.entries.forEach { model ->
                             val cursorOn = remember { mutableStateOf(false) }
-                            val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
+                            val backgroundColor = animateColorAsState(
+                                if (cursorOn.value) MaterialTheme.colors.primary
+                                else Color.Transparent
+                            )
 
                             DropdownMenuItem(
                                 {
