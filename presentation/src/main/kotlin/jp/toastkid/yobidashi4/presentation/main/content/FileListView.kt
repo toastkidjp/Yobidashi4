@@ -129,7 +129,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         viewModel.openingDropdown(fileListItem),
                         cursorOn,
                         viewModel::closeDropdown,
-                        { viewModel.selectedFiles() },
+                        viewModel::selectedFiles,
                         viewModel::openFile,
                         { viewModel.edit(fileListItem.path) },
                         { viewModel.preview(fileListItem.path) },
