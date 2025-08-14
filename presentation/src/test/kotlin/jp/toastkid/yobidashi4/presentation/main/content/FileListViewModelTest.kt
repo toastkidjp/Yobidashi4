@@ -619,7 +619,7 @@ class FileListViewModelTest {
 
         subject.clipText("test")
 
-        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+        verify { anyConstructed<ClipboardPutterService>().invoke("test") }
     }
 
     @OptIn(InternalComposeUiApi::class)
