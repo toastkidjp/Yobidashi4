@@ -227,7 +227,7 @@ class FileListViewModel : KoinComponent {
 
     private fun useSelectedFile(pathIfEmpty: Path?, action: (Path) -> Unit) {
         articleStates.filter(FileListItem::selected)
-            .map { it.path }
+            .map(FileListItem::path)
             .ifEmpty { makeSubstitute(pathIfEmpty) }
             .forEach(action)
     }
