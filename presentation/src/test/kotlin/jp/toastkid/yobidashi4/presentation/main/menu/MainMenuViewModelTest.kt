@@ -983,4 +983,15 @@ class MainMenuViewModelTest {
         verify { mainViewModel.openTab(any()) }
     }
 
+    @Test
+    fun shortcutKey() {
+        val currentOsName = System.getProperty("os.name")
+        System.setProperty("os.name", "Mac OS")
+        subject = MainMenuViewModel()
+
+        assertTrue(subject.useMetaKey())
+
+        System.setProperty("os.name", currentOsName)
+    }
+
 }
