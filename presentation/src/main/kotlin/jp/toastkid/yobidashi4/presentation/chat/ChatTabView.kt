@@ -168,7 +168,7 @@ fun ChatTabView(chatTab: ChatTab) {
                             viewModel.send(coroutineScope)
                         } }
                 ) {
-                    Text("Send", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("Send", color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
                 }
             }
         }
