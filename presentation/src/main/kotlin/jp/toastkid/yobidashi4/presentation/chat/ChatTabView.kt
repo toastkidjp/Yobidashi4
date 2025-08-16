@@ -47,6 +47,7 @@ import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
+import jp.toastkid.yobidashi4.presentation.component.GlowingButton
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
@@ -145,18 +146,29 @@ fun ChatTabView(chatTab: ChatTab) {
                 }
             }
 
-            MultiLineTextField(
-                viewModel.textInput(),
-                viewModel.label(),
-                Int.MAX_VALUE,
-                viewModel::onValueChanged,
-                modifier = Modifier
-                    .focusRequester(viewModel.focusRequester())
-                    .fillMaxWidth()
-                    .weight(0.2f)
-                    .onKeyEvent { viewModel.onKeyEvent(coroutineScope, it) }
-                    .semantics { contentDescription = "Input message box." }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                MultiLineTextField(
+                    viewModel.textInput(),
+                    viewModel.label(),
+                    Int.MAX_VALUE,
+                    viewModel::onValueChanged,
+                    modifier = Modifier
+                        .focusRequester(viewModel.focusRequester())
+                        .fillMaxWidth()
+                        .weight(0.2f)
+                        .onKeyEvent { viewModel.onKeyEvent(coroutineScope, it) }
+                        .semantics { contentDescription = "Input message box." }
+                )
+
+                GlowingButton(
+                    "Send",
+                    { coroutineScope.launch {
+                        viewModel.send(coroutineScope)
+                    } }
+                )
+            }
         }
     }
 
