@@ -163,11 +163,12 @@ fun ChatTabView(chatTab: ChatTab) {
                 )
 
                 GlowingButton(
-                    "Send",
                     { coroutineScope.launch {
                         viewModel.send(coroutineScope)
                     } }
-                )
+                ) {
+                    Text("Send", color = Color.White, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
