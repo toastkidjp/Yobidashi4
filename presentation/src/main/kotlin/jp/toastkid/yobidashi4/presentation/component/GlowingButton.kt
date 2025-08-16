@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun GlowingButton(
     onClick: () -> Unit,
-    content: @Composable BoxScope.() -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val infiniteTransition = rememberInfiniteTransition()
     val glow = infiniteTransition.animateFloat(
@@ -34,7 +35,7 @@ internal fun GlowingButton(
     )
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .graphicsLayer {
                 scaleX = glow.value
                 scaleY = glow.value
