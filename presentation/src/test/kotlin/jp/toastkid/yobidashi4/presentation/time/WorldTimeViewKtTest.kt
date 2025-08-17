@@ -2,8 +2,10 @@ package jp.toastkid.yobidashi4.presentation.time
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -63,7 +65,12 @@ class WorldTimeViewKtTest {
                 .performClick()
 
             onNodeWithContentDescription("Timezone chooser's item UTC", useUnmergedTree = true)
-                .performClick()
+                .performMouseInput {
+                    enter()
+                    exit()
+                    enter()
+                    click()
+                }
 
             onNodeWithContentDescription("Hour chooser", useUnmergedTree = true)
                 .performClick()
