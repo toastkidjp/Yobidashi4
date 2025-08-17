@@ -170,15 +170,34 @@ fun WorldTimeView(modifier: Modifier) {
                                 viewModel.openingMinuteChooser(),
                                 viewModel::closeMinuteChooser
                             ) {
+                                val cursorOn = remember { mutableStateOf(false) }
+                                val backgroundColor = animateColorAsState(
+                                    if (cursorOn.value) MaterialTheme.colors.primary
+                                    else Color.Transparent
+                                )
+                                val fontColor = animateColorAsState(
+                                    if (cursorOn.value) MaterialTheme.colors.onPrimary
+                                    else Color.Transparent
+                                )
+
                                 (0..59).forEach {
                                     DropdownMenuItem(
                                         {
                                             viewModel.chooseMinute(it)
                                         },
-                                        modifier = Modifier.semantics { contentDescription = "Minute chooser's item $it" }
+                                        modifier = Modifier
+                                            .drawBehind { drawRect(backgroundColor.value) }
+                                            .onPointerEvent(PointerEventType.Enter) {
+                                                cursorOn.value = true
+                                            }
+                                            .onPointerEvent(PointerEventType.Exit) {
+                                                cursorOn.value = false
+                                            }
+                                            .semantics { contentDescription = "Minute chooser's item $it" }
                                     ) {
                                         Text(
                                             "$it",
+                                            color = fontColor.value,
                                             fontSize = 24.sp
                                         )
                                     }
