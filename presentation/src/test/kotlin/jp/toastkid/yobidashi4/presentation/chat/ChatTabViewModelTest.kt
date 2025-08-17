@@ -116,28 +116,27 @@ class ChatTabViewModelTest {
 
         runDesktopComposeUiTest {
             setContent {
-                rememberCoroutineScope().launch {
-                    subject.onValueChanged(TextFieldValue("test"))
+                val coroutineScope = rememberCoroutineScope()
+                subject.onValueChanged(TextFieldValue("test"))
 
-                    subject.send(CoroutineScope(Dispatchers.Unconfined))
-                    capturingSlot.captured.invoke(null)
-                    capturingSlot.captured.invoke(ChatResponseItem("Answer"))
-                    capturingSlot.captured.invoke(ChatResponseItem("on going"))
+                subject.send(coroutineScope)
+                capturingSlot.captured.invoke(null)
+                capturingSlot.captured.invoke(ChatResponseItem("Answer"))
+                capturingSlot.captured.invoke(ChatResponseItem("on going"))
 
-                    verify { service.send(any(), any(), any()) }
+                verify { service.send(any(), any(), any()) }
 
-                    capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
+                capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
 
-                    subject.send(CoroutineScope(Dispatchers.Unconfined))
-                    capturingSlot.captured.invoke(null)
-                    capturingSlot.captured.invoke(ChatResponseItem("Answer"))
-                    assertEquals(2, subject.messages().size)
+                subject.send(coroutineScope)
+                capturingSlot.captured.invoke(null)
+                capturingSlot.captured.invoke(ChatResponseItem("Answer"))
+                assertEquals(2, subject.messages().size)
 
-                    subject.onValueChanged(TextFieldValue("2nd send"))
-                    subject.send(CoroutineScope(Dispatchers.Unconfined))
-                    capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
-                    assertEquals(4, subject.messages().size)
-                }
+                subject.onValueChanged(TextFieldValue("2nd send"))
+                subject.send(coroutineScope)
+                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
+                assertEquals(4, subject.messages().size)
             }
         }
     }
