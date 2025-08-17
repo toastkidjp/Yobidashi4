@@ -88,7 +88,7 @@ class ChatTabViewModel : KoinComponent {
         useImageGeneration.value = useImageGeneration.value.not()
     }
 
-    suspend fun send(coroutineScope: CoroutineScope) {
+    fun send(coroutineScope: CoroutineScope) {
         val text = textInput.value.text
         if (text.isBlank()) {
             return
@@ -107,15 +107,18 @@ class ChatTabViewModel : KoinComponent {
         }
 
         labelState.value = "Connecting in progress..."
-        withContext(ioContextProvider()) {
-            service.send(messages, currentModel.value) {
-                onReceive(it)
-                coroutineScope.launch {
-                    scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
+
+        coroutineScope.launch {
+            withContext(ioContextProvider()) {
+                service.send(messages, currentModel.value) {
+                    onReceive(it)
+                    coroutineScope.launch {
+                        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
+                    }
                 }
             }
+            labelState.value = DEFAULT_LABEL
         }
-        labelState.value = DEFAULT_LABEL
     }
 
     private fun onReceive(item: ChatResponseItem?) {
