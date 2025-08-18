@@ -71,6 +71,7 @@ class ChatTabViewKtTest {
         every { anyConstructed<ChatTabViewModel>().switchImageGeneration() } just Runs
         every { anyConstructed<ChatTabViewModel>().clearChat() } just Runs
         every { anyConstructed<ChatTabViewModel>().clipText(any()) } just Runs
+        every { anyConstructed<ChatTabViewModel>().send(any()) } just Runs
         every { tab.chat() } returns mockk()
         every { tab.scrollPosition() } returns 0
     }
@@ -123,6 +124,10 @@ class ChatTabViewKtTest {
                     click()
                 }
                 .assertDoesNotExist()
+
+            onNodeWithContentDescription("Send chat", useUnmergedTree = true)
+                .performClick()
+            verify { anyConstructed<ChatTabViewModel>().send(any()) }
         }
     }
 
