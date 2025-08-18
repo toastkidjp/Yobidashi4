@@ -165,7 +165,15 @@ fun NumberPlaceView() {
             }
 
             DropdownMenuItem(
-                onClick = viewModel::setCorrect
+                onClick = viewModel::setCorrect,
+                modifier = Modifier
+                    .drawBehind { drawRect(backgroundColor.value) }
+                    .onPointerEvent(PointerEventType.Enter) {
+                        cursorOn.value = true
+                    }
+                    .onPointerEvent(PointerEventType.Exit) {
+                        cursorOn.value = false
+                    }
             ) {
                 Text("Set answer")
             }
