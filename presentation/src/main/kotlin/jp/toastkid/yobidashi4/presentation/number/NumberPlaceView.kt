@@ -171,7 +171,15 @@ fun NumberPlaceView() {
             }
 
             DropdownMenuItem(
-                onClick = viewModel::clear
+                onClick = viewModel::clear,
+                modifier = Modifier
+                    .drawBehind { drawRect(backgroundColor.value) }
+                    .onPointerEvent(PointerEventType.Enter) {
+                        cursorOn.value = true
+                    }
+                    .onPointerEvent(PointerEventType.Exit) {
+                        cursorOn.value = false
+                    }
             ) {
                 Text("Clear")
             }
