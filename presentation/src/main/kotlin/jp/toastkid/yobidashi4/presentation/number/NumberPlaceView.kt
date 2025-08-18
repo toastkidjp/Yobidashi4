@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi4.presentation.number
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -31,10 +32,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -43,7 +49,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NumberPlaceView() {
     val viewModel = remember { NumberPlaceViewModel() }
@@ -134,8 +140,26 @@ fun NumberPlaceView() {
             viewModel.openingDropdown(),
             onDismissRequest = viewModel::closeDropdown
         ) {
+            val cursorOn = remember { mutableStateOf(false) }
+            val backgroundColor = animateColorAsState(
+                if (cursorOn.value) MaterialTheme.colors.primary
+                else Color.Transparent
+            )
+            val fontColor = animateColorAsState(
+                if (cursorOn.value) MaterialTheme.colors.onPrimary
+                else Color.Transparent
+            )
+
             DropdownMenuItem(
-                onClick = viewModel::renewGame
+                onClick = viewModel::renewGame,
+                modifier = Modifier
+                    .drawBehind { drawRect(backgroundColor.value) }
+                    .onPointerEvent(PointerEventType.Enter) {
+                        cursorOn.value = true
+                    }
+                    .onPointerEvent(PointerEventType.Exit) {
+                        cursorOn.value = false
+                    }
             ) {
                 Text("Other board")
             }
