@@ -165,6 +165,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 GlowingButton(
                     modifier = Modifier
                         .clickable { viewModel.send(coroutineScope) }
+                        .semantics { contentDescription = "Send chat" }
                 ) {
                     Text("Send", color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
                 }
