@@ -87,7 +87,12 @@ class WorldTimeViewKtTest {
                 .performClick()
 
             onNodeWithContentDescription("Minute chooser's item 1", useUnmergedTree = true)
-                .performClick()
+                .performMouseInput {
+                    enter()
+                    exit()
+                    enter()
+                    click()
+                }
         }
     }
 }
