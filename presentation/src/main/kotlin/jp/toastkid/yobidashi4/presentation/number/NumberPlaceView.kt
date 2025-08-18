@@ -161,7 +161,7 @@ fun NumberPlaceView() {
                         cursorOn.value = false
                     }
             ) {
-                Text("Other board")
+                Text("Other board", color = fontColor.value)
             }
 
             DropdownMenuItem(
