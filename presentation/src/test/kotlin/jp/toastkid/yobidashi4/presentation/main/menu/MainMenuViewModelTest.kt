@@ -994,4 +994,15 @@ class MainMenuViewModelTest {
         System.setProperty("os.name", currentOsName)
     }
 
+    @Test
+    fun shortcutKeyWindowsCase() {
+        val currentOsName = System.getProperty("os.name")
+        System.setProperty("os.name", "Windows 11")
+        subject = MainMenuViewModel()
+
+        assertFalse(subject.useMetaKey())
+
+        System.setProperty("os.name", currentOsName)
+    }
+
 }
