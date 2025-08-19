@@ -164,18 +164,28 @@ fun NumberPlaceView() {
                 Text("Other board", color = fontColor.value)
             }
 
+            val cursorOnSetCorrect = remember { mutableStateOf(false) }
+            val backgroundColorSetCorrect = animateColorAsState(
+                if (cursorOnSetCorrect.value) MaterialTheme.colors.primary
+                else Color.Transparent
+            )
+            val fontColorSetCorrect = animateColorAsState(
+                if (cursorOnSetCorrect.value) MaterialTheme.colors.onPrimary
+                else Color.Transparent
+            )
+
             DropdownMenuItem(
                 onClick = viewModel::setCorrect,
                 modifier = Modifier
-                    .drawBehind { drawRect(backgroundColor.value) }
+                    .drawBehind { drawRect(backgroundColorSetCorrect.value) }
                     .onPointerEvent(PointerEventType.Enter) {
-                        cursorOn.value = true
+                        cursorOnSetCorrect.value = true
                     }
                     .onPointerEvent(PointerEventType.Exit) {
-                        cursorOn.value = false
+                        cursorOnSetCorrect.value = false
                     }
             ) {
-                Text("Set answer", color = fontColor.value)
+                Text("Set answer", color = fontColorSetCorrect.value)
             }
 
             DropdownMenuItem(
