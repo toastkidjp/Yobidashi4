@@ -16,7 +16,7 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun HoverHighlightDropdownMenuItem(
+internal fun HoverHighlightDropdownMenuItem(
     labelText: String,
     onClick: () -> Unit
 ) {
