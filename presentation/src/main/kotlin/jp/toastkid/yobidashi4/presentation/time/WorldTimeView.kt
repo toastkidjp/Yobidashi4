@@ -70,17 +70,17 @@ fun WorldTimeView(modifier: Modifier) {
                                 viewModel.openingChooser(),
                                 viewModel::closeChooser
                             ) {
-                                val cursorOn = remember { mutableStateOf(false) }
-                                val backgroundColor = animateColorAsState(
-                                    if (cursorOn.value) MaterialTheme.colors.primary
-                                    else Color.Transparent
-                                )
-                                val fontColor = animateColorAsState(
-                                    if (cursorOn.value) MaterialTheme.colors.onPrimary
-                                    else Color.Transparent
-                                )
-
                                 viewModel.pickupTimeZone().forEach {
+                                    val cursorOn = remember { mutableStateOf(false) }
+                                    val backgroundColor = animateColorAsState(
+                                        if (cursorOn.value) MaterialTheme.colors.primary
+                                        else Color.Transparent
+                                    )
+                                    val fontColor = animateColorAsState(
+                                        if (cursorOn.value) MaterialTheme.colors.onPrimary
+                                        else Color.Transparent
+                                    )
+
                                     DropdownMenuItem(
                                         {
                                             viewModel.choose(it)
