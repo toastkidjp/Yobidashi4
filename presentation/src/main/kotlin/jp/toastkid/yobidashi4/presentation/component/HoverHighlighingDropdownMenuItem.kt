@@ -20,27 +20,27 @@ internal fun HoverHighlightDropdownMenuItem(
     labelText: String,
     onClick: () -> Unit
 ) {
-    val cursorOnClear = remember { mutableStateOf(false) }
-    val backgroundColorClear = animateColorAsState(
-        if (cursorOnClear.value) MaterialTheme.colors.primary
+    val cursorOn = remember { mutableStateOf(false) }
+    val backgroundColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colors.primary
         else Color.Transparent
     )
-    val fontColorClear = animateColorAsState(
-        if (cursorOnClear.value) MaterialTheme.colors.onPrimary
+    val fontColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colors.onPrimary
         else Color.Transparent
     )
 
     DropdownMenuItem(
         onClick = onClick,
         modifier = Modifier
-            .drawBehind { drawRect(backgroundColorClear.value) }
+            .drawBehind { drawRect(backgroundColor.value) }
             .onPointerEvent(PointerEventType.Enter) {
-                cursorOnClear.value = true
+                cursorOn.value = true
             }
             .onPointerEvent(PointerEventType.Exit) {
-                cursorOnClear.value = false
+                cursorOn.value = false
             }
     ) {
-        Text(labelText, color = fontColorClear.value)
+        Text(labelText, color = fontColor.value)
     }
 }
