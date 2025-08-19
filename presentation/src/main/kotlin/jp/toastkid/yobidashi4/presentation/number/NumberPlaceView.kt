@@ -189,7 +189,7 @@ fun NumberPlaceView() {
                         cursorOn.value = false
                     }
             ) {
-                Text("Clear")
+                Text("Clear", color = fontColor.value)
             }
         }
     }
