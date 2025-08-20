@@ -165,16 +165,6 @@ fun NumberPlaceView() {
                 Text("Other board", color = fontColor.value)
             }
 
-            val cursorOnSetCorrect = remember { mutableStateOf(false) }
-            val backgroundColorSetCorrect = animateColorAsState(
-                if (cursorOnSetCorrect.value) MaterialTheme.colors.primary
-                else Color.Transparent
-            )
-            val fontColorSetCorrect = animateColorAsState(
-                if (cursorOnSetCorrect.value) MaterialTheme.colors.onPrimary
-                else Color.Transparent
-            )
-
             HoverHighlightDropdownMenuItem(
                 "Set answer", onClick = viewModel::setCorrect
             )
