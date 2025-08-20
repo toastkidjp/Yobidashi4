@@ -72,16 +72,6 @@ fun WorldTimeView(modifier: Modifier) {
                                 viewModel::closeChooser
                             ) {
                                 viewModel.pickupTimeZone().forEach {
-                                    val cursorOn = remember { mutableStateOf(false) }
-                                    val backgroundColor = animateColorAsState(
-                                        if (cursorOn.value) MaterialTheme.colors.primary
-                                        else Color.Transparent
-                                    )
-                                    val fontColor = animateColorAsState(
-                                        if (cursorOn.value) MaterialTheme.colors.onPrimary
-                                        else Color.Transparent
-                                    )
-
                                     HoverHighlightDropdownMenuItem(
                                         viewModel.label(it),
                                         modifier = Modifier.semantics { contentDescription = "Timezone chooser's item ${viewModel.label(it)}" },
