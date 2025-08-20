@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -198,19 +199,9 @@ fun NumberPlaceView() {
                 else Color.Transparent
             )
 
-            DropdownMenuItem(
-                onClick = viewModel::clear,
-                modifier = Modifier
-                    .drawBehind { drawRect(backgroundColorClear.value) }
-                    .onPointerEvent(PointerEventType.Enter) {
-                        cursorOnClear.value = true
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        cursorOnClear.value = false
-                    }
-            ) {
-                Text("Clear", color = fontColorClear.value)
-            }
+            HoverHighlightDropdownMenuItem(
+                "Clear", onClick = viewModel::clear
+            )
         }
     }
 
