@@ -31,7 +31,7 @@ internal fun HoverHighlightDropdownMenuItem(
     )
     val fontColor = animateColorAsState(
         if (cursorOn.value) MaterialTheme.colors.onPrimary
-        else Color.Transparent
+        else MaterialTheme.colors.onSurface
     )
 
     DropdownMenuItem(
