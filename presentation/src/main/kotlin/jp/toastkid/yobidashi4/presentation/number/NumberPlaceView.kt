@@ -189,16 +189,6 @@ fun NumberPlaceView() {
                 Text("Set answer", color = fontColorSetCorrect.value)
             }
 
-            val cursorOnClear = remember { mutableStateOf(false) }
-            val backgroundColorClear = animateColorAsState(
-                if (cursorOnClear.value) MaterialTheme.colors.primary
-                else Color.Transparent
-            )
-            val fontColorClear = animateColorAsState(
-                if (cursorOnClear.value) MaterialTheme.colors.onPrimary
-                else Color.Transparent
-            )
-
             HoverHighlightDropdownMenuItem(
                 "Clear", onClick = viewModel::clear
             )
