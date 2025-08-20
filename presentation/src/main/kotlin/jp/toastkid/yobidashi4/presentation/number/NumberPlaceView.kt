@@ -37,10 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -151,19 +148,9 @@ fun NumberPlaceView() {
                 else Color.Transparent
             )
 
-            DropdownMenuItem(
-                onClick = viewModel::renewGame,
-                modifier = Modifier
-                    .drawBehind { drawRect(backgroundColor.value) }
-                    .onPointerEvent(PointerEventType.Enter) {
-                        cursorOn.value = true
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        cursorOn.value = false
-                    }
-            ) {
-                Text("Other board", color = fontColor.value)
-            }
+            HoverHighlightDropdownMenuItem(
+                "Other board", onClick = viewModel::renewGame
+            )
 
             HoverHighlightDropdownMenuItem(
                 "Set answer", onClick = viewModel::setCorrect
