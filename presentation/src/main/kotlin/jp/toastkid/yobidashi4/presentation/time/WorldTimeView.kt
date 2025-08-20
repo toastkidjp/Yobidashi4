@@ -35,6 +35,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -116,36 +117,11 @@ fun WorldTimeView(modifier: Modifier) {
                                 viewModel::closeHourChooser,
                             ) {
                                 (0..23).forEach {
-                                    val cursorOn = remember { mutableStateOf(false) }
-                                    val backgroundColor = animateColorAsState(
-                                        if (cursorOn.value) MaterialTheme.colors.primary
-                                        else Color.Transparent
-                                    )
-                                    val fontColor = animateColorAsState(
-                                        if (cursorOn.value) MaterialTheme.colors.onPrimary
-                                        else Color.Transparent
-                                    )
-
-                                    DropdownMenuItem(
-                                        {
-                                            viewModel.chooseHour(it)
-                                        },
-                                        modifier = Modifier
-                                            .drawBehind { drawRect(backgroundColor.value) }
-                                            .onPointerEvent(PointerEventType.Enter) {
-                                                cursorOn.value = true
-                                            }
-                                            .onPointerEvent(PointerEventType.Exit) {
-                                                cursorOn.value = false
-                                            }
-                                            .semantics { contentDescription = "Hour chooser's item $it" }
-                                    ) {
-                                        Text(
-                                            "$it",
-                                            color = fontColor.value,
-                                            fontSize = 24.sp,
-                                        )
-                                    }
+                                    HoverHighlightDropdownMenuItem(
+                                        "$it",
+                                        modifier = Modifier.semantics { contentDescription = "Hour chooser's item $it" },
+                                        fontSize = 24.sp
+                                    ) { viewModel.chooseHour(it) }
                                 }
                             }
                         }
