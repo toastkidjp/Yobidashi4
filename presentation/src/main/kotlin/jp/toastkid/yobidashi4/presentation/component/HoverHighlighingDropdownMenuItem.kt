@@ -13,11 +13,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun HoverHighlightDropdownMenuItem(
     labelText: String,
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = 16.sp,
     onClick: () -> Unit
 ) {
     val cursorOn = remember { mutableStateOf(false) }
@@ -32,7 +36,7 @@ internal fun HoverHighlightDropdownMenuItem(
 
     DropdownMenuItem(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .drawBehind { drawRect(backgroundColor.value) }
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
@@ -41,6 +45,6 @@ internal fun HoverHighlightDropdownMenuItem(
                 cursorOn.value = false
             }
     ) {
-        Text(labelText, color = fontColor.value)
+        Text(labelText, fontSize = fontSize, color = fontColor.value)
     }
 }
