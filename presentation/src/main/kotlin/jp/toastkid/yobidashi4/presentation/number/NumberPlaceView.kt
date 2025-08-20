@@ -175,19 +175,9 @@ fun NumberPlaceView() {
                 else Color.Transparent
             )
 
-            DropdownMenuItem(
-                onClick = viewModel::setCorrect,
-                modifier = Modifier
-                    .drawBehind { drawRect(backgroundColorSetCorrect.value) }
-                    .onPointerEvent(PointerEventType.Enter) {
-                        cursorOnSetCorrect.value = true
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        cursorOnSetCorrect.value = false
-                    }
-            ) {
-                Text("Set answer", color = fontColorSetCorrect.value)
-            }
+            HoverHighlightDropdownMenuItem(
+                "Set answer", onClick = viewModel::setCorrect
+            )
 
             HoverHighlightDropdownMenuItem(
                 "Clear", onClick = viewModel::clear
