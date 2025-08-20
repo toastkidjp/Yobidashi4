@@ -82,22 +82,10 @@ fun WorldTimeView(modifier: Modifier) {
                                         else Color.Transparent
                                     )
 
-                                    DropdownMenuItem(
-                                        {
-                                            viewModel.choose(it)
-                                        },
-                                        modifier = Modifier
-                                            .drawBehind { drawRect(backgroundColor.value) }
-                                            .onPointerEvent(PointerEventType.Enter) {
-                                                cursorOn.value = true
-                                            }
-                                            .onPointerEvent(PointerEventType.Exit) {
-                                                cursorOn.value = false
-                                            }
-                                            .semantics { contentDescription = "Timezone chooser's item ${viewModel.label(it)}" }
-                                    ) {
-                                        Text(viewModel.label(it), color = fontColor.value)
-                                    }
+                                    HoverHighlightDropdownMenuItem(
+                                        viewModel.label(it),
+                                        modifier = Modifier.semantics { contentDescription = "Timezone chooser's item ${viewModel.label(it)}" },
+                                    ) { viewModel.choose(it) }
                                 }
                             }
                         }
