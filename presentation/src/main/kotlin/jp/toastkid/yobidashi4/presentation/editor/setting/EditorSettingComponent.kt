@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -13,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import java.awt.GraphicsEnvironment
 
 @Composable
@@ -68,13 +68,9 @@ private fun <T> EditorSettingDropdown(
             onDismissRequest = onClose
         ) {
             items.forEach {
-                DropdownMenuItem(
-                    onClick = {
-                        onClose()
-                        onSelectValue(it)
-                    }
-                ) {
-                    Text("$it")
+                HoverHighlightDropdownMenuItem("$it") {
+                    onClose()
+                    onSelectValue(it)
                 }
             }
         }
