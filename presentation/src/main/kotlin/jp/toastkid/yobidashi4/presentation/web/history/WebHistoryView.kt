@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -113,16 +114,9 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                             expanded = viewModel.openingDropdown(webHistory),
                             onDismissRequest = viewModel::closeDropdown
                         ) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.openUrl(webHistory.url, false)
-                                    viewModel.closeDropdown()
-                                }
-                            ) {
-                                Text(
-                                    "Open",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
+                            HoverHighlightDropdownMenuItem("Open", modifier = Modifier.fillMaxSize()) {
+                                viewModel.openUrl(webHistory.url, false)
+                                viewModel.closeDropdown()
                             }
 
                             DropdownMenuItem(
