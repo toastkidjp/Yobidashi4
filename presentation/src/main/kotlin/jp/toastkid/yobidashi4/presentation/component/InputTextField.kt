@@ -83,9 +83,7 @@ internal fun InputTextField(
                 }
             }
 
-            HoverHighlightDropdownMenuItem("Clear history") {
-                onClickClear()
-            }
+            HoverHighlightDropdownMenuItem("Clear history", onClick = onClickClear)
         }
     }
 }
