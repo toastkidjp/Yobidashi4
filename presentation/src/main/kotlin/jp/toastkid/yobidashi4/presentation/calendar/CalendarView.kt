@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import java.time.DayOfWeek
 import java.time.Month
@@ -155,11 +155,12 @@ private fun TopComponent(
                 Text("$currentMonth", fontSize = 16.sp)
                 DropdownMenu(expanded = openingMonthChooser, onDismissRequest = closeMonthChooser) {
                     Month.entries.forEach {
-                        DropdownMenuItem(onClick = {
+                        HoverHighlightDropdownMenuItem(
+                            "${it.value}",
+                            modifier = Modifier.semantics { contentDescription = "month_chooser_button_${it.value}" }
+                        ) {
                             moveMonth(it.value)
                             closeMonthChooser()
-                        }, modifier = Modifier.semantics { contentDescription = "month_chooser_button_${it.value}" }) {
-                            Text("${it.value}")
                         }
                     }
                 }
