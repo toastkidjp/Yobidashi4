@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -135,26 +134,11 @@ fun WorldTimeView(modifier: Modifier) {
                                         else Color.Transparent
                                     )
 
-                                    DropdownMenuItem(
-                                        {
-                                            viewModel.chooseMinute(it)
-                                        },
-                                        modifier = Modifier
-                                            .drawBehind { drawRect(backgroundColor.value) }
-                                            .onPointerEvent(PointerEventType.Enter) {
-                                                cursorOn.value = true
-                                            }
-                                            .onPointerEvent(PointerEventType.Exit) {
-                                                cursorOn.value = false
-                                            }
-                                            .semantics { contentDescription = "Minute chooser's item $it" }
-                                    ) {
-                                        Text(
-                                            "$it",
-                                            color = fontColor.value,
-                                            fontSize = 24.sp
-                                        )
-                                    }
+                                    HoverHighlightDropdownMenuItem(
+                                        "$it",
+                                        modifier = Modifier.semantics { contentDescription = "Minute chooser's item $it" },
+                                        fontSize = 24.sp
+                                    ) { viewModel.chooseMinute(it) }
                                 }
                             }
                         }
