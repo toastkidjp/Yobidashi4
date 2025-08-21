@@ -78,10 +78,8 @@ internal fun InputTextField(
                         Text("x")
                     }
 
-                    DropdownMenuItem({
+                    HoverHighlightDropdownMenuItem(it) {
                         suggestionConsumer(it)
-                    }) {
-                        Text(it)
                     }
                 }
             }
