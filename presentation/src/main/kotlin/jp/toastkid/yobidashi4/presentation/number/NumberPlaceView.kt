@@ -24,7 +24,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -240,12 +239,12 @@ private fun MaskedCell(
             }
 
             (1..9).forEach {
-                DropdownMenuItem(onClick = { onMenuItemClick(it) }, modifier = Modifier.semantics { contentDescription = "chooser_$it" }) {
-                    Text(
-                        text = "$it",
-                        fontSize = fontSize,
-                        textAlign = TextAlign.Center
-                    )
+                HoverHighlightDropdownMenuItem(
+                    "$it",
+                    modifier = Modifier.semantics { contentDescription = "chooser_$it" },
+                    fontSize = fontSize,
+                ) {
+                    onMenuItemClick(it)
                 }
             }
         }
