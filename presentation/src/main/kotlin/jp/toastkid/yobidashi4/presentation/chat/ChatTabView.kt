@@ -18,7 +18,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -31,12 +30,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +44,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.GlowingButton
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
@@ -103,29 +100,11 @@ fun ChatTabView(chatTab: ChatTab) {
                                 else Color.Transparent
                             )
 
-                            DropdownMenuItem(
-                                {
-                                    viewModel.chooseModel(model)
-                                    viewModel.closeModelChooser()
-                                },
-                                modifier = Modifier
-                                    .drawBehind {
-                                        drawRect(backgroundColor.value)
-                                    }
-                                    .onPointerEvent(PointerEventType.Enter) {
-                                        cursorOn.value = true
-                                    }
-                                    .onPointerEvent(PointerEventType.Exit) {
-                                        cursorOn.value = false
-                                    }
-                                    .semantics {
-                                        contentDescription = "chooserItem-${model.label()}"
-                                    }
-                            ) {
-                                val fontColor =
-                                    if (cursorOn.value) MaterialTheme.colors.onPrimary
-                                    else MaterialTheme.colors.onSurface
-                                GenerativeAiModelLabel(model.label(), viewModel.modelIcon(model), fontColor)
+                            HoverHighlightDropdownMenuItem(model.label(), modifier = Modifier.semantics {
+                                contentDescription = "chooserItem-${model.label()}"
+                            }, drawableResource = viewModel.modelIcon(model)) {
+                                viewModel.chooseModel(model)
+                                viewModel.closeModelChooser()
                             }
                         }
                     }
