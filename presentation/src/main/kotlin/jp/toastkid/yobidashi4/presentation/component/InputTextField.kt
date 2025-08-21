@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -84,8 +83,8 @@ internal fun InputTextField(
                 }
             }
 
-            DropdownMenuItem(onClickClear) {
-                Text("Clear history")
+            HoverHighlightDropdownMenuItem("Clear history") {
+                onClickClear()
             }
         }
     }
