@@ -71,7 +71,7 @@ _
     @Test
     fun monthlyCase() {
         val path = mockk<Path>()
-        every { path.nameWithoutExtension }.returns("2024-02-23.md")
+        every { path.nameWithoutExtension } returns "2024-02-23.md"
 
         val lines = """
 _
