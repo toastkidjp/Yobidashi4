@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.number
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.MouseButton
 import androidx.compose.ui.test.click
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
@@ -21,8 +22,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.model.number.NumberPlaceGame
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.repository.number.GameRepository
@@ -35,6 +34,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.util.concurrent.atomic.AtomicBoolean
 
 class NumberPlaceViewKtTest {
 
@@ -111,12 +112,22 @@ class NumberPlaceViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainOption() {
+        every { anyConstructed<NumberPlaceViewModel>().renewGame() } just Runs
         every { anyConstructed<NumberPlaceViewModel>().openingDropdown() } returns true
 
         runDesktopComposeUiTest {
             setContent {
                 NumberPlaceView()
             }
+
+            onNode(hasText("Other board"), useUnmergedTree = true)
+                .performMouseInput {
+                    enter()
+                    exit()
+                    enter()
+                    click()
+                }
+            verify { anyConstructed<NumberPlaceViewModel>().renewGame() }
 
             onNodeWithContentDescription("Surface", useUnmergedTree = true)
                 .performMouseInput {
