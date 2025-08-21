@@ -231,12 +231,12 @@ private fun MaskedCell(
             textAlign = TextAlign.Center
         )
         DropdownMenu(open, onDismissRequest = close) {
-            DropdownMenuItem(onClick = { onMenuItemClick(-1) }, modifier = Modifier.semantics { contentDescription = "chooser_-1" }) {
-                Text(
-                    text = "_",
-                    fontSize = fontSize,
-                    textAlign = TextAlign.Center
-                )
+            HoverHighlightDropdownMenuItem(
+                "_",
+                modifier = Modifier.semantics { contentDescription = "chooser_-1" },
+                fontSize = fontSize,
+            ) {
+                onMenuItemClick(-1)
             }
 
             (1..9).forEach {
