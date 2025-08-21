@@ -197,17 +197,13 @@ private fun AppBarContent(
                 scrollState = rememberScrollState(),
                 onDismissRequest = closeMaskingCount) {
                 (1 .. 64).forEach { count ->
-                    DropdownMenuItem(
-                        onClick = {
-                            setMaskingCount(count)
-                            closeMaskingCount()
-                            reloadGame()
-                        }, modifier = Modifier.semantics { contentDescription = "masking_count_$count" }) {
-                        Text(
-                            text = "$count",
-                            fontSize = fontSize,
-                            textAlign = TextAlign.Center
-                        )
+                    HoverHighlightDropdownMenuItem("$count",
+                        modifier = Modifier.semantics { contentDescription = "masking_count_$count" },
+                        fontSize = fontSize,
+                    ) {
+                        setMaskingCount(count)
+                        closeMaskingCount()
+                        reloadGame()
                     }
                 }
             }
