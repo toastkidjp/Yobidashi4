@@ -177,7 +177,7 @@ test
     @Test
     fun testContainsOozumoDay() {
         mockkConstructor(UserTemplateStreamReader::class, OozumoTemplate::class)
-        every { anyConstructed<OozumoTemplate>().invoke(any()) }.returns("Oozumo")
+        every { anyConstructed<OozumoTemplate>().invoke(any()) } returns "Oozumo"
         every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
             {{oozumo}}
         """.trimIndent().byteInputStream())
