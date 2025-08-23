@@ -136,16 +136,10 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.clipText(webHistory.url)
                             }
 
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.clipText("[${webHistory.title}](${webHistory.url})")
-                                }
-                            ) {
-                                Text(
-                                    "Clip markdown link",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
+                            HoverHighlightDropdownMenuItem("Clip markdown link") {
+                                viewModel.clipText("[${webHistory.title}](${webHistory.url})")
                             }
+
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.delete(webHistory)
