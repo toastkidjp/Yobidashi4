@@ -213,13 +213,9 @@ private fun TabOptionMenu(
             close()
         }
 
-        DropdownMenuItem(
-            onClick = {
-                closeOtherTabs()
-                close()
-            }
-        ) {
-            Text("Close other tabs")
+        HoverHighlightDropdownMenuItem("Close other tabs") {
+            closeOtherTabs()
+            close()
         }
 
         if (tab is WebTab) {
