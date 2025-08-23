@@ -140,16 +140,10 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.clipText("[${webHistory.title}](${webHistory.url})")
                             }
 
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.delete(webHistory)
-                                }
-                            ) {
-                                Text(
-                                    "Delete",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
+                            HoverHighlightDropdownMenuItem("Delete") {
+                                viewModel.delete(webHistory)
                             }
+
                             DropdownMenuItem(onClick = viewModel::clear) {
                                 Text(
                                     "Clear",
