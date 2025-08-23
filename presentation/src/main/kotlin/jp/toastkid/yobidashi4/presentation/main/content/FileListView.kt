@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_reload
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import org.jetbrains.compose.resources.painterResource
@@ -222,30 +223,21 @@ private fun FileListItemRow(
             openOption,
             onDismissRequest = closeOption
         ) {
-            DropdownMenuItem(
-                onClick = {
-                    selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach(openFile)
-                    closeOption()
-                }
+            HoverHighlightDropdownMenuItem(
+                "Open"
             ) {
-                Text(
-                    "Open",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+                selectedFiles().ifEmpty { listOf(fileListItem.path) }.forEach(openFile)
+                closeOption()
             }
 
             if (fileListItem.editable) {
-                DropdownMenuItem(
-                    onClick = {
-                        edit()
-                        closeOption()
-                    }
+                HoverHighlightDropdownMenuItem(
+                    "Edit"
                 ) {
-                    Text(
-                        "Edit",
-                        modifier = Modifier.padding(8.dp).fillMaxSize()
-                    )
+                    edit()
+                    closeOption()
                 }
+
                 DropdownMenuItem(
                     onClick = {
                         preview()
