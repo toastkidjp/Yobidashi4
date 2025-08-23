@@ -113,6 +113,7 @@ class NumberPlaceViewKtTest {
     @Test
     fun mainOption() {
         every { anyConstructed<NumberPlaceViewModel>().renewGame() } just Runs
+        every { anyConstructed<NumberPlaceViewModel>().setCorrect() } just Runs
         every { anyConstructed<NumberPlaceViewModel>().openingDropdown() } returns true
 
         runDesktopComposeUiTest {
@@ -128,6 +129,15 @@ class NumberPlaceViewKtTest {
                     click()
                 }
             verify { anyConstructed<NumberPlaceViewModel>().renewGame() }
+
+            onNode(hasText("Set answer"), useUnmergedTree = true)
+                .performMouseInput {
+                    enter()
+                    exit()
+                    enter()
+                    click()
+                }
+            verify { anyConstructed<NumberPlaceViewModel>().setCorrect() }
 
             onNodeWithContentDescription("Surface", useUnmergedTree = true)
                 .performMouseInput {
