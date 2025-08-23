@@ -57,6 +57,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.chat.ChatTabView
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.TabIcon
 import jp.toastkid.yobidashi4.presentation.compound.CompoundInterestCalculatorView
 import jp.toastkid.yobidashi4.presentation.converter.ConverterToolTabView
@@ -207,13 +208,9 @@ private fun TabOptionMenu(
         expanded = openingDropdownMenu,
         onDismissRequest = close
     ) {
-        DropdownMenuItem(
-            onClick = {
-                clipText(tab.title())
-                close()
-            }
-        ) {
-            Text("Copy title")
+        HoverHighlightDropdownMenuItem("Copy title") {
+            clipText(tab.title())
+            close()
         }
 
         DropdownMenuItem(
