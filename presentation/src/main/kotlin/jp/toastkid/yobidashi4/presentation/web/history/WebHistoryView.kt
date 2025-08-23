@@ -132,16 +132,10 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.clipText(webHistory.title)
                             }
 
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.clipText(webHistory.url)
-                                }
-                            ) {
-                                Text(
-                                    "Copy URL",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
+                            HoverHighlightDropdownMenuItem("Copy URL") {
+                                viewModel.clipText(webHistory.url)
                             }
+
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.clipText("[${webHistory.title}](${webHistory.url})")
