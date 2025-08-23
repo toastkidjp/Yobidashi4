@@ -245,17 +245,13 @@ private fun FileListItemRow(
                     closeOption()
                 }
 
-                DropdownMenuItem(
-                    onClick = {
-                        openFile(fileListItem.path)
-                        closeOption()
-                    }
+                HoverHighlightDropdownMenuItem(
+                    "Open background"
                 ) {
-                    Text(
-                        "Open background",
-                        modifier = Modifier.padding(8.dp).fillMaxSize()
-                    )
+                    openFile(fileListItem.path)
+                    closeOption()
                 }
+
                 DropdownMenuItem(
                     onClick = {
                         slideshow()
