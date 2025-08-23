@@ -124,16 +124,10 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.closeDropdown()
                             }
 
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.browseUri(webHistory.url)
-                                }
-                            ) {
-                                Text(
-                                    "Open with browser",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
+                            HoverHighlightDropdownMenuItem("Open with browser") {
+                                viewModel.browseUri(webHistory.url)
                             }
+
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.clipText(webHistory.title)
