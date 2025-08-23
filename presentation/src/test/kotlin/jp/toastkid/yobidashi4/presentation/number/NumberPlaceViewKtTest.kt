@@ -124,9 +124,6 @@ class NumberPlaceViewKtTest {
 
             onNode(hasText("Other board"), useUnmergedTree = true)
                 .performMouseInput {
-                    enter()
-                    exit()
-                    enter()
                     click()
                 }
             verify { anyConstructed<NumberPlaceViewModel>().renewGame() }
