@@ -259,16 +259,12 @@ private fun FileListItemRow(
                     closeOption()
                 }
 
-                DropdownMenuItem(
-                    onClick = {
-                        clipText(fileListItem.path.nameWithoutExtension)
-                    }
+                HoverHighlightDropdownMenuItem(
+                    "Copy title"
                 ) {
-                    Text(
-                        "Copy title",
-                        modifier = Modifier.padding(8.dp).fillMaxSize()
-                    )
+                    clipText(fileListItem.path.nameWithoutExtension)
                 }
+
                 DropdownMenuItem(
                     onClick = {
                         clipText("[[${fileListItem.path.nameWithoutExtension}]]")
