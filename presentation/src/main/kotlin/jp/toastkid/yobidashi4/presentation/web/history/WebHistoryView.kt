@@ -119,17 +119,11 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.closeDropdown()
                             }
 
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.openUrl(webHistory.url, true)
-                                    viewModel.closeDropdown()
-                                }
-                            ) {
-                                Text(
-                                    "Open background",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
+                            HoverHighlightDropdownMenuItem("Open background") {
+                                viewModel.openUrl(webHistory.url, true)
+                                viewModel.closeDropdown()
                             }
+
                             DropdownMenuItem(
                                 onClick = {
                                     viewModel.browseUri(webHistory.url)
