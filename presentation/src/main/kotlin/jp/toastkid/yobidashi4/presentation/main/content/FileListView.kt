@@ -238,17 +238,13 @@ private fun FileListItemRow(
                     closeOption()
                 }
 
-                DropdownMenuItem(
-                    onClick = {
-                        preview()
-                        closeOption()
-                    }
+                HoverHighlightDropdownMenuItem(
+                    "Preview"
                 ) {
-                    Text(
-                        "Preview",
-                        modifier = Modifier.padding(8.dp).fillMaxSize()
-                    )
+                    preview()
+                    closeOption()
                 }
+
                 DropdownMenuItem(
                     onClick = {
                         openFile(fileListItem.path)
