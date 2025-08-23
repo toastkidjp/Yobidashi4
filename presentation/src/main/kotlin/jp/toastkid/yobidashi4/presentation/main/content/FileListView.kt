@@ -252,17 +252,13 @@ private fun FileListItemRow(
                     closeOption()
                 }
 
-                DropdownMenuItem(
-                    onClick = {
-                        slideshow()
-                        closeOption()
-                    }
+                HoverHighlightDropdownMenuItem(
+                    "Slideshow"
                 ) {
-                    Text(
-                        "Slideshow",
-                        modifier = Modifier.padding(8.dp).fillMaxSize()
-                    )
+                    slideshow()
+                    closeOption()
                 }
+
                 DropdownMenuItem(
                     onClick = {
                         clipText(fileListItem.path.nameWithoutExtension)
