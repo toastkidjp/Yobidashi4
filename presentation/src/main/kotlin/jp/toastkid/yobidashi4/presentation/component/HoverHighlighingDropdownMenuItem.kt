@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.component
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +32,7 @@ internal fun HoverHighlightDropdownMenuItem(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 16.sp,
     drawableResource: DrawableResource? = null,
+    iconSize: Dp = 24.dp,
     onClick: () -> Unit
 ) {
     val cursorOn = remember { mutableStateOf(false) }
@@ -61,7 +64,8 @@ internal fun HoverHighlightDropdownMenuItem(
                 Icon(
                     painter = painterResource(drawableResource),
                     contentDescription = labelText,
-                    tint = fontColor.value
+                    tint = fontColor.value,
+                    modifier = Modifier.size(iconSize)
                 )
             }
 
