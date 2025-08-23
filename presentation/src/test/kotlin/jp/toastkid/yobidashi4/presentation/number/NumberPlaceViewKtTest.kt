@@ -133,9 +133,6 @@ class NumberPlaceViewKtTest {
 
             onNode(hasText("Set answer"), useUnmergedTree = true)
                 .performMouseInput {
-                    enter()
-                    exit()
-                    enter()
                     click()
                 }
             verify { anyConstructed<NumberPlaceViewModel>().setCorrect() }
