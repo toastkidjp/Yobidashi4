@@ -219,13 +219,9 @@ private fun TabOptionMenu(
         }
 
         if (tab is WebTab) {
-            DropdownMenuItem(
-                onClick = {
-                    clipText(tab.url())
-                    close()
-                }
-            ) {
-                Text("Copy URL")
+            HoverHighlightDropdownMenuItem("Copy URL") {
+                clipText(tab.url())
+                close()
             }
         }
 
