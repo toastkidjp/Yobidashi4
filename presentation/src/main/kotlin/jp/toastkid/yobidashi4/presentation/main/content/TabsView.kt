@@ -226,13 +226,9 @@ private fun TabOptionMenu(
         }
 
         if (tab is Reloadable) {
-            DropdownMenuItem(
-                onClick = {
-                    tab.reload()
-                    close()
-                }
-            ) {
-                Text("Reload")
+            HoverHighlightDropdownMenuItem("Reload") {
+                tab.reload()
+                close()
             }
         }
 
