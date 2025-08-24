@@ -255,13 +255,10 @@ private fun TabOptionMenu(
             ) {
                 Text("Open with editor")
             }
-            DropdownMenuItem(
-                onClick = {
-                    clipText("[[${tab.path.nameWithoutExtension}]]")
-                    close()
-                }
-            ) {
-                Text("Clip internal link")
+
+            HoverHighlightDropdownMenuItem("Clip internal link") {
+                clipText("[[${tab.path.nameWithoutExtension}]]")
+                close()
             }
         }
 
