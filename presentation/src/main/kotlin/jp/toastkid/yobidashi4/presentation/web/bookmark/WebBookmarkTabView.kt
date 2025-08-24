@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -161,15 +162,8 @@ private fun WebBookmarkItemRow(
             expanded = openingDropdown,
             onDismissRequest = closeDropdown
         ) {
-            DropdownMenuItem(
-                onClick = {
-                    openUrl(false)
-                }
-            ) {
-                Text(
-                    "Open",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+            HoverHighlightDropdownMenuItem("Open") {
+                openUrl(false)
             }
 
             DropdownMenuItem(
