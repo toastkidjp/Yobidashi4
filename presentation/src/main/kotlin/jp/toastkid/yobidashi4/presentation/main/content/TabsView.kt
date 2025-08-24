@@ -233,11 +233,9 @@ private fun TabOptionMenu(
         }
 
         if (tab is MarkdownPreviewTab) {
-            DropdownMenuItem(onClick = {
+            HoverHighlightDropdownMenuItem("Edit") {
                 edit(tab)
                 close()
-            }) {
-                Text("Edit")
             }
         }
 
