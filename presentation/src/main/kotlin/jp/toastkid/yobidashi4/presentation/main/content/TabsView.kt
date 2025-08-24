@@ -266,12 +266,8 @@ private fun TabOptionMenu(
         }
 
         if (tab is ChatTab) {
-            DropdownMenuItem(
-                onClick = {
-                    exportChat(tab)
-                }
-            ) {
-                Text("Export chat")
+            HoverHighlightDropdownMenuItem("Export chat") {
+                exportChat(tab)
             }
         }
     }
