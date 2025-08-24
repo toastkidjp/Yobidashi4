@@ -66,9 +66,6 @@ class WorldTimeViewKtTest {
 
             onNodeWithContentDescription("Timezone chooser's item UTC", useUnmergedTree = true)
                 .performMouseInput {
-                    enter()
-                    exit()
-                    enter()
                     click()
                 }
 
