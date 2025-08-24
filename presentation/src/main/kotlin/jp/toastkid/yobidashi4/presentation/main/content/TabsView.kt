@@ -240,11 +240,9 @@ private fun TabOptionMenu(
         }
 
         if (tab is TableTab) {
-            DropdownMenuItem(onClick = {
+            HoverHighlightDropdownMenuItem("Export table") {
                 exportTable(tab)
                 close()
-            }) {
-                Text("Export table")
             }
         }
 
