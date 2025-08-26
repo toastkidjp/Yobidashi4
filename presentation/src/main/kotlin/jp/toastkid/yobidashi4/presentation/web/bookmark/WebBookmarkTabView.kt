@@ -198,15 +198,9 @@ private fun WebBookmarkItemRow(
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
-            DropdownMenuItem(
-                onClick = {
-                    clipText("[${bookmark.title}](${bookmark.url})")
-                }
-            ) {
-                Text(
-                    "Clip markdown link",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+
+            HoverHighlightDropdownMenuItem("Clip markdown link") {
+                clipText("[${bookmark.title}](${bookmark.url})")
             }
 
             HoverHighlightDropdownMenuItem("Delete", onClick = onDelete)
