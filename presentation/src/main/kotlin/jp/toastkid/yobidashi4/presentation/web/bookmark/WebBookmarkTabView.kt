@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +17,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -170,13 +168,8 @@ private fun WebBookmarkItemRow(
                 openUrl(true)
             }
 
-            DropdownMenuItem(
-                onClick = browseUri
-            ) {
-                Text(
-                    "Open with browser",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+            HoverHighlightDropdownMenuItem("Open with browser") {
+                browseUri()
             }
 
             HoverHighlightDropdownMenuItem("Copy title") {
