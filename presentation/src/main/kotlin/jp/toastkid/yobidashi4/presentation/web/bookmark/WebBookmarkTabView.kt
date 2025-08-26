@@ -178,15 +178,9 @@ private fun WebBookmarkItemRow(
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
-            DropdownMenuItem(
-                onClick = {
-                    clipText(bookmark.title)
-                }
-            ) {
-                Text(
-                    "Copy title",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+
+            HoverHighlightDropdownMenuItem("Copy title") {
+                clipText(bookmark.title)
             }
 
             HoverHighlightDropdownMenuItem("Copy URL") {
