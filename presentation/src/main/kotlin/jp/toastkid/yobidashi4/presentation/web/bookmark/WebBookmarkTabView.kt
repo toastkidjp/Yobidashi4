@@ -166,16 +166,10 @@ private fun WebBookmarkItemRow(
                 openUrl(false)
             }
 
-            DropdownMenuItem(
-                onClick = {
-                    openUrl(true)
-                }
-            ) {
-                Text(
-                    "Open background",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+            HoverHighlightDropdownMenuItem("Open background") {
+                openUrl(true)
             }
+
             DropdownMenuItem(
                 onClick = browseUri
             ) {
