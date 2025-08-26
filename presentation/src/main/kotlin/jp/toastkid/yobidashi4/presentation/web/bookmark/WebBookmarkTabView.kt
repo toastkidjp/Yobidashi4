@@ -188,15 +188,9 @@ private fun WebBookmarkItemRow(
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
-            DropdownMenuItem(
-                onClick = {
-                    clipText(bookmark.url)
-                }
-            ) {
-                Text(
-                    "Copy URL",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+
+            HoverHighlightDropdownMenuItem("Copy URL") {
+                clipText(bookmark.url)
             }
 
             HoverHighlightDropdownMenuItem("Clip markdown link") {
