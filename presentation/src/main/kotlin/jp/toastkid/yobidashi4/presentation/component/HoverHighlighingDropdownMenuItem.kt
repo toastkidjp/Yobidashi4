@@ -69,7 +69,12 @@ internal fun HoverHighlightDropdownMenuItem(
                 )
             }
 
-            Text(labelText, fontSize = fontSize, color = fontColor.value, modifier = Modifier.padding(start = if (drawableResource != null) 4.dp else 0.dp))
+            Text(
+                labelText,
+                fontSize = fontSize,
+                color = fontColor.value,
+                modifier = Modifier.padding(start = if (drawableResource != null) 4.dp else 0.dp)
+            )
         }
     }
 }
