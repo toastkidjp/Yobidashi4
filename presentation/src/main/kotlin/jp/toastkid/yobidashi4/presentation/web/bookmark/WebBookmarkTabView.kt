@@ -208,13 +208,8 @@ private fun WebBookmarkItemRow(
                     modifier = Modifier.padding(8.dp).fillMaxSize()
                 )
             }
-            DropdownMenuItem(
-                onClick = onDelete
-            ) {
-                Text(
-                    "Delete",
-                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                )
+            HoverHighlightDropdownMenuItem("Delete") {
+                onDelete()
             }
         }
     }
