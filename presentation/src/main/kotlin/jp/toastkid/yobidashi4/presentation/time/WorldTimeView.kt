@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,12 +27,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -144,34 +142,26 @@ fun WorldTimeView(modifier: Modifier) {
                     }
                 }
 
-                items(viewModel.items(), { it }) {
+                items(viewModel.items(), { it }) { item ->
                     val cursorOn = remember { mutableStateOf(false) }
-                    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
-                    Column(
+                    HoverHighlightColumn(
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                             .animateItem()
                             .fillMaxWidth()
-                            .drawBehind { drawRect(backgroundColor.value) }
-                            .onPointerEvent(PointerEventType.Enter) {
-                                cursorOn.value = true
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                cursorOn.value = false
-                            }
                             .onClick {
-                                viewModel.onClickItem(it)
+                                viewModel.onClickItem(item)
                             }
-                            .semantics { contentDescription = it.timeZone() }
+                            .semantics { contentDescription = item.timeZone() }
                     ) {
                         Text(
-                            viewModel.label(it.timeZone()),
+                            viewModel.label(item.timeZone()),
                             color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                             fontSize = 16.sp,
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         Text(
-                            it.time,
+                            item.time,
                             color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                             fontSize = 14.sp
                         )
