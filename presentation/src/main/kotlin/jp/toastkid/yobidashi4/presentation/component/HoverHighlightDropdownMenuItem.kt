@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -97,6 +98,36 @@ internal fun HoverHighlightRow(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .drawBehind { drawRect(backgroundColor.value) }
+            .onPointerEvent(PointerEventType.Enter) {
+                cursorOn.value = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                cursorOn.value = false
+            }
+    ) {
+        content(fontColor.value)
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun HoverHighlightColumn(
+    modifier: Modifier = Modifier,
+    content: @Composable (Color) -> Unit
+) {
+    val cursorOn = remember { mutableStateOf(false) }
+    val backgroundColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colors.primary
+        else Color.Transparent
+    )
+    val fontColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colors.onPrimary
+        else MaterialTheme.colors.onSurface
+    )
+
+    Column(
         modifier = modifier
             .drawBehind { drawRect(backgroundColor.value) }
             .onPointerEvent(PointerEventType.Enter) {
