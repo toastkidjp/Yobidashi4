@@ -153,16 +153,16 @@ fun WorldTimeView(modifier: Modifier) {
                                 viewModel.onClickItem(item)
                             }
                             .semantics { contentDescription = item.timeZone() }
-                    ) {
+                    ) { textColor ->
                         Text(
                             viewModel.label(item.timeZone()),
-                            color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                            color = textColor,
                             fontSize = 16.sp,
                             modifier = Modifier.padding(bottom = 4.dp)
                         )
                         Text(
                             item.time,
-                            color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                            color = textColor,
                             fontSize = 14.sp
                         )
                     }
