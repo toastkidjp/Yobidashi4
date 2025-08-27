@@ -78,3 +78,34 @@ internal fun HoverHighlightDropdownMenuItem(
         }
     }
 }
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun HoverHighlightRow(
+    modifier: Modifier = Modifier,
+    content: @Composable (Color) -> Unit
+) {
+    val cursorOn = remember { mutableStateOf(false) }
+    val backgroundColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colors.primary
+        else Color.Transparent
+    )
+    val fontColor = animateColorAsState(
+        if (cursorOn.value) MaterialTheme.colors.onPrimary
+        else MaterialTheme.colors.onSurface
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .drawBehind { drawRect(backgroundColor.value) }
+            .onPointerEvent(PointerEventType.Enter) {
+                cursorOn.value = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                cursorOn.value = false
+            }
+    ) {
+        content(fontColor.value)
+    }
+}
