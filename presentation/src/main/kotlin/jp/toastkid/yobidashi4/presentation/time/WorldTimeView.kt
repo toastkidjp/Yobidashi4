@@ -128,7 +128,9 @@ fun WorldTimeView(modifier: Modifier) {
                                         "$it",
                                         modifier = Modifier.semantics { contentDescription = "Minute chooser's item $it" },
                                         fontSize = 24.sp
-                                    ) { viewModel.chooseMinute(it) }
+                                    ) {
+                                        viewModel.chooseMinute(it)
+                                    }
                                 }
                             }
                         }
