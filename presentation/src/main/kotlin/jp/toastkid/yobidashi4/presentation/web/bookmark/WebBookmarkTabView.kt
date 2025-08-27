@@ -168,9 +168,7 @@ private fun WebBookmarkItemRow(
                 openUrl(true)
             }
 
-            HoverHighlightDropdownMenuItem("Open with browser") {
-                browseUri()
-            }
+            HoverHighlightDropdownMenuItem("Open with browser", onClick = browseUri)
 
             HoverHighlightDropdownMenuItem("Copy title") {
                 clipText(bookmark.title)
