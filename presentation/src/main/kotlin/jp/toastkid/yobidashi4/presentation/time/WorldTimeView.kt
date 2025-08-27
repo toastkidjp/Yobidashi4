@@ -109,7 +109,8 @@ fun WorldTimeView(modifier: Modifier) {
 
                         Box(
                             contentAlignment = Alignment.Center,
-                            modifier = Modifier.clickable(onClick = viewModel::openMinuteChooser)
+                            modifier = Modifier
+                                .clickable(onClick = viewModel::openMinuteChooser)
                                 .semantics { contentDescription = "Minute chooser" }
                         ) {
                             Text(
