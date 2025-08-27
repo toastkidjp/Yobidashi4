@@ -20,7 +20,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -143,8 +142,6 @@ fun WorldTimeView(modifier: Modifier) {
                 }
 
                 items(viewModel.items(), { it }) { item ->
-                    val cursorOn = remember { mutableStateOf(false) }
-
                     HoverHighlightColumn(
                         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
                             .animateItem()
