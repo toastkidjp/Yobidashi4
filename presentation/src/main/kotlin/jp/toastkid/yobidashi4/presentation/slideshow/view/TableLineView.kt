@@ -77,7 +77,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
             val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
             val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
 
-            TableRow(itemRow, fontSize, textColor, Modifier.drawBehind { drawRect(backgroundColor.value) }
+            TableRow(itemRow, fontSize, Modifier.drawBehind { drawRect(backgroundColor.value) }
                 .onPointerEvent(PointerEventType.Enter) {
                     cursorOn.value = true
                 }
@@ -93,7 +93,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 }
 
 @Composable
-private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, modifier: Modifier) {
+private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, modifier: Modifier) {
     Column {
         HoverHighlightRow(
             modifier = modifier
