@@ -86,7 +86,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                         },
                         viewModel.openingDropdown(bookmark),
                         viewModel::closeDropdown,
-                        if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                         Modifier.animateItem()
                             .combinedClickable(
                                 enabled = true,
@@ -138,7 +137,6 @@ private fun WebBookmarkItemRow(
     onDelete: () -> Unit,
     openingDropdown: Boolean,
     closeDropdown: () -> Unit,
-    textColor: Color,
     modifier: Modifier
 ) {
     Box {
