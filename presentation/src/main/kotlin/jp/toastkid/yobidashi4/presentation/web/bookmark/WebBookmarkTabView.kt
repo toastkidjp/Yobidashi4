@@ -8,7 +8,6 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -142,10 +142,9 @@ private fun WebBookmarkItemRow(
     modifier: Modifier
 ) {
     Box {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        HoverHighlightRow(
             modifier = modifier
-        ) {
+        ) { textColor ->
             LoadIcon(bookmark.url, Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
             Column(modifier = Modifier
                 .padding(horizontal = 16.dp)
