@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -95,10 +95,9 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 @Composable
 private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, textColor: Color, modifier: Modifier) {
     Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        HoverHighlightRow(
             modifier = modifier
-        ) {
+        ) { textColor ->
             itemRow.forEachIndexed { index, any ->
                 if (index != 0) {
                     VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
