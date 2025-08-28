@@ -124,7 +124,8 @@ fun WorldTimeView(modifier: Modifier) {
                                 (0..59).forEach {
                                     HoverHighlightDropdownMenuItem(
                                         "$it",
-                                        modifier = Modifier.semantics { contentDescription = "Minute chooser's item $it" },
+                                        modifier = Modifier
+                                            .semantics { contentDescription = "Minute chooser's item $it" },
                                         fontSize = 24.sp
                                     ) {
                                         viewModel.chooseMinute(it)
