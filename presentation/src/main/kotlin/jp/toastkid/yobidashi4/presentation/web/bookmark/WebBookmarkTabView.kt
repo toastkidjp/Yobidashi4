@@ -27,14 +27,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -100,13 +97,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                                 awaitEachGesture {
                                     viewModel.onPointerEvent(awaitPointerEvent(), bookmark)
                                 }
-                            }
-                            .drawBehind { drawRect(backgroundColor.value) }
-                            .onPointerEvent(PointerEventType.Enter) {
-                                cursorOn.value = true
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                cursorOn.value = false
                             }
                     )
                 }
