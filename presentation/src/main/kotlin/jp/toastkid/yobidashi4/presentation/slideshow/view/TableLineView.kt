@@ -76,7 +76,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
             val cursorOn = remember { mutableStateOf(false) }
             val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
-            TableRow(itemRow, fontSize, Modifier.drawBehind { drawRect(backgroundColor.value) }
+            TableRow(itemRow, fontSize, Modifier
                 .onPointerEvent(PointerEventType.Enter) {
                     cursorOn.value = true
                 }
