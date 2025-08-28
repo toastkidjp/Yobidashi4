@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.font.FontWeight
@@ -74,7 +73,6 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
         viewModel.tableData().forEach { itemRow ->
             val cursorOn = remember { mutableStateOf(false) }
-            val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
             TableRow(itemRow, fontSize, Modifier
                 .onPointerEvent(PointerEventType.Enter) {
