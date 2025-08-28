@@ -47,6 +47,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_edit
 import jp.toastkid.yobidashi4.library.resources.ic_markdown
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -148,21 +149,7 @@ private fun LazyItemScope.TableRow(
 ) {
     SelectionContainer {
         Column(modifier = Modifier.animateItem()) {
-            val cursorOn = remember { mutableStateOf(false) }
-            val rowBackgroundColor = animateColorAsState(
-                if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-                    .drawBehind { drawRect(rowBackgroundColor.value) }
-                    .onPointerEvent(PointerEventType.Enter) {
-                        cursorOn.value = true
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        cursorOn.value = false
-                    }
-            ) {
+            HoverHighlightRow { textColor ->
                 Icon(
                     painter = painterResource(Res.drawable.ic_markdown),
                     contentDescription = "Open preview",
@@ -204,13 +191,14 @@ private fun LazyItemScope.TableRow(
                     }
                     Text(
                         makeText(any),
-                        color = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                        color = textColor,
                         modifier = Modifier
                             .weight(if (index == 0) 0.4f else 1f)
                             .padding(horizontal = 16.dp)
                     )
                 }
             }
+
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
         }
     }
