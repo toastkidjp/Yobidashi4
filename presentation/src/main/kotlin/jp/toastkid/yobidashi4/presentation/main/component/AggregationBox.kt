@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_history
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 import org.jetbrains.compose.resources.painterResource
 
@@ -97,19 +97,11 @@ internal fun AggregationBox() {
                         return@DropdownMenu
                     }
                     viewModel.categories().forEach {
-                        DropdownMenuItem(
-                            onClick = {
-                                viewModel.choose(it)
-                            }
-                        ) {
-                            Icon(
-                                painterResource(viewModel.icon(it)),
-                                contentDescription = it.label(),
-                                modifier = Modifier.size(48.dp).padding(horizontal = 8.dp),
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                            Text(it.label(), modifier = Modifier.padding(start = 8.dp))
-                        }
+                        HoverHighlightDropdownMenuItem(
+                            it.label(),
+                            drawableResource = viewModel.icon(it),
+                            iconSize = 48.dp
+                        ) { viewModel.choose(it) }
                     }
                 }
             }
