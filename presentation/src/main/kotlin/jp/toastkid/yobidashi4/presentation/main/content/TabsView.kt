@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -247,13 +246,9 @@ private fun TabOptionMenu(
         }
 
         if (tab is EditorTab) {
-            DropdownMenuItem(
-                onClick = {
-                    openFile(tab.path)
-                    close()
-                }
-            ) {
-                Text("Open with editor")
+            HoverHighlightDropdownMenuItem("Open with editor") {
+                openFile(tab.path)
+                close()
             }
 
             HoverHighlightDropdownMenuItem("Clip internal link") {
