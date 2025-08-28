@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -265,15 +263,10 @@ private fun FileListItemRow(
                     clipText(fileListItem.path.nameWithoutExtension)
                 }
 
-                DropdownMenuItem(
-                    onClick = {
-                        clipText("[[${fileListItem.path.nameWithoutExtension}]]")
-                    }
+                HoverHighlightDropdownMenuItem(
+                    "Clip internal link"
                 ) {
-                    Text(
-                        "Clip internal link",
-                        modifier = Modifier.padding(8.dp).fillMaxSize()
-                    )
+                    clipText("[[${fileListItem.path.nameWithoutExtension}]]")
                 }
             }
         }
