@@ -81,7 +81,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 }
 
 @Composable
-private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, modifier: Modifier) {
+private fun TableRow(itemRow: List<Any>, fontSize: TextUnit, modifier: Modifier = Modifier) {
     Column {
         HoverHighlightRow(
             modifier = modifier
