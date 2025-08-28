@@ -51,7 +51,9 @@ fun WorldTimeView(modifier: Modifier) {
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth().drawBehind { drawRect(backgroundColor.value) }
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .drawBehind { drawRect(backgroundColor.value) }
                     ) {
                         Box(
                             contentAlignment = Alignment.Center,
