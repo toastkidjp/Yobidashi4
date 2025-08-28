@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -144,12 +143,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 viewModel.delete(webHistory)
                             }
 
-                            DropdownMenuItem(onClick = viewModel::clear) {
-                                Text(
-                                    "Clear",
-                                    modifier = Modifier.padding(8.dp).fillMaxSize()
-                                )
-                            }
+                            HoverHighlightDropdownMenuItem("Clear", onClick = viewModel::clear)
                         }
                     }
                 }
