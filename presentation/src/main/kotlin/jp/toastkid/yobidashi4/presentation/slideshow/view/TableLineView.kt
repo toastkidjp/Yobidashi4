@@ -14,7 +14,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -72,8 +71,6 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
         Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
 
         viewModel.tableData().forEach { itemRow ->
-            val cursorOn = remember { mutableStateOf(false) }
-
             TableRow(itemRow, fontSize, Modifier)
         }
     }
