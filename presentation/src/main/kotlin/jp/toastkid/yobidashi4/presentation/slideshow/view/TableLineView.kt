@@ -74,13 +74,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
         viewModel.tableData().forEach { itemRow ->
             val cursorOn = remember { mutableStateOf(false) }
 
-            TableRow(itemRow, fontSize, Modifier
-                .onPointerEvent(PointerEventType.Enter) {
-                    cursorOn.value = true
-                }
-                .onPointerEvent(PointerEventType.Exit) {
-                    cursorOn.value = false
-                })
+            TableRow(itemRow, fontSize, Modifier)
         }
     }
 
