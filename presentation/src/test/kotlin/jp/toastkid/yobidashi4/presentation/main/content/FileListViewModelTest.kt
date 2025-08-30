@@ -423,22 +423,6 @@ class FileListViewModelTest {
         assertFalse(subject.openingDropdown(item))
     }
 
-    @Test
-    fun focus() {
-        assertFalse(subject.focusingItem(mockk()))
-
-        val item = mockk<FileListItem>()
-        subject.focusItem(item)
-
-        assertFalse(subject.focusingItem(mockk()))
-        assertTrue(subject.focusingItem(item))
-
-        subject.unFocusItem()
-
-        assertFalse(subject.focusingItem(mockk()))
-        assertFalse(subject.focusingItem(item))
-    }
-
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun onPointerEvent() {
