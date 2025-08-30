@@ -8,7 +8,6 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -43,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
@@ -83,7 +83,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 cursorOn.value = false
                             }
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        HoverHighlightRow { textColor ->
                             LoadIcon(webHistory.url, Modifier.size(32.dp).padding(start = 4.dp).padding(horizontal = 4.dp))
                             Column(modifier = Modifier
                                 .combinedClickable(
@@ -97,8 +97,6 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                                 )
                                 .padding(horizontal = 16.dp)
                             ) {
-                                val textColor = if (cursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
-
                                 Text(webHistory.title, color = textColor)
                                 Text(webHistory.url, maxLines = 1, overflow = TextOverflow.Ellipsis, color = textColor)
                                 Text(
