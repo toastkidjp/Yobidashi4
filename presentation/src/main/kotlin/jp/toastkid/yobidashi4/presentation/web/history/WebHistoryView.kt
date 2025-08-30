@@ -21,7 +21,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -60,8 +59,6 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
                 modifier = Modifier.padding(end = 16.dp)
             ) {
                 items(viewModel.list(), key = WebHistory::hashCode) { webHistory ->
-                    val cursorOn = remember { mutableStateOf(false) }
-
                     Box(
                         Modifier.pointerInput(Unit) {
                             awaitEachGesture {
