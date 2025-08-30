@@ -23,7 +23,7 @@ dependencyResolutionManagement {
             library("jsoup", "org.jsoup", "jsoup").version("1.21.2")
             version("compose", "1.7.3")
             version("kover", "0.9.1")
-            version("kotlin", "2.2.0")
+            version("kotlin", "2.2.10")
             version("ksp", "2.2.0-2.0.2")
         }
 
