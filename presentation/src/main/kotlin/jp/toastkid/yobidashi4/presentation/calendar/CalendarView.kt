@@ -171,7 +171,8 @@ private fun TopComponent(
             onClick = {
                 plusMonths(1)
             },
-            modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionRight }) {
+            modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionRight }
+        ) {
             Text(">", modifier = Modifier.padding(8.dp))
         }
 
