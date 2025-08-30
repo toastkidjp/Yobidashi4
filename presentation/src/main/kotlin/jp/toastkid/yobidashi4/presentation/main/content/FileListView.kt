@@ -124,7 +124,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
                     FileListItemRow(
                         fileListItem,
-                        backgroundColor.value,
                         viewModel.openingDropdown(fileListItem),
                         viewModel::closeDropdown,
                         viewModel::selectedFiles,
@@ -181,7 +180,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 @Composable
 private fun FileListItemRow(
     fileListItem: FileListItem,
-    backgroundColor: Color,
     openOption: Boolean,
     closeOption: () -> Unit,
     selectedFiles: () -> List<Path>,
