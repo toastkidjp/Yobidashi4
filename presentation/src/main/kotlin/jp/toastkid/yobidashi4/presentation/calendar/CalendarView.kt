@@ -167,9 +167,11 @@ private fun TopComponent(
             }
         }
 
-        Button(onClick = {
-            plusMonths(1)
-        }, modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionRight }) {
+        Button(
+            onClick = {
+                plusMonths(1)
+            },
+            modifier = Modifier.padding(8.dp).onPreviewKeyEvent { it.key == Key.DirectionRight }) {
             Text(">", modifier = Modifier.padding(8.dp))
         }
 
