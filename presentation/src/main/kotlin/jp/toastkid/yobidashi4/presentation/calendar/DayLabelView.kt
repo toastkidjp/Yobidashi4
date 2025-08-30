@@ -30,11 +30,11 @@ fun DayLabelView(
         else MaterialTheme.colors.surface,
         modifier = modifier
     ) {
-        HoverHighlightColumn {
+        HoverHighlightColumn { textColor ->
             Text(
                 viewModel.makeText(date),
                 fontSize = 16.sp,
-                color = viewModel.textColor(dayOfWeek, offDay, today) ?: MaterialTheme.colors.onSurface,
+                color = viewModel.textColor(dayOfWeek, offDay, today) ?: textColor,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(label, fontSize = viewModel.labelSize(label), color = viewModel.labelColor())
