@@ -118,9 +118,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         else Color.Transparent
                     }
                     val cursorOn = viewModel.focusingItem(fileListItem)
-                    val backgroundColor = animateColorAsState(
-                        if (cursorOn) MaterialTheme.colors.primary else Color.Transparent
-                    )
 
                     FileListItemRow(
                         fileListItem,
