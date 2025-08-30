@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_reload
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
@@ -197,11 +197,9 @@ private fun FileListItemRow(
     Box(
         modifier = modifier
     ) {
-        Column(modifier = Modifier
-            .drawBehind { drawRect(backgroundColor) }
+        HoverHighlightColumn(modifier = Modifier
             .padding(horizontal = 16.dp)
-        ) {
-            val textColor = if (cursorOn) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+        ) { textColor ->
             Text(
                 fileListItem.path.nameWithoutExtension,
                 maxLines = 1,
