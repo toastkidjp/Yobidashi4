@@ -180,8 +180,6 @@ class FileListViewModel : KoinComponent {
 
     private val currentFocusItem = mutableStateOf<FileListItem?>(null)
 
-    fun focusingItem(item: FileListItem): Boolean = currentFocusItem.value == item
-
     fun focusItem(item: FileListItem) {
         currentFocusItem.value = item
     }
