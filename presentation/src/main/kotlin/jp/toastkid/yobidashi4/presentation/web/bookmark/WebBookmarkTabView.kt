@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.web.bookmark
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.combinedClickable
@@ -28,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -65,7 +63,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                     { index, item -> item.title + item.url + index }
                 ) { _, bookmark ->
                     val cursorOn = remember { mutableStateOf(false) }
-                    val backgroundColor = animateColorAsState(if (cursorOn.value) MaterialTheme.colors.primary else Color.Transparent)
 
                     WebBookmarkItemRow(
                         bookmark,
