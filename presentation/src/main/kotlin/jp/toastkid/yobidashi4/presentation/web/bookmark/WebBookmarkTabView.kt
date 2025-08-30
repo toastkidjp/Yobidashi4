@@ -20,7 +20,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -62,8 +61,6 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                     viewModel.bookmarks(),
                     { index, item -> item.title + item.url + index }
                 ) { _, bookmark ->
-                    val cursorOn = remember { mutableStateOf(false) }
-
                     WebBookmarkItemRow(
                         bookmark,
                         {
