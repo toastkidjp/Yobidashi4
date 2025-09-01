@@ -117,7 +117,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         else if (index % 2 == 0) evenBackground
                         else Color.Transparent
                     }
-                    val cursorOn = viewModel.focusingItem(fileListItem)
 
                     FileListItemRow(
                         fileListItem,
