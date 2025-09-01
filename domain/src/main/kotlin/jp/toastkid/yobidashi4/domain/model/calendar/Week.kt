@@ -1,14 +1,14 @@
 package jp.toastkid.yobidashi4.domain.model.calendar
 
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import java.time.DayOfWeek
 import java.time.LocalDate
-import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 
 class Week {
     private val days: MutableList<CalendarDate> = mutableListOf()
 
     fun add(date: LocalDate, holiday: Holiday? = null) {
-        days.add(CalendarDate(date.dayOfMonth, date.dayOfWeek, if (holiday != null) holiday.title else "", offDay = holiday != null))
+        days.add(CalendarDate(date.dayOfMonth, date.dayOfWeek, if (holiday != null) listOf(holiday.title) else emptyList(), offDay = holiday != null))
     }
 
     fun addEmpty() {
