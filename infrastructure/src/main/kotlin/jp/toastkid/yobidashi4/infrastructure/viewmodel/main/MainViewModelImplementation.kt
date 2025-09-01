@@ -88,7 +88,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         setting.setDarkMode(_darkMode.value)
     }
 
-    private val backgroundImage = mutableStateOf(ImageBitmap(0, 0))
+    private val backgroundImage = mutableStateOf(ImageBitmap(1, 1))
 
     override fun backgroundImage(): ImageBitmap = backgroundImage.value
 
