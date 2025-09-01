@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 
 enum class FixedJapaneseHoliday(val month: Int, val date: Int, val japaneseTitle: String) {
     NATIONAL_FOUNDATION_DAY(2, 11, "建国記念の日"),
@@ -23,7 +24,7 @@ enum class FixedJapaneseHoliday(val month: Int, val date: Int, val japaneseTitle
                         it.japaneseTitle,
                         it.month,
                         calculateDate(year, it),
-                        "\uD83C\uDDEF\uD83C\uDDF5"
+                        HolidayCalendar.JAPAN.flag
                     )
                 }
         }
