@@ -3,15 +3,10 @@ package jp.toastkid.yobidashi4.presentation.calendar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 
 class DayLabelViewKtTest {
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
