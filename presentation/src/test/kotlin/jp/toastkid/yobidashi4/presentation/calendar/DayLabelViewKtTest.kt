@@ -3,10 +3,10 @@ package jp.toastkid.yobidashi4.presentation.calendar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import java.time.DayOfWeek
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.DayOfWeek
 
 class DayLabelViewKtTest {
 
@@ -26,7 +26,7 @@ class DayLabelViewKtTest {
                 DayLabelView(
                     1,
                     DayOfWeek.MONDAY,
-                    "test",
+                    listOf("test"),
                     true,
                     false,
                     Modifier
@@ -34,7 +34,7 @@ class DayLabelViewKtTest {
                 DayLabelView(
                     1,
                     DayOfWeek.MONDAY,
-                    "test",
+                    listOf("test"),
                     false,
                     true,
                     Modifier
@@ -42,7 +42,7 @@ class DayLabelViewKtTest {
                 DayLabelView(
                     1,
                     DayOfWeek.TUESDAY,
-                    "test",
+                    listOf("test"),
                     false,
                     false,
                     Modifier
@@ -50,7 +50,7 @@ class DayLabelViewKtTest {
                 DayLabelView(
                     1,
                     DayOfWeek.SATURDAY,
-                    "test",
+                    listOf("test"),
                     false,
                     false,
                     Modifier
@@ -58,7 +58,7 @@ class DayLabelViewKtTest {
                 DayLabelView(
                     1,
                     DayOfWeek.SUNDAY,
-                    "test",
+                    listOf("test"),
                     false,
                     false,
                     Modifier
