@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.calendar
 
-import jp.toastkid.yobidashi4.domain.model.calendar.MoveableJapaneseHoliday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.MoveableJapaneseHoliday
 
 class MoveableHolidayCalculatorService {
 

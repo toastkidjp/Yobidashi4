@@ -1,9 +1,9 @@
-package jp.toastkid.yobidashi4.domain.model.calendar
+package jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan
 
-import java.time.DayOfWeek
-import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 enum class MoveableJapaneseHoliday(val title: String, private val month: Int, val week: Int) {
 

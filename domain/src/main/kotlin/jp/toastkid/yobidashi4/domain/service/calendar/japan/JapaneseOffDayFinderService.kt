@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi4.domain.service.calendar.japan
 
-import java.time.DayOfWeek
-import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.FixedJapaneseHoliday
-import jp.toastkid.yobidashi4.domain.model.calendar.MoveableJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.MoveableJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.SpecialCaseOffDayCalculatorService
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 class JapaneseOffDayFinderService(
     private val equinoxDayCalculator: EquinoxDayCalculator = EquinoxDayCalculator(),
