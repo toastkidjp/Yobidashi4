@@ -5,7 +5,7 @@ import java.time.DayOfWeek
 data class CalendarDate(
     val date: Int,
     val dayOfWeek: DayOfWeek,
-    val label: String = "",
+    val label: List<String> = emptyList(),
     val offDay: Boolean = false
 ) {
 }
