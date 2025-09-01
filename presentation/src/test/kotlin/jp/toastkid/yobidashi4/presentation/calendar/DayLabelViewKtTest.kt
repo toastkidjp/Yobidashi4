@@ -4,15 +4,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 
 class DayLabelViewKtTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
 
     @AfterEach
     fun tearDown() {
