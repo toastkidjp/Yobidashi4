@@ -8,7 +8,8 @@ enum class HolidayCalendar(
     val flag: String = "\uD83C\uDDFA\uD83C\uDDF8"
 ) {
 
-    JAPAN(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5");
+    JAPAN(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5"),
+    UK(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5");
 
     fun getHolidays(year: Int, month: Int): List<Holiday> {
         return offDayFinderService.invoke(year, month)
