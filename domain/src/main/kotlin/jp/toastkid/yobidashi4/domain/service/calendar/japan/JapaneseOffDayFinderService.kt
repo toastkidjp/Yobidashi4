@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.calendar.japan
 
-import jp.toastkid.yobidashi4.domain.model.calendar.FixedJapaneseHoliday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.FixedJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.MoveableJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator

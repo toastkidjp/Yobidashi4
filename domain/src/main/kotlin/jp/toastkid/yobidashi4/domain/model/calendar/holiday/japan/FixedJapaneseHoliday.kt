@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi4.domain.model.calendar
+package jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 
