@@ -72,7 +72,7 @@ class TextFileViewerTabViewModelTest {
         runBlocking {
             subject = spyk(subject)
             val focusRequester = mockk<FocusRequester>()
-            every { focusRequester.requestFocus() } just Runs
+            every { focusRequester.requestFocus() } returns true
             every { subject.focusRequester() } returns focusRequester
             every { Files.readAllLines(any()) } returns listOf("test")
             val path = mockk<Path>()
@@ -98,7 +98,7 @@ class TextFileViewerTabViewModelTest {
         runBlocking {
             subject = spyk(subject)
             val focusRequester = mockk<FocusRequester>()
-            every { focusRequester.requestFocus() } just Runs
+            every { focusRequester.requestFocus() } returns true
             every { subject.focusRequester() } returns focusRequester
             every { Files.readAllLines(any()) } returns listOf(
                 "test", "test", "test", "test", "test","test", "test", "test", "test", "test", "test"
@@ -115,7 +115,7 @@ class TextFileViewerTabViewModelTest {
         runBlocking {
             subject = spyk(subject)
             val focusRequester = mockk<FocusRequester>()
-            every { focusRequester.requestFocus() } just Runs
+            every { focusRequester.requestFocus() } returns true
             every { subject.focusRequester() } returns focusRequester
             every { Files.readAllLines(any()) } returns listOf("test")
 
@@ -131,7 +131,7 @@ class TextFileViewerTabViewModelTest {
         runBlocking {
             subject = spyk(subject)
             val focusRequester = mockk<FocusRequester>()
-            every { focusRequester.requestFocus() } just Runs
+            every { focusRequester.requestFocus() } returns true
             every { subject.focusRequester() } returns focusRequester
             every { Files.readAllLines(any()) } throws MalformedInputException(-1)
 
