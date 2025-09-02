@@ -209,7 +209,7 @@ class TextEditorViewModelTest {
     @Test
     fun initialScroll() {
         val focusRequester = mockk<FocusRequester>()
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         viewModel = spyk(viewModel)
         every { viewModel.focusRequester() } returns focusRequester
 
@@ -223,7 +223,7 @@ class TextEditorViewModelTest {
     @Test
     fun initialScrollWhenTabsScrollOverZero() {
         val focusRequester = mockk<FocusRequester>()
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         viewModel = spyk(viewModel)
         every { viewModel.focusRequester() } returns focusRequester
         val editorTab = mockk<EditorTab>()
