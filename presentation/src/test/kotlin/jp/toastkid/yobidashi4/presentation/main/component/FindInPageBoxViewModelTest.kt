@@ -305,7 +305,7 @@ class FindInPageBoxViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
 
         subject.launch()
 
