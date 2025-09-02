@@ -12,12 +12,6 @@ class DateCalculator {
         val localDate = LocalDate.of(year, month, 1)
         val firstDayOfWeek = localDate.dayOfWeek
 
-        val d = if (firstDayOfWeek == DayOfWeek.MONDAY) {
-            8
-        } else {
-            (firstDayOfWeek.ordinal - (DayOfWeek.MONDAY.ordinal + 1))
-        }
-
         val targetWeek = when {
             (week != -1) -> week
             DAYS_OF_WEEK_FOR_LAST_WEEK.contains(firstDayOfWeek) -> 5
