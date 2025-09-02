@@ -23,10 +23,6 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Image
-import java.awt.image.BufferedImage
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import org.junit.jupiter.api.AfterEach
@@ -36,6 +32,10 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.awt.Image
+import java.awt.image.BufferedImage
+import java.net.URL
+import javax.imageio.ImageIO
 
 class SlideshowViewModelTest {
 
@@ -278,7 +278,7 @@ class SlideshowViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
 
         subject.requestFocus()
 
