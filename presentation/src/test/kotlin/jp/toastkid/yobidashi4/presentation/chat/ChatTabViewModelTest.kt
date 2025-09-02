@@ -174,7 +174,7 @@ class ChatTabViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
 
         CoroutineScope(Dispatchers.Unconfined).launch {
             subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1)
