@@ -215,7 +215,7 @@ class PhotoTabViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         val path = mockk<Path>()
         every { path.toFile() } returns mockk()
 
@@ -229,7 +229,7 @@ class PhotoTabViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         val path = mockk<Path>()
         every { path.toFile() } returns mockk()
         mockkStatic(ImageIO::class)
@@ -247,7 +247,7 @@ class PhotoTabViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         val path = mockk<Path>()
         every { path.toFile() } returns mockk()
         every { Files.newInputStream(any()) } returns "test".byteInputStream()
