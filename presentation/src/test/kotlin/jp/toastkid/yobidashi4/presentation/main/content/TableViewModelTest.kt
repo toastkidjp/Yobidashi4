@@ -87,7 +87,7 @@ class TableViewModelTest {
 
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         every { subject.focusRequester() } returns focusRequester
         val result = StepsAggregationResult()
         result.put("2023-12-25", 1200, 95)
@@ -109,7 +109,7 @@ class TableViewModelTest {
 
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         every { subject.focusRequester() } returns focusRequester
         val result = FindResult("test")
         result.add("2024-03-23.md", listOf("test"))
@@ -152,7 +152,7 @@ class TableViewModelTest {
             subject = spyk(subject)
             val focusRequester = mockk<FocusRequester>()
             every { subject.focusRequester() } returns focusRequester
-            every { focusRequester.requestFocus() } just Runs
+            every { focusRequester.requestFocus() } returns true
             CoroutineScope(Dispatchers.Unconfined).launch {
                 subject.start(TableTab("Test", FindResult("\"Test\"")))
             }
