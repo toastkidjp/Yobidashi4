@@ -156,7 +156,7 @@ class NotificationListTabViewModelTest {
         every { repository.readAll() } returns listOf(NotificationEvent.makeDefault())
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
 
         subject.start(Dispatchers.Unconfined)
 
