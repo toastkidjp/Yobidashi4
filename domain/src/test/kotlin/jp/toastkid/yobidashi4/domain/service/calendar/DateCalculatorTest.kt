@@ -7,7 +7,7 @@ class DateCalculatorTest {
 
     @Test
     fun test() {
-        val dateCalculator = DateCalculator()
+        val dateCalculator = MondayDateCalculator()
         assertEquals(5, dateCalculator.invoke(2025, 5, 1))
         assertEquals(26, dateCalculator.invoke(2025, 5, -1))
         assertEquals(8, dateCalculator.invoke(2025, 9, 2))

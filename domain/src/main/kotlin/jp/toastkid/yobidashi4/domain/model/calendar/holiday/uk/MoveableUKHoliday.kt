@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
-import jp.toastkid.yobidashi4.domain.service.calendar.DateCalculator
+import jp.toastkid.yobidashi4.domain.service.calendar.MondayDateCalculator
 
 enum class MoveableUKHoliday(private val month: Int, val week: Int, val title: String) {
     EARLY_MAY_BANK_HOLIDAY(5, 1, "Early May Bank Holiday"),
@@ -19,7 +19,7 @@ enum class MoveableUKHoliday(private val month: Int, val week: Int, val title: S
 
     companion object {
 
-        private val dateCalculator = DateCalculator()
+        private val dateCalculator = MondayDateCalculator()
 
         fun find(year: Int, month: Int): List<Holiday> = entries.filter { it.month == month }.map {
             Holiday(

@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi4.domain.service.calendar
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-class DateCalculator {
+class MondayDateCalculator {
 
     private val DAYS_OF_WEEK_FOR_LAST_WEEK =
         setOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY)
