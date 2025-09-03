@@ -79,7 +79,7 @@ fun CalendarView(tab: CalendarTab) {
             }
 
             calendarViewModel.month().forEach { w ->
-                Row {
+                Row(modifier = Modifier.weight(1f)) {
                     w.days().forEach { day ->
                         DayLabelView(day.date, day.dayOfWeek, day.label, day.offDay,
                             calendarViewModel.isToday(day.date),
