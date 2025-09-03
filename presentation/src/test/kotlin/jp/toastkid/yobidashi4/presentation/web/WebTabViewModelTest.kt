@@ -10,10 +10,9 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Panel
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -26,6 +25,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Panel
 
 class WebTabViewModelTest {
 
@@ -89,7 +89,7 @@ class WebTabViewModelTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } just Runs
+        every { focusRequester.requestFocus() } returns true
         every { mainViewModel.finderFlow() } returns flowOf(FindOrder.EMPTY, FindOrder("test", ""))
         every { webViewPool.clearFind(any()) } just Runs
         every { webViewPool.find(any(), any(), any()) } just Runs
