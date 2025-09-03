@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.calendar.holiday
 
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.japan.JapaneseOffDayFinderService
+import jp.toastkid.yobidashi4.domain.service.calendar.uk.UKOffDayFinder
 
 enum class HolidayCalendar(
     private val offDayFinderService: OffDayFinderService,
@@ -9,7 +10,7 @@ enum class HolidayCalendar(
 ) {
 
     JAPAN(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5"),
-    UK(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5");
+    UK(UKOffDayFinder(), "\uD83C\uDDEF\uD83C\uDDF5");
 
     fun getHolidays(year: Int, month: Int): List<Holiday> {
         return offDayFinderService.invoke(year, month)
