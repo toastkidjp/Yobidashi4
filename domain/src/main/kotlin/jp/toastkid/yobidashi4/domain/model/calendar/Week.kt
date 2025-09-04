@@ -8,6 +8,17 @@ import java.time.LocalDate
 class Week {
     private val days: MutableList<CalendarDate> = mutableListOf()
 
+    fun add(date: LocalDate, holidays: List<Holiday> = emptyList()) {
+        days.add(
+            CalendarDate(
+                date.dayOfMonth,
+                date.dayOfWeek,
+                holidays.map(Holiday::title),
+                offDay = holidays.any { it.flag == HolidayCalendar.JAPAN.flag }
+            )
+        )
+    }
+
     fun add(date: LocalDate, holiday: Holiday? = null) {
         days.add(
             CalendarDate(
