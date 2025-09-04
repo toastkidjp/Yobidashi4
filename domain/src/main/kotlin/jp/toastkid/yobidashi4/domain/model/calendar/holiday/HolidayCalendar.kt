@@ -10,7 +10,7 @@ enum class HolidayCalendar(
 ) {
 
     JAPAN(JapaneseOffDayFinderService(), "\uD83C\uDDEF\uD83C\uDDF5"),
-    UK(UKOffDayFinder(), "\uD83C\uDDEF\uD83C\uDDF5");
+    UK(UKOffDayFinder(), "\uD83C\uDDEC\uD83C\uDDE7");
 
     fun getHolidays(year: Int, month: Int): List<Holiday> {
         return offDayFinderService.invoke(year, month)
