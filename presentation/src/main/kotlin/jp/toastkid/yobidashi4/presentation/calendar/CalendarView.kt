@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Button
@@ -19,6 +20,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
@@ -69,7 +71,7 @@ fun CalendarView(tab: CalendarTab) {
                                 fontWeight = FontWeight.Bold,
                                 color = when (dayOfWeek) {
                                     DayOfWeek.SUNDAY -> Color(190, 50, 55)
-                                    DayOfWeek.SATURDAY ->  Color(55, 50, 190)
+                                    DayOfWeek.SATURDAY -> Color(165, 160, 255)
                                     else -> MaterialTheme.colors.onSurface
                                 }
                             )
@@ -81,9 +83,16 @@ fun CalendarView(tab: CalendarTab) {
             calendarViewModel.month().forEach { w ->
                 Row(modifier = Modifier.weight(1f)) {
                     w.days().forEach { day ->
+                        val backgroundColor = if (calendarViewModel.isToday(day.date)) MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                        //else if (viewModel.useOffDayBackground(offDay, dayOfWeek)) Color.White.copy(alpha = 0.8f)
+                        else MaterialTheme.colors.surface
                         DayLabelView(day.date, day.dayOfWeek, day.label, day.offDay,
                             calendarViewModel.isToday(day.date),
                             modifier = Modifier.weight(1f)
+                                .fillMaxHeight()
+                                .drawBehind {
+                                    drawRect(backgroundColor)
+                                }
                                 .combinedClickable(
                                     enabled = day.date != -1,
                                     onClick = {
