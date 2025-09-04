@@ -127,6 +127,7 @@ class CalendarViewModel : KoinComponent {
         val firstDay = localDateState.value.withDayOfMonth(1)
 
         val offDayFinderService = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
+        val ukHolidays = HolidayCalendar.UK.getHolidays(firstDay.year, firstDay.monthValue)
 
         var hasStarted1 = false
         var current1 = firstDay
@@ -143,7 +144,9 @@ class CalendarViewModel : KoinComponent {
                 if (firstDay.month != current1.month) {
                     w.addEmpty()
                 } else {
-                    w.add(current1, offDayFinderService.find { it.day == current1.dayOfMonth })
+                    val holiday = offDayFinderService.find { it.day == current1.dayOfMonth }
+                    val ukHolidayCandidate = ukHolidays.find { it.day == current1.dayOfMonth }
+                    w.add(current1, listOfNotNull(holiday, ukHolidayCandidate))
                 }
                 current1 = current1.plusDays(1L)
             }
