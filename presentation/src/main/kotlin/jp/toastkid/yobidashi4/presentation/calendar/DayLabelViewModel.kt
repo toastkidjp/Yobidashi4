@@ -32,4 +32,4 @@ class DayLabelViewModel {
 }
 
 private val OFF_DAY_FG:  Color = Color(220, 50, 55)
-private val SATURDAY_FG:  Color = Color(55, 50, 190)
+private val SATURDAY_FG:  Color = Color(165, 160, 255)
