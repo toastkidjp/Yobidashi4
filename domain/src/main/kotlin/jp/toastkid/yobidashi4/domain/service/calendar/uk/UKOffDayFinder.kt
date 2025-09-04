@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.domain.service.calendar.uk
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk.FixedUKHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk.MoveableUKHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
@@ -27,7 +28,7 @@ class UKOffDayFinder(
         val substitutes = holidays.mapNotNull {
             val calendar = GregorianCalendar(year, month - 1, it.day)
             if (month != 5 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                Holiday("Substitute Holiday", month, it.day + 1, "\uD83C\uDDEC\uD83C\uDDE7")
+                Holiday("Substitute Holiday", month, it.day + 1, HolidayCalendar.UK.flag)
             } else null
         }
 
