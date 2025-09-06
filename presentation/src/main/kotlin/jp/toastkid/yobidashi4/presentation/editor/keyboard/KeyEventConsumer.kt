@@ -36,7 +36,8 @@ class KeyEventConsumer(
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
     private val toHalfWidth: ToHalfWidth = ToHalfWidth(),
     private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService(),
-    private val blockQuotation: BlockQuotation = BlockQuotation()
+    private val blockQuotation: BlockQuotation = BlockQuotation(),
+    private val textReformat: TextReformat = TextReformat()
 ) {
 
     operator fun invoke(
@@ -276,7 +277,7 @@ class KeyEventConsumer(
                     return false
                 }
 
-                val converted = TextReformat().invoke(selected.toString())
+                val converted = textReformat.invoke(selected.toString())
                 val newText = StringBuilder(content.text)
                     .replace(
                         selectionStartIndex,
