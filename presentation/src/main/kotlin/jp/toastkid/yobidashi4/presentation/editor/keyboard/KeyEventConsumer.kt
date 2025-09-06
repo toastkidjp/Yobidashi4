@@ -291,6 +291,7 @@ class KeyEventConsumer(
                         content.composition
                     )
                 )
+                selected.setLength(0)
                 true
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.O -> {
