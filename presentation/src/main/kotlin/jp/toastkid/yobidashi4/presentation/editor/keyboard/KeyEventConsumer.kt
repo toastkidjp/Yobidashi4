@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
+import jp.toastkid.yobidashi4.domain.service.editor.text.TextReformat
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
@@ -260,6 +261,36 @@ class KeyEventConsumer(
                 }
 
                 mainViewModel.openUrl(searchUrlFactory(selected), false)
+                true
+            }
+            it.isCtrlPressed && it.isShiftPressed && it.key == Key.F -> {
+                val selected = StringBuilder(content.text.substring(selectionStartIndex, selectionEndIndex))
+                if (selected.isEmpty()) {
+                    val clipped = ClipboardFetcher().invoke()
+                    if (clipped.isNullOrBlank().not()) {
+                        selected.append(clipped)
+                    }
+                }
+
+                if (selected.isEmpty()) {
+                    return false
+                }
+
+                val converted = TextReformat().invoke(selected.toString())
+                val newText = StringBuilder(content.text)
+                    .replace(
+                        selectionStartIndex,
+                        selectionEndIndex,
+                        converted
+                    )
+                    .toString()
+                setNewContent(
+                    TextFieldValue(
+                        newText,
+                        TextRange(selectionStartIndex + converted.length),
+                        content.composition
+                    )
+                )
                 true
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.O -> {
