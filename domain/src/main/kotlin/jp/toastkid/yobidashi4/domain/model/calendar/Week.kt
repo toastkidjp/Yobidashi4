@@ -19,17 +19,6 @@ class Week {
         )
     }
 
-    fun add(date: LocalDate, holiday: Holiday? = null) {
-        days.add(
-            CalendarDate(
-                date.dayOfMonth,
-                date.dayOfWeek,
-                if (holiday != null) listOf(holiday.title) else emptyList(),
-                offDay = holiday != null && holiday.flag == HolidayCalendar.JAPAN.flag
-            )
-        )
-    }
-
     fun addEmpty() {
         days.add(CalendarDate(-1, DayOfWeek.MONDAY))
     }
