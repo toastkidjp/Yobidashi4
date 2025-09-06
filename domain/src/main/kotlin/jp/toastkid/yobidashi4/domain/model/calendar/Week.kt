@@ -6,6 +6,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 class Week {
+
     private val days: MutableList<CalendarDate> = mutableListOf()
 
     fun add(date: LocalDate, holidays: List<Holiday> = emptyList()) {
