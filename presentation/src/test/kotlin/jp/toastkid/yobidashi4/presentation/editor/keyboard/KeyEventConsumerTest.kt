@@ -927,4 +927,20 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun noopTextReformat() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { textReformat.invoke(any()) } returns "reformat"
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.F, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue("test"),
+            mockk(),
+            { fail("This code will be never called.") }
+        )
+
+        assertFalse(consumed)
+    }
+
 }
