@@ -911,4 +911,20 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun textReformatIfClipboardIsEmpty() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { textReformat.invoke(any()) } returns "reformat"
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.F, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue("test", TextRange(0, 1)),
+            mockk(),
+            { assertEquals("reformatest", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
 }
