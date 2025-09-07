@@ -63,14 +63,11 @@ class FileListViewKtTest {
         every { anyConstructed<FileListViewModel>().onSingleClick(any()) } just Runs
         every { anyConstructed<FileListViewModel>().onLongClick(any()) } just Runs
         every { anyConstructed<FileListViewModel>().onDoubleClick(any()) } just Runs
-        every { anyConstructed<FileListViewModel>().focusItem(any()) } just Runs
         every { anyConstructed<FileListViewModel>().openFile(any()) } just Runs
         every { anyConstructed<FileListViewModel>().edit(any()) } just Runs
         every { anyConstructed<FileListViewModel>().preview(any()) } just Runs
         every { anyConstructed<FileListViewModel>().slideshow(any()) } just Runs
         every { anyConstructed<FileListViewModel>().clipText(any()) } just Runs
-        every { anyConstructed<FileListViewModel>().unFocusItem() } just Runs
-        every { anyConstructed<FileListViewModel>().unFocusItem() } just Runs
         every { anyConstructed<FileListViewModel>().onPointerEvent(any(), any()) } just Runs
         every { anyConstructed<FileListViewModel>().start(any()) } just Runs
     }
@@ -141,18 +138,6 @@ class FileListViewKtTest {
             }
             verify { anyConstructed<FileListViewModel>().onLongClick(any()) }
             verify { anyConstructed<FileListViewModel>().onDoubleClick(any()) }
-
-            // For whole testing.
-            node.performClick().performClick().performClick().performClick()
-            verify { anyConstructed<FileListViewModel>().onSingleClick(any()) }
-
-            node.performMouseInput {
-                enter()
-                exit()
-            }
-            verify { anyConstructed<FileListViewModel>().onPointerEvent(any(), any()) }
-            verify { anyConstructed<FileListViewModel>().focusItem(any()) }
-            verify { anyConstructed<FileListViewModel>().unFocusItem() }
         }
     }
 
