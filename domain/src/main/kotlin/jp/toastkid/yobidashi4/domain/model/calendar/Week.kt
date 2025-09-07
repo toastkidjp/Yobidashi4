@@ -14,7 +14,7 @@ class Week {
             CalendarDate(
                 date.dayOfMonth,
                 date.dayOfWeek,
-                holidays.map(Holiday::title),
+                holidays.map { it.flag + " " + it.title },
                 offDay = holidays.any { it.flag == HolidayCalendar.JAPAN.flag }
             )
         )
