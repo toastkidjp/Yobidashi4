@@ -228,7 +228,7 @@ class MainViewModelImplementationTest {
         assertFalse(subject.showBackgroundImage())
 
         subject = spyk(subject)
-        every { subject.backgroundImage() } returns ImageBitmap(0, 1)
+        every { subject.backgroundImage() } returns ImageBitmap(1, 1)
 
         assertTrue(subject.showBackgroundImage())
     }
