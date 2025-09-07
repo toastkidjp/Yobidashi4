@@ -18,7 +18,7 @@ class DayLabelViewModel {
     }
 
     fun labelSize(label: String?): TextUnit {
-        return if (label.isNullOrEmpty()) 12.sp else 10.sp
+        return if (label.isNullOrEmpty()) 12.sp else 11.sp
     }
 
     fun labelColor(): Color {
