@@ -1,9 +1,6 @@
 package jp.toastkid.yobidashi4.domain.service.editor.text
 
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
-
-class TextReformat {
+class TextReformat(private val jsonPrettyPrint: JsonPrettyPrint = JsonPrettyPrint()) {
 
     operator fun invoke(input: String): String {
         if (input.isEmpty()) {
@@ -12,17 +9,7 @@ class TextReformat {
 
         val trimmed = input.trim()
         if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
-            try {
-                val json = Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                }
-                val jsonElement = Json.parseToJsonElement(trimmed)
-                return json.encodeToString(jsonElement)
-            } catch (ignored: SerializationException) {
-                return input
-            }
+            return jsonPrettyPrint(trimmed)
         }
 
         val minIndent = input.split("\n").filter { it.isNotEmpty() }.map { str ->
