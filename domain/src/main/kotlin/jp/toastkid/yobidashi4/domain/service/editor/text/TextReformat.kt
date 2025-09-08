@@ -1,15 +1,10 @@
 package jp.toastkid.yobidashi4.domain.service.editor.text
 
-class TextReformat(private val jsonPrettyPrint: JsonPrettyPrint = JsonPrettyPrint()) {
+class TextReformat {
 
     operator fun invoke(input: String): String {
         if (input.isEmpty()) {
             return input
-        }
-
-        val trimmed = input.trim()
-        if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
-            return jsonPrettyPrint(trimmed)
         }
 
         val minIndent = input.split("\n").filter { it.isNotEmpty() }.map { str ->
