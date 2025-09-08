@@ -963,4 +963,20 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun jsonPrettyPrintIfClipboardIsEmpty() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { jsonPrettyPrint.invoke(any()) } returns "{}"
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue("test", TextRange(0, 1)),
+            mockk(),
+            { assertEquals("{}est", it.text) }
+        )
+
+        assertTrue(consumed)
+    }
+
 }
