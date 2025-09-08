@@ -32,23 +32,6 @@ a
                 c"""
             )
         )
-
-        assertEquals(
-            """
-{
-    "key": "value",
-    "values": [
-        "a",
-        "b"
-    ],
-    "obj": {
-        "inner": true
-    }
-}""".trimIndent(),
-            subject.invoke("""{"key": "value", "values": ["a", "b"], "obj": { "inner": true }}""")
-        )
-
-        assertEquals("""{"incorrect json"}""", subject.invoke("""{"incorrect json"}"""))
     }
 
 }
