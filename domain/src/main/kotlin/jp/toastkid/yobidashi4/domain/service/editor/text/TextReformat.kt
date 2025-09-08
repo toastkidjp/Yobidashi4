@@ -14,18 +14,21 @@ class TextReformat {
     }
 
     private fun calculateMinimumIndent(input: String): Int {
-        val minIndent = input.split("\n").filter(CharSequence::isNotEmpty).map { str ->
-            var count = 0
-            for (char in str) {
-                if (char.isWhitespace()) {
-                    count++
-                    continue
-                }
+        val minIndent = input.split("\n")
+            .filter(CharSequence::isNotEmpty)
+            .map { str ->
+                var count = 0
+                for (char in str) {
+                    if (char.isWhitespace()) {
+                        count++
+                        continue
+                    }
 
+                    return@map count
+                }
                 return@map count
             }
-            return@map count
-        }.min()
+            .min()
         return minIndent
     }
 
