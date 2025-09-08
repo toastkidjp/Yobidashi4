@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
+import jp.toastkid.yobidashi4.domain.service.editor.text.JsonPrettyPrint
 import jp.toastkid.yobidashi4.domain.service.editor.text.TextReformat
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
@@ -77,6 +78,9 @@ class KeyEventConsumerTest {
     @MockK
     private lateinit var textReformat: TextReformat
 
+    @MockK
+    private lateinit var jsonPrettyPrint: JsonPrettyPrint
+
     private val conversionCapturingSlot = slot<(String) -> String?>()
 
     @BeforeEach
@@ -90,7 +94,7 @@ class KeyEventConsumerTest {
             )
         }
 
-        subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory, blockQuotation = blockQuotation, textReformat = textReformat)
+        subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory, blockQuotation = blockQuotation, textReformat = textReformat, jsonPrettyPrint = jsonPrettyPrint)
         every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
         every { expressionTextCalculatorService.invoke(any()) } returns "3"
         every { selectedTextConversion.invoke(any(), any(), any(), capture(conversionCapturingSlot), any()) } returns true
@@ -941,6 +945,22 @@ class KeyEventConsumerTest {
         )
 
         assertFalse(consumed)
+    }
+
+    @Test
+    fun jsonPrettyPrint() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
+        every { jsonPrettyPrint.invoke(any()) } returns "{}"
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue("", TextRange(0)),
+            mockk(),
+            { assertEquals("{}", it.text) }
+        )
+
+        assertTrue(consumed)
     }
 
 }
