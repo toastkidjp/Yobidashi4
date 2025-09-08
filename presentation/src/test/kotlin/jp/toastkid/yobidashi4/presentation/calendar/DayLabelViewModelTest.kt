@@ -4,7 +4,6 @@ import androidx.compose.ui.unit.sp
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
-import java.time.DayOfWeek
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.DayOfWeek
 
 class DayLabelViewModelTest {
 
@@ -56,8 +56,8 @@ class DayLabelViewModelTest {
     fun labelSize() {
         assertEquals(12.sp, subject.labelSize(null))
         assertEquals(12.sp, subject.labelSize(""))
-        assertEquals(10.sp, subject.labelSize(" "))
-        assertEquals(10.sp, subject.labelSize("test"))
+        assertEquals(11.sp, subject.labelSize(" "))
+        assertEquals(11.sp, subject.labelSize("test"))
     }
 
     @Test
