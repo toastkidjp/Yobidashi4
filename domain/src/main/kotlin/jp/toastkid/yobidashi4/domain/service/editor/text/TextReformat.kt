@@ -14,7 +14,7 @@ class TextReformat {
     }
 
     private fun calculateMinimumIndent(input: String): Int {
-        val minIndent = input.split("\n")
+        return input.split("\n")
             .filter(CharSequence::isNotEmpty)
             .map { str ->
                 var count = 0
@@ -29,7 +29,6 @@ class TextReformat {
                 return@map count
             }
             .min()
-        return minIndent
     }
 
 }
