@@ -979,4 +979,20 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
     }
 
+    @Test
+    fun noopJsonPrettyPrint() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { jsonPrettyPrint.invoke(any()) } returns "{}}"
+
+        val consumed = subject.invoke(
+            KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+            TextFieldValue("test"),
+            mockk(),
+            { fail("This code will be never called.") }
+        )
+
+        assertFalse(consumed)
+    }
+
 }
