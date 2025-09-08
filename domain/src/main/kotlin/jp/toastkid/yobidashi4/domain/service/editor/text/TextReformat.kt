@@ -7,7 +7,14 @@ class TextReformat {
             return input
         }
 
-        val minIndent = input.split("\n").filter { it.isNotEmpty() }.map { str ->
+        val minIndent = calculateMinimumIndent(input)
+
+        val whitespaces = " ".repeat(minIndent)
+        return input.split("\n").joinToString("\n") { it.replaceFirst(whitespaces, "") }
+    }
+
+    private fun calculateMinimumIndent(input: String): Int {
+        val minIndent = input.split("\n").filter(CharSequence::isNotEmpty).map { str ->
             var count = 0
             for (char in str) {
                 if (char.isWhitespace()) {
@@ -19,9 +26,7 @@ class TextReformat {
             }
             return@map count
         }.min()
-
-        val whitespaces = " ".repeat(minIndent)
-        return input.split("\n").joinToString("\n") { it.replaceFirst(whitespaces, "") }
+        return minIndent
     }
 
 }
