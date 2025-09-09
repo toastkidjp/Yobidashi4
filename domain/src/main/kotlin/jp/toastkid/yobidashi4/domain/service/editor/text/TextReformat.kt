@@ -17,16 +17,13 @@ class TextReformat {
         return input.split("\n")
             .filter(CharSequence::isNotEmpty)
             .map { str ->
-                var count = 0
-                for (char in str) {
+                str.fold(0) { count, char ->
                     if (char.isWhitespace()) {
-                        count++
-                        continue
+                        return@fold count + 1
                     }
 
-                    return@map count
+                    return@fold count
                 }
-                return@map count
             }
             .min()
     }
