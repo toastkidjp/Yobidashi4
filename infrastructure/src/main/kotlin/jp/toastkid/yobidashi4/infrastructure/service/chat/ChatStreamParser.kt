@@ -14,7 +14,7 @@ class ChatStreamParser {
         }
 
         val matcher = pattern.matcher(line)
-        val message = if (matcher.find()) matcher.group(1).replace("\\n", "\n") else null
+        val message = if (matcher.find()) matcher.group(1).replace("\\n", "\n").replace("\\u003e", ">").replace("\\u003c", "<") else null
 
         val imageMatcher = imagePattern.matcher(line)
         val base64 = if (imageMatcher.find()) imageMatcher.group(2) else null
