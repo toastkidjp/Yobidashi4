@@ -32,8 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -143,12 +141,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                                 }
                             )
                             .drawBehind { drawRect(underlay.value) }
-                            .onPointerEvent(PointerEventType.Enter) {
-                                viewModel.focusItem(fileListItem)
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                viewModel.unFocusItem()
-                            }
                             .pointerInput(Unit) {
                                 awaitEachGesture {
                                     viewModel.onPointerEvent(awaitPointerEvent(), index)
