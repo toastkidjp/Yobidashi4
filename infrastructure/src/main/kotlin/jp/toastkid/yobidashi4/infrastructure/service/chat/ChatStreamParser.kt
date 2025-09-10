@@ -16,7 +16,10 @@ class ChatStreamParser {
         val matcher = pattern.matcher(line)
         val message =
             if (matcher.find())
-                matcher.group(1).replace("\\n", "\n").replace("\\u003e", ">").replace("\\u003c", "<")
+                matcher.group(1)
+                    .replace("\\n", "\n")
+                    .replace("\\u003e", ">")
+                    .replace("\\u003c", "<")
             else
                 null
 
