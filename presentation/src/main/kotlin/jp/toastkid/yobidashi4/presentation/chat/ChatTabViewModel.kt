@@ -112,9 +112,6 @@ class ChatTabViewModel : KoinComponent {
             withContext(ioContextProvider()) {
                 service.send(messages, currentModel.value) {
                     onReceive(it)
-                    coroutineScope.launch {
-                        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
-                    }
                 }
             }
             labelState.value = DEFAULT_LABEL
