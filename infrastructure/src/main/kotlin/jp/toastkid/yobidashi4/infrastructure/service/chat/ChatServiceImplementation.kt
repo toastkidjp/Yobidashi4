@@ -31,7 +31,11 @@ class ChatServiceImplementation : ChatService, KoinComponent {
 
     private val repositories = loadRepositories()
 
-    override fun send(messages: MutableList<ChatMessage>, model: GenerativeAiModel, onUpdate: (ChatResponseItem?) -> Unit): String? {
+    override fun send(
+        messages: MutableList<ChatMessage>,
+        model: GenerativeAiModel,
+        onUpdate: (ChatResponseItem?) -> Unit
+    ): String? {
         val chat = Chat(messages)
 
         val repository = repositories.get(model) ?: return null
