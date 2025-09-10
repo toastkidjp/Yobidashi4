@@ -178,16 +178,6 @@ class FileListViewModel : KoinComponent {
         viewModel.edit(fileListItem.path)
     }
 
-    private val currentFocusItem = mutableStateOf<FileListItem?>(null)
-
-    fun focusItem(item: FileListItem) {
-        currentFocusItem.value = item
-    }
-
-    fun unFocusItem() {
-        currentFocusItem.value = null
-    }
-
     private val currentDropdownItem = mutableStateOf<FileListItem?>(null)
 
     fun openingDropdown(item: FileListItem) = currentDropdownItem.value == item
