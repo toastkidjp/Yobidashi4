@@ -354,6 +354,20 @@ class MainMenuViewModelTest {
     @Test
     fun closeCurrentTab() {
         every { mainViewModel.tabs } returns mutableListOf(mockk())
+        every { mainViewModel.currentTab() } returns mockk()
+        every { mainViewModel.closeCurrent() } just Runs
+        val ifEmpty = mockk<() -> Unit>()
+        every { ifEmpty.invoke() } just Runs
+
+        subject.closeCurrentTab(ifEmpty)
+
+        verify { ifEmpty wasNot called }
+    }
+
+    @Test
+    fun noopCloseCurrentTab() {
+        every { mainViewModel.tabs } returns mutableListOf(mockk())
+        every { mainViewModel.currentTab() } returns mockk<WebTab>()
         every { mainViewModel.closeCurrent() } just Runs
         val ifEmpty = mockk<() -> Unit>()
         every { ifEmpty.invoke() } just Runs
