@@ -150,14 +150,15 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun closeCurrentTab(ifEmpty: () -> Unit) {
-        if (viewModel.tabs.isNotEmpty()) {
-            if (viewModel.currentTab() is WebTab) {
-                return
-            }
-            viewModel.closeCurrent()
+        if (viewModel.tabs.isEmpty()) {
+            ifEmpty()
             return
         }
-        ifEmpty()
+
+        if (viewModel.currentTab() is WebTab) {
+            return
+        }
+        viewModel.closeCurrent()
     }
 
     fun useAdditionalTabMenu(): Boolean {
