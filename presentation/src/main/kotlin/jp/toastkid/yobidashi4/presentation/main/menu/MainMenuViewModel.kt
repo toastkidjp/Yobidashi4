@@ -158,6 +158,7 @@ class MainMenuViewModel : KoinComponent {
         if (viewModel.currentTab() is WebTab) {
             return
         }
+
         viewModel.closeCurrent()
     }
 
