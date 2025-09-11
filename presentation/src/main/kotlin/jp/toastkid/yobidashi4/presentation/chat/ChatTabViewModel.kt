@@ -180,7 +180,10 @@ class ChatTabViewModel : KoinComponent {
             }
             keyEvent.key == Key.DirectionDown -> {
                 coroutineScope.launch {
-                    scrollState.scrollToItem(kotlin.math.min(scrollState.layoutInfo.totalItemsCount - 1, scrollState.firstVisibleItemIndex + 1), 0)
+                    scrollState.scrollToItem(
+                        kotlin.math.min(scrollState.layoutInfo.totalItemsCount - 1, scrollState.firstVisibleItemIndex + 1),
+                        0
+                    )
                 }
                 return true
             }
