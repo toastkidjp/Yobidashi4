@@ -14,7 +14,11 @@ import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 
 interface ChatService {
 
-    fun send(messages: MutableList<ChatMessage>, model: GenerativeAiModel, onUpdate: (ChatResponseItem?) -> Unit): String?
+    fun send(
+        messages: MutableList<ChatMessage>,
+        model: GenerativeAiModel,
+        onUpdate: (ChatResponseItem?) -> Unit
+    ): String?
 
     fun setChat(chat: Chat)
 
