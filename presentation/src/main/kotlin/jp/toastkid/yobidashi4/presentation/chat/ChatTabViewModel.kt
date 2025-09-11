@@ -27,6 +27,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.math.max
+import kotlin.math.min
 
 class ChatTabViewModel : KoinComponent {
 
@@ -181,7 +182,7 @@ class ChatTabViewModel : KoinComponent {
             keyEvent.key == Key.DirectionDown -> {
                 coroutineScope.launch {
                     scrollState.scrollToItem(
-                        kotlin.math.min(
+                        min(
                             scrollState.layoutInfo.totalItemsCount - 1,
                             scrollState.firstVisibleItemIndex + 1
                         ),
