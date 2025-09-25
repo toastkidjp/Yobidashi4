@@ -83,7 +83,7 @@ _
 """
             .split("_").map { it.trim() }
         every { Files.readAllLines(any()) } returns lines
-        every { articlesReaderService.invoke() }.returns(Stream.of(path))
+        every { articlesReaderService.invoke() } returns Stream.of(path)
 
         val outgoAggregationResult = outgoAggregatorService.invoke("2024")
 
