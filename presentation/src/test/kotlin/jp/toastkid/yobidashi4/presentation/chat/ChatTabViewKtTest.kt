@@ -119,8 +119,6 @@ class ChatTabViewKtTest {
             val contentDescription = "chooserItem-${GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE.label()}"
             onNodeWithContentDescription(contentDescription, useUnmergedTree = true)
                 .performMouseInput {
-                    enter()
-                    exit()
                     click()
                 }
                 .assertDoesNotExist()
