@@ -39,7 +39,7 @@ class MediaPlayerInvokerTest {
 
         mockkStatic(Runtime::class)
         every { Runtime.getRuntime() } returns runtime
-        every { runtime.exec(any<Array<String>>()) }.returns(mockk())
+        every { runtime.exec(any<Array<String>>()) } returns mockk()
         every { setting.mediaPlayerPath() }.returns("path/to/media_player.ext")
         every { path.toAbsolutePath() }.returns(path)
 
