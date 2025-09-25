@@ -71,7 +71,7 @@ class TodayArticleGeneratorTest {
         every { offDayFinderService.invoke(any(), any(), any(), any(), any()) } returns false
 
         mockkStatic(Files::class)
-        every { Files.exists(articleFolder) }.returns(true)
+        every { Files.exists(articleFolder) } returns true
         every { Files.exists(path) }.returns(false)
 
         mockkConstructor(ArticleTitleGenerator::class)
