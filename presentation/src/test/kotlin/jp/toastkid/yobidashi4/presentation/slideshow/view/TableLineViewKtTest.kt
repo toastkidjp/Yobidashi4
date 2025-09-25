@@ -13,7 +13,6 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -69,8 +68,6 @@ class TableLineViewKtTest {
             onNode(hasText("2023-03-03"), true)
                 .performMouseInput {
                     longClick()
-                    enter()
-                    exit()
                 }
         }
     }
