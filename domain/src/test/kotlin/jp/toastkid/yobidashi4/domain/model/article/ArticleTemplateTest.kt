@@ -199,9 +199,9 @@ test
     @Test
     fun testPlainText() {
         mockkConstructor(UserTemplateStreamReader::class)
-        every { anyConstructed<UserTemplateStreamReader>().invoke() }.returns("""
+        every { anyConstructed<UserTemplateStreamReader>().invoke() } returns """
 test
-        """.trimIndent().byteInputStream())
+        """.trimIndent().byteInputStream()
         val content = ArticleTemplate(LocalDate.of(2023, 2, 23), offDayFinderService).invoke("test")
         assertTrue(content.contains("test"))
     }
