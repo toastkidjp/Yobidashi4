@@ -101,10 +101,6 @@ class TableViewKtTest {
             val previewButton = onAllNodesWithContentDescription("Open preview", useUnmergedTree = true).onFirst()
             previewButton.performClick()
             verify { anyConstructed<TableViewModel>().openMarkdownPreview(any()) }
-            previewButton.onParent().performMouseInput {
-                enter()
-                exit()
-            }
 
             onAllNodesWithContentDescription("Open file", useUnmergedTree = true).onFirst().performClick()
             verify { anyConstructed<TableViewModel>().edit(any()) }
