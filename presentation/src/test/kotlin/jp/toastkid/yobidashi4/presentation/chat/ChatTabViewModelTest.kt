@@ -199,6 +199,22 @@ class ChatTabViewModelTest {
     }
 
     @Test
+    fun launchWithZero() {
+        subject = spyk(subject)
+        val focusRequester = mockk<FocusRequester>()
+        every { subject.focusRequester() } returns focusRequester
+        every { focusRequester.requestFocus() } returns true
+
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 0)
+
+            verify { subject.focusRequester() }
+            verify { service.setChat(any()) }
+            verify { focusRequester.requestFocus() }
+        }
+    }
+
+    @Test
     fun update() {
         val chatTab = mockk<ChatTab>()
         every { mainViewModel.replaceTab(any(),  any()) } just Runs
