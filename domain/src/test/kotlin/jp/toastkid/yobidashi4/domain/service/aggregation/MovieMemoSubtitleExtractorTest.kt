@@ -30,7 +30,7 @@ internal class MovieMemoSubtitleExtractorTest {
     fun setUp() {
         val path = mockk<Path>()
         val fileName = mockk<Path>()
-        every { path.getFileName() } returns fileName
+        every { path.fileName } returns fileName
         every { fileName.toString() } returns "file.md"
 
         mockkStatic(Files::class)
