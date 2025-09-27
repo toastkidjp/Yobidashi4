@@ -144,6 +144,12 @@ class ChatTabViewModelTest {
                 subject.send(coroutineScope)
                 capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
                 assertEquals(6, subject.messages().size)
+
+                // For test coverage.
+                subject.clearChat()
+                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
+                subject.clearChat()
+                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer", image = true))
             }
         }
     }
