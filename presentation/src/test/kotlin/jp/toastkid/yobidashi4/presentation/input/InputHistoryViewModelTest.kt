@@ -98,7 +98,7 @@ class InputHistoryViewModelTest {
     fun openOnBackground() {
         val inputHistory = InputHistory("test", 1)
 
-        subject.open(inputHistory)
+        subject.openOnBackground(inputHistory)
 
         verify { anyConstructed<AggregationInvoker>().invoke(any(), inputHistory.word) }
     }
