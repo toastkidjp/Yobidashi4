@@ -24,6 +24,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
@@ -137,6 +138,12 @@ class ChatTabViewModelTest {
                 subject.send(coroutineScope)
                 capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
                 assertEquals(4, subject.messages().size)
+
+                subject.onValueChanged(TextFieldValue("Image send"))
+                subject.chooseModel(GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE)
+                subject.send(coroutineScope)
+                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
+                assertEquals(6, subject.messages().size)
             }
         }
     }
