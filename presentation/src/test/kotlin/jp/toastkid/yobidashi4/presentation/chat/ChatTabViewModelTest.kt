@@ -207,11 +207,11 @@ class ChatTabViewModelTest {
 
         CoroutineScope(Dispatchers.Unconfined).launch {
             subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 0)
-
-            verify { subject.focusRequester() }
-            verify { service.setChat(any()) }
-            verify { focusRequester.requestFocus() }
         }
+
+        verify { subject.focusRequester() }
+        verify { service.setChat(any()) }
+        verify { focusRequester.requestFocus() }
     }
 
     @Test
