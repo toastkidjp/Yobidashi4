@@ -152,8 +152,10 @@ result.value = engine.eval(input.value.text).toString()
                     {},
                     Modifier
                 )
+                val slide = Slide()
+                slide.addLine(mockk())
                 Slideshow(
-                    SlideDeck(mutableListOf(Slide())),
+                    SlideDeck(mutableListOf(slide)),
                     {},
                     {},
                     Modifier
