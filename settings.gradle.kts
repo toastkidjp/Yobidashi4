@@ -24,7 +24,7 @@ dependencyResolutionManagement {
             version("compose", "1.8.0-beta02")
             version("kover", "0.9.2")
             version("kotlin", "2.2.20")
-            version("ksp", "2.2.10-2.0.2")
+            version("ksp", "2.2.20-2.0.3")
         }
 
         create("testLibraries") {
