@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
@@ -13,6 +14,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -35,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -182,20 +185,23 @@ class ChatTabViewModelTest {
         assertNotNull(subject.focusRequester())
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
-    fun launch() {
+    fun launch() = runTest {
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
+        val listState = mockk<LazyListState>()
+        every { subject.scrollState() } returns listState
+        coEvery { listState.scrollToItem(any()) } just Runs
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
 
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1)
+        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1)
 
-            verify { subject.focusRequester() }
-            verify { service.setChat(any()) }
-            verify { focusRequester.requestFocus() }
-        }
+        coVerify { listState.scrollToItem(any()) }
+        verify { subject.focusRequester() }
+        verify { service.setChat(any()) }
+        verify { focusRequester.requestFocus() }
     }
 
     @Test
