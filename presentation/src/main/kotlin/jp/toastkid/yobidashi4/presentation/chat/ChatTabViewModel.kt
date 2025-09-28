@@ -217,7 +217,7 @@ class ChatTabViewModel : KoinComponent {
         messages.addAll(chat.list())
         service.setChat(chat)
         if (scrollState.firstVisibleItemScrollOffset != scrollPosition) {
-            scrollState.scrollToItem(scrollPosition)
+            scrollState().scrollToItem(scrollPosition)
         }
         focusRequester().requestFocus()
     }
