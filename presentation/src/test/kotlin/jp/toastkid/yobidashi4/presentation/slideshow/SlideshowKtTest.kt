@@ -20,17 +20,20 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
+import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
+import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.net.URL
 import java.nio.file.Files
 import javax.imageio.ImageIO
-import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
-import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
-import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 class SlideshowKtTest {
 
@@ -133,6 +136,24 @@ result.value = engine.eval(input.value.text).toString()
             setContent {
                 Slideshow(
                     SlideDeck(slideDeck.slides.filter { it.lines().any { l -> l is ImageLine } }.toMutableList()),
+                    {},
+                    {},
+                    Modifier
+                )
+                Slideshow(
+                    SlideDeck(slideDeck.slides.filter { it.lines().any { l -> l is CodeBlockLine } }.toMutableList()),
+                    {},
+                    {},
+                    Modifier
+                )
+                Slideshow(
+                    SlideDeck(slideDeck.slides.filter { it.lines().any { l -> l is TableLine } }.toMutableList()),
+                    {},
+                    {},
+                    Modifier
+                )
+                Slideshow(
+                    SlideDeck(mutableListOf(Slide())),
                     {},
                     {},
                     Modifier
