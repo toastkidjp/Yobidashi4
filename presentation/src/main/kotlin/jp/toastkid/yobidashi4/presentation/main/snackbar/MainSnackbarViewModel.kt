@@ -29,11 +29,9 @@ class MainSnackbarViewModel : KoinComponent {
     )
 
     fun setAnchor(anchors: DraggableAnchors<Any>) {
-        anchoredDraggableStateHolder.value = (
-            AnchoredDraggableState(
-                initialValue = Center,
-                anchors = anchors,
-            )
+        anchoredDraggableStateHolder.value = AnchoredDraggableState(
+            initialValue = Center,
+            anchors = anchors,
         )
     }
 
