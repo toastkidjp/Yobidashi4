@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -60,6 +61,8 @@ class MainSnackbarViewModel : KoinComponent {
         }
 
     }
+
+    fun offset() = IntOffset(anchoredDraggableState().offset.toInt(), 0)
 
     fun isInitialized() = anchoredDraggableStateHolder.value !== initialState
 
