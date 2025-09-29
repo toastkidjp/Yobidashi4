@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -69,7 +68,7 @@ internal fun MainSnackbar(snackbarData: SnackbarData) {
                 ),
                 overscrollEffect = viewModel.overscrollEffect()
             )
-            .offset { IntOffset(viewModel.anchoredDraggableState().offset.toInt(), 0) }
+            .offset { viewModel.offset() }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
