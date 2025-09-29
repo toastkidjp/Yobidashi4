@@ -24,9 +24,8 @@ class MainSnackbarViewModel : KoinComponent {
         anchors = DraggableAnchors { },
     )
 
-    private val anchoredDraggableStateHolder = mutableStateOf<AnchoredDraggableState<Any>>(
-        initialState
-    )
+    private val anchoredDraggableStateHolder =
+        mutableStateOf<AnchoredDraggableState<Any>>(initialState)
 
     fun setAnchor(anchors: DraggableAnchors<Any>) {
         anchoredDraggableStateHolder.value = AnchoredDraggableState(
