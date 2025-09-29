@@ -13,6 +13,7 @@ import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -67,6 +68,12 @@ class MainSnackbarViewModelTest {
         assertTrue(subject.isInitialized())
 
         assertNotNull(subject.anchoredDraggableState())
+    }
+
+    @Test
+    fun offset() {
+        assertEquals(0, subject.offset().x)
+        assertEquals(0, subject.offset().y)
     }
 
     @Test
