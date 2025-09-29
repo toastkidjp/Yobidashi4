@@ -128,7 +128,7 @@ internal fun HoverHighlightColumn(
     )
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .drawBehind { drawRect(backgroundColor.value) }
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
@@ -136,6 +136,7 @@ internal fun HoverHighlightColumn(
             .onPointerEvent(PointerEventType.Exit) {
                 cursorOn.value = false
             }
+            .then(modifier)
     ) {
         content(fontColor.value)
     }
