@@ -131,7 +131,7 @@ result.value = engine.eval(input.value.text).toString()
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun otherPage() {
+    fun imagePage() {
         runComposeUiTest {
             setContent {
                 Slideshow(
@@ -140,6 +140,15 @@ result.value = engine.eval(input.value.text).toString()
                     {},
                     Modifier
                 )
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun otherPage() {
+        runComposeUiTest {
+            setContent {
                 Slideshow(
                     SlideDeck(slideDeck.slides.filter { it.lines().any { l -> l is CodeBlockLine } }.toMutableList()),
                     {},
