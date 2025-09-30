@@ -32,7 +32,8 @@ class InputHistoryViewModel : KoinComponent {
 
     private val items = mutableStateListOf<InputHistory>()
 
-    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss").withLocale(Locale.ENGLISH)
+    private val dateFormatter =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss").withLocale(Locale.ENGLISH)
 
     private val listState = LazyListState()
 
