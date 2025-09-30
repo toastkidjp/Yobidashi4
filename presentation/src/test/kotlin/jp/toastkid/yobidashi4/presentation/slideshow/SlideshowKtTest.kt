@@ -161,7 +161,7 @@ result.value = engine.eval(input.value.text).toString()
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun otherPage() {
+    fun tableLinePage() {
         runComposeUiTest {
             setContent {
                 Slideshow(
@@ -170,6 +170,15 @@ result.value = engine.eval(input.value.text).toString()
                     {},
                     Modifier
                 )
+            }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun otherPage() {
+        runComposeUiTest {
+            setContent {
                 val slide = Slide()
                 slide.addLine(mockk())
                 Slideshow(
