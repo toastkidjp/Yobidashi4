@@ -5,8 +5,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.foundation.layout.Arrangement.Absolute.Center
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -14,6 +13,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -89,6 +89,17 @@ class MainSnackbarViewModelTest {
             subject.anchoredDraggableState().snapTo(Start)
         }
         assertFalse(subject.overscrollEffect().isInProgress)
+    }
+
+    @Test
+    fun applyToFling() {
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.overscrollEffect().applyToFling(Velocity.Zero) { it }
+            subject.anchoredDraggableState().snapTo(Start)
+            subject.overscrollEffect().applyToFling(Velocity.Zero) { it }
+        }
+
+        verify { mainViewModel.dismissSnackbar() }
     }
 
 }
