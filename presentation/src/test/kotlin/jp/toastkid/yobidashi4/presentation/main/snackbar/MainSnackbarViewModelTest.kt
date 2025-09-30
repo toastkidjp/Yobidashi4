@@ -5,6 +5,8 @@ import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.foundation.layout.Arrangement.Absolute.Center
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.mockk.MockKAnnotations
@@ -100,6 +102,21 @@ class MainSnackbarViewModelTest {
         }
 
         verify { mainViewModel.dismissSnackbar() }
+    }
+
+    @Test
+    fun applyToScroll() {
+        subject.setAnchor(
+            DraggableAnchors<Any> {
+                Start at -20.dp.value
+                Center at 0f
+                End at 20.dp.value
+            }
+        )
+
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.overscrollEffect().applyToScroll(Offset.Zero, NestedScrollSource.UserInput) { it }
+        }
     }
 
 }
