@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.spyk
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,6 +38,18 @@ class MouseEventAdapterTest {
         every { event.button } returns PointerButton.Secondary
 
         assertTrue(subject.isSecondaryClick(event))
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
+    fun isNotSecondaryClick() {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        event = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { event.button } returns PointerButton.Primary
+
+        assertFalse(subject.isSecondaryClick(event))
     }
 
 }
