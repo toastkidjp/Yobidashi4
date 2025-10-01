@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 
 class MouseEventAdapterTest {
 
-    private lateinit var subject: MouseEventAdapter
+    private lateinit var subject: PointerEventAdapter
 
     @MockK
     private lateinit var event: PointerEvent
@@ -32,7 +32,7 @@ class MouseEventAdapterTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        subject = MouseEventAdapter()
+        subject = PointerEventAdapter()
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
