@@ -51,10 +51,6 @@ class PointerEventAdapterTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun isNotSecondaryClick() {
-        val pointerInputChange = mockk<PointerInputChange>()
-        every { pointerInputChange.previousPressed } returns false
-        every { pointerInputChange.pressed } returns true
-        event = spyk(PointerEvent(listOf(pointerInputChange)))
         every { event.button } returns PointerButton.Primary
 
         assertFalse(subject.isSecondaryClick(event))
