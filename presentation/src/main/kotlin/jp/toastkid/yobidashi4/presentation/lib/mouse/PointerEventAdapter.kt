@@ -12,7 +12,7 @@ import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 
-class MouseEventAdapter {
+class PointerEventAdapter {
 
     @OptIn(ExperimentalComposeUiApi::class)
     fun isSecondaryClick(event: PointerEvent): Boolean {
