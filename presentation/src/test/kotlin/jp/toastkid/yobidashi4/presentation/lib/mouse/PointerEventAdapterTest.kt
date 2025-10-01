@@ -33,13 +33,18 @@ class PointerEventAdapterTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        val pointerInputChange = mockk<PointerInputChange>()
-        every { pointerInputChange.previousPressed } returns false
-        every { pointerInputChange.pressed } returns true
+        val pointerInputChange = makePointerInputChange(true)
         event = spyk(PointerEvent(listOf(pointerInputChange)))
         every { event.button } returns PointerButton.Secondary
 
         subject = PointerEventAdapter()
+    }
+
+    private fun makePointerInputChange(pressed: Boolean): PointerInputChange {
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns pressed
+        return pointerInputChange
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
