@@ -28,9 +28,16 @@ class PointerEventAdapterTest {
     @MockK
     private lateinit var event: PointerEvent
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        event = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { event.button } returns PointerButton.Secondary
 
         subject = PointerEventAdapter()
     }
@@ -38,12 +45,6 @@ class PointerEventAdapterTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun isSecondaryClick() {
-        val pointerInputChange = mockk<PointerInputChange>()
-        every { pointerInputChange.previousPressed } returns false
-        every { pointerInputChange.pressed } returns true
-        event = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { event.button } returns PointerButton.Secondary
-
         assertTrue(subject.isSecondaryClick(event))
     }
 
