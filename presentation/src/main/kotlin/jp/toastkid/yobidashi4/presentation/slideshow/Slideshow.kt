@@ -158,7 +158,10 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                 Modifier.focusable(true).fillMaxHeight().align(Alignment.TopCenter)
             }
 
-        Column(modifier = columnModifier) {
+        Column(
+            horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
+            modifier = columnModifier
+        ) {
             if (slide.hasTitle()) {
                 Text(
                     slide.title(),
