@@ -226,6 +226,13 @@ private fun TabOptionMenu(
             }
         }
 
+        if (tab is WebBookmarkTab) {
+            HoverHighlightDropdownMenuItem("Modify") {
+                openFile(Path.of("user/bookmark/list.tsv"))
+                close()
+            }
+        }
+
         if (tab is Reloadable) {
             HoverHighlightDropdownMenuItem("Reload") {
                 tab.reload()
