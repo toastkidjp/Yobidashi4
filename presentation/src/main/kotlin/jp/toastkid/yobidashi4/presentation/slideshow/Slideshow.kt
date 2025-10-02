@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.onKeyEvent
@@ -142,6 +143,13 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     Box(
         modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
     ) {
+        val columnModifier =
+            if (slide.isFront()) {
+                Modifier.focusable(true).fillMaxWidth().wrapContentHeight().align(Alignment.Center)
+            } else {
+                Modifier.focusable(true).fillMaxHeight().align(Alignment.TopCenter)
+            }
+
         val backgroundUrl = slide.background()
         if (backgroundUrl.isNotBlank()) {
             val bitmap = loadImage(backgroundUrl)
@@ -152,16 +160,16 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             )
         }
 
-        val columnModifier =
-            if (slide.isFront()) {
-                Modifier.focusable(true).fillMaxWidth().wrapContentHeight().align(Alignment.Center)
-            } else {
-                Modifier.focusable(true).fillMaxHeight().align(Alignment.TopCenter)
-            }
+        val surfaceColor = MaterialTheme.colors.surface
 
         Column(
             horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
             modifier = columnModifier
+                .drawBehind {
+                    if (slide.background().isNotEmpty()) {
+                        drawRect(surfaceColor.copy(alpha = 0.75f))
+                    }
+                }
         ) {
             if (slide.hasTitle()) {
                 Text(
