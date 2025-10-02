@@ -9,11 +9,6 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
@@ -24,6 +19,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class WebHistoryViewModel : KoinComponent {
 
