@@ -80,6 +80,10 @@ class TabsViewModel  : KoinComponent {
         viewModel.openFile(path)
     }
 
+    fun slideshow(path: Path) {
+        viewModel.slideshow(path)
+    }
+
     fun clipText(text: String) {
         clipboardPutterService.invoke(text)
     }
