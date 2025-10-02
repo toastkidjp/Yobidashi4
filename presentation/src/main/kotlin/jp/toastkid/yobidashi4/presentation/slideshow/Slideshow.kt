@@ -124,6 +124,7 @@ fun Slideshow(
                     }
                 },
                 valueRange = 0f .. (deck.slides.size - 1).toFloat(),
+                steps = deck.slides.size,
                 modifier = Modifier.align(Alignment.BottomCenter)
                     .alpha(alpha.value)
                     .onPointerEvent(PointerEventType.Enter) {
