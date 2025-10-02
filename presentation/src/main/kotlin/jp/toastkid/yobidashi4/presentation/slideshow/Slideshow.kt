@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
@@ -153,7 +154,7 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
 
         val columnModifier =
             if (slide.isFront()) {
-                Modifier.focusable(true).wrapContentHeight().align(Alignment.Center)
+                Modifier.focusable(true).fillMaxWidth().wrapContentHeight().align(Alignment.Center)
             } else {
                 Modifier.focusable(true).fillMaxHeight().align(Alignment.TopCenter)
             }
