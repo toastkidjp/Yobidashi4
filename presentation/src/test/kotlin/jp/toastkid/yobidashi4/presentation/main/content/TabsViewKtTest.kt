@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
+import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -267,6 +268,22 @@ class TabsViewKtTest {
             setContent {
                 TabsView(Modifier)
             }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun webBookmarkTab() {
+        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(WebBookmarkTab())
+
+        runDesktopComposeUiTest {
+            setContent {
+                TabsView(Modifier)
+            }
+
+            onNode(hasText("Modify"), useUnmergedTree = true).onParent().performClick()
+            verify { anyConstructed<TabsViewModel>().openFile(any()) }
         }
     }
 
