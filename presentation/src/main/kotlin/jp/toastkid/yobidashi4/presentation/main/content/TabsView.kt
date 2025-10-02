@@ -148,6 +148,7 @@ internal fun TabsView(modifier: Modifier) {
                             tab,
                             viewModel::closeOtherTabs,
                             viewModel::openFile,
+                            viewModel::slideshow,
                             viewModel::clipText,
                             {
                                 viewModel.edit(it.slideshowSourcePath())
@@ -197,6 +198,7 @@ private fun TabOptionMenu(
     tab: Tab,
     closeOtherTabs: () -> Unit,
     openFile: (Path) -> Unit,
+    slideshow: (Path) -> Unit,
     clipText: (String) -> Unit,
     edit: (MarkdownPreviewTab) -> Unit,
     exportTable: (TableTab) -> Unit,
@@ -253,6 +255,11 @@ private fun TabOptionMenu(
 
             HoverHighlightDropdownMenuItem("Clip internal link") {
                 clipText("[[${tab.path.nameWithoutExtension}]]")
+                close()
+            }
+
+            HoverHighlightDropdownMenuItem("Slideshow") {
+                slideshow(tab.path)
                 close()
             }
         }
