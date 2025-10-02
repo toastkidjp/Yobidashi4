@@ -77,7 +77,7 @@ fun Slideshow(
             .focusRequester(viewModel.focusRequester())
     ) {
         Box(
-            modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
+            modifier = Modifier.padding(8.dp).fillMaxHeight()
         ) {
             val backgroundUrl = deck.background
             if (backgroundUrl.isNotBlank()) {
