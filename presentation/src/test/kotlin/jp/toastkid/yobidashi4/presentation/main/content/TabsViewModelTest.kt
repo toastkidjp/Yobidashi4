@@ -193,6 +193,15 @@ class TabsViewModelTest {
     }
 
     @Test
+    fun slideshow() {
+        every { mainViewModel.slideshow(any()) } just Runs
+
+        subject.slideshow(mockk())
+
+        verify { mainViewModel.slideshow(any()) }
+    }
+
+    @Test
     fun clipText() {
         subject.clipText("test")
 
