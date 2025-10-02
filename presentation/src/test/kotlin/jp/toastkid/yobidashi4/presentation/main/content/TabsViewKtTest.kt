@@ -213,6 +213,7 @@ class TabsViewKtTest {
     fun dropdownEditorTab() {
         every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
         every { anyConstructed<TabsViewModel>().tabs() } returns listOf(editorTab)
+        every { anyConstructed<TabsViewModel>().slideshow(any()) } just Runs
 
         runDesktopComposeUiTest {
             setContent {
@@ -222,6 +223,8 @@ class TabsViewKtTest {
             verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
             onNode(hasText("Open with editor"), useUnmergedTree = true).onParent().performClick()
             verify { anyConstructed<TabsViewModel>().openFile(any()) }
+            onNode(hasText("Slideshow"), useUnmergedTree = true).onParent().performClick()
+            verify { anyConstructed<TabsViewModel>().slideshow(any()) }
         }
     }
 
