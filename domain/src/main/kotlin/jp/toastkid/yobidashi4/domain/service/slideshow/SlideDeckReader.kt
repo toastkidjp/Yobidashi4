@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi4.domain.service.slideshow
 
+import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
+import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
-import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 
 class SlideDeckReader(private val pathToMarkdown: Path) {
 
@@ -55,7 +55,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     if (line.startsWith("![")) {
                         if (BackgroundExtractor.shouldInvoke(line)) {
                             backgroundExtractor(line)?.let {
-                                if (deck.background.isBlank()) {
+                                if (deck.slides.isEmpty() && deck.background.isBlank()) {
                                     deck.background = it
                                     return@forEach
                                 }
