@@ -66,7 +66,6 @@ class PointerEventAdapterTest {
     fun isNotClick() {
         val pointerInputChange = makePointerInputChange(false)
         event = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { event.button } returns PointerButton.Secondary
 
         assertFalse(subject.isSecondaryClick(event))
     }
