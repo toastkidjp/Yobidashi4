@@ -27,6 +27,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.lib.mouse.PointerEventAdapter
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -72,6 +73,9 @@ class FileListViewModelTest {
         every { Files.getLastModifiedTime(any()) } answers { FileTime.fromMillis(System.currentTimeMillis()) }
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 10000
+
+        mockkConstructor(PointerEventAdapter::class)
+        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns false
 
         subject = FileListViewModel()
     }
@@ -426,12 +430,8 @@ class FileListViewModelTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun onPointerEvent() {
-        val pointerInputChange = mockk<PointerInputChange>()
-        every { pointerInputChange.previousPressed } returns false
-        every { pointerInputChange.pressed } returns true
-        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
-        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { pointerEvent.button } returns PointerButton.Secondary
+        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns true
+
         subject.start(
             listOf(
                 mockk<Path>().also {
@@ -446,7 +446,7 @@ class FileListViewModelTest {
         )
         val fileListItem = subject.items()[1]
 
-        subject.onPointerEvent(pointerEvent, 1)
+        subject.onPointerEvent(mockk(), 1)
 
         assertTrue(subject.openingDropdown(fileListItem))
     }
@@ -454,12 +454,6 @@ class FileListViewModelTest {
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
     fun noopOnPointerEvent() {
-        val pointerInputChange = mockk<PointerInputChange>()
-        every { pointerInputChange.previousPressed } returns false
-        every { pointerInputChange.pressed } returns true
-        every { pointerInputChange.changedToDownIgnoreConsumed() } returns false
-        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { pointerEvent.button } returns PointerButton.Secondary
         subject.start(
             listOf(
                 mockk<Path>().also {
@@ -474,7 +468,7 @@ class FileListViewModelTest {
         )
         val fileListItem = subject.items()[1]
 
-        subject.onPointerEvent(pointerEvent, 0)
+        subject.onPointerEvent(mockk(), 0)
 
         assertFalse(subject.openingDropdown(fileListItem))
     }
