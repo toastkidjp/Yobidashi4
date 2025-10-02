@@ -29,6 +29,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.lib.mouse.PointerEventAdapter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -65,8 +66,9 @@ class TabsViewModelTest {
             )
         }
 
-        mockkConstructor(ClipboardPutterService::class)
+        mockkConstructor(ClipboardPutterService::class, PointerEventAdapter::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns false
 
         subject = TabsViewModel()
     }
@@ -237,14 +239,9 @@ class TabsViewModelTest {
     @Test
     fun onPointerEvent() {
         val webHistory = mockk<Tab>()
-        val pointerInputChange = mockk<PointerInputChange>()
-        every { pointerInputChange.previousPressed } returns false
-        every { pointerInputChange.pressed } returns true
-        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
-        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { pointerEvent.button } returns PointerButton.Secondary
+        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns true
 
-        subject.onPointerEvent(pointerEvent, webHistory)
+        subject.onPointerEvent(mockk(), webHistory)
 
         assertTrue(subject.openingDropdown(webHistory))
     }
