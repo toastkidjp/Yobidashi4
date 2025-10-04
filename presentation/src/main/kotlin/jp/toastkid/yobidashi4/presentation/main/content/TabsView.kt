@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.chat.ChatTabView
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
@@ -228,7 +229,7 @@ private fun TabOptionMenu(
 
         if (tab is WebBookmarkTab) {
             HoverHighlightDropdownMenuItem("Modify") {
-                openFile(Path.of("user/bookmark/list.tsv"))
+                openFile(WebBookmarkPath().getPath())
                 close()
             }
         }
