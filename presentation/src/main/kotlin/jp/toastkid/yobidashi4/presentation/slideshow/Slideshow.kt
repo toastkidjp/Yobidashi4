@@ -120,9 +120,7 @@ fun Slideshow(
             val alpha = animateFloatAsState(viewModel.sliderAlpha())
             Slider(
                 viewModel.sliderValue(),
-                onValueChange = {
-                    viewModel.setSliderValue(it)
-                },
+                onValueChange = viewModel::setSliderValue,
                 onValueChangeFinished = {
                     val page = viewModel.sliderValue().roundToInt()
                     if (page != pagerState.currentPage) {
