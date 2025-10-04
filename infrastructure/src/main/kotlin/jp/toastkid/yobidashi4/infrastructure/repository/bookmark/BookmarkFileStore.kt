@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.bookmark
 
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import org.koin.core.annotation.Single
 import java.nio.file.Files
-import java.nio.file.Path
 
 @Single
 class BookmarkFileStore : BookmarkRepository {
@@ -41,4 +41,4 @@ class BookmarkFileStore : BookmarkRepository {
 
 }
 
-private val path = Path.of("user/bookmark/list.tsv")
+private val path = WebBookmarkPath().getPath()
