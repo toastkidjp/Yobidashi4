@@ -269,6 +269,15 @@ class SlideshowViewModelTest {
     }
 
     @Test
+    fun sliderValue() {
+        assertEquals(0f, subject.sliderValue())
+
+        subject.setSliderValue(1f)
+
+        assertEquals(1f, subject.sliderValue())
+    }
+
+    @Test
     fun focusRequester() {
         assertNotNull(subject.focusRequester())
     }
