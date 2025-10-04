@@ -123,7 +123,6 @@ fun Slideshow(
             Slider(
                 sliderState.value,
                 onValueChange = {
-                    val page = it.roundToInt()
                     sliderState.value = it
                 },
                 onValueChangeFinished = {
