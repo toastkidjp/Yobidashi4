@@ -27,6 +27,8 @@ class SlideshowViewModel {
 
     private val sliderVisibility = mutableStateOf(false)
 
+    private val sliderState = mutableStateOf(0f)
+
     private val onEscapeKeyReleased = AtomicReference(EMPTY_ACTION)
 
     private val onFullscreenKeyReleased = AtomicReference(EMPTY_ACTION)
@@ -100,6 +102,12 @@ class SlideshowViewModel {
 
     fun hideSlider() {
         sliderVisibility.value = false
+    }
+
+    fun sliderValue() = sliderState.value
+
+    fun setSliderValue(newValue: Float) {
+        sliderState.value = newValue
     }
 
     fun focusRequester() = focusRequester
