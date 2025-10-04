@@ -19,6 +19,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -48,6 +49,8 @@ import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -116,15 +119,23 @@ fun Slideshow(
             )
 
             val alpha = animateFloatAsState(viewModel.sliderAlpha())
+            val sliderState = remember { mutableStateOf(0f) }
             Slider(
-                pagerState.currentPage.toFloat(),
+                sliderState.value,
                 onValueChange = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(it.toInt())
+                    val page = it.roundToInt()
+                    sliderState.value = it
+                },
+                onValueChangeFinished = {
+                    val page = sliderState.value.roundToInt()
+                    if (page != pagerState.currentPage) {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(page)
+                        }
                     }
                 },
                 valueRange = 0f .. (deck.slides.size - 1).toFloat(),
-                steps = deck.slides.size,
+                steps = max(1, deck.slides.size - 2),
                 modifier = Modifier.align(Alignment.BottomCenter)
                     .alpha(alpha.value)
                     .onPointerEvent(PointerEventType.Enter) {
