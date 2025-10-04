@@ -19,7 +19,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -119,14 +118,13 @@ fun Slideshow(
             )
 
             val alpha = animateFloatAsState(viewModel.sliderAlpha())
-            val sliderState = remember { mutableStateOf(0f) }
             Slider(
-                sliderState.value,
+                viewModel.sliderValue(),
                 onValueChange = {
-                    sliderState.value = it
+                    viewModel.setSliderValue(it)
                 },
                 onValueChangeFinished = {
-                    val page = sliderState.value.roundToInt()
+                    val page = viewModel.sliderValue().roundToInt()
                     if (page != pagerState.currentPage) {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(page)
