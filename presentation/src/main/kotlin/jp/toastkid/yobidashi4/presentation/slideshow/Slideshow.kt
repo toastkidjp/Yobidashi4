@@ -185,7 +185,7 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             slide.lines().forEach { line ->
                 when (line) {
                     is TextLine ->
-                        Text(line.text, fontSize = 24.sp, modifier = Modifier.padding(bottom = 8.dp))
+                        Text(line.text, fontSize = 28.sp, modifier = Modifier.padding(bottom = 8.dp))
 
                     is ImageLine -> {
                         Image(
