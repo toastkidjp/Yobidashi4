@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Surface
@@ -173,6 +177,8 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
 
         val surfaceColor = MaterialTheme.colors.surface
 
+        val scrollState = rememberScrollState()
+
         Column(
             horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
             modifier = columnModifier
@@ -181,6 +187,7 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                         drawRect(surfaceColor.copy(alpha = 0.75f))
                     }
                 }
+                .verticalScroll(scrollState)
         ) {
             if (slide.hasTitle()) {
                 Text(
@@ -215,5 +222,10 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                 }
             }
         }
+
+        VerticalScrollbar(
+            adapter = rememberScrollbarAdapter(scrollState),
+            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+        )
     }
 }
