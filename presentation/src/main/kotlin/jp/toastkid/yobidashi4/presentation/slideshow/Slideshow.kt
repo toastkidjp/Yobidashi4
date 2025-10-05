@@ -188,6 +188,7 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                     fontSize = if (slide.isFront()) 48.sp else 36.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
+                    lineHeight = if (slide.isFront()) 48.sp else 36.sp,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
             }
