@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.domain.model.slideshow
 
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 class Slide {
 
@@ -60,7 +60,7 @@ class Slide {
         if (backgroundPath.isNotBlank()) {
             imageUrls.add(backgroundPath)
         }
-        lines.filterIsInstance<ImageLine>().map { it.source }.forEach { imageUrls.add(it) }
+        lines.filterIsInstance<ImageLine>().map(ImageLine::source).forEach { imageUrls.add(it) }
         return imageUrls
     }
 
