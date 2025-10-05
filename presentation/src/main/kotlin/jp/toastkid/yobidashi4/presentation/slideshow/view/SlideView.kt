@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
@@ -41,6 +44,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val keyboardScrollAction = remember { KeyboardScrollAction(scrollState) }
+    val focusRequester = remember { FocusRequester() }
 
     Box(
         modifier = Modifier.padding(8.dp).fillMaxHeight()
@@ -74,6 +78,10 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                 }
                 .onKeyEvent {
                     return@onKeyEvent keyboardScrollAction.invoke(coroutineScope, it.key, it.isCtrlPressed)
+                }
+                .focusRequester(focusRequester)
+                .clickable {
+                    focusRequester.requestFocus()
                 }
                 .verticalScroll(scrollState)
         ) {
