@@ -32,6 +32,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -47,6 +49,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
+import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 import kotlinx.coroutines.Dispatchers
@@ -155,6 +158,10 @@ fun Slideshow(
 
 @Composable
 private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
+    val keyboardScrollAction = remember { KeyboardScrollAction(scrollState) }
+
     Box(
         modifier = Modifier.padding(8.dp).fillMaxHeight()
     ) {
@@ -177,8 +184,6 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
 
         val surfaceColor = MaterialTheme.colors.surface
 
-        val scrollState = rememberScrollState()
-
         Column(
             horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
             modifier = columnModifier
@@ -186,6 +191,9 @@ private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                     if (slide.background().isNotEmpty()) {
                         drawRect(surfaceColor.copy(alpha = 0.75f))
                     }
+                }
+                .onKeyEvent {
+                    return@onKeyEvent keyboardScrollAction.invoke(coroutineScope, it.key, it.isCtrlPressed)
                 }
                 .verticalScroll(scrollState)
         ) {
