@@ -126,11 +126,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                     }
 
                     if (tableBuilder.active()) {
-                        val slide = builder.get()
-                        slide.addLine(tableBuilder.build())
-                        this.builder.set(slide)
-                        tableBuilder.setInactive()
-                        tableBuilder.clear()
+                        insertTable()
                     }
                     // Not code.
                     if (line.isNotEmpty()) {
@@ -141,11 +137,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                 }
 
                 if (tableBuilder.active()) {
-                    val slide = builder.get()
-                    slide.addLine(tableBuilder.build())
-                    this.builder.set(slide)
-                    tableBuilder.setInactive()
-                    tableBuilder.clear()
+                    insertTable()
                 }
 
                 builder.let {
@@ -157,6 +149,14 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
             e.printStackTrace()
         }
         return deck
+    }
+
+    private fun insertTable() {
+        val slide = builder.get()
+        slide.addLine(tableBuilder.build())
+        this.builder.set(slide)
+        tableBuilder.setInactive()
+        tableBuilder.clear()
     }
 
     companion object {
