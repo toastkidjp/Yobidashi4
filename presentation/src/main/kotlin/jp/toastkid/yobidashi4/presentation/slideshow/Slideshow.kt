@@ -141,6 +141,10 @@ fun Slideshow(
                     }
                     .semantics { contentDescription = "slider" }
             )
+
+            LaunchedEffect(pagerState.currentPage) {
+                viewModel.setSliderValue(pagerState.currentPage.toFloat())
+            }
         }
     }
 }
