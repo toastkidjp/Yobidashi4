@@ -42,6 +42,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
 
     private fun readLines(lines: Stream<String>): SlideDeck {
         val deck = SlideDeck()
+
         lines.forEach { line: String ->
             if (line.startsWith("#")) {
                 if (this.builder.get().hasTitle()) {
