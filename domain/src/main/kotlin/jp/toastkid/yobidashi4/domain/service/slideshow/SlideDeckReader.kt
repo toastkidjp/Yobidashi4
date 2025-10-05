@@ -30,9 +30,7 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
      */
     operator fun invoke(): SlideDeck {
         try {
-            return Files.lines(pathToMarkdown).use { lines ->
-                readLines(lines)
-            }
+            return Files.lines(pathToMarkdown).use(::readLines)
 
         } catch (e: IOException) {
             e.printStackTrace()
