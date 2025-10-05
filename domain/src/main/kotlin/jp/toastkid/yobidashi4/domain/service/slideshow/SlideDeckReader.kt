@@ -139,10 +139,20 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
                         this.builder.set(slide)
                     }
                 }
+
+                if (tableBuilder.active()) {
+                    val slide = builder.get()
+                    slide.addLine(tableBuilder.build())
+                    this.builder.set(slide)
+                    tableBuilder.setInactive()
+                    tableBuilder.clear()
+                }
+
                 builder.let {
                     deck.add(it.get())
                 }
             }
+
         } catch (e: IOException) {
             e.printStackTrace()
         }
