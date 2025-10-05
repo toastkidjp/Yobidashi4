@@ -45,7 +45,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Slideshow(
+internal fun Slideshow(
     deck: SlideDeck,
     onEscapeKeyReleased: () -> Unit,
     onFullscreenKeyReleased: () -> Unit,
