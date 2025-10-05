@@ -156,7 +156,7 @@ fun Slideshow(
 @Composable
 private fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     Box(
-        modifier = Modifier.padding(8.dp).fillMaxHeight().fillMaxHeight()
+        modifier = Modifier.padding(8.dp).fillMaxHeight()
     ) {
         val columnModifier =
             if (slide.isFront()) {
