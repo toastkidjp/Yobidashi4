@@ -62,15 +62,15 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
         }
 
         val surfaceColor = MaterialTheme.colors.surface
+        val withDrawBehind = if (slide.background().isNotEmpty())
+            columnModifier.drawBehind {
+                drawRect(surfaceColor.copy(alpha = 0.75f))
+            }
+        else columnModifier
 
         Column(
             horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
-            modifier = columnModifier
-                .drawBehind {
-                    if (slide.background().isNotEmpty()) {
-                        drawRect(surfaceColor.copy(alpha = 0.75f))
-                    }
-                }
+            modifier = withDrawBehind
                 .onKeyEvent {
                     return@onKeyEvent viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
                 }
