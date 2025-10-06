@@ -47,7 +47,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     val focusRequester = remember { FocusRequester() }
 
     Box(
-        modifier = Modifier.padding(8.dp).fillMaxHeight()
+        modifier = Modifier.padding(8.dp).fillMaxSize()
     ) {
         val columnModifier =
             if (slide.isFront()) {
