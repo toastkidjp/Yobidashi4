@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
-import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
+import java.nio.file.Path
 
 class SlideshowWindow {
 
@@ -18,7 +17,7 @@ class SlideshowWindow {
     ) {
         AppTheme(darkTheme = false) {
             val deck = SlideDeckReader(path).invoke()
-            val viewModel = remember { SlideshowViewModel() }
+            val viewModel = remember { SlideshowWindowViewModel() }
             Window(
                 onCloseRequest = onCloseWindow,
                 undecorated = true,

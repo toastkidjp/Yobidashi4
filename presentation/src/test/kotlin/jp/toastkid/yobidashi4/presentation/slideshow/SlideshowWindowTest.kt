@@ -11,18 +11,17 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import java.nio.file.Files
-import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
 
 class SlideshowWindowTest {
 
     @BeforeEach
     fun setUp() {
-        mockkConstructor(SlideshowViewModel::class)
-        every { anyConstructed<SlideshowViewModel>().windowVisible() } returns false
+        mockkConstructor(SlideshowWindowViewModel::class)
+        every { anyConstructed<SlideshowWindowViewModel>().windowVisible() } returns false
         mockkStatic(Files::class)
         every { Files.lines(any()) } returns """
 # Test

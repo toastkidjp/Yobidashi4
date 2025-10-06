@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindowViewModel
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -14,11 +15,11 @@ import org.junit.jupiter.api.Test
 
 class SlideshowViewModelTest {
 
-    private lateinit var viewModel: SlideshowViewModel
+    private lateinit var viewModel: SlideshowWindowViewModel
 
     @BeforeEach
     fun setUp() {
-        viewModel = SlideshowViewModel()
+        viewModel = SlideshowWindowViewModel()
     }
 
     @Test

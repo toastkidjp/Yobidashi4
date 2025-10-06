@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
-import jp.toastkid.yobidashi4.presentation.slideshow.viewmodel.SlideshowViewModel
+import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -160,8 +160,8 @@ class MainApplicationKtTest {
     fun slideshowPath() {
         every { anyConstructed<LauncherJarTimestampReader>().invoke() } returns null
         every { mainViewModel.slideshowPath() } returns mockk()
-        mockkConstructor(SlideshowViewModel::class)
-        every { anyConstructed<SlideshowViewModel>().windowVisible() } returns false
+        mockkConstructor(SlideshowWindowViewModel::class)
+        every { anyConstructed<SlideshowWindowViewModel>().windowVisible() } returns false
         mockkStatic(Files::class)
         every { Files.lines(any()) } returns """
 # Test
@@ -169,7 +169,7 @@ class MainApplicationKtTest {
 
         launchMainApplication(false)
 
-        verify { anyConstructed<SlideshowViewModel>().windowVisible() }
+        verify { anyConstructed<SlideshowWindowViewModel>().windowVisible() }
     }
 
 }
