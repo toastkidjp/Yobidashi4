@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -22,7 +21,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.isCtrlPressed
@@ -37,14 +35,11 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 
 @Composable
 fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     val coroutineScope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
-    val keyboardScrollAction = remember { KeyboardScrollAction(scrollState) }
-    val focusRequester = remember { FocusRequester() }
+    val viewModel = remember { SlideViewModel() }
 
     Box(
         modifier = Modifier.padding(8.dp).fillMaxSize()
@@ -77,13 +72,13 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                     }
                 }
                 .onKeyEvent {
-                    return@onKeyEvent keyboardScrollAction.invoke(coroutineScope, it.key, it.isCtrlPressed)
+                    return@onKeyEvent viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
                 }
-                .focusRequester(focusRequester)
+                .focusRequester(viewModel.focusRequester())
                 .clickable {
-                    focusRequester.requestFocus()
+                    viewModel.requestFocus()
                 }
-                .verticalScroll(scrollState)
+                .verticalScroll(viewModel.scrollState())
         ) {
             if (slide.hasTitle()) {
                 Text(
@@ -125,7 +120,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
         }
 
         VerticalScrollbar(
-            adapter = rememberScrollbarAdapter(scrollState),
+            adapter = rememberScrollbarAdapter(viewModel.scrollState()),
             modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
         )
     }
