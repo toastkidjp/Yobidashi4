@@ -29,7 +29,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.lib.mouse.PointerEventAdapter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -45,7 +44,7 @@ import org.koin.dsl.module
 import java.nio.file.Path
 
 class TabsViewModelTest {
-    
+
     private lateinit var subject: TabsViewModel
 
     @MockK
@@ -66,9 +65,8 @@ class TabsViewModelTest {
             )
         }
 
-        mockkConstructor(ClipboardPutterService::class, PointerEventAdapter::class)
+        mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
-        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns false
 
         subject = TabsViewModel()
     }
@@ -177,18 +175,18 @@ class TabsViewModelTest {
     @Test
     fun closeOtherTabs() {
         every { mainViewModel.closeOtherTabs() } just Runs
-        
+
         subject.closeOtherTabs()
-        
+
         verify { mainViewModel.closeOtherTabs() }
     }
 
     @Test
     fun openFile() {
         every { mainViewModel.openFile(any()) } just Runs
-        
+
         subject.openFile(mockk())
-        
+
         verify { mainViewModel.openFile(any()) }
     }
 
@@ -248,9 +246,14 @@ class TabsViewModelTest {
     @Test
     fun onPointerEvent() {
         val webHistory = mockk<Tab>()
-        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns true
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
 
-        subject.onPointerEvent(mockk(), webHistory)
+        subject.onPointerEvent(pointerEvent, webHistory)
 
         assertTrue(subject.openingDropdown(webHistory))
     }
