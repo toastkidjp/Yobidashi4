@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.lib.mouse.PointerEventAdapter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,9 +59,8 @@ class WebBookmarkTabViewModelTest {
             )
         }
 
-        mockkConstructor(WebIcon::class, PointerEventAdapter::class)
+        mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
-        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns false
 
         subject = WebBookmarkTabViewModel()
     }
@@ -152,9 +150,14 @@ class WebBookmarkTabViewModelTest {
     @Test
     fun onPointerEvent() {
         val bookmark = mockk<Bookmark>()
-        every { anyConstructed<PointerEventAdapter>().isSecondaryClick(any()) } returns true
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
 
-        subject.onPointerEvent(mockk(), bookmark)
+        subject.onPointerEvent(pointerEvent, bookmark)
 
         assertTrue(subject.openingDropdown(bookmark))
     }
@@ -163,9 +166,15 @@ class WebBookmarkTabViewModelTest {
     @Test
     fun noopOnPointerEventOnOpeningDropdown() {
         val bookmark = mockk<Bookmark>()
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns PointerButton.Secondary
         subject.openDropdown(bookmark)
 
-        subject.onPointerEvent(mockk(), bookmark)
+        subject.onPointerEvent(pointerEvent, bookmark)
 
         assertTrue(subject.openingDropdown(bookmark))
     }
