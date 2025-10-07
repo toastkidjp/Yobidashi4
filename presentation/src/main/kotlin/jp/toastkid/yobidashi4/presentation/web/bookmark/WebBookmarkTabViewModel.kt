@@ -6,14 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.lib.mouse.PointerEventAdapter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -82,11 +83,10 @@ class WebBookmarkTabViewModel : KoinComponent {
         currentDropdownItem.value = null
     }
 
-    private val pointerEventAdapter = PointerEventAdapter()
-
     @OptIn(ExperimentalComposeUiApi::class)
     fun onPointerEvent(pointerEvent: PointerEvent, bookmark: Bookmark) {
-        if (pointerEventAdapter.isSecondaryClick(pointerEvent)
+        if (pointerEvent.type == PointerEventType.Press
+            && pointerEvent.button == PointerButton.Secondary
             && openingDropdown(bookmark).not()
         ) {
             openDropdown(bookmark)
