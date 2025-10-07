@@ -12,11 +12,12 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.lib.mouse.PointerEventAdapter
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -47,8 +48,6 @@ class FileListViewModel : KoinComponent {
     private val shiftPressing = AtomicBoolean(false)
 
     private val keyword = mutableStateOf(TextFieldValue())
-
-    private val pointerEventAdapter = PointerEventAdapter()
 
     fun listState() = listState
 
@@ -194,7 +193,8 @@ class FileListViewModel : KoinComponent {
     @OptIn(ExperimentalComposeUiApi::class)
     fun onPointerEvent(pointerEvent: PointerEvent, index: Int) {
         val fileListItem = items().getOrNull(index) ?: return
-        if (pointerEventAdapter.isSecondaryClick(pointerEvent)
+        if (pointerEvent.type == PointerEventType.Press
+            && pointerEvent.button == PointerButton.Secondary
             && !openingDropdown(fileListItem)
         ) {
             openDropdown(fileListItem)
