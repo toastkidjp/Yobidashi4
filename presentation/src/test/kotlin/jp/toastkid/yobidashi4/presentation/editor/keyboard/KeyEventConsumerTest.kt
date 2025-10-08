@@ -421,6 +421,7 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
+        assertEquals("TEST", conversionCapturingSlot.captured.invoke("test"))
     }
 
     @Test
