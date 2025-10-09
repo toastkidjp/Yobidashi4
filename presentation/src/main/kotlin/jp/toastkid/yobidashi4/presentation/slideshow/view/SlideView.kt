@@ -75,9 +75,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
                     return@onKeyEvent viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
                 }
                 .focusRequester(viewModel.focusRequester())
-                .clickable {
-                    viewModel.requestFocus()
-                }
+                .clickable(onClick = viewModel::requestFocus)
                 .verticalScroll(viewModel.scrollState())
         ) {
             if (slide.hasTitle()) {
