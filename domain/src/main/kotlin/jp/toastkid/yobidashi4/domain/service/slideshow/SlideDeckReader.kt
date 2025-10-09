@@ -168,5 +168,6 @@ class SlideDeckReader(private val pathToMarkdown: Path) {
 
         /** In-line image pattern.  */
         private val FOOTER_TEXT: Pattern = Pattern.compile("\\[footer\\]\\((.+?)\\)")
+
     }
 }
