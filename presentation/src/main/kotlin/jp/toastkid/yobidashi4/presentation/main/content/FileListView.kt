@@ -181,8 +181,8 @@ private fun FileListItemRow(
     Box(
         modifier = modifier
     ) {
-        HoverHighlightColumn(modifier = Modifier
-            .padding(horizontal = 16.dp)
+        HoverHighlightColumn(
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) { textColor ->
             Text(
                 fileListItem.path.nameWithoutExtension,
