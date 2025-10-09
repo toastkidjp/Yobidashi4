@@ -18,7 +18,7 @@ class TransferableImage(private val i: Image) : Transferable {
     }
 
     override fun getTransferDataFlavors(): Array<DataFlavor> {
-        return arrayOf( DataFlavor.imageFlavor)
+        return arrayOf(DataFlavor.imageFlavor)
     }
 
     override fun isDataFlavorSupported(flavor: DataFlavor): Boolean {
