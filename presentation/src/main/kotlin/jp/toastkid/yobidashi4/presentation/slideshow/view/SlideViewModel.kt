@@ -23,7 +23,7 @@ class SlideViewModel {
     fun focusRequester() = focusRequester
 
     fun requestFocus() {
-        focusRequester.requestFocus()
+        focusRequester().requestFocus()
     }
 
 }
