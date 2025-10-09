@@ -60,7 +60,7 @@ class Slide {
         if (backgroundPath.isNotBlank()) {
             imageUrls.add(backgroundPath)
         }
-        lines.filterIsInstance<ImageLine>().map(ImageLine::source).forEach { imageUrls.add(it) }
+        lines.filterIsInstance<ImageLine>().map(ImageLine::source).forEach(imageUrls::add)
         return imageUrls
     }
 
