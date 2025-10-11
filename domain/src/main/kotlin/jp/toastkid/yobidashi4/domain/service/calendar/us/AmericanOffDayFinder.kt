@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi4.domain.service.calendar.us
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
-import jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk.MoveableUKHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.us.FixedAmericanHoliday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.us.MoveableAmericanHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.uk.EasterHolidayCalculator
 import java.util.Calendar
@@ -35,7 +35,10 @@ class AmericanOffDayFinder(
             } else null
         }
 
-        holidays.addAll(MoveableUKHoliday.find(year, month))
+        val moveable = MoveableAmericanHoliday.find(year, month)
+        if (moveable != null) {
+            holidays.add(moveable)
+        }
         holidays.addAll(easterHolidayCalculator.invoke(year, month))
 
         return substitutes.union(holidays).toList()
