@@ -13,8 +13,8 @@ import jp.toastkid.yobidashi4.domain.model.calendar.holiday.us.FixedAmericanHoli
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.us.MoveableAmericanHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
 import jp.toastkid.yobidashi4.domain.service.calendar.uk.EasterHolidayCalculator
-import java.util.Calendar
-import java.util.GregorianCalendar
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 class AmericanOffDayFinder(
     private val easterHolidayCalculator: EasterHolidayCalculator = EasterHolidayCalculator()
@@ -29,8 +29,8 @@ class AmericanOffDayFinder(
         }
 
         val substitutes = holidays.mapNotNull {
-            val calendar = GregorianCalendar(year, month - 1, it.day)
-            if (month != 5 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            val calendar = LocalDate.of(year, month, it.day)
+            if (month != 5 && calendar.dayOfWeek == DayOfWeek.SUNDAY) {
                 Holiday("Substitute Holiday", month, it.day + 1, HolidayCalendar.US.flag)
             } else null
         }
