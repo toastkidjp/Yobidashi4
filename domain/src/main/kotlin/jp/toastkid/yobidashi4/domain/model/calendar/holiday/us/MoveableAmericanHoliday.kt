@@ -8,14 +8,14 @@
 package jp.toastkid.yobidashi4.domain.model.calendar.holiday.us
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
-import java.util.Calendar
-import java.util.GregorianCalendar
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 enum class MoveableAmericanHoliday(
     private val month: Int,
     val week: Int,
     val title: String,
-    val dayOfWeek: Int = Calendar.MONDAY
+    val dayOfWeek: DayOfWeek = DayOfWeek.MONDAY
 ) {
 
     MARTIN_LUTHER_KING_JR_DAY(1, 3,  "Martin Luther King, Jr. Day"),
@@ -23,13 +23,13 @@ enum class MoveableAmericanHoliday(
     MEMORIAL_DAY(5, -1, "Memorial Day"),
     LABOR_DAY(9, 1, "Labor Day"),
     COLUMBUS_DAY(10, 2, "Columbus Day"),
-    THANKSGIVING_DAY(11, 4, "Thanksgiving Day", Calendar.THURSDAY)
+    THANKSGIVING_DAY(11, 4, "Thanksgiving Day", DayOfWeek.THURSDAY)
     ;
 
     companion object {
 
         private val DAYS_OF_WEEK_FOR_LAST_WEEK =
-            setOf(Calendar.MONDAY, Calendar.SUNDAY, Calendar.SATURDAY)
+            setOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY)
 
         private val months = entries.map { it.month }.distinct()
 
@@ -46,12 +46,12 @@ enum class MoveableAmericanHoliday(
                 return null
             }
 
-            val localDate = GregorianCalendar(year, month - 1, 1)
+            val localDate = LocalDate.of(year, month, 1)
             val candidate = find(month) ?: return null
-            val dayOfWeek = localDate.get(Calendar.DAY_OF_WEEK)
+            val dayOfWeek = localDate.dayOfWeek
             val offsetDays =
-                if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek - dayOfWeek + 1
-                else 7 - (dayOfWeek - candidate.dayOfWeek - 1)
+                if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek.value - dayOfWeek.value + 1
+                else 7 - (dayOfWeek.value - candidate.dayOfWeek.value - 1)
 
             val targetWeek = when {
                 (candidate.week != -1) -> candidate.week
