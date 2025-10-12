@@ -26,8 +26,8 @@ class UKOffDayFinder(
         holidays.addAll(firstOrNull)
 
         val substitutes = holidays.mapNotNull {
-            val calendar = LocalDate.of(year, month, it.day)
-            if (month != 5 && calendar.dayOfWeek == DayOfWeek.SUNDAY) {
+            val date = LocalDate.of(year, month, it.day)
+            if (month != 5 && date.dayOfWeek == DayOfWeek.SUNDAY) {
                 Holiday("Substitute Holiday", month, it.day + 1, HolidayCalendar.UK.flag)
             } else null
         }
