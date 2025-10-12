@@ -31,7 +31,7 @@ enum class MoveableAmericanHoliday(
         private val DAYS_OF_WEEK_FOR_LAST_WEEK =
             setOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY)
 
-        private val months = entries.map { it.month }.distinct()
+        private val months = entries.map(MoveableAmericanHoliday::month).distinct()
 
         private fun isTargetMonth(month: Int): Boolean {
             return months.contains(month)
