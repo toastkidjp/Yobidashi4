@@ -23,6 +23,7 @@ class MoveableAmericanHolidayTest {
         assertTrue(MoveableAmericanHoliday.isHoliday(2023, 5, 29))
         assertTrue(MoveableAmericanHoliday.isHoliday(2024, 5, 27))
         assertTrue(MoveableAmericanHoliday.isHoliday(2023, 9, 4))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2025, 9, 1))
         assertTrue(MoveableAmericanHoliday.isHoliday(2020, 11, 26))
         assertTrue(MoveableAmericanHoliday.isHoliday(2023, 11, 23))
         assertTrue(MoveableAmericanHoliday.isHoliday(2024, 11, 28))
