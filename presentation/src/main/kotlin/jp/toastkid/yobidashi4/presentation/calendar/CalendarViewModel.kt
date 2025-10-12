@@ -148,7 +148,8 @@ class CalendarViewModel : KoinComponent {
                     val holiday = offDayFinderService.find { it.day == current1.dayOfMonth }
                     val ukHolidayCandidate = ukHolidays.find { it.day == current1.dayOfMonth }
                     val usHolidayCandidate = usHolidays.find { it.day == current1.dayOfMonth }
-                    w.add(current1, listOfNotNull(holiday, ukHolidayCandidate, usHolidayCandidate))
+                    val holidays = listOfNotNull(holiday, ukHolidayCandidate, usHolidayCandidate)
+                    w.add(current1, holidays)
                 }
                 current1 = current1.plusDays(1L)
             }
