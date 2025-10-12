@@ -39,7 +39,6 @@ class AmericanOffDayFinder(
         if (moveable != null) {
             holidays.add(moveable)
         }
-        holidays.addAll(easterHolidayCalculator.invoke(year, month))
 
         return substitutes.union(holidays).toList()
     }
