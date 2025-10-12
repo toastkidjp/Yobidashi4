@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.calendar
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -145,10 +146,7 @@ class CalendarViewModel : KoinComponent {
                 if (firstDay.month != current1.month) {
                     w.addEmpty()
                 } else {
-                    val holiday = offDayFinderService.find { it.day == current1.dayOfMonth }
-                    val ukHolidayCandidate = ukHolidays.find { it.day == current1.dayOfMonth }
-                    val usHolidayCandidate = usHolidays.find { it.day == current1.dayOfMonth }
-                    val holidays = listOfNotNull(holiday, ukHolidayCandidate, usHolidayCandidate)
+                    val holidays = calculateHolidays(offDayFinderService, current1, ukHolidays, usHolidays)
                     w.add(current1, holidays)
                 }
                 current1 = current1.plusDays(1L)
@@ -158,6 +156,19 @@ class CalendarViewModel : KoinComponent {
             }
         }
         return weeks
+    }
+
+    private fun calculateHolidays(
+        offDayFinderService: Set<Holiday>,
+        current1: LocalDate,
+        ukHolidays: List<Holiday>,
+        usHolidays: List<Holiday>
+    ): List<Holiday> {
+        val holiday = offDayFinderService.find { it.day == current1.dayOfMonth }
+        val ukHolidayCandidate = ukHolidays.find { it.day == current1.dayOfMonth }
+        val usHolidayCandidate = usHolidays.find { it.day == current1.dayOfMonth }
+        val holidays = listOfNotNull(holiday, ukHolidayCandidate, usHolidayCandidate)
+        return holidays
     }
 
     private val openMonthChooser = mutableStateOf(false)
