@@ -12,12 +12,10 @@ import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.us.FixedAmericanHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.us.MoveableAmericanHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
-import jp.toastkid.yobidashi4.domain.service.calendar.uk.EasterHolidayCalculator
 import java.time.DayOfWeek
 import java.time.LocalDate
 
 class AmericanOffDayFinder(
-    private val easterHolidayCalculator: EasterHolidayCalculator = EasterHolidayCalculator()
 ) : OffDayFinderService {
 
     override fun invoke(year: Int, month: Int, useUserOffDay: Boolean): List<Holiday> {
