@@ -22,7 +22,10 @@ class UserOffDayServiceImplementation: KoinComponent, UserOffDayService {
     override fun contains(month: Int): Boolean = targetMonths.contains(month)
 
     override fun findBy(month: Int): Set<Holiday> {
-        return userOffDays.filter { it.first == month }.map { Holiday("User off-day", it.first, it.second, "") }.toSet()
+        return userOffDays
+            .filter { it.first == month }
+            .map { Holiday("User off-day", it.first, it.second, "") }
+            .toSet()
     }
 
 }
