@@ -127,7 +127,7 @@ class CalendarViewModel : KoinComponent {
     private fun makeMonth(week: Iterable<DayOfWeek>): MutableList<Week> {
         val firstDay = localDateState.value.withDayOfMonth(1)
 
-        val offDayFinderService = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
+        val jpHolidays = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
         val ukHolidays = HolidayCalendar.UK.getHolidays(firstDay.year, firstDay.monthValue)
         val usHolidays = HolidayCalendar.US.getHolidays(firstDay.year, firstDay.monthValue)
 
@@ -146,7 +146,7 @@ class CalendarViewModel : KoinComponent {
                 if (firstDay.month != current1.month) {
                     w.addEmpty()
                 } else {
-                    val holidays = calculateHolidays(offDayFinderService, current1, ukHolidays, usHolidays)
+                    val holidays = calculateHolidays(jpHolidays, current1, ukHolidays, usHolidays)
                     w.add(current1, holidays)
                 }
                 current1 = current1.plusDays(1L)
