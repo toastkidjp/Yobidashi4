@@ -160,11 +160,11 @@ class CalendarViewModel : KoinComponent {
 
     private fun calculateHolidays(
         current1: LocalDate,
-        offDayFinderService: Set<Holiday>,
+        jpHolidays: Set<Holiday>,
         ukHolidays: List<Holiday>,
         usHolidays: List<Holiday>
     ): List<Holiday> {
-        val holiday = offDayFinderService.find { it.day == current1.dayOfMonth }
+        val holiday = jpHolidays.find { it.day == current1.dayOfMonth }
         val ukHolidayCandidate = ukHolidays.find { it.day == current1.dayOfMonth }
         val usHolidayCandidate = usHolidays.find { it.day == current1.dayOfMonth }
         val holidays = listOfNotNull(holiday, ukHolidayCandidate, usHolidayCandidate)
