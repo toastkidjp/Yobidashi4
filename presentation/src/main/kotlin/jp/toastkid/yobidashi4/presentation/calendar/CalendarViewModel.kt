@@ -146,7 +146,7 @@ class CalendarViewModel : KoinComponent {
                 if (firstDay.month != current1.month) {
                     w.addEmpty()
                 } else {
-                    val holidays = calculateHolidays(jpHolidays, current1, ukHolidays, usHolidays)
+                    val holidays = calculateHolidays(current1, jpHolidays, ukHolidays, usHolidays)
                     w.add(current1, holidays)
                 }
                 current1 = current1.plusDays(1L)
@@ -159,8 +159,8 @@ class CalendarViewModel : KoinComponent {
     }
 
     private fun calculateHolidays(
-        offDayFinderService: Set<Holiday>,
         current1: LocalDate,
+        offDayFinderService: Set<Holiday>,
         ukHolidays: List<Holiday>,
         usHolidays: List<Holiday>
     ): List<Holiday> {
