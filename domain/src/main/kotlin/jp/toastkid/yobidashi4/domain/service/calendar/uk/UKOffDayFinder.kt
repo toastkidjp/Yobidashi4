@@ -12,8 +12,8 @@ import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk.FixedUKHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk.MoveableUKHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
-import java.util.Calendar
-import java.util.GregorianCalendar
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 class UKOffDayFinder(
     private val easterHolidayCalculator: EasterHolidayCalculator = EasterHolidayCalculator()
@@ -26,8 +26,8 @@ class UKOffDayFinder(
         holidays.addAll(firstOrNull)
 
         val substitutes = holidays.mapNotNull {
-            val calendar = GregorianCalendar(year, month - 1, it.day)
-            if (month != 5 && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            val calendar = LocalDate.of(year, month, it.day)
+            if (month != 5 && calendar.dayOfWeek == DayOfWeek.SUNDAY) {
                 Holiday("Substitute Holiday", month, it.day + 1, HolidayCalendar.UK.flag)
             } else null
         }
