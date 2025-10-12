@@ -15,8 +15,7 @@ import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-class AmericanOffDayFinder(
-) : OffDayFinderService {
+class AmericanOffDayFinder : OffDayFinderService {
 
     override fun invoke(year: Int, month: Int, useUserOffDay: Boolean): List<Holiday> {
         val holidays = mutableListOf<Holiday>()
