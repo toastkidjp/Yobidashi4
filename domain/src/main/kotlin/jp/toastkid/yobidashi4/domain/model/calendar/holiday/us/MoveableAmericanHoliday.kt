@@ -37,7 +37,7 @@ enum class MoveableAmericanHoliday(
             return months.contains(month)
         }
 
-        fun find(month: Int): MoveableAmericanHoliday? {
+        private fun find(month: Int): MoveableAmericanHoliday? {
             return entries.firstOrNull { it.month == month }
         }
 
