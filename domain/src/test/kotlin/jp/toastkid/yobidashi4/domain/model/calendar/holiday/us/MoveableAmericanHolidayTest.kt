@@ -14,19 +14,19 @@ class MoveableAmericanHolidayTest {
 
     @Test
     fun test() {
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 1, 15))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 2, 20))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 2, 19))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2020, 5, 25))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2021, 5, 31))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2022, 5, 30))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 5, 29))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 5, 27))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 9, 4))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2025, 9, 1))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2020, 11, 26))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 11, 23))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 11, 28))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 1))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 2))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 2))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2020, 5))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2021, 5))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2022, 5))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 5))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 5))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 9))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2025, 9))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2020, 11))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 11))
+        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 11))
     }
 
 }
