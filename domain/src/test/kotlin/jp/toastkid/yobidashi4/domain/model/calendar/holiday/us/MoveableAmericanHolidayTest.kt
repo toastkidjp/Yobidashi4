@@ -7,26 +7,26 @@
  */
 package jp.toastkid.yobidashi4.domain.model.calendar.holiday.us
 
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 
 class MoveableAmericanHolidayTest {
 
     @Test
     fun test() {
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 1))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 2))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 2))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2020, 5))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2021, 5))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2022, 5))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 5))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 5))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 9))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2025, 9))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2020, 11))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2023, 11))
-        assertTrue(MoveableAmericanHoliday.isHoliday(2024, 11))
+        assertNotNull(MoveableAmericanHoliday.find(2024, 1))
+        assertNotNull(MoveableAmericanHoliday.find(2023, 2))
+        assertNotNull(MoveableAmericanHoliday.find(2024, 2))
+        assertNotNull(MoveableAmericanHoliday.find(2020, 5))
+        assertNotNull(MoveableAmericanHoliday.find(2021, 5))
+        assertNotNull(MoveableAmericanHoliday.find(2022, 5))
+        assertNotNull(MoveableAmericanHoliday.find(2023, 5))
+        assertNotNull(MoveableAmericanHoliday.find(2024, 5))
+        assertNotNull(MoveableAmericanHoliday.find(2023, 9))
+        assertNotNull(MoveableAmericanHoliday.find(2025, 9))
+        assertNotNull(MoveableAmericanHoliday.find(2020, 11))
+        assertNotNull(MoveableAmericanHoliday.find(2023, 11))
+        assertNotNull(MoveableAmericanHoliday.find(2024, 11))
     }
 
 }
