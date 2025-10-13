@@ -62,7 +62,7 @@ enum class MoveableAmericanHoliday(
             return Holiday(candidate.title, candidate.month, offsetDays + (7 * (targetWeek - 1)))
         }
 
-        fun isHoliday(year: Int, month: Int, date: Int): Boolean {
+        fun isHoliday(year: Int, month: Int): Boolean {
             return find(year, month) != null
         }
 
