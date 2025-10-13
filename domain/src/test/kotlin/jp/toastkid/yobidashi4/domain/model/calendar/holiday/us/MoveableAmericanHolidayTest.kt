@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi4.domain.model.calendar.holiday.us
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.api.assertNull
 
 class MoveableAmericanHolidayTest {
 
@@ -17,6 +18,7 @@ class MoveableAmericanHolidayTest {
         assertNotNull(MoveableAmericanHoliday.find(2024, 1))
         assertNotNull(MoveableAmericanHoliday.find(2023, 2))
         assertNotNull(MoveableAmericanHoliday.find(2024, 2))
+        assertNull(MoveableAmericanHoliday.find(2025, 3))
         assertNotNull(MoveableAmericanHoliday.find(2020, 5))
         assertNotNull(MoveableAmericanHoliday.find(2021, 5))
         assertNotNull(MoveableAmericanHoliday.find(2022, 5))
