@@ -37,7 +37,7 @@ enum class MoveableAmericanHoliday(
             return months.contains(month)
         }
 
-        private fun find(month: Int): MoveableAmericanHoliday? {
+        private fun findCandidate(month: Int): MoveableAmericanHoliday? {
             return entries.firstOrNull { it.month == month }
         }
 
@@ -47,7 +47,7 @@ enum class MoveableAmericanHoliday(
             }
 
             val localDate = LocalDate.of(year, month, 1)
-            val candidate = find(month) ?: return null
+            val candidate = findCandidate(month) ?: return null
             val dayOfWeek = localDate.dayOfWeek
             val offsetDays =
                 if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek.value - dayOfWeek.value + 1
