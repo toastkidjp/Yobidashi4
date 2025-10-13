@@ -18,7 +18,6 @@ class MoveableAmericanHolidayTest {
         assertNotNull(MoveableAmericanHoliday.find(2024, 1))
         assertNotNull(MoveableAmericanHoliday.find(2023, 2))
         assertNotNull(MoveableAmericanHoliday.find(2024, 2))
-        assertNull(MoveableAmericanHoliday.find(2025, 3))
         assertNotNull(MoveableAmericanHoliday.find(2020, 5))
         assertNotNull(MoveableAmericanHoliday.find(2021, 5))
         assertNotNull(MoveableAmericanHoliday.find(2022, 5))
@@ -29,6 +28,11 @@ class MoveableAmericanHolidayTest {
         assertNotNull(MoveableAmericanHoliday.find(2020, 11))
         assertNotNull(MoveableAmericanHoliday.find(2023, 11))
         assertNotNull(MoveableAmericanHoliday.find(2024, 11))
+    }
+
+    @Test
+    fun nullCase() {
+        assertNull(MoveableAmericanHoliday.find(2025, 3))
     }
 
 }
