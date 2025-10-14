@@ -14,8 +14,7 @@ import jp.toastkid.yobidashi4.domain.service.calendar.MondayDateCalculator
 enum class MoveableUKHoliday(private val month: Int, val week: Int, val title: String) {
     EARLY_MAY_BANK_HOLIDAY(5, 1, "Early May Bank Holiday"),
     SPRING_BANK_HOLIDAY(5, -1, "Spring Bank Holiday"),
-    SUMMER_BANK_HOLIDAY(8, -1, "Summer Bank Holiday")
-    ;
+    SUMMER_BANK_HOLIDAY(8, -1, "Summer Bank Holiday");
 
     companion object {
 
