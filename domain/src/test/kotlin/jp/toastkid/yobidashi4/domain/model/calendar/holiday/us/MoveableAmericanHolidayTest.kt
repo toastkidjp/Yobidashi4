@@ -10,24 +10,29 @@ package jp.toastkid.yobidashi4.domain.model.calendar.holiday.us
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertNull
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class MoveableAmericanHolidayTest {
 
-    @Test
-    fun test() {
-        assertNotNull(MoveableAmericanHoliday.find(2024, 1))
-        assertNotNull(MoveableAmericanHoliday.find(2023, 2))
-        assertNotNull(MoveableAmericanHoliday.find(2024, 2))
-        assertNotNull(MoveableAmericanHoliday.find(2020, 5))
-        assertNotNull(MoveableAmericanHoliday.find(2021, 5))
-        assertNotNull(MoveableAmericanHoliday.find(2022, 5))
-        assertNotNull(MoveableAmericanHoliday.find(2023, 5))
-        assertNotNull(MoveableAmericanHoliday.find(2024, 5))
-        assertNotNull(MoveableAmericanHoliday.find(2023, 9))
-        assertNotNull(MoveableAmericanHoliday.find(2025, 9))
-        assertNotNull(MoveableAmericanHoliday.find(2020, 11))
-        assertNotNull(MoveableAmericanHoliday.find(2023, 11))
-        assertNotNull(MoveableAmericanHoliday.find(2024, 11))
+    @ParameterizedTest
+    @CsvSource(
+        "2024, 1",
+        "2023, 2",
+        "2024, 2",
+        "2020, 5",
+        "2021, 5",
+        "2022, 5",
+        "2023, 5",
+        "2024, 5",
+        "2023, 9",
+        "2025, 9",
+        "2020, 11",
+        "2023, 11",
+        "2024, 11"
+    )
+    fun test(year: Int, month: Int) {
+        assertNotNull(MoveableAmericanHoliday.find(year, month))
     }
 
     @Test
