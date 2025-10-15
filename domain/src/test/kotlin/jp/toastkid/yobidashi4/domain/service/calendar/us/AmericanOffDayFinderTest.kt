@@ -25,6 +25,7 @@ class AmericanOffDayFinderTest {
         assertEquals(2, subject.invoke(2025, 1, false).size)
         assertEquals(1, subject.invoke(2025, 2, false).size)
         assertEquals(0, subject.invoke(2025, 3, false).size)
+        assertEquals(0, subject.invoke(2025, 4, false).size)
     }
 
 }
