@@ -27,9 +27,11 @@ class AmericanOffDayFinder : OffDayFinderService {
 
         val substitutes = holidays.mapNotNull {
             val date = LocalDate.of(year, month, it.day)
-            if (date.dayOfWeek == DayOfWeek.SUNDAY) {
-                Holiday("Substitute Holiday", month, it.day + 1, HolidayCalendar.US.flag)
-            } else null
+            if (date.dayOfWeek != DayOfWeek.SUNDAY) {
+                return@mapNotNull null
+            }
+
+            return@mapNotNull Holiday("Substitute Holiday", month, it.day + 1, HolidayCalendar.US.flag)
         }
 
         val moveable = MoveableAmericanHoliday.find(year, month)
