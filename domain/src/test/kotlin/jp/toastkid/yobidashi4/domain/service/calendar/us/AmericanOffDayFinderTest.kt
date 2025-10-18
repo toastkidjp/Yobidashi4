@@ -9,7 +9,8 @@ package jp.toastkid.yobidashi4.domain.service.calendar.us
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class AmericanOffDayFinderTest {
 
@@ -20,22 +21,25 @@ class AmericanOffDayFinderTest {
         subject = AmericanOffDayFinder()
     }
 
-    @Test
-    fun invoke() {
-        assertEquals(2, subject.invoke(2025, 1, false).size)
-        assertEquals(1, subject.invoke(2025, 2, false).size)
-        assertEquals(0, subject.invoke(2025, 3, false).size)
-        assertEquals(0, subject.invoke(2025, 4, false).size)
-        assertEquals(1, subject.invoke(2025, 5, false).size)
-        assertEquals(1, subject.invoke(2025, 6, false).size)
-        assertEquals(0, subject.invoke(2020, 6, false).size)
-        assertEquals(1, subject.invoke(2025, 7, false).size)
-        assertEquals(2, subject.invoke(2021, 7, false).size)
-        assertEquals(0, subject.invoke(2025, 8, false).size)
-        assertEquals(1, subject.invoke(2025, 9, false).size)
-        assertEquals(1, subject.invoke(2025, 10, false).size)
-        assertEquals(2, subject.invoke(2025, 11, false).size)
-        assertEquals(1, subject.invoke(2025, 12, false).size)
+    @ParameterizedTest
+    @CsvSource(
+        "2025, 1, 2",
+        "2025, 2, 1",
+        "2025, 3, 0",
+        "2025, 4, 0",
+        "2025, 5, 1",
+        "2025, 6, 1",
+        "2020, 6, 0",
+        "2025, 7, 1",
+        "2021, 7, 2",
+        "2025, 8, 0",
+        "2025, 9, 1",
+        "2025, 10, 1",
+        "2025, 11, 2",
+        "2025, 12, 1",
+    )
+    fun invoke(year: Int, month: Int, expected: Int) {
+        assertEquals(expected, subject.invoke(year, month, false).size)
     }
 
 }
