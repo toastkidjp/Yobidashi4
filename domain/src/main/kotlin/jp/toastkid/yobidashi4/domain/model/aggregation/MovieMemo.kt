@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.domain.model.aggregation
 
 data class MovieMemo(
-        val date: String,
-        val title: String
+    val date: String,
+    val title: String
 ) {
 
     fun toArray(): Array<Any> = arrayOf(date, title)
