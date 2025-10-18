@@ -42,8 +42,13 @@ class SpecialCaseOffDayCalculatorService {
         return emptySet()
     }
 
-    private fun makeJapaneseHoliday(title: String, month: Int, day: Int) = Holiday(title, month,
-        day, "\uD83C\uDDEF\uD83C\uDDF5")
+    private fun makeJapaneseHoliday(title: String, month: Int, day: Int) =
+        Holiday(
+            title,
+            month,
+            day,
+            "\uD83C\uDDEF\uD83C\uDDF5"
+        )
 
     companion object {
         private val TARGET_YEARS = setOf(2019, 2020, 2021)
