@@ -33,13 +33,11 @@ class SpecialCaseOffDayCalculatorService {
             )
         }
 
-        if (year == 2021) {
-            if (month == 7) {
-                return setOf(
-                    makeJapaneseHoliday("Marine day", month, 22),
-                    makeJapaneseHoliday("Sports day", month, 23)
-                )
-            }
+        if (year == 2021 && month == 7) {
+            return setOf(
+                makeJapaneseHoliday("Marine day", month, 22),
+                makeJapaneseHoliday("Sports day", month, 23)
+            )
         }
         return emptySet()
     }
