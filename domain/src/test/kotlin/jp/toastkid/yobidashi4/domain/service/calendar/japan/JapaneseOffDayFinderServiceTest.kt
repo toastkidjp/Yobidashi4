@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class JapaneseOffDayFinderServiceTest {
 
@@ -21,6 +23,16 @@ class JapaneseOffDayFinderServiceTest {
         assertEquals(10, japaneseOffDayFinderService.invoke(2020, 8).firstOrNull()?.day)
         assertEquals(9, japaneseOffDayFinderService.invoke(2021, 8).firstOrNull()?.day)
         assertEquals(11, japaneseOffDayFinderService.invoke(2022, 8).firstOrNull()?.day)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "2020, 10",
+        "2021, 9",
+        "2022, 11"
+    )
+    fun mountainDay(year: Int, expectedDate: Int) {
+        assertEquals(expectedDate, japaneseOffDayFinderService.invoke(year, 8).firstOrNull()?.day)
     }
 
     @Test
