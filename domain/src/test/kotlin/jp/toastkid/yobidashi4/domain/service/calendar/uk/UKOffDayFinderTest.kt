@@ -34,7 +34,8 @@ class UKOffDayFinderTest {
         "2025, 9, 0",
         "2025, 10, 0",
         "2025, 11, 0",
-        "2025, 12, 2"
+        "2025, 12, 2",
+        "2027, 12, 3"
     )
     fun invoke(year: Int, month: Int, expect: Int) {
         assertEquals(expect, subject.invoke(year, month).size)
