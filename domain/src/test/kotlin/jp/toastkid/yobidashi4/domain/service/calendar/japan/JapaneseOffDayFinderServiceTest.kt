@@ -18,13 +18,6 @@ class JapaneseOffDayFinderServiceTest {
         japaneseOffDayFinderService = JapaneseOffDayFinderService()
     }
 
-    @Test
-    fun invoke() {
-        assertEquals(10, japaneseOffDayFinderService.invoke(2020, 8).firstOrNull()?.day)
-        assertEquals(9, japaneseOffDayFinderService.invoke(2021, 8).firstOrNull()?.day)
-        assertEquals(11, japaneseOffDayFinderService.invoke(2022, 8).firstOrNull()?.day)
-    }
-
     @ParameterizedTest
     @CsvSource(
         "2020, 10",
