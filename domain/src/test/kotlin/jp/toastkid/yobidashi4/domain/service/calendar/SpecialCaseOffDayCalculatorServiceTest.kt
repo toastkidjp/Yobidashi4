@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 internal class SpecialCaseOffDayCalculatorServiceTest {
 
@@ -19,6 +21,24 @@ internal class SpecialCaseOffDayCalculatorServiceTest {
     @BeforeEach
     fun setUp() {
         specialCaseOffDayCalculatorService = SpecialCaseOffDayCalculatorService()
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "2019, 1, 0",
+        "2019, 4, 1",
+        "2019, 5, 2",
+        "2019, 7, 0",
+        "2020, 7, 2",
+        "2021, 7, 2",
+        "2020, 8, 0",
+        "2021, 8, 0",
+        "2020, 10, 0",
+        "2021, 10, 0",
+        "2021, 4, 0",
+    )
+    fun test(year: Int, month: Int, expected: Int) {
+        assertEquals(expected, specialCaseOffDayCalculatorService.invoke(year, month).size)
     }
 
     @Test
