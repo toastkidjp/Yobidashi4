@@ -17,7 +17,7 @@ class OutgoAggregationResult(val target: String): AggregationResult {
         map.add(Outgo(date, title, value))
     }
 
-    fun aggregate() {
+    fun groupByDate() {
         val aggregated = map
             .groupBy(Outgo::date)
             .map { Outgo(it.key, it.key, it.value.sumOf(Outgo::price)) }
