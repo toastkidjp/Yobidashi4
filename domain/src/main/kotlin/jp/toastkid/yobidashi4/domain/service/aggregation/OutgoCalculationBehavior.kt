@@ -47,7 +47,7 @@ internal class OutgoCalculationBehavior(
             .collect(Collectors.toList())
 
         if (monthly) {
-            aggregationResult.aggregate()
+            aggregationResult.groupByDate()
         }
 
         return aggregationResult
