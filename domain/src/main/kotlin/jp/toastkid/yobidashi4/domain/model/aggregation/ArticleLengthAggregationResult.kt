@@ -25,7 +25,8 @@ class ArticleLengthAggregationResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> {
         if (cache.size != map.size) {
             cache.clear()
-            map.entries.map { arrayOf<Any>(it.key, it.value) }
+            map.entries
+                .map { arrayOf<Any>(it.key, it.value) }
                 .forEach(cache::add)
         }
         return cache
