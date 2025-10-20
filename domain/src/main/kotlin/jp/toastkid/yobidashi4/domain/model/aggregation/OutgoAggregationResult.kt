@@ -31,11 +31,15 @@ class OutgoAggregationResult(val target: String): AggregationResult {
 
     override fun itemArrays(): List<Array<Any>> {
         if (cached.size != map.size) {
-            val mapped = map.map { arrayOf<Any>(it.date, it.title, it.price) }
-            cached.clear()
-            cached.addAll(mapped)
+            updateCache()
         }
         return cached
+    }
+
+    private fun updateCache() {
+        val mapped = map.map { arrayOf<Any>(it.date, it.title, it.price) }
+        cached.clear()
+        cached.addAll(mapped)
     }
 
     override fun header(): Array<Any> = arrayOf("Date", "Item", "Price")
