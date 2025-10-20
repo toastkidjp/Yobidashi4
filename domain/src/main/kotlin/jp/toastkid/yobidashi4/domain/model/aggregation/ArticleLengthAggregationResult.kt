@@ -26,9 +26,7 @@ class ArticleLengthAggregationResult : AggregationResult {
         if (cache.size != map.size) {
             cache.clear()
             map.entries.map { arrayOf<Any>(it.key, it.value) }
-                .forEach {
-                    cache.add(it)
-                }
+                .forEach(cache::add)
         }
         return cache
     }
