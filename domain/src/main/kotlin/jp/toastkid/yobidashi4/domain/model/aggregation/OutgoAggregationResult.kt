@@ -11,6 +11,8 @@ class OutgoAggregationResult(val target: String): AggregationResult {
 
     private val map: MutableList<Outgo> = mutableListOf()
 
+    private val cached: MutableList<Array<Any>> = mutableListOf()
+
     fun add(date: String, title: String, value: Int) {
         map.add(Outgo(date, title, value))
     }
@@ -27,7 +29,14 @@ class OutgoAggregationResult(val target: String): AggregationResult {
         return map.sumOf(Outgo::price)
     }
 
-    override fun itemArrays(): List<Array<Any>> = map.map { arrayOf(it.date, it.title, it.price) }
+    override fun itemArrays(): List<Array<Any>> {
+        if (cached.size != map.size) {
+            val mapped = map.map { arrayOf<Any>(it.date, it.title, it.price) }
+            cached.clear()
+            cached.addAll(mapped)
+        }
+        return cached
+    }
 
     override fun header(): Array<Any> = arrayOf("Date", "Item", "Price")
 
