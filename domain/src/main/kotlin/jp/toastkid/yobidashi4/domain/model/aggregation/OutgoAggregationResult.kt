@@ -15,7 +15,7 @@ class OutgoAggregationResult(val target: String): AggregationResult {
     }
 
     fun sum(): Int {
-        return map.sumOf { it.price }
+        return map.sumOf(Outgo::price)
     }
 
     override fun itemArrays(): List<Array<Any>> = map.map { arrayOf(it.date, it.title, it.price) }
