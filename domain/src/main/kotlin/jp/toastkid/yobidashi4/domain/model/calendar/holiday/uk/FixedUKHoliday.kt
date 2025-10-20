@@ -5,7 +5,6 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-
 package jp.toastkid.yobidashi4.domain.model.calendar.holiday.uk
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
