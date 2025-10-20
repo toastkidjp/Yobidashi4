@@ -4,12 +4,18 @@ class CompoundInterestCalculationResult : AggregationResult {
 
     private val items = mutableListOf<Triple<Int, Long, Long>>()
 
+    private val cache: MutableList<Array<Any>> = mutableListOf()
+
     override fun header(): Array<Any> {
         return arrayOf("Year", "Single", "Compound")
     }
 
     override fun itemArrays(): Collection<Array<Any>> {
-        return items.map { arrayOf<Any>(it.first, it.second, it.third) }
+        if (cache.size != items.size) {
+            cache.clear()
+            items.map { arrayOf<Any>(it.first, it.second, it.third) }.forEach { cache.add(it) }
+        }
+        return cache
     }
 
     override fun columnClass(columnIndex: Int): Class<out Any> {
