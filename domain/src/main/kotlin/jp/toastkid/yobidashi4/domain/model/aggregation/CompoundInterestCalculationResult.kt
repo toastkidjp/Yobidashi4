@@ -13,7 +13,9 @@ class CompoundInterestCalculationResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> {
         if (cache.size != items.size) {
             cache.clear()
-            items.map { arrayOf<Any>(it.first, it.second, it.third) }.forEach(cache::add)
+            items
+                .map { arrayOf<Any>(it.first, it.second, it.third) }
+                .forEach(cache::add)
         }
         return cache
     }
