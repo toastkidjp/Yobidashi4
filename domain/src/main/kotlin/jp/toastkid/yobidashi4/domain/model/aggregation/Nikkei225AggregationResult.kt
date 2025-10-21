@@ -13,7 +13,7 @@ class Nikkei225AggregationResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> {
         if (cache.size != map.size) {
             cache.clear()
-            map.map { arrayOf<Any>(it.key, it.value.first, it.value.second) }.forEach { cache.add(it) }
+            map.map { arrayOf<Any>(it.key, it.value.first, it.value.second) }.forEach(cache::add)
         }
         return cache
     }
