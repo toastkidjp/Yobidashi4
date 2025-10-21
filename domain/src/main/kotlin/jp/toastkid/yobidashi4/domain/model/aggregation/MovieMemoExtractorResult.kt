@@ -4,12 +4,18 @@ class MovieMemoExtractorResult : AggregationResult {
 
     private val items = mutableListOf<MovieMemo>()
 
+    private val cache: MutableList<Array<Any>> = mutableListOf()
+
     override fun header(): Array<Any> {
         return MovieMemo.header()
     }
 
     override fun itemArrays(): Collection<Array<Any>> {
-        return items.map(MovieMemo::toArray)
+        if (cache.size != items.size) {
+            cache.clear()
+            items.map(MovieMemo::toArray).forEach { cache.add(it) }
+        }
+        return cache
     }
 
     override fun title(): String {
