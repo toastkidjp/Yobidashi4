@@ -13,7 +13,7 @@ class MovieMemoExtractorResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> {
         if (cache.size != items.size) {
             cache.clear()
-            items.map(MovieMemo::toArray).forEach { cache.add(it) }
+            items.map(MovieMemo::toArray).forEach(cache::add)
         }
         return cache
     }
