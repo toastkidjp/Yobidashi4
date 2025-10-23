@@ -17,7 +17,7 @@ class StepsAggregationResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> {
         if (cache.size != dateAndSteps.size) {
             cache.clear()
-            dateAndSteps.map { arrayOf<Any>(it.key, it.value.first, it.value.second) }.forEach { cache.add(it) }
+            dateAndSteps.map { arrayOf<Any>(it.key, it.value.first, it.value.second) }.forEach(cache::add)
         }
 
         return cache
