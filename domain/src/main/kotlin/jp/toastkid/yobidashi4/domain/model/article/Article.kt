@@ -18,7 +18,7 @@ class Article(private val file: Path) {
     }
 
     fun count(): Int {
-        return Files.readAllLines(file).map { it.codePointCount(0, it.length) }.sum()
+        return Files.readAllLines(file).sumOf { it.codePointCount(0, it.length) }
     }
 
     fun lastModified(): Long {
