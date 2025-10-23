@@ -63,10 +63,8 @@ enum class MoveableJapaneseHoliday(val title: String, private val month: Int, va
                 }
             }
 
-            if (month == 10) {
-                if (year == 2020 || year == 2021) {
-                    return emptyList()
-                }
+            if (month == 10 && (year == 2020 || year == 2021)) {
+                return emptyList()
             }
 
             val targetDay = entries.first { it.month == month }
