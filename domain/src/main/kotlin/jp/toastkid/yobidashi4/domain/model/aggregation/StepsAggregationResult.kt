@@ -4,6 +4,8 @@ class StepsAggregationResult : AggregationResult {
 
     private val dateAndSteps = mutableMapOf<String, Pair<Int, Int>>()
 
+    private val cache = mutableListOf<Array<Any>>()
+
     fun put(date: String, steps: Int, kcal: Int) {
         dateAndSteps.put(date, steps to kcal)
     }
@@ -13,7 +15,12 @@ class StepsAggregationResult : AggregationResult {
     }
 
     override fun itemArrays(): Collection<Array<Any>> {
-        return dateAndSteps.map { arrayOf(it.key, it.value.first, it.value.second) }
+        if (cache.size != dateAndSteps.size) {
+            cache.clear()
+            dateAndSteps.map { arrayOf<Any>(it.key, it.value.first, it.value.second) }.forEach { cache.add(it) }
+        }
+
+        return cache
     }
 
     override fun title(): String {
