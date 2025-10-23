@@ -17,7 +17,7 @@ class StocksAggregationResult : AggregationResult {
     override fun itemArrays(): Collection<Array<Any>> {
         if (cache.size != dateAndSteps.size) {
             cache.clear()
-            dateAndSteps.map { arrayOf<Any>(it.key, it.value.first, it.value.second, it.value.third) }.forEach { cache.add(it) }
+            dateAndSteps.map { arrayOf<Any>(it.key, it.value.first, it.value.second, it.value.third) }.forEach(cache::add)
         }
 
         return cache
