@@ -4,6 +4,8 @@ class StocksAggregationResult : AggregationResult {
 
     private val dateAndSteps = mutableMapOf<String, Triple<Int, Int, Double>>()
 
+    private val cache = mutableListOf<Array<Any>>()
+
     fun put(date: String, valuation: Int, gainOrLoss: Int, percent: Double) {
         dateAndSteps.put(date, Triple(valuation, gainOrLoss, percent))
     }
@@ -13,7 +15,12 @@ class StocksAggregationResult : AggregationResult {
     }
 
     override fun itemArrays(): Collection<Array<Any>> {
-        return dateAndSteps.map { arrayOf(it.key, it.value.first, it.value.second, it.value.third) }
+        if (cache.size != dateAndSteps.size) {
+            cache.clear()
+            dateAndSteps.map { arrayOf<Any>(it.key, it.value.first, it.value.second, it.value.third) }.forEach { cache.add(it) }
+        }
+
+        return cache
     }
 
     override fun title(): String {
