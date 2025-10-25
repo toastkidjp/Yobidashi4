@@ -40,9 +40,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
             .joinToString(",", transform = ::toContent)
 
     private fun toContent(it: ChatMessage) =
-        "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${
-            escape(it.text)
-        }'}" +
+        "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${escape(it.text)}'}" +
                 " ${
                     if (it.image.isNullOrBlank().not()) 
                         ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}"
