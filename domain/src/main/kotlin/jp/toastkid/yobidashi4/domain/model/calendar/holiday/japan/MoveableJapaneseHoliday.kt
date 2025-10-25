@@ -5,7 +5,11 @@ import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-enum class MoveableJapaneseHoliday(val title: String, private val month: Int, val week: Int) {
+enum class MoveableJapaneseHoliday(
+    val title: String,
+    private val month: Int,
+    val week: Int
+) {
 
     COMING_OF_AGE_DAY("成人の日", 1, 2),
     MARINE_DAY("海の日", 7, 3),
