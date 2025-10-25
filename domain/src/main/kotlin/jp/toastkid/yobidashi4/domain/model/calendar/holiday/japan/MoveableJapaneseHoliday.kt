@@ -93,7 +93,8 @@ enum class MoveableJapaneseHoliday(
         private fun calculateDate(year: Int, month: Int, week: Int): Int {
             val localDate = LocalDate.of(year, month, 1)
             val dayOfWeek = localDate.dayOfWeek
-            val o = if (dayOfWeek == DayOfWeek.MONDAY) 6 else (dayOfWeek.ordinal - (DayOfWeek.MONDAY.ordinal + 1))
+            val o = if (dayOfWeek == DayOfWeek.MONDAY) 6
+            else (dayOfWeek.ordinal - (DayOfWeek.MONDAY.ordinal + 1))
             return 7 * week - (o)
         }
 
