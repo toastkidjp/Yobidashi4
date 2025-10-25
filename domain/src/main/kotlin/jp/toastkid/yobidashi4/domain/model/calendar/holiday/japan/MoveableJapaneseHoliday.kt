@@ -96,7 +96,7 @@ enum class MoveableJapaneseHoliday(
             val o = if (dayOfWeek == DayOfWeek.MONDAY)
                 6
             else
-                    (dayOfWeek.ordinal - (DayOfWeek.MONDAY.ordinal + 1))
+                dayOfWeek.ordinal - (DayOfWeek.MONDAY.ordinal + 1)
             return 7 * week - (o)
         }
 
