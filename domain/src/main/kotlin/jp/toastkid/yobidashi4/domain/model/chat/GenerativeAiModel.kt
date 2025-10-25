@@ -44,4 +44,8 @@ enum class GenerativeAiModel(
 
     fun image() = image
 
+    companion object {
+        fun defalut() = GEMINI_2_5_FLASH_LITE
+    }
+
 }
