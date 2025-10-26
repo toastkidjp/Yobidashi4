@@ -29,6 +29,7 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -212,7 +213,7 @@ class ChatTabViewModel : KoinComponent {
         return focusRequester
     }
 
-    suspend fun launch(chat: Chat, scrollPosition: Int) {
+    suspend fun launch(chat: Chat, scrollPosition: Int, initialModel: GenerativeAiModel, initialQuestion: String) {
         messages.clear()
         messages.addAll(chat.list())
         service.setChat(chat)
@@ -220,6 +221,11 @@ class ChatTabViewModel : KoinComponent {
             scrollState().scrollToItem(scrollPosition)
         }
         focusRequester().requestFocus()
+
+        if (initialQuestion.isNotEmpty()) {
+            textInput.value = TextFieldValue(initialQuestion)
+            send(CoroutineScope(Dispatchers.IO))
+        }
     }
 
     fun update(chatTab: ChatTab) {
