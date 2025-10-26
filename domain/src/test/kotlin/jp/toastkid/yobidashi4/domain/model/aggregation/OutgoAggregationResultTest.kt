@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.aggregation
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,6 +36,15 @@ internal class OutgoAggregationResultTest {
         assertEquals(String::class.java, outgoAggregationResult.columnClass(0))
         assertEquals(String::class.java, outgoAggregationResult.columnClass(1))
         assertEquals(Int::class.java, outgoAggregationResult.columnClass(2))
+    }
+
+    @Test
+    fun itemArrays() {
+        outgoAggregationResult.add("2025-01-01", "Osechi", 12000)
+
+        val itemArrays = outgoAggregationResult.itemArrays()
+        assertEquals(1, outgoAggregationResult.itemArrays().size)
+        assertSame(itemArrays, outgoAggregationResult.itemArrays())
     }
 
 }
