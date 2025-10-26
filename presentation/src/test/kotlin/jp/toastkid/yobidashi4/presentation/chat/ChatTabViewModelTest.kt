@@ -231,6 +231,25 @@ class ChatTabViewModelTest {
         verify { mainViewModel.replaceTab(any(),  any()) }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun launchWithInitialQuestion() = runTest {
+        subject = spyk(subject)
+        val focusRequester = mockk<FocusRequester>()
+        val listState = mockk<LazyListState>()
+        every { subject.scrollState() } returns listState
+        coEvery { listState.scrollToItem(any()) } just Runs
+        every { subject.focusRequester() } returns focusRequester
+        every { focusRequester.requestFocus() } returns true
+
+        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "With initial query")
+
+        coVerify { listState.scrollToItem(any()) }
+        verify { subject.focusRequester() }
+        verify { service.setChat(any()) }
+        verify { focusRequester.requestFocus() }
+    }
+
     @Test
     fun label() {
         assertTrue(subject.label().isNotBlank())
