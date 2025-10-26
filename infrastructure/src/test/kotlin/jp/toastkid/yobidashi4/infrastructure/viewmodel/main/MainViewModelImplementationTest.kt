@@ -29,10 +29,12 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
+import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
@@ -1485,6 +1487,20 @@ class MainViewModelImplementationTest {
         subject.openInputHistory("test")
 
         assertTrue(subject.tabs.first() is InputHistoryTab)
+    }
+
+    @Test
+    fun askGenerativeAi() {
+        subject = spyk(subject)
+        val capturingSlot = slot<ChatTab>()
+        every { subject.openTab(capture(capturingSlot)) } just Runs
+
+        val question = "Initial question"
+        val model = GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE
+        subject.askGenerativeAi(question, model)
+
+        assertEquals(question, capturingSlot.captured.initialQuestion())
+        assertEquals(model, capturingSlot.captured.initialModel())
     }
 
 }
