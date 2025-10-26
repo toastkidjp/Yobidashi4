@@ -12,9 +12,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Image
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -31,6 +28,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Image
+import java.net.URL
+import javax.imageio.ImageIO
 
 class CefContextMenuActionTest {
 
@@ -67,6 +67,7 @@ class CefContextMenuActionTest {
         every { viewModel.openUrl(any(), any()) } just Runs
         every { viewModel.webSearch(any(), any()) } just Runs
         every { viewModel.browseUri(any()) } just Runs
+        every { viewModel.askGenerativeAi(any(), any()) } just Runs
         every { viewModel.currentTab() } returns currentWebTab
         every { currentWebTab.title() } returns "title"
         every { currentWebTab.id() } returns "test1"
@@ -534,6 +535,13 @@ class CefContextMenuActionTest {
         subject.invoke(browser, param, "test", ContextMenu.DEVELOPER_TOOL.id)
 
         verify { pool wasNot called }
+    }
+
+    @Test
+    fun askSelected() {
+        subject.invoke(browser, param, "selected text", ContextMenu.ASK_SELECTED_TEXT.id)
+
+        verify { viewModel.askGenerativeAi(any(), any()) }
     }
 
 }
