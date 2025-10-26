@@ -196,7 +196,7 @@ class ChatTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
 
-        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1)
+        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "")
 
         coVerify { listState.scrollToItem(any()) }
         verify { subject.focusRequester() }
@@ -212,7 +212,7 @@ class ChatTabViewModelTest {
         every { focusRequester.requestFocus() } returns true
 
         CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 0)
+            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 0, mockk(), "")
         }
 
         verify { subject.focusRequester() }
