@@ -19,7 +19,7 @@ class GenerativeAiModelTest {
 
     @Test
     fun default() {
-        assertSame(GenerativeAiModel.GEMINI_2_5_FLASH_LITE, GenerativeAiModel.defalut())
+        assertSame(GenerativeAiModel.GEMINI_2_5_FLASH_LITE, GenerativeAiModel.default())
     }
 
 }
