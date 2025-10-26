@@ -66,7 +66,7 @@ class ChatTabViewKtTest {
             ChatMessage("user", "test"),
             ChatMessage("model", "test")
         )
-        coEvery { anyConstructed<ChatTabViewModel>().launch(any(), any()) } just Runs
+        coEvery { anyConstructed<ChatTabViewModel>().launch(any(), any(), any(), any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().update(any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().switchImageGeneration() } just Runs
         every { anyConstructed<ChatTabViewModel>().clearChat() } just Runs
@@ -74,6 +74,8 @@ class ChatTabViewKtTest {
         every { anyConstructed<ChatTabViewModel>().send(any()) } just Runs
         every { tab.chat() } returns mockk()
         every { tab.scrollPosition() } returns 0
+        every { tab.initialModel() } returns mockk()
+        every { tab.initialQuestion() } returns "Initial question"
     }
 
     @AfterEach
