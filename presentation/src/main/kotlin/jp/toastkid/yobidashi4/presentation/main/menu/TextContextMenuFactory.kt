@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLocalization
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.service.text.TextCountMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -20,7 +21,7 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
             override fun Area(
                 textManager: TextContextMenu.TextManager,
                 state: ContextMenuState,
-                content: @Composable () -> Unit
+                content: @Composable (() -> Unit)
             ) {
                 val localization = LocalLocalization.current
                 mainViewModel.setTextManager(textManager)
@@ -60,6 +61,12 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                                 .findArticle(textManager.selectedText.text)
                         }
                     )
+                    items.add(
+                        ContextMenuItem("Ask AI") {
+                            mainViewModel
+                                .askGenerativeAi("\"${textManager.selectedText.text}\" とは", GenerativeAiModel.default())
+                        }
+                    )
 
                     val secondaryClickItem = mainViewModel.getSecondaryClickItem()
                     if (secondaryClickItem.isNotBlank()) {
@@ -80,6 +87,7 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
 
                 ContextMenuArea(itemConsumer, state, content = content)
             }
+
         }
     }
 
