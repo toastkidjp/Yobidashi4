@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowState
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -162,5 +163,7 @@ interface MainViewModel {
     fun sendNotification(notificationEvent: NotificationEvent)
 
     fun openInputHistory(category: String)
+
+    fun askGenerativeAi(question: String, model: GenerativeAiModel)
 
 }
