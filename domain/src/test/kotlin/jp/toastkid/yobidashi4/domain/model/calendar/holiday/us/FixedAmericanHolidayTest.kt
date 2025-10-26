@@ -15,6 +15,7 @@ class FixedAmericanHolidayTest {
 
     @Test
     fun test() {
+        assertNull(FixedAmericanHoliday.find(2020, 5))
         assertNull(FixedAmericanHoliday.find(2020, 6))
         assertNotNull(FixedAmericanHoliday.find(2021, 6))
     }
