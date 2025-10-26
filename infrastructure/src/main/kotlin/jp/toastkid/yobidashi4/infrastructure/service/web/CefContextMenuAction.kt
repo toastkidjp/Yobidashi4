@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.infrastructure.model.web.ContextMenu
@@ -110,6 +111,12 @@ class CefContextMenuAction : KoinComponent {
             ContextMenu.DEVELOPER_TOOL.id -> {
                 val webTab = viewModel.currentTab() as? WebTab ?: return
                 object : KoinComponent { val pool: WebViewPool by inject() }.pool.switchDevTools(webTab.id())
+            }
+
+            ContextMenu.ASK_SELECTED_TEXT.id -> {
+                if (selectedText.isNotEmpty()) {
+                    viewModel.askGenerativeAi("\"${selectedText}\" とは", GenerativeAiModel.default())
+                }
             }
 
             else -> Unit
