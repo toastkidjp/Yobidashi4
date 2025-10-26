@@ -31,23 +31,13 @@ enum class MoveableAmericanHoliday(
         private val DAYS_OF_WEEK_FOR_LAST_WEEK =
             setOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY)
 
-        private val months = entries.map(MoveableAmericanHoliday::month).distinct()
-
-        private fun isTargetMonth(month: Int): Boolean {
-            return months.contains(month)
-        }
-
         private fun findCandidate(month: Int): MoveableAmericanHoliday? {
             return entries.firstOrNull { it.month == month }
         }
 
         fun find(year: Int, month: Int): Holiday? {
-            if (isTargetMonth(month).not()) {
-                return null
-            }
-
-            val localDate = LocalDate.of(year, month, 1)
             val candidate = findCandidate(month) ?: return null
+            val localDate = LocalDate.of(year, month, 1)
             val dayOfWeek = localDate.dayOfWeek
             val offsetDays =
                 if (dayOfWeek <= candidate.dayOfWeek) candidate.dayOfWeek.value - dayOfWeek.value + 1
