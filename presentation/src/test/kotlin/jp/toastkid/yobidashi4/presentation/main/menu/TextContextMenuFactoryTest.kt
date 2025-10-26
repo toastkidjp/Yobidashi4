@@ -50,6 +50,7 @@ class TextContextMenuFactoryTest {
         every { mainViewModel.findArticle(any()) } just Runs
         every { mainViewModel.getSecondaryClickItem() } returns "test"
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+        every { mainViewModel.askGenerativeAi(any(), any()) } just Runs
         every { textManager.selectedText } returns AnnotatedString("test")
         every { textManager.cut } returns mockk()
         every { textManager.copy } returns mockk()
@@ -102,6 +103,9 @@ class TextContextMenuFactoryTest {
 
             onNode(hasText("Find article")).performClick()
             verify { mainViewModel.findArticle(any()) }
+
+            onNode(hasText("Ask AI")).performClick()
+            verify { mainViewModel.askGenerativeAi(any(), any()) }
         }
     }
 
