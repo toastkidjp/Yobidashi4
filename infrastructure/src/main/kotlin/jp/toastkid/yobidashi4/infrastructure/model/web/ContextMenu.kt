@@ -22,6 +22,7 @@ enum class ContextMenu(
 
     CLIP_TEXT(416, "テキストをコピー", Context.PLAIN_TEXT),
     SEARCH_WITH_SELECTED_TEXT(405, "選択したテキストを検索", Context.PLAIN_TEXT),
+    ASK_SELECTED_TEXT(419, "選択したテキストをAIに聞く", Context.PLAIN_TEXT),
 
     OPEN_WITH_OTHER_BROWSER(414, "ブラウザーで開く"),
     RESET_ZOOM(406, "ズーム率をリセット"),
