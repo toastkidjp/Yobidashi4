@@ -19,7 +19,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -35,6 +34,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 import org.jetbrains.compose.resources.painterResource
 
@@ -91,17 +91,12 @@ internal fun WebSearchBox() {
                         return@DropdownMenu
                     }
                     SearchSite.entries.forEach {
-                        DropdownMenuItem(
-                            onClick = {
-                                viewModel.choose(it)
-                            }
+                        HoverHighlightDropdownMenuItem(
+                            it.siteName,
+                            drawableResource = viewModel.icon(it),
+                            iconSize = 48.dp
                         ) {
-                            Image(
-                                painterResource(viewModel.icon(it)),
-                                contentDescription = it.siteName,
-                                modifier = Modifier.size(48.dp).padding(8.dp)
-                            )
-                            Text(it.siteName, modifier = Modifier.padding(start = 8.dp))
+                            viewModel.choose(it)
                         }
                     }
                 }
