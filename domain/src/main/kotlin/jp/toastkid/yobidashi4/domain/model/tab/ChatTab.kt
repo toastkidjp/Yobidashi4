@@ -22,10 +22,6 @@ class ChatTab(
         return ChatTab(this.chat, scrollPosition)
     }
 
-    fun shouldSendInitialQuestion(): Boolean {
-        return initialQuestion.isNotEmpty()
-    }
-
     fun initialModel() = initialModel
 
     fun initialQuestion() = initialQuestion
