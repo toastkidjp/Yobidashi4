@@ -544,4 +544,11 @@ class CefContextMenuActionTest {
         verify { viewModel.askGenerativeAi(any(), any()) }
     }
 
+    @Test
+    fun noopAskSelectedWithoutQuestion() {
+        subject.invoke(browser, param, "", ContextMenu.ASK_SELECTED_TEXT.id)
+
+        verify(inverse = true) { viewModel.askGenerativeAi(any(), any()) }
+    }
+
 }
