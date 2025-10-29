@@ -48,10 +48,11 @@ data class WebSearchItem(
             return WebSearchItem(
                 searchSite.siteName,
                 icon(searchSite),
-                { viewModel, query -> viewModel.openUrl(
-                    searchSite.make(query, (viewModel.currentTab() as? WebTab)?.url()).toString(),
-                    false
-                )
+                { viewModel, query ->
+                    viewModel.openUrl(
+                        searchSite.make(query, (viewModel.currentTab() as? WebTab)?.url()).toString(),
+                        false
+                    )
                 }
             )
         }
