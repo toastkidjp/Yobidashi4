@@ -20,6 +20,7 @@ import io.mockk.mockkConstructor
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
@@ -106,6 +107,16 @@ class WebSearchBoxViewModelTest {
 
         assertEquals(subject.icon(SearchSite.SEARCH_WITH_IMAGE), subject.currentIconPath())
         assertEquals(SearchSite.SEARCH_WITH_IMAGE.siteName, subject.currentSiteName())
+        assertFalse(subject.openingDropdown())
+    }
+
+    @Test
+    fun chooseGenerativeAiModel() {
+        subject.setOpenDropdown()
+
+        subject.choose(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)
+
+        assertEquals(GenerativeAiModel.GEMINI_2_5_FLASH_LITE.label(), subject.currentSiteName())
         assertFalse(subject.openingDropdown())
     }
 
