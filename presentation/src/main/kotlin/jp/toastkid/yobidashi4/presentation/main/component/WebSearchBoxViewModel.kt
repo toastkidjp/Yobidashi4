@@ -14,7 +14,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import java.text.DecimalFormat
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.text.DecimalFormat
 
 class WebSearchBoxViewModel : KoinComponent {
 
@@ -46,7 +47,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     private val inputHistories = mutableStateListOf<InputHistory>()
 
-    private val selectedSite = mutableStateOf(SearchSite.getDefault())
+    private val selectedSite = mutableStateOf(WebSearchItem.fromSearchSite(SearchSite.getDefault()))
 
     private val query = mutableStateOf(TextFieldValue())
 
@@ -72,10 +73,10 @@ class WebSearchBoxViewModel : KoinComponent {
         openDropdown.value = false
     }
 
-    fun currentIconPath() = icon(selectedSite.value)
+    fun currentIconPath() = selectedSite.value.icon
 
     fun currentSiteName(): String? {
-        return selectedSite.value.siteName
+        return selectedSite.value.label
     }
 
     fun containsSwingContent(): Boolean {
@@ -83,7 +84,13 @@ class WebSearchBoxViewModel : KoinComponent {
     }
 
     fun choose(it: SearchSite) {
-        selectedSite.value = it
+        selectedSite.value = WebSearchItem.fromSearchSite(it)
+        closeDropdown()
+    }
+
+    // TODO Write test
+    fun choose(it: GenerativeAiModel) {
+        selectedSite.value = WebSearchItem.from(it)
         closeDropdown()
     }
 
@@ -116,9 +123,7 @@ class WebSearchBoxViewModel : KoinComponent {
             return
         }
 
-        selectedSite.value.make(query.value.text, (viewModel.currentTab() as? WebTab)?.url()).let {
-            viewModel.openUrl(it.toString(), false)
-        }
+        selectedSite.value.action(viewModel, query.value.text)
         viewModel.setShowWebSearch(false)
 
         if (saveSearchHistory()) {
