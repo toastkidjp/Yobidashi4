@@ -15,6 +15,7 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -34,7 +35,8 @@ class WebSearchBoxKtTest {
         every { anyConstructed<WebSearchBoxViewModel>().switchSaveSearchHistory() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().setOpenDropdown() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().closeDropdown() } just Runs
-        every { anyConstructed<WebSearchBoxViewModel>().choose(any()) } just Runs
+        every { anyConstructed<WebSearchBoxViewModel>().choose(any<SearchSite>()) } just Runs
+        every { anyConstructed<WebSearchBoxViewModel>().choose(any<GenerativeAiModel>()) } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().start() } just Runs
     }
 
@@ -88,7 +90,7 @@ class WebSearchBoxKtTest {
             onNodeWithContentDescription(SearchSite.SEARCH_WITH_IMAGE.siteName, useUnmergedTree = true)
                 .onParent()
                 .performClick()
-            verify { anyConstructed<WebSearchBoxViewModel>().choose(any()) }
+            verify { anyConstructed<WebSearchBoxViewModel>().choose(any<SearchSite>()) }
         }
     }
 
@@ -107,7 +109,7 @@ class WebSearchBoxKtTest {
             verify { anyConstructed<WebSearchBoxViewModel>().showWebSearch() }
 
             onNodeWithContentDescription(SearchSite.SEARCH_WITH_IMAGE.siteName, useUnmergedTree = true).performClick()
-            verify { anyConstructed<WebSearchBoxViewModel>().choose(any()) }
+            verify { anyConstructed<WebSearchBoxViewModel>().choose(any<SearchSite>()) }
 
             onNodeWithContentDescription("Switch dropdown menu.", true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().closeDropdown() }
