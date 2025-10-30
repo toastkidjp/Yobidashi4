@@ -47,6 +47,8 @@ class WebSearchBoxViewModel : KoinComponent {
 
     private val inputHistories = mutableStateListOf<InputHistory>()
 
+    private val items = mutableStateListOf<WebSearchItem>()
+
     private val selectedSite = mutableStateOf(WebSearchItem.fromSearchSite(SearchSite.getDefault()))
 
     private val query = mutableStateOf(TextFieldValue())
@@ -73,6 +75,8 @@ class WebSearchBoxViewModel : KoinComponent {
         openDropdown.value = false
     }
 
+    fun items() = items
+
     fun currentIconPath() = selectedSite.value.icon
 
     fun currentSiteName(): String? {
@@ -90,6 +94,11 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun choose(it: GenerativeAiModel) {
         selectedSite.value = WebSearchItem.from(it)
+        closeDropdown()
+    }
+
+    fun choose(it: WebSearchItem) {
+        selectedSite.value = it
         closeDropdown()
     }
 
@@ -187,6 +196,11 @@ class WebSearchBoxViewModel : KoinComponent {
         if (viewModel.showWebSearch()) {
             focusRequester().requestFocus()
         }
+
+        SearchSite.entries.map { WebSearchItem.fromSearchSite(it) }
+            .forEach { items.add(it) }
+        GenerativeAiModel.entries.map { WebSearchItem.from(it) }
+            .forEach { items.add(it) }
 
         val webTab = viewModel.currentTab() as? WebTab ?: return
         query.value = TextFieldValue(webTab.url())
