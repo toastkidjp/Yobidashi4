@@ -66,6 +66,8 @@ class WebSearchBoxViewModelTest {
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
         every { anyConstructed<InputHistoryService>().filter(any(), any()) } just Runs
 
+        every { setting.chatApiKey() } returns "Dummy key"
+
         subject = WebSearchBoxViewModel()
     }
 
@@ -323,6 +325,26 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun start() {
+        every { viewModel.showWebSearch() } returns true
+        val tab = mockk<WebTab>()
+        every { viewModel.currentTab() } returns tab
+        val url = "https://www.yahoo.co.jp"
+        every { tab.url() } returns url
+        subject = spyk(subject)
+        val focusRequester = mockk<FocusRequester>()
+        every { subject.focusRequester() } returns focusRequester
+        every { focusRequester.requestFocus() } returns true
+
+        subject.start()
+
+        verify { focusRequester.requestFocus() }
+        assertEquals(url, subject.query().text)
+    }
+
+    @Test
+    fun startWithNullKey() {
+        every { setting.chatApiKey() } returns null
+
         every { viewModel.showWebSearch() } returns true
         val tab = mockk<WebTab>()
         every { viewModel.currentTab() } returns tab
