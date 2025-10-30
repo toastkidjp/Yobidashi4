@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -35,9 +36,12 @@ class WebSearchBoxKtTest {
         every { anyConstructed<WebSearchBoxViewModel>().switchSaveSearchHistory() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().setOpenDropdown() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().closeDropdown() } just Runs
-        every { anyConstructed<WebSearchBoxViewModel>().choose(any<SearchSite>()) } just Runs
+        every { anyConstructed<WebSearchBoxViewModel>().choose(any<WebSearchItem>()) } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().choose(any<GenerativeAiModel>()) } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().start() } just Runs
+        val mutableStateListOf = mutableStateListOf<WebSearchItem>()
+        SearchSite.entries.map { WebSearchItem.fromSearchSite(it) }.forEach { mutableStateListOf.add(it) }
+        every { anyConstructed<WebSearchBoxViewModel>().items() } returns mutableStateListOf
     }
 
     @AfterEach
@@ -90,7 +94,7 @@ class WebSearchBoxKtTest {
             onNodeWithContentDescription(SearchSite.SEARCH_WITH_IMAGE.siteName, useUnmergedTree = true)
                 .onParent()
                 .performClick()
-            verify { anyConstructed<WebSearchBoxViewModel>().choose(any<SearchSite>()) }
+            verify { anyConstructed<WebSearchBoxViewModel>().choose(any<WebSearchItem>()) }
         }
     }
 
@@ -109,7 +113,7 @@ class WebSearchBoxKtTest {
             verify { anyConstructed<WebSearchBoxViewModel>().showWebSearch() }
 
             onNodeWithContentDescription(SearchSite.SEARCH_WITH_IMAGE.siteName, useUnmergedTree = true).performClick()
-            verify { anyConstructed<WebSearchBoxViewModel>().choose(any<SearchSite>()) }
+            verify { anyConstructed<WebSearchBoxViewModel>().choose(any<WebSearchItem>()) }
 
             onNodeWithContentDescription("Switch dropdown menu.", true).performClick()
             verify { anyConstructed<WebSearchBoxViewModel>().closeDropdown() }
