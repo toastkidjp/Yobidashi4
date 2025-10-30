@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
@@ -40,6 +41,8 @@ import java.text.DecimalFormat
 class WebSearchBoxViewModel : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
+
+    private val setting: Setting by inject()
 
     private val focusRequester = FocusRequester()
 
@@ -199,8 +202,11 @@ class WebSearchBoxViewModel : KoinComponent {
 
         SearchSite.entries.map { WebSearchItem.fromSearchSite(it) }
             .forEach { items.add(it) }
-        GenerativeAiModel.entries.map { WebSearchItem.from(it) }
-            .forEach { items.add(it) }
+
+        if (setting.chatApiKey().isNullOrBlank().not()) {
+            GenerativeAiModel.entries.map { WebSearchItem.from(it) }
+                .forEach { items.add(it) }
+        }
 
         val webTab = viewModel.currentTab() as? WebTab ?: return
         query.value = TextFieldValue(webTab.url())
