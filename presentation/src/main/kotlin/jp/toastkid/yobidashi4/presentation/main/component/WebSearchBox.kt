@@ -33,7 +33,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 import org.jetbrains.compose.resources.painterResource
@@ -78,10 +77,10 @@ internal fun WebSearchBox() {
                 ) {
                     if (viewModel.containsSwingContent()) {
                         LazyRow(modifier = Modifier.width(600.dp).height(60.dp)) {
-                            items(SearchSite.entries) {
+                            items(viewModel.items()) {
                                 Image(
-                                    painterResource(viewModel.icon(it)),
-                                    contentDescription = it.siteName,
+                                    painterResource(it.icon),
+                                    contentDescription = it.label,
                                     modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
                                         viewModel.choose(it)
                                     }
@@ -90,10 +89,10 @@ internal fun WebSearchBox() {
                         }
                         return@DropdownMenu
                     }
-                    SearchSite.entries.forEach {
+                    viewModel.items().forEach {
                         HoverHighlightDropdownMenuItem(
-                            it.siteName,
-                            drawableResource = viewModel.icon(it),
+                            it.label,
+                            drawableResource = it.icon,
                             iconSize = 48.dp
                         ) {
                             viewModel.choose(it)
