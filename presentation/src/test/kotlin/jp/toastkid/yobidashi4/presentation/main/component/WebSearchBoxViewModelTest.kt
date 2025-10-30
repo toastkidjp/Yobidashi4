@@ -359,6 +359,7 @@ class WebSearchBoxViewModelTest {
 
         verify { focusRequester.requestFocus() }
         assertEquals(url, subject.query().text)
+        assertEquals(SearchSite.entries.size, subject.items().size)
     }
 
     @Test
