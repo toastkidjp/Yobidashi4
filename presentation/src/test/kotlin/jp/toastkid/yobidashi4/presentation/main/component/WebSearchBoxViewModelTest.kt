@@ -21,6 +21,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
@@ -43,6 +44,9 @@ class WebSearchBoxViewModelTest {
     @MockK
     private lateinit var viewModel: MainViewModel
 
+    @MockK
+    private lateinit var setting: Setting
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -51,6 +55,7 @@ class WebSearchBoxViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
+                    single(qualifier = null) { setting } bind(Setting::class)
                 }
             )
         }
