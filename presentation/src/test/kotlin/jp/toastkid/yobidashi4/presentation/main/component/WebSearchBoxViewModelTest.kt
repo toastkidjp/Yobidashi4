@@ -121,6 +121,16 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
+    fun chooseWebSearchItem() {
+        subject.setOpenDropdown()
+
+        subject.choose(WebSearchItem.from(GenerativeAiModel.GEMINI_2_5_FLASH_LITE))
+
+        assertEquals(GenerativeAiModel.GEMINI_2_5_FLASH_LITE.label(), subject.currentSiteName())
+        assertFalse(subject.openingDropdown())
+    }
+
+    @Test
     fun onValueChange() {
         subject.onValueChange(TextFieldValue("1+2"))
 
