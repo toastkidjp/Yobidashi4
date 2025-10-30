@@ -32,6 +32,8 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -341,51 +343,15 @@ class WebSearchBoxViewModelTest {
         assertEquals(url, subject.query().text)
     }
 
-    @Test
-    fun startWithNullKey() {
-        every { setting.chatApiKey() } returns null
-
-        every { viewModel.showWebSearch() } returns true
-        val tab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns tab
-        val url = "https://www.yahoo.co.jp"
-        every { tab.url() } returns url
-        subject = spyk(subject)
-        val focusRequester = mockk<FocusRequester>()
-        every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } returns true
-
-        subject.start()
-
-        verify { focusRequester.requestFocus() }
-        assertEquals(url, subject.query().text)
-        assertEquals(SearchSite.entries.size, subject.items().size)
-    }
-
-    @Test
-    fun startWithEmptyKey() {
-        every { setting.chatApiKey() } returns ""
-
-        every { viewModel.showWebSearch() } returns true
-        val tab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns tab
-        val url = "https://www.yahoo.co.jp"
-        every { tab.url() } returns url
-        subject = spyk(subject)
-        val focusRequester = mockk<FocusRequester>()
-        every { subject.focusRequester() } returns focusRequester
-        every { focusRequester.requestFocus() } returns true
-
-        subject.start()
-
-        verify { focusRequester.requestFocus() }
-        assertEquals(url, subject.query().text)
-        assertEquals(SearchSite.entries.size, subject.items().size)
-    }
-
-    @Test
-    fun startWithBlankKey() {
-        every { setting.chatApiKey() } returns "  "
+    @ParameterizedTest
+    @CsvSource(
+        "null",
+        "''",
+        "' '",
+        nullValues = ["null"]
+    )
+    fun startWithNullOrBlankKey(arg: String?) {
+        every { setting.chatApiKey() } returns arg
 
         every { viewModel.showWebSearch() } returns true
         val tab = mockk<WebTab>()
