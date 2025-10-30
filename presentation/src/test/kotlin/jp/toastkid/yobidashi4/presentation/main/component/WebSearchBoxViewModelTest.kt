@@ -384,6 +384,27 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
+    fun startWithBlankKey() {
+        every { setting.chatApiKey() } returns "  "
+
+        every { viewModel.showWebSearch() } returns true
+        val tab = mockk<WebTab>()
+        every { viewModel.currentTab() } returns tab
+        val url = "https://www.yahoo.co.jp"
+        every { tab.url() } returns url
+        subject = spyk(subject)
+        val focusRequester = mockk<FocusRequester>()
+        every { subject.focusRequester() } returns focusRequester
+        every { focusRequester.requestFocus() } returns true
+
+        subject.start()
+
+        verify { focusRequester.requestFocus() }
+        assertEquals(url, subject.query().text)
+        assertEquals(SearchSite.entries.size, subject.items().size)
+    }
+
+    @Test
     fun startIfBoxIsClosed() {
         every { viewModel.showWebSearch() } returns false
         every { viewModel.currentTab() } returns mockk()
