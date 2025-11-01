@@ -95,11 +95,6 @@ class WebSearchBoxViewModel : KoinComponent {
         closeDropdown()
     }
 
-    fun choose(it: GenerativeAiModel) {
-        selectedSite.value = WebSearchItem.from(it)
-        closeDropdown()
-    }
-
     fun choose(it: WebSearchItem) {
         selectedSite.value = it
         closeDropdown()
