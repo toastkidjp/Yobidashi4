@@ -78,7 +78,7 @@ class WebSearchBoxViewModel : KoinComponent {
         openDropdown.value = false
     }
 
-    fun items() = items
+    fun items(): List<WebSearchItem> = items
 
     fun currentIconPath() = selectedSite.value.icon
 
