@@ -90,11 +90,6 @@ class WebSearchBoxViewModel : KoinComponent {
         return viewModel.currentTab() is WebTab
     }
 
-    fun choose(it: SearchSite) {
-        selectedSite.value = WebSearchItem.fromSearchSite(it)
-        closeDropdown()
-    }
-
     fun choose(it: WebSearchItem) {
         selectedSite.value = it
         closeDropdown()
