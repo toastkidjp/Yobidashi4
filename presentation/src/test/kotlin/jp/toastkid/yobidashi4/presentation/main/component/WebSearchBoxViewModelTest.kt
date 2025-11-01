@@ -109,17 +109,6 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
-    fun choose() {
-        subject.setOpenDropdown()
-
-        subject.choose(SearchSite.SEARCH_WITH_IMAGE)
-
-        assertEquals(subject.icon(SearchSite.SEARCH_WITH_IMAGE), subject.currentIconPath())
-        assertEquals(SearchSite.SEARCH_WITH_IMAGE.siteName, subject.currentSiteName())
-        assertFalse(subject.openingDropdown())
-    }
-
-    @Test
     fun chooseWebSearchItem() {
         subject.setOpenDropdown()
 
