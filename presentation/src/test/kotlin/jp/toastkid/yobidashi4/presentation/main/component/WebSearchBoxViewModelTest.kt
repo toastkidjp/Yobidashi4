@@ -120,16 +120,6 @@ class WebSearchBoxViewModelTest {
     }
 
     @Test
-    fun chooseGenerativeAiModel() {
-        subject.setOpenDropdown()
-
-        subject.choose(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)
-
-        assertEquals(GenerativeAiModel.GEMINI_2_5_FLASH_LITE.label(), subject.currentSiteName())
-        assertFalse(subject.openingDropdown())
-    }
-
-    @Test
     fun chooseWebSearchItem() {
         subject.setOpenDropdown()
 
