@@ -155,7 +155,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun inputHistories(): List<String> = inputHistoryService.inputHistories(inputHistories)
 
-    fun shouldShowInputHistory() = inputHistoryService.shouldShowInputHistory(inputHistories)
+    fun shouldShowInputHistory(): Boolean = inputHistoryService.shouldShowInputHistory(inputHistories)
 
     fun putText(text: String?) {
         val textFieldValue = inputHistoryService.make(text) ?: return
