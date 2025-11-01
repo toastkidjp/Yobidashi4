@@ -16,7 +16,6 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -37,7 +36,6 @@ class WebSearchBoxKtTest {
         every { anyConstructed<WebSearchBoxViewModel>().setOpenDropdown() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().closeDropdown() } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().choose(any<WebSearchItem>()) } just Runs
-        every { anyConstructed<WebSearchBoxViewModel>().choose(any<GenerativeAiModel>()) } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().start() } just Runs
         val mutableStateListOf = mutableStateListOf<WebSearchItem>()
         SearchSite.entries.map { WebSearchItem.fromSearchSite(it) }.forEach { mutableStateListOf.add(it) }
