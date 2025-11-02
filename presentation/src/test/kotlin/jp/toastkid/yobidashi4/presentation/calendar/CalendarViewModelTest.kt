@@ -203,7 +203,7 @@ class CalendarViewModelTest {
 
     @Test
     fun month() {
-        viewModel.moveMonth(2)
+        viewModel.moveMonth(5)
 
         val month = viewModel.month()
 
