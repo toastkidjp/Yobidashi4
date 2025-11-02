@@ -223,10 +223,6 @@ class MainMenuViewModel : KoinComponent {
         return viewModel.tabs.size > 1
     }
 
-    fun moveTabIndex(i: Int) {
-        viewModel.moveTabIndex(i)
-    }
-
     fun moveNextTab() {
         viewModel.moveTabIndex(1)
     }
