@@ -79,6 +79,14 @@ class AggregationBoxViewModel : KoinComponent {
         mutableStateOf(TextFieldValue(it, TextRange(it.length)))
     }
 
+    private val useExactMatch = mutableStateOf(true)
+
+    fun useExactMatch() = useExactMatch.value
+
+    fun setExactMatch(boolean: Boolean) {
+        useExactMatch.value = boolean
+    }
+
     private val openDropdown =  mutableStateOf(false)
 
     fun focusingModifier() = Modifier.focusRequester(focusRequester)
@@ -138,10 +146,15 @@ class AggregationBoxViewModel : KoinComponent {
     fun keyword() = keyword.value
 
     fun onSearch() {
-        val query = getQuery()
-        if (query.isBlank()) {
+        val queryCandidate = getQuery()
+        if (queryCandidate.isBlank()) {
             return
         }
+
+        val query = if (useExactMatch.value && !queryCandidate.startsWith("\"") && !queryCandidate.endsWith("\""))
+            "\"$queryCandidate\""
+        else
+            queryCandidate
 
         if (requireSecondInput()) {
             keywordHistoryService.add(query)
