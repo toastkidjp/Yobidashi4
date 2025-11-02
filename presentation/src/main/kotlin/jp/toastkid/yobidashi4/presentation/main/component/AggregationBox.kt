@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -140,6 +141,13 @@ internal fun AggregationBox() {
                     .clickable(onClick = viewModel::openHistory)
                     .padding(start = 4.dp)
             )
+
+            Checkbox(
+                viewModel.useExactMatch(),
+                onCheckedChange = viewModel::setExactMatch
+            )
+
+            Text("Use exact match")
         }
     }
 
