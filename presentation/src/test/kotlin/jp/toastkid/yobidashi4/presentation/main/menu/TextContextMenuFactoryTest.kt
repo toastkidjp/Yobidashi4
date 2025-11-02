@@ -25,6 +25,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class TextContextMenuFactoryTest {
 
@@ -111,8 +113,13 @@ class TextContextMenuFactoryTest {
 
 
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
-    @Test
-    fun getSecondaryClickItemCase() {
+    @ParameterizedTest
+    @CsvSource(
+        "secondary, false",
+        "'', true"
+    )
+    fun getSecondaryClickItemCase(secondaryClickItem: String, inverted: Boolean) {
+        every { mainViewModel.getSecondaryClickItem() } returns secondaryClickItem
         mockkConstructor(LinkBehaviorService::class)
         every { anyConstructed<LinkBehaviorService>().invoke(any(), any()) } just Runs
         every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
@@ -125,6 +132,12 @@ class TextContextMenuFactoryTest {
                 textContextMenu.Area(textManager, state) {
 
                 }
+            }
+
+            if (inverted) {
+                onNode(hasText("Open")).assertDoesNotExist()
+                onNode(hasText("Open background")).assertDoesNotExist()
+                return@runDesktopComposeUiTest
             }
 
             onNode(hasText("Open")).performClick()
@@ -132,29 +145,6 @@ class TextContextMenuFactoryTest {
 
             onNode(hasText("Open background")).performClick()
             verify { anyConstructed<LinkBehaviorService>().invoke(any(), true) }
-        }
-    }
-
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
-    @Test
-    fun getSecondaryClickItemWithEmpty() {
-        every { mainViewModel.getSecondaryClickItem() } returns ""
-        mockkConstructor(LinkBehaviorService::class)
-        every { anyConstructed<LinkBehaviorService>().invoke(any(), any()) } just Runs
-        every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
-
-        val textContextMenu = textContextMenuFactory.invoke()
-        assertNotNull(textContextMenu)
-
-        runDesktopComposeUiTest {
-            setContent {
-                textContextMenu.Area(textManager, state) {
-
-                }
-            }
-
-            onNode(hasText("Open")).assertDoesNotExist()
-            onNode(hasText("Open background")).assertDoesNotExist()
         }
     }
 
