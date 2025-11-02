@@ -19,6 +19,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
+import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
@@ -45,6 +46,9 @@ class MainScaffoldKtTest {
     private lateinit var mainViewModel: MainViewModel
 
     @MockK
+    private lateinit var setting: Setting
+
+    @MockK
     private lateinit var articlesReaderService: ArticlesReaderService
 
     @MockK
@@ -58,6 +62,7 @@ class MainScaffoldKtTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { setting } bind(Setting::class)
                     single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                 }
@@ -81,6 +86,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.selected } returns mutableStateOf(0)
         every { mainViewModel.currentTab() } returns ConverterToolTab()
         every { mainViewModel.tabs } returns mutableListOf()
+        every { setting.chatApiKey() } returns "test-key"
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
