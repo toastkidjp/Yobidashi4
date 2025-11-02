@@ -88,7 +88,6 @@ class WebSearchBoxViewModel : KoinComponent {
         val toString = calculator.invoke(query.value.text)?.let(formatter::format)
         result.value = when {
             toString == null -> ""
-            toString.endsWith(".0") -> toString.substring(0, toString.lastIndexOf("."))
             else -> toString
         }
 
