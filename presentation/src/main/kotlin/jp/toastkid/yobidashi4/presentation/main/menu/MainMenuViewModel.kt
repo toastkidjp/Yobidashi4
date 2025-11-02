@@ -227,6 +227,14 @@ class MainMenuViewModel : KoinComponent {
         viewModel.moveTabIndex(i)
     }
 
+    fun moveNextTab() {
+        viewModel.moveTabIndex(1)
+    }
+
+    fun movePreviousTab() {
+        viewModel.moveTabIndex(-1)
+    }
+
     fun tabCount(): Int {
         return viewModel.tabs.size
     }
