@@ -598,12 +598,21 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun moveTabIndex() {
+    fun movePreviousTab() {
         every { mainViewModel.moveTabIndex(any()) } just Runs
 
-        subject.moveTabIndex(11)
+        subject.movePreviousTab()
 
-        verify { mainViewModel.moveTabIndex(11) }
+        verify { mainViewModel.moveTabIndex(-1) }
+    }
+
+    @Test
+    fun moveNextTab() {
+        every { mainViewModel.moveTabIndex(any()) } just Runs
+
+        subject.moveNextTab()
+
+        verify { mainViewModel.moveTabIndex(1) }
     }
 
     @Test
