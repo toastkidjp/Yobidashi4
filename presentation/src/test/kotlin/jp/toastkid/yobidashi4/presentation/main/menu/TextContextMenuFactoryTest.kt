@@ -113,7 +113,6 @@ class TextContextMenuFactoryTest {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun getSecondaryClickItemCase() {
-        every { mainViewModel.getSecondaryClickItem() } returns "secondary"
         mockkConstructor(LinkBehaviorService::class)
         every { anyConstructed<LinkBehaviorService>().invoke(any(), any()) } just Runs
         every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
@@ -133,6 +132,29 @@ class TextContextMenuFactoryTest {
 
             onNode(hasText("Open background")).performClick()
             verify { anyConstructed<LinkBehaviorService>().invoke(any(), true) }
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
+    @Test
+    fun getSecondaryClickItemWithEmpty() {
+        every { mainViewModel.getSecondaryClickItem() } returns ""
+        mockkConstructor(LinkBehaviorService::class)
+        every { anyConstructed<LinkBehaviorService>().invoke(any(), any()) } just Runs
+        every { state.status } returns ContextMenuState.Status.Open(Rect(0f, 0f, 1f, 1f))
+
+        val textContextMenu = textContextMenuFactory.invoke()
+        assertNotNull(textContextMenu)
+
+        runDesktopComposeUiTest {
+            setContent {
+                textContextMenu.Area(textManager, state) {
+
+                }
+            }
+
+            onNode(hasText("Open")).assertDoesNotExist()
+            onNode(hasText("Open background")).assertDoesNotExist()
         }
     }
 
