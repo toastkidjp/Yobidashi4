@@ -229,7 +229,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                     onClick = viewModel::movePreviousTab
                 )
 
-                Item("Move next tab", icon = painterResource(Res.drawable.ic_forward), shortcut = KeyShortcut(Key.PageDown, ctrl = true), onClick = viewModel::moveNextTab)
+                Item(
+                    "Move next tab",
+                    icon = painterResource(Res.drawable.ic_forward),
+                    shortcut = KeyShortcut(Key.PageDown, ctrl = true),
+                    onClick = viewModel::moveNextTab
+                )
             }
 
             Item(
