@@ -176,7 +176,7 @@ class WebSearchBoxViewModel : KoinComponent {
             focusRequester().requestFocus()
         }
 
-        SearchSite.entries.map { WebSearchItem.fromSearchSite(it) }
+        SearchSite.entries.map(WebSearchItem::fromSearchSite)
             .forEach(items::add)
 
         if (setting.chatApiKey().isNullOrBlank().not()) {
