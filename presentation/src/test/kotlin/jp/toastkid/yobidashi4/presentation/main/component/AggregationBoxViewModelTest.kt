@@ -288,11 +288,19 @@ class AggregationBoxViewModelTest {
 
     @ParameterizedTest
     @CsvSource(
-        "\"Test, \"Test",
-        "Test\", Test\"",
-        "\"Test\", \"Test\""
+        "false, \"Test, \"Test",
+        "false, Test\", Test\"",
+        "false, \"Test\", \"Test\"",
+        "true, \"Test, \"Test",
+        "true, Test\", Test\"",
+        "true, \"Test\", \"Test\"",
+        "true, Test, Test"
     )
-    fun onSearchWith(input: String, expected: String) {
+    fun onSearchWith(setExactMatchToFalse: Boolean, input: String, expected: String) {
+        if (setExactMatchToFalse) {
+            subject.setExactMatch(false)
+        }
+
         subject.onDateInputValueChange(TextFieldValue(input))
         val capturingSlot = slot<String>()
 
