@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -34,6 +35,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -281,6 +284,23 @@ class AggregationBoxViewModelTest {
         subject.choose(subject.categories().last())
 
         assertTrue(subject.requireSecondInput())
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "\"Test, \"Test",
+        "Test\", Test\"",
+        "\"Test\", \"Test\""
+    )
+    fun onSearchWith(input: String, expected: String) {
+        subject.onDateInputValueChange(TextFieldValue(input))
+        val capturingSlot = slot<String>()
+
+        subject.onSearch()
+
+        verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
+        verify { anyConstructed<AggregationInvoker>().invoke(any(), capture(capturingSlot)) }
+        assertEquals(expected, capturingSlot.captured)
     }
 
     @Test
