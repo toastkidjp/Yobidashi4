@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -10,6 +8,10 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.slf4j.LoggerFactory
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
 
 @Single
 class AsynchronousArticleIndexerServiceImplementation : AsynchronousArticleIndexerService, KoinComponent {
@@ -27,8 +29,13 @@ class AsynchronousArticleIndexerServiceImplementation : AsynchronousArticleIndex
 
         CoroutineScope(dispatcher).launch {
             val indexer = FullTextSearchIndexer(indexFolder)
-            indexer.createIndex(dataFolder)
-            indexer.close()
+            try {
+                indexer.createIndex(dataFolder)
+            } catch (e: IOException) {
+                LoggerFactory.getLogger(javaClass).error("Indexing error", e)
+            } finally {
+                indexer.close()
+            }
         }
     }
 
