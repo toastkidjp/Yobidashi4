@@ -296,7 +296,7 @@ class AggregationBoxViewModelTest {
         "true, \"Test\", \"Test\"",
         "true, Test, Test"
     )
-    fun onSearchWith(setExactMatchToFalse: Boolean, input: String, expected: String) {
+    fun onSearchWithCheckingExactmatchBehavior(setExactMatchToFalse: Boolean, input: String, expected: String) {
         if (setExactMatchToFalse) {
             subject.setExactMatch(false)
         }
