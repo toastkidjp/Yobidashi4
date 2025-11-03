@@ -85,11 +85,8 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun onValueChange(it: TextFieldValue) {
         query.value = it
-        val toString = calculator.invoke(query.value.text)?.let(formatter::format)
-        result.value = when {
-            toString == null -> ""
-            else -> toString
-        }
+
+        result.value = calculator.invoke(query.value.text)?.let(formatter::format) ?: ""
 
         inputHistoryService.filter(inputHistories, it.text)
     }
