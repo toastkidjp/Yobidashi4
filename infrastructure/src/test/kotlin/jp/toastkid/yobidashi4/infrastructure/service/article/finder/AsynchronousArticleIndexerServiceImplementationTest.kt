@@ -10,8 +10,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +23,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Path
 
 class AsynchronousArticleIndexerServiceImplementationTest {
 
@@ -74,6 +75,15 @@ class AsynchronousArticleIndexerServiceImplementationTest {
         subject.invoke(Dispatchers.Unconfined)
 
         verify { anyConstructed<FullTextSearchIndexer>().createIndex(any()) }
+        verify { anyConstructed<FullTextSearchIndexer>().close() }
+    }
+
+    @Test
+    fun exceptionCase() {
+        every { anyConstructed<FullTextSearchIndexer>().createIndex(any()) } throws IOException("Test")
+
+        subject.invoke(Dispatchers.Unconfined)
+
         verify { anyConstructed<FullTextSearchIndexer>().close() }
     }
 
