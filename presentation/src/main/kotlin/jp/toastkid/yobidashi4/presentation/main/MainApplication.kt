@@ -47,10 +47,12 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
         object : KoinComponent {
             val viewModel: MainViewModel by inject()
             val ioContextProvider: IoContextProvider by inject()
+            val notification: ScheduledNotification by inject()
         }
     }
     val mainViewModel = remember { koin.viewModel }
     val ioContextProvider = remember { koin.ioContextProvider }
+    val notification = remember { koin.notification }
 
     AppTheme(darkTheme = mainViewModel.darkMode()) {
         MainTray()
@@ -81,10 +83,6 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
             SlideshowWindow().openWindow(path, mainViewModel::closeSlideshow)
         }
     }
-
-    val notification = object : KoinComponent {
-        val notification: ScheduledNotification by inject()
-    }.notification
 
     LaunchedEffect(Unit) {
         withContext(ioContextProvider()) {
