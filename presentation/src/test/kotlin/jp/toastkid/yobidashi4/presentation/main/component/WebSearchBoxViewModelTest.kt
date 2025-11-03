@@ -118,30 +118,22 @@ class WebSearchBoxViewModelTest {
         assertFalse(subject.openingDropdown())
     }
 
-    @Test
-    fun onValueChange() {
-        subject.onValueChange(TextFieldValue("1+2"))
 
-        assertEquals("1+2", subject.query().text)
-        assertEquals("3", subject.result())
+    @ParameterizedTest
+    @CsvSource(
+        "1+2, 3",
+        "1*0.5, 0.5",
+        "1.2+1.8, 3",
+        "1/0, ∞",
+        "10000000, '10,000,000'",
+        "1., 1",
+        "12.0, 12"
+    )
+    fun onValueChange(input: String, expected: String) {
+        subject.onValueChange(TextFieldValue(input))
 
-        subject.onValueChange(TextFieldValue("1*0.5"))
-        assertEquals("0.5", subject.result())
-
-        subject.onValueChange(TextFieldValue("1.2+1.8"))
-        assertEquals("3", subject.result())
-
-        subject.onValueChange(TextFieldValue("1/0"))
-        assertEquals("∞", subject.result())
-
-        subject.onValueChange(TextFieldValue("10000000"))
-        assertEquals("10,000,000", subject.result())
-
-        subject.onValueChange(TextFieldValue("1."))
-        assertEquals("1", subject.result())
-
-        subject.onValueChange(TextFieldValue("12.0"))
-        assertEquals("12", subject.result())
+        assertEquals(input, subject.query().text)
+        assertEquals(expected, subject.result())
 
         subject.clearInput()
 
