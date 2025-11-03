@@ -145,13 +145,16 @@ class AggregationBoxViewModel : KoinComponent {
 
     fun keyword() = keyword.value
 
+    private fun shouldSurroundDoubleQuote(queryCandidate: String): Boolean =
+        useExactMatch.value && !queryCandidate.startsWith("\"") && !queryCandidate.endsWith("\"")
+
     fun onSearch() {
         val queryCandidate = getQuery()
         if (queryCandidate.isBlank()) {
             return
         }
 
-        val query = if (useExactMatch.value && !queryCandidate.startsWith("\"") && !queryCandidate.endsWith("\""))
+        val query = if (shouldSurroundDoubleQuote(queryCandidate))
             "\"$queryCandidate\""
         else
             queryCandidate
