@@ -7,5 +7,4 @@ data class CalendarDate(
     val dayOfWeek: DayOfWeek,
     val label: List<String> = emptyList(),
     val offDay: Boolean = false
-) {
-}
+)
