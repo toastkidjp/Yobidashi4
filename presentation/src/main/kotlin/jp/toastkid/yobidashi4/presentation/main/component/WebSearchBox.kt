@@ -88,7 +88,9 @@ internal fun WebSearchBox() {
                                 Image(
                                     painterResource(it.icon),
                                     contentDescription = it.label,
-                                    colorFilter = ColorFilter.tint(if (it.useTint) MaterialTheme.colors.secondary else Color.Transparent),
+                                    colorFilter = ColorFilter.tint(
+                                        if (it.useTint) MaterialTheme.colors.secondary else Color.Transparent
+                                    ),
                                     modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
                                         viewModel.choose(it)
                                     }
