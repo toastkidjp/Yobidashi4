@@ -29,6 +29,7 @@ import org.jetbrains.compose.resources.DrawableResource
 data class WebSearchItem(
     val label: String,
     val icon: DrawableResource,
+    val useTint: Boolean,
     val action: (MainViewModel, String) -> Unit
 ) {
 
@@ -38,16 +39,17 @@ data class WebSearchItem(
             return WebSearchItem(
                 generativeAiModel.label(),
                 ChatModelIconMapper().invoke(generativeAiModel),
-                { viewModel, query ->
-                    viewModel.askGenerativeAi(query, generativeAiModel)
-                }
-            )
+                true,
+            ) { viewModel, query ->
+                viewModel.askGenerativeAi(query, generativeAiModel)
+            }
         }
 
         fun fromSearchSite(searchSite: SearchSite): WebSearchItem {
             return WebSearchItem(
                 searchSite.siteName,
                 icon(searchSite),
+                false,
                 { viewModel, query ->
                     viewModel.openUrl(
                         searchSite.make(query, (viewModel.currentTab() as? WebTab)?.url()).toString(),
