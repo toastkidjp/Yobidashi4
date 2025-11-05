@@ -74,6 +74,8 @@ class WebSearchBoxViewModel : KoinComponent {
         return selectedSite.value.label
     }
 
+    fun currentTint() = selectedSite.value.useTint
+
     fun containsSwingContent(): Boolean {
         return viewModel.currentTab() is WebTab
     }
