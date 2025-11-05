@@ -5,6 +5,6 @@ data class LoanPayment(
     val paymentSchedule: List<PaymentDetail>
 ) {
 
-    fun totalInterestAmount() = paymentSchedule.sumOf { paymentDetail -> paymentDetail.interest }.toLong()
+    fun totalInterestAmount() = paymentSchedule.sumOf(PaymentDetail::interest).toLong()
 
 }
