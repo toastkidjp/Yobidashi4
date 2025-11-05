@@ -70,7 +70,9 @@ internal fun WebSearchBox() {
                     Image(
                         painterResource(viewModel.currentIconPath()),
                         contentDescription = viewModel.currentSiteName(),
-                        colorFilter = ColorFilter.tint(if (viewModel.currentTint()) MaterialTheme.colors.secondary else Color.Transparent),
+                        colorFilter = ColorFilter.tint(
+                            if (viewModel.currentTint()) MaterialTheme.colors.secondary else Color.Transparent
+                        ),
                         modifier = Modifier.size(64.dp).padding(8.dp)
                     )
                 }
