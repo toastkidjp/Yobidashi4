@@ -178,7 +178,7 @@ class WebSearchBoxViewModel : KoinComponent {
             .forEach(items::add)
 
         if (setting.chatApiKey().isNullOrBlank().not()) {
-            GenerativeAiModel.entries.map { WebSearchItem.from(it) }
+            GenerativeAiModel.entries.map(WebSearchItem::from)
                 .forEach { items.add(it) }
         }
 
