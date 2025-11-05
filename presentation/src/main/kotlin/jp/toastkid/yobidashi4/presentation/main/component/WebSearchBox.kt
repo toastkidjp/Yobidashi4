@@ -62,7 +62,9 @@ internal fun WebSearchBox() {
             )
 
             Box(
-                modifier = Modifier.clickable(onClick = viewModel::setOpenDropdown).semantics { contentDescription = "Switch dropdown menu." }
+                modifier = Modifier
+                    .clickable(onClick = viewModel::setOpenDropdown)
+                    .semantics { contentDescription = "Switch dropdown menu." }
             ) {
                 Surface(elevation = 4.dp) {
                     Image(
