@@ -28,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -66,6 +68,7 @@ internal fun WebSearchBox() {
                     Image(
                         painterResource(viewModel.currentIconPath()),
                         contentDescription = viewModel.currentSiteName(),
+                        colorFilter = ColorFilter.tint(if (viewModel.currentTint()) MaterialTheme.colors.secondary else Color.Transparent),
                         modifier = Modifier.size(64.dp).padding(8.dp)
                     )
                 }
@@ -81,6 +84,7 @@ internal fun WebSearchBox() {
                                 Image(
                                     painterResource(it.icon),
                                     contentDescription = it.label,
+                                    colorFilter = ColorFilter.tint(if (it.useTint) MaterialTheme.colors.secondary else Color.Transparent),
                                     modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
                                         viewModel.choose(it)
                                     }
