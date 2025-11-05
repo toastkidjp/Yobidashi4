@@ -91,9 +91,12 @@ internal fun WebSearchBox() {
                                     colorFilter = ColorFilter.tint(
                                         if (it.useTint) MaterialTheme.colors.secondary else Color.Transparent
                                     ),
-                                    modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
-                                        viewModel.choose(it)
-                                    }
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .padding(horizontal = 8.dp)
+                                        .clickable {
+                                            viewModel.choose(it)
+                                        }
                                 )
                             }
                         }
