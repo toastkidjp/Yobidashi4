@@ -179,7 +179,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
         if (setting.chatApiKey().isNullOrBlank().not()) {
             GenerativeAiModel.entries.map(WebSearchItem::from)
-                .forEach { items.add(it) }
+                .forEach(items::add)
         }
 
         val webTab = viewModel.currentTab() as? WebTab ?: return
