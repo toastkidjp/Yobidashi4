@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +17,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.Dp
@@ -34,6 +35,7 @@ internal fun HoverHighlightDropdownMenuItem(
     fontSize: TextUnit = 16.sp,
     drawableResource: DrawableResource? = null,
     iconSize: Dp = 24.dp,
+    useTint: Boolean = true,
     onClick: () -> Unit
 ) {
     val cursorOn = remember { mutableStateOf(false) }
@@ -62,10 +64,10 @@ internal fun HoverHighlightDropdownMenuItem(
             modifier = Modifier.padding(4.dp)
         ) {
             if (drawableResource != null) {
-                Icon(
+                Image(
                     painter = painterResource(drawableResource),
                     contentDescription = labelText,
-                    tint = fontColor.value,
+                    colorFilter = if (useTint) ColorFilter.tint(fontColor.value) else null,
                     modifier = Modifier.size(iconSize)
                 )
             }
