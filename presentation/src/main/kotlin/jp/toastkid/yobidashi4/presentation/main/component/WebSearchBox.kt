@@ -108,6 +108,7 @@ internal fun WebSearchBox() {
                         HoverHighlightDropdownMenuItem(
                             it.label,
                             drawableResource = it.icon,
+                            useTint = it.useTint,
                             iconSize = 48.dp
                         ) {
                             viewModel.choose(it)
