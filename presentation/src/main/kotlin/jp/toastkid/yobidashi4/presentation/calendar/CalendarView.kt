@@ -193,7 +193,10 @@ private fun TopComponent(
         }
 
         Button(onClick = moveToCurrentMonth, modifier = Modifier.padding(8.dp)) {
-            Text("Current month", modifier = Modifier.padding(8.dp))
+            Text(
+                "Current month",
+                modifier = Modifier.padding(8.dp)
+            )
         }
     }
 }
