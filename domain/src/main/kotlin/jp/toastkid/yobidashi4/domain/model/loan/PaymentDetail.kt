@@ -11,5 +11,4 @@ data class PaymentDetail(
     val principal: Double,
     val interest: Double,
     val amount: Long
-) {
-}
+)
