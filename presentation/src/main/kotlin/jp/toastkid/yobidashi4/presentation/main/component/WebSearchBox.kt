@@ -77,9 +77,7 @@ internal fun WebSearchBox() {
                     Image(
                         painterResource(viewModel.currentIconPath()),
                         contentDescription = viewModel.currentSiteName(),
-                        colorFilter = ColorFilter.tint(
-                            if (viewModel.currentTint()) MaterialTheme.colors.secondary else Color.Transparent
-                        ),
+                        colorFilter = if (viewModel.currentTint()) ColorFilter.tint(MaterialTheme.colors.secondary) else null,
                         modifier = Modifier.size(64.dp).padding(8.dp)
                     )
                 }
