@@ -15,6 +15,8 @@ class InputHistoryService(private val context: String) : KoinComponent {
 
     private val repository: InputHistoryRepository by inject(parameters = { ParametersHolder(mutableListOf(context)) })
 
+    private val cache: MutableList<String> = mutableListOf()
+
     fun all(items: MutableList<InputHistory>) {
         items.clear()
         items.addAll(repository.list())
@@ -40,8 +42,6 @@ class InputHistoryService(private val context: String) : KoinComponent {
 
         return TextFieldValue("$query ", TextRange(query.length + 1))
     }
-
-    private val cache: MutableList<String> = mutableListOf()
 
     fun inputHistories(items: List<InputHistory>): List<String> {
         if (cache.size != items.size) {
