@@ -59,7 +59,7 @@ class InputHistoryService(private val context: String) : KoinComponent {
         items.clear()
         repository.clear()
         viewModel.showSnackbar("It has done clear!", "Undo", {
-            swap.forEach { repository.add(it) }
+            swap.forEach(repository::add)
             items.addAll(swap.takeLast(5))
         })
     }
