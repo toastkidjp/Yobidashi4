@@ -41,7 +41,7 @@ class OozumoTemplateTest {
 
     @Test
     fun aroundMonths() {
-        val months = (1..12).map { subject.invoke(LocalDate.of(2024, it, 20)) }.filterNotNull()
+        val months = (1..12).mapNotNull { subject.invoke(LocalDate.of(2024, it, 20)) }
         assertEquals(6, months.size)
         months.forEach { assertTrue(it.startsWith("## 大相撲")) }
     }
