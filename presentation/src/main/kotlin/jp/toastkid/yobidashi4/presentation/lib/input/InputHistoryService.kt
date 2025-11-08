@@ -41,7 +41,16 @@ class InputHistoryService(private val context: String) : KoinComponent {
         return TextFieldValue("$query ", TextRange(query.length + 1))
     }
 
-    fun inputHistories(items: List<InputHistory>): List<String> = items.map { it.word }
+    private val cache: MutableList<String> = mutableListOf()
+
+    fun inputHistories(items: List<InputHistory>): List<String> {
+        if (cache.size != items.size) {
+            cache.clear()
+            items.map { it.word }.forEach { cache.add(it) }
+        }
+
+        return cache
+    }
 
     fun shouldShowInputHistory(items: List<InputHistory>): Boolean = items.isNotEmpty()
 
