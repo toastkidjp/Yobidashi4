@@ -38,7 +38,7 @@ class InputHistoryService(private val context: String) : KoinComponent {
             return null
         }
 
-        return TextFieldValue("${query} ", TextRange(query.length + 1))
+        return TextFieldValue("$query ", TextRange(query.length + 1))
     }
 
     fun inputHistories(items: List<InputHistory>): List<String> = items.map { it.word }
