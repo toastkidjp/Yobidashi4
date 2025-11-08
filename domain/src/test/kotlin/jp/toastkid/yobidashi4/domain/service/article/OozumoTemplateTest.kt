@@ -1,11 +1,11 @@
 package jp.toastkid.yobidashi4.domain.service.article
 
-import java.time.LocalDate
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 class OozumoTemplateTest {
 
@@ -35,7 +35,7 @@ class OozumoTemplateTest {
     @Test
     fun aroundDays() {
         (14..28).map { LocalDate.of(2024, 7, it) }.forEach {
-            assertTrue(subject.invoke(it)?.contains("大相撲七月場所") ?: false)
+            assertTrue(subject.invoke(it)?.contains("大相撲七月場所") == true)
         }
     }
 
