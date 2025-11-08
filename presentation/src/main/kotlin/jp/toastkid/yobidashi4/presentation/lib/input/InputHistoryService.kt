@@ -46,7 +46,7 @@ class InputHistoryService(private val context: String) : KoinComponent {
     fun inputHistories(items: List<InputHistory>): List<String> {
         if (cache.size != items.size) {
             cache.clear()
-            items.map { it.word }.forEach { cache.add(it) }
+            items.map(InputHistory::word).forEach { cache.add(it) }
         }
 
         return cache
