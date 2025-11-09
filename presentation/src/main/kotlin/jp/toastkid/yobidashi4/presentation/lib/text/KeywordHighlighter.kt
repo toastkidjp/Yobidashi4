@@ -33,7 +33,9 @@ class KeywordHighlighter {
                 style = SpanStyle(
                     color = Color(0xff64B5F6),
                     textDecoration = TextDecoration.Underline
-                ), start = annotateStart, end = annotateStart + title.length
+                ),
+                start = annotateStart,
+                end = annotateStart + title.length
             )
 
             // attach a string annotation that stores a URL to the text "link"
