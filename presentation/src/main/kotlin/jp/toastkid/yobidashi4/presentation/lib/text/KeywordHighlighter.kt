@@ -19,6 +19,11 @@ class KeywordHighlighter {
         textDecoration = TextDecoration.Underline
     )
 
+    private val style = SpanStyle(
+        color = Color(0xFFFFFFFF),
+        background = Color(0xFF444499)
+    )
+
     operator fun invoke(text: String, finderTarget: String? = null) = buildAnnotatedString {
         var lastIndex = 0
         val matcher = internalLinkPattern.matcher(text)
@@ -66,11 +71,6 @@ class KeywordHighlighter {
             }
 
             val buildString = toAnnotatedString().text
-
-            val style = SpanStyle(
-                color = Color(0xFFFFFFFF),
-                background = Color(0xFF444499)
-            )
 
             val finderMatcher = pattern.matcher(buildString)
             while (finderMatcher.find()) {
