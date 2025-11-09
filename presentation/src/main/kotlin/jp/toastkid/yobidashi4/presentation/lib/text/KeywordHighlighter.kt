@@ -62,13 +62,15 @@ class KeywordHighlighter {
 
             val buildString = toAnnotatedString().text
 
+            val style = SpanStyle(
+                color = Color(0xFFFFFFFF),
+                background = Color(0xFF444499)
+            )
+
             val finderMatcher = pattern.matcher(buildString)
             while (finderMatcher.find()) {
                 addStyle(
-                    style = SpanStyle(
-                        color = Color(0xFFFFFFFF),
-                        background = Color(0xFF444499)
-                    ),
+                    style = style,
                     start = finderMatcher.start(),
                     end = finderMatcher.end()
                 )
