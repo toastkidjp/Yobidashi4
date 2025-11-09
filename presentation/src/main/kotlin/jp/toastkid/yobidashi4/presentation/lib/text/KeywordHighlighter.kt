@@ -68,7 +68,9 @@ class KeywordHighlighter {
                     style = SpanStyle(
                         color = Color(0xFFFFFFFF),
                         background = Color(0xFF444499)
-                    ), start = finderMatcher.start(), end = finderMatcher.end()
+                    ),
+                    start = finderMatcher.start(),
+                    end = finderMatcher.end()
                 )
             }
         }
