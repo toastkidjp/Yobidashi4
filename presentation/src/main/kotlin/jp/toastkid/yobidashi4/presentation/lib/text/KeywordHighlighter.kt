@@ -7,6 +7,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import org.slf4j.LoggerFactory
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 import kotlin.math.min
@@ -55,6 +56,7 @@ class KeywordHighlighter {
             val pattern = try {
                 Pattern.compile(finderTarget)
             } catch (e: PatternSyntaxException) {
+                LoggerFactory.getLogger(javaClass).warn("Pattern compilation error", e)
                 return@buildAnnotatedString
             }
 
