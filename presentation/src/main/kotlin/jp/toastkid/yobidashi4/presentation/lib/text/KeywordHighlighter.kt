@@ -29,11 +29,13 @@ class KeywordHighlighter {
 
             val annotateStart = length
             append(title)
+
+            val underLineStyle = SpanStyle(
+                color = Color(0xff64B5F6),
+                textDecoration = TextDecoration.Underline
+            )
             addStyle(
-                style = SpanStyle(
-                    color = Color(0xff64B5F6),
-                    textDecoration = TextDecoration.Underline
-                ),
+                style = underLineStyle,
                 start = annotateStart,
                 end = annotateStart + title.length
             )
