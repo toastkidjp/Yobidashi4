@@ -22,7 +22,7 @@ class OozumoTemplateTest {
         assertTrue(subject.invoke(LocalDate.of(2024, 1, 14))?.startsWith("## 大相撲一月場所 初日") == true)
         assertTrue(subject.invoke(LocalDate.of(2024, 1, 22))?.startsWith("## 大相撲一月場所 九日目") == true)
         val finalDate = subject.invoke(LocalDate.of(2024, 1, 28))
-        assertTrue(finalDate?.startsWith("## 大相撲一月場所 千秋楽") ?: false)
+        assertTrue(finalDate?.startsWith("## 大相撲一月場所 千秋楽") == true)
         assertTrue(finalDate?.contains("### 三賞") ?: false)
         assertTrue(finalDate?.contains("| 殊勲賞") ?: false)
         assertTrue(finalDate?.contains("| 敢闘賞") ?: false)
