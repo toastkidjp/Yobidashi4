@@ -14,6 +14,11 @@ import kotlin.math.min
 
 class KeywordHighlighter {
 
+    private val underLineStyle = SpanStyle(
+        color = Color(0xff64B5F6),
+        textDecoration = TextDecoration.Underline
+    )
+
     operator fun invoke(text: String, finderTarget: String? = null) = buildAnnotatedString {
         var lastIndex = 0
         val matcher = internalLinkPattern.matcher(text)
@@ -30,10 +35,6 @@ class KeywordHighlighter {
             val annotateStart = length
             append(title)
 
-            val underLineStyle = SpanStyle(
-                color = Color(0xff64B5F6),
-                textDecoration = TextDecoration.Underline
-            )
             addStyle(
                 style = underLineStyle,
                 start = annotateStart,
