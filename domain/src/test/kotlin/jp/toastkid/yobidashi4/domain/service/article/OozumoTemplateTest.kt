@@ -24,7 +24,7 @@ class OozumoTemplateTest {
         val finalDate = subject.invoke(LocalDate.of(2024, 1, 28))
         assertTrue(finalDate?.startsWith("## 大相撲一月場所 千秋楽") == true)
         assertTrue(finalDate?.contains("### 三賞") == true)
-        assertTrue(finalDate?.contains("| 殊勲賞") ?: false)
+        assertTrue(finalDate?.contains("| 殊勲賞") == true)
         assertTrue(finalDate?.contains("| 敢闘賞") ?: false)
         assertTrue(finalDate?.contains("| 技能賞") ?: false)
         assertTrue(finalDate?.contains("### これより三役") ?: false)
