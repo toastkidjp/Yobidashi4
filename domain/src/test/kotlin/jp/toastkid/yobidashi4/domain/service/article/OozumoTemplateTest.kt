@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 
 class OozumoTemplateTest {
@@ -30,6 +32,16 @@ class OozumoTemplateTest {
         assertTrue(finalDate?.contains("### これより三役") == true)
         assertNull(subject.invoke(LocalDate.of(2024, 1, 29)))
         assertNull(subject.invoke(LocalDate.of(2024, 2, 15)))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "2024,1,9",
+        "2024,1,29",
+        "2024,2,15"
+    )
+    fun nullCases(year: Int, month: Int, date: Int) {
+        assertNull(subject.invoke(LocalDate.of(year, month, date)))
     }
 
     @Test
