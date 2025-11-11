@@ -27,7 +27,7 @@ class OozumoTemplateTest {
         assertTrue(finalDate?.contains("| 殊勲賞") == true)
         assertTrue(finalDate?.contains("| 敢闘賞") == true)
         assertTrue(finalDate?.contains("| 技能賞") == true)
-        assertTrue(finalDate?.contains("### これより三役") ?: false)
+        assertTrue(finalDate?.contains("### これより三役") == true)
         assertNull(subject.invoke(LocalDate.of(2024, 1, 29)))
         assertNull(subject.invoke(LocalDate.of(2024, 2, 15)))
     }
