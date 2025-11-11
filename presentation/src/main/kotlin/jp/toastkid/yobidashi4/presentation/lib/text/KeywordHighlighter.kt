@@ -19,7 +19,7 @@ class KeywordHighlighter {
         textDecoration = TextDecoration.Underline
     )
 
-    private val style = SpanStyle(
+    private val matchedWordStyle = SpanStyle(
         color = Color(0xFFFFFFFF),
         background = Color(0xFF444499)
     )
@@ -75,7 +75,7 @@ class KeywordHighlighter {
             val finderMatcher = pattern.matcher(buildString)
             while (finderMatcher.find()) {
                 addStyle(
-                    style = style,
+                    style = matchedWordStyle,
                     start = finderMatcher.start(),
                     end = finderMatcher.end()
                 )
