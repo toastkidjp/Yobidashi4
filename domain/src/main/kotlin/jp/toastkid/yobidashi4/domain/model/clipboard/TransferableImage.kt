@@ -31,4 +31,5 @@ class TransferableImage(private val i: Image) : Transferable {
     override fun isDataFlavorSupported(flavor: DataFlavor): Boolean {
         return flavor == DataFlavor.imageFlavor
     }
+
 }
