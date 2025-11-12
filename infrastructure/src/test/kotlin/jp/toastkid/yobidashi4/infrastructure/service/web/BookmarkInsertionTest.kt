@@ -128,7 +128,7 @@ class BookmarkInsertionTest {
     }
 
     @Test
-    fun invoke4() {
+    fun invokeWithPageUrl() {
         val slot = slot<String>()
         every { mainViewModel.showSnackbar(capture(slot)) } just Runs
         every { params.linkUrl } returns null
