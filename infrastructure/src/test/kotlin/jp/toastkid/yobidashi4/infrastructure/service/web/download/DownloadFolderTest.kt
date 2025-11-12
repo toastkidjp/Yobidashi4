@@ -90,7 +90,7 @@ class DownloadFolderTest {
         expected: String
     ) {
         every { Files.exists(any()) } answers {
-            val path = this.args.get(0) as? Path ?: return@answers false
+            val path = this.args[0] as? Path ?: return@answers false
             return@answers path.name.endsWith("_000.png")
         }
 
