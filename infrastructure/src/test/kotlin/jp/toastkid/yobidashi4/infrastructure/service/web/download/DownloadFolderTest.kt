@@ -68,7 +68,7 @@ class DownloadFolderTest {
         assertNull(subject.assignAbsolutePath(null))
         val assignAbsolutePath = subject.assignAbsolutePath("test")
         assertTrue(assignAbsolutePath?.endsWith("test_000") == true)
-        assertTrue(subject.assignAbsolutePath("test.jpg")?.endsWith("test_000.jpg") ?: false)
+        assertTrue(subject.assignAbsolutePath("test.jpg")?.endsWith("test_000.jpg") == true)
     }
 
     @Test
