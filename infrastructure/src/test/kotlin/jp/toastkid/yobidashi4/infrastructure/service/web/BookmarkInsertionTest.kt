@@ -54,7 +54,7 @@ class BookmarkInsertionTest {
         startKoin {
             modules(
                 module {
-                    single() { mainViewModel }.bind(MainViewModel::class)
+                    single { mainViewModel }.bind(MainViewModel::class)
                     single() { repository }.bind(BookmarkRepository::class)
                 }
             )
