@@ -55,7 +55,7 @@ class BookmarkInsertionTest {
             modules(
                 module {
                     single { mainViewModel }.bind(MainViewModel::class)
-                    single() { repository }.bind(BookmarkRepository::class)
+                    single { repository }.bind(BookmarkRepository::class)
                 }
             )
         }
