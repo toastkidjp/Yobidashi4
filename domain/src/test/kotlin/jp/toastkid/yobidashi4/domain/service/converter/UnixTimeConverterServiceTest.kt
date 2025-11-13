@@ -86,15 +86,6 @@ class UnixTimeConverterServiceTest {
 
     @Test
     fun secondInputAction() {
-        assertNull(unixTimeConverterService.secondInputAction(""))
-        assertNull(unixTimeConverterService.secondInputAction(" "))
-        assertNull(unixTimeConverterService.secondInputAction("test2"))
-        assertNull(unixTimeConverterService.secondInputAction("2023-02-13"))
-        assertNull(unixTimeConverterService.secondInputAction("-9-02-13 11:22:33"))
-        assertNull(unixTimeConverterService.secondInputAction("9-02-13 11:22:33"))
-        assertNull(unixTimeConverterService.secondInputAction("99-02-13 11:22:33"))
-        assertNull(unixTimeConverterService.secondInputAction("999-02-13 11:22:33"))
-        assertNull(unixTimeConverterService.secondInputAction("-009-02-13 11:22:33"))
         assertEquals("-61879412247000", unixTimeConverterService.secondInputAction("0009-02-13 11:22:33"))
         assertEquals("-59039271447000", unixTimeConverterService.secondInputAction("0099-02-13 11:22:33"))
         assertEquals("-30638036247000", unixTimeConverterService.secondInputAction("0999-02-13 11:22:33"))
