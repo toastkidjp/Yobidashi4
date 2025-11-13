@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 import java.time.chrono.JapaneseDate
 
@@ -56,13 +58,16 @@ class JapaneseAgeConverterServiceTest {
         assertNotNull(japaneseAgeConverterService.defaultSecondInputValue())
     }
 
-    @Test
-    fun firstInputAction() {
-        assertEquals("35", japaneseAgeConverterService.firstInputAction("昭和63"))
-        assertEquals("33", japaneseAgeConverterService.firstInputAction("平成2"))
-        assertEquals("4", japaneseAgeConverterService.firstInputAction("令和1"))
-        assertEquals("113", japaneseAgeConverterService.firstInputAction("明治43"))
-        assertEquals("99", japaneseAgeConverterService.firstInputAction("大正13"))
+    @ParameterizedTest
+    @CsvSource(
+        "昭和63, 35",
+        "平成2, 33",
+        "令和1, 4",
+        "明治43, 113",
+        "大正13, 99"
+    )
+    fun firstInputAction(input: String, expected: String) {
+        assertEquals(expected, japaneseAgeConverterService.firstInputAction(input))
     }
 
     @Test
