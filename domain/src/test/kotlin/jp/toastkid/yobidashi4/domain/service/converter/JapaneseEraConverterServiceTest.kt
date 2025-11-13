@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class JapaneseEraConverterServiceTest {
 
@@ -45,14 +47,17 @@ class JapaneseEraConverterServiceTest {
         assertNotNull(japaneseEraConverterService.defaultSecondInputValue())
     }
 
-    @Test
-    fun firstInputAction() {
-        assertEquals("1874", japaneseEraConverterService.firstInputAction("明治6"))
-        assertEquals("1900", japaneseEraConverterService.firstInputAction("明治33"))
-        assertEquals("1914", japaneseEraConverterService.firstInputAction("大正2"))
-        assertEquals("1988", japaneseEraConverterService.firstInputAction("昭和63"))
-        assertEquals("2018", japaneseEraConverterService.firstInputAction("平成30"))
-        assertEquals("2019", japaneseEraConverterService.firstInputAction("令和1"))
+    @ParameterizedTest
+    @CsvSource(
+        "明治6, 1874",
+        "明治33, 1900",
+        "大正2, 1914",
+        "昭和63, 1988",
+        "平成30, 2018",
+        "令和1, 2019"
+    )
+    fun firstInputAction(input: String, expected: String) {
+        assertEquals(expected, japaneseEraConverterService.firstInputAction(input))
     }
 
     @Test
