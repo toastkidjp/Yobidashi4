@@ -60,14 +60,17 @@ class JapaneseEraConverterServiceTest {
         assertEquals(expected, japaneseEraConverterService.firstInputAction(input))
     }
 
-    @Test
-    fun firstInputActionIrregularInput() {
-        assertNull(japaneseEraConverterService.firstInputAction("明治5"))
-        assertNull(japaneseEraConverterService.firstInputAction("63"))
-        assertNull(japaneseEraConverterService.firstInputAction("63昭和"))
-        assertNull(japaneseEraConverterService.firstInputAction("昭和初期"))
-        assertNull(japaneseEraConverterService.firstInputAction("1984"))
-        assertNull(japaneseEraConverterService.firstInputAction("平成31"))
+    @ParameterizedTest
+    @CsvSource(
+        "明治5",
+        "63",
+        "63昭和",
+        "昭和初期",
+        "1984",
+        "平成31"
+    )
+    fun firstInputActionIrregularInput(input: String) {
+        assertNull(japaneseEraConverterService.firstInputAction(input))
     }
 
     @Test
