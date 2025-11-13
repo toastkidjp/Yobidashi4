@@ -52,17 +52,20 @@ class UnixTimeConverterServiceTest {
         assertNull(unixTimeConverterService.firstInputAction(input))
     }
 
-    @Test
-    fun firstInputAction() {
-        assertEquals("1970-01-01 09:00:02", unixTimeConverterService.firstInputAction("2000"))
-        assertEquals("1970-01-01 08:59:59", unixTimeConverterService.firstInputAction("-1"))
-        assertEquals("1970-01-01 09:00:00", unixTimeConverterService.firstInputAction("0"))
-        assertEquals("1970-01-01 09:00:00", unixTimeConverterService.firstInputAction("1"))
-        assertEquals("1970-01-01 09:00:00", unixTimeConverterService.firstInputAction("100"))
-        assertEquals("1975-01-27 08:50:33", unixTimeConverterService.firstInputAction("160012233432"))
-        assertEquals("2020-09-15 07:25:34", unixTimeConverterService.firstInputAction("1600122334320"))
-        assertEquals("2477-01-21 17:15:43", unixTimeConverterService.firstInputAction("16001223343200"))
-        assertEquals("7040-08-02 19:37:12", unixTimeConverterService.firstInputAction("160012233432000"))
+    @ParameterizedTest
+    @CsvSource(
+        "2000, 1970-01-01 09:00:02",
+        "-1, 1970-01-01 08:59:59",
+        "0, 1970-01-01 09:00:00",
+        "1, 1970-01-01 09:00:00",
+        "100, 1970-01-01 09:00:00",
+        "160012233432, 1975-01-27 08:50:33",
+        "1600122334320, 2020-09-15 07:25:34",
+        "16001223343200, 2477-01-21 17:15:43",
+        "160012233432000, 7040-08-02 19:37:12",
+    )
+    fun firstInputAction(input: String, expected: String) {
+        assertEquals(expected, unixTimeConverterService.firstInputAction(input))
     }
 
     @Test
