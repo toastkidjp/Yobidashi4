@@ -84,14 +84,17 @@ class UnixTimeConverterServiceTest {
         assertNull(unixTimeConverterService.secondInputAction(input))
     }
 
-    @Test
-    fun secondInputAction() {
-        assertEquals("-61879412247000", unixTimeConverterService.secondInputAction("0009-02-13 11:22:33"))
-        assertEquals("-59039271447000", unixTimeConverterService.secondInputAction("0099-02-13 11:22:33"))
-        assertEquals("-30638036247000", unixTimeConverterService.secondInputAction("0999-02-13 11:22:33"))
-        assertEquals("-217201047000", unixTimeConverterService.secondInputAction("1963-02-13 11:22:33"))
-        assertEquals("1676254953000", unixTimeConverterService.secondInputAction("2023-02-13 11:22:33"))
-        assertEquals("2370565353000", unixTimeConverterService.secondInputAction("2045-02-13 11:22:33"))
+    @ParameterizedTest
+    @CsvSource(
+        "0009-02-13 11:22:33, -61879412247000",
+        "0099-02-13 11:22:33, -59039271447000",
+        "0999-02-13 11:22:33, -30638036247000",
+        "1963-02-13 11:22:33, -217201047000",
+        "2023-02-13 11:22:33, 1676254953000",
+        "2045-02-13 11:22:33, 2370565353000",
+    )
+    fun secondInputAction(input: String, expected: String) {
+        assertEquals(expected, unixTimeConverterService.secondInputAction(input))
     }
 
     @Test
