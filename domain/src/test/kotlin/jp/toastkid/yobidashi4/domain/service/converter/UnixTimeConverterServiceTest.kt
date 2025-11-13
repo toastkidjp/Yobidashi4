@@ -5,7 +5,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,16 +43,9 @@ class UnixTimeConverterServiceTest {
 
     @ParameterizedTest
     @CsvSource(
-        "''",
-        "' '",
-        "test1"
-    )
-    fun firstInputActionReturnsNullCases(input: String) {
-        assertNull(unixTimeConverterService.firstInputAction(input))
-    }
-
-    @ParameterizedTest
-    @CsvSource(
+        "'', null",
+        "' ', null",
+        "test1, null",
         "-1, 1970-01-01 08:59:59",
         "0, 1970-01-01 09:00:00",
         "1, 1970-01-01 09:00:00",
@@ -63,8 +55,9 @@ class UnixTimeConverterServiceTest {
         "1600122334320, 2020-09-15 07:25:34",
         "16001223343200, 2477-01-21 17:15:43",
         "160012233432000, 7040-08-02 19:37:12",
+        nullValues = ["null"]
     )
-    fun firstInputAction(input: String, expected: String) {
+    fun firstInputAction(input: String, expected: String?) {
         assertEquals(expected, unixTimeConverterService.firstInputAction(input))
     }
 
