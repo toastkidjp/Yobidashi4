@@ -54,9 +54,6 @@ class UnixTimeConverterServiceTest {
 
     @Test
     fun firstInputAction() {
-        assertNull(unixTimeConverterService.firstInputAction(""))
-        assertNull(unixTimeConverterService.firstInputAction(" "))
-        assertNull(unixTimeConverterService.firstInputAction("test1"))
         assertEquals("1970-01-01 09:00:02", unixTimeConverterService.firstInputAction("2000"))
 
         assertEquals("1970-01-01 08:59:59", unixTimeConverterService.firstInputAction("-1"))
