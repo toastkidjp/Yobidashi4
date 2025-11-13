@@ -70,30 +70,24 @@ class UnixTimeConverterServiceTest {
 
     @ParameterizedTest
     @CsvSource(
-        "''",
-        "' '",
-        "test2",
-        "2023-02-13",
-        "-9-02-13 11:22:33",
-        "9-02-13 11:22:33",
-        "99-02-13 11:22:33",
-        "999-02-13 11:22:33",
-        "-009-02-13 11:22:33"
-    )
-    fun secondInputActionReturnsNullCases(input: String) {
-        assertNull(unixTimeConverterService.secondInputAction(input))
-    }
-
-    @ParameterizedTest
-    @CsvSource(
+        "'', null",
+        "' ', null",
+        "test2, null",
+        "2023-02-13, null",
+        "-9-02-13 11:22:33, null",
+        "9-02-13 11:22:33, null",
+        "99-02-13 11:22:33, null",
+        "999-02-13 11:22:33, null",
+        "-009-02-13 11:22:33, null",
         "0009-02-13 11:22:33, -61879412247000",
         "0099-02-13 11:22:33, -59039271447000",
         "0999-02-13 11:22:33, -30638036247000",
         "1963-02-13 11:22:33, -217201047000",
         "2023-02-13 11:22:33, 1676254953000",
         "2045-02-13 11:22:33, 2370565353000",
+        nullValues = ["null"]
     )
-    fun secondInputAction(input: String, expected: String) {
+    fun secondInputAction(input: String, expected: String?) {
         assertEquals(expected, unixTimeConverterService.secondInputAction(input))
     }
 
