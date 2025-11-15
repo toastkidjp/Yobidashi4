@@ -6,7 +6,6 @@ import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -86,18 +85,12 @@ class JapaneseAgeConverterServiceTest {
         "34, 平成1",
         "4, 令和1",
         "3, 令和2",
+        "2019, null",
+        "大正, null",
+        nullValues = ["null"]
     )
-    fun secondInputAction(input: String, expected: String) {
+    fun secondInputAction(input: String, expected: String?) {
         assertEquals(expected, japaneseAgeConverterService.secondInputAction(input))
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        "2019",
-        "大正",
-    )
-    fun secondInputActionIrregularCase(input: String) {
-        assertNull(japaneseAgeConverterService.secondInputAction(input))
     }
 
 }
