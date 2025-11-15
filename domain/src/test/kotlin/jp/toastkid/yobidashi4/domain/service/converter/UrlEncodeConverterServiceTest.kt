@@ -52,11 +52,14 @@ class UrlEncodeConverterServiceTest {
         assertEquals(expected, urlEncodeConverterService.firstInputAction(input))
     }
 
-    @Test
-    fun secondInputAction() {
-        assertEquals("", urlEncodeConverterService.secondInputAction(""))
-        assertEquals(" ", urlEncodeConverterService.secondInputAction(" "))
-        assertEquals("東京特許 許可局", urlEncodeConverterService.secondInputAction("%E6%9D%B1%E4%BA%AC%E7%89%B9%E8%A8%B1+%E8%A8%B1%E5%8F%AF%E5%B1%80"))
+    @ParameterizedTest
+    @CsvSource(
+        "'', ''",
+        "' ', ' '",
+        "%E6%9D%B1%E4%BA%AC%E7%89%B9%E8%A8%B1+%E8%A8%B1%E5%8F%AF%E5%B1%80, 東京特許 許可局"
+    )
+    fun secondInputAction(input: String, expected: String) {
+        assertEquals(expected, urlEncodeConverterService.secondInputAction(input))
     }
 
     @Test
