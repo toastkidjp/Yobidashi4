@@ -9,7 +9,7 @@ class ContextMenuTest {
     fun id() {
         val values = ContextMenu.entries
 
-        assertEquals(values.size, values.map { it.id }.toSet().size)
+        assertEquals(values.size, values.map(ContextMenu::id).toSet().size)
     }
 
 }
