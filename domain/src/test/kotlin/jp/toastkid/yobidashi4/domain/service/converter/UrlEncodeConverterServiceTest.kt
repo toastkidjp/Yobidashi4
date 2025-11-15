@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class UrlEncodeConverterServiceTest {
 
@@ -40,11 +42,14 @@ class UrlEncodeConverterServiceTest {
         assertTrue(urlEncodeConverterService.defaultSecondInputValue().isNotBlank())
     }
 
-    @Test
-    fun firstInputAction() {
-        assertEquals("", urlEncodeConverterService.firstInputAction(""))
-        assertEquals("+", urlEncodeConverterService.firstInputAction(" "))
-        assertEquals("%E6%9D%B1%E4%BA%AC%E7%89%B9%E8%A8%B1+%E8%A8%B1%E5%8F%AF%E5%B1%80", urlEncodeConverterService.firstInputAction("東京特許 許可局"))
+    @ParameterizedTest
+    @CsvSource(
+        "'', ''",
+        "' ', +",
+        "東京特許 許可局, %E6%9D%B1%E4%BA%AC%E7%89%B9%E8%A8%B1+%E8%A8%B1%E5%8F%AF%E5%B1%80"
+    )
+    fun firstInputAction(input: String, expected: String) {
+        assertEquals(expected, urlEncodeConverterService.firstInputAction(input))
     }
 
     @Test
