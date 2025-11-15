@@ -76,16 +76,19 @@ class JapaneseAgeConverterServiceTest {
         assertEquals(expected, japaneseAgeConverterService.firstInputAction(input))
     }
 
-    @Test
-    fun secondInputAction() {
-        assertEquals("大正14", japaneseAgeConverterService.secondInputAction("98"))
-        assertEquals("大正15", japaneseAgeConverterService.secondInputAction("97"))
-        assertEquals("昭和2", japaneseAgeConverterService.secondInputAction("96"))
-        assertEquals("昭和62", japaneseAgeConverterService.secondInputAction("36"))
-        assertEquals("昭和63", japaneseAgeConverterService.secondInputAction("35"))
-        assertEquals("平成1", japaneseAgeConverterService.secondInputAction("34"))
-        assertEquals("令和1", japaneseAgeConverterService.secondInputAction("4"))
-        assertEquals("令和2",  japaneseAgeConverterService.secondInputAction("3"))
+    @ParameterizedTest
+    @CsvSource(
+        "98, 大正14",
+        "97, 大正15",
+        "96, 昭和2",
+        "36, 昭和62",
+        "35, 昭和63",
+        "34, 平成1",
+        "4, 令和1",
+        "3, 令和2",
+    )
+    fun secondInputAction(input: String, expected: String) {
+        assertEquals(expected, japaneseAgeConverterService.secondInputAction(input))
     }
 
     @Test
