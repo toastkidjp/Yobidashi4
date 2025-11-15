@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.domain.service.converter
 
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
@@ -16,10 +15,6 @@ class JapaneseEraConverterServiceTest {
     @BeforeEach
     fun setUp() {
         japaneseEraConverterService = JapaneseEraConverterService()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test
