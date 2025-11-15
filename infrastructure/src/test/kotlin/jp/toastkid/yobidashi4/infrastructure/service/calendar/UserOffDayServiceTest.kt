@@ -6,10 +6,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -47,11 +49,14 @@ internal class UserOffDayServiceTest {
         unmockkAll()
     }
 
-    @Test
-    fun testInvoke() {
-        assertFalse(userOffDayService.invoke(12, 3))
-        assertFalse(userOffDayService.invoke(11, 29))
-        assertTrue(userOffDayService.invoke(12, 29))
+    @ParameterizedTest
+    @CsvSource(
+        "12, 3, false",
+        "11, 29, false",
+        "12, 29, true",
+    )
+    fun testInvoke(month: Int, day: Int, expected: Boolean) {
+        assertEquals(expected, userOffDayService.invoke(month, day))
     }
 
     @Test
