@@ -65,6 +65,7 @@ class TextFileViewerTabViewModelTest {
     @Test
     fun keyboardScrollAction() {
         subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, false)
+        subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, true)
     }
 
     @Test
