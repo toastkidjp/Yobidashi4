@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -17,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
@@ -33,25 +31,22 @@ import jp.toastkid.yobidashi4.domain.service.converter.TemperatureConverterServi
 import jp.toastkid.yobidashi4.domain.service.converter.TsuboCountConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.UnixTimeConverterService
 import jp.toastkid.yobidashi4.domain.service.converter.UrlEncodeConverterService
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 
 @Composable
 fun ConverterToolTabView() {
-    val state = rememberScrollState()
-    val keyboardScrollAction = KeyboardScrollAction(state)
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember { FocusRequester() }
+    val viewModel = remember { ConverterToolTabViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier
-            .onKeyEvent { keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed) }
-            .focusRequester(focusRequester)
+            .onKeyEvent { viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed) }
+            .focusRequester(viewModel.focusRequester())
             .semantics { contentDescription = "surface" }
     ) {
         Box {
-            Column(modifier = Modifier.padding(8.dp).verticalScroll(state).fillMaxWidth()) {
+            Column(modifier = Modifier.padding(8.dp).verticalScroll(viewModel.scrollState()).fillMaxWidth()) {
                 TwoValueConverterBox(UnixTimeConverterService())
                 TwoValueConverterBox(UrlEncodeConverterService())
                 TwoValueConverterBox(TatamiCountConverterService())
@@ -63,12 +58,12 @@ fun ConverterToolTabView() {
             }
 
             VerticalScrollbar(
-                adapter = rememberScrollbarAdapter(state),
+                adapter = rememberScrollbarAdapter(viewModel.scrollState()),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
 
             LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
+                viewModel.launch()
             }
         }
     }
