@@ -30,9 +30,9 @@ class EasterHolidayCalculatorTest {
         assertEquals(4, holidays[2][0].month)
         assertEquals(1, holidays[2][0].day)
 
-        val march = calculator.invoke(2024, 3)
+        val march = calculator.invoke(2016, 3)
         assertEquals(3, march[0].month)
-        assertEquals(29, march[0].day)
+        assertEquals(25, march[0].day)
     }
 
 }
