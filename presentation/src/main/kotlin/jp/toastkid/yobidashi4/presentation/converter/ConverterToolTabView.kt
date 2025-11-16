@@ -44,7 +44,10 @@ fun ConverterToolTabView() {
 
     ) {
         Box {
-            Column(modifier = Modifier.padding(8.dp).verticalScroll(viewModel.scrollState()).fillMaxWidth()
+            Column(modifier = Modifier
+                .padding(8.dp)
+                .verticalScroll(viewModel.scrollState())
+                .fillMaxWidth()
                 .onKeyEvent { viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed) }
                 .focusRequester(viewModel.focusRequester())
                 .semantics { contentDescription = "surface" }
