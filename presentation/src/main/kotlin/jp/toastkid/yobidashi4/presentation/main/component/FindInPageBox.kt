@@ -36,11 +36,13 @@ internal fun FindInPageBox() {
         modifier = Modifier.fillMaxWidth().onKeyEvent(viewModel::onKeyEvent)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("x", modifier = Modifier
-                .padding(start = 4.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable(onClick = viewModel::switchFind)
-                .padding(8.dp)
+            Text(
+                "x",
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .clickable(onClick = viewModel::switchFind)
+                    .padding(8.dp)
             )
 
             InputTextField(
