@@ -51,11 +51,13 @@ internal fun AggregationBox() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.wrapContentSize()
         ) {
-            Text("x", modifier = Modifier
-                .padding(start = 4.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                .clickable { viewModel.switchAggregationBox(false) }
-                .padding(8.dp)
+            Text(
+                "x",
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .clickable { viewModel.switchAggregationBox(false) }
+                    .padding(8.dp)
             )
 
             Box(
