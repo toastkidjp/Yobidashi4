@@ -106,7 +106,10 @@ internal fun FindInPageBox() {
             }
 
             if (viewModel.findStatus().isNotEmpty()) {
-                Text(viewModel.findStatus(), modifier = Modifier.padding(horizontal = 8.dp))
+                Text(
+                    viewModel.findStatus(),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
             }
 
             LaunchedEffect(viewModel.openFind()) {
