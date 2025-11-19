@@ -69,7 +69,7 @@ class TextFileViewerTabViewModel : KoinComponent {
 
         withContext(dispatcher) {
             try {
-                Files.readAllLines(path).forEach { textState.add(it) }
+                Files.readAllLines(path).forEach(textState::add)
             } catch (e: IOException) {
                 LoggerFactory.getLogger(javaClass).error("File read error.", e)
             }
