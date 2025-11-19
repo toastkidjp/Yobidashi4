@@ -90,9 +90,12 @@ internal fun AggregationBox() {
                                 Icon(
                                     painterResource(viewModel.icon(it)),
                                     contentDescription = it.label(),
-                                    modifier = Modifier.size(48.dp).padding(horizontal = 8.dp).clickable {
-                                        viewModel.choose(it)
-                                    },
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .padding(horizontal = 8.dp)
+                                        .clickable {
+                                            viewModel.choose(it)
+                                        },
                                     tint = MaterialTheme.colors.onPrimary
                                 )
                             }
