@@ -69,7 +69,7 @@ class WorldTimeViewModel : KoinComponent {
                 null
             }
         }
-            .forEach { items.add(it) }
+            .forEach(items::add)
     }
 
     fun label(timeZoneId: String): String {
