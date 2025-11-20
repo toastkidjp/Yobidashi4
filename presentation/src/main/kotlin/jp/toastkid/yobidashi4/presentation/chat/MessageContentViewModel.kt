@@ -10,6 +10,7 @@ import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.file.Path
@@ -37,10 +38,15 @@ class MessageContentViewModel : KoinComponent {
             return current
         }
 
-        val loadImage = loadImage(base64Image)
-        imageHolder.set(loadImage)
+        try {
+            val loadImage = loadImage(base64Image)
+            imageHolder.set(loadImage)
 
-        return imageHolder.get()
+            return imageHolder.get()
+        } catch (e: Exception) {
+            LoggerFactory.getLogger(javaClass).warn("Image loading error.", e)
+            return imageHolder.get()
+        }
     }
 
     fun storeImage(base64Image: String) {
