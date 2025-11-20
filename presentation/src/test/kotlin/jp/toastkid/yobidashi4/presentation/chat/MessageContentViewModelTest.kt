@@ -23,6 +23,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.awt.image.BufferedImage
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Path
 import java.util.Base64
@@ -81,6 +82,15 @@ class MessageContentViewModelTest {
         val image2 = subject.image("test")
 
         assertSame(image, image2)
+    }
+
+    @Test
+    fun imageThrowingErrorCase() {
+        every { ImageIO.read(any<InputStream>()) } throws IOException("test")
+        val image = subject.image("test")
+
+        assertEquals(1, image.width)
+        assertEquals(1, image.height)
     }
 
     @Test
