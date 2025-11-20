@@ -53,7 +53,7 @@ class MessageContentViewModel : KoinComponent {
 
     private fun loadImage(base64Image: String): ImageBitmap {
         return ByteArrayInputStream(Base64.getDecoder().decode(base64Image))
-            .use { ImageIO.read(it) }
+            .use(ImageIO::read)
             .toComposeImageBitmap()
     }
 
