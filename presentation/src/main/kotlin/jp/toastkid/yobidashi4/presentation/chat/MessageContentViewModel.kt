@@ -34,7 +34,7 @@ class MessageContentViewModel : KoinComponent {
 
     fun image(base64Image: String): ImageBitmap {
         val current = imageHolder.get()
-        if (current != null) {
+        if (current != EMPTY_IMAGE) {
             return current
         }
 
