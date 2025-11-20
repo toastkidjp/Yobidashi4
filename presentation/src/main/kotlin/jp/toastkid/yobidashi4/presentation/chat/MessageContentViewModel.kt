@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.ByteArrayInputStream
+import java.io.IOException
 import java.nio.file.Path
 import java.util.Base64
 import java.util.concurrent.atomic.AtomicReference
@@ -51,6 +52,7 @@ class MessageContentViewModel : KoinComponent {
             }
     }
 
+    @Throws(IllegalArgumentException::class, IOException::class)
     private fun loadImage(base64Image: String): ImageBitmap {
         return ByteArrayInputStream(Base64.getDecoder().decode(base64Image))
             .use(ImageIO::read)
