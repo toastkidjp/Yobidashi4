@@ -23,7 +23,7 @@ class MessageContentViewModel : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
-    private val imageHolder = AtomicReference<ImageBitmap>()
+    private val imageHolder = AtomicReference<ImageBitmap>(EMPTY_IMAGE)
 
     private val contextMenuState = ContextMenuState()
 
@@ -62,3 +62,5 @@ class MessageContentViewModel : KoinComponent {
     fun contextMenuState() = contextMenuState
 
 }
+
+private val EMPTY_IMAGE = ImageBitmap(1, 1)
