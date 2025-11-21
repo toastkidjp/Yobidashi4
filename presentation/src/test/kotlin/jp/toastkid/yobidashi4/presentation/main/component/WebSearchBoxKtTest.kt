@@ -38,7 +38,7 @@ class WebSearchBoxKtTest {
         every { anyConstructed<WebSearchBoxViewModel>().choose(any<WebSearchItem>()) } just Runs
         every { anyConstructed<WebSearchBoxViewModel>().start() } just Runs
         val mutableStateListOf = mutableStateListOf<WebSearchItem>()
-        SearchSite.entries.map { WebSearchItem.fromSearchSite(it) }.forEach { mutableStateListOf.add(it) }
+        SearchSite.entries.map(WebSearchItem::fromSearchSite).forEach { mutableStateListOf.add(it) }
         every { anyConstructed<WebSearchBoxViewModel>().items() } returns mutableStateListOf
     }
 
