@@ -57,8 +57,8 @@ class FileListViewModel : KoinComponent {
 
     fun start(paths: List<Path>) {
         articleStates.clear()
-        paths.map {
-            FileListItem(it, editable = editableExtensions.contains(it.extension)) }
+        paths
+            .map { FileListItem(it, editable = editableExtensions.contains(it.extension)) }
             .sortedByDescending(FileListItem::sortKey)
             .forEach(articleStates::add)
         completeItems.clear()
