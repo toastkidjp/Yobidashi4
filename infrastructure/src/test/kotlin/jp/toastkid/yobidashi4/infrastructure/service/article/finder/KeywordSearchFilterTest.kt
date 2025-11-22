@@ -38,7 +38,7 @@ class KeywordSearchFilterTest {
     }
 
     @Test
-    fun invoke2() {
+    fun invokeWithMultipleConstructorParameter() {
         val keywordSearchFilter = KeywordSearchFilter("test これ")
         assertTrue(keywordSearchFilter.invoke("This text exists for test."))
         assertTrue(keywordSearchFilter.invoke("これはtestです."))
