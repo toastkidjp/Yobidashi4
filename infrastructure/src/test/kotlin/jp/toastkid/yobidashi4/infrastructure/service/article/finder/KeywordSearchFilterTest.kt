@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -65,13 +64,18 @@ class KeywordSearchFilterTest {
         assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
-    @Test
-    fun invokeForExactMatch() {
+    @ParameterizedTest
+    @CsvSource(
+        "This text exists for test., true",
+        "これはtestです., false",
+        "これはtetです., false",
+        "'', false",
+        "null, false",
+        nullValues = ["null"]
+    )
+    fun invokeForExactMatch(input: String?, expected: Boolean) {
         val keywordSearchFilter = KeywordSearchFilter("\"for test\"")
-        assertTrue(keywordSearchFilter.invoke("This text exists for test."))
-        assertFalse(keywordSearchFilter.invoke("これはtestです."))
-        assertFalse(keywordSearchFilter.invoke("これはtetです."))
-        assertFalse(keywordSearchFilter.invoke(""))
+        assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
     @Test
