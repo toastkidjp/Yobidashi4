@@ -51,13 +51,18 @@ class KeywordSearchFilterTest {
         assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
-    @Test
-    fun invokeWithMultipleConstructorParameterForExactMatch() {
+    @ParameterizedTest
+    @CsvSource(
+        "This text exists for test., false",
+        "これはtestです., true",
+        "これはtetです., false",
+        "'', false",
+        "null, false",
+        nullValues = ["null"]
+    )
+    fun invokeWithMultipleConstructorParameterForExactMatch(input: String?, expected: Boolean) {
         val keywordSearchFilter = KeywordSearchFilter("test*これ*です")
-        assertFalse(keywordSearchFilter.invoke("This text exists for test."))
-        assertTrue(keywordSearchFilter.invoke("これはtestです."))
-        assertFalse(keywordSearchFilter.invoke("これはtetです."))
-        assertFalse(keywordSearchFilter.invoke(""))
+        assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
     @Test
