@@ -37,13 +37,18 @@ class KeywordSearchFilterTest {
         assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
-    @Test
-    fun invokeWithMultipleConstructorParameter() {
+    @ParameterizedTest
+    @CsvSource(
+        "This text exists for test., true",
+        "これはtestです., true",
+        "これはtetです., true",
+        "'', false",
+        "null, false",
+        nullValues = ["null"]
+    )
+    fun invokeWithMultipleConstructorParameter(input: String?, expected: Boolean) {
         val keywordSearchFilter = KeywordSearchFilter("test これ")
-        assertTrue(keywordSearchFilter.invoke("This text exists for test."))
-        assertTrue(keywordSearchFilter.invoke("これはtestです."))
-        assertTrue(keywordSearchFilter.invoke("これはtetです."))
-        assertFalse(keywordSearchFilter.invoke(""))
+        assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
     @Test
