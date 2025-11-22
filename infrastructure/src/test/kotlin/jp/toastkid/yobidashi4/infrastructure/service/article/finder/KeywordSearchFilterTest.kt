@@ -32,7 +32,7 @@ class KeywordSearchFilterTest {
         "null, false",
         nullValues = ["null"]
     )
-    fun invoke1(input: String?, expected: Boolean) {
+    fun invokeWithConstructorParameter(input: String?, expected: Boolean) {
         val keywordSearchFilter = KeywordSearchFilter("test")
         assertEquals(expected, keywordSearchFilter.invoke(input))
     }
