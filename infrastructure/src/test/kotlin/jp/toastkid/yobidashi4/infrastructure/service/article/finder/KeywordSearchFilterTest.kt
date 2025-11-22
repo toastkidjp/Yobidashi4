@@ -56,7 +56,7 @@ class KeywordSearchFilterTest {
     }
 
     @Test
-    fun invoke4() {
+    fun invokeForExactMatch() {
         val keywordSearchFilter = KeywordSearchFilter("\"for test\"")
         assertTrue(keywordSearchFilter.invoke("This text exists for test."))
         assertFalse(keywordSearchFilter.invoke("これはtestです."))
