@@ -1,19 +1,26 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class KeywordSearchFilterTest {
 
-    @Test
-    fun invoke() {
+    @ParameterizedTest
+    @CsvSource(
+        "This text exists for test., true",
+        "これはtestです., true",
+        "これはtetです., true",
+        "'', true",
+        "null, false",
+        nullValues = ["null"]
+    )
+    fun invoke(input: String?, expected: Boolean) {
         val keywordSearchFilter = KeywordSearchFilter(null)
-        assertTrue(keywordSearchFilter.invoke("This text exists for test."))
-        assertTrue(keywordSearchFilter.invoke("これはtestです."))
-        assertTrue(keywordSearchFilter.invoke("これはtetです."))
-        assertTrue(keywordSearchFilter.invoke(""))
-        assertFalse(keywordSearchFilter.invoke(null))
+        assertEquals(expected, keywordSearchFilter.invoke(input))
     }
 
     @Test
