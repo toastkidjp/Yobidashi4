@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import org.koin.core.annotation.Single
+import java.nio.file.Path
 
 @Single
 class FullTextArticleFinderImplementation : FullTextArticleFinder {
@@ -24,7 +24,7 @@ class FullTextArticleFinderImplementation : FullTextArticleFinder {
             .parallelStream()
             .forEach {
                 val lines = it["content"].split("\n")
-                val filteredList = lines.filter { line -> filter.invoke(line) }
+                val filteredList = lines.filter(filter::invoke)
                 if (filteredList.isNotEmpty()) {
                     aggregationResult.add(it["name"], filteredList)
                 }
