@@ -22,7 +22,7 @@ class IndexTargetFilter(private val indexDirectoryPath: Path) {
     private fun calculateLastUpdated() =
         Files.list(indexDirectoryPath)
             .filter { it.nameWithoutExtension.startsWith("segments_") }
-            .map { lastModifiedMs(it) }
+            .map(this::lastModifiedMs)
             .max(Comparator.naturalOrder())
             .orElseGet { 0L }
 
