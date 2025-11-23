@@ -15,14 +15,16 @@ class IndexTargetFilter(private val indexDirectoryPath: Path) {
         return Files.isDirectory(it).not()
                 && Files.isReadable(it)
                 && targetExtensions.contains(it.extension)
-                && Files.getLastModifiedTime(it).toMillis() > lastIndexed
+                && lastModifiedMs(it) > lastIndexed
     }
 
     private fun calculateLastUpdated() =
         Files.list(indexDirectoryPath)
             .filter { it.nameWithoutExtension.startsWith("segments_") }
-            .map { Files.getLastModifiedTime(it).toMillis() }
+            .map { lastModifiedMs(it) }
             .max(Comparator.naturalOrder())
             .orElseGet { 0L }
+
+    private fun lastModifiedMs(paths: Path): Long = Files.getLastModifiedTime(paths).toMillis()
 
 }
