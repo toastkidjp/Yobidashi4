@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.extension
@@ -25,6 +26,10 @@ class IndexTargetFilter(private val indexDirectoryPath: Path) {
             .max(Comparator.naturalOrder())
             .orElseGet { 0L }
 
-    private fun lastModifiedMs(paths: Path): Long = Files.getLastModifiedTime(paths).toMillis()
+    private fun lastModifiedMs(paths: Path): Long = try {
+        Files.getLastModifiedTime(paths).toMillis()
+    } catch (e: IOException) {
+        0L
+    }
 
 }
