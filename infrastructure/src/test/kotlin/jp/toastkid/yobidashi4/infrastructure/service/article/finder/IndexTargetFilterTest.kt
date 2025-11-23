@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
@@ -39,6 +40,9 @@ class IndexTargetFilterTest {
     private lateinit var segment2: Path
 
     @MockK
+    private lateinit var segmentExceptionCase: Path
+
+    @MockK
     private lateinit var notSegment: Path
 
     @BeforeEach
@@ -47,15 +51,17 @@ class IndexTargetFilterTest {
         mockkStatic(Files::class)
         every { Files.isDirectory(any()) } returns false
         every { Files.isReadable(any()) } returns true
-        every { Files.list(folder) } answers { Stream.of(segment1, notSegment, segment2) }
+        every { Files.list(folder) } answers { Stream.of(segment1, notSegment, segment2, segmentExceptionCase) }
         every { segment1.nameWithoutExtension } returns "segments_1"
         every { segment2.nameWithoutExtension } returns "segments_2"
         every { notSegment.nameWithoutExtension } returns "test"
+        every { segmentExceptionCase.nameWithoutExtension } returns "segments_3"
         every { item1.nameWithoutExtension } returns "item.txt"
         every { item2.nameWithoutExtension } returns "item.md"
         every { item3.nameWithoutExtension } returns "item.jar"
         every { Files.getLastModifiedTime(item1) } returns FileTime.fromMillis(4)
         every { Files.getLastModifiedTime(item2) } returns FileTime.fromMillis(3)
+        every { Files.getLastModifiedTime(segmentExceptionCase) } throws IOException()
         every { Files.getLastModifiedTime(segment1) } returns FileTime.fromMillis(3)
         every { Files.getLastModifiedTime(segment2) } returns FileTime.fromMillis(1)
         subject = IndexTargetFilter(folder)
