@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
-class KeywordSearchFilter(private val input: String?) {
+class KeywordSearchFilter(input: String?) {
 
     private val keywords: MutableSet<String> = mutableSetOf()
 
