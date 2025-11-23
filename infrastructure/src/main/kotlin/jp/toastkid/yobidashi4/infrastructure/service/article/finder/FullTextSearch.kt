@@ -20,7 +20,7 @@ import java.io.IOException
 import java.nio.file.Path
 import java.text.ParseException
 
-class FullTextSearch constructor(private val indexSearcher: IndexSearcher) {
+class FullTextSearch(private val indexSearcher: IndexSearcher) {
 
     private val queryParser: QueryParser = QueryParser("content", StandardAnalyzer())
 
