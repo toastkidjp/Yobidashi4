@@ -34,7 +34,7 @@ class KeywordSearchFilter(private val input: String?) {
         }
 
         return if (useAndSearch) {
-            keywords.all { actualKeyword -> text.contains(actualKeyword) }
+            keywords.all(text::contains)
         } else {
             keywords.any { actualKeyword -> text.contains(actualKeyword) }
         }
