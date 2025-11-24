@@ -1,9 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class TrimmingServiceTest {
 
@@ -24,19 +25,15 @@ class TrimmingServiceTest {
         )
     }
 
-    @Test
-    fun endWithLineBreak() {
-        assertEquals("test\n", trimmingService.invoke("test \n"))
-    }
-
-    @Test
-    fun testEmptyCase() {
-        assertEquals("", trimmingService.invoke(""))
-    }
-
-    @Test
-    fun testNullCase() {
-        assertNull(trimmingService.invoke(null))
+    @ParameterizedTest
+    @CsvSource(
+        "null, null",
+        "test \\n,test \\n",
+        "'', ''",
+        nullValues = ["null"],
+    )
+    fun testCases(input: String?, expected: String?) {
+        assertEquals(expected, trimmingService.invoke(input))
     }
 
 }
