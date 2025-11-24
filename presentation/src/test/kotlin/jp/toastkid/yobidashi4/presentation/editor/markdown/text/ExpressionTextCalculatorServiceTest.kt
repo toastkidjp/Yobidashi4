@@ -3,6 +3,8 @@ package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class ExpressionTextCalculatorServiceTest {
 
@@ -18,14 +20,18 @@ class ExpressionTextCalculatorServiceTest {
         assertEquals("4.4682\n", subject.invoke("2.2341*2\n"))
     }
 
-    @Test
-    fun invoke() {
-        assertEquals("4.4682", subject.invoke("2.2341*2"))
-        assertEquals("2", subject.invoke("1+1"))
-        assertEquals("51", subject.invoke("1500*0.03+6"))
-        assertEquals("525", subject.invoke("1500/3 + 25"))
-        assertEquals("525", subject.invoke("1,500/3 + 25"))
-        assertEquals("Good+day", subject.invoke("Good+day"))
-        assertEquals("11+(2", subject.invoke("11+(2"))
+    @ParameterizedTest
+    @CsvSource(
+        "2.2341*2, 4.4682",
+        "1+1, 2",
+        "1500*0.03+6, 51",
+        "1500/3 + 25, 525",
+        "1_500/3 + 25, 525",
+        "Good+day, Good+day",
+        "11+(2, 11+(2",
+    )
+    fun testInvoke(input: String, expected: String) {
+        assertEquals(expected, subject.invoke(input.replace("_", ",")))
     }
+
 }
