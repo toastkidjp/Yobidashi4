@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class InternalLinkSchemeTest {
 
@@ -76,4 +78,21 @@ class InternalLinkSchemeTest {
             internalLinkScheme.extract("https://internal/Clean%20Code")
         )
     }
+
+    @ParameterizedTest
+    @CsvSource(
+        "'', ''",
+        "' ', ' '",
+        "tomato, tomato",
+        "https://www.yahoo.co.jp, https://www.yahoo.co.jp",
+        "https://internal/tomato, tomato",
+        "https://internal/Clean%20Code, Clean Code"
+    )
+    fun extractCases(input: String, expected: String) {
+        assertEquals(
+            expected,
+            internalLinkScheme.extract(input)
+        )
+    }
+
 }
