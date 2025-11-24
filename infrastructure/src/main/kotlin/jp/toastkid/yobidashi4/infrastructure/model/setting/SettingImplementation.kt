@@ -100,6 +100,10 @@ class SettingImplementation : Setting {
         return properties.getProperty("editor_font_size")?.toIntOrNull() ?: 16
     }
 
+    override fun editorLineHeight(): Float {
+        return properties.getProperty("editor_line_height")?.toFloatOrNull() ?: 1.5f
+    }
+
     override fun editorConversionLimit(): Int {
         return properties.getProperty("editor_conversion_limit")?.toIntOrNull() ?: 4_500
     }
