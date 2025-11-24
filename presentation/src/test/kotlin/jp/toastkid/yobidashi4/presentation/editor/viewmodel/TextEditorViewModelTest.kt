@@ -76,6 +76,7 @@ class TextEditorViewModelTest {
             )
         }
         every { setting.editorConversionLimit() } returns 4500
+        every { setting.editorFontSize() } returns 16
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
         every { mainViewModel.darkMode() } returns true
         mockkConstructor(FindOrderReceiver::class)
@@ -344,6 +345,11 @@ class TextEditorViewModelTest {
     @Test
     fun getHighlightSize() {
         assertNotNull(viewModel.getHighlightSize())
+    }
+
+    @Test
+    fun fontSize() {
+        assertEquals(16, viewModel.fontSize())
     }
 
 }
