@@ -53,6 +53,7 @@ class SimpleTextEditorKtTest {
 
         every { mainViewModel.darkMode() } returns false
         every { setting.editorConversionLimit() } returns 3_000
+        every { setting.editorFontSize() } returns 16
 
         mockkConstructor(TextEditorViewModel::class)
         every { anyConstructed<TextEditorViewModel>().launchTab(any()) } just Runs
