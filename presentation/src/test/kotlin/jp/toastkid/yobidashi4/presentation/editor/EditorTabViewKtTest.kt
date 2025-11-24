@@ -47,6 +47,8 @@ class EditorTabViewKtTest {
         }
 
         every { setting.editorConversionLimit() } returns 4500
+        every { setting.editorFontSize() } returns 16
+        every { setting.editorLineHeight() } returns 1.5f
         every { mainViewModel.darkMode() } returns false
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
         every { mainViewModel.finderFlow() } returns emptyFlow()
