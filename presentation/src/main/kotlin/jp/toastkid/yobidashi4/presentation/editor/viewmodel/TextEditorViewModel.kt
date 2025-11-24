@@ -241,6 +241,8 @@ class TextEditorViewModel : KoinComponent {
         return "Character: ${formatter.format(count)}"
     }
 
+    fun fontSize() = setting.editorFontSize()
+
     fun dispose() {
         val currentText = content.value.text
         if (currentText.isNotEmpty()) {
