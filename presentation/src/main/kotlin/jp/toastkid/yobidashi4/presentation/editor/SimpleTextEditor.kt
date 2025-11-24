@@ -79,7 +79,7 @@ fun SimpleTextEditor(
                             ) {
                                 Text(
                                     lineNumberText,
-                                    fontSize = 16.sp,
+                                    fontSize = viewModel.fontSize().sp,
                                     fontFamily = FontFamily("MS Gothic"),
                                     textAlign = TextAlign.End,
                                     style = TextStyle(
@@ -98,7 +98,7 @@ fun SimpleTextEditor(
             },
             textStyle = TextStyle(
                 color = MaterialTheme.colors.onSurface,
-                fontSize = 16.sp,
+                fontSize = viewModel.fontSize().sp,
                 fontFamily = FontFamily("MS Gothic"),
                 lineHeight = 1.5.em,
                 lineHeightStyle = LineHeightStyle(
