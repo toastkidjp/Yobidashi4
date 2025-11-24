@@ -128,7 +128,7 @@ class TextEditorViewModel : KoinComponent {
 
     private val highlightSize = AtomicReference(Size(Float.MAX_VALUE, 37.em.value))
 
-    fun getHighlightSize() = highlightSize.get()
+    fun getHighlightSize(): Size = highlightSize.get()
 
     fun verticalScrollState() = verticalScrollState
 
