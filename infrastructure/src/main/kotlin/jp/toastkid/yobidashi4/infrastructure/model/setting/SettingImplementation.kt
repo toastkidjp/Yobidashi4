@@ -97,7 +97,7 @@ class SettingImplementation : Setting {
     }
 
     override fun editorFontSize(): Int {
-        return properties.getProperty("editor_font_size")?.toIntOrNull() ?: 14
+        return properties.getProperty("editor_font_size")?.toIntOrNull() ?: 16
     }
 
     override fun editorConversionLimit(): Int {
