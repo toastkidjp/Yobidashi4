@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class FinderMessageFactoryTest {
 
@@ -19,10 +21,17 @@ class FinderMessageFactoryTest {
         assertTrue(finderMessageFactory.invoke("", -1).isEmpty())
         assertTrue(finderMessageFactory.invoke("", 2).isEmpty())
         assertTrue(finderMessageFactory.invoke(" ", 2).isEmpty())
-        assertEquals("\"test\" was not found.", finderMessageFactory.invoke("test", -1))
-        assertEquals("\"test\" was not found.", finderMessageFactory.invoke("test", 0))
-        assertEquals("\"test\" was found. 1", finderMessageFactory.invoke("test", 1))
-        assertEquals("\"test\" was found. 2", finderMessageFactory.invoke("test", 2))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "test, -1, \"test\" was not found.",
+        "test, 0, \"test\" was not found.",
+        "test, 1, \"test\" was found. 1",
+        "test, 2, \"test\" was found. 2",
+    )
+    fun invokeWith(targetText: String, foundCount: Int, expected: String?) {
+        assertEquals(expected, finderMessageFactory.invoke(targetText, foundCount))
     }
 
 }
