@@ -418,7 +418,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun saveAllEditorTab() {
-        tabs.filterIsInstance<EditorTab>().forEach { editorTabFileStore(it) }
+        tabs.filterIsInstance<EditorTab>().forEach(editorTabFileStore::invoke)
     }
 
     override fun updateEditorContent(path: Path, text: CharSequence, caretPosition: Int, scroll: Double, resetEditing: Boolean) {
