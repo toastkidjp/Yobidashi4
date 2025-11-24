@@ -243,6 +243,8 @@ class TextEditorViewModel : KoinComponent {
 
     fun fontSize() = setting.editorFontSize()
 
+    fun lineHeight() = setting.editorLineHeight()
+
     fun dispose() {
         val currentText = content.value.text
         if (currentText.isNotEmpty()) {
