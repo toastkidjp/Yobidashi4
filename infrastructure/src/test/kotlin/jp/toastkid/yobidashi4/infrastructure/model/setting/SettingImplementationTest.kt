@@ -170,7 +170,7 @@ user_off_day=12/29,12/30
 
     @Test
     fun editorFontSize() {
-        assertEquals(14, subject.editorFontSize())
+        assertEquals(16, subject.editorFontSize())
 
         subject.setEditorFontSize(1)
 
@@ -182,7 +182,7 @@ user_off_day=12/29,12/30
 
         subject.update("editor_font_size", "test")
 
-        assertEquals(14, subject.editorFontSize())
+        assertEquals(16, subject.editorFontSize())
     }
 
     @Test
