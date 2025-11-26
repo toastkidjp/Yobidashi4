@@ -122,6 +122,11 @@ class MarkdownParser {
                 return@forEach
             }
 
+            if (line.startsWith("* ")) {
+                listLineBuilder.add(line)
+                return@forEach
+            }
+
             if (orderedListPrefixPattern.containsMatchIn(line)) {
                 listLineBuilder.setOrdered()
                 listLineBuilder.add(line)
