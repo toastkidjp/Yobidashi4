@@ -32,6 +32,10 @@ Description
 ### List
 - 1tab
 - 2tab
+
+### List
+* 1tab
+* 2tab
                 """
 
     @Test
@@ -41,7 +45,7 @@ Description
             true
         )
         assertTrue(codeString.text.endsWith("[EOF]"))
-        assertEquals(114, codeString.spanStyles.size)
+        assertEquals(141, codeString.spanStyles.size)
     }
 
     @Test
@@ -51,7 +55,7 @@ Description
             false
         )
         assertTrue(codeString.text.endsWith("[EOF]"))
-        assertEquals(114, codeString.spanStyles.size)
+        assertEquals(141, codeString.spanStyles.size)
     }
 
 }
