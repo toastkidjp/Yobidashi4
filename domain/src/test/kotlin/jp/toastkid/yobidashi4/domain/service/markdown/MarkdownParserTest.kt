@@ -58,6 +58,11 @@ S&P 500 and [VIX](https://www.yahoo.co.jp/indices/VIX:IND)
 - Beck
 - Chief
 
+## List
+* Aaron
+* Beck
+* Chief
+
 ## Ordered List
 1. Soba
 2. Udon
