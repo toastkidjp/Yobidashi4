@@ -13,12 +13,13 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.DayOfWeek
 
 class DayLabelViewModelTest {
@@ -72,13 +73,16 @@ class DayLabelViewModelTest {
         assertNotNull(subject.labelColor())
     }
 
-    @Test
-    fun useOffDayBackground() {
-        assertTrue(subject.useOffDayBackground(true, DayOfWeek.SUNDAY))
-        assertTrue(subject.useOffDayBackground(true, DayOfWeek.MONDAY))
-        assertTrue(subject.useOffDayBackground(false, DayOfWeek.SATURDAY))
-        assertTrue(subject.useOffDayBackground(false, DayOfWeek.SUNDAY))
-        assertFalse(subject.useOffDayBackground(false, DayOfWeek.TUESDAY))
+    @ParameterizedTest
+    @CsvSource(
+        "SUNDAY, true, true",
+        "MONDAY, true, true",
+        "SATURDAY, false, true",
+        "SUNDAY, false, true",
+        "TUESDAY, false, false",
+    )
+    fun useOffDayBackground(dayOfWeek: String, offDay: Boolean, expected: Boolean) {
+        assertEquals(expected, subject.useOffDayBackground(offDay, DayOfWeek.valueOf(dayOfWeek)))
     }
 
 }
