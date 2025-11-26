@@ -46,6 +46,10 @@ class EditorTheme {
             Regex("\\n-.*"),
             SpanStyle(Color(0xFF666239)),
             SpanStyle(Color(0xFFFFD54F))
+        ),EditorStyle(
+            Regex("\\n\\*.*"),
+            SpanStyle(Color(0xFF666239)),
+            SpanStyle(Color(0xFFFFD54F))
         )
     )
 
