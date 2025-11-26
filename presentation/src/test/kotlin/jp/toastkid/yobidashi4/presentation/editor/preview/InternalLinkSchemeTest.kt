@@ -1,8 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -42,13 +40,16 @@ class InternalLinkSchemeTest {
         )
     }
 
-    @Test
-    fun isInternalLink() {
-        assertFalse(internalLinkScheme.isInternalLink(""))
-        assertFalse(internalLinkScheme.isInternalLink(" "))
-        assertFalse(internalLinkScheme.isInternalLink("https://www.yahoo.co.jp"))
-        assertFalse(internalLinkScheme.isInternalLink("tomato"))
-        assertTrue(internalLinkScheme.isInternalLink("https://internal/tomato"))
+    @ParameterizedTest
+    @CsvSource(
+        "'', false",
+        "' ', false",
+        "https://www.yahoo.co.jp, false",
+        "tomato, false",
+        "https://internal/tomato, true",
+    )
+    fun isInternalLink(input: String, expected: Boolean) {
+        assertEquals(expected, internalLinkScheme.isInternalLink(input))
     }
 
     @ParameterizedTest
