@@ -16,7 +16,7 @@ class TrimmingServiceTest {
     }
 
     @Test
-    fun test() {
+    fun testMultilineCase() {
         val lineSeparator = "\n"
         assertEquals(
             "john${lineSeparator}aaa${lineSeparator}trimmed",
