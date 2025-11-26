@@ -17,7 +17,6 @@ class TrimmingServiceTest {
 
     @Test
     fun test() {
-        assertEquals("aaa", trimmingService.invoke("  aaa   "))
         val lineSeparator = "\n"
         assertEquals(
             "john${lineSeparator}aaa${lineSeparator}trimmed",
@@ -27,6 +26,7 @@ class TrimmingServiceTest {
 
     @ParameterizedTest
     @CsvSource(
+        "'  aaa   ', aaa",
         "null, null",
         "test \\n,test \\n",
         "'', ''",
