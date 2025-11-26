@@ -51,34 +51,6 @@ class InternalLinkSchemeTest {
         assertTrue(internalLinkScheme.isInternalLink("https://internal/tomato"))
     }
 
-    @Test
-    fun extract() {
-        assertEquals(
-            "",
-            internalLinkScheme.extract("")
-        )
-        assertEquals(
-            " ",
-            internalLinkScheme.extract(" ")
-        )
-        assertEquals(
-            "tomato",
-            internalLinkScheme.extract("tomato")
-        )
-        assertEquals(
-            "https://www.yahoo.co.jp",
-            internalLinkScheme.extract("https://www.yahoo.co.jp")
-        )
-        assertEquals(
-            "tomato",
-            internalLinkScheme.extract("https://internal/tomato")
-        )
-        assertEquals(
-            "Clean Code",
-            internalLinkScheme.extract("https://internal/Clean%20Code")
-        )
-    }
-
     @ParameterizedTest
     @CsvSource(
         "'', ''",
