@@ -5,8 +5,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class UserTemplateStreamReader {
+
+    private val userTemplatePath = Path.of("user/article_template.txt")
+
     operator fun invoke(): InputStream? {
-        val userTemplatePath = Path.of("user/article_template.txt")
         return if (Files.exists(userTemplatePath)) {
             Files.newInputStream(userTemplatePath)
         } else {
