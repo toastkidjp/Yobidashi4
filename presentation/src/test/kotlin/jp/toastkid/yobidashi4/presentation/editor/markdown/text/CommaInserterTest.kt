@@ -3,9 +3,9 @@ package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class CommaInserterTest {
 
@@ -17,16 +17,20 @@ class CommaInserterTest {
         MockKAnnotations.init(this)
     }
 
-    @Test
-    fun testInvoke() {
-        assertNull(commaInserter.invoke(null))
-        assertEquals("100", commaInserter.invoke("100"))
-        assertEquals("1,000", commaInserter.invoke("1000"))
-        assertEquals("556,090", commaInserter.invoke("556090"))
-        assertEquals("1,000,556,090", commaInserter.invoke("1000556090"))
-        assertEquals("10,556,090", commaInserter.invoke("10556090"))
-        assertEquals("1,556,090", commaInserter.invoke("1556090"))
-        assertEquals("ora,nge", commaInserter.invoke("orange"))
+    @ParameterizedTest
+    @CsvSource(
+        "null, null",
+        "100, 100",
+        "1000, 1_000",
+        "556090, 556_090",
+        "1000556090, 1_000_556_090",
+        "10556090, 10_556_090",
+        "1556090, 1_556_090",
+        "orange, ora_nge",
+        nullValues = ["null"]
+    )
+    fun testInvoke(input: String?, expected: String?) {
+        assertEquals(expected?.replace("_", ","), commaInserter.invoke(input))
     }
 
 }
