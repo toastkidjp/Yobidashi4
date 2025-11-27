@@ -49,14 +49,13 @@ data class WebSearchItem(
             return WebSearchItem(
                 searchSite.siteName,
                 icon(searchSite),
-                false,
-                { viewModel, query ->
-                    viewModel.openUrl(
-                        searchSite.make(query, (viewModel.currentTab() as? WebTab)?.url()).toString(),
-                        false
-                    )
-                }
-            )
+                false
+            ) { viewModel, query ->
+                viewModel.openUrl(
+                    searchSite.make(query, (viewModel.currentTab() as? WebTab)?.url()).toString(),
+                    false
+                )
+            }
         }
 
         private fun icon(searchSite: SearchSite) = when(searchSite) {
