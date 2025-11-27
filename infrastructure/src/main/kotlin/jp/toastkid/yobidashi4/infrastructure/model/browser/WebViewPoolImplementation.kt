@@ -61,7 +61,7 @@ class WebViewPoolImplementation : WebViewPool {
             return
         }
 
-        ArrayList(browsers.keys).forEach { dispose(it) }
+        ArrayList(browsers.keys).forEach(this::dispose)
         client.dispose()
         CefApp.getInstance().dispose()
     }
