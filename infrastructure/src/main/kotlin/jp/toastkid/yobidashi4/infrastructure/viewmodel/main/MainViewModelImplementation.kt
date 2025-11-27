@@ -373,7 +373,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             _tabs.addAll(snapshot)
             _selected.value = currentIndex
         })
-        val targetIds = _tabs.filterIsInstance<WebTab>().map { it.id() }
+        val targetIds = _tabs.filterIsInstance<WebTab>().map(WebTab::id)
         _tabs.clear()
         _selected.value = -1
         targetIds.forEach(webViewPool::dispose)
