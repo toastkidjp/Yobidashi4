@@ -10,7 +10,7 @@ class BlockQuotationTest {
     /**
      * Line separator.
      */
-    private val lineSeparator = System.getProperty("line.separator")
+    private val lineSeparator = System.lineSeparator()
 
     /**
      * Test object.
