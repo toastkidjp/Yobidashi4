@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi4.presentation.editor.preview
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -16,28 +14,15 @@ class InternalLinkSchemeTest {
         internalLinkScheme = InternalLinkScheme()
     }
 
-    @Test
-    fun makeLink() {
-        assertAll(
-            {
-                assertEquals(
-                    "[null](https://internal/null)",
-                    internalLinkScheme.makeLink(null)
-                )
-            },
-            {
-                assertEquals(
-                    "[tomato](https://internal/tomato)",
-                    internalLinkScheme.makeLink("tomato")
-                )
-            },
-            {
-                assertEquals(
-                    "[tomato 33](https://internal/tomato%2033)",
-                    internalLinkScheme.makeLink("tomato 33")
-                )
-            }
-        )
+    @ParameterizedTest
+    @CsvSource(
+        "null, [null](https://internal/null)",
+        "tomato, [tomato](https://internal/tomato)",
+        "tomato 33, [tomato 33](https://internal/tomato%2033)",
+        nullValues = ["null"],
+    )
+    fun makeLink(input: String?, expected: String) {
+        assertEquals(expected, internalLinkScheme.makeLink(input))
     }
 
     @ParameterizedTest
