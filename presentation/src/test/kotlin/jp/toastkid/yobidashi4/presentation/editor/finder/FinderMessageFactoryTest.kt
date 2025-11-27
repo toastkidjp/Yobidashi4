@@ -24,7 +24,7 @@ class FinderMessageFactoryTest {
         "test, 1, \"test\" was found. 1",
         "test, 2, \"test\" was found. 2",
     )
-    fun invokeWith(targetText: String, foundCount: Int, expected: String?) {
+    fun invokeWith(targetText: String, foundCount: Int, expected: String) {
         assertEquals(expected, finderMessageFactory.invoke(targetText, foundCount))
     }
 
