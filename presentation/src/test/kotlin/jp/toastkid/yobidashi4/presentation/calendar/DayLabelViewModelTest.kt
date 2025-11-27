@@ -60,12 +60,16 @@ class DayLabelViewModelTest {
         assertNull(subject.textColor(DayOfWeek.MONDAY, false, false))
     }
 
-    @Test
-    fun labelSize() {
-        assertEquals(12.sp, subject.labelSize(null))
-        assertEquals(12.sp, subject.labelSize(""))
-        assertEquals(11.sp, subject.labelSize(" "))
-        assertEquals(11.sp, subject.labelSize("test"))
+    @ParameterizedTest
+    @CsvSource(
+        "null, 12",
+        "'', 12",
+        "' ', 11",
+        "test, 11",
+        nullValues = ["null"]
+    )
+    fun labelSize(input: String?, expected: Int) {
+        assertEquals(expected.sp, subject.labelSize(input))
     }
 
     @Test
