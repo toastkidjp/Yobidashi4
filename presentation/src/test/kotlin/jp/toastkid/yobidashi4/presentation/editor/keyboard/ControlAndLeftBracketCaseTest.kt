@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -38,21 +37,14 @@ class ControlAndLeftBracketCaseTest {
     fun tearDown() {
     }
 
-    @Test
-    fun noop() {
-        assertFalse(subject.invoke(TextFieldValue(), 1, callback))
-        verify { callback wasNot Called }
-    }
-
-    @Test
-    fun noopExtractedNormalCharacter() {
-        assertFalse(subject.invoke(TextFieldValue("test"), 1, callback))
-        verify { callback wasNot Called }
-    }
-
-    @Test
-    fun noopExtractedNormal() {
-        assertFalse(subject.invoke(TextFieldValue("(test"), 0, callback))
+    @ParameterizedTest
+    @CsvSource(
+        "(test, 0",
+        "test, 1",
+        "'', 1"
+    )
+    fun noopCases(input: String, selectionStartIndex: Int) {
+        assertFalse(subject.invoke(TextFieldValue(input), selectionStartIndex, callback))
         verify { callback wasNot Called }
     }
 
