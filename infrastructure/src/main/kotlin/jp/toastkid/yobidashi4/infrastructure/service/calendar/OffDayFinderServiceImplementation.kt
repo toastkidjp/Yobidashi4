@@ -22,7 +22,13 @@ class OffDayFinderServiceImplementation : OffDayFinderService, KoinComponent {
 
     private val userOffDayService: UserOffDayService by inject()
 
-    override operator fun invoke(year: Int, month: Int, date: Int, dayOfWeek: DayOfWeek, useUserOffDay: Boolean): Boolean {
+    override operator fun invoke(
+        year: Int,
+        month: Int,
+        date: Int,
+        dayOfWeek: DayOfWeek,
+        useUserOffDay: Boolean
+    ): Boolean {
         if (month == 6) {
             return false
         }
