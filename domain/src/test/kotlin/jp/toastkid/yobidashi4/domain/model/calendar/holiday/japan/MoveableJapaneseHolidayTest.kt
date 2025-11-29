@@ -56,7 +56,7 @@ internal class MoveableJapaneseHolidayTest {
                 Assertions.assertEquals(23, sportsDay.day)
             },
             {
-                Assertions.assertEquals("体育の日", MoveableJapaneseHoliday.find(2019, 10).first().title)
+                assertEquals("体育の日", MoveableJapaneseHoliday.find(2019, 10).first().title)
             },
             {
                 Assertions.assertTrue(MoveableJapaneseHoliday.find(2020, 10).isEmpty())
