@@ -24,7 +24,7 @@ internal class MoveableJapaneseHolidayTest {
         assertAll(
             {
                 val agedDay2013 = MoveableJapaneseHoliday.find(2013, 9).first()
-                Assertions.assertEquals(MoveableJapaneseHoliday.RESPECT_FOR_THE_AGED_DAY.title, agedDay2013.title)
+                assertEquals(MoveableJapaneseHoliday.RESPECT_FOR_THE_AGED_DAY.title, agedDay2013.title)
                 Assertions.assertEquals(16, agedDay2013.day)
             },
             {
