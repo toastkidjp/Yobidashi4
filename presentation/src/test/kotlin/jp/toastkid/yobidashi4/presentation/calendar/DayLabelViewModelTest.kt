@@ -62,6 +62,10 @@ class DayLabelViewModelTest {
     )
     fun textColor(dayOfWeek: DayOfWeek, offDay: Boolean, today: Boolean) {
         assertNotNull(subject.textColor(dayOfWeek, offDay, today))
+    }
+
+    @Test
+    fun noopTextColorCase() {
         assertNull(subject.textColor(DayOfWeek.MONDAY, false, false))
     }
 
