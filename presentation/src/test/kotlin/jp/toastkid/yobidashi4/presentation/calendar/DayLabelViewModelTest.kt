@@ -15,7 +15,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -37,11 +36,14 @@ class DayLabelViewModelTest {
         unmockkAll()
     }
 
-    @Test
-    fun makeText() {
-        assertTrue(subject.makeText(-1).isEmpty())
-        assertEquals("1", subject.makeText(1))
-        assertEquals("31", subject.makeText(31))
+    @ParameterizedTest
+    @CsvSource(
+        "-1, ''",
+        "1, 1",
+        "31, 31",
+    )
+    fun makeText(input: Int, expected: String) {
+        assertEquals(expected, subject.makeText(input))
     }
 
     @Test
