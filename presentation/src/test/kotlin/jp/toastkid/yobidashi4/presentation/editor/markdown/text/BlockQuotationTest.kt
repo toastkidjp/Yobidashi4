@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class BlockQuotationTest {
 
@@ -25,13 +27,14 @@ class BlockQuotationTest {
         quotation = BlockQuotation()
     }
 
-    @Test
-    fun testInvoke() {
-        assertEquals("> tomato", quotation("tomato"))
-        assertEquals(
-            "> 1. tomato$lineSeparator> 2. orange$lineSeparator> 3. apple",
-            quotation("1. tomato${lineSeparator}2. orange${lineSeparator}3. apple")
-        )
+
+    @ParameterizedTest
+    @CsvSource(
+        "tomato, > tomato",
+        "1. tomato\\n2. orange\\n3. apple, > 1. tomato\\n> 2. orange\\n> 3. apple"
+    )
+    fun test(input: String, expected: String) {
+        assertEquals(expected.replace("\\n", "\n"), quotation(input.replace("\\n", "\n")))
     }
 
     @Test
