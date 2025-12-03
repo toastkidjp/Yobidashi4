@@ -46,19 +46,22 @@ class DayLabelViewModelTest {
         assertEquals(expected, subject.makeText(input))
     }
 
-    @Test
-    fun textColor() {
-        assertNotNull(subject.textColor(DayOfWeek.SUNDAY, true, true))
-        assertNotNull(subject.textColor(DayOfWeek.SUNDAY, false, true))
-        assertNotNull(subject.textColor(DayOfWeek.SUNDAY, false, false))
-        assertNotNull(subject.textColor(DayOfWeek.SUNDAY, true, false))
-        assertNotNull(subject.textColor(DayOfWeek.SATURDAY, true, true))
-        assertNotNull(subject.textColor(DayOfWeek.SATURDAY, false, true))
-        assertNotNull(subject.textColor(DayOfWeek.SATURDAY, false, false))
-        assertNotNull(subject.textColor(DayOfWeek.SATURDAY, true, false))
-        assertNotNull(subject.textColor(DayOfWeek.MONDAY, true, true))
-        assertNotNull(subject.textColor(DayOfWeek.MONDAY, true, false))
-        assertNotNull(subject.textColor(DayOfWeek.MONDAY, false, true))
+    @ParameterizedTest
+    @CsvSource(
+        "SUNDAY, true, true",
+        "SUNDAY, false, true",
+        "SUNDAY, false, false",
+        "SUNDAY, true, false",
+        "SATURDAY, true, true",
+        "SATURDAY, false, true",
+        "SATURDAY, false, false",
+        "SATURDAY, true, false",
+        "MONDAY, true, true",
+        "MONDAY, true, false",
+        "MONDAY, false, true",
+    )
+    fun textColor(dayOfWeek: DayOfWeek, offDay: Boolean, today: Boolean) {
+        assertNotNull(subject.textColor(dayOfWeek, offDay, today))
         assertNull(subject.textColor(DayOfWeek.MONDAY, false, false))
     }
 
