@@ -32,15 +32,11 @@ class BlockQuotationTest {
     @CsvSource(
         "tomato, > tomato",
         "1. tomato\\n2. orange\\n3. apple, > 1. tomato\\n> 2. orange\\n> 3. apple",
-        "test\\n, > test\\n"
+        "test\\n, > test\\n",
+        "'', ''"
     )
     fun test(input: String, expected: String) {
         assertEquals(expected.replace("\\n", "\n"), quotation(input.replace("\\n", "\n")))
-    }
-
-    @Test
-    fun testInvokeWithEmptyInput() {
-        assertEquals("", quotation(""))
     }
 
     @Test
