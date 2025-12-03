@@ -47,10 +47,7 @@ class InternalLinkSchemeTest {
         "https://internal/Clean%20Code, Clean Code"
     )
     fun extractCases(input: String, expected: String) {
-        assertEquals(
-            expected,
-            internalLinkScheme.extract(input)
-        )
+        assertEquals(expected, internalLinkScheme.extract(input))
     }
 
 }
