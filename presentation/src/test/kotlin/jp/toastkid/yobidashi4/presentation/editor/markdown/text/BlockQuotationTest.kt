@@ -8,11 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource
 class BlockQuotationTest {
 
     /**
-     * Line separator.
-     */
-    private val lineSeparator = System.lineSeparator()
-
-    /**
      * Test object.
      */
     private lateinit var quotation: BlockQuotation
