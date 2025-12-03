@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.markdown.text
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -33,15 +31,12 @@ class BlockQuotationTest {
         "tomato, > tomato",
         "1. tomato\\n2. orange\\n3. apple, > 1. tomato\\n> 2. orange\\n> 3. apple",
         "test\\n, > test\\n",
-        "'', ''"
+        "'', ''",
+        "null, null",
+        nullValues = ["null"]
     )
-    fun test(input: String, expected: String) {
-        assertEquals(expected.replace("\\n", "\n"), quotation(input.replace("\\n", "\n")))
-    }
-
-    @Test
-    fun testInvokeWithNullInput() {
-        assertNull(quotation(null))
+    fun test(input: String?, expected: String?) {
+        assertEquals(expected?.replace("\\n", "\n"), quotation(input?.replace("\\n", "\n")))
     }
 
 }
