@@ -11,9 +11,9 @@ import java.net.URL
 
 @Single
 class WebIconLoaderServiceImplementation(
-    private val webIconDownloader: WebIconDownloader,
-    private val webIcon: WebIcon,
-    private val iconUrlFinder: IconUrlFinder
+    private val webIconDownloader: WebIconDownloader = WebIconDownloader(),
+    private val webIcon: WebIcon = WebIcon(),
+    private val iconUrlFinder: IconUrlFinder = IconUrlFinder()
 ) : WebIconLoaderService {
 
     override operator fun invoke(htmlSource: String, browserUrl: String?) {

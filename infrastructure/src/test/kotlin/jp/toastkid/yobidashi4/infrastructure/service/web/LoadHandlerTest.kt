@@ -15,9 +15,6 @@ import org.cef.callback.CefStringVisitor
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class LoadHandlerTest {
 
@@ -29,16 +26,9 @@ class LoadHandlerTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { webIconLoaderService } bind (WebIconLoaderService::class)
-                }
-            )
-        }
         every { webIconLoaderService.invoke(any(), any()) } just Runs
 
-        subject = LoadHandler()
+        subject = LoadHandler(webIconLoaderService)
     }
 
     @AfterEach
