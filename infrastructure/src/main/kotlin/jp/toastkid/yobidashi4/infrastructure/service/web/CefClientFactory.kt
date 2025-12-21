@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.infrastructure.service.web
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
+import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
@@ -33,17 +34,17 @@ class CefClientFactory : KoinComponent {
 
     private val viewModel : MainViewModel by inject()
 
+    private val webIconLoaderService: WebIconLoaderService by inject()
+
     private val cefAppFactory = CefAppFactory()
 
     private val adHosts = AdHosts.make()
-
-    private val loadHandler = LoadHandler()
 
     operator fun invoke(): CefClient {
         val selectedText = AtomicReference("")
 
         val client = cefAppFactory.invoke().createClient()
-        client.addLoadHandler(loadHandler)
+        client.addLoadHandler(LoadHandler(webIconLoaderService))
 
         client.addLifeSpanHandler(object : CefLifeSpanHandlerAdapter() {
             override fun onBeforePopup(
