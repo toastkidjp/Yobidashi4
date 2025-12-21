@@ -4,11 +4,10 @@ import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import org.cef.browser.CefBrowser
 import org.cef.handler.CefLoadHandlerAdapter
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class LoadHandler : CefLoadHandlerAdapter(), KoinComponent {
-
-    private val webIconLoaderService: WebIconLoaderService by inject()
+class LoadHandler(
+    private val webIconLoaderService: WebIconLoaderService
+) : CefLoadHandlerAdapter(), KoinComponent {
 
     override fun onLoadingStateChange(
         browser: CefBrowser?,
