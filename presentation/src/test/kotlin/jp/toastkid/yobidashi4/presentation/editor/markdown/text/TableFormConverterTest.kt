@@ -23,15 +23,20 @@ class TableFormConverterTest {
 8時45分 22.4
 8時55分 22.5
 9時10分 22.8
+10時10分 23.0
 """.trimIndent()
 
     @Test
     fun test() {
-        TableFormConverter().invoke(text).trim().split("\n")
+        val converted = TableFormConverter().invoke(text)
+        val length = "| 8時45分  | 22.4".length
+        converted.trim().split("\n")
             .forEach {
                 assertTrue(it.startsWith("| "))
-                assertTrue(it.contains("分 | "))
+                assertEquals(length, it.length)
             }
+        converted.contains("| 7時50分  | 21.1")
+        converted.contains("| 8時0分   | 21.4")
     }
 
     @Test
