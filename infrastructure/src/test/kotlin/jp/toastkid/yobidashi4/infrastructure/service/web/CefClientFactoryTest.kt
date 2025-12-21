@@ -15,6 +15,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.web.ad.AdHosts
+import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.cef.CefApp
 import org.cef.CefClient
@@ -57,6 +58,9 @@ class CefClientFactoryTest {
     private lateinit var webViewPool: WebViewPool
 
     @MockK
+    private lateinit var webIconLoaderService: WebIconLoaderService
+
+    @MockK
     private lateinit var cefApp: CefApp
 
     @MockK
@@ -71,6 +75,7 @@ class CefClientFactoryTest {
                 module {
                     single(qualifier = null) { webViewPool } bind(WebViewPool::class)
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
+                    single(qualifier = null) { webIconLoaderService } bind(WebIconLoaderService::class)
                 }
             )
         }
