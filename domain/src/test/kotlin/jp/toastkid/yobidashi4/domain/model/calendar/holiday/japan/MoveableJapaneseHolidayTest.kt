@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -16,6 +17,21 @@ internal class MoveableJapaneseHolidayTest {
     )
     fun testIsTargetMonth(arg: Int, expected: Boolean) {
         assertEquals(expected, MoveableJapaneseHoliday.isTargetMonth(arg))
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "2023, 3, -1",
+        "2013, 9, 16",
+
+    )
+    fun testFindParameterized(year: Int, month: Int, date: Int) {
+        if (date == -1) {
+            assertTrue(MoveableJapaneseHoliday.find(year, month).isEmpty())
+            return
+        }
+
+        assertEquals(16, MoveableJapaneseHoliday.find(year, month).first().day)
     }
 
     @Test
