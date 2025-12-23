@@ -21,6 +21,12 @@ class NotificationEventFileStore : NotificationEventRepository {
     private val path = Path.of("user/notification/list.tsv")
 
     override fun add(event: NotificationEvent) {
+        if (Files.exists(path.parent).not()) {
+            Files.createDirectories(path.parent)
+        }
+        if (Files.exists(path).not()) {
+            Files.createFile(path)
+        }
         Files.write(path, event.toTsv().toByteArray(), StandardOpenOption.APPEND)
     }
 
