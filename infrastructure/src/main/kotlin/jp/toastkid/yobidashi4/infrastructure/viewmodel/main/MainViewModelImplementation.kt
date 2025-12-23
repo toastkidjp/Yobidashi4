@@ -277,7 +277,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         val tab = EditorTab(path)
-        (tab as? EditorTab)?.loadContent()
+        tab?.loadContent()
         if (onBackground) {
             _tabs.add(tab)
             return
