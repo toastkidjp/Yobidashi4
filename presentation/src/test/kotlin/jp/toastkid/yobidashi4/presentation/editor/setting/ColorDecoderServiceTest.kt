@@ -28,15 +28,18 @@ internal class ColorDecoderServiceTest {
         assertNull(colorDecoderService.invoke(input))
     }
 
-    @Test
-    fun test() {
-        val color = colorDecoderService.invoke("#000099")
+    @ParameterizedTest
+    @CsvSource(
+        "#000099,0,0,153,255",
+    )
+    fun test(colorCode: String, red: Int, green: Int, blue: Int, alpha: Int) {
+        val color = colorDecoderService.invoke(colorCode)
                 ?: fail("This case doesn't allow null.")
 
-        assertEquals(0, color.red)
-        assertEquals(0, color.green)
-        assertEquals(153, color.blue)
-        assertEquals(255, color.alpha)
+        assertEquals(red, color.red)
+        assertEquals(green, color.green)
+        assertEquals(blue, color.blue)
+        assertEquals(alpha, color.alpha)
     }
 
     @Test
