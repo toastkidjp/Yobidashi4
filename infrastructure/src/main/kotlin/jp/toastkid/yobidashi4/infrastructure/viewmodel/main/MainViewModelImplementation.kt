@@ -185,7 +185,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     override fun openPreview(path: Path, onBackground: Boolean) {
         if (Files.exists(path).not()) {
-            showSnackbar("File is not found. : ${path}")
+            showSnackbar("File is not found. : $path")
             return
         }
 
