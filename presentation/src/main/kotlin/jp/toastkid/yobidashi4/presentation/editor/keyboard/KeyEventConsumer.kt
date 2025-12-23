@@ -382,7 +382,13 @@ class KeyEventConsumer(
             }
             it.isCtrlPressed && it.key == Key.L -> {
                 LinkPasteCase()
-                    .invoke(content, selectionStartIndex, selectionEndIndex, selectedTextConversion, setNewContent)
+                    .invoke(
+                        content,
+                        selectionStartIndex,
+                        selectionEndIndex,
+                        selectedTextConversion,
+                        setNewContent
+                    )
             }
             else -> false
         }
