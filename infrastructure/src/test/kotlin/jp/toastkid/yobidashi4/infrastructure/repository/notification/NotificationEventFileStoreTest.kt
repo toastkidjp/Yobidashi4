@@ -50,9 +50,26 @@ Test3
 
     @Test
     fun add() {
+        every { Files.exists(any()) } returns true
+
         subject.add(NotificationEvent("test", "test", LocalDateTime.now()))
 
         verify { Files.write(any(), any<ByteArray>(), StandardOpenOption.APPEND) }
+        verify(inverse = true) { Files.createDirectories(any()) }
+        verify(inverse = true) { Files.createFile(any()) }
+    }
+
+    @Test
+    fun addIfTheFileDoesNotExists() {
+        every { Files.exists(any()) } returns false
+        every { Files.createDirectories(any()) } returns mockk()
+        every { Files.createFile(any()) } returns mockk()
+
+        subject.add(NotificationEvent("test", "test", LocalDateTime.now()))
+
+        verify { Files.write(any(), any<ByteArray>(), StandardOpenOption.APPEND) }
+        verify { Files.createDirectories(any()) }
+        verify { Files.createFile(any()) }
     }
 
     @Test
