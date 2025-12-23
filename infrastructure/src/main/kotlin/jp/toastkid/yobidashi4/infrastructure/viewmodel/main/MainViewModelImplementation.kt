@@ -369,10 +369,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun closeAllTabs() {
         val snapshot = mutableListOf<Tab>().also { it.addAll(_tabs) }
         val currentIndex = _selected.value
-        showSnackbar("Clear all tabs.", "Undo", {
+        showSnackbar("Clear all tabs.", "Undo") {
             _tabs.addAll(snapshot)
             _selected.value = currentIndex
-        })
+        }
         val targetIds = _tabs.filterIsInstance<WebTab>().map(WebTab::id)
         _tabs.clear()
         _selected.value = -1
