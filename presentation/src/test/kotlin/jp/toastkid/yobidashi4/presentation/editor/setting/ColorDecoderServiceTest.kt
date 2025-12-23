@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 internal class ColorDecoderServiceTest {
 
@@ -15,11 +17,15 @@ internal class ColorDecoderServiceTest {
         colorDecoderService = ColorDecoderService()
     }
 
-    @Test
-    fun testReturnNull() {
-        assertNull(colorDecoderService.invoke(null))
-        assertNull(colorDecoderService.invoke(""))
-        assertNull(colorDecoderService.invoke(" "))
+    @ParameterizedTest
+    @CsvSource(
+        "null",
+        "''",
+        "' '",
+        nullValues = ["null"]
+    )
+    fun testReturnNull(input: String?) {
+        assertNull(colorDecoderService.invoke(input))
     }
 
     @Test
