@@ -36,7 +36,7 @@ internal class MoveableJapaneseHolidayTest {
 
     @Test
     fun testFind() {
-        Assertions.assertTrue(MoveableJapaneseHoliday.find(2023, 3).isEmpty())
+        assertTrue(MoveableJapaneseHoliday.find(2023, 3).isEmpty())
         assertAll(
             {
                 val agedDay2013 = MoveableJapaneseHoliday.find(2013, 9).first()
