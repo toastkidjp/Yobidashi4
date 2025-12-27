@@ -61,13 +61,13 @@ jobs:
           java-version: '21'
 
       - name: Build UberJar
-        timeout-minutes: 5
+        timeout-minutes: 6
         run: "./gradlew packageUberJarForCurrentOS"
         env:
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP'
 
       - name: Upload artifact
-        timeout-minutes: 5
+        timeout-minutes: 1
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
@@ -76,7 +76,7 @@ jobs:
             build/compose/jars/*.jar
 
       - name: Upload artifact to release
-        timeout-minutes: 5
+        timeout-minutes: 1
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
@@ -87,7 +87,7 @@ jobs:
         shell: bash
 
       - name: Upload Kotlin build report
-        timeout-minutes: 2
+        timeout-minutes: 1
         uses: actions/upload-artifact@v4
         with:
           name: Kotlin build report-${{ runner.os }}
