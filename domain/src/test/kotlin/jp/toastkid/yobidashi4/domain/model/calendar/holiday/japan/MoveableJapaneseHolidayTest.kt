@@ -23,7 +23,6 @@ internal class MoveableJapaneseHolidayTest {
     @CsvSource(
         "2023, 3, -1",
         "2013, 9, 16",
-
     )
     fun testFindParameterized(year: Int, month: Int, date: Int) {
         if (date == -1) {
