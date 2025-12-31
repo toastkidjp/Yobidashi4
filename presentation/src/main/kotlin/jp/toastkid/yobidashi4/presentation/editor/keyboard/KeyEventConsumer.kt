@@ -1,5 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.delete
+import androidx.compose.foundation.text.input.insert
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
@@ -10,8 +13,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.getSelectedText
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.editor.text.JsonPrettyPrint
@@ -42,11 +43,17 @@ class KeyEventConsumer(
     private val jsonPrettyPrint: JsonPrettyPrint = JsonPrettyPrint(),
 ) {
 
+    private fun getSelectedText(content: TextFieldState): CharSequence {
+        val selection = content.selection
+        val selectionStartIndex = min(selection.start, selection.end)
+        val selectionEndIndex = max(selection.start, selection.end)
+        return content.text.subSequence(selectionStartIndex, selectionEndIndex)
+    }
+
     operator fun invoke(
         it: KeyEvent,
-        content: TextFieldValue,
-        lastParagraph: MultiParagraph?,
-        setNewContent: (TextFieldValue) -> Unit
+        content: TextFieldState,
+        lastParagraph: MultiParagraph?
     ): Boolean {
         if (it.type != KeyEventType.KeyDown) {
             return false
@@ -59,12 +66,11 @@ class KeyEventConsumer(
 
         return when {
             it.isCtrlPressed && it.key == Key.D -> {
-                val selected = content.getSelectedText()
+                val selected = getSelectedText(content)
                 if (selected.isNotEmpty()) {
-                    val newText = StringBuilder(content.text)
-                        .insert(selectionEndIndex, selected)
-                        .toString()
-                    setNewContent(content.copy(newText))
+                    content.edit {
+                        insert(selection.end, selected.toString())
+                    }
                     return true
                 }
 
@@ -73,39 +79,23 @@ class KeyEventConsumer(
                 val lineStart = textLayoutResult.getLineStart(currentLine)
                 val lineEnd = textLayoutResult.getLineEnd(currentLine)
                 val safeEnd = min(content.text.length, lineEnd)
-                val newText = StringBuilder(content.text)
-                    .insert(safeEnd, "\n${content.text.substring(lineStart, safeEnd)}")
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        content.selection,
-                        content.composition
-                    )
-                )
+                content.edit {
+                    insert(safeEnd, "\n${content.text.substring(lineStart, safeEnd)}")
+                    selection = content.selection
+                }
                 true
             }
             it.isCtrlPressed && it.key == Key.Minus -> {
-                val selected = content.getSelectedText()
+                val selected = getSelectedText(content)
                 if (selected.isEmpty()) {
                     return false
                 }
 
-                val converted = ListHeadAdder().invoke(selected.text, "-") ?: return false
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        converted
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + converted.length),
-                        content.composition
-                    )
-                )
+                val converted = ListHeadAdder().invoke(selected.toString(), "-") ?: return false
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, converted)
+                    selection = TextRange(selectionStartIndex + converted.length)
+                }
                 true
             }
             it.isCtrlPressed && it.key == Key.One -> {
@@ -115,20 +105,10 @@ class KeyEventConsumer(
                 }
 
                 val converted = NumberedListHeadAdder().invoke(selected) ?: return false
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        converted
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + converted.length),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, converted)
+                    selection = TextRange(selectionStartIndex + converted.length)
+                }
                 true
             }
             it.isCtrlPressed && it.key == Key.Zero -> {
@@ -138,34 +118,24 @@ class KeyEventConsumer(
                 }
 
                 val converted = ListHeadAdder().invoke(selected, "- [ ]") ?: return false
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        converted
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + converted.length),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, converted)
+                    selection = TextRange(selectionStartIndex + converted.length)
+                }
                 true
             }
             it.isCtrlPressed && it.key == Key.Four -> {
                 val textLayoutResult = lastParagraph ?: return false
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
-                setNewContent(content.copy(selection = TextRange(lineStart)))
+                content.edit { selection = TextRange(lineStart) }
                 true
             }
             it.isCtrlPressed && it.key == Key.E -> {
                 val textLayoutResult = lastParagraph ?: return false
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                setNewContent(content.copy(selection = TextRange(lineEnd)))
+                content.edit { selection = TextRange(lineEnd) }
                 true
             }
             it.isCtrlPressed && it.key == Key.Comma -> {
@@ -175,20 +145,10 @@ class KeyEventConsumer(
                 }
 
                 val converted = CommaInserter().invoke(selected) ?: return false
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        converted
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + converted.length),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, converted)
+                    selection = TextRange(selectionStartIndex + converted.length)
+                }
                 true
             }
             it.isCtrlPressed && it.key == Key.T -> {
@@ -198,59 +158,54 @@ class KeyEventConsumer(
                 }
 
                 val tableString = TableFormConverter().invoke(selected)
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        tableString
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + tableString.length),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, tableString)
+                    selection = TextRange(selectionStartIndex + tableString.length)
+                }
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.U -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::switchCase, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::switchCase)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.H -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, toHalfWidth::invoke, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, toHalfWidth::invoke)
                 true
             }
             it.isCtrlPressed && it.key == Key.B -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::bold, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::bold)
                 true
             }
             it.isCtrlPressed && it.key == Key.I -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::italic, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::italic)
                 true
             }
             it.isCtrlPressed && it.key == Key.Two -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::doubleQuote, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::doubleQuote)
                 true
             }
             it.isCtrlPressed && it.key == Key.Eight -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundBrackets, setNewContent)
+                selectedTextConversion(
+                    content,
+                    selectionStartIndex,
+                    selectionEndIndex,
+                    ::surroundBrackets
+                )
                 true
             }
             it.isCtrlPressed && it.key == Key.LeftBracket -> {
-                return controlAndLeftBracketCase.invoke(content, selectionStartIndex, setNewContent)
+                return controlAndLeftBracketCase.invoke(content, selectionStartIndex)
             }
             it.isCtrlPressed && it.key == Key.RightBracket -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundMultibyteBrackets, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundMultibyteBrackets)
                 true
             }
             it.isCtrlPressed && it.key == Key.At -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundCodeFence, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, ::surroundCodeFence)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.C -> {
-                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, expressionTextCalculatorService::invoke, setNewContent)
+                selectedTextConversion(content, selectionStartIndex, selectionEndIndex, expressionTextCalculatorService::invoke)
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.N -> {
@@ -280,20 +235,11 @@ class KeyEventConsumer(
                 }
 
                 val converted = textReformat.invoke(selected.toString())
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        converted
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + converted.length),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, converted)
+                    selection = TextRange(selectionStartIndex + converted.length)
+                }
+
                 selected.setLength(0)
                 true
             }
@@ -311,20 +257,10 @@ class KeyEventConsumer(
                 }
 
                 val converted = jsonPrettyPrint.invoke(selected.toString())
-                val newText = StringBuilder(content.text)
-                    .replace(
-                        selectionStartIndex,
-                        selectionEndIndex,
-                        converted
-                    )
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(selectionStartIndex + converted.length),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    replace(selectionStartIndex, selectionEndIndex, converted)
+                    selection = TextRange(selectionStartIndex + converted.length)
+                }
                 selected.setLength(0)
                 true
             }
@@ -346,26 +282,17 @@ class KeyEventConsumer(
             it.isCtrlPressed && it.key == Key.Q -> {
                 val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
                 if (selected.isNotEmpty()) {
-                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, blockQuotation::invoke, setNewContent)
+                    selectedTextConversion(content, selectionStartIndex, selectionEndIndex, blockQuotation::invoke)
                     return true
                 }
 
                 val clipped = ClipboardFetcher().invoke()
                 if (!clipped.isNullOrEmpty()) {
                     val decoratedLink = blockQuotation.invoke(clipped) ?: return false
-                    val newText = StringBuilder(content.text)
-                        .insert(
-                            selectionStartIndex,
-                            decoratedLink
-                        )
-                        .toString()
-                    setNewContent(
-                        TextFieldValue(
-                            newText,
-                            TextRange(selectionStartIndex + decoratedLink.length + 1),
-                            content.composition
-                        )
-                    )
+                    content.edit {
+                        insert(selectionStartIndex, decoratedLink)
+                        selection = TextRange(selectionStartIndex + decoratedLink.length + 1)
+                    }
                     return true
                 }
 
@@ -377,7 +304,9 @@ class KeyEventConsumer(
                     return false
                 }
 
-                setNewContent(content.copy(content.text.removeRange(index, index + 1)))
+                content.edit {
+                    delete(index, index + 1)
+                }
                 true
             }
             it.isCtrlPressed && it.key == Key.L -> {
@@ -386,8 +315,7 @@ class KeyEventConsumer(
                         content,
                         selectionStartIndex,
                         selectionEndIndex,
-                        selectedTextConversion,
-                        setNewContent
+                        selectedTextConversion
                     )
             }
             else -> false
