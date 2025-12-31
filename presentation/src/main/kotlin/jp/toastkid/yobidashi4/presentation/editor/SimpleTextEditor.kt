@@ -52,16 +52,14 @@ fun SimpleTextEditor(
 
     Box {
         BasicTextField(
-            value = viewModel.content(),
-            onValueChange = {
-                viewModel.onValueChange(it)
-                setStatus(viewModel.makeCharacterCountMessage(it.text.length))
-            },
+            state = viewModel.content(),
             onTextLayout = {
-                viewModel.setMultiParagraph(it.multiParagraph)
+                val multiParagraph = it.invoke()?.multiParagraph ?: return@BasicTextField
+                viewModel.setMultiParagraph(multiParagraph)
             },
-            visualTransformation = viewModel.visualTransformation(),
-            decorationBox = {
+            inputTransformation = viewModel.inputTransformation(),
+            outputTransformation = viewModel.visualTransformation(),
+            decorator = {
                 Row {
                     Column(
                         modifier = Modifier
@@ -140,7 +138,11 @@ fun SimpleTextEditor(
         )
     }
 
-    LaunchedEffect(viewModel.verticalScrollState().offset) {
+    LaunchedEffect(viewModel.verticalScrollState().value) {
         viewModel.adjustLineNumberState()
+    }
+
+    LaunchedEffect(viewModel.content().text) {
+        setStatus(viewModel.makeCharacterCountMessage(viewModel.content().text.length))
     }
 }
