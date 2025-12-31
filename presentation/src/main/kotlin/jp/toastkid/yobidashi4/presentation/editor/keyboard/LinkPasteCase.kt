@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
@@ -12,17 +13,16 @@ class LinkPasteCase : KoinComponent {
     private val linkDecoratorService: LinkDecoratorService by inject()
 
     operator fun invoke(
-        content: TextFieldValue,
+        content: TextFieldState,
         selectionStartIndex: Int,
         selectionEndIndex: Int,
         selectedTextConversion: SelectedTextConversion,
-        setNewContent: (TextFieldValue) -> Unit
     ): Boolean {
         val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
         if (isUrl(selected)) {
             selectedTextConversion(content, selectionStartIndex, selectionEndIndex, {
                 linkDecoratorService.invoke(selected)
-            }, setNewContent)
+            })
             return true
         }
 
@@ -35,13 +35,12 @@ class LinkPasteCase : KoinComponent {
                     decoratedLink
                 )
                 .toString()
-            setNewContent(
-                TextFieldValue(
-                    newText,
-                    TextRange(selectionStartIndex + decoratedLink.length + 1),
-                    content.composition
-                )
-            )
+
+            content.edit {
+                replace(selectionStartIndex, selectionEndIndex, newText)
+                selection = TextRange(selectionStartIndex + decoratedLink.length + 1)
+            }
+
         }
 
         return true
