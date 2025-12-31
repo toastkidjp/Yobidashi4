@@ -9,9 +9,12 @@ package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.text.TextFieldScrollState
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.delete
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
@@ -21,8 +24,6 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
@@ -30,7 +31,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
-import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorVisualTransformation
+import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorOutputTransformation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +53,7 @@ class TextEditorViewModel : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
 
-    private val content = mutableStateOf(TextFieldValue())
+    private val content = TextFieldState()
 
     private val lastParagraph = AtomicReference<MultiParagraph?>(null)
 
@@ -64,7 +65,7 @@ class TextEditorViewModel : KoinComponent {
 
     private val previewKeyEventConsumer = PreviewKeyEventConsumer()
 
-    private val verticalScrollState = TextFieldScrollState(Orientation.Vertical, 0)
+    private val verticalScrollState = ScrollState(0)
 
     private val lineNumberScrollState = ScrollState(0)
 
@@ -78,29 +79,31 @@ class TextEditorViewModel : KoinComponent {
 
     private val formatter = DecimalFormat("#,###.##")
 
-    fun content() = content.value
+    fun content() = content
 
-    fun onValueChange(it: TextFieldValue) {
-        if (altPressed.get()) {
-            return
-        }
+    private val lastLength = AtomicReference(-1)
 
-        applyStyle(it)
-    }
-
-    private fun applyStyle(it: TextFieldValue) {
+    fun update() {
         val tab = this.tab.get()
-        val newContent = if (tab.editable()) it else it.copy(text = content.value.text)
-        if (content.value.text != newContent.text) {
+        if (content.text.length != lastLength.get() && content.composition == null) {
             mainViewModel.updateEditorContent(
                 tab.path,
-                newContent.text,
+                content.text,
                 -1,
                 resetEditing = false
             )
         }
+        lastLength.set(content.text.length)
+    }
 
-        content.value = newContent
+    private fun applyStyle(it: TextFieldState) {
+        val tab = this.tab.get()
+        val newContent = if (tab.editable()) it else it//TODO .copy(text = content.text)
+
+        content.setTextAndPlaceCursorAtEnd(newContent.text.toString())
+        content.edit {
+            selection = it.selection
+        }
     }
 
     private val lineHeights = mutableMapOf<Int, TextUnit>()
@@ -126,7 +129,7 @@ class TextEditorViewModel : KoinComponent {
     private fun setNewCurrentLineHighlight(multiParagraph: MultiParagraph) {
         val cursorOffset = min(
             multiParagraph.intrinsics.annotatedString.text.length,
-            content.value.selection.start
+            content.selection.start
         )
         val cursorRect = multiParagraph.getCursorRect(cursorOffset)
         val cursorSize = (cursorRect.bottom - cursorRect.top)
@@ -144,30 +147,28 @@ class TextEditorViewModel : KoinComponent {
     fun onClickLineNumber(it: Int) {
         val multiParagraph = lastParagraph.get() ?: return
 
-        content.value = content.value.copy(
+        content.edit {
             selection = TextRange(multiParagraph.getLineStart(it), multiParagraph.getLineEnd(it))
-        )
+        }
     }
 
     fun focusRequester() = focusRequester
 
     fun onKeyEvent(it: KeyEvent): Boolean {
-        altPressed.set(it.isAltPressed)
-
         return keyEventConsumer(
             it,
-            content.value,
+            content,
             lastParagraph.get(),
-            ::applyStyle
         )
     }
 
     fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+        altPressed.set(it.isAltPressed)
+
         return previewKeyEventConsumer.invoke(
             it,
-            content.value,
+            content,
             lastParagraph.get(),
-            ::applyStyle
         ) {
             coroutineScope.launch {
                 verticalScrollState.scrollBy(it)
@@ -176,7 +177,7 @@ class TextEditorViewModel : KoinComponent {
     }
 
     suspend fun adjustLineNumberState() {
-        lineNumberScrollState.scrollTo(verticalScrollState.offset.toInt())
+        lineNumberScrollState.scrollTo(verticalScrollState.value)
     }
 
     fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 150) {
@@ -189,7 +190,7 @@ class TextEditorViewModel : KoinComponent {
         coroutineScope.launch {
             focusRequester().requestFocus()
             delay(ms)
-            verticalScrollState.offset = tab.scroll().toFloat()
+            verticalScrollState.scrollTo(tab.scroll().toInt())
         }
     }
 
@@ -211,20 +212,19 @@ class TextEditorViewModel : KoinComponent {
     fun launchTab(tab: EditorTab, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         this.tab.set(tab)
 
-        val newContent = TextFieldValue(tab.getContent().toString(), TextRange(tab.caretPosition()))
+        val newContent = TextFieldState(tab.getContent().toString(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
-
         CoroutineScope(dispatcher).launch {
             mainViewModel.finderFlow().collect {
-                findOrderReceiver(it, content.value, ::applyStyle)
+                findOrderReceiver(it, content)
             }
         }
     }
 
     fun currentLineOffset(): Offset {
         val paragraph = lastParagraph.get() ?: return Offset.Zero
-        val currentLine = paragraph.getLineForOffset(content.value.selection.start)
-        return Offset(paragraph.getLineLeft(currentLine), paragraph.getLineTop(currentLine) - verticalScrollState.offset)
+        val currentLine = paragraph.getLineForOffset(content.selection.start)
+        return Offset(paragraph.getLineLeft(currentLine), paragraph.getLineTop(currentLine) - verticalScrollState.value)
     }
 
     fun currentLineHighlightColor(): Color {
@@ -234,11 +234,23 @@ class TextEditorViewModel : KoinComponent {
         )
     }
 
-    private val visualTransformation = TextEditorVisualTransformation(content, mainViewModel.darkMode())
+    fun inputTransformation(): InputTransformation {
+        return InputTransformation {
+            if (altPressed.get()) {
+                return@InputTransformation
+            }
 
-    fun visualTransformation(): VisualTransformation {
-        if (content.value.text.length > conversionLimit) {
-            return VisualTransformation.None
+            update()
+        }
+    }
+
+    private val visualTransformation = TextEditorOutputTransformation(content, mainViewModel.darkMode())
+
+    private val none = OutputTransformation {}
+
+    fun visualTransformation(): OutputTransformation {
+        if (content.text.length > conversionLimit) {
+            return none
         }
 
         return visualTransformation
@@ -253,19 +265,21 @@ class TextEditorViewModel : KoinComponent {
     fun lineHeight() = setting.editorLineHeight()
 
     fun dispose() {
-        val currentText = content.value.text
+        val currentText = content.text
         if (currentText.isNotEmpty()) {
             mainViewModel.updateEditorContent(
                 tab.get().path,
                 currentText,
-                content.value.selection.start,
-                verticalScrollState.offset.toDouble(),
+                content.selection.start,
+                verticalScrollState.value.toDouble(),
                 resetEditing = false
             )
         }
 
         lastParagraph.set(null)
-        content.value = TextFieldValue()
+        content.edit {
+            delete(0, length)
+        }
     }
 
 }
