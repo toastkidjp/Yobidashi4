@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.delete
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
@@ -10,14 +12,12 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.math.min
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.math.min
 
 class PreviewKeyEventConsumer(
     private val mainViewModel: MainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
@@ -25,9 +25,8 @@ class PreviewKeyEventConsumer(
 
     operator fun invoke(
         it: KeyEvent,
-        content: TextFieldValue,
+        content: TextFieldState,
         lastParagraph: MultiParagraph?,
-        setNewContent: (TextFieldValue) -> Unit,
         scrollBy: (Float) -> Unit
     ): Boolean {
         if (it.type != KeyEventType.KeyDown) {
@@ -35,11 +34,15 @@ class PreviewKeyEventConsumer(
         }
         when {
             it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionUp -> {
-                setNewContent(content.copy(selection = TextRange.Zero))
+                content.edit {
+                    selection = TextRange.Zero
+                }
                 return true
             }
             it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                setNewContent(content.copy(selection = TextRange(content.text.length)))
+                content.edit {
+                    selection = TextRange(length)
+                }
                 return true
             }
             it.isCtrlPressed && it.key == Key.DirectionUp -> {
@@ -51,10 +54,6 @@ class PreviewKeyEventConsumer(
                 return true
             }
             it.isCtrlPressed && it.key == Key.X -> {
-                if (content.getSelectedText().isNotEmpty()) {
-                    return false
-                }
-
                 val textLayoutResult = lastParagraph ?: return false
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
@@ -62,37 +61,17 @@ class PreviewKeyEventConsumer(
                 val targetEnd = min(content.text.length, lineEnd + 1)
                 val currentLineText = content.text.substring(lineStart, targetEnd)
                 ClipboardPutterService().invoke(currentLineText)
-                val newText = StringBuilder(content.text)
-                    .delete(lineStart, targetEnd)
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(lineStart),
-                        content.composition
-                    )
-                )
+                content.edit { delete(lineStart, targetEnd) }
                 return true
             }
             it.isCtrlPressed && it.key == Key.Enter -> {
-                if (content.getSelectedText().isNotEmpty()) {
-                    return true
-                }
-
                 val textLayoutResult = lastParagraph ?: return false
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
                 val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                val newText = StringBuilder(content.text)
-                    .delete(lineStart, lineEnd + 1)
-                    .toString()
-                setNewContent(
-                    TextFieldValue(
-                        newText,
-                        TextRange(lineStart),
-                        content.composition
-                    )
-                )
+                content.edit {
+                    delete(lineStart, lineEnd + 1)
+                }
                 return true
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionRight -> {
