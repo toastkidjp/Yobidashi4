@@ -1,14 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 
 class ControlAndLeftBracketCase {
 
     operator fun invoke(
-        content: TextFieldValue,
-        selectionStartIndex: Int,
-        setNewContent: (TextFieldValue) -> Unit
+        content: TextFieldState,
+        selectionStartIndex: Int
     ): Boolean {
         if (content.text.length <= selectionStartIndex) {
             return false
@@ -34,7 +33,9 @@ class ControlAndLeftBracketCase {
             return false
         }
 
-        setNewContent(content.copy(selection = TextRange(index, index + 1)))
+        content.edit {
+            selection = TextRange(index, index + 1)
+        }
         return true
     }
 
