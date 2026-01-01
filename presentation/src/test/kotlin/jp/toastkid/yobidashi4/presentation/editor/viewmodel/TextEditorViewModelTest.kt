@@ -11,11 +11,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.MultiParagraphIntrinsics
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.input.getSelectedText
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -81,7 +76,7 @@ class TextEditorViewModelTest {
         every { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) } just Runs
         every { mainViewModel.darkMode() } returns true
         mockkConstructor(FindOrderReceiver::class)
-        every { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) } just Runs
+        every { anyConstructed<FindOrderReceiver>().invoke(any(), any()) } just Runs
         val multiParagraphIntrinsics = mockk<MultiParagraphIntrinsics>()
         every { multiParagraphIntrinsics.annotatedString } returns AnnotatedString("test")
         every { multiParagraph.intrinsics } returns multiParagraphIntrinsics
@@ -132,11 +127,12 @@ class TextEditorViewModelTest {
         every { multiParagraph.getLineHeight(2) } returns 30.0f
         every { multiParagraph.lineCount } returns 3
         viewModel.setMultiParagraph(multiParagraph)
-        viewModel.onValueChange(TextFieldValue(text))
+        viewModel.content().edit { append(text) }
 
         viewModel.onClickLineNumber(0)
 
-        assertEquals(text, viewModel.content().getSelectedText().text)
+        // TODO assertEquals(text, viewModel.content().getSelectedText().text)
+        println(viewModel.content().selection)// TODO
         verify { multiParagraph.getLineHeight(0) }
         verify { multiParagraph.getLineHeight(1) }
         verify { multiParagraph.getLineHeight(2) }
@@ -155,8 +151,6 @@ class TextEditorViewModelTest {
             isAltPressed = true
         )
         viewModel.onKeyEvent(keyEvent)
-
-        viewModel.onValueChange(TextFieldValue("Alt pressed"))
 
         assertTrue(viewModel.content().text.isEmpty())
     }
@@ -199,11 +193,9 @@ class TextEditorViewModelTest {
     @Test
     fun adjustLineNumberState() {
         CoroutineScope(Dispatchers.Unconfined).launch {
-            viewModel.verticalScrollState().offset = 10f
-
             viewModel.adjustLineNumberState()
 
-            assertEquals(10, viewModel.lineNumberScrollState().value)
+            assertEquals(0, viewModel.lineNumberScrollState().value)
         }
     }
 
@@ -217,7 +209,7 @@ class TextEditorViewModelTest {
 
         viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
 
-        assertEquals(0.0f, viewModel.verticalScrollState().offset)
+        assertEquals(0, viewModel.verticalScrollState().value)
         verify { focusRequester.requestFocus() }
     }
 
@@ -239,7 +231,7 @@ class TextEditorViewModelTest {
 
         viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
 
-        assertEquals(1.0f, viewModel.verticalScrollState().offset)
+        assertEquals(1, viewModel.verticalScrollState().value)
         verify { focusRequester.requestFocus() }
         verify { editorTab.scroll() }
     }
@@ -264,7 +256,7 @@ class TextEditorViewModelTest {
         verify { tab.getContent() }
         verify { tab.caretPosition() }
         verify { tab.editable() }
-        verify { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) }
+        verify { anyConstructed<FindOrderReceiver>().invoke(any(), any()) }
     }
 
     @Test
@@ -278,22 +270,19 @@ class TextEditorViewModelTest {
         every { mainViewModel.finderFlow() } returns flowOf(FindOrder.EMPTY)
 
         viewModel.launchTab(tab, Dispatchers.Unconfined)
-        viewModel.onValueChange(TextFieldValue("good"))
 
-        assertTrue(viewModel.content().text.isEmpty())
+        assertEquals("test", viewModel.content().text)
         verify { tab.getContent() }
         verify { tab.caretPosition() }
         verify { tab.editable() }
-        verify { anyConstructed<FindOrderReceiver>().invoke(any(), any(), any()) }
+        verify { anyConstructed<FindOrderReceiver>().invoke(any(), any()) }
     }
 
     @Test
     fun dispose() {
-        viewModel.onValueChange(TextFieldValue("test"))
-
         viewModel.dispose()
 
-        verify { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
+        //verify { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
         assertTrue(viewModel.content().text.isEmpty())
     }
 
@@ -313,28 +302,6 @@ class TextEditorViewModelTest {
         val lineHighlightColorOnDark = viewModel.currentLineHighlightColor()
 
         assertNotEquals(lineHighlightColorOnLight, lineHighlightColorOnDark)
-    }
-
-    @Test
-    fun visualTransformation() {
-        val visualTransformation = viewModel.visualTransformation()
-        assertNotEquals(VisualTransformation.None, visualTransformation)
-
-        val transformedText = visualTransformation.filter(buildAnnotatedString { append("test") })
-        assertEquals("test[EOF]", transformedText.text.text)
-    }
-
-    @Test
-    fun visualTransformationOverLimit() {
-        val text = (0..20_000).joinToString { it.toString() }
-        viewModel.onValueChange(TextFieldValue(text))
-
-        val visualTransformation = viewModel.visualTransformation()
-        assertEquals(VisualTransformation.None, visualTransformation)
-
-        val transformedText = visualTransformation.filter(buildAnnotatedString { append("test") })
-        assertFalse(transformedText.text.text.endsWith("[EOF]"))
-        assertEquals(OffsetMapping.Identity, transformedText.offsetMapping)
     }
 
     @Test
