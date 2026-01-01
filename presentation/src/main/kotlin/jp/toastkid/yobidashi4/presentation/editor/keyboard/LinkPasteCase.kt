@@ -1,12 +1,14 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.insert
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.math.min
 
 class LinkPasteCase : KoinComponent {
 
@@ -29,16 +31,10 @@ class LinkPasteCase : KoinComponent {
         val clipped = ClipboardFetcher().invoke() ?: return false
         if (isUrl(clipped)) {
             val decoratedLink = linkDecoratorService.invoke(clipped)
-            val newText = StringBuilder(content.text)
-                .insert(
-                    selectionStartIndex,
-                    decoratedLink
-                )
-                .toString()
 
             content.edit {
-                replace(selectionStartIndex, selectionEndIndex, newText)
-                selection = TextRange(selectionStartIndex + decoratedLink.length + 1)
+                insert(selectionStartIndex, decoratedLink)
+                selection = TextRange(min(length, selectionStartIndex + decoratedLink.length))
             }
 
         }
