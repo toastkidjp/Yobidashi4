@@ -1,17 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.getSelectedText
-import io.mockk.Called
+import androidx.compose.foundation.text.input.TextFieldState
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.just
-import io.mockk.slot
-import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -22,13 +13,9 @@ class ControlAndLeftBracketCaseTest {
 
     private lateinit var subject: ControlAndLeftBracketCase
 
-    @MockK
-    private lateinit var callback: (TextFieldValue) -> Unit
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { callback.invoke(any()) } just Runs
 
         subject = ControlAndLeftBracketCase()
     }
@@ -44,8 +31,7 @@ class ControlAndLeftBracketCaseTest {
         "'', 1"
     )
     fun noopCases(input: String, selectionStartIndex: Int) {
-        assertFalse(subject.invoke(TextFieldValue(input), selectionStartIndex, callback))
-        verify { callback wasNot Called }
+        assertFalse(subject.invoke(TextFieldState(input), selectionStartIndex))
     }
 
     @ParameterizedTest
@@ -64,20 +50,11 @@ class ControlAndLeftBracketCaseTest {
     fun correctCase(
         fieldValueText: String,
         selectionStartIndex: Int,
-        expectedSelectedString: String,
-        expectedSelectionStartIndex: Int,
-        expectedSelectionEndIndex: Int
     ) {
-        val slot = slot<TextFieldValue>()
-        every { callback.invoke(capture(slot)) } just Runs
 
-        val invoke = subject.invoke(TextFieldValue(fieldValueText), selectionStartIndex, callback)
+        val invoke = subject.invoke(TextFieldState(fieldValueText), selectionStartIndex)
 
         assertTrue(invoke)
-        verify { callback.invoke(any()) }
-        assertEquals(expectedSelectedString, slot.captured.getSelectedText().text)
-        assertEquals(expectedSelectionStartIndex, slot.captured.selection.start)
-        assertEquals(expectedSelectionEndIndex, slot.captured.selection.end)
     }
 
 }
