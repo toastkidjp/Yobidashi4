@@ -1,14 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -60,9 +59,8 @@ class PreviewKeyEventConsumerTest {
     fun onKeyUp() {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.A, KeyEventType.KeyUp, isCtrlPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             scrollBy
         )
 
@@ -73,9 +71,8 @@ class PreviewKeyEventConsumerTest {
     fun scrollUp() {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             scrollBy
         )
 
@@ -87,9 +84,8 @@ class PreviewKeyEventConsumerTest {
     fun scrollDown() {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             scrollBy
         )
 
@@ -99,70 +95,59 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun moveToTop() {
-        val setNewContent = mockk<(TextFieldValue) -> Unit>()
-        every { setNewContent.invoke(any()) } just Runs
-
+        val content = TextFieldState("\n\n\nlast", initialSelection = TextRange(5))
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldValue(),
+            content,
             mockk(),
-            setNewContent,
             scrollBy
         )
 
         assertTrue(consumed)
-        verify { setNewContent.invoke(any()) }
+        assertEquals(0, content.selection.start)
+        assertEquals(0, content.selection.end)
     }
 
     @Test
     fun moveToBottom() {
-        val setNewContent = mockk<(TextFieldValue) -> Unit>()
-        every { setNewContent.invoke(any()) } just Runs
-
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            setNewContent,
             scrollBy
         )
 
         assertTrue(consumed)
-        verify { setNewContent.invoke(any()) }
     }
 
     @Test
     fun noopCtrlShift() {
-        val setNewContent = mockk<(TextFieldValue) -> Unit>()
+        val setNewContent = mockk<(TextFieldState) -> Unit>()
         every { setNewContent.invoke(any()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            setNewContent,
             scrollBy
         )
 
         assertFalse(consumed)
-        verify { setNewContent wasNot Called }
     }
 
     @Test
     fun noopShift() {
-        val setNewContent = mockk<(TextFieldValue) -> Unit>()
+        val setNewContent = mockk<(TextFieldState) -> Unit>()
         every { setNewContent.invoke(any()) } just Runs
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = false, isShiftPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            setNewContent,
             scrollBy
         )
 
         assertFalse(consumed)
-        verify { setNewContent wasNot Called }
     }
 
     @Test
@@ -175,9 +160,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3"),
+            TextFieldState("test\ntest2\ntest3"),
             multiParagraph,
-            {},
             scrollBy
         )
 
@@ -196,9 +180,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3"),
+            TextFieldState("test\ntest2\ntest3"),
             null,
-            {},
             scrollBy
         )
 
@@ -217,9 +200,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3", TextRange(1, 3)),
+            TextFieldState("test\ntest2\ntest3", TextRange(1, 3)),
             multiParagraph,
-            {},
             scrollBy
         )
 
@@ -234,12 +216,12 @@ class PreviewKeyEventConsumerTest {
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
         every { multiParagraph.getLineEnd(0) } returns 4
+        val content = TextFieldState("test\ntest2\ntest3")
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3"),
+            content,
             multiParagraph,
-            { assertEquals("test2\ntest3", it.text) },
             scrollBy
         )
 
@@ -248,6 +230,7 @@ class PreviewKeyEventConsumerTest {
         verify { multiParagraph.getLineForOffset(any()) }
         verify { multiParagraph.getLineStart(0) }
         verify { multiParagraph.getLineEnd(0) }
+        assertEquals("test2\ntest3", content.text)
     }
 
     @Test
@@ -258,9 +241,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3", TextRange(0, 3)),
+            TextFieldState("test\ntest2\ntest3", TextRange(0, 3)),
             multiParagraph,
-            {},
             scrollBy
         )
 
@@ -273,9 +255,8 @@ class PreviewKeyEventConsumerTest {
     fun deleteLineOnParagraphIsNull() {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3"),
+            TextFieldState("test\ntest2\ntest3"),
             null,
-            {},
             scrollBy
         )
 
@@ -286,9 +267,8 @@ class PreviewKeyEventConsumerTest {
     fun elseCase() {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             scrollBy
         )
 
@@ -302,9 +282,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             mockk()
         )
 
@@ -321,9 +300,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             scrollBy
         )
 
@@ -341,9 +319,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             scrollBy
         )
 
@@ -358,9 +335,8 @@ class PreviewKeyEventConsumerTest {
     fun noopAltCombination() {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
-            TextFieldValue(),
+            TextFieldState(),
             mockk(),
-            {},
             mockk()
         )
 
@@ -377,9 +353,8 @@ class PreviewKeyEventConsumerTest {
 
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldValue("test\ntest2\ntest3"),
+            TextFieldState("test\ntest2\ntest3"),
             multiParagraph,
-            {},
             scrollBy
         )
 
