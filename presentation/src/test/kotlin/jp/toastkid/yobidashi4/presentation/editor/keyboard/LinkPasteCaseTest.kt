@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.called
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -40,7 +39,7 @@ class LinkPasteCaseTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { selectedTextConversion.invoke(any(), any(), any(), any(), any()) } returns true
+        every { selectedTextConversion.invoke(any(), any(), any(), any()) } returns true
         startKoin {
             modules(
                 module {
@@ -66,18 +65,18 @@ class LinkPasteCaseTest {
         val decoratedLink = "[test]($selected)"
         every { linkDecoratorService.invoke(any()) } returns decoratedLink
         val capturingSlot = slot<(String) -> String?>()
-        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot), any()) } returns true
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot)) } returns true
+        val content = TextFieldState(selected, TextRange(0))
 
         val consumed = subject.invoke(
-            TextFieldValue(selected, TextRange(0)),
+            content,
             0,
             selected.length,
-            selectedTextConversion,
-            { assertEquals(decoratedLink, it.text) }
+            selectedTextConversion
         )
 
         assertTrue(consumed)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any(), any()) }
+        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
         assertTrue(capturingSlot.isCaptured)
         assertEquals("[test](https://test.yahoo.com)", capturingSlot.captured.invoke("test"))
         verify(inverse = true) { anyConstructed<ClipboardFetcher>().invoke()  }
@@ -93,17 +92,18 @@ class LinkPasteCaseTest {
         every { anyConstructed<ClipboardFetcher>().invoke() } returns url
         val decoratedLink = "[test]($url)"
         every { linkDecoratorService.invoke(any()) } returns decoratedLink
+        val content = TextFieldState("", TextRange(0))
 
         val consumed = subject.invoke(
-            TextFieldValue("", TextRange(0)),
+            content,
             0,
             0,
-            selectedTextConversion,
-            { assertEquals(decoratedLink, it.text) }
+            selectedTextConversion
         )
 
         assertTrue(consumed)
         verify { selectedTextConversion wasNot Called }
+        assertEquals(decoratedLink, content.text)
     }
 
     @Test
@@ -113,11 +113,10 @@ class LinkPasteCaseTest {
         every { anyConstructed<ClipboardFetcher>().invoke() } returns null
 
         val consumed = subject.invoke(
-            TextFieldValue(selected),
+            TextFieldState(selected),
             0,
             0,
             selectedTextConversion,
-            { fail() }
         )
 
         assertFalse(consumed)
@@ -132,11 +131,10 @@ class LinkPasteCaseTest {
         every { linkDecoratorService.invoke(any()) } returns decoratedLink
 
         val consumed = subject.invoke(
-            TextFieldValue("", TextRange(0)),
+            TextFieldState("", TextRange(0)),
             0,
             0,
-            selectedTextConversion,
-            { fail() }
+            selectedTextConversion
         )
 
         assertTrue(consumed)
