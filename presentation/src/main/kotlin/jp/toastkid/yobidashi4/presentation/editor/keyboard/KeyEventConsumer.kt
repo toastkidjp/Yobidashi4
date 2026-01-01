@@ -291,7 +291,7 @@ class KeyEventConsumer(
                     val decoratedLink = blockQuotation.invoke(clipped) ?: return false
                     content.edit {
                         insert(selectionStartIndex, decoratedLink)
-                        selection = TextRange(selectionStartIndex + decoratedLink.length + 1)
+                        selection = TextRange(min(length, selectionStartIndex + decoratedLink.length + 1))
                     }
                     return true
                 }
