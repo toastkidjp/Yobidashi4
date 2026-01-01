@@ -54,6 +54,10 @@ class PreviewKeyEventConsumer(
                 return true
             }
             it.isCtrlPressed && it.key == Key.X -> {
+                if (content.selection.start != content.selection.end) {
+                    return false
+                }
+
                 val textLayoutResult = lastParagraph ?: return false
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
@@ -65,6 +69,10 @@ class PreviewKeyEventConsumer(
                 return true
             }
             it.isCtrlPressed && it.key == Key.Enter -> {
+                if (content.selection.start != content.selection.end) {
+                    return true
+                }
+
                 val textLayoutResult = lastParagraph ?: return false
                 val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
                 val lineStart = textLayoutResult.getLineStart(currentLine)
