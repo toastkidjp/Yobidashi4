@@ -120,7 +120,6 @@ internal fun WebSearchBox() {
             InputTextField(
                 viewModel.query(),
                 "Please would you input web search keyword?",
-                onValueChange = viewModel::onValueChange,
                 onSearch = {
                     viewModel.invokeSearch()
                 },
@@ -173,6 +172,10 @@ internal fun WebSearchBox() {
 
             LaunchedEffect(viewModel.showWebSearch()) {
                 viewModel.start()
+            }
+
+            LaunchedEffect(viewModel.query().text) {
+                viewModel.onValueChange()
             }
         }
     }
