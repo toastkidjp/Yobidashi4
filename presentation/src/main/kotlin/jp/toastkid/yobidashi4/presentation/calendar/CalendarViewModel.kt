@@ -1,7 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.calendar
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
@@ -60,7 +61,7 @@ class CalendarViewModel : KoinComponent {
 
         val nextYear = localDateState.value.year
         if (year != nextYear) {
-            setYearInput(TextFieldValue("$nextYear"))
+            yearInput.setTextAndPlaceCursorAtEnd("$nextYear")
         }
     }
 
@@ -79,7 +80,7 @@ class CalendarViewModel : KoinComponent {
 
         val nextYear = localDateState.value.year
         if (year != nextYear) {
-            setYearInput(TextFieldValue("$nextYear"))
+            yearInput.setTextAndPlaceCursorAtEnd("$nextYear")
         }
     }
 
@@ -87,13 +88,12 @@ class CalendarViewModel : KoinComponent {
         return localDateState.value.withDayOfMonth(1)
     }
 
-    private val yearInput = mutableStateOf(TextFieldValue())
+    private val yearInput = TextFieldState()
 
-    fun yearInput() = yearInput.value
+    fun yearInput() = yearInput
 
-    fun setYearInput(textFieldValue: TextFieldValue) {
-        yearInput.value = textFieldValue
-        textFieldValue.text.toIntOrNull()?.let {
+    fun setYearInput() {
+        yearInput().text.toString().toIntOrNull()?.let {
             setYear(it)
         }
     }
@@ -187,7 +187,7 @@ class CalendarViewModel : KoinComponent {
 
     fun launch(date: LocalDate) {
         setNewLocalDate(date)
-        yearInput.value = TextFieldValue("${localDate().year}")
+        yearInput.setTextAndPlaceCursorAtEnd("${localDate().year}")
     }
 
     fun onDispose(tab: CalendarTab) {
