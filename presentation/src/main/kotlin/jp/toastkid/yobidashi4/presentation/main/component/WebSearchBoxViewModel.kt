@@ -1,5 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
@@ -10,8 +13,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
@@ -42,7 +43,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     private val selectedSite = mutableStateOf(WebSearchItem.fromSearchSite(SearchSite.getDefault()))
 
-    private val query = mutableStateOf(TextFieldValue())
+    private val query = TextFieldState()
 
     private val openDropdown = mutableStateOf(false)
 
@@ -85,39 +86,35 @@ class WebSearchBoxViewModel : KoinComponent {
         closeDropdown()
     }
 
-    fun onValueChange(it: TextFieldValue) {
-        query.value = it
+    fun onValueChange() {
+        result.value = calculator.invoke(query.text.toString())?.let(formatter::format) ?: ""
 
-        result.value = calculator.invoke(query.value.text)?.let(formatter::format) ?: ""
-
-        inputHistoryService.filter(inputHistories, it.text)
+        inputHistoryService.filter(inputHistories, query.text.toString())
     }
 
-    fun query(): TextFieldValue {
-        return query.value
-    }
+    fun query() = query
 
     fun invokeSearch() {
-        if (query.value.text.isBlank() || query.value.composition != null) {
+        if (query.text.isBlank() || query.composition != null) {
             return
         }
 
-        if (query.value.text.startsWith("https://")) {
-            viewModel.openUrl(query.value.text, false)
+        if (query.text.startsWith("https://")) {
+            viewModel.openUrl(query.text.toString(), false)
             viewModel.setShowWebSearch(false)
             return
         }
 
-        selectedSite.value.action(viewModel, query.value.text)
+        selectedSite.value.action(viewModel, query.text.toString())
         viewModel.setShowWebSearch(false)
 
         if (saveSearchHistory()) {
-            inputHistoryService.add(query.value.text)
+            inputHistoryService.add(query.text.toString())
         }
     }
 
     fun clearInput() {
-        query.value = TextFieldValue()
+        query.clearText()
     }
 
     fun focusRequester() = focusRequester
@@ -133,8 +130,8 @@ class WebSearchBoxViewModel : KoinComponent {
         }
 
         if (it.isCtrlPressed && it.key == Key.Two) {
-            val newText = "\"${query.value.text}\""
-            query.value = TextFieldValue(newText, TextRange(newText.length))
+            val newText = "\"${query.text}\""
+            query.setTextAndPlaceCursorAtEnd(newText)
             return true
         }
 
@@ -157,7 +154,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun putText(text: String?) {
         val textFieldValue = inputHistoryService.make(text) ?: return
-        query.value = textFieldValue
+        query.setTextAndPlaceCursorAtEnd(textFieldValue.text)
         inputHistories.clear()
     }
 
@@ -185,7 +182,7 @@ class WebSearchBoxViewModel : KoinComponent {
         }
 
         val webTab = viewModel.currentTab() as? WebTab ?: return
-        query.value = TextFieldValue(webTab.url())
+        query.setTextAndPlaceCursorAtEnd(webTab.url())
     }
 
     fun onFocusChanged(focusState: FocusState) {
