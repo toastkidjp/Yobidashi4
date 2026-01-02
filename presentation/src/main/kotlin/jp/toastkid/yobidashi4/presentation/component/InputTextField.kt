@@ -4,9 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActionScope
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldBuffer
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -20,12 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import jp.toastkid.yobidashi4.library.resources.Res
@@ -34,10 +33,9 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun InputTextField(
-    textFieldValue: TextFieldValue,
+    textFieldValue: TextFieldState,
     labelText: String,
-    onValueChange: (TextFieldValue) -> Unit,
-    onSearch:  (KeyboardActionScope.() -> Unit),
+    onSearch:  () -> Unit,
     clearButton: () -> Unit,
     openSuggestion: Boolean,
     suggestions: List<String>,
@@ -53,11 +51,12 @@ internal fun InputTextField(
             maxLines = 1,
             colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
             labelText = labelText,
-            onValueChange = onValueChange,
             onClearInput = clearButton,
-            keyboardActions = KeyboardActions(onSearch = onSearch),
+            keyboardActions = KeyboardActionHandler {
+                onSearch.invoke()
+            },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            visualTransformation = SingleLineTransformation(),
+            inputTransformation = SingleLineTransformation(),
             modifier = modifier.onFocusChanged(onFocusChanged)
         )
 
@@ -88,13 +87,14 @@ internal fun InputTextField(
     }
 }
 
-private class SingleLineTransformation : VisualTransformation {
+private class SingleLineTransformation : InputTransformation {
 
-    override fun filter(text: AnnotatedString): TransformedText {
-        return TransformedText(
-            AnnotatedString(text.replace("\n".toRegex(), " ")),
-            OffsetMapping.Identity
-        )
+    override fun TextFieldBuffer.transformInput() {
+        var indexOf = asCharSequence().indexOf("\n")
+        while (indexOf != -1) {
+            replace(indexOf, indexOf + 1, "")
+            indexOf = asCharSequence().indexOf("\n")
+        }
     }
 
 }
@@ -103,25 +103,25 @@ private val emptyClearInputAction = {}
 
 @Composable
 fun SingleLineTextField(
-    textFieldValue: TextFieldValue,
+    textFieldValue: TextFieldState,
     labelText: String,
-    onValueChange: (TextFieldValue) -> Unit,
     onClearInput: () -> Unit = emptyClearInputAction,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions(),
+    keyboardActions: KeyboardActionHandler = KeyboardActionHandler { },
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-    visualTransformation: VisualTransformation = SingleLineTransformation(),
+    inputTransformation: InputTransformation = SingleLineTransformation(),
+    visualTransformation: OutputTransformation = OutputTransformation { },
     modifier: Modifier = Modifier
 ) {
     MultiLineTextField(
         textFieldValue,
         labelText,
         1,
-        onValueChange,
         onClearInput,
         keyboardOptions,
         keyboardActions,
         colors,
+        inputTransformation,
         visualTransformation,
         modifier
     )
@@ -129,23 +129,22 @@ fun SingleLineTextField(
 
 @Composable
 fun MultiLineTextField(
-    textFieldValue: TextFieldValue,
+    textFieldValue: TextFieldState,
     labelText: String,
     maxLines: Int,
-    onValueChange: (TextFieldValue) -> Unit,
     onClearInput: () -> Unit = emptyClearInputAction,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions(),
+    keyboardActions: KeyboardActionHandler = KeyboardActionHandler { },
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    inputTransformation: InputTransformation = InputTransformation { },
+    visualTransformation: OutputTransformation = OutputTransformation {  },
     modifier: Modifier = Modifier
 ) {
     TextField(
         textFieldValue,
-        maxLines = maxLines,
+        lineLimits = if (maxLines == 1) TextFieldLineLimits.SingleLine else TextFieldLineLimits.MultiLine(maxLines),
         colors = colors,
         label = { Text(labelText, color = MaterialTheme.colors.secondary) },
-        onValueChange = onValueChange,
         trailingIcon = {
             if (onClearInput !== emptyClearInputAction) {
                 Icon(
@@ -157,8 +156,9 @@ fun MultiLineTextField(
             }
         },
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,
+        onKeyboardAction = keyboardActions,
+        inputTransformation = inputTransformation,
+        outputTransformation = visualTransformation,
         modifier = modifier
     )
 }
