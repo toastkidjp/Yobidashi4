@@ -115,9 +115,6 @@ internal fun AggregationBox() {
             InputTextField(
                 viewModel.dateInput(),
                 viewModel.label(),
-                onValueChange = {
-                    viewModel.onDateInputValueChange(it)
-                },
                 onSearch = {
                     viewModel.onSearch()
                 },
@@ -158,5 +155,13 @@ internal fun AggregationBox() {
 
     LaunchedEffect(viewModel.showAggregationBox()) {
         viewModel.start()
+    }
+
+    LaunchedEffect(viewModel.keyword().text) {
+        viewModel.onKeywordInputValueChange()
+    }
+
+    LaunchedEffect(viewModel.dateInput().text) {
+        viewModel.onDateInputValueChange()
     }
 }
