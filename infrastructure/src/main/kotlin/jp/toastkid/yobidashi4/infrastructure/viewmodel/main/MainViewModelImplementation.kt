@@ -9,6 +9,8 @@ package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
@@ -18,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Notification
@@ -112,7 +113,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         setting.switchUseBackground()
 
         if (setting.useBackground().not()) {
-            backgroundImage.value = ImageBitmap(0, 0)
+            backgroundImage.value = ImageBitmap(1, 1)
         } else {
             loadBackgroundImage()
         }
@@ -620,8 +621,8 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
 
     private val openFind = mutableStateOf(false)
 
-    private val findInput = mutableStateOf(TextFieldValue())
-    private val replaceInput = mutableStateOf(TextFieldValue())
+    private val findInput = TextFieldState()
+    private val replaceInput = TextFieldState()
 
     override fun openFind() = openFind.value
 
@@ -629,16 +630,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openFind.value = openFind.value.not()
 
         if (openFind.value.not()) {
-            findInput.value = TextFieldValue()
+            findInput.clearText()
             CoroutineScope(Dispatchers.Unconfined).launch {
                 _finderFlow.emit(FindOrder.EMPTY)
             }
         }
     }
 
-    override fun inputValue() = findInput.value
+    override fun inputValue() = findInput
 
-    override fun replaceInputValue() = replaceInput.value
+    override fun replaceInputValue() = replaceInput
 
     private val caseSensitive = mutableStateOf(setting.useCaseSensitiveInFinder())
 
@@ -655,30 +656,25 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         return _finderFlow.asSharedFlow()
     }
 
-    override fun onFindInputChange(value: TextFieldValue) {
-        findInput.value = TextFieldValue(value.text, value.selection, value.composition)
+    override fun onFindInputChange() {
         findDown()
-    }
-
-    override fun onReplaceInputChange(value: TextFieldValue) {
-        replaceInput.value = TextFieldValue(value.text, value.selection, value.composition)
     }
 
     override fun findUp() {
         CoroutineScope(Dispatchers.Default).launch {
-            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = true, caseSensitive = caseSensitive()))
+            _finderFlow.emit(FindOrder(findInput.text.toString(), replaceInput.text.toString(), upper = true, caseSensitive = caseSensitive()))
         }
     }
 
     override fun replaceAll() {
         CoroutineScope(Dispatchers.Default).launch {
-            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, invokeReplace = true, caseSensitive = caseSensitive()))
+            _finderFlow.emit(FindOrder(findInput.text.toString(), replaceInput.text.toString(), invokeReplace = true, caseSensitive = caseSensitive()))
         }
     }
 
     override fun findDown() {
         CoroutineScope(Dispatchers.Default).launch {
-            _finderFlow.emit(FindOrder(findInput.value.text, replaceInput.value.text, upper = false, caseSensitive = caseSensitive()))
+            _finderFlow.emit(FindOrder(findInput.text.toString(), replaceInput.text.toString(), upper = false, caseSensitive = caseSensitive()))
         }
     }
 
