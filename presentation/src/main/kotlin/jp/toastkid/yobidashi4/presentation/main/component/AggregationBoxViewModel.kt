@@ -1,5 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -12,7 +15,6 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleAggregator
@@ -54,7 +56,7 @@ class AggregationBoxViewModel : KoinComponent {
 
     private val focusRequester = FocusRequester()
 
-    private val keyword = mutableStateOf(TextFieldValue())
+    private val keyword = TextFieldState()
 
     private val aggregations = listOf(
         MovieMemoSubtitleExtractor(articlesReaderService),
@@ -76,7 +78,7 @@ class AggregationBoxViewModel : KoinComponent {
     ))
 
     private val query = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")).let {
-        mutableStateOf(TextFieldValue(it, TextRange(it.length)))
+        TextFieldState(it, TextRange(it.length))
     }
 
     private val useExactMatch = mutableStateOf(true)
@@ -97,8 +99,8 @@ class AggregationBoxViewModel : KoinComponent {
             return true
         }
         if (requireSecondInput() && it.type == KeyEventType.KeyDown && it.isCtrlPressed && it.key == Key.Two) {
-            val newText = "\"${keyword.value.text}\""
-            keyword.value = TextFieldValue(newText, TextRange(newText.length))
+            val newText = "\"${keyword.text}\""
+            keyword.setTextAndPlaceCursorAtEnd(newText)
             return true
         }
         return false
@@ -143,9 +145,9 @@ class AggregationBoxViewModel : KoinComponent {
         return selectedSite.value is FullTextArticleFinder
     }
 
-    fun keyword() = keyword.value
+    fun keyword() = keyword
 
-    private fun shouldSurroundDoubleQuote(queryCandidate: String): Boolean =
+    private fun shouldSurroundDoubleQuote(queryCandidate: CharSequence): Boolean =
         requireSecondInput() && useExactMatch.value && !queryCandidate.startsWith("\"") && !queryCandidate.endsWith("\"")
 
     fun onSearch() {
@@ -154,10 +156,12 @@ class AggregationBoxViewModel : KoinComponent {
             return
         }
 
-        val query = if (shouldSurroundDoubleQuote(queryCandidate))
-            "\"$queryCandidate\""
-        else
-            queryCandidate
+        val query = (
+                if (shouldSurroundDoubleQuote(queryCandidate))
+                    "\"$queryCandidate\""
+                else
+                    queryCandidate
+                ).toString()
 
         if (requireSecondInput()) {
             keywordHistoryService.add(query)
@@ -186,12 +190,12 @@ class AggregationBoxViewModel : KoinComponent {
     fun putDate(text: String?) {
         if (requireSecondInput()) {
             val newFieldValue = keywordHistoryService.make(text) ?: return
-            keyword.value = newFieldValue
+            keyword.setTextAndPlaceCursorAtEnd(newFieldValue.text)
             keywordHistories.clear()
             return
         }
         val newFieldValue = dateHistoryService.make(text) ?: return
-        query.value = newFieldValue
+        query.setTextAndPlaceCursorAtEnd(newFieldValue.text)
         dateHistories.clear()
         keywordHistories.clear()
     }
@@ -214,7 +218,7 @@ class AggregationBoxViewModel : KoinComponent {
         dateHistoryService.clear(dateHistories)
     }
 
-    private fun getQuery() = if (requireSecondInput()) keyword.value.text else query.value.text
+    private fun getQuery() = if (requireSecondInput()) keyword.text else query.text
 
     fun showAggregationBox(): Boolean {
         return viewModel.showAggregationBox()
@@ -226,34 +230,25 @@ class AggregationBoxViewModel : KoinComponent {
         }
     }
 
-    fun dateInput() = if (requireSecondInput()) keyword.value else query.value
+    fun dateInput() = if (requireSecondInput()) keyword else query
 
     fun label() = if (requireSecondInput()) "Keyword" else "Year-Month"
 
-    fun onDateInputValueChange(it: TextFieldValue) {
-        if (requireSecondInput()) {
-            onKeywordValueChange(it)
-            return
-        }
-
-        query.value = it
-
-        dateHistoryService.filter(dateHistories, it.text)
+    fun onDateInputValueChange() {
+        dateHistoryService.filter(dateHistories, dateInput().text.toString())
     }
 
-    private fun onKeywordValueChange(it: TextFieldValue) {
-        keyword.value = it
-
-        keywordHistoryService.filter(keywordHistories, it.text)
+    fun onKeywordInputValueChange() {
+        keywordHistoryService.filter(keywordHistories, keyword().text.toString())
     }
 
     fun clearDateInput() {
         if (requireSecondInput()) {
-            keyword.value = TextFieldValue()
+            keyword.clearText()
             return
         }
 
-        query.value = TextFieldValue()
+        query.clearText()
     }
 
     fun icon(articleAggregator: ArticleAggregator) =  when (articleAggregator) {
