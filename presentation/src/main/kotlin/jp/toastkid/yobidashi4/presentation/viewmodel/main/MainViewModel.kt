@@ -2,10 +2,10 @@ package jp.toastkid.yobidashi4.presentation.viewmodel.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowState
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
@@ -112,9 +112,9 @@ interface MainViewModel {
 
     fun switchFind()
 
-    fun inputValue(): TextFieldValue
+    fun inputValue(): TextFieldState
 
-    fun replaceInputValue(): TextFieldValue
+    fun replaceInputValue(): TextFieldState
 
     fun caseSensitive(): Boolean
 
@@ -122,8 +122,7 @@ interface MainViewModel {
 
     fun finderFlow(): Flow<FindOrder>
 
-    fun onFindInputChange(value: TextFieldValue)
-    fun onReplaceInputChange(value: TextFieldValue)
+    fun onFindInputChange()
 
     fun findUp()
 
