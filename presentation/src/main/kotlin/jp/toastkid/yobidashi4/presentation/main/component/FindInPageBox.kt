@@ -21,7 +21,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
@@ -50,9 +49,8 @@ internal fun FindInPageBox() {
             InputTextField(
                 viewModel.inputValue(),
                 "Please would you input web search keyword?",
-                viewModel::onFindInputChange,
-                ::print,
-                { viewModel.onFindInputChange(TextFieldValue()) },
+                {},
+                { viewModel.onFindInputChange() },
                 viewModel.shouldShowInputHistory(),
                 viewModel.inputHistories(),
                 viewModel::onClickInputHistory,
@@ -66,8 +64,7 @@ internal fun FindInPageBox() {
             if (viewModel.useReplace()) {
                 SingleLineTextField(
                     viewModel.replaceInputValue(),
-                    "Replacement",
-                    viewModel::onReplaceInputChange,
+                    "Replacement"
                 )
             }
 
@@ -116,6 +113,10 @@ internal fun FindInPageBox() {
 
             LaunchedEffect(viewModel.openFind()) {
                 viewModel.launch()
+            }
+
+            LaunchedEffect(viewModel.inputValue().text) {
+                viewModel.onFindInputChange()
             }
         }
     }
