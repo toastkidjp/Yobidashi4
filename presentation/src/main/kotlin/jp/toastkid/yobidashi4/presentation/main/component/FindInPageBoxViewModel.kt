@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.input.key.Key
@@ -7,7 +9,6 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
@@ -37,13 +38,12 @@ class FindInPageBoxViewModel : KoinComponent {
         viewModel.switchFind()
     }
 
-    fun inputValue(): TextFieldValue {
+    fun inputValue(): TextFieldState {
         return viewModel.inputValue()
     }
 
-    fun onFindInputChange(it: TextFieldValue) {
-        viewModel.onFindInputChange(it)
-        findInputHistoryService.filter(findInputHistories, it.text)
+    fun onFindInputChange() {
+        findInputHistoryService.filter(findInputHistories, inputValue().text.toString())
     }
 
     fun shouldShowInputHistory(): Boolean {
@@ -56,7 +56,7 @@ class FindInPageBoxViewModel : KoinComponent {
 
     fun onClickInputHistory(it: String) {
         val value = findInputHistoryService.make(it) ?: return
-        viewModel.onFindInputChange(value)
+        viewModel.inputValue().setTextAndPlaceCursorAtEnd(value.text)
         findInputHistories.clear()
     }
 
@@ -85,10 +85,6 @@ class FindInPageBoxViewModel : KoinComponent {
     }
 
     fun replaceInputValue() = viewModel.replaceInputValue()
-
-    fun onReplaceInputChange(it: TextFieldValue) {
-        viewModel.onReplaceInputChange(it)
-    }
 
     fun caseSensitive(): Boolean {
         return viewModel.caseSensitive()
