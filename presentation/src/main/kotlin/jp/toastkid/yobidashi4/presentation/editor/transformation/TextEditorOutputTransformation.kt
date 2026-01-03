@@ -70,12 +70,14 @@ class TextEditorOutputTransformation(
         val last = transformedText.get()
         if (last != null && content.composition == null && last == content.text) {
             applyStyles(this)
+            append("[EOF]")
             return
         }
 
         transformedText.set(content.text)
         calculateStyle(darkMode, content.text.toString())
         applyStyles(this)
+        append("[EOF]")
     }
 
     private fun applyStyles(buffer: TextFieldBuffer) {
