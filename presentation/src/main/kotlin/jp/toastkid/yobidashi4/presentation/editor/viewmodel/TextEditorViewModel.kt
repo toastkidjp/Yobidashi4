@@ -85,14 +85,12 @@ class TextEditorViewModel : KoinComponent {
 
     fun update() {
         val tab = this.tab.get()
-        if (content.text.length != lastLength.get() && content.composition == null) {
-            mainViewModel.updateEditorContent(
-                tab.path,
-                content.text,
-                -1,
-                resetEditing = false
-            )
-        }
+        mainViewModel.updateEditorContent(
+            tab.path,
+            content.text,
+            -1,
+            resetEditing = false
+        )
         lastLength.set(content.text.length)
     }
 
@@ -214,6 +212,7 @@ class TextEditorViewModel : KoinComponent {
 
         val newContent = TextFieldState(tab.getContent().toString(), TextRange(tab.caretPosition()))
         applyStyle(newContent)
+        update()
         CoroutineScope(dispatcher).launch {
             mainViewModel.finderFlow().collect {
                 findOrderReceiver(it, content)
@@ -240,7 +239,7 @@ class TextEditorViewModel : KoinComponent {
                 return@InputTransformation
             }
 
-            update()
+            //TODO update()
         }
     }
 
