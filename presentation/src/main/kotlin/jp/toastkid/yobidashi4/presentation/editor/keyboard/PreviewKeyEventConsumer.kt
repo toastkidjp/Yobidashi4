@@ -78,7 +78,7 @@ class PreviewKeyEventConsumer(
                 val lineStart = textLayoutResult.getLineStart(currentLine)
                 val lineEnd = textLayoutResult.getLineEnd(currentLine)
                 content.edit {
-                    delete(lineStart, lineEnd + 1)
+                    delete(lineStart, min(length, lineEnd + 1))
                 }
                 return true
             }
