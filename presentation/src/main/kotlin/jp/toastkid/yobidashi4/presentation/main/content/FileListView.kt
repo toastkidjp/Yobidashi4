@@ -91,10 +91,13 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         SingleLineTextField(
                             viewModel.keyword(),
                             "Keyword",
-                            viewModel::onValueChange,
                             viewModel::clearInput,
                             modifier = Modifier.weight(1f)
                         )
+
+                        LaunchedEffect(viewModel.keyword().text) {
+                            viewModel.onValueChange()
+                        }
 
                         Icon(
                             painterResource(Res.drawable.ic_reload),
