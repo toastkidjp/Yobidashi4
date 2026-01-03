@@ -9,6 +9,8 @@ package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -22,7 +24,6 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
@@ -54,13 +55,13 @@ class FileListViewModel : KoinComponent {
 
     private val shiftPressing = AtomicBoolean(false)
 
-    private val keyword = mutableStateOf(TextFieldValue())
+    private val keyword = TextFieldState()
 
     fun listState() = listState
 
     fun horizontalScrollState() = horizontalScrollState
 
-    fun keyword() = keyword.value
+    fun keyword() = keyword
 
     fun start(paths: List<Path>) {
         articleStates.clear()
@@ -118,10 +119,9 @@ class FileListViewModel : KoinComponent {
         return listState.firstVisibleItemIndex == 0
     }
 
-    fun onValueChange(it: TextFieldValue) {
-        keyword.value = it
-        if (keyword.value.composition == null) {
-            val lowercase = keyword.value.text.lowercase()
+    fun onValueChange() {
+        if (keyword.composition == null) {
+            val lowercase = keyword.text.toString().lowercase()
 
             articleStates.clear()
             articleStates.addAll(
@@ -134,7 +134,7 @@ class FileListViewModel : KoinComponent {
     }
 
     fun clearInput() {
-        keyword.value = TextFieldValue()
+        keyword.clearText()
         articleStates.clear()
         articleStates.addAll(completeItems)
     }
