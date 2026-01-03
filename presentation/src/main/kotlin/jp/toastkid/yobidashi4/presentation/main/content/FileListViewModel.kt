@@ -120,17 +120,19 @@ class FileListViewModel : KoinComponent {
     }
 
     fun onValueChange() {
-        if (keyword.composition == null) {
-            val lowercase = keyword.text.toString().lowercase()
-
-            articleStates.clear()
-            articleStates.addAll(
-                if (lowercase.isNotBlank())
-                    completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
-                else
-                    completeItems
-            )
+        if (keyword.composition != null) {
+            return
         }
+
+        val lowercase = keyword.text.toString().lowercase()
+
+        articleStates.clear()
+        articleStates.addAll(
+            if (lowercase.isNotBlank())
+                completeItems.filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
+            else
+                completeItems
+        )
     }
 
     fun clearInput() {
