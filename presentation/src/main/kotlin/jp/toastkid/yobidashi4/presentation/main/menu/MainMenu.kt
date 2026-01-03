@@ -78,7 +78,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Find",
                 icon = painterResource(Res.drawable.ic_search),
-                shortcut = KeyShortcut(Key.F, alt = true),
+                shortcut = KeyShortcut(Key.F, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 onClick = viewModel::switchFindArticle
             )
 
@@ -97,21 +97,21 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Open article folder",
                 icon = painterResource(Res.drawable.ic_article_folder),
-                shortcut = KeyShortcut(Key.O, alt = true),
+                shortcut = KeyShortcut(Key.O, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 onClick = viewModel::openArticleFolder
             )
 
             Item(
                 "Open user folder",
                 icon = painterResource(Res.drawable.ic_user_folder),
-                shortcut = KeyShortcut(Key.U, alt = true),
+                shortcut = KeyShortcut(Key.U, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 onClick = viewModel::openUserFolder
             )
 
             Item(
                 "Open download folder",
                 icon = painterResource(Res.drawable.ic_user_folder),
-                shortcut = KeyShortcut(Key.U, alt = true),
+                shortcut = KeyShortcut(Key.U, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 onClick = viewModel::openDownloadFolder
             )
 
@@ -254,42 +254,42 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
         Menu("Tool") {
             Item(
                 "Assistant Chat",
-                shortcut = KeyShortcut(Key.G, alt = true),
+                shortcut = KeyShortcut(Key.G, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_chat),
                 onClick = viewModel::openChatTab
             )
 
             Item(
                 "Bookmark",
-                shortcut = KeyShortcut(Key.B, alt = true),
+                shortcut = KeyShortcut(Key.B, shift = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_bookmark),
                 onClick = viewModel::openBookmarkTab
             )
 
             Item(
                 "Calendar",
-                shortcut = KeyShortcut(Key.C, alt = true),
+                shortcut = KeyShortcut(Key.C, shift = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_calendar),
                 onClick = viewModel::openCalendarTab
             )
 
             Item(
                 "Aggregation",
-                shortcut = KeyShortcut(Key.A, alt = true),
+                shortcut = KeyShortcut(Key.A, shift = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_aggregation),
                 onClick = viewModel::openAggregationBox
             )
 
             Item(
                 "Web history",
-                shortcut = KeyShortcut(Key.H, alt = true),
+                shortcut = KeyShortcut(Key.H, shift = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_history),
                 onClick = viewModel::openWebHistoryTab
             )
 
             Item(
                 "Web search",
-                shortcut = KeyShortcut(Key.S, alt = true),
+                shortcut = KeyShortcut(Key.S, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_search),
                 onClick =  viewModel::switchWebSearchBox
             )
@@ -314,7 +314,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item(
                 "Roulette",
-                shortcut = KeyShortcut(Key.R, alt = true),
+                shortcut = KeyShortcut(Key.R, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_shuffle),
                 onClick = viewModel::openRouletteToolTab
             )
@@ -327,21 +327,21 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
 
             Item(
                 "Loan calculator",
-                shortcut = KeyShortcut(Key.L, alt = true),
+                shortcut = KeyShortcut(Key.L, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_home),
                 onClick = viewModel::openLoanCalculatorTab
             )
 
             Item(
                 "Number place",
-                shortcut = KeyShortcut(Key.N, alt = true),
+                shortcut = KeyShortcut(Key.N, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_number_place),
                 onClick = viewModel::openNumberPlaceTab
             )
 
             Item(
                 "Music player",
-                shortcut = KeyShortcut(Key.M, alt = true),
+                shortcut = KeyShortcut(Key.M, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 icon = painterResource(Res.drawable.ic_music),
                 onClick = viewModel::openMusicPlayerTab
             )
@@ -423,7 +423,7 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Switch dark mode",
                 icon = painterResource(Res.drawable.ic_dark_mode),
-                shortcut = KeyShortcut(key = Key.D, alt = true),
+                shortcut = KeyShortcut(key = Key.D, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
                 onClick = viewModel::switchDarkMode
             )
 
