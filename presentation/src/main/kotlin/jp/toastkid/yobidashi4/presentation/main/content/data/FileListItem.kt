@@ -24,7 +24,6 @@ data class FileListItem(
 
     init {
         subText.set(makeSubText())
-        sortKey.set(Files.getLastModifiedTime(path).toMillis())
     }
 
     private fun makeSubText(): String? {
@@ -35,9 +34,11 @@ data class FileListItem(
         val size = Files.size(path).toDouble()
         val unit = if (size > 1_000_000) "MB" else "KB"
         val displaySize = decimalFormat.format(size / (if (size > 1_000_000) 1_000_000 else 1000))
+        val lastModifiedTime = Files.getLastModifiedTime(path)
+        sortKey.set(lastModifiedTime.toMillis())
         return "$displaySize $unit | ${
             LocalDateTime
-                .ofInstant(Files.getLastModifiedTime(path).toInstant(), ZoneId.systemDefault())
+                .ofInstant(lastModifiedTime.toInstant(), ZoneId.systemDefault())
                 .format(dateTimeFormatter)
         }"
     }
