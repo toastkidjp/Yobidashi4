@@ -245,7 +245,9 @@ class TextEditorViewModel : KoinComponent {
 
     private val visualTransformation = TextEditorOutputTransformation(content, mainViewModel.darkMode())
 
-    private val none = OutputTransformation {}
+    private val none = OutputTransformation {
+        append("[EOF]")
+    }
 
     fun visualTransformation(): OutputTransformation {
         if (content.text.length > conversionLimit) {
