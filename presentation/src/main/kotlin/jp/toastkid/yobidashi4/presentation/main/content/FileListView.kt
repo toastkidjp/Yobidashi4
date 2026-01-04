@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -43,6 +44,7 @@ import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.painterResource
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
@@ -95,10 +97,17 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             modifier = Modifier.weight(1f)
                         )
 
-                        LaunchedEffect(viewModel.keyword().text) {
-                            viewModel.onValueChange()
-                        }
+                        LaunchedEffect(viewModel.keyword()) {
+                            snapshotFlow { viewModel.keyword().text to (viewModel.keyword().composition == null) }
+                                .distinctUntilChanged()
+                                .collect { textAndComposition ->
+                                    if (textAndComposition.second.not()) {
+                                        return@collect
+                                    }
 
+                                    viewModel.onValueChange()
+                                }
+                        }
                         Icon(
                             painterResource(Res.drawable.ic_reload),
                             contentDescription = "Reload file list",
