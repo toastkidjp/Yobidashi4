@@ -1,54 +1,46 @@
+/*
+ * Copyright (c) 2025 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.yobidashi4.presentation.editor.transformation
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.TextFieldValue
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotSame
-import org.junit.jupiter.api.Assertions.assertSame
+import androidx.compose.foundation.text.input.TextFieldBuffer
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.ui.text.SpanStyle
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class TextEditorVisualTransformationTest {
 
-    private lateinit var subject: TextEditorVisualTransformation
+    private lateinit var subject: TextEditorOutputTransformation
 
     @BeforeEach
     fun setUp() {
-        subject = TextEditorVisualTransformation(mutableStateOf(TextFieldValue()), true)
+        subject = TextEditorOutputTransformation(TextFieldState(), true)
     }
 
     @Test
     fun visualTransformation() {
-        val transformedText = subject.filter(buildAnnotatedString { append("test") })
-        assertEquals("test[EOF]", transformedText.text.text)
-    }
-    @Test
-    fun overwriteWithStateContainingComposition() {
-        val content = mutableStateOf(TextFieldValue("test"))
-        subject = TextEditorVisualTransformation(content, true)
-        val first = subject.filter(buildAnnotatedString { append("test") })
+        val buffer = mockk<TextFieldBuffer>()
+        every { buffer.asCharSequence() } returns "# Test doc"
+        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.append(any<String>()) } returns buffer
 
-        // overwrite
-        content.value = TextFieldValue("test", composition = TextRange.Zero)
-        assertNotSame(first, subject.filter(buildAnnotatedString { append("test") }))
-        assertNotSame(first, subject.filter(buildAnnotatedString { append("test2") }))
+        with(subject) {
+            buffer.transformOutput()
+            buffer.transformOutput()
+        }
 
-        content.value = TextFieldValue("test")
-        assertNotSame(first, subject.filter(buildAnnotatedString { append("test2") }))
-    }
-
-    @Test
-    fun useCache() {
-        val content = mutableStateOf(TextFieldValue("test"))
-        subject = TextEditorVisualTransformation(content, true)
-
-        // use cache
-        val first = subject.filter(buildAnnotatedString { append("test") })
-        assertSame(first, subject.filter(buildAnnotatedString { append("test") }))
-        // overwrite
-        assertNotSame(first, subject.filter(buildAnnotatedString { append("test2") }))
+        verify { buffer.addStyle(any<SpanStyle>(), any(), any()) }
+        verify { buffer.append("[EOF]") }
     }
 
 }
