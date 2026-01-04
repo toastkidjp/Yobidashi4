@@ -51,6 +51,8 @@ data class FileListItem(
 
     fun sortKey(): Long = sortKey.get()
 
+    fun keep() = !subText.get().isNullOrBlank()
+
 }
 
 private val decimalFormat = DecimalFormat("#,###.##")
