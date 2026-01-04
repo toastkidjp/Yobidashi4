@@ -18,7 +18,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class TextEditorVisualTransformationTest {
+class TextEditorOutputTransformationTest {
 
     private lateinit var subject: TextEditorOutputTransformation
 
