@@ -236,10 +236,9 @@ class TextEditorViewModel : KoinComponent {
     fun inputTransformation(): InputTransformation {
         return InputTransformation {
             if (altPressed.get()) {
+                revertAllChanges()
                 return@InputTransformation
             }
-
-            //TODO update()
         }
     }
 
