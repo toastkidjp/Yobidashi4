@@ -81,8 +81,6 @@ class TextEditorViewModel : KoinComponent {
 
     fun content() = content
 
-    private val lastLength = AtomicReference(-1)
-
     fun update() {
         val tab = this.tab.get()
         mainViewModel.updateEditorContent(
@@ -91,7 +89,6 @@ class TextEditorViewModel : KoinComponent {
             -1,
             resetEditing = false
         )
-        lastLength.set(content.text.length)
     }
 
     private fun applyStyle(it: TextFieldState) {
