@@ -120,10 +120,6 @@ class FileListViewModel : KoinComponent {
     }
 
     fun onValueChange() {
-        if (keyword.composition != null) {
-            return
-        }
-
         val lowercase = keyword.text.toString().lowercase()
 
         articleStates.clear()
