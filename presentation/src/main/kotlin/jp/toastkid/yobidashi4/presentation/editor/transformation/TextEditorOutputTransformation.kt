@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.regex.Pattern
 
 @Immutable
-private data class EditorStyle2(
+private data class EditorStylePattern(
     val regex: Pattern,
     val lightStyle: SpanStyle,
     val darkStyle: SpanStyle
@@ -30,32 +30,32 @@ class TextEditorOutputTransformation(
 ) : OutputTransformation {
 
     private val patterns = listOf(
-        EditorStyle2(
+        EditorStylePattern(
             Pattern.compile("[0-9]*", Pattern.MULTILINE),
             SpanStyle(Color(0xFF6897BB)),
             SpanStyle(Color(0xFFA8B7EE))
         ),
-        EditorStyle2(
+        EditorStylePattern(
             Pattern.compile("^#.*?$", Pattern.MULTILINE),
             SpanStyle(Color(0xFF008800), fontWeight = FontWeight.Bold),
             SpanStyle(Color(0xFF00DD00), fontWeight = FontWeight.Bold)
         ),
-        EditorStyle2(
+        EditorStylePattern(
             Pattern.compile("^\\|.*?$", Pattern.MULTILINE),
             SpanStyle(Color(0xFF8800CC)),
             SpanStyle(Color(0xFF86EEC7))
         ),
-        EditorStyle2(
+        EditorStylePattern(
             Pattern.compile("^>.*?$", Pattern.MULTILINE),
             SpanStyle(Color(0xFF7744AA)),
             SpanStyle(Color(0xFFCCAAFF))
         ),
-        EditorStyle2(
+        EditorStylePattern(
             Pattern.compile("^-.*?$", Pattern.MULTILINE),
             SpanStyle(Color(0xFF666239)),
             SpanStyle(Color(0xFFFFD54F))
         ),
-        EditorStyle2(
+        EditorStylePattern(
             Pattern.compile("^\\*.*?$", Pattern.MULTILINE),
             SpanStyle(Color(0xFF666239)),
             SpanStyle(Color(0xFFFFD54F))
