@@ -8,6 +8,7 @@ import org.cef.browser.CefBrowser
 import org.koin.core.annotation.Single
 import java.awt.Component
 import java.util.concurrent.atomic.AtomicReference
+import javax.swing.SwingUtilities
 
 @Single
 class WebViewPoolImplementation : WebViewPool {
@@ -51,7 +52,11 @@ class WebViewPoolImplementation : WebViewPool {
 
     override fun dispose(id: String) {
         val browser = browsers.get(id) ?: return
-        browser.close(true)
+
+        SwingUtilities.invokeLater(Runnable {
+            browser.close(true)
+        })
+
         client.doClose(browser)
         browsers.remove(id)
     }
