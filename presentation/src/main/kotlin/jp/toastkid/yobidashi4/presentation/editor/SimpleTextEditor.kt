@@ -20,6 +20,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class)
 @Composable
@@ -142,7 +144,16 @@ fun SimpleTextEditor(
         viewModel.adjustLineNumberState()
     }
 
-    LaunchedEffect(viewModel.content().text) {
-        setStatus(viewModel.makeCharacterCountMessage(viewModel.content().text.length))
+    LaunchedEffect(viewModel.content()) {
+        snapshotFlow { viewModel.content().text to (viewModel.content().composition == null) }
+            .distinctUntilChanged()
+            .collect { textAndComposition ->
+                if (textAndComposition.second.not()) {
+                    return@collect
+                }
+
+                viewModel.update()
+                setStatus(viewModel.makeCharacterCountMessage(viewModel.content().text.length))
+            }
     }
 }
