@@ -68,6 +68,7 @@ class FileListItemTest {
         val fileListItem = FileListItem(path, selected = true, editable = true)
 
         assertNull(fileListItem.subText())
+        assertFalse(fileListItem.keep())
     }
 
     @Test
@@ -81,6 +82,7 @@ class FileListItemTest {
         verify { Files.size(any()) }
         verify { Files.getLastModifiedTime(any()) }
         assertEquals("1.23 MB | 2023-12-10(Sun) 09:55:56", subText)
+        assertTrue(fileListItem.keep())
     }
 
     @Test
