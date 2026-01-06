@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.editor.keyboard
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.insert
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
 import org.koin.core.component.KoinComponent
