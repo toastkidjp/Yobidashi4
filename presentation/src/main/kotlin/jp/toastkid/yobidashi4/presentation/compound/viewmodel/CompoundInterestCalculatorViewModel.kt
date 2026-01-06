@@ -63,7 +63,7 @@ class CompoundInterestCalculatorViewModel {
 
     fun result() = result.value.itemArrays().toList()
 
-    private fun calculate() {
+    fun calculate() {
         CompoundInterestCalculatorInput.from(
             capitalInput.text.toString(),
             installmentInput.text.toString(),
