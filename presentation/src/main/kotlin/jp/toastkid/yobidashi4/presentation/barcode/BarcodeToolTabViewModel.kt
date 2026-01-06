@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.barcode
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeDecoder
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -24,33 +24,29 @@ class BarcodeToolTabViewModel : KoinComponent {
 
     private val lastBarcode = mutableStateOf<BufferedImage?>(null)
 
-    private val input = mutableStateOf(TextFieldValue())
+    private val input = TextFieldState()
 
-    private val decodeInput = mutableStateOf(TextFieldValue())
+    private val decodeInput = TextFieldState()
 
     private val decodeResult = mutableStateOf("")
 
     fun barcodeImage() =
         lastBarcode.value?.toComposeImageBitmap()
 
-    fun encodeInputValue() = input.value
+    fun encodeInputValue() = input
 
-    fun setEncodeInputValue(value: TextFieldValue) {
-        input.value = value
-
-        if (value.text.isNotBlank()) {
-            lastBarcode.value = barcodeEncoder.invoke(value.text, 400, 400)
+    fun setEncodeInputValue() {
+        if (input.text.isNotBlank()) {
+            lastBarcode.value = barcodeEncoder.invoke(input.text.toString(), 400, 400)
         }
     }
 
-    fun decodeInputValue() = decodeInput.value
+    fun decodeInputValue() = decodeInput
 
-    fun setDecodeInputValue(value: TextFieldValue) {
-        decodeInput.value = value
-
-        if (value.text.isNotBlank()) {
+    fun setDecodeInputValue() {
+        if (decodeInput.text.isNotBlank()) {
             val image = try {
-                ImageIO.read(URI(value.text).toURL())
+                ImageIO.read(URI(decodeInput.text.toString()).toURL())
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
                 null
