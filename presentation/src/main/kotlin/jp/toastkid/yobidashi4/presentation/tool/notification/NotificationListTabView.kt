@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -30,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
@@ -63,9 +64,9 @@ internal fun NotificationListTabView() {
                 }
 
                 itemsIndexed(viewModel.items(), { _, item -> item.title + item.text + item.date }) { index, item ->
-                    val titleState = remember { mutableStateOf(TextFieldValue(item.title)) }
-                    val textState = remember { mutableStateOf(TextFieldValue(item.text)) }
-                    val dateTimeState = remember { mutableStateOf(TextFieldValue(item.dateTimeString())) }
+                    val titleState = remember { (TextFieldState(item.title)) }
+                    val textState = remember { (TextFieldState(item.text)) }
+                    val dateTimeState = remember { (TextFieldState(item.dateTimeString())) }
                     val headerCursorOn = mutableStateOf(false)
                     val headerColumnBackgroundColor = animateColorAsState(
                         if (headerCursorOn.value) MaterialTheme.colors.primary
@@ -82,18 +83,12 @@ internal fun NotificationListTabView() {
                         }
                         .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     ) {
-                        NotificationEventRow(titleState.value) {
-                            titleState.value = it
-                        }
-                        NotificationEventRow(textState.value) {
-                            textState.value = it
-                        }
-                        NotificationEventRow(dateTimeState.value) {
-                            dateTimeState.value = it
-                        }
+                        NotificationEventRow(titleState)
+                        NotificationEventRow(textState)
+                        NotificationEventRow(dateTimeState)
 
                         Button(onClick = {
-                            viewModel.update(index, titleState.value.text, textState.value.text, dateTimeState.value.text)
+                            viewModel.update(index, titleState.text, textState.text, dateTimeState.text)
                         }) {
                             Text("Update")
                         }
@@ -119,8 +114,7 @@ internal fun NotificationListTabView() {
 
 @Composable
 private fun NotificationEventRow(
-    initialInput: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit
+    initialInput: TextFieldState
 ) {
     Box(
         contentAlignment = Alignment.CenterStart
@@ -128,8 +122,7 @@ private fun NotificationEventRow(
         SingleLineTextField(
             initialInput,
             "Keyword",
-            onValueChange,
-            { onValueChange(TextFieldValue()) }
+            { initialInput.clearText() }
         )
     }
 }
