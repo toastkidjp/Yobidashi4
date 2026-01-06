@@ -1,7 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.compound.viewmodel
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
@@ -10,60 +11,52 @@ class CompoundInterestCalculatorViewModel {
 
     private val calculator = CompoundInterestCalculatorService()
 
-    private val capitalInput = mutableStateOf(TextFieldValue("0"))
+    private val capitalInput = TextFieldState("0")
 
-    fun capitalInput() = capitalInput.value
+    fun capitalInput() = capitalInput
 
-    fun setCapitalInput(value: TextFieldValue) {
-        capitalInput.value = value
-
+    fun setCapitalInput() {
         calculate()
     }
 
     fun clearCapitalInput() {
-        setCapitalInput(TextFieldValue())
+        capitalInput.clearText()
     }
 
-    private val installmentInput = mutableStateOf(TextFieldValue("40000"))
+    private val installmentInput = TextFieldState("40000")
 
-    fun installmentInput() = installmentInput.value
+    fun installmentInput() = installmentInput
 
-    fun setInstallmentInput(value: TextFieldValue) {
-        installmentInput.value = value
-
+    fun setInstallmentInput() {
         calculate()
     }
 
     fun clearInstallmentInput() {
-        setInstallmentInput(TextFieldValue())
+        installmentInput.clearText()
     }
 
-    private val annualInterestInput = mutableStateOf(TextFieldValue("0.03"))
+    private val annualInterestInput = TextFieldState("0.03")
 
-    fun annualInterestInput() = annualInterestInput.value
+    fun annualInterestInput() = annualInterestInput
 
-    fun setAnnualInterestInput(value: TextFieldValue) {
-        annualInterestInput.value = value
-
+    fun setAnnualInterestInput() {
         calculate()
     }
 
     fun clearAnnualInterestInput() {
-        setAnnualInterestInput(TextFieldValue())
+        annualInterestInput.clearText()
     }
 
-    private val yearInput = mutableStateOf(TextFieldValue("20"))
+    private val yearInput = TextFieldState("20")
 
-    fun yearInput() = yearInput.value
+    fun yearInput() = yearInput
 
-    fun setYearInput(value: TextFieldValue) {
-        yearInput.value = value
-
+    fun setYearInput() {
         calculate()
     }
 
     fun clearYearInput() {
-        setYearInput(TextFieldValue())
+        yearInput.clearText()
     }
 
     private val result = mutableStateOf(CompoundInterestCalculationResult())
@@ -72,10 +65,10 @@ class CompoundInterestCalculatorViewModel {
 
     private fun calculate() {
         CompoundInterestCalculatorInput.from(
-            capitalInput.value.text,
-            installmentInput.value.text,
-            annualInterestInput.value.text,
-            yearInput.value.text
+            capitalInput.text.toString(),
+            installmentInput.text.toString(),
+            annualInterestInput.text.toString(),
+            yearInput.text.toString()
         )?.let {
             result.value = calculator.invoke(it)
         }
