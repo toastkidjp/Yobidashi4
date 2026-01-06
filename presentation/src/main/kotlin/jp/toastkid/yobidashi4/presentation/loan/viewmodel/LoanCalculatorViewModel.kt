@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
@@ -9,8 +10,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
@@ -23,6 +22,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.TestOnly
 import java.text.DecimalFormat
+import java.util.UUID
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToInt
 
@@ -40,65 +40,73 @@ class LoanCalculatorViewModel {
 
     fun totalInterest() = totalInterest.value
 
-    private val loanAmount = mutableStateOf(TextFieldValue("35000000"))
+    private val loanAmount = TextFieldState("35000000")
 
-    fun loanAmount() = loanAmount.value
+    fun loanAmount() = loanAmount
 
-    fun setLoanAmount(value: TextFieldValue) {
-        loanAmount.value = value.copy(text = formatDecimalString(value.text))
+    fun setLoanAmount() {
+/*        loanAmount.edit {
+            replace(0, length, formatDecimalString(loanAmount.text.toString()))
+        }*/
 
         brokerageFee.set(calculateBrokerageFee())
 
-        onChange(inputChannel, value.text)
+        onChange(inputChannel)
     }
 
-    private val loanTerm = mutableStateOf(TextFieldValue("35"))
+    private val loanTerm = TextFieldState("35")
 
-    fun loanTerm() = loanTerm.value
+    fun loanTerm() = loanTerm
 
-    fun setLoanTerm(value: TextFieldValue) {
-        loanTerm.value = value.copy(text = formatDecimalString(value.text))
-
-        onChange(inputChannel, value.text)
+    fun setLoanTerm() {
+        /*loanTerm.edit {
+            replace(0, length, formatDecimalString(loanTerm.text.toString()))
+        }*/
+        onChange(inputChannel)
     }
 
-    private val interestRate = mutableStateOf(TextFieldValue("1.0"))
+    private val interestRate = TextFieldState("1.0")
 
-    fun interestRate() = interestRate.value
+    fun interestRate() = interestRate
 
-    fun setInterestRate(value: TextFieldValue) {
-        interestRate.value = value.copy(formatDecimalString(value.text))
-
-        onChange(inputChannel, value.text)
+    fun setInterestRate() {
+/*        interestRate.edit {
+            replace(0, length, formatDecimalString(interestRate.text.toString()))
+        }*/
+        onChange(inputChannel)
     }
 
-    private val downPayment = mutableStateOf(TextFieldValue("1000000"))
+    private val downPayment = TextFieldState("1000000")
 
-    fun downPayment() = downPayment.value
+    fun downPayment() = downPayment
 
-    fun setDownPayment(value: TextFieldValue) {
-        downPayment.value = value.copy(formatDecimalString(value.text))
-
-        onChange(inputChannel, value.text)
+    fun setDownPayment() {
+/*        downPayment.edit {
+            replace(0, length, formatDecimalString(downPayment.text.toString()))
+        }*/
+        onChange(inputChannel)
     }
 
-    private val managementFee = mutableStateOf(TextFieldValue("10000"))
+    private val managementFee = TextFieldState("10000")
 
-    fun managementFee() = managementFee.value
+    fun managementFee() = managementFee
 
-    fun setManagementFee(value: TextFieldValue) {
-        managementFee.value = value.copy(formatDecimalString(value.text))
-
-        onChange(inputChannel, value.text)
+    fun setManagementFee() {
+/*        managementFee.edit {
+            replace(0, length, formatDecimalString(managementFee.text.toString()))
+        }*/
+        onChange(inputChannel)
     }
 
-    private val renovationReserves = mutableStateOf(TextFieldValue("10000"))
+    private val renovationReserves = TextFieldState("10000")
 
-    fun renovationReserves() = renovationReserves.value
+    fun renovationReserves() = renovationReserves
 
-    fun setRenovationReserves(value: TextFieldValue) {
-        renovationReserves.value = value.copy(formatDecimalString(value.text))
-        onChange(inputChannel, value.text)
+    fun setRenovationReserves() {
+/*        renovationReserves.edit {
+            replace(0, length, formatDecimalString(renovationReserves.text.toString()))
+        }*/
+        onChange(inputChannel)
     }
 
     private val lastPaymentResult = AtomicReference<LoanPayment?>(null)
@@ -133,13 +141,13 @@ class LoanCalculatorViewModel {
         ).invoke()
     }
 
-    private fun onChange(inputChannel: Channel<String>, text: String) {
+    private fun onChange(inputChannel: Channel<String>) {
         CoroutineScope(Dispatchers.IO).launch {
-            inputChannel.send(text)
+            inputChannel.send(UUID.randomUUID().toString())
         }
     }
 
-    private val visualTransformation: VisualTransformation = DecimalVisualTransformation()
+    private val visualTransformation = DecimalVisualTransformation()
 
     fun visualTransformation() = visualTransformation
 
@@ -151,12 +159,12 @@ class LoanCalculatorViewModel {
         return input.filter { it.isDigit() || it == '.' }.trim()
     }
 
-    private fun extractLong(editText: String) = editText.toLong()
+    private fun extractLong(editText: CharSequence) = editText.toString().toLongOrNull() ?: 0
 
-    private fun extractInt(editText: String) = editText.toInt()
+    private fun extractInt(editText: CharSequence) = editText.toString().toIntOrNull() ?: 0
 
-    private fun extractDouble(editText: String) =
-        editText.toDoubleOrNull() ?: 0.0
+    private fun extractDouble(editText: CharSequence) =
+        editText.toString().toDoubleOrNull() ?: 0.0
 
     fun format(l: Long): String = decimalFormat.format(l)
 
@@ -183,12 +191,12 @@ class LoanCalculatorViewModel {
     }
 
     private fun makeFactor() = Factor(
-        extractLong(loanAmount.value.text),
-        extractInt(loanTerm.value.text),
-        extractDouble(interestRate.value.text),
-        extractInt(downPayment.value.text),
-        extractInt(managementFee.value.text),
-        extractInt(renovationReserves.value.text)
+        extractLong(loanAmount.text),
+        extractInt(loanTerm.text),
+        extractDouble(interestRate.text),
+        extractInt(downPayment.text),
+        extractInt(managementFee.text),
+        extractInt(renovationReserves.text)
     )
 
     private val decimalFormat = DecimalFormat("#,###.##")
@@ -199,7 +207,7 @@ class LoanCalculatorViewModel {
      * else 3.3％＋66,000
      */
     private fun calculateBrokerageFee(): String {
-        val amount = extractLong(loanAmount.value.text)
+        val amount = extractLong(loanAmount.text)
         val brokerageFee = when {
             amount <= 2_000_000 -> (amount * 0.055)
             amount <= 4_000_000 -> (amount * 0.044) + 22_000
