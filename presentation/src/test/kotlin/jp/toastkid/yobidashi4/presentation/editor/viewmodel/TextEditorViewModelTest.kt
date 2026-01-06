@@ -131,8 +131,8 @@ class TextEditorViewModelTest {
 
         viewModel.onClickLineNumber(0)
 
-        // TODO assertEquals(text, viewModel.content().getSelectedText().text)
-        println(viewModel.content().selection)// TODO
+        val content = viewModel.content()
+        assertEquals(text, content.text.subSequence(content.selection.start, content.selection.end))
         verify { multiParagraph.getLineHeight(0) }
         verify { multiParagraph.getLineHeight(1) }
         verify { multiParagraph.getLineHeight(2) }
@@ -323,6 +323,16 @@ class TextEditorViewModelTest {
     @Test
     fun lineHeight() {
         assertEquals(1.5f, viewModel.lineHeight())
+    }
+
+    @Test
+    fun visualTransformation() {
+        viewModel.visualTransformation()
+
+        every { setting.editorConversionLimit() } returns -1
+
+        viewModel = TextEditorViewModel()
+        viewModel.visualTransformation()
     }
 
 }
