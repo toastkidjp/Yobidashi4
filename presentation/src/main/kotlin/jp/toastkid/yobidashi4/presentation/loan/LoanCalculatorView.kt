@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -27,8 +29,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
@@ -149,21 +149,24 @@ fun LoanCalculatorView() {
 
 @Composable
 private fun LoanCalculatorInput(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: TextFieldState,
+    onValueChange: () -> Unit,
     labelText: String,
-    visualTransformation: VisualTransformation
+    inputTransformation: OutputTransformation
 ) {
     SingleLineTextField(
         textFieldValue = value,
-        onValueChange = onValueChange,
         labelText = labelText,
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colors.onSurface,
             backgroundColor = Color.Transparent,
             cursorColor = MaterialTheme.colors.onSurface
         ),
-        visualTransformation = visualTransformation,
+        visualTransformation = inputTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
+
+    LaunchedEffect(value.text) {
+        onValueChange()
+    }
 }
