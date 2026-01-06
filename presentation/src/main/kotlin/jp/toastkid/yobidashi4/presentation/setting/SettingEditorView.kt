@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -84,11 +85,7 @@ fun SettingEditorView() {
                             state.value,
                             item.first,
                             {
-                                state.value = it
-                                viewModel.update(item.first, it)
-                            },
-                            {
-                                state.value = TextFieldValue()
+                                state.value.clearText()
                                 viewModel.update(item.first, TextFieldValue())
                             }
                         )
