@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.MaterialTheme
@@ -24,7 +26,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -35,12 +39,13 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.format.TextStyle
@@ -63,11 +68,19 @@ fun CalendarView(tab: CalendarTab) {
                 calendarViewModel.openingMonthChooser(),
                 calendarViewModel::openMonthChooser,
                 calendarViewModel::closeMonthChooser,
-                calendarViewModel::setYearInput,
                 calendarViewModel::plusMonths,
                 calendarViewModel::moveToCurrentMonth,
                 calendarViewModel::moveMonth
             )
+
+            LaunchedEffect(calendarViewModel.yearInput()) {
+                snapshotFlow { calendarViewModel.yearInput().text }
+                    .distinctUntilChanged()
+                    .collect { text ->
+                        calendarViewModel.setYearInput()
+                    }
+            }
+
             Row {
                 calendarViewModel.dayOfWeeks().forEach { dayOfWeek ->
                     Surface(modifier = Modifier.weight(1f)) {
@@ -128,13 +141,12 @@ fun CalendarView(tab: CalendarTab) {
 
 @Composable
 private fun TopComponent(
-    yearInput: TextFieldValue,
+    yearInput: TextFieldState,
     japaneseYear: String,
     currentMonth: Int,
     openingMonthChooser: Boolean,
     openMonthChooser: () -> Unit,
     closeMonthChooser: () -> Unit,
-    setYearInput: (TextFieldValue) -> Unit,
     plusMonths: (Long) -> Unit,
     moveToCurrentMonth: () -> Unit,
     moveMonth: (Int) -> Unit
@@ -154,7 +166,9 @@ private fun TopComponent(
             SingleLineTextField(
                 yearInput,
                 "Year",
-                setYearInput,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal
+                ),
                 modifier = Modifier.widthIn(60.dp)
             )
         }
