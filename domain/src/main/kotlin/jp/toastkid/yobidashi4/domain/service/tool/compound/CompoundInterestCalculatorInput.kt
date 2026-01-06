@@ -21,10 +21,10 @@ data class CompoundInterestCalculatorInput(
                 return null
             }
 
-            val capital = capitalInput.toDouble()
-            val installment = installmentInput.toLong()
-            val annualInterest = annualInterestInput.toDouble()
-            val year = yearInput.toLong()
+            val capital = capitalInput.toDoubleOrNull() ?: return null
+            val installment = installmentInput.toLongOrNull() ?: return null
+            val annualInterest = annualInterestInput.toDoubleOrNull() ?: return null
+            val year = yearInput.toLongOrNull() ?: return null
 
             return CompoundInterestCalculatorInput(capital, installment, annualInterest, year)
         }
