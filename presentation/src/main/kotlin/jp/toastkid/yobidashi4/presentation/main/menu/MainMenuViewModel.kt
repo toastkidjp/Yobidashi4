@@ -79,7 +79,11 @@ class MainMenuViewModel : KoinComponent {
         if (viewModel.openArticleList()) Res.drawable.ic_left_panel_close else Res.drawable.ic_left_panel_open
 
     fun switchArticleListShortcut(): KeyShortcut {
-        return KeyShortcut(if (viewModel.openArticleList()) Key.DirectionLeft else Key.DirectionRight, ctrl = true, alt = true)
+        return KeyShortcut(
+            if (viewModel.openArticleList()) Key.DirectionLeft else Key.DirectionRight,
+            ctrl = true,
+            alt = true
+        )
     }
 
     fun switchArticleList() {
