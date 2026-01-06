@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.setting
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
@@ -27,7 +28,7 @@ class SettingEditorViewModel : KoinComponent {
 
     private val listState = LazyListState()
 
-    private val items = mutableStateListOf<Pair<String, TextFieldValue>>()
+    private val items = mutableStateListOf<Pair<String, TextFieldState>>()
 
     fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
         if (keyEvent.type != KeyEventType.KeyDown) {
@@ -51,21 +52,22 @@ class SettingEditorViewModel : KoinComponent {
 
     fun listState() = listState
 
-    fun items(): List<Pair<String, TextFieldValue>> = items
+    fun items(): List<Pair<String, TextFieldState>> = items
 
     fun start() {
         items.clear()
         setting.items()
-            .map { it.key.toString() to TextFieldValue(it.value.toString()) }
+            .map { it.key.toString() to TextFieldState(it.value.toString()) }
             .forEach(items::add)
     }
 
+    // TODO Delete it
     fun update(key: String, it: TextFieldValue) {
         val index = items.indexOfFirst { it.first === key }
         if (index == -1) {
             return
         }
-        items.set(index, key to it)
+        //items.set(index, key to it)
     }
 
     fun openFile() {
@@ -77,7 +79,7 @@ class SettingEditorViewModel : KoinComponent {
         items.filter {
             it.second.text.isNotBlank()
         }.forEach {
-            setting.update(it.first, it.second.text)
+            setting.update(it.first, it.second.text.toString())
         }
         setting.save()
     }
