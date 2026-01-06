@@ -17,6 +17,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +43,6 @@ internal fun CompoundInterestCalculatorView() {
                 SingleLineTextField(
                     viewModel.capitalInput(),
                     "Capital",
-                    viewModel::setCapitalInput,
                     viewModel::clearCapitalInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = DecimalVisualTransformation()
@@ -51,8 +51,7 @@ internal fun CompoundInterestCalculatorView() {
                 SingleLineTextField(
                     viewModel.installmentInput(),
                     "Installment",
-                    viewModel::setInstallmentInput,
-                    viewModel::clearInstallmentInput,
+                    onClearInput = viewModel::clearInstallmentInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = DecimalVisualTransformation()
                 )
@@ -60,16 +59,13 @@ internal fun CompoundInterestCalculatorView() {
                 SingleLineTextField(
                     viewModel.annualInterestInput(),
                     "Annual interest",
-                    viewModel::setAnnualInterestInput,
-                    viewModel::clearAnnualInterestInput,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    onClearInput = viewModel::clearAnnualInterestInput,
                 )
 
                 SingleLineTextField(
                     viewModel.yearInput(),
                     "Year",
-                    viewModel::setYearInput,
-                    viewModel::clearYearInput,
+                    onClearInput = viewModel::clearYearInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
@@ -95,6 +91,19 @@ internal fun CompoundInterestCalculatorView() {
                     adapter = rememberScrollbarAdapter(verticalScrollState),
                     modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
                 )
+
+                LaunchedEffect(viewModel.capitalInput().text) {
+                    viewModel.setCapitalInput()
+                }
+                LaunchedEffect(viewModel.installmentInput().text) {
+                    viewModel.setInstallmentInput()
+                }
+                LaunchedEffect(viewModel.annualInterestInput().text) {
+                    viewModel.setAnnualInterestInput()
+                }
+                LaunchedEffect(viewModel.yearInput().text) {
+                    viewModel.setYearInput()
+                }
             }
         }
     }
