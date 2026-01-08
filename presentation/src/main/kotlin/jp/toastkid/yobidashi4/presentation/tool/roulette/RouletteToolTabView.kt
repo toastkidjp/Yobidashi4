@@ -56,7 +56,6 @@ fun RouletteToolTabView() {
                 viewModel.input(),
                 "Base file name",
                 Int.MAX_VALUE,
-                viewModel::onValueChange,
                 viewModel::clearInput,
                 modifier = Modifier.onKeyEvent(viewModel::onKeyEvent)
             )
