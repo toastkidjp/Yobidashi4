@@ -15,7 +15,11 @@ data class CompoundInterestCalculatorInput(
             annualInterestInput: String?,
             yearInput: String?,
         ): CompoundInterestCalculatorInput? {
-            if (capitalInput.isNullOrBlank() || installmentInput.isNullOrBlank() || annualInterestInput.isNullOrBlank() || yearInput.isNullOrBlank()) {
+            if (capitalInput.isNullOrBlank()
+                || installmentInput.isNullOrBlank()
+                || annualInterestInput.isNullOrBlank()
+                || yearInput.isNullOrBlank()
+                ) {
                 return null
             }
 
