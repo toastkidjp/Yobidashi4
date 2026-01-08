@@ -1,13 +1,14 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
@@ -19,29 +20,25 @@ class InputBoxViewModel : KoinComponent {
 
     private val focusRequester = FocusRequester()
 
-    private val query = mutableStateOf(TextFieldValue())
+    private val query = TextFieldState()
 
     fun setShowInputBox() {
         viewModel.setShowInputBox()
     }
 
     fun invokeAction() {
-        if (query.value.text.isBlank()) {
+        if (query.text.isBlank()) {
             return
         }
 
-        viewModel.invokeInputAction(query.value.text)
+        viewModel.invokeInputAction(query.text.toString())
         setShowInputBox()
     }
 
-    fun onValueChange(it: TextFieldValue) {
-        query.value = it
-    }
-
-    fun query() = query.value
+    fun query() = query
 
     fun clearInput() {
-        query.value = TextFieldValue()
+        query.clearText()
     }
 
     fun focusRequester() = focusRequester
@@ -64,7 +61,7 @@ class InputBoxViewModel : KoinComponent {
         }
 
         val webTab = viewModel.currentTab() as? WebTab ?: return
-        query.value = TextFieldValue(webTab.url())
+        query.setTextAndPlaceCursorAtEnd(webTab.url())
     }
 
 }
