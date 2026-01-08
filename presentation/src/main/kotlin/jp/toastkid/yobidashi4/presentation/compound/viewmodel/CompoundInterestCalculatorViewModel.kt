@@ -15,10 +15,6 @@ class CompoundInterestCalculatorViewModel {
 
     fun capitalInput() = capitalInput
 
-    fun setCapitalInput() {
-        calculate()
-    }
-
     fun clearCapitalInput() {
         capitalInput.clearText()
     }
