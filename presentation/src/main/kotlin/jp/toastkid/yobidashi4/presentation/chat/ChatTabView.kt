@@ -124,7 +124,6 @@ fun ChatTabView(chatTab: ChatTab) {
                     viewModel.textInput(),
                     viewModel.label(),
                     Int.MAX_VALUE,
-                    viewModel::onValueChanged,
                     modifier = Modifier
                         .focusRequester(viewModel.focusRequester())
                         .fillMaxWidth()
