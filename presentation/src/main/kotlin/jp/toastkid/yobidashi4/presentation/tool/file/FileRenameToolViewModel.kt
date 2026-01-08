@@ -1,14 +1,14 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -23,7 +23,7 @@ class FileRenameToolViewModel : KoinComponent {
 
     private val paths = mutableStateListOf<Path>()
 
-    private val input = mutableStateOf(TextFieldValue("img"))
+    private val input = TextFieldState("img")
 
     private val listState = LazyListState()
 
@@ -31,11 +31,7 @@ class FileRenameToolViewModel : KoinComponent {
 
     fun listState() = listState
 
-    fun input() = input.value
-
-    fun onValueChange(it: TextFieldValue) {
-        input.value = it
-    }
+    fun input() = input
 
     fun rename() {
         if (paths.isEmpty()) {
@@ -44,7 +40,7 @@ class FileRenameToolViewModel : KoinComponent {
 
         val decimalFormat = DecimalFormat("0".repeat(paths.size.toString().length))
         paths.forEachIndexed { i, p ->
-            Files.copy(p, p.resolveSibling("${input.value.text}_${decimalFormat.format(i + 1)}.${p.extension}"))
+            Files.copy(p, p.resolveSibling("${input.text}_${decimalFormat.format(i + 1)}.${p.extension}"))
         }
 
         viewModel
@@ -61,8 +57,8 @@ class FileRenameToolViewModel : KoinComponent {
 
     fun onKeyEvent(it: KeyEvent): Boolean {
         if (it.type == KeyEventType.KeyDown && it.key == Key.Enter
-            && input.value.composition == null
-            && input.value.text.isNotBlank()
+            && input.composition == null
+            && input.text.isNotBlank()
         ) {
             rename()
             return true
@@ -86,7 +82,7 @@ class FileRenameToolViewModel : KoinComponent {
     }
 
     fun clearInput() {
-        input.value = TextFieldValue()
+        input.clearText()
     }
 
     fun remove(path: Path) {
