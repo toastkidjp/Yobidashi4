@@ -27,10 +27,6 @@ class CompoundInterestCalculatorViewModel {
 
     fun installmentInput() = installmentInput
 
-    fun setInstallmentInput() {
-        calculate()
-    }
-
     fun clearInstallmentInput() {
         installmentInput.clearText()
     }
