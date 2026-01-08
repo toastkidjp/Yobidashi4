@@ -93,7 +93,7 @@ internal fun CompoundInterestCalculatorView() {
                 )
 
                 LaunchedEffect(viewModel.capitalInput().text) {
-                    viewModel.setCapitalInput()
+                    viewModel.calculate()
                 }
                 LaunchedEffect(viewModel.installmentInput().text) {
                     viewModel.setInstallmentInput()
