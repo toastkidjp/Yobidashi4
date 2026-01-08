@@ -102,7 +102,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.calculate()
                 }
                 LaunchedEffect(viewModel.yearInput().text) {
-                    viewModel.setYearInput()
+                    viewModel.calculate()
                 }
             }
         }
