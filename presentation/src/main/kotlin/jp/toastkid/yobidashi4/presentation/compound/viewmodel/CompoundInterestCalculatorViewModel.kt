@@ -51,10 +51,6 @@ class CompoundInterestCalculatorViewModel {
 
     fun yearInput() = yearInput
 
-    fun setYearInput() {
-        calculate()
-    }
-
     fun clearYearInput() {
         yearInput.clearText()
     }
