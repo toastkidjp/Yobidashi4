@@ -8,6 +8,9 @@
 package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
@@ -18,7 +21,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
@@ -43,7 +45,7 @@ class ChatTabViewModel : KoinComponent {
 
     private val service: ChatService by inject()
 
-    private val textInput = mutableStateOf(TextFieldValue())
+    private val textInput = TextFieldState()
 
     private val focusRequester = FocusRequester()
 
@@ -98,19 +100,19 @@ class ChatTabViewModel : KoinComponent {
     }
 
     fun send(coroutineScope: CoroutineScope) {
-        val text = textInput.value.text
+        val text = textInput.text
         if (text.isBlank()) {
             return
         }
 
-        textInput.value = TextFieldValue()
+        textInput.clearText()
         messages.add(
             ChatMessage(
                 "user",
                 if (currentModel.value.image())
                     "$text\n画像は著作権及び肖像権に問題のない形で出力してください。画像に文字を入れてはいけません。文字が入っていることを確認したら罰金$100を科します"
                 else
-                    text
+                    text.toString()
             )
         )
         coroutineScope.launch {
@@ -203,11 +205,7 @@ class ChatTabViewModel : KoinComponent {
         }
     }
 
-    fun textInput() = textInput.value
-
-    fun onValueChanged(newValue: TextFieldValue) {
-        textInput.value = newValue
-    }
+    fun textInput() = textInput
 
     fun focusRequester(): FocusRequester {
         return focusRequester
@@ -223,7 +221,7 @@ class ChatTabViewModel : KoinComponent {
         focusRequester().requestFocus()
 
         if (initialQuestion.isNotEmpty()) {
-            textInput.value = TextFieldValue(initialQuestion)
+            textInput.setTextAndPlaceCursorAtEnd(initialQuestion)
             send(CoroutineScope(Dispatchers.IO))
         }
     }
