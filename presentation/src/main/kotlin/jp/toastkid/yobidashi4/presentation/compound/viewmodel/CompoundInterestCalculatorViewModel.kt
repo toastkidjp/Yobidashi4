@@ -39,10 +39,6 @@ class CompoundInterestCalculatorViewModel {
 
     fun annualInterestInput() = annualInterestInput
 
-    fun setAnnualInterestInput() {
-        calculate()
-    }
-
     fun clearAnnualInterestInput() {
         annualInterestInput.clearText()
     }
