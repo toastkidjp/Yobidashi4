@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -49,13 +49,10 @@ internal fun InputBox() {
             SingleLineTextField(
                 viewModel.query(),
                 "Please would you input file name?",
-                viewModel::onValueChange,
                 viewModel::clearInput,
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        viewModel.invokeAction()
-                    }
-                ),
+                keyboardActions = KeyboardActionHandler {
+                    viewModel.invokeAction()
+                },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 modifier = Modifier.focusRequester(viewModel.focusRequester())
                     .onKeyEvent(viewModel::onKeyEvent)
