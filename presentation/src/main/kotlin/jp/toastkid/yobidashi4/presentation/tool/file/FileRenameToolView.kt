@@ -37,7 +37,6 @@ fun FileRenameToolView() {
             SingleLineTextField(
                 viewModel.input(),
                 "Base file name",
-                viewModel::onValueChange,
                 viewModel::clearInput,
                 modifier = Modifier.onKeyEvent(viewModel::onKeyEvent)
             )
