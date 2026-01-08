@@ -9,8 +9,6 @@ data class CompoundInterestCalculatorInput(
 
     companion object {
 
-        private const val REPLACE_TARGET = ","
-
         fun from(
             capitalInput: String?,
             installmentInput: String?,
