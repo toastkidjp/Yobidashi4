@@ -1,31 +1,28 @@
 package jp.toastkid.yobidashi4.presentation.tool.roulette
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 
 class RouletteToolTabViewModel {
 
-    private val input = mutableStateOf(TextFieldValue("Cake\nCoffee\nScone\nTea"))
+    private val input = TextFieldState("Cake\nCoffee\nScone\nTea")
 
     private val result = mutableStateOf("")
 
-    fun input() = input.value
-
-    fun onValueChange(it: TextFieldValue) {
-        input.value = it
-    }
+    fun input() = input
 
     fun clearInput() {
-        input.value = TextFieldValue()
+        input.clearText()
     }
 
     fun roulette() {
-        result.value = input.value.text.split("\n").random()
+        result.value = input.text.split("\n").random()
     }
 
     fun result() = result.value
@@ -39,7 +36,7 @@ class RouletteToolTabViewModel {
     }
 
     fun onKeyEvent(it: KeyEvent): Boolean {
-        if (input.value.composition == null && it.isCtrlPressed && it.key == Key.Enter) {
+        if (input.composition == null && it.isCtrlPressed && it.key == Key.Enter) {
             roulette()
             return true
         }
