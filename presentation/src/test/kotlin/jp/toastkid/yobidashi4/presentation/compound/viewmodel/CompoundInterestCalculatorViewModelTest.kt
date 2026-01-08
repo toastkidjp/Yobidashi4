@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.compound.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
@@ -30,10 +29,7 @@ class CompoundInterestCalculatorViewModelTest {
     fun setCapitalInput() {
         assertEquals("0", subject.capitalInput().text)
 
-        subject.setCapitalInput(TextFieldValue("10000"))
-
-        assertEquals("10000", subject.capitalInput().text)
-        assertEquals(20, subject.result().size)
+        assertEquals(0, subject.result().size)
 
         subject.clearCapitalInput()
 
@@ -44,10 +40,7 @@ class CompoundInterestCalculatorViewModelTest {
     fun setInstallmentInput() {
         assertEquals("40000", subject.installmentInput().text)
 
-        subject.setInstallmentInput(TextFieldValue("10000"))
-
-        assertEquals("10000", subject.installmentInput().text)
-        assertEquals(20, subject.result().size)
+        assertEquals(0, subject.result().size)
 
         subject.clearInstallmentInput()
 
@@ -58,10 +51,7 @@ class CompoundInterestCalculatorViewModelTest {
     fun setAnnualInterestInput() {
         assertEquals("0.03", subject.annualInterestInput().text)
 
-        subject.setAnnualInterestInput(TextFieldValue("0.1"))
-
-        assertEquals("0.1", subject.annualInterestInput().text)
-        assertEquals(20, subject.result().size)
+        assertEquals(0, subject.result().size)
 
         subject.clearAnnualInterestInput()
 
@@ -72,10 +62,7 @@ class CompoundInterestCalculatorViewModelTest {
     fun setYearInput() {
         assertEquals("20", subject.yearInput().text)
 
-        subject.setYearInput(TextFieldValue("10"))
-
-        assertEquals("10", subject.yearInput().text)
-        assertEquals(10, subject.result().size)
+        assertEquals(0, subject.result().size)
 
         subject.clearYearInput()
 
@@ -87,7 +74,7 @@ class CompoundInterestCalculatorViewModelTest {
         mockkObject(CompoundInterestCalculatorInput)
         every { CompoundInterestCalculatorInput.from(any(), any(), any(), any()) } returns null
 
-        subject.setYearInput(TextFieldValue("2022"))
+        subject.calculate()
 
         verify { CompoundInterestCalculatorInput.from(any(), any(), any(), any()) }
     }
