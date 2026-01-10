@@ -58,7 +58,7 @@ internal fun CompoundInterestCalculatorView() {
 
                 SingleLineTextField(
                     viewModel.annualInterestInput(),
-                    "Annual interest",
+                    "Annual interest(%)",
                     onClearInput = viewModel::clearAnnualInterestInput,
                 )
 
