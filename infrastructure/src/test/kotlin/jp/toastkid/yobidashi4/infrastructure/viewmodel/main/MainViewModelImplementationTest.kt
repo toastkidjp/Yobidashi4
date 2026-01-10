@@ -2,10 +2,10 @@ package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowPlacement
@@ -1255,7 +1255,8 @@ class MainViewModelImplementationTest {
 
         assertTrue(subject.openFind())
 
-        subject.onFindInputChange(TextFieldValue("test"))
+        subject.inputValue().setTextAndPlaceCursorAtEnd("test")
+        subject.onFindInputChange()
         val countDownLatch = CountDownLatch(1)
         val job = CoroutineScope(Dispatchers.Unconfined).launch {
             subject.finderFlow().collect {
@@ -1276,18 +1277,10 @@ class MainViewModelImplementationTest {
     fun onFindInputChange() {
         assertTrue(subject.inputValue().text.isEmpty())
 
-        subject.onFindInputChange(TextFieldValue("test"))
+        subject.inputValue().setTextAndPlaceCursorAtEnd("test")
+        subject.onFindInputChange()
 
         assertEquals("test", subject.inputValue().text)
-    }
-
-    @Test
-    fun onReplaceInputChange() {
-        assertTrue(subject.replaceInputValue().text.isEmpty())
-
-        subject.onReplaceInputChange(TextFieldValue("test"))
-
-        assertEquals("test", subject.replaceInputValue().text)
     }
 
     @Test
