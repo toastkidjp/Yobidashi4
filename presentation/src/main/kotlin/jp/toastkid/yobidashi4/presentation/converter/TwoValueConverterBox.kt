@@ -9,11 +9,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
@@ -32,8 +34,13 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                 viewModel::clearFirstInput,
                 KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            LaunchedEffect(viewModel.firstInput().text) {
-                viewModel.onFirstValueChange()
+
+            LaunchedEffect(unixTimeConverterService) {
+                snapshotFlow { viewModel.firstInput().text }
+                    .distinctUntilChanged()
+                    .collect {
+                        viewModel.onFirstValueChange()
+                    }
             }
 
             SingleLineTextField(
