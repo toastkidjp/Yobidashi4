@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -11,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
@@ -31,14 +29,16 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
             SingleLineTextField(
                 viewModel.firstInput(),
                 unixTimeConverterService.firstInputLabel(),
-                viewModel::clearFirstInput,
-                KeyboardOptions(keyboardType = KeyboardType.Number)
+                viewModel::clearFirstInput
             )
 
             LaunchedEffect(unixTimeConverterService) {
-                snapshotFlow { viewModel.firstInput().text }
+                snapshotFlow { viewModel.firstInput().text to (viewModel.firstInput().composition != null) }
                     .distinctUntilChanged()
                     .collect {
+                        if (it.second) {
+                            return@collect
+                        }
                         viewModel.onFirstValueChange()
                     }
             }
@@ -50,9 +50,12 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
             )
 
             LaunchedEffect(unixTimeConverterService) {
-                snapshotFlow { viewModel.secondInput().text }
+                snapshotFlow { viewModel.secondInput().text to (viewModel.firstInput().composition != null) }
                     .distinctUntilChanged()
                     .collect {
+                        if (it.second) {
+                            return@collect
+                        }
                         viewModel.onSecondValueChange()
                     }
             }
