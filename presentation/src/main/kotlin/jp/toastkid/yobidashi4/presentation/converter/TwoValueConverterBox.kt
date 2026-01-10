@@ -49,8 +49,12 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
                 viewModel::clearSecondInput
             )
 
-            LaunchedEffect(viewModel.secondInput().text) {
-                viewModel.onSecondValueChange()
+            LaunchedEffect(unixTimeConverterService) {
+                snapshotFlow { viewModel.secondInput().text }
+                    .distinctUntilChanged()
+                    .collect {
+                        viewModel.onSecondValueChange()
+                    }
             }
         }
     }
