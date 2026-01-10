@@ -27,7 +27,7 @@ class CompoundInterestCalculatorViewModel {
         installmentInput.clearText()
     }
 
-    private val annualInterestInput = TextFieldState("0.03")
+    private val annualInterestInput = TextFieldState("3.0")
 
     fun annualInterestInput() = annualInterestInput
 
