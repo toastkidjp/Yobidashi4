@@ -50,7 +50,7 @@ internal fun CompoundInterestCalculatorView() {
 
                 SingleLineTextField(
                     viewModel.installmentInput(),
-                    "Installment",
+                    "Installment (Yearly)",
                     onClearInput = viewModel::clearInstallmentInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = DecimalVisualTransformation()
