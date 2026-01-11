@@ -14,9 +14,8 @@ class TwoValueConverterBoxViewModel(private val unixTimeConverterService: TwoStr
     fun firstInput() = firstInput
 
     fun onFirstValueChange() {
-        unixTimeConverterService.firstInputAction(firstInput.text.toString())?.let { newValue ->
-            secondInput.setTextAndPlaceCursorAtEnd(newValue)
-        }
+        unixTimeConverterService.firstInputAction(firstInput.text.toString())
+            ?.let(secondInput::setTextAndPlaceCursorAtEnd)
     }
 
     fun secondInput() = secondInput
