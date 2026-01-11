@@ -63,7 +63,7 @@ class JapaneseAgeConverterService : TwoStringConverterService {
         val age = input.toIntOrNull() ?: return null
         val japaneseBirthDate = try {
             JapaneseDate.now().minus(age.toLong(), ChronoUnit.YEARS)
-        } catch (e: DateTimeException) {
+        } catch (_: DateTimeException) {
             return null
         }
         return japaneseBirthDate.format(DateTimeFormatter.ofPattern("Gy"))
