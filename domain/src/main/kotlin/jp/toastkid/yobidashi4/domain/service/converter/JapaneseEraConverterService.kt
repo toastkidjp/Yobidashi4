@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.converter
 
 import java.time.DateTimeException
+import java.time.chrono.IsoChronology
 import java.time.chrono.JapaneseDate
 import java.time.chrono.JapaneseEra
 import java.time.format.DateTimeFormatter
@@ -51,7 +52,7 @@ class JapaneseEraConverterService : TwoStringConverterService {
         } catch (e: DateTimeException) {
             return null
         }
-        return japaneseDate.format(DateTimeFormatter.ofPattern("Y"))
+        return japaneseDate.format(DateTimeFormatter.ofPattern("y").withChronology(IsoChronology.INSTANCE))
     }
 
     override fun secondInputAction(input: String): String? {
