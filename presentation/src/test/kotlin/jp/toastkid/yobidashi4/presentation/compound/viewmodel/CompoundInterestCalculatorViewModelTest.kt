@@ -49,7 +49,7 @@ class CompoundInterestCalculatorViewModelTest {
 
     @Test
     fun setAnnualInterestInput() {
-        assertEquals("0.03", subject.annualInterestInput().text)
+        assertEquals("3.0", subject.annualInterestInput().text)
 
         assertEquals(0, subject.result().size)
 
