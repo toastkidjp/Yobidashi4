@@ -51,12 +51,13 @@ class JapaneseEraConverterServiceTest {
 
     @ParameterizedTest
     @CsvSource(
-        "明治6, 1874",
+        "明治6, 1873",
         "明治33, 1900",
-        "大正2, 1914",
+        "大正2, 1913",
         "昭和63, 1988",
         "平成30, 2018",
-        "令和1, 2019"
+        "令和1, 2019",
+        "令和8, 2026",
     )
     fun firstInputAction(input: String, expected: String) {
         assertEquals(expected, japaneseEraConverterService.firstInputAction(input))
