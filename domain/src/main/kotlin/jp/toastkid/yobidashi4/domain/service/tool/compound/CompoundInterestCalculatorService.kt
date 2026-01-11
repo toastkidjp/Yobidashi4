@@ -12,7 +12,9 @@ class CompoundInterestCalculatorService {
     operator fun invoke(input: CompoundInterestCalculatorInput): CompoundInterestCalculationResult {
         val (capital, installment, rawAnnualInterest, year) = input
         val annualInterest = rawAnnualInterest / 100.0
+
         val result = CompoundInterestCalculationResult()
+
         var single = capital
         var compound = capital
         (1 .. year)
