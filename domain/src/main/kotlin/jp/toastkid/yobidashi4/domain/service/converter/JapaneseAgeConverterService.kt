@@ -50,7 +50,7 @@ class JapaneseAgeConverterService : TwoStringConverterService {
 
         val japaneseDate = try {
             JapaneseDate.of(era, yearOfEra, 12, 26)
-        } catch (e: DateTimeException) {
+        } catch (_: DateTimeException) {
             return null
         }
 
