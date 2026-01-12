@@ -55,6 +55,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
+import jp.toastkid.yobidashi4.presentation.barcode.BarcodeToolTabView
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
 import jp.toastkid.yobidashi4.presentation.chat.ChatTabView
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
@@ -182,7 +183,7 @@ internal fun TabsView(modifier: Modifier) {
             is LoanCalculatorTab -> LoanCalculatorView()
             is TextFileViewerTab -> TextFileViewerTabView(currentTab)
             is ConverterToolTab -> ConverterToolTabView()
-            is BarcodeToolTab -> BarcodeToolTab()
+            is BarcodeToolTab -> BarcodeToolTabView()
             is NotificationListTab -> NotificationListTabView()
             is ChatTab -> ChatTabView(currentTab)
             is PhotoTab -> PhotoTabView(currentTab)
