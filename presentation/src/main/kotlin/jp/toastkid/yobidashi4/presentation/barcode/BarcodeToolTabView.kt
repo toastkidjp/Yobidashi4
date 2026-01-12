@@ -74,8 +74,16 @@ internal fun BarcodeToolTabView() {
                     }
             }
 
-            LaunchedEffect(viewModel.decodeInputValue().text) {
-                viewModel.setDecodeInputValue()
+            LaunchedEffect(viewModel.decodeInputValue()) {
+                snapshotFlow { viewModel.decodeInputValue().text to (viewModel.decodeInputValue().composition != null) }
+                    .distinctUntilChanged()
+                    .collect { textAndComposition ->
+                        if (textAndComposition.second) {
+                            return@collect
+                        }
+
+                        viewModel.setDecodeInputValue()
+                    }
             }
         }
     }
