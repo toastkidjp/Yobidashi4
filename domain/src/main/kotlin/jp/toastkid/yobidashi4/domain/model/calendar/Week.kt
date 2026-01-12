@@ -16,12 +16,16 @@ class Week {
 
     private val days: MutableList<CalendarDate> = mutableListOf()
 
-    fun add(date: LocalDate, holidays: List<Holiday> = emptyList()) {
+    fun add(date: LocalDate, holidays: List<Holiday> = emptyList(), labels: List<Holiday> = emptyList()) {
+        val holidayLabels = holidays
+            .map { it.flag + " " + it.title }
+            .union(labels.map { it.flag + " " + it.title })
+
         days.add(
             CalendarDate(
                 date.dayOfMonth,
                 date.dayOfWeek,
-                holidays.map { it.flag + " " + it.title },
+                holidayLabels.toList(),
                 offDay = holidays.any { it.flag == HolidayCalendar.JAPAN.flag }
             )
         )
