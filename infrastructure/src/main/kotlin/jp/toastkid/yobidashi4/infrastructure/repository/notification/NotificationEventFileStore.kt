@@ -77,5 +77,3 @@ class NotificationEventFileStore : NotificationEventRepository {
     }
 
 }
-
-private const val DELIMITER = "\t"
