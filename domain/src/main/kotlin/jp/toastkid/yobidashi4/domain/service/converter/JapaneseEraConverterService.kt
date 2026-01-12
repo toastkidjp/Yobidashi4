@@ -59,7 +59,7 @@ class JapaneseEraConverterService : TwoStringConverterService {
         val year = input.toIntOrNull() ?: return null
         val japaneseDate = try {
             JapaneseDate.of(year, 12, 28)
-        } catch (e: DateTimeException) {
+        } catch (_: DateTimeException) {
             return null
         }
         return japaneseDate.format(DateTimeFormatter.ofPattern("Gy"))
