@@ -2,14 +2,10 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.text.TextFieldScrollState
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -18,12 +14,11 @@ import kotlin.math.min
 
 class CodeBlockViewModel {
 
-    @OptIn(ExperimentalFoundationApi::class)
-    private val verticalScrollState = TextFieldScrollState(Orientation.Vertical, 0)
+    private val verticalScrollState = ScrollState(0)
 
     private val horizontalScrollState = ScrollState(0)
 
-    private val content = mutableStateOf(TextFieldValue())
+    private val content = TextFieldState()
 
     private val codeStringBuilder = CodeStringBuilder()
 
@@ -31,21 +26,14 @@ class CodeBlockViewModel {
 
     fun maxHeight(fontSize: TextUnit) = min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
 
-    fun content() = content.value
+    fun content() = content
 
     @OptIn(ExperimentalFoundationApi::class)
     fun verticalScrollState() = verticalScrollState
 
     fun horizontalScrollState() = horizontalScrollState
 
-    fun transform(it: AnnotatedString): TransformedText {
-        val t = codeStringBuilder(it.text)
-        return TransformedText(t, OffsetMapping.Identity)
-    }
-
-    fun onValueChange(it: TextFieldValue) {
-        content.value = it
-    }
+    fun outputTransformation() = codeStringBuilder
 
     fun lineNumberTexts(): List<String> {
         val max = lineCountState.value
@@ -69,7 +57,7 @@ class CodeBlockViewModel {
     }
 
     fun start(code: String) {
-        content.value = TextFieldValue(code)
+        content.setTextAndPlaceCursorAtEnd(code)
     }
 
 }
