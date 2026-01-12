@@ -10,7 +10,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -62,7 +61,7 @@ class SettingEditorViewModel : KoinComponent {
     }
 
     // TODO Delete it
-    fun update(key: String, it: TextFieldValue) {
+    fun update(key: String) {
         val index = items.indexOfFirst { it.first === key }
         if (index == -1) {
             return
