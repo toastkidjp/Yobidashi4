@@ -49,7 +49,7 @@ class JapaneseEraConverterService : TwoStringConverterService {
 
         val japaneseDate = try {
             JapaneseDate.of(era, yearOfEra, 12, 28)
-        } catch (e: DateTimeException) {
+        } catch (_: DateTimeException) {
             return null
         }
         return japaneseDate.format(DateTimeFormatter.ofPattern("y").withChronology(IsoChronology.INSTANCE))
