@@ -10,6 +10,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
+import jp.toastkid.yobidashi4.domain.service.calendar.label.CalendarLabelFinderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,6 +27,8 @@ class CalendarViewModel : KoinComponent {
     private val setting: Setting by inject()
 
     private val userOffDayService: UserOffDayService by inject()
+
+    private val calendarLabelFinderService = CalendarLabelFinderService()
 
     private val week = listOf(
         DayOfWeek.SUNDAY,
@@ -130,6 +133,7 @@ class CalendarViewModel : KoinComponent {
         val jpHolidays = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
         val ukHolidays = HolidayCalendar.UK.getHolidays(firstDay.year, firstDay.monthValue)
         val usHolidays = HolidayCalendar.US.getHolidays(firstDay.year, firstDay.monthValue)
+        val calendarLabels = calendarLabelFinderService.invoke(firstDay.year, firstDay.monthValue)
 
         var hasStarted1 = false
         var current1 = firstDay
@@ -147,7 +151,7 @@ class CalendarViewModel : KoinComponent {
                     w.addEmpty()
                 } else {
                     val holidays = calculateHolidays(current1, jpHolidays, ukHolidays, usHolidays)
-                    w.add(current1, holidays)
+                    w.add(current1, holidays, calendarLabels.filter { it.day == current1.dayOfMonth })
                 }
                 current1 = current1.plusDays(1L)
             }
