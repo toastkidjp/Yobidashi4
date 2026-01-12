@@ -10,10 +10,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 internal fun BarcodeToolTabView() {
@@ -60,8 +62,16 @@ internal fun BarcodeToolTabView() {
                 }
             }
 
-            LaunchedEffect(viewModel.encodeInputValue().text) {
-                viewModel.setEncodeInputValue()
+            LaunchedEffect(viewModel.encodeInputValue()) {
+                snapshotFlow { viewModel.encodeInputValue().text to (viewModel.encodeInputValue().composition != null) }
+                    .distinctUntilChanged()
+                    .collect { textAndComposition ->
+                        if (textAndComposition.second) {
+                            return@collect
+                        }
+
+                        viewModel.setEncodeInputValue()
+                    }
             }
 
             LaunchedEffect(viewModel.decodeInputValue().text) {
