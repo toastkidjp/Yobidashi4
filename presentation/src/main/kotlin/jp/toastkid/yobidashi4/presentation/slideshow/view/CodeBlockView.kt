@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -65,7 +66,13 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                                         fontSize = fontSize,
                                         fontFamily = FontFamily.Monospace,
                                         textAlign = TextAlign.End,
-                                        lineHeight = 1.55.em
+                                        style = TextStyle(
+                                            lineHeight = 1.5.em,
+                                            lineHeightStyle = LineHeightStyle(
+                                                alignment = LineHeightStyle.Alignment.Center,
+                                                trim = LineHeightStyle.Trim.None
+                                            )
+                                        )
                                     )
                                 }
                             }
@@ -77,7 +84,11 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                     color = MaterialTheme.colors.onSurface,
                     fontSize = fontSize,
                     fontFamily = FontFamily.Monospace,
-                    lineHeight = 1.5.em
+                    lineHeight = 1.5.em,
+                    lineHeightStyle = LineHeightStyle(
+                        alignment = LineHeightStyle.Alignment.Center,
+                        trim = LineHeightStyle.Trim.None
+                    )
                 ),
                 scrollState = viewModel.verticalScrollState()
             )
