@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.text.code
 
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
+import java.util.regex.Pattern
 
-class CodeStringBuilder {
+class CodeStringBuilder : OutputTransformation {
 
     private val simple: SpanStyle = SpanStyle()
 
@@ -26,44 +26,26 @@ class CodeStringBuilder {
     private val annotation: SpanStyle = SpanStyle(Color(0xFFBBB529))
 
     private val comment: SpanStyle = SpanStyle(Color(0xFF808080))
-    
-    operator fun invoke(str: String) = buildAnnotatedString {
-        withStyle(simple) {
-            append(str)
-            addStyle(punctuation, str, ":")
-            addStyle(punctuation, str, "=")
-            addStyle(punctuation, str, "\"")
-            addStyle(punctuation, str, "[")
-            addStyle(punctuation, str, "]")
-            addStyle(punctuation, str, "{")
-            addStyle(punctuation, str, "}")
-            addStyle(punctuation, str, "(")
-            addStyle(punctuation, str, ")")
-            addStyle(punctuation, str, ",")
-            addStyle(keyword, str, "fun ")
-            addStyle(keyword, str, "---")
-            addStyle(keyword, str, "val ")
-            addStyle(keyword, str, "var ")
-            addStyle(keyword, str, "private ")
-            addStyle(keyword, str, "internal ")
-            addStyle(keyword, str, "for ")
-            addStyle(keyword, str, "expect ")
-            addStyle(keyword, str, "actual ")
-            addStyle(keyword, str, "import ")
-            addStyle(keyword, str, "package ")
-            addStyle(value, str, "true")
-            addStyle(value, str, "false")
-            addStyle(value, str, Regex("[0-9]*"))
-        }
+
+    private val punctuationPattern = Pattern.compile("[:=\"\\[\\]\\{\\}\\(\\),]")
+
+    private val keywordPattern = Pattern.compile("\\b(fun|val|var|private|internal|for|expect|actual|import|package|static|object) ")
+
+    private val valuePattern = Pattern.compile("(true|false)")
+
+    private val digitPattern = Pattern.compile("[0-9]*")
+
+    override fun TextFieldBuffer.transformOutput() {
+        applyPattern(punctuationPattern, punctuation)
+        applyPattern(keywordPattern, keyword)
+        applyPattern(valuePattern, value)
+        applyPattern(digitPattern, value)
     }
 
-    private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: String) {
-        addStyle(style, text, Regex.fromLiteral(regexp))
-    }
-
-    private fun AnnotatedString.Builder.addStyle(style: SpanStyle, text: String, regexp: Regex) {
-        for (result in regexp.findAll(text)) {
-            addStyle(style, result.range.first, result.range.last + 1)
+    private fun TextFieldBuffer.applyPattern(pattern: Pattern, style: SpanStyle) {
+        val matcher = pattern.matcher(asCharSequence())
+        while (matcher.find()) {
+            addStyle(style, matcher.start(), matcher.end())
         }
     }
 
