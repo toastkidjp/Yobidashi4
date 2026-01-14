@@ -7,7 +7,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import java.util.regex.Pattern
 
-class CodeStringBuilder : OutputTransformation {
+class CodeBlockViewOutputTransformation : OutputTransformation {
 
     private val simple: SpanStyle = SpanStyle()
 
