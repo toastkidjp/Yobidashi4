@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test
 
 class CodeStringBuilderTest {
 
-    private lateinit var subject: CodeStringBuilder
+    private lateinit var subject: CodeBlockViewOutputTransformation
 
     @BeforeEach
     fun setUp() {
-        subject = CodeStringBuilder()
+        subject = CodeBlockViewOutputTransformation()
     }
 
     @AfterEach
