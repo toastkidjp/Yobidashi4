@@ -138,7 +138,7 @@ class CalendarViewModel : KoinComponent {
         var hasStarted1 = false
         var current1 = firstDay
         val weeks = mutableListOf<Week>()
-        repeat(6) { i ->
+        repeat(6) {
             val w = Week()
             week.forEach { dayOfWeek ->
                 if (hasStarted1.not() && dayOfWeek != firstDay.dayOfWeek) {
