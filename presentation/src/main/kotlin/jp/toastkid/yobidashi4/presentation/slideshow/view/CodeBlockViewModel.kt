@@ -20,7 +20,7 @@ class CodeBlockViewModel {
 
     private val content = TextFieldState()
 
-    private val codeStringBuilder = CodeBlockViewOutputTransformation()
+    private val outputTransformation = CodeBlockViewOutputTransformation()
 
     private val lineCountState = mutableStateOf(1)
 
@@ -33,7 +33,7 @@ class CodeBlockViewModel {
 
     fun horizontalScrollState() = horizontalScrollState
 
-    fun outputTransformation() = codeStringBuilder
+    fun outputTransformation() = outputTransformation
 
     fun lineNumberTexts(): List<String> {
         val max = lineCountState.value
