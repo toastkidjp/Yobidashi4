@@ -9,7 +9,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import jp.toastkid.yobidashi4.presentation.text.code.CodeStringBuilder
+import jp.toastkid.yobidashi4.presentation.text.code.CodeBlockViewOutputTransformation
 import kotlin.math.min
 
 class CodeBlockViewModel {
@@ -20,7 +20,7 @@ class CodeBlockViewModel {
 
     private val content = TextFieldState()
 
-    private val codeStringBuilder = CodeStringBuilder()
+    private val codeStringBuilder = CodeBlockViewOutputTransformation()
 
     private val lineCountState = mutableStateOf(1)
 
