@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class CodeStringBuilderTest {
+class CodeBlockViewOutputTransformationTest {
 
     private lateinit var subject: CodeBlockViewOutputTransformation
 
