@@ -102,9 +102,7 @@ class CalendarViewModel : KoinComponent {
     fun yearInput() = yearInput
 
     fun setYearInput() {
-        yearInput().text.toString().toIntOrNull()?.let {
-            setYear(it)
-        }
+        yearInput().text.toString().toIntOrNull()?.let(::setYear)
     }
 
     private val japaneseYear = AtomicReference("")
