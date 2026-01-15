@@ -56,7 +56,7 @@ class FindInPageBoxViewModel : KoinComponent {
 
     fun onClickInputHistory(it: String) {
         val value = findInputHistoryService.make(it) ?: return
-        viewModel.inputValue().setTextAndPlaceCursorAtEnd(value.text)
+        viewModel.inputValue().setTextAndPlaceCursorAtEnd(value)
         findInputHistories.clear()
     }
 
