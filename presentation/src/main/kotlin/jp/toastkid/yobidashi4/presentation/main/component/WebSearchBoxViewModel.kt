@@ -154,7 +154,7 @@ class WebSearchBoxViewModel : KoinComponent {
 
     fun putText(text: String?) {
         val textFieldValue = inputHistoryService.make(text) ?: return
-        query.setTextAndPlaceCursorAtEnd(textFieldValue.text)
+        query.setTextAndPlaceCursorAtEnd(textFieldValue)
         inputHistories.clear()
     }
 
