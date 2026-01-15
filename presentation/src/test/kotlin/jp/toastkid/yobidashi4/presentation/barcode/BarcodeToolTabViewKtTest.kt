@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.barcode
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -51,10 +51,10 @@ class BarcodeToolTabViewKtTest {
         every { anyConstructed<BarcodeToolTabViewModel>().barcodeImage() } returns ImageBitmap(1, 1)
         every { anyConstructed<BarcodeToolTabViewModel>().onClickImage() } just Runs
         every { anyConstructed<BarcodeToolTabViewModel>().onClickDecodeResult() } just Runs
-        every { anyConstructed<BarcodeToolTabViewModel>().encodeInputValue() } returns TextFieldValue()
-        every { anyConstructed<BarcodeToolTabViewModel>().setEncodeInputValue(any()) } just Runs
-        every { anyConstructed<BarcodeToolTabViewModel>().decodeInputValue() } returns TextFieldValue()
-        every { anyConstructed<BarcodeToolTabViewModel>().setDecodeInputValue(any()) } just Runs
+        every { anyConstructed<BarcodeToolTabViewModel>().encodeInputValue() } returns TextFieldState()
+        every { anyConstructed<BarcodeToolTabViewModel>().setEncodeInputValue() } just Runs
+        every { anyConstructed<BarcodeToolTabViewModel>().decodeInputValue() } returns TextFieldState()
+        every { anyConstructed<BarcodeToolTabViewModel>().setDecodeInputValue() } just Runs
         every { anyConstructed<BarcodeToolTabViewModel>().decodeResult() } returns "test"
     }
 
