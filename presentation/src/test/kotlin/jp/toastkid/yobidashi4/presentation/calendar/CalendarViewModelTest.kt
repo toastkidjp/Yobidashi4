@@ -271,9 +271,13 @@ class CalendarViewModelTest {
         "1872, 壬申",
     )
     fun japaneseYearNotApplicableCases(year: Int, zodiac: String) {
-        assertTrue(viewModel.japaneseYear().isEmpty())
         viewModel.setYear(year)
         assertEquals(zodiac, viewModel.japaneseYear())
+    }
+
+    @Test
+    fun initialJapaneseYearIsEmpty() {
+        assertTrue(viewModel.japaneseYear().isEmpty())
     }
 
 }
