@@ -109,7 +109,7 @@ class CalendarViewModel : KoinComponent {
 
     private val japaneseYear = AtomicReference("")
 
-    fun japaneseYear() = japaneseYear.get()
+    fun japaneseYear(): String = japaneseYear.get()
 
     fun isToday(date: Int): Boolean {
         val value = localDate()
