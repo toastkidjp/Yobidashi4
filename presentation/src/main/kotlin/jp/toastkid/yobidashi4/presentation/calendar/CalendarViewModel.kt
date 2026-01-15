@@ -138,7 +138,9 @@ class CalendarViewModel : KoinComponent {
     private fun makeMonth(week: Iterable<DayOfWeek>): MutableList<Week> {
         val firstDay = localDateState.value.withDayOfMonth(1)
 
-        val jpHolidays = HolidayCalendar.JAPAN.getHolidays(firstDay.year, firstDay.month.value).union(userOffDayService.findBy(firstDay.monthValue))
+        val jpHolidays = HolidayCalendar.JAPAN
+            .getHolidays(firstDay.year, firstDay.month.value)
+            .union(userOffDayService.findBy(firstDay.monthValue))
         val ukHolidays = HolidayCalendar.UK.getHolidays(firstDay.year, firstDay.monthValue)
         val usHolidays = HolidayCalendar.US.getHolidays(firstDay.year, firstDay.monthValue)
         val calendarLabels = calendarLabelFinderService.invoke(firstDay.year, firstDay.monthValue)
