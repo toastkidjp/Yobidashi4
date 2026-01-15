@@ -264,15 +264,16 @@ class CalendarViewModelTest {
         assertEquals(expected, viewModel.japaneseYear())
     }
 
-    @Test
-    fun japaneseYearNotApplicableCases() {
+    @ParameterizedTest
+    @CsvSource(
+        "1168, 戊子",
+        "1869, 己巳",
+        "1872, 壬申",
+    )
+    fun japaneseYearNotApplicableCases(year: Int, zodiac: String) {
         assertTrue(viewModel.japaneseYear().isEmpty())
-        viewModel.setYear(1168)
-        assertEquals("戊子", viewModel.japaneseYear())
-        viewModel.setYear(1869)
-        assertEquals("己巳", viewModel.japaneseYear())
-        viewModel.setYear(1872)
-        assertEquals("壬申", viewModel.japaneseYear())
+        viewModel.setYear(year)
+        assertEquals(zodiac, viewModel.japaneseYear())
     }
 
 }
