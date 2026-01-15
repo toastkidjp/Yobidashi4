@@ -7,8 +7,6 @@
  */
 package jp.toastkid.yobidashi4.presentation.lib.input
 
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -42,12 +40,12 @@ class InputHistoryService(private val context: String) : KoinComponent {
         repository.add(InputHistory(query, System.currentTimeMillis()))
     }
 
-    fun make(query: String?): TextFieldValue? {
+    fun make(query: String?): String? {
         if (query.isNullOrBlank()) {
             return null
         }
 
-        return TextFieldValue("$query ", TextRange(query.length + 1))
+        return query
     }
 
     fun inputHistories(items: List<InputHistory>): List<String> {
