@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.barcode
 
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -82,7 +82,8 @@ class BarcodeToolTabViewModelTest {
     fun setEncodeInputValue() {
         assertTrue(barcodeToolTabViewModel.encodeInputValue().text.isEmpty())
 
-        barcodeToolTabViewModel.setEncodeInputValue(TextFieldValue("test"))
+        barcodeToolTabViewModel.encodeInputValue().setTextAndPlaceCursorAtEnd("test")
+        barcodeToolTabViewModel.setEncodeInputValue()
 
         assertEquals("test", barcodeToolTabViewModel.encodeInputValue().text)
         verify { barcodeEncoder.invoke(any(), any(), any()) }
@@ -92,7 +93,8 @@ class BarcodeToolTabViewModelTest {
     fun setEncodeInputValueWithoutNewBarcode() {
         assertTrue(barcodeToolTabViewModel.encodeInputValue().text.isEmpty())
 
-        barcodeToolTabViewModel.setEncodeInputValue(TextFieldValue(""))
+        barcodeToolTabViewModel.encodeInputValue().setTextAndPlaceCursorAtEnd("")
+        barcodeToolTabViewModel.setEncodeInputValue()
 
         assertTrue(barcodeToolTabViewModel.encodeInputValue().text.isEmpty())
         verify { barcodeEncoder wasNot Called }
@@ -105,7 +107,8 @@ class BarcodeToolTabViewModelTest {
         val image = mockk<BufferedImage>()
         every { ImageIO.read(any<URL>()) } returns image
 
-        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("https://test.com"))
+        barcodeToolTabViewModel.decodeInputValue().setTextAndPlaceCursorAtEnd("https://test.com")
+        barcodeToolTabViewModel.setDecodeInputValue()
 
         assertEquals("https://test.com", barcodeToolTabViewModel.decodeInputValue().text)
         verify { ImageIO.read(any<URL>()) }
@@ -116,7 +119,8 @@ class BarcodeToolTabViewModelTest {
     fun setDecodeInputValueWithIncorrectUrl() {
         assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
 
-        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("test"))
+        barcodeToolTabViewModel.decodeInputValue().setTextAndPlaceCursorAtEnd("test")
+        barcodeToolTabViewModel.setDecodeInputValue()
 
         assertEquals("test", barcodeToolTabViewModel.decodeInputValue().text)
         verify { barcodeDecoder wasNot called }
@@ -129,7 +133,7 @@ class BarcodeToolTabViewModelTest {
         val image = mockk<BufferedImage>()
         every { ImageIO.read(any<URL>()) } returns image
 
-        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue())
+        barcodeToolTabViewModel.setDecodeInputValue()
 
         assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
         assertTrue(barcodeToolTabViewModel.decodeResult().isEmpty())
@@ -149,7 +153,8 @@ class BarcodeToolTabViewModelTest {
 
         assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
 
-        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("https://www.yahoo.co.jp"))
+        barcodeToolTabViewModel.decodeInputValue().setTextAndPlaceCursorAtEnd("https://www.yahoo.co.jp")
+        barcodeToolTabViewModel.setDecodeInputValue()
 
         verify { barcodeDecoder.invoke(any()) }
         assertEquals("https://www.yahoo.co.jp", barcodeToolTabViewModel.decodeInputValue().text)
@@ -168,7 +173,8 @@ class BarcodeToolTabViewModelTest {
 
         assertTrue(barcodeToolTabViewModel.decodeInputValue().text.isEmpty())
 
-        barcodeToolTabViewModel.setDecodeInputValue(TextFieldValue("https://www.yahoo.co.jp"))
+        barcodeToolTabViewModel.decodeInputValue().setTextAndPlaceCursorAtEnd("https://www.yahoo.co.jp")
+        barcodeToolTabViewModel.setDecodeInputValue()
 
         verify { barcodeDecoder.invoke(any()) }
         assertEquals("https://www.yahoo.co.jp", barcodeToolTabViewModel.decodeInputValue().text)
@@ -198,7 +204,8 @@ class BarcodeToolTabViewModelTest {
     fun onClickImageOnSetImage() {
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<Image>()) } just Runs
-        barcodeToolTabViewModel.setEncodeInputValue(TextFieldValue("https://www.yahoo.co.jp"))
+        barcodeToolTabViewModel.encodeInputValue().setTextAndPlaceCursorAtEnd("https://www.yahoo.co.jp")
+        barcodeToolTabViewModel.setEncodeInputValue()
 
         barcodeToolTabViewModel.onClickImage()
 
