@@ -9,6 +9,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.calendar.CalendarDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
@@ -210,7 +211,7 @@ class CalendarViewModelTest {
         val month = viewModel.month()
 
         assertEquals(5, month.size)
-        assertTrue(month.flatMap(Week::days).any { it.offDay })
+        assertTrue(month.flatMap(Week::days).any(CalendarDate::offDay))
     }
 
     @Test
