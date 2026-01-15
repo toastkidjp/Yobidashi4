@@ -113,7 +113,9 @@ class CalendarViewModel : KoinComponent {
 
     fun isToday(date: Int): Boolean {
         val value = localDate()
-        return value.year == LocalDate.now().year && value.month == LocalDate.now().month && LocalDate.now().dayOfMonth == date
+        return value.year == LocalDate.now().year
+                && value.month == LocalDate.now().month
+                && LocalDate.now().dayOfMonth == date
     }
 
     fun openDateArticle(date: Int, onBackground: Boolean = false) {
