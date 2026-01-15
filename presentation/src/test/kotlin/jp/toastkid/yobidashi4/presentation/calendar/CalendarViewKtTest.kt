@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.calendar
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
@@ -12,7 +13,6 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -21,8 +21,6 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.time.DayOfWeek
-import java.time.LocalDate
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
@@ -34,6 +32,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 class CalendarViewKtTest {
     
@@ -72,8 +72,8 @@ class CalendarViewKtTest {
         every { anyConstructed<CalendarViewModel>().openDateArticle(any()) } just Runs
         every { anyConstructed<CalendarViewModel>().openDateArticle(any(), any()) } just Runs
         every { anyConstructed<CalendarViewModel>().plusMonths(any()) } just Runs
-        every { anyConstructed<CalendarViewModel>().yearInput() } returns TextFieldValue()
-        every { anyConstructed<CalendarViewModel>().setYearInput(any()) } just Runs
+        every { anyConstructed<CalendarViewModel>().yearInput() } returns TextFieldState()
+        every { anyConstructed<CalendarViewModel>().setYearInput() } just Runs
         every { anyConstructed<CalendarViewModel>().moveMonth(any()) } just Runs
         every { anyConstructed<CalendarViewModel>().closeMonthChooser() } just Runs
         every { anyConstructed<CalendarViewModel>().moveToCurrentMonth() } just Runs
