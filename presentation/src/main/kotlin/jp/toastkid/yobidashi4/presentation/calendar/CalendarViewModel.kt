@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
+import jp.toastkid.yobidashi4.domain.model.calendar.zodiac.JapaneseZodiac
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
@@ -50,12 +51,17 @@ class CalendarViewModel : KoinComponent {
         localDateState.value = newDate
     }
 
-    private fun makeJapaneseYearLabel(year: Int, month: Int): String =
-        if (year >= 1873)
-            JapaneseDate.of(year, month, 1)
-                .format(DateTimeFormatter.ofPattern("Gy"))
+    private val japaneseZodiac = JapaneseZodiac()
+
+    private fun makeJapaneseYearLabel(year: Int, month: Int): String {
+        val zodiac = japaneseZodiac.calculate(year)
+
+        return if (year >= 1873)
+            "${JapaneseDate.of(year, month, 1)
+                .format(DateTimeFormatter.ofPattern("Gy"))} ($zodiac)"
         else
-            ""
+            zodiac
+    }
 
     fun plusMonths(i: Long) {
         val year = localDateState.value.year
