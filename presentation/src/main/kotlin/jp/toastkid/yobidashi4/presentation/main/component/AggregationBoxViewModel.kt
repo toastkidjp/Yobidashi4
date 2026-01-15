@@ -190,12 +190,12 @@ class AggregationBoxViewModel : KoinComponent {
     fun putDate(text: String?) {
         if (requireSecondInput()) {
             val newFieldValue = keywordHistoryService.make(text) ?: return
-            keyword.setTextAndPlaceCursorAtEnd(newFieldValue.text)
+            keyword.setTextAndPlaceCursorAtEnd(newFieldValue)
             keywordHistories.clear()
             return
         }
         val newFieldValue = dateHistoryService.make(text) ?: return
-        query.setTextAndPlaceCursorAtEnd(newFieldValue.text)
+        query.setTextAndPlaceCursorAtEnd(newFieldValue)
         dateHistories.clear()
         keywordHistories.clear()
     }
