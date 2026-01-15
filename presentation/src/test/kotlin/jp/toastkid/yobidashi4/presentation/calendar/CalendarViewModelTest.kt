@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.calendar
 
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -9,6 +9,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -133,7 +134,7 @@ class CalendarViewModelTest {
 
     @Test
     fun setYearInput() {
-        viewModel.setYearInput(TextFieldValue("2023"))
+        viewModel.yearInput().setTextAndPlaceCursorAtEnd("2023")
 
         assertEquals("2023", viewModel.yearInput().text)
     }
@@ -142,7 +143,7 @@ class CalendarViewModelTest {
     fun setYearInputIrregularCase() {
         val year = viewModel.localDate().year
 
-        viewModel.setYearInput(TextFieldValue("TEST"))
+        viewModel.yearInput().setTextAndPlaceCursorAtEnd("TEST")
 
         assertEquals(year, viewModel.localDate().year)
     }
@@ -203,12 +204,13 @@ class CalendarViewModelTest {
 
     @Test
     fun month() {
+        viewModel.setYear(2025)
         viewModel.moveMonth(5)
 
         val month = viewModel.month()
 
         assertEquals(5, month.size)
-        assertTrue(month.flatMap { it.days() }.any { it.offDay })
+        assertTrue(month.flatMap(Week::days).any { it.offDay })
     }
 
     @Test
@@ -245,14 +247,14 @@ class CalendarViewModelTest {
     }
 
     @CsvSource(value = [
-        "1873, 明治6",
-        "1913, 大正2",
-        "1927, 昭和2",
-        "1988, 昭和63",
-        "1990, 平成2",
-        "2018, 平成30",
-        "2019, 平成31",
-        "2020, 令和2",
+        "1873, 明治6 (癸酉)",
+        "1913, 大正2 (癸丑)",
+        "1927, 昭和2 (丁卯)",
+        "1988, 昭和63 (戊辰)",
+        "1990, 平成2 (庚午)",
+        "2018, 平成30 (戊戌)",
+        "2019, 平成31 (己亥)",
+        "2020, 令和2 (庚子)",
     ])
     @ParameterizedTest
     fun japaneseYear(year: Int, expected: String) {
@@ -265,18 +267,11 @@ class CalendarViewModelTest {
     fun japaneseYearNotApplicableCases() {
         assertTrue(viewModel.japaneseYear().isEmpty())
         viewModel.setYear(1168)
-        assertTrue(viewModel.japaneseYear().isEmpty())
+        assertEquals("戊子", viewModel.japaneseYear())
         viewModel.setYear(1869)
-        assertTrue(viewModel.japaneseYear().isEmpty())
+        assertEquals("己巳", viewModel.japaneseYear())
         viewModel.setYear(1872)
-        assertTrue(viewModel.japaneseYear().isEmpty())
-    }
-
-    @Test
-    fun clearJapaneseYear() {
-        viewModel.setYear(2022)
-        viewModel.setYear(1872)
-        assertTrue(viewModel.japaneseYear().isEmpty())
+        assertEquals("壬申", viewModel.japaneseYear())
     }
 
 }
