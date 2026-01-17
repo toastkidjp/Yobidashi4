@@ -27,4 +27,4 @@ class JapaneseZodiac {
 
 private const val JIKKAN_SIZE = 10
 
-private val JUNISHI_SIZE = 12
+private const val JUNISHI_SIZE = 12
