@@ -15,12 +15,14 @@ class JapaneseZodiac {
 
     private val JIKKAN_SIZE = 10
 
+    private val JUNISHI_SIZE = 12
+
     fun calculate(year: Int): String {
         val jikkanIndex = (year - 4) % JIKKAN_SIZE
-        val junishiIndex = (year - 4) % 12
+        val junishiIndex = (year - 4) % JUNISHI_SIZE
 
         val finalJikkanIndex = if (jikkanIndex < 0) jikkanIndex + JIKKAN_SIZE else jikkanIndex
-        val finalJunishiIndex = if (junishiIndex < 0) junishiIndex + 12 else junishiIndex
+        val finalJunishiIndex = if (junishiIndex < 0) junishiIndex + JUNISHI_SIZE else junishiIndex
 
         return jikkan[finalJikkanIndex] + junishi[finalJunishiIndex]
     }
