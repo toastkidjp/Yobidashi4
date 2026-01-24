@@ -28,7 +28,11 @@ class CalendarLabelFinderService {
 
     operator fun invoke(year: Int, month: Int): MutableList<Holiday> {
         val labels = mutableListOf<Holiday>()
-        labels.addAll(FixedCalendarLabel.entries.filter { it.month == month }.map { Holiday(it.title, it.month, it.date, HolidayCalendar.JAPAN.flag) })
+        labels.addAll(
+            FixedCalendarLabel.entries
+                .filter { it.month == month }
+                .map { Holiday(it.title, it.month, it.date, HolidayCalendar.JAPAN.flag) }
+        )
 
         val localDate = LocalDate.of(year, month, 1)
         val dayOfWeek = localDate.dayOfWeek
