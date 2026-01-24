@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.infrastructure.service.calendar
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import org.koin.core.annotation.Single
@@ -31,7 +32,7 @@ class UserOffDayServiceImplementation: KoinComponent, UserOffDayService {
     override fun findBy(month: Int): Set<Holiday> {
         return userOffDays
             .filter { it.first == month }
-            .map { Holiday("User off-day", it.first, it.second, "") }
+            .map { Holiday("User off-day", it.first, it.second, HolidayCalendar.JAPAN.flag) }
             .toSet()
     }
 
