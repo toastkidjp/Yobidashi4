@@ -16,13 +16,10 @@ import java.time.LocalDate
 
 class CalendarLabelFinderService {
 
-    private fun calculateOffsetDays(
-        dayOfWeek: DayOfWeek,
-        candidateDayOfWeek: DayOfWeek
-    ): Int {
+    private fun calculateOffsetDays(dayOfWeek: DayOfWeek, ): Int {
         val offsetDays =
-            if (dayOfWeek <= candidateDayOfWeek) candidateDayOfWeek.value - dayOfWeek.value + 1
-            else 7 - (dayOfWeek.value - candidateDayOfWeek.value - 1)
+            if (dayOfWeek <= DayOfWeek.FRIDAY) DayOfWeek.FRIDAY.value - dayOfWeek.value + 1
+            else 7 - (dayOfWeek.value - DayOfWeek.FRIDAY.value - 1)
         return offsetDays
     }
 
@@ -38,7 +35,7 @@ class CalendarLabelFinderService {
         val dayOfWeek = localDate.dayOfWeek
 
         labels.add(
-            Holiday("SQ", month, calculateOffsetDays(dayOfWeek, DayOfWeek.FRIDAY) + 7, HolidayCalendar.JAPAN.flag)
+            Holiday("SQ", month, calculateOffsetDays(dayOfWeek) + 7, HolidayCalendar.JAPAN.flag)
         )
         if (month == 1) {
             labels.add(
