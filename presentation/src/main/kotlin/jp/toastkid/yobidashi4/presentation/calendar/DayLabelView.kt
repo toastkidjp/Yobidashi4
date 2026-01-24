@@ -24,14 +24,14 @@ fun DayLabelView(
     val viewModel = remember { DayLabelViewModel() }
 
     HoverHighlightColumn(
-        modifier = modifier
+        modifier = modifier.padding(end = 8.dp)
     ) { textColor ->
         Text(
             viewModel.makeText(date),
             fontSize = 16.sp,
             textAlign = TextAlign.Right,
             color = viewModel.textColor(dayOfWeek, offDay, today) ?: textColor,
-            modifier = Modifier.padding(bottom = 4.dp).fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(end = 8.dp).padding(bottom = 4.dp)
         )
         label.forEach { text ->
             Text(text, fontSize = viewModel.labelSize(text), color = viewModel.labelColor())
