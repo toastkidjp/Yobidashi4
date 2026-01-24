@@ -4,7 +4,6 @@ import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -167,8 +166,8 @@ class SettingEditorViewModelTest {
         every { setting.items() } returns mapOf("test" to "value")
         subject.start()
 
-        subject.update("a", TextFieldValue("unused"))
-        subject.update("test", TextFieldValue("updated"))
+        subject.update("a")
+        subject.update("test")
 
         assertEquals("updated", subject.items().first().second.text)
     }
@@ -189,7 +188,7 @@ class SettingEditorViewModelTest {
             "empty" to "y"
         )
         subject.start()
-        subject.update("empty", TextFieldValue(""))
+        subject.update("empty")
         every { setting.update(any(), any()) } just Runs
         every { setting.save() } just Runs
 
