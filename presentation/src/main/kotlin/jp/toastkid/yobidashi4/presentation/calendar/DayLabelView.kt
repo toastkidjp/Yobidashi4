@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.calendar
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
@@ -27,8 +29,9 @@ fun DayLabelView(
         Text(
             viewModel.makeText(date),
             fontSize = 16.sp,
+            textAlign = TextAlign.Right,
             color = viewModel.textColor(dayOfWeek, offDay, today) ?: textColor,
-            modifier = Modifier.padding(bottom = 4.dp)
+            modifier = Modifier.padding(bottom = 4.dp).fillMaxWidth()
         )
         label.forEach { text ->
             Text(text, fontSize = viewModel.labelSize(text), color = viewModel.labelColor())
