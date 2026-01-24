@@ -37,7 +37,9 @@ class CalendarLabelFinderService {
         val localDate = LocalDate.of(year, month, 1)
         val dayOfWeek = localDate.dayOfWeek
 
-        labels.add(Holiday("SQ", month, calculateOffsetDays(dayOfWeek, DayOfWeek.FRIDAY) + 7, HolidayCalendar.JAPAN.flag))
+        labels.add(
+            Holiday("SQ", month, calculateOffsetDays(dayOfWeek, DayOfWeek.FRIDAY) + 7, HolidayCalendar.JAPAN.flag)
+        )
         if (month == 1) {
             labels.add(
                 Holiday(
