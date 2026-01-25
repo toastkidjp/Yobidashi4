@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,10 +9,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -42,7 +43,7 @@ import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
 @Composable
 fun MarkdownPreview(
     content: Markdown,
-    scrollState: ScrollState,
+    scrollState: LazyListState,
     modifier: Modifier
 ) {
     val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
@@ -54,8 +55,8 @@ fun MarkdownPreview(
         }
     ) {
         SelectionContainer {
-            Column(modifier = Modifier.verticalScroll(scrollState).padding(8.dp)) {
-                content.lines().forEach { line ->
+            LazyColumn(state = scrollState, modifier = Modifier.padding(8.dp)) {
+                items(content.lines()) { line ->
                     when (line) {
                         is TextBlock -> {
                             Row(verticalAlignment = Alignment.CenterVertically) {
