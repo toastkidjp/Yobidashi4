@@ -24,6 +24,6 @@ data class Markdown(
 
     fun lines(): List<Line> = lines
 
-    fun subheadings() = subheadings
+    fun subheadings(): List<TextBlock> = subheadings
 
 }
