@@ -1,20 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +19,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.unit.sp
-import jp.toastkid.yobidashi4.domain.model.markdown.Subhead
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
@@ -84,34 +74,5 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
                 viewModel.onDispose(tab)
             }
         }
-    }
-}
-
-@Composable
-private fun MarkdownSubhead(
-    subheadings: List<Subhead>,
-    function: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val scrollState = rememberScrollState()
-
-    Box(modifier = modifier) {
-        Column(modifier = Modifier.verticalScroll(scrollState)) {
-            subheadings.forEach {
-                Text(
-                    text = it.text(),
-                    fontSize = it.fontSize().sp,
-                    lineHeight = it.fontSize().sp,
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        function(it.indexOf())
-                    }
-                )
-            }
-        }
-
-        VerticalScrollbar(
-            rememberScrollbarAdapter(scrollState),
-            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
-        )
     }
 }
