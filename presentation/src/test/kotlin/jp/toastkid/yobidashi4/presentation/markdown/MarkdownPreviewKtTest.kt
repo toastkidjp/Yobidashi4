@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.Key
@@ -77,7 +77,7 @@ class MarkdownPreviewKtTest {
             setContent {
                 MarkdownPreview(
                     mocked,
-                    rememberScrollState(),
+                    rememberLazyListState(),
                     Modifier
                 )
             }
