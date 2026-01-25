@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -26,6 +27,14 @@ class MarkdownTabViewModel : KoinComponent {
 
     fun onDispose(tab: ScrollableContentTab) {
         mainViewModel.updateScrollableTab(tab, scrollState.value)
+    }
+
+    private val showSubheadings = mutableStateOf(false)
+
+    fun showSubheadings() = showSubheadings.value
+
+    fun switchSubheadings() {
+        showSubheadings.value = showSubheadings.value.not()
     }
 
 }
