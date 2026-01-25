@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.sp
+import jp.toastkid.yobidashi4.domain.model.markdown.Subhead
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
@@ -49,27 +50,9 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
                 MarkdownPreview(tab.markdown(), viewModel.scrollState(), modifier.weight(1f))
 
                 if (viewModel.showSubheadings()) {
-                    val scrollState = rememberScrollState()
-
-                    Box(modifier = Modifier.weight(0.3f)) {
-                        Column(modifier = Modifier.verticalScroll(scrollState)) {
-                            tab.markdown().subheadings().forEach {
-                                Text(
-                                    text = it.text(),
-                                    fontSize = it.fontSize().sp,
-                                    lineHeight = it.fontSize().sp,
-                                    modifier = Modifier.fillMaxWidth().clickable {
-                                        viewModel.scrollState().requestScrollToItem(it.indexOf())
-                                    }
-                                )
-                            }
-                        }
-
-                        VerticalScrollbar(
-                            rememberScrollbarAdapter(scrollState),
-                            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
-                        )
-                    }
+                    MarkdownSubhead(tab.markdown().subheadings(), {
+                        viewModel.scrollState().requestScrollToItem(it)
+                    }, Modifier.weight(0.3f))
                 }
             }
 
@@ -101,5 +84,34 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
                 viewModel.onDispose(tab)
             }
         }
+    }
+}
+
+@Composable
+private fun MarkdownSubhead(
+    subheadings: List<Subhead>,
+    function: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val scrollState = rememberScrollState()
+
+    Box(modifier = modifier) {
+        Column(modifier = Modifier.verticalScroll(scrollState)) {
+            subheadings.forEach {
+                Text(
+                    text = it.text(),
+                    fontSize = it.fontSize().sp,
+                    lineHeight = it.fontSize().sp,
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        function(it.indexOf())
+                    }
+                )
+            }
+        }
+
+        VerticalScrollbar(
+            rememberScrollbarAdapter(scrollState),
+            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+        )
     }
 }
