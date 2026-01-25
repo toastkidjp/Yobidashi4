@@ -5,7 +5,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 data class Markdown(
     private val title: String,
     private val lines: MutableList<Line> = mutableListOf(),
-    private val subheadings: MutableList<TextBlock> = mutableListOf(),
+    private val subheadings: MutableList<Subhead> = mutableListOf(),
 ) {
 
     fun title() = title
@@ -14,7 +14,14 @@ data class Markdown(
         lines.add(line)
 
         if (line is TextBlock && line.level != -1) {
-            this.subheadings.add(line)
+            this.subheadings.add(
+                Subhead(
+                    line.text,
+                    line.level,
+                    line.fontSize(),
+                    lines.size
+                )
+            )
         }
     }
 
@@ -24,6 +31,6 @@ data class Markdown(
 
     fun lines(): List<Line> = lines
 
-    fun subheadings(): List<TextBlock> = subheadings
+    fun subheadings(): List<Subhead> = subheadings
 
 }
