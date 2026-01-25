@@ -126,6 +126,9 @@ println("Hello")
                 assertEquals(2, tables[1].header.size)
                 assertEquals(4, tables[1].table.size)
             },
+            {
+                assertEquals(12, markdown.subheadings().size)
+            }
         )
     }
 
