@@ -70,10 +70,10 @@ class MarkdownTabViewModelTest {
                     subject.launch(2)
                 }
             }
-        }
 
-        assertEquals(2, subject.scrollState().value)
-        verify { focusRequester.requestFocus() }
+            assertEquals(0, subject.scrollState().firstVisibleItemIndex)
+            verify { focusRequester.requestFocus() }
+        }
     }
 
     @Test
