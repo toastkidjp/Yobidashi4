@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
@@ -10,15 +10,15 @@ import org.koin.core.component.inject
 
 class MarkdownTabViewModel : KoinComponent {
 
-    private val scrollState = ScrollState(0)
+    private val scrollState = LazyListState(0)
 
     private val focusRequester = FocusRequester()
 
     private val mainViewModel: MainViewModel by inject()
 
     suspend fun launch(scrollPosition: Int) {
-        scrollState.scrollTo(scrollPosition)
         focusRequester().requestFocus()
+        scrollState.scrollToItem(scrollPosition)
     }
 
     fun scrollState() = scrollState
@@ -26,7 +26,7 @@ class MarkdownTabViewModel : KoinComponent {
     fun focusRequester() = focusRequester
 
     fun onDispose(tab: ScrollableContentTab) {
-        mainViewModel.updateScrollableTab(tab, scrollState.value)
+        mainViewModel.updateScrollableTab(tab, scrollState.firstVisibleItemIndex)
     }
 
     private val showSubheadings = mutableStateOf(false)
