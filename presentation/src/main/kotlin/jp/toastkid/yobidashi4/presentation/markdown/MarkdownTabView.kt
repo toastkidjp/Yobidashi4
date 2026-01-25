@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.verticalScroll
@@ -54,9 +55,12 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
                         Column(modifier = Modifier.verticalScroll(scrollState)) {
                             tab.markdown().subheadings().forEach {
                                 Text(
-                                    text = it.text,
+                                    text = it.text(),
                                     fontSize = it.fontSize().sp,
-                                    lineHeight = it.fontSize().sp
+                                    lineHeight = it.fontSize().sp,
+                                    modifier = Modifier.fillMaxWidth().clickable {
+                                        viewModel.scrollState().requestScrollToItem(it.indexOf())
+                                    }
                                 )
                             }
                         }
