@@ -42,9 +42,7 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
                 if (viewModel.showSubheadings()) {
                     MarkdownSubhead(
                         tab.markdown().subheadings(),
-                        {
-                            viewModel.scrollState().requestScrollToItem(it)
-                        },
+                        viewModel.scrollState()::requestScrollToItem,
                         Modifier.weight(0.3f)
                     )
                 }
