@@ -25,8 +25,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
@@ -47,11 +50,33 @@ fun MarkdownPreview(
     modifier: Modifier
 ) {
     val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
+
     val coroutineScope = rememberCoroutineScope()
 
+    MarkdownContent(
+        content,
+        scrollState,
+        { viewModel.onKeyEvent(coroutineScope, it) },
+        { viewModel.makeFontWeight(it) },
+        { a, b -> viewModel.extractText(a, b) },
+        { viewModel.loadBitmap(it) },
+        modifier
+    )
+}
+
+@Composable
+private fun MarkdownContent(
+    content: Markdown,
+    scrollState: LazyListState,
+    onKeyEvent: (KeyEvent) -> Boolean,
+    fontWeight: (Int) -> FontWeight,
+    extractText: (String, Boolean) -> String,
+    loadBitmap: (String) -> ImageBitmap?,
+    modifier: Modifier
+) {
     Box(
         modifier = modifier.onKeyEvent {
-            viewModel.onKeyEvent(coroutineScope, it)
+            onKeyEvent(it)
         }
     ) {
         SelectionContainer {
@@ -61,14 +86,18 @@ fun MarkdownPreview(
                         is TextBlock -> {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 if (line.quote) {
-                                    VerticalDivider(2.dp, Color(0x88CCAAFF), Modifier.padding(start = 4.dp, end = 8.dp).height(36.dp))
+                                    VerticalDivider(
+                                        2.dp,
+                                        Color(0x88CCAAFF),
+                                        Modifier.padding(start = 4.dp, end = 8.dp).height(36.dp)
+                                    )
                                 }
                                 TextLineView(
                                     line.text,
                                     TextStyle(
                                         color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
                                         fontSize = line.fontSize().sp,
-                                        fontWeight = viewModel.makeFontWeight(line.level),
+                                        fontWeight = fontWeight(line.level),
                                     ),
                                     Modifier.padding(bottom = 8.dp)
                                 )
@@ -95,7 +124,7 @@ fun MarkdownPreview(
                                         }
                                     }
                                     TextLineView(
-                                        viewModel.extractText(it, line.taskList),
+                                        extractText(it, line.taskList),
                                         TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
                                         Modifier.padding(bottom = 4.dp)
                                     )
@@ -104,7 +133,7 @@ fun MarkdownPreview(
                         }
 
                         is ImageLine -> {
-                            val read = viewModel.loadBitmap(line.source)
+                            val read = loadBitmap(line.source)
                             if (read != null) {
                                 Image(
                                     read,
