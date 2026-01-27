@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -23,9 +22,7 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         modifier = modifier.focusRequester(viewModel.focusRequester())
     ) {
-        Box {
-            MarkdownPreview(tab.markdown(), viewModel.scrollState(), modifier)
-        }
+        MarkdownPreview(tab.markdown(), viewModel.scrollState(), modifier)
 
         DisposableEffect(tab) {
             coroutineScope.launch {
