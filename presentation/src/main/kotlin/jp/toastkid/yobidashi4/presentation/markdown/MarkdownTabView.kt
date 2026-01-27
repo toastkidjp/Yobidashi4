@@ -22,7 +22,11 @@ internal fun MarkdownTabView(tab: MarkdownPreviewTab, modifier: Modifier) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         modifier = modifier.focusRequester(viewModel.focusRequester())
     ) {
-        MarkdownPreview(tab.markdown(), viewModel.scrollState(), modifier)
+        MarkdownPreview(
+            tab.markdown(),
+            viewModel.scrollState(),
+            modifier
+        )
 
         DisposableEffect(tab) {
             coroutineScope.launch {
