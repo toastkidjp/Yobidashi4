@@ -194,9 +194,8 @@ private fun MarkdownContent(
         }
 
         VerticalScrollbar(
-            adapter = rememberScrollbarAdapter(scrollState), modifier = Modifier.fillMaxHeight().align(
-                Alignment.CenterEnd
-            )
+            adapter = rememberScrollbarAdapter(scrollState),
+            modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
         )
     }
 }
