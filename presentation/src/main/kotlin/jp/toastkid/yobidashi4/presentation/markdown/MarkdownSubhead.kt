@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -32,16 +33,19 @@ fun MarkdownSubhead(
     val scrollState = rememberScrollState()
 
     Box(modifier = modifier) {
-        HoverHighlightColumn(modifier = Modifier.verticalScroll(scrollState)) {
-            subheadings.forEach {
-                Text(
-                    text = it.text(),
-                    fontSize = it.fontSize().sp,
-                    lineHeight = it.fontSize().sp,
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        function(it.indexOf())
-                    }
-                )
+        Column(modifier = Modifier.verticalScroll(scrollState)) {
+            subheadings.forEach { subheading ->
+                HoverHighlightColumn { textColor ->
+                    Text(
+                        text = subheading.text(),
+                        color = textColor,
+                        fontSize = subheading.fontSize().sp,
+                        lineHeight = subheading.fontSize().sp,
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            function(subheading.indexOf())
+                        }
+                    )
+                }
             }
         }
 
