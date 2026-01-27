@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.compound
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -18,10 +18,10 @@ class CompoundInterestCalculatorViewKtTest {
     @BeforeEach
     fun setUp() {
         mockkConstructor(CompoundInterestCalculatorViewModel::class)
-        every { anyConstructed<CompoundInterestCalculatorViewModel>().installmentInput() } returns TextFieldValue()
-        every { anyConstructed<CompoundInterestCalculatorViewModel>().annualInterestInput() } returns TextFieldValue()
-        every { anyConstructed<CompoundInterestCalculatorViewModel>().capitalInput() } returns TextFieldValue()
-        every { anyConstructed<CompoundInterestCalculatorViewModel>().yearInput() } returns TextFieldValue()
+        every { anyConstructed<CompoundInterestCalculatorViewModel>().installmentInput() } returns TextFieldState()
+        every { anyConstructed<CompoundInterestCalculatorViewModel>().annualInterestInput() } returns TextFieldState()
+        every { anyConstructed<CompoundInterestCalculatorViewModel>().capitalInput() } returns TextFieldState()
+        every { anyConstructed<CompoundInterestCalculatorViewModel>().yearInput() } returns TextFieldState()
         every { anyConstructed<CompoundInterestCalculatorViewModel>().result() } returns
                 CompoundInterestCalculatorService().invoke(
                     CompoundInterestCalculatorInput(
