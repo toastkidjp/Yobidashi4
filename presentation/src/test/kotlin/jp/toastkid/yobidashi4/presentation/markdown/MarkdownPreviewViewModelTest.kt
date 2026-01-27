@@ -20,11 +20,6 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Image
-import java.awt.image.BufferedImage
-import java.io.IOException
-import java.net.URL
-import javax.imageio.ImageIO
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +36,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.Image
+import java.awt.image.BufferedImage
+import java.io.IOException
+import java.net.URL
+import javax.imageio.ImageIO
 
 class MarkdownPreviewViewModelTest {
 
@@ -153,6 +153,15 @@ class MarkdownPreviewViewModelTest {
     fun makeFontWeight() {
         assertEquals(FontWeight.Normal, subject.makeFontWeight(-1))
         assertEquals(FontWeight.Bold, subject.makeFontWeight(0))
+    }
+
+    @Test
+    fun showSubheadings() {
+        assertFalse(subject.showSubheadings())
+
+        subject.switchSubheadings()
+
+        assertTrue(subject.showSubheadings())
     }
 
 }
