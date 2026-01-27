@@ -11,7 +11,6 @@ import kotlin.math.max
 
 class Subhead(
     private val text: String,
-    private val level: Int,
     private val fontSize: Int,
     private val indexOf: Int
 ) {
