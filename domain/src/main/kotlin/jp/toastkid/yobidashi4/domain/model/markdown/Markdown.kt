@@ -17,7 +17,6 @@ data class Markdown(
             this.subheadings.add(
                 Subhead(
                     line.text,
-                    line.level,
                     line.fontSize(),
                     lines.size
                 )
