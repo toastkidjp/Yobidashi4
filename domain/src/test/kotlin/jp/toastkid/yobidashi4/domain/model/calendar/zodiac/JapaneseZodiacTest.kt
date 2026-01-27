@@ -23,6 +23,9 @@ class JapaneseZodiacTest {
 
     @ParameterizedTest
     @CsvSource(
+        "-100, 庚辰",
+        "4, 甲子",
+        "3, 癸亥",
         "1868, 戊辰",
         "1966, 丙午",
         "2024, 甲辰",
