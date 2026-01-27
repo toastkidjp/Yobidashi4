@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.component
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
@@ -7,7 +8,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -30,9 +30,8 @@ class InputTextFieldKtTest {
         runDesktopComposeUiTest {
             setContent {
                 InputTextField(
-                    TextFieldValue("test"),
+                    TextFieldState("test"),
                     "label",
-                    {},
                     {},
                     {},
                     true,
@@ -68,9 +67,8 @@ class InputTextFieldKtTest {
         runDesktopComposeUiTest {
             setContent {
                 InputTextField(
-                    TextFieldValue("test"),
+                    TextFieldState("test"),
                     "label",
-                    {},
                     {},
                     clearButton,
                     false,
@@ -97,9 +95,8 @@ class InputTextFieldKtTest {
         runDesktopComposeUiTest {
             setContent {
                 SingleLineTextField(
-                    TextFieldValue("test"),
+                    TextFieldState("test"),
                     "label",
-                    {},
                     onClearInput
                 )
             }
@@ -115,9 +112,8 @@ class InputTextFieldKtTest {
         runDesktopComposeUiTest {
             setContent {
                 SingleLineTextField(
-                    TextFieldValue("test"),
+                    TextFieldState("test"),
                     "label",
-                    {}
                 )
             }
 
