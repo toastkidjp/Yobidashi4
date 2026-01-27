@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,17 +19,23 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,10 +47,14 @@ import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MarkdownPreview(
     content: Markdown,
@@ -53,15 +65,45 @@ fun MarkdownPreview(
 
     val coroutineScope = rememberCoroutineScope()
 
-    MarkdownContent(
-        content,
-        scrollState,
-        { viewModel.onKeyEvent(coroutineScope, it) },
-        { viewModel.makeFontWeight(it) },
-        { a, b -> viewModel.extractText(a, b) },
-        { viewModel.loadBitmap(it) },
-        modifier
-    )
+    val visibility = remember { mutableStateOf(false) }
+
+    Box {
+        Row {
+            MarkdownContent(
+                content,
+                scrollState,
+                { viewModel.onKeyEvent(coroutineScope, it) },
+                { viewModel.makeFontWeight(it) },
+                { a, b -> viewModel.extractText(a, b) },
+                { viewModel.loadBitmap(it) },
+                modifier.weight(1f)
+            )
+
+            if (viewModel.showSubheadings()) {
+                MarkdownSubhead(
+                    content.subheadings(),
+                    scrollState::requestScrollToItem,
+                    Modifier.weight(0.3f)
+                )
+            }
+        }
+
+        Icon(
+            painterResource(Res.drawable.ic_left_panel_open),
+            contentDescription = "Toggle subheadings.",
+            tint = MaterialTheme.colors.secondary,
+            modifier = modifier
+                .alpha(animateFloatAsState(if (visibility.value) 1f else 0f).value)
+                .onPointerEvent(PointerEventType.Enter) {
+                    visibility.value = true
+                }
+                .onPointerEvent(PointerEventType.Exit) {
+                    visibility.value = false
+                }
+                .clickable(onClick = viewModel::switchSubheadings)
+                .align(Alignment.CenterEnd)
+        )
+    }
 }
 
 @Composable
