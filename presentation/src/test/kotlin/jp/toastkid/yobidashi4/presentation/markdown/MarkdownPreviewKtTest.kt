@@ -5,10 +5,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.font.FontWeight
@@ -20,7 +23,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
+import jp.toastkid.yobidashi4.domain.model.markdown.Subhead
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -46,6 +51,7 @@ class MarkdownPreviewKtTest {
         every { anyConstructed<MarkdownPreviewViewModel>().makeFontWeight(any()) } returns FontWeight.Normal
         every { anyConstructed<MarkdownPreviewViewModel>().extractText(any(), any()) } returns "test"
         every { anyConstructed<MarkdownPreviewViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
+        every { anyConstructed<MarkdownPreviewViewModel>().switchSubheadings() } just Runs
         startKoin {
             modules(
                 module {
@@ -91,6 +97,37 @@ class MarkdownPreviewKtTest {
                     pressKey(Key.DirectionDown, 500L)
                     pressKey(Key.Enter, 500L)
                 }
+
+            val toggleSubheadings = onNode(hasContentDescription("Toggle subheadings."))
+            toggleSubheadings.assertExists()
+            toggleSubheadings.performMouseInput {
+                enter()
+                click()
+            }
+            verify { anyConstructed<MarkdownPreviewViewModel>().switchSubheadings() }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun showSubheadings() {
+        val mocked = mockk<Markdown>()
+        val content = MarkdownParser().invoke(
+            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```",
+            "test"
+        )
+        every { mocked.lines() } returns content.lines().plus(mockk<Line>())
+        every { mocked.subheadings() } returns content.subheadings().plus(Subhead("test", 25, 0))
+        every { anyConstructed<MarkdownPreviewViewModel>().showSubheadings() } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                MarkdownPreview(
+                    mocked,
+                    rememberLazyListState(),
+                    Modifier
+                )
+            }
         }
     }
 
