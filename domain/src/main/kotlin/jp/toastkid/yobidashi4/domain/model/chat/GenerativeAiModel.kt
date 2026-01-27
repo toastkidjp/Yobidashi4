@@ -14,6 +14,11 @@ enum class GenerativeAiModel(
     private val image: Boolean = false
 ) {
 
+    GEMINI_3_0_FLASH(
+        "Gemini 3 Flash",
+        "gemini-3-flash-preview",
+        "v1beta"
+    ),
     GEMINI_2_5_FLASH(
         "Gemini 2.5 Flash",
         "gemini-2.5-flash",
