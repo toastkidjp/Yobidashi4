@@ -11,6 +11,7 @@ enum class GenerativeAiModel(
     private val label: String,
     private val urlParameter: String,
     private val versionPath: String,
+    private val webGrounding: Boolean = false,
     private val image: Boolean = false
 ) {
 
@@ -22,12 +23,14 @@ enum class GenerativeAiModel(
     GEMINI_2_5_FLASH(
         "Gemini 2.5 Flash",
         "gemini-2.5-flash",
-        "v1"
+        "v1beta",
+        true
     ),
     GEMINI_2_5_FLASH_LITE(
         "Gemini 2.5 Flash Lite",
         "gemini-2.5-flash-lite",
-        "v1beta"
+        "v1beta",
+        true
     ),
     GEMINI_2_0_FLASH_IMAGE(
         "Image generation",
@@ -55,6 +58,8 @@ enum class GenerativeAiModel(
     }
 
     fun image() = image
+
+    fun webGrounding() = webGrounding
 
     companion object {
         fun default() = GEMINI_2_5_FLASH_LITE
