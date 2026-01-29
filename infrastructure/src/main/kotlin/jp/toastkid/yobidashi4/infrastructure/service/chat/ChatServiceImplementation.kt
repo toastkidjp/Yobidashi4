@@ -46,7 +46,7 @@ class ChatServiceImplementation : ChatService, KoinComponent {
         val chat = Chat(messages)
 
         val repository = repositories.getOrElse(model, repositories.values::first)
-        repository.request(chat.makeContent(model.image()), onUpdate)
+        repository.request(chat.makeContent(model.webGrounding(), model.image()), onUpdate)
 
         return null
     }
