@@ -18,6 +18,8 @@ import java.nio.file.Path
 
 class SettingEditorViewModel : KoinComponent {
 
+    private val logFilePath = Path.of("user/setting.properties")
+
     private val viewModel: MainViewModel by inject()
 
     private val setting: Setting by inject()
@@ -60,7 +62,6 @@ class SettingEditorViewModel : KoinComponent {
     }
 
     fun openFile() {
-        val logFilePath = Path.of("user/setting.properties")
         viewModel.openFile(logFilePath)
     }
 
