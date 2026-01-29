@@ -14,8 +14,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -63,7 +61,7 @@ class SettingEditorViewModelTest {
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        subject.onKeyEvent(CoroutineScope(Dispatchers.Unconfined), KeyEvent(Key.AppSwitch, KeyEventType.KeyDown))
+        subject.onKeyEvent(KeyEvent(Key.AppSwitch, KeyEventType.KeyDown))
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -73,7 +71,6 @@ class SettingEditorViewModelTest {
         every { subject.openFile() } just Runs
 
         val onKeyEvent = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -88,7 +85,6 @@ class SettingEditorViewModelTest {
         every { subject.openFile() } just Runs
 
         val onKeyEvent = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = false)
         )
 
@@ -103,7 +99,6 @@ class SettingEditorViewModelTest {
         every { subject.openFile() } just Runs
 
         val onKeyEvent = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.O, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
@@ -118,7 +113,6 @@ class SettingEditorViewModelTest {
         every { subject.save() } just Runs
 
         val onKeyEvent = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.S, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -133,7 +127,6 @@ class SettingEditorViewModelTest {
         every { subject.save() } just Runs
 
         val onKeyEvent = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.S, KeyEventType.KeyDown, isCtrlPressed = false)
         )
 
