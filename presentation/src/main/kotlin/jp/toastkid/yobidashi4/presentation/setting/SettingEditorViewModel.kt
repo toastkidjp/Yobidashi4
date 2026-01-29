@@ -70,6 +70,8 @@ class SettingEditorViewModel : KoinComponent {
             .filter { it.second.text.isNotBlank() }
             .forEach { setting.update(it.first, it.second.text.toString()) }
         setting.save()
+
+        viewModel.showSnackbar("It has saved settings.")
     }
 
 }
