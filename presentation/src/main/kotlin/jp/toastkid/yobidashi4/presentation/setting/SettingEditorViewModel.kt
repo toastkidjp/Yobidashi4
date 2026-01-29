@@ -59,14 +59,6 @@ class SettingEditorViewModel : KoinComponent {
             .forEach(items::add)
     }
 
-    // TODO Delete it
-    fun update(key: String) {
-        val index = items.indexOfFirst { it.first === key }
-        if (index == -1) {
-            return
-        }
-    }
-
     fun openFile() {
         val logFilePath = Path.of("user/setting.properties")
         viewModel.openFile(logFilePath)
