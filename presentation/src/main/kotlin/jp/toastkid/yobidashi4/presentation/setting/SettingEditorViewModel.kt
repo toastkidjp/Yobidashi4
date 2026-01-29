@@ -66,7 +66,6 @@ class SettingEditorViewModel : KoinComponent {
         if (index == -1) {
             return
         }
-        //items.set(index, key to it)
     }
 
     fun openFile() {
