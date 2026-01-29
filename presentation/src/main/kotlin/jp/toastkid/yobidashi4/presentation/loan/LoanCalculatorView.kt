@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -61,6 +62,7 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.loanAmount(),
                     viewModel::setLoanAmount,
+                    viewModel.loanAmount()::clearText,
                     "Loan amount",
                     viewModel.visualTransformation()
                 )
@@ -68,6 +70,7 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.loanTerm(),
                     viewModel::setLoanTerm,
+                    viewModel.loanTerm()::clearText,
                     "Loan term",
                     viewModel.visualTransformation()
                 )
@@ -75,6 +78,7 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.interestRate(),
                     viewModel::setInterestRate,
+                    viewModel.interestRate()::clearText,
                     "Interest rate",
                     viewModel.visualTransformation()
                 )
@@ -82,6 +86,7 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.downPayment(),
                     viewModel::setDownPayment,
+                    viewModel.downPayment()::clearText,
                     "Down payment",
                     viewModel.visualTransformation()
                 )
@@ -89,6 +94,7 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.managementFee(),
                     viewModel::setManagementFee,
+                    viewModel.managementFee()::clearText,
                     "Management fee (Monthly)",
                     viewModel.visualTransformation()
                 )
@@ -96,6 +102,7 @@ fun LoanCalculatorView() {
                 LoanCalculatorInput(
                     viewModel.renovationReserves(),
                     viewModel::setRenovationReserves,
+                    viewModel.renovationReserves()::clearText,
                     "Renovation reserves (Monthly)",
                     viewModel.visualTransformation()
                 )
@@ -151,6 +158,7 @@ fun LoanCalculatorView() {
 private fun LoanCalculatorInput(
     value: TextFieldState,
     onValueChange: () -> Unit,
+    onClearInput: () -> Unit,
     labelText: String,
     inputTransformation: OutputTransformation
 ) {
@@ -163,7 +171,8 @@ private fun LoanCalculatorInput(
             cursorColor = MaterialTheme.colors.onSurface
         ),
         visualTransformation = inputTransformation,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        onClearInput = onClearInput
     )
 
     LaunchedEffect(value.text) {
