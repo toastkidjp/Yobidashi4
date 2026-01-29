@@ -12,7 +12,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
@@ -29,7 +28,7 @@ class SettingEditorViewModel : KoinComponent {
 
     private val items = mutableStateListOf<Pair<String, TextFieldState>>()
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+    fun onKeyEvent(keyEvent: KeyEvent): Boolean {
         if (keyEvent.type != KeyEventType.KeyDown) {
             return false
         }
