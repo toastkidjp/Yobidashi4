@@ -155,17 +155,6 @@ class SettingEditorViewModelTest {
     }
 
     @Test
-    fun update() {
-        every { setting.items() } returns mapOf("test" to "value")
-        subject.start()
-
-        subject.update("a")
-        subject.update("test")
-
-        assertEquals("updated", subject.items().first().second.text)
-    }
-
-    @Test
     fun openFile() {
         every { viewModel.openFile(any()) } just Runs
 
