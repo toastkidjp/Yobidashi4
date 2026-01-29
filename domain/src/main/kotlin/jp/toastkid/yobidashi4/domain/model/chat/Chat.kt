@@ -11,11 +11,12 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
     fun list(): List<ChatMessage> = texts
 
-    fun makeContent(useImage: Boolean = false) = """
+    fun makeContent(useWebGrounding: Boolean = false, useImage: Boolean = false) = """
       {
         "contents": [
           ${makeContents()}
         ],
+        ${if (useWebGrounding) "\"tools\": [ { \"google_search\": {} } ]," else "" }
         ${if (useImage) "\"generationConfig\":{\"responseModalities\":[\"TEXT\",\"IMAGE\"]}," else "" }
         "safetySettings": [
             {
