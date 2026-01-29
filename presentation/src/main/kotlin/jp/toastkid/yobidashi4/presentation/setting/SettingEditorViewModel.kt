@@ -65,11 +65,9 @@ class SettingEditorViewModel : KoinComponent {
     }
 
     fun save() {
-        items.filter {
-            it.second.text.isNotBlank()
-        }.forEach {
-            setting.update(it.first, it.second.text.toString())
-        }
+        items
+            .filter { it.second.text.isNotBlank() }
+            .forEach { setting.update(it.first, it.second.text.toString()) }
         setting.save()
     }
 
