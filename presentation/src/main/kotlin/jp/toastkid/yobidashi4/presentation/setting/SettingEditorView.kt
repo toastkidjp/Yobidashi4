@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
@@ -86,7 +85,6 @@ fun SettingEditorView() {
                             item.first,
                             {
                                 state.value.clearText()
-                                viewModel.update(item.first, TextFieldValue())
                             }
                         )
                     }
