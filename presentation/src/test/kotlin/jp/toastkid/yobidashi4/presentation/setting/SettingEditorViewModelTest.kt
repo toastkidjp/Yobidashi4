@@ -170,7 +170,6 @@ class SettingEditorViewModelTest {
             "empty" to "y"
         )
         subject.start()
-        subject.update("empty")
         every { setting.update(any(), any()) } just Runs
         every { setting.save() } just Runs
 
