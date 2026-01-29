@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi4.presentation.tool.roulette
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -16,7 +16,7 @@ class RouletteToolTabViewKtTest {
     fun setUp() {
         mockkConstructor(RouletteToolTabViewModel::class)
 
-        every { anyConstructed<RouletteToolTabViewModel>().input() } returns TextFieldValue()
+        every { anyConstructed<RouletteToolTabViewModel>().input() } returns TextFieldState()
         every { anyConstructed<RouletteToolTabViewModel>().result() } returns "test"
     }
 
