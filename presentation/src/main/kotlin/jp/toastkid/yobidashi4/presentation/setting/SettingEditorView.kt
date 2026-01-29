@@ -40,6 +40,11 @@ fun SettingEditorView() {
     val viewModel = remember { SettingEditorViewModel() }
     val coroutineScope = rememberCoroutineScope()
 
+    val stickyHeaderBackgroundColor = animateColorAsState(
+        if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+        else Color.Transparent
+    )
+
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
@@ -53,7 +58,11 @@ fun SettingEditorView() {
                 userScrollEnabled = true
             ) {
                 stickyHeader {
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier
+                            .drawBehind { drawRect(stickyHeaderBackgroundColor.value) }
+                            .fillMaxWidth()
+                    ) {
                         Button(onClick = viewModel::save) {
                             Text("Save")
                         }
