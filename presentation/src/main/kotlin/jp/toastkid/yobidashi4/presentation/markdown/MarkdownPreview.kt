@@ -75,7 +75,7 @@ fun MarkdownPreview(
                 { viewModel.onKeyEvent(coroutineScope, it) },
                 viewModel::makeFontWeight,
                 { a, b -> viewModel.extractText(a, b) },
-                { viewModel.loadBitmap(it) },
+                viewModel::loadBitmap,
                 modifier.weight(1f)
             )
 
