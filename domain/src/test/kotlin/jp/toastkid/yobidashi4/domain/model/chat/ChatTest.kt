@@ -55,7 +55,8 @@ class ChatTest {
           "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
           "threshold": "BLOCK_ONLY_HIGH"
       }
-  ]
+  ],
+  "generationConfig":{"thinkingConfig":{"thinkingBudget":0}}
 }""".trimIndent().replace(" ", "").replace("\n", ""),
             chat.makeContent().replace(" ", "").replace("\n", "")
         )
@@ -89,7 +90,8 @@ class ChatTest {
           "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
           "threshold": "BLOCK_ONLY_HIGH"
       }
-  ]
+  ],
+  "generationConfig":{"thinkingConfig":{"thinkingBudget":0}}
 }""".trimIndent().replace(" ", "").replace("\n", ""),
             chat.makeContent().replace(" ", "").replace("\n", "")
         )
@@ -123,9 +125,10 @@ class ChatTest {
           "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
           "threshold": "BLOCK_ONLY_HIGH"
       }
-  ]
+  ],
+  "generationConfig":{"thinkingConfig":{"thinkingBudget":0}}
 }""".trimIndent().replace(" ", "").replace("\n", ""),
-            chat.makeContent(true).replace(" ", "").replace("\n", "")
+            chat.makeContent(useImage = true).replace(" ", "").replace("\n", "")
         )
     }
 
