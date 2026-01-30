@@ -38,16 +38,6 @@ enum class GenerativeAiModel(
         "v1beta",
         true
     ),
-    GEMINI_2_0_FLASH(
-        "Gemini 2.0 Flash",
-        "gemini-2.0-flash",
-        "v1"
-    ),
-    GEMINI_2_0_FLASH_LITE(
-        "Gemini 2.0 Flash Lite",
-        "gemini-2.0-flash-lite",
-        "v1"
-    )
     ;
 
     fun label(): String = label
