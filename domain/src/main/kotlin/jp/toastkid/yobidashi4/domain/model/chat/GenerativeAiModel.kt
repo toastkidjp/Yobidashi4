@@ -32,12 +32,6 @@ enum class GenerativeAiModel(
         "v1beta",
         true
     ),
-    GEMINI_2_0_FLASH_IMAGE(
-        "Image generation",
-        "gemini-2.0-flash-preview-image-generation",
-        "v1beta",
-        true
-    ),
     ;
 
     fun label(): String = label
