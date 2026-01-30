@@ -32,6 +32,16 @@ enum class GenerativeAiModel(
         "v1beta",
         true
     ),
+    GEMINI_2_5_FLASH_WITHOUT_WEB_GROUNDING(
+        "Gemini 2.5 Flash(Web Grounding なし)",
+        "gemini-2.5-flash",
+        "v1beta",
+    ),
+    GEMINI_2_5_FLASH_LITE_WITHOUT_WEB_GROUNDING(
+        "Gemini 2.5 Flash Lite(Web Grounding なし)",
+        "gemini-2.5-flash-lite",
+        "v1beta",
+    ),
     ;
 
     fun label(): String = label
