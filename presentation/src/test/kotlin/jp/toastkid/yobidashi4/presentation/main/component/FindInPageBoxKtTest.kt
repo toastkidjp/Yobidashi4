@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
@@ -10,7 +11,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -49,14 +49,14 @@ class FindInPageBoxKtTest {
 
         every { mainViewModel.currentTab() } returns mockk<EditorTab>()
         every { mainViewModel.findStatus() } returns ""
-        every { mainViewModel.inputValue() } returns TextFieldValue()
-        every { mainViewModel.replaceInputValue() } returns TextFieldValue()
+        every { mainViewModel.inputValue() } returns TextFieldState()
+        every { mainViewModel.replaceInputValue() } returns TextFieldState()
         every { mainViewModel.caseSensitive() } returns false
         every { mainViewModel.openFind() } returns false
 
         mockkConstructor(FindInPageBoxViewModel::class)
         every { anyConstructed<FindInPageBoxViewModel>().launch() } just Runs
-        every { anyConstructed<FindInPageBoxViewModel>().onFindInputChange(any()) } just Runs
+        every { anyConstructed<FindInPageBoxViewModel>().onFindInputChange() } just Runs
         every { anyConstructed<FindInPageBoxViewModel>().findUp() } just Runs
         every { anyConstructed<FindInPageBoxViewModel>().findDown() } just Runs
         every { anyConstructed<FindInPageBoxViewModel>().switchCaseSensitive() } just Runs
@@ -73,7 +73,7 @@ class FindInPageBoxKtTest {
     @Test
     fun findInPageBox() {
         val text = "input_field"
-        every { anyConstructed<FindInPageBoxViewModel>().inputValue() } returns TextFieldValue(text)
+        every { anyConstructed<FindInPageBoxViewModel>().inputValue() } returns TextFieldState(text)
         runDesktopComposeUiTest {
             setContent {
                 FindInPageBox()
@@ -96,13 +96,13 @@ class FindInPageBoxKtTest {
                 keyDown(Key.K)
                 keyUp(Key.K)
             }.performTextInput("test")
-            verify { anyConstructed<FindInPageBoxViewModel>().onFindInputChange(any()) }
+            verify { anyConstructed<FindInPageBoxViewModel>().onFindInputChange() }
 
             onNodeWithContentDescription("Case sensitive checkbox", useUnmergedTree = true).performClick()
             verify { anyConstructed<FindInPageBoxViewModel>().switchCaseSensitive() }
 
             onAllNodesWithContentDescription("Clear input.").onFirst().performClick()
-            verify { anyConstructed<FindInPageBoxViewModel>().onFindInputChange(any()) }
+            verify { anyConstructed<FindInPageBoxViewModel>().onFindInputChange() }
         }
     }
 }
