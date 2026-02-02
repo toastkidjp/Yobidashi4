@@ -1,14 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
-import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -17,7 +16,8 @@ import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.util.stream.Stream
+import jp.toastkid.yobidashi4.domain.model.input.InputHistory
+import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
@@ -31,6 +31,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.util.stream.Stream
 
 class AggregationBoxKtTest {
 
@@ -43,6 +44,9 @@ class AggregationBoxKtTest {
     @MockK
     private lateinit var fullTextArticleFinder: FullTextArticleFinder
 
+    @MockK
+    private lateinit var repository: InputHistoryRepository
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -53,6 +57,7 @@ class AggregationBoxKtTest {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
+                    single(qualifier=null) { repository } bind(InputHistoryRepository::class)
                 }
             )
         }
@@ -72,9 +77,10 @@ class AggregationBoxKtTest {
         every { anyConstructed<AggregationBoxViewModel>().categories() } returns listOf(
             StepsAggregatorService(articlesReaderService)
         )
-        every { articlesReaderService.invoke() } returns Stream.empty()
+        every { articlesReaderService.invoke() } answers { Stream.empty() }
         every { fullTextArticleFinder.label() } returns "Find article"
         every { anyConstructed<AggregationBoxViewModel>().icon(any()) } returns Res.drawable.ic_aggregation
+        every { repository.filter(any()) } returns listOf(InputHistory("test", 0))
     }
 
     @AfterEach
@@ -87,8 +93,8 @@ class AggregationBoxKtTest {
     @Test
     fun aggregationBox() {
         val label = "test input label"
-        every { anyConstructed<AggregationBoxViewModel>().dateInput() } returns TextFieldValue(label)
-        every { anyConstructed<AggregationBoxViewModel>().onDateInputValueChange(any()) } just Runs
+        every { anyConstructed<AggregationBoxViewModel>().dateInput() } returns TextFieldState(label)
+        every { anyConstructed<AggregationBoxViewModel>().onDateInputValueChange() } just Runs
 
         runDesktopComposeUiTest {
             setContent {
@@ -107,8 +113,8 @@ class AggregationBoxKtTest {
     fun withDropdown() {
         every { anyConstructed<AggregationBoxViewModel>().isOpeningChooser() } returns true
         val label = "test input label"
-        every { anyConstructed<AggregationBoxViewModel>().dateInput() } returns TextFieldValue(label)
-        every { anyConstructed<AggregationBoxViewModel>().onDateInputValueChange(any()) } just Runs
+        every { anyConstructed<AggregationBoxViewModel>().dateInput() } returns TextFieldState(label)
+        every { anyConstructed<AggregationBoxViewModel>().onDateInputValueChange() } just Runs
 
         runDesktopComposeUiTest {
             setContent {
@@ -121,9 +127,8 @@ class AggregationBoxKtTest {
             val input = onNode(hasText(label), true)
             input.performClick()
             verify { anyConstructed<AggregationBoxViewModel>().closeChooser() }
-            input.performTextInput("test")
             input.performImeAction()
-            verify { anyConstructed<AggregationBoxViewModel>().onDateInputValueChange(any()) }
+            verify { anyConstructed<AggregationBoxViewModel>().onDateInputValueChange() }
             verify { anyConstructed<AggregationBoxViewModel>().onSearch() }
         }
     }
