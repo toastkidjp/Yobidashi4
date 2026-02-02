@@ -1,11 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -68,7 +68,7 @@ class InputBoxViewModelTest {
     fun invokeAction() {
         every { viewModel.invokeInputAction(any()) } just Runs
         every { viewModel.setShowInputBox() } just Runs
-        subject.onValueChange(TextFieldValue("test"))
+        subject.query().setTextAndPlaceCursorAtEnd("test")
 
         subject.invokeAction()
 
@@ -78,7 +78,7 @@ class InputBoxViewModelTest {
 
     @Test
     fun onValueChange() {
-        subject.onValueChange(TextFieldValue("test"))
+        subject.query().setTextAndPlaceCursorAtEnd("test")
 
         assertEquals("test", subject.query().text)
 
