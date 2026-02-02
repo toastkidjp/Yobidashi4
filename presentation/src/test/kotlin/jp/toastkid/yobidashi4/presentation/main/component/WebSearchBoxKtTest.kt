@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
@@ -9,22 +10,42 @@ import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
+import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 class WebSearchBoxKtTest {
 
+    @MockK
+    private lateinit var inputHistoryRepository: InputHistoryRepository
+
     @BeforeEach
     fun setUp() {
+        MockKAnnotations.init(this)
+
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
+                }
+            )
+        }
+
+        every { inputHistoryRepository.filter(any()) } returns emptyList()
         mockkConstructor(WebSearchBoxViewModel::class)
         every { anyConstructed<WebSearchBoxViewModel>().openingDropdown() } returns false
         every { anyConstructed<WebSearchBoxViewModel>().containsSwingContent() } returns false
@@ -44,6 +65,7 @@ class WebSearchBoxKtTest {
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -51,7 +73,7 @@ class WebSearchBoxKtTest {
     @Test
     fun webSearchBox() {
         val text = "web-search-input"
-        every { anyConstructed<WebSearchBoxViewModel>().query() } returns TextFieldValue(text)
+        every { anyConstructed<WebSearchBoxViewModel>().query() } returns TextFieldState(text)
         every { anyConstructed<WebSearchBoxViewModel>().invokeSearch() } just Runs
 
         runDesktopComposeUiTest {
