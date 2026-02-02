@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.domain.service.aggregation.EatingOutCounterService
 import jp.toastkid.yobidashi4.domain.service.aggregation.MovieMemoSubtitleExtractor
 import jp.toastkid.yobidashi4.domain.service.aggregation.Nikkei225AggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.OutgoAggregatorService
+import jp.toastkid.yobidashi4.domain.service.aggregation.SalesTaxAggregator
 import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.domain.service.aggregation.StocksAggregatorService
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
@@ -63,6 +64,7 @@ class AggregationBoxViewModel : KoinComponent {
         StocksAggregatorService(articlesReaderService),
         OutgoAggregatorService(articlesReaderService),
         EatingOutCounterService(articlesReaderService),
+        SalesTaxAggregator(articlesReaderService),
         ArticleLengthAggregatorService(articlesReaderService),
         StepsAggregatorService(articlesReaderService),
         Nikkei225AggregatorService(articlesReaderService),
