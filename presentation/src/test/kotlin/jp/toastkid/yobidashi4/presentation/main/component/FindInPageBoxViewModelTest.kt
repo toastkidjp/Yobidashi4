@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -106,7 +106,7 @@ class FindInPageBoxViewModelTest {
 
     @Test
     fun inputValue() {
-        val textFieldValue = mockk<TextFieldValue>()
+        val textFieldValue = mockk<TextFieldState>()
         every { mainViewModel.inputValue() } returns textFieldValue
 
         subject.inputValue()
@@ -116,12 +116,12 @@ class FindInPageBoxViewModelTest {
 
     @Test
     fun onFindInputChange() {
-        every { mainViewModel.onFindInputChange(any()) } just Runs
+        every { mainViewModel.onFindInputChange() } just Runs
+        every { mainViewModel.inputValue() } returns TextFieldState()
         every { anyConstructed<InputHistoryService>().filter(any(), any()) } returns mockk()
 
-        subject.onFindInputChange(TextFieldValue("test new"))
+        subject.onFindInputChange()
 
-        verify { mainViewModel.onFindInputChange(any()) }
         verify { anyConstructed<InputHistoryService>().filter(any(), any()) }
     }
 
@@ -137,24 +137,25 @@ class FindInPageBoxViewModelTest {
 
     @Test
     fun onClickInputHistory() {
-        every { anyConstructed<InputHistoryService>().make(any()) } returns TextFieldValue("test ")
-        every { mainViewModel.onFindInputChange(any()) } just Runs
+        every { anyConstructed<InputHistoryService>().make(any()) } returns "test "
+        every { mainViewModel.inputValue() } returns TextFieldState()
+        every { mainViewModel.onFindInputChange() } just Runs
 
         subject.onClickInputHistory("test")
 
         verify { anyConstructed<InputHistoryService>().make(any()) }
-        verify { mainViewModel.onFindInputChange(any()) }
+        assertEquals("test ", mainViewModel.inputValue().text)
     }
 
     @Test
     fun onClickInputHistoryMakeNullCase() {
         every { anyConstructed<InputHistoryService>().make(any()) } returns null
-        every { mainViewModel.onFindInputChange(any()) } just Runs
+        every { mainViewModel.onFindInputChange() } just Runs
 
         subject.onClickInputHistory("test")
 
         verify { anyConstructed<InputHistoryService>().make(any()) }
-        verify(inverse = true) { mainViewModel.onFindInputChange(any()) }
+        verify(inverse = true) { mainViewModel.onFindInputChange() }
     }
 
     @Test
@@ -223,15 +224,6 @@ class FindInPageBoxViewModelTest {
         subject.replaceInputValue()
 
         verify { mainViewModel.replaceInputValue() }
-    }
-
-    @Test
-    fun onReplaceInputChange() {
-        every { mainViewModel.onReplaceInputChange(any()) } just Runs
-
-        subject.onReplaceInputChange(TextFieldValue("test new"))
-
-        verify { mainViewModel.onReplaceInputChange(any()) }
     }
 
     @Test
