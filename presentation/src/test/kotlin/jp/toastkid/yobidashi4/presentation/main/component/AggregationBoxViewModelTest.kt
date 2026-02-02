@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -112,7 +112,8 @@ class AggregationBoxViewModelTest {
     @Test
     fun onKeyEventWith2Key() {
         subject.choose(subject.categories().last())
-        subject.onDateInputValueChange(TextFieldValue("test"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("test")
+        subject.onDateInputValueChange()
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Two, KeyEventType.KeyDown, isCtrlPressed = true)
@@ -125,7 +126,8 @@ class AggregationBoxViewModelTest {
     @Test
     fun onKeyEventWith2KeyButKeyHasReleased() {
         subject.choose(subject.categories().last())
-        subject.onDateInputValueChange(TextFieldValue("test"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("test")
+        subject.onDateInputValueChange()
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Two, KeyEventType.KeyUp, isCtrlPressed = true)
@@ -136,7 +138,8 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun onKeyEventWith2KeyButCurrentIsNotFind() {
-        subject.onDateInputValueChange(TextFieldValue("test"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("test")
+        subject.onDateInputValueChange()
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Two, KeyEventType.KeyDown, isCtrlPressed = true)
@@ -149,7 +152,8 @@ class AggregationBoxViewModelTest {
     @Test
     fun unconsumedOnKeyEventWith2KeyAndOtherMask() {
         subject.choose(subject.categories().last())
-        subject.onDateInputValueChange(TextFieldValue("test"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("test")
+        subject.onDateInputValueChange()
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Two, KeyEventType.KeyDown, isShiftPressed = true)
@@ -242,7 +246,8 @@ class AggregationBoxViewModelTest {
 
         assertTrue(subject.keyword().text.isEmpty())
 
-        subject.onDateInputValueChange(TextFieldValue("new text"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("new text")
+        subject.onDateInputValueChange()
 
         assertEquals("new text", subject.keyword().text)
 
@@ -255,7 +260,8 @@ class AggregationBoxViewModelTest {
     fun onDateValueChange() {
         assertTrue(subject.dateInput().text.isNotEmpty())
 
-        subject.onDateInputValueChange(TextFieldValue("2023-12"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("2023-12")
+        subject.onDateInputValueChange()
 
         assertEquals("2023-12", subject.dateInput().text)
 
@@ -270,7 +276,8 @@ class AggregationBoxViewModelTest {
 
         assertEquals("Find article", subject.selectedCategoryName())
 
-        subject.onDateInputValueChange(TextFieldValue("test"))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("test")
+        subject.onDateInputValueChange()
 
         subject.onSearch()
 
@@ -301,7 +308,9 @@ class AggregationBoxViewModelTest {
             subject.setExactMatch(false)
         }
 
-        subject.onDateInputValueChange(TextFieldValue(input))
+        subject.dateInput().setTextAndPlaceCursorAtEnd(input)
+        subject.onDateInputValueChange()
+
         val capturingSlot = slot<String>()
 
         subject.onSearch()
@@ -313,7 +322,8 @@ class AggregationBoxViewModelTest {
 
     @Test
     fun onSearchWithBlankQuery() {
-        subject.onDateInputValueChange(TextFieldValue("  "))
+        subject.dateInput().setTextAndPlaceCursorAtEnd("  ")
+        subject.onDateInputValueChange()
 
         subject.onSearch()
 
