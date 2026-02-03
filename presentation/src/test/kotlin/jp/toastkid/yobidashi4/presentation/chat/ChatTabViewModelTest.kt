@@ -142,7 +142,7 @@ class ChatTabViewModelTest {
                 assertEquals(4, subject.messages().size)
 
                 subject.textInput().setTextAndPlaceCursorAtEnd("Image send")
-                subject.chooseModel(GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE)
+                subject.chooseModel(GenerativeAiModel.GEMINI_2_5_FLASH_LITE_WITHOUT_WEB_GROUNDING)
                 subject.send(coroutineScope)
                 capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
                 assertEquals(6, subject.messages().size)
