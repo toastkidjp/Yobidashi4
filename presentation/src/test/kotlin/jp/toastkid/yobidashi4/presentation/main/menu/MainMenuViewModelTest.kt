@@ -180,7 +180,7 @@ class MainMenuViewModelTest {
         subject.switchFindArticle()
 
         verify { mainViewModel.showAggregationBox() }
-        verify { mainViewModel.setInitialAggregationType(7) }
+        verify { mainViewModel.setInitialAggregationType(8) }
         verify { mainViewModel.switchAggregationBox(true) }
     }
 
