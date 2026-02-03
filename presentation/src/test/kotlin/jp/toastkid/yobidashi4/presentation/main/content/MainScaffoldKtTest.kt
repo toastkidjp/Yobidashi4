@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
@@ -8,7 +9,6 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -25,6 +25,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -54,6 +55,9 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var fullTextArticleFinder: FullTextArticleFinder
 
+    @MockK
+    private lateinit var inputHistoryRepository: InputHistoryRepository
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -65,6 +69,7 @@ class MainScaffoldKtTest {
                     single(qualifier=null) { setting } bind(Setting::class)
                     single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
+                    single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                 }
             )
         }
@@ -87,6 +92,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.currentTab() } returns ConverterToolTab()
         every { mainViewModel.tabs } returns mutableListOf()
         every { setting.chatApiKey() } returns "test-key"
+        every { inputHistoryRepository.filter(any()) } returns emptyList()
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
@@ -127,7 +133,7 @@ class MainScaffoldKtTest {
         every { markdownPreviewTab.scrollPosition() } returns 1
         every { mainViewModel.currentTab() } returns markdownPreviewTab
         every { mainViewModel.initialAggregationType() } returns 0
-        every { mainViewModel.inputValue() } returns TextFieldValue("search")
+        every { mainViewModel.inputValue() } returns TextFieldState("search")
         every { mainViewModel.findStatus() } returns "test"
         every { mainViewModel.caseSensitive() } returns true
         every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
