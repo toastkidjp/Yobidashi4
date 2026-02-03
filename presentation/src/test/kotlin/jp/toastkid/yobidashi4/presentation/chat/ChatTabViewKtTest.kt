@@ -118,7 +118,7 @@ class ChatTabViewKtTest {
             onNodeWithContentDescription("Model chooser", useUnmergedTree = true)
                 .performClick()
 
-            val contentDescription = "chooserItem-${GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE.label()}"
+            val contentDescription = "chooserItem-${GenerativeAiModel.GEMINI_2_5_FLASH_LITE_WITHOUT_WEB_GROUNDING.label()}"
             onNodeWithContentDescription(contentDescription, useUnmergedTree = true)
                 .performMouseInput {
                     click()
