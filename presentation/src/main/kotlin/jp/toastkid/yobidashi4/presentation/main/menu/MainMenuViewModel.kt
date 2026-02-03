@@ -91,7 +91,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun switchFindArticle() {
-        switchAggregationBox(7)
+        switchAggregationBox(8)
     }
 
     fun updateFinderIndex() {
