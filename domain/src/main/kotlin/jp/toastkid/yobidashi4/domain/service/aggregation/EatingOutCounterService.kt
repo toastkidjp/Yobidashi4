@@ -9,6 +9,10 @@ class EatingOutCounterService(articlesReaderService: ArticlesReaderService) : Ar
         it.contains(TARGET_LINE_LABEL).not()
     }
 
+    private fun contains(it: String): Boolean {
+        return it.contains(TARGET_LINE_LABEL).not()
+    }
+
     override operator fun invoke(keyword: String): AggregationResult {
         return behavior.invoke(keyword)
     }
