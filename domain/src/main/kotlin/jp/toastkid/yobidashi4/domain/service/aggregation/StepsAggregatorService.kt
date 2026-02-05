@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi4.domain.service.aggregation
 
-import java.nio.file.Files
-import java.util.regex.Pattern
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
+import java.nio.file.Files
+import java.util.regex.Pattern
 import kotlin.io.path.nameWithoutExtension
 
 class StepsAggregatorService(private val articlesReaderService: ArticlesReaderService) : ArticleAggregator {
@@ -15,7 +15,7 @@ class StepsAggregatorService(private val articlesReaderService: ArticlesReaderSe
             .filter { it.nameWithoutExtension.startsWith(keyword) }
             .map { it.nameWithoutExtension to Files.readAllLines(it) }
             .forEach {
-                it.second.filter { line -> line.contains(TARGET) }
+                it.second.filter { line -> containsTarget(line) }
                     .forEach { line ->
                         val matcher = pattern.matcher(line)
                         while (matcher.find()) {
@@ -29,6 +29,8 @@ class StepsAggregatorService(private val articlesReaderService: ArticlesReaderSe
             }
         return aggregationResult
     }
+
+    private fun containsTarget(line: String): Boolean = line.contains(TARGET)
 
     override fun label() = "Steps"
 
