@@ -13,10 +13,10 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 class SalesTaxAggregator(articlesReaderService: ArticlesReaderService) : ArticleAggregator {
 
     private val behavior = OutgoCalculationBehavior(articlesReaderService) {
-        contains(it, TARGET_LINE_LABEL)
+        contains(it)
     }
 
-    private fun contains(string: String, TARGET_LINE_LABEL: String): Boolean = string.contains(TARGET_LINE_LABEL).not()
+    private fun contains(string: String): Boolean = string.contains(TARGET_LINE_LABEL).not()
 
     override operator fun invoke(keyword: String): AggregationResult {
         return behavior.invoke(keyword)
