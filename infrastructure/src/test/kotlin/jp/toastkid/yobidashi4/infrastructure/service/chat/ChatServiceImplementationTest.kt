@@ -71,7 +71,7 @@ class ChatServiceImplementationTest {
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { repository.request(any(), capture(capturingSlot)) } just Runs
 
-        subject.send(mutableListOf(ChatMessage("user", "test")), GenerativeAiModel.GEMINI_2_0_FLASH, callback)
+        subject.send(mutableListOf(ChatMessage("user", "test")), GenerativeAiModel.GEMINI_2_5_FLASH, callback)
         capturingSlot.captured.invoke(ChatResponseItem("test"))
         capturingSlot.captured.invoke(ChatResponseItem("\"Escaped\""))
         capturingSlot.captured.invoke(ChatResponseItem("image", image = true))
@@ -85,7 +85,7 @@ class ChatServiceImplementationTest {
     fun sendWhenReceiveNullResponse() {
         every { repository.request(any(), any()) } just Runs
 
-        subject.send(mutableListOf(ChatMessage("user", "test")), GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE, callback)
+        subject.send(mutableListOf(ChatMessage("user", "test")), GenerativeAiModel.GEMINI_2_5_FLASH, callback)
 
         verify { repository.request(any(), any()) }
     }
