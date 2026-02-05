@@ -57,6 +57,4 @@ internal class OutgoCalculationBehavior(
 
 private const val SECTION_TITLE = "家計簿"
 
-private const val TARGET_LINE_LABEL = "(外食)"
-
 private const val YEN_UNIT = "円"
