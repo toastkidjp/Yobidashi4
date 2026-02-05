@@ -5,9 +5,7 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 
 class EatingOutCounterService(articlesReaderService: ArticlesReaderService) : ArticleAggregator {
 
-    private val behavior = OutgoCalculationBehavior(articlesReaderService) {
-        it.contains(TARGET_LINE_LABEL).not()
-    }
+    private val behavior = OutgoCalculationBehavior(articlesReaderService, ::contains)
 
     private fun contains(it: String): Boolean {
         return it.contains(TARGET_LINE_LABEL).not()
