@@ -11,8 +11,6 @@ import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -252,7 +250,7 @@ class FileListViewModelTest {
             )
         )
 
-        subject.onValueChange(TextFieldValue("test"))
+        subject.onValueChange()
         assertEquals(1, subject.items().size)
     }
 
@@ -271,13 +269,13 @@ class FileListViewModelTest {
             )
         )
 
-        subject.onValueChange(TextFieldValue())
+        subject.onValueChange()
         assertEquals(2, subject.items().size)
     }
 
     @Test
     fun onValueChangeWithComposition() {
-        subject.onValueChange(TextFieldValue("test", composition = TextRange.Zero))
+        subject.onValueChange()
 
         subject.clearInput()
 
