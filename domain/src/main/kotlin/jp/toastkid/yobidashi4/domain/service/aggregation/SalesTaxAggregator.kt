@@ -12,9 +12,7 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 
 class SalesTaxAggregator(articlesReaderService: ArticlesReaderService) : ArticleAggregator {
 
-    private val behavior = OutgoCalculationBehavior(articlesReaderService) {
-        contains(it)
-    }
+    private val behavior = OutgoCalculationBehavior(articlesReaderService, ::contains)
 
     private fun contains(string: String): Boolean = string.contains(TARGET_LINE_LABEL).not()
 
