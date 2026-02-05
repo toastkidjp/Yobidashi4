@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
-import androidx.compose.ui.text.input.TextFieldValue
 import jp.toastkid.yobidashi4.domain.service.converter.TsuboCountConverterService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -18,7 +17,7 @@ class TwoValueConverterBoxViewModelTest {
 
     @Test
     fun onFirstValueChange() {
-        subject.onFirstValueChange(TextFieldValue("10"))
+        subject.onFirstValueChange()
 
         assertEquals("10", subject.firstInput().text)
         assertEquals("32.40", subject.secondInput().text)
@@ -26,7 +25,7 @@ class TwoValueConverterBoxViewModelTest {
 
     @Test
     fun onFirstValueChangeWithIncorrectInput() {
-        subject.onFirstValueChange(TextFieldValue("noop"))
+        subject.onFirstValueChange()
 
         assertEquals("noop", subject.firstInput().text)
         assertEquals("324.00", subject.secondInput().text)
@@ -34,7 +33,7 @@ class TwoValueConverterBoxViewModelTest {
 
     @Test
     fun onSecondValueChange() {
-        subject.onSecondValueChange(TextFieldValue("3240.0"))
+        subject.onSecondValueChange()
 
         assertEquals("1000.00", subject.firstInput().text)
         assertEquals("3240.0", subject.secondInput().text)
@@ -42,7 +41,7 @@ class TwoValueConverterBoxViewModelTest {
 
     @Test
     fun onSecondValueChangeWithIncorrectInput() {
-        subject.onSecondValueChange(TextFieldValue("noop"))
+        subject.onSecondValueChange()
 
         assertEquals("100", subject.firstInput().text)
         assertEquals("noop", subject.secondInput().text)
