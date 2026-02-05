@@ -1489,7 +1489,7 @@ class MainViewModelImplementationTest {
         every { subject.openTab(capture(capturingSlot)) } just Runs
 
         val question = "Initial question"
-        val model = GenerativeAiModel.GEMINI_2_0_FLASH_IMAGE
+        val model = GenerativeAiModel.GEMINI_2_5_FLASH_LITE
         subject.askGenerativeAi(question, model)
 
         assertEquals(question, capturingSlot.captured.initialQuestion())
