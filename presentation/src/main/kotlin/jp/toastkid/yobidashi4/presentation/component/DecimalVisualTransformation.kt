@@ -18,7 +18,7 @@ class DecimalVisualTransformation : OutputTransformation {
         val input = asCharSequence().toString()
         val decimal = toDecimal(input)
         val useFormatter = decimal != null && decimal != BigDecimal.ZERO && !input.contains(".")
-        if (useFormatter.not() || decimal.intValueExact() < 999) {
+        if (useFormatter.not() || input.length <= 3) {
             return
         }
 
