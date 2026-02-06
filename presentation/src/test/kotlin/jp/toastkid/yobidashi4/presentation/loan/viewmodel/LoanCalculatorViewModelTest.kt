@@ -64,7 +64,7 @@ class LoanCalculatorViewModelTest {
 
         subject.setLoanAmount()
 
-        assertEquals("", subject.loanAmount().text)
+        assertEquals(" ", subject.loanAmount().text)
     }
 
     @Test
