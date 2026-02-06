@@ -375,9 +375,9 @@ class WebSearchBoxViewModelTest {
         subject.putText("test")
 
         val keyword = subject.query()
-        assertEquals("test ", keyword.text)
-        assertEquals(5, keyword.selection.start)
-        assertEquals(5, keyword.selection.end)
+        assertEquals("test", keyword.text)
+        assertEquals(4, keyword.selection.start)
+        assertEquals(4, keyword.selection.end)
     }
 
     @Test
