@@ -142,7 +142,7 @@ class LoanCalculatorViewModelTest {
         subject.renovationReserves().clearText()
         subject.setRenovationReserves()
 
-        assertEquals("0", subject.renovationReserves().text)
+        assertEquals("", subject.renovationReserves().text)
     }
 
     @Test
