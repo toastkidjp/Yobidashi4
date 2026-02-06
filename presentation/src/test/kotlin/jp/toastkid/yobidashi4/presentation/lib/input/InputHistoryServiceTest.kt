@@ -123,7 +123,7 @@ class InputHistoryServiceTest {
     fun make() {
         val textFieldValue = subject.make("test")
 
-        assertEquals("test ", textFieldValue)
+        assertEquals("test", textFieldValue)
     }
 
     @Test
