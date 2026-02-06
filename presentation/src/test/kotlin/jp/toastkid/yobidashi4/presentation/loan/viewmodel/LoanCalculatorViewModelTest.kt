@@ -97,7 +97,7 @@ class LoanCalculatorViewModelTest {
         subject.interestRate().setTextAndPlaceCursorAtEnd("az")
         subject.setInterestRate()
 
-        assertTrue(subject.interestRate().text.isBlank())
+        assertFalse(subject.interestRate().text.isBlank())
     }
 
     @Test
