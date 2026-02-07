@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.yobidashi4.domain.model.aggregation.CompoundInterestCalculationResult
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorInput
 import jp.toastkid.yobidashi4.domain.service.tool.compound.CompoundInterestCalculatorService
+import jp.toastkid.yobidashi4.presentation.component.DecimalInputTransformation
 
 class CompoundInterestCalculatorViewModel {
 
@@ -57,5 +58,9 @@ class CompoundInterestCalculatorViewModel {
             result.value = calculator.invoke(it)
         }
     }
+
+    private val inputTransformation = DecimalInputTransformation()
+
+    fun inputTransformation() = inputTransformation
 
 }
