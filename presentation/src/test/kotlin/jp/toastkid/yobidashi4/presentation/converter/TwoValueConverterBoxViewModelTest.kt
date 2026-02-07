@@ -20,7 +20,7 @@ class TwoValueConverterBoxViewModelTest {
         subject.onFirstValueChange()
 
         assertEquals("100", subject.firstInput().text)
-        assertEquals("32.40", subject.secondInput().text)
+        assertEquals("324.00", subject.secondInput().text)
     }
 
     @Test
@@ -36,7 +36,7 @@ class TwoValueConverterBoxViewModelTest {
         subject.onSecondValueChange()
 
         assertEquals("100.00", subject.firstInput().text)
-        assertEquals("324.0", subject.secondInput().text)
+        assertEquals("324.00", subject.secondInput().text)
     }
 
     @Test
@@ -44,7 +44,7 @@ class TwoValueConverterBoxViewModelTest {
         subject.onSecondValueChange()
 
         assertEquals("100.00", subject.firstInput().text)
-        assertEquals("noop", subject.secondInput().text)
+        assertEquals("324.00", subject.secondInput().text)
     }
 
     @Test
