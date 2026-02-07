@@ -53,12 +53,14 @@ internal fun CompoundInterestCalculatorView() {
                     "Installment (Yearly)",
                     onClearInput = viewModel::clearInstallmentInput,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    inputTransformation = viewModel.inputTransformation(),
                     visualTransformation = DecimalVisualTransformation()
                 )
 
                 SingleLineTextField(
                     viewModel.annualInterestInput(),
                     "Annual interest(%)",
+                    inputTransformation = viewModel.inputTransformation(),
                     onClearInput = viewModel::clearAnnualInterestInput,
                 )
 
@@ -66,6 +68,7 @@ internal fun CompoundInterestCalculatorView() {
                     viewModel.yearInput(),
                     "Year",
                     onClearInput = viewModel::clearYearInput,
+                    inputTransformation = viewModel.inputTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
