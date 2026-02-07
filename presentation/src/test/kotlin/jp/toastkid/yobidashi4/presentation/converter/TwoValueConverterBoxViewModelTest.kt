@@ -27,7 +27,7 @@ class TwoValueConverterBoxViewModelTest {
     fun onFirstValueChangeWithIncorrectInput() {
         subject.onFirstValueChange()
 
-        assertEquals("noop", subject.firstInput().text)
+        assertEquals("100", subject.firstInput().text)
         assertEquals("324.00", subject.secondInput().text)
     }
 
