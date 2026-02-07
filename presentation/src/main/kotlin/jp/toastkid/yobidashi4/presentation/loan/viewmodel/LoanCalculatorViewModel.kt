@@ -15,6 +15,7 @@ import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
 import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
+import jp.toastkid.yobidashi4.presentation.component.DecimalInputTransformation
 import jp.toastkid.yobidashi4.presentation.component.DecimalVisualTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -217,5 +218,9 @@ class LoanCalculatorViewModel {
     }
 
     fun brokerageFee(): String = brokerageFee.get()
+
+    private val inputTransformation = DecimalInputTransformation()
+
+    fun inputTransformation() = inputTransformation
 
 }
