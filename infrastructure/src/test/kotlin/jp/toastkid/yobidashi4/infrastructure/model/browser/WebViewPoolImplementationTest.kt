@@ -8,6 +8,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import javax.swing.SwingUtilities
 
 class WebViewPoolImplementationTest {
 
@@ -30,6 +32,8 @@ class WebViewPoolImplementationTest {
 
     @MockK
     private lateinit var cefBrowser: CefBrowser
+
+    private val slot = slot<Runnable>()
 
     @BeforeEach
     fun setUp() {
@@ -47,9 +51,10 @@ class WebViewPoolImplementationTest {
         mockkConstructor(CefClientFactory::class)
         every { anyConstructed<CefClientFactory>().invoke() } returns cefClient
 
-        mockkStatic(CefApp::class)
+        mockkStatic(CefApp::class, SwingUtilities::class)
         every { CefApp.getInstance().dispose() } just Runs
-        every { CefApp.getState() }.returns(CefApp.CefAppState.INITIALIZED)
+        every { CefApp.getState() } returns CefApp.CefAppState.INITIALIZED
+        every { SwingUtilities.invokeLater(capture(slot)) } just Runs
 
         subject = WebViewPoolImplementation()
     }
@@ -94,6 +99,7 @@ class WebViewPoolImplementationTest {
         assertNotNull(component)
 
         subject.dispose("1")
+        slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { cefClient.doClose(any()) }
@@ -113,6 +119,7 @@ class WebViewPoolImplementationTest {
     fun disposeAll() {
         subject.component("1", "https://www.yahoo.co.jp")
         subject.disposeAll()
+        slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
@@ -127,10 +134,12 @@ class WebViewPoolImplementationTest {
         subject.component("3", "https://www.yahoo.co.jp")
 
         subject.disposeAll()
+        slot.captured.run()
 
-        verify(exactly = 3) { cefBrowser.close(any()) }
+        verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
         verify { cefClient.dispose() }
+        verify(exactly = 3) { cefClient.doClose(any()) }
     }
 
     @Test
