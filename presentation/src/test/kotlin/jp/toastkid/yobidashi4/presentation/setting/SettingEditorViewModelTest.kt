@@ -165,6 +165,7 @@ class SettingEditorViewModelTest {
 
     @Test
     fun save() {
+        every { viewModel.showSnackbar(any()) } just Runs
         every { setting.items() } returns mapOf(
             "test" to "value",
             "empty" to "y"
@@ -177,6 +178,7 @@ class SettingEditorViewModelTest {
 
         verify { setting.update(any(), any()) }
         verify { setting.save() }
+        verify { viewModel.showSnackbar(any()) }
     }
 
 }
