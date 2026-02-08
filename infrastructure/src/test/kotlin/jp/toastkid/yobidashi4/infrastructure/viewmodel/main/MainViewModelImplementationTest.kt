@@ -1188,9 +1188,6 @@ class MainViewModelImplementationTest {
         subject.showSnackbar("test", "Test", { countDownLatch.countDown() })
         subject.snackbarHostState().currentSnackbarData?.performAction()
         countDownLatch.await(1, TimeUnit.SECONDS)
-
-        //assertTrue(subject.showingSnackbar())
-        //assertNotNull(subject.snackbarHostState().currentSnackbarData)
     }
 
     @Test
