@@ -1185,7 +1185,7 @@ class MainViewModelImplementationTest {
         assertNull(subject.snackbarHostState().currentSnackbarData)
 
         val countDownLatch = CountDownLatch(1)
-        subject.showSnackbar("test", "Test", { countDownLatch.countDown() })
+        subject.showSnackbar("test", "Test") { countDownLatch.countDown() }
         subject.snackbarHostState().currentSnackbarData?.performAction()
         countDownLatch.await(1, TimeUnit.SECONDS)
     }
