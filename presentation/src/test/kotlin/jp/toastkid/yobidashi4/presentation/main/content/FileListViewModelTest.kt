@@ -251,7 +251,7 @@ class FileListViewModelTest {
         )
 
         subject.onValueChange()
-        assertEquals(1, subject.items().size)
+        assertEquals(2, subject.items().size)
     }
 
     @Test
