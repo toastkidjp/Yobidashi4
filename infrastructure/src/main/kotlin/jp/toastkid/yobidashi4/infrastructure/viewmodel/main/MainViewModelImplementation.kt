@@ -210,7 +210,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        val targetTab = _tabs.get(index)
+        val targetTab = _tabs.getOrNull(index) ?: return
         if (targetTab.closeable().not()) {
             showSnackbar("Cannot close this tab.")
             return
