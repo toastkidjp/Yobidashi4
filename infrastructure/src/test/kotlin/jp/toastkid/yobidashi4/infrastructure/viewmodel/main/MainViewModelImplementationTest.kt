@@ -64,6 +64,7 @@ import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -566,6 +567,13 @@ class MainViewModelImplementationTest {
         verify { tab.closeable() }
         verify { webTab.closeable() }
         verify { webViewPool.dispose("test") }
+    }
+
+    @Test
+    fun noopRemoveTabAt() {
+        subject.openTab(mockk<EditorTab>())
+
+        assertDoesNotThrow { subject.removeTabAt(1) }
     }
 
     @Test
