@@ -22,7 +22,7 @@ jobs:
           TZ: 'Asia/Tokyo'
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag_title="v0.9.3"
+          tag_title="v0.9.3_draft"
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
           releases=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=50")
           RELEASE_EXISTS=$(echo $releases | jq --arg search_name $tag_title '[.[] | select(.draft == true and .name == $search_name)] | length > 0')
