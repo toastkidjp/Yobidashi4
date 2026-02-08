@@ -369,9 +369,9 @@ class AggregationBoxViewModelTest {
         subject.putDate("test")
 
         val textFieldValue = subject.dateInput()
-        assertEquals("test ", textFieldValue.text)
-        assertEquals(5, textFieldValue.selection.start)
-        assertEquals(5, textFieldValue.selection.end)
+        assertEquals("test", textFieldValue.text)
+        assertEquals(4, textFieldValue.selection.start)
+        assertEquals(4, textFieldValue.selection.end)
     }
 
     @Test
@@ -383,9 +383,9 @@ class AggregationBoxViewModelTest {
         subject.putDate("test")
 
         val keyword = subject.keyword()
-        assertEquals("test ", keyword.text)
-        assertEquals(5, keyword.selection.start)
-        assertEquals(5, keyword.selection.end)
+        assertEquals("test", keyword.text)
+        assertEquals(4, keyword.selection.start)
+        assertEquals(4, keyword.selection.end)
     }
 
     @Test
