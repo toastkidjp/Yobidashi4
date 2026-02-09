@@ -76,7 +76,7 @@ class WebTabViewKtTest {
 
                 val index = remember { mutableStateOf(0) }
 
-                Window({}, visible = false) {
+                Window({}, visible = true) {
                     WebTabView(tabs[index.value])
 
                     index.value = 1
