@@ -4,7 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.rememberWindowState
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -76,7 +78,7 @@ class WebTabViewKtTest {
 
                 val index = remember { mutableStateOf(0) }
 
-                Window({}, visible = true) {
+                Window({}, visible = true, state = rememberWindowState(width = 1.dp, height = 1.dp)) {
                     WebTabView(tabs[index.value])
 
                     index.value = 1
