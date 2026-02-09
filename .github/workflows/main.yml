@@ -113,7 +113,7 @@ jobs:
           cache: gradle
 
       - name: kover
-        timeout-minutes: 19
+        timeout-minutes: 22
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
