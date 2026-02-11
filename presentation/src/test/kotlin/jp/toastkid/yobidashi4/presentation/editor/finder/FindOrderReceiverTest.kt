@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.flowOf
@@ -63,24 +64,15 @@ class FindOrderReceiverTest {
 
         val content = TextFieldState("test")
         subject.invoke(FindOrder.EMPTY, content)
-        println(content.text)
-        println(content.selection)
 
-        /*
         subject.invoke(FindOrder("test", ""), TextFieldState("test"))
-        verify { setNewContent.invoke(any()) }
 
         subject.invoke(FindOrder("test", "", true, true, false), TextFieldState("test"))
-        verify { setNewContent.invoke(any()) }
         verify { mainViewModel.setFindStatus(any()) }
 
         subject.invoke(FindOrder("", "", true, false, false), TextFieldState("test"))
-        verify { setNewContent.invoke(any()) }
 
         subject.invoke(FindOrder("at", ""), TextFieldState("test"))
-        verify { setNewContent.invoke(any()) }
-
-         */
     }
 
 }
