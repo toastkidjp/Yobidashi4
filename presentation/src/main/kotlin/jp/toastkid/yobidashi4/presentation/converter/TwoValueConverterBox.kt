@@ -15,13 +15,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
@@ -53,14 +51,9 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
             )
 
             LaunchedEffect(unixTimeConverterService) {
-                snapshotFlow { viewModel.secondInput().text to (viewModel.firstInput().composition != null) }
-                    .distinctUntilChanged()
-                    .collect {
-                        if (it.second) {
-                            return@collect
-                        }
-                        viewModel.onSecondValueChange()
-                    }
+                collectCommittedInput(viewModel.secondInput()) {
+                    viewModel.onSecondValueChange()
+                }
             }
         }
     }
