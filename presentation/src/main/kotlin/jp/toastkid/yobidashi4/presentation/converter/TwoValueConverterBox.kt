@@ -52,9 +52,10 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
             )
 
             LaunchedEffect(unixTimeConverterService) {
-                collectCommittedInput(viewModel.secondInput()) {
-                    viewModel.onSecondValueChange()
-                }
+                collectCommittedInput(
+                    viewModel.secondInput(),
+                    viewModel::onSecondValueChange
+                )
             }
         }
     }
