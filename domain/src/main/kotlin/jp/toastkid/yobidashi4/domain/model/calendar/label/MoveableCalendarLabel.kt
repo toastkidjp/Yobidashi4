@@ -43,11 +43,7 @@ enum class MoveableCalendarLabel(
         val dayOfWeek = localDate.dayOfWeek
         val offsetDays = calculateOffsetDays(dayOfWeek, candidate.dayOfWeek)
 
-        val targetWeek = when {
-            (candidate.week != -1) -> candidate.week
-            DAYS_OF_WEEK_FOR_LAST_WEEK.contains(dayOfWeek) -> 5
-            else -> 4
-        }
+        val targetWeek = candidate.week
 
         return Holiday(candidate.title, candidate.month, offsetDays + (7 * (targetWeek - 1)))
     }
