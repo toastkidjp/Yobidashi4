@@ -39,9 +39,10 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
             )
 
             LaunchedEffect(unixTimeConverterService) {
-                collectCommittedInput(viewModel.firstInput()) {
-                    viewModel.onFirstValueChange()
-                }
+                collectCommittedInput(
+                    viewModel.firstInput(),
+                    viewModel::onFirstValueChange
+                )
             }
 
             SingleLineTextField(
