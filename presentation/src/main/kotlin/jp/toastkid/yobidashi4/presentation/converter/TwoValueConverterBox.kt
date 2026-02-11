@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
@@ -40,14 +41,9 @@ fun TwoValueConverterBox(unixTimeConverterService: TwoStringConverterService) {
             )
 
             LaunchedEffect(unixTimeConverterService) {
-                snapshotFlow { viewModel.firstInput().text to (viewModel.firstInput().composition != null) }
-                    .distinctUntilChanged()
-                    .collect {
-                        if (it.second) {
-                            return@collect
-                        }
-                        viewModel.onFirstValueChange()
-                    }
+                collectCommittedInput(viewModel.firstInput()) {
+                    viewModel.onFirstValueChange()
+                }
             }
 
             SingleLineTextField(
