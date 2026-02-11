@@ -8,11 +8,14 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -47,6 +50,12 @@ class ConverterToolTabViewModelTest {
         subject.launch()
 
         verify { focusRequester.requestFocus() }
+    }
+
+    @Test
+    fun keyboardScrollAction() {
+        subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, false)
+        subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, true)
     }
 
 }
