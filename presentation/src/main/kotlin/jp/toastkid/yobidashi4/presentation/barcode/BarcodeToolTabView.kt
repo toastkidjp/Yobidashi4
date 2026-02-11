@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
@@ -63,15 +64,9 @@ internal fun BarcodeToolTabView() {
             }
 
             LaunchedEffect(viewModel.encodeInputValue()) {
-                snapshotFlow { viewModel.encodeInputValue().text to (viewModel.encodeInputValue().composition != null) }
-                    .distinctUntilChanged()
-                    .collect { textAndComposition ->
-                        if (textAndComposition.second) {
-                            return@collect
-                        }
-
-                        viewModel.setEncodeInputValue()
-                    }
+                collectCommittedInput(viewModel.encodeInputValue()) {
+                    viewModel.setEncodeInputValue()
+                }
             }
 
             LaunchedEffect(viewModel.decodeInputValue()) {
