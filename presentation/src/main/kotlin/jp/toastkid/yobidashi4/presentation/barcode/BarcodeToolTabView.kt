@@ -69,9 +69,10 @@ internal fun BarcodeToolTabView() {
             }
 
             LaunchedEffect(viewModel.decodeInputValue()) {
-                collectCommittedInput(viewModel.decodeInputValue()) {
-                    viewModel.setDecodeInputValue()
-                }
+                collectCommittedInput(
+                    viewModel.decodeInputValue(),
+                    viewModel::setDecodeInputValue
+                )
             }
         }
     }
