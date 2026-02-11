@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import jp.toastkid.yobidashi4.domain.service.converter.TsuboCountConverterService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -25,9 +26,10 @@ class TwoValueConverterBoxViewModelTest {
 
     @Test
     fun onFirstValueChangeWithIncorrectInput() {
+        subject.firstInput().setTextAndPlaceCursorAtEnd("test")
         subject.onFirstValueChange()
 
-        assertEquals("100", subject.firstInput().text)
+        assertEquals("test", subject.firstInput().text)
         assertEquals("324.00", subject.secondInput().text)
     }
 
@@ -41,10 +43,12 @@ class TwoValueConverterBoxViewModelTest {
 
     @Test
     fun onSecondValueChangeWithIncorrectInput() {
+        subject.secondInput().setTextAndPlaceCursorAtEnd("test")
+
         subject.onSecondValueChange()
 
-        assertEquals("100.00", subject.firstInput().text)
-        assertEquals("324.00", subject.secondInput().text)
+        assertEquals("100", subject.firstInput().text)
+        assertEquals("test", subject.secondInput().text)
     }
 
     @Test
