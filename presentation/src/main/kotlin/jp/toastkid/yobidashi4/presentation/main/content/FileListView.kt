@@ -97,9 +97,10 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                         )
 
                         LaunchedEffect(viewModel.keyword()) {
-                            collectCommittedInput(viewModel.keyword()) {
-                                viewModel.onValueChange()
-                            }
+                            collectCommittedInput(
+                                viewModel.keyword(),
+                                viewModel::onValueChange
+                            )
                         }
                         Icon(
                             painterResource(Res.drawable.ic_reload),
