@@ -103,6 +103,7 @@ class MarkdownPreviewKtTest {
             toggleSubheadings.performMouseInput {
                 enter()
                 click()
+                exit()
             }
             verify { anyConstructed<MarkdownPreviewViewModel>().switchSubheadings() }
         }
