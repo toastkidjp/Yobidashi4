@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 
 class TwoValueConverterBoxViewModel(private val unixTimeConverterService: TwoStringConverterService) {
@@ -30,8 +29,10 @@ class TwoValueConverterBoxViewModel(private val unixTimeConverterService: TwoStr
     fun secondInput() = secondInput
 
     fun onSecondValueChange() {
-        unixTimeConverterService.secondInputAction(secondInput.text.toString())
-            ?.let(firstInput::setTextAndPlaceCursorAtEnd)
+        val result = unixTimeConverterService.secondInputAction(secondInput.text.toString()) ?: return
+
+        firstInput.clearText()
+        firstInput.edit { append(result) }
     }
 
     fun clearFirstInput() {
