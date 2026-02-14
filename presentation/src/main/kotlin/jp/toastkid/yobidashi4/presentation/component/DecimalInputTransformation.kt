@@ -19,7 +19,7 @@ class DecimalInputTransformation : InputTransformation {
 
         // 変更後のテキスト全体が数値として妥当か（または空か）をチェック
         val newText = asCharSequence().toString()
-        val isValid = newText.count { it == '.' } <= 1
+        val isValid = newText.count { isDot(it) } <= 1
                 && newText.all(::isDecimalInputCharacter)
 
         if (!isValid) {
@@ -29,5 +29,7 @@ class DecimalInputTransformation : InputTransformation {
 
     private fun isDecimalInputCharacter(ch: Char): Boolean =
         ch.isDigit() || ch == '.' || ch == ','
+
+    private fun isDot(ch: Char): Boolean = ch == '.'
 
 }
