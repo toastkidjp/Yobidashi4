@@ -71,9 +71,6 @@ class LoanCalculatorViewModel {
     fun interestRate() = interestRate
 
     fun setInterestRate() {
-/*        interestRate.edit {
-            replace(0, length, formatDecimalString(interestRate.text.toString()))
-        }*/
         onChange(inputChannel)
     }
 
