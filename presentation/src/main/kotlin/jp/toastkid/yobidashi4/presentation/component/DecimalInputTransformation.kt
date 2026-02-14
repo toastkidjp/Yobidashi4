@@ -27,6 +27,7 @@ class DecimalInputTransformation : InputTransformation {
         }
     }
 
-    private fun isDecimalInputCharacter(ch: Char): Boolean = ch.isDigit() || ch == '.' || ch == ','
+    private fun isDecimalInputCharacter(ch: Char): Boolean =
+        ch.isDigit() || ch == '.' || ch == ','
 
 }
