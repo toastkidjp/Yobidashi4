@@ -13,7 +13,7 @@ import jp.toastkid.yobidashi4.domain.service.converter.TwoStringConverterService
 
 class TwoValueConverterBoxViewModel(private val unixTimeConverterService: TwoStringConverterService) {
 
-    private val firstInput = (TextFieldState(unixTimeConverterService.defaultFirstInputValue()))
+    private val firstInput = TextFieldState(unixTimeConverterService.defaultFirstInputValue())
 
     private val secondInput = (TextFieldState(unixTimeConverterService.defaultSecondInputValue()))
 
