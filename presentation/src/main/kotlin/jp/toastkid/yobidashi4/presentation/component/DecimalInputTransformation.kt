@@ -20,11 +20,13 @@ class DecimalInputTransformation : InputTransformation {
         // 変更後のテキスト全体が数値として妥当か（または空か）をチェック
         val newText = asCharSequence().toString()
         val isValid = newText.count { it == '.' } <= 1
-                && newText.all { it.isDigit() || it == '.' || it == ',' }
+                && newText.all { isDecimalInputCharacter(it) }
 
         if (!isValid) {
             revertAllChanges() // 条件に合わない場合は入力を差し戻す
         }
     }
+
+    private fun isDecimalInputCharacter(ch: Char): Boolean = ch.isDigit() || ch == '.' || ch == ','
 
 }
