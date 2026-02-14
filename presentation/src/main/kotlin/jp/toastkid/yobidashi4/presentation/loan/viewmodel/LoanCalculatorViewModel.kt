@@ -87,9 +87,6 @@ class LoanCalculatorViewModel {
     fun managementFee() = managementFee
 
     fun setManagementFee() {
-/*        managementFee.edit {
-            replace(0, length, formatDecimalString(managementFee.text.toString()))
-        }*/
         onChange(inputChannel)
     }
 
