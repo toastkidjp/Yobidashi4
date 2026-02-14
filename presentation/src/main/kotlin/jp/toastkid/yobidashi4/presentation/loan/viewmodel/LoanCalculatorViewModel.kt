@@ -79,9 +79,6 @@ class LoanCalculatorViewModel {
     fun downPayment() = downPayment
 
     fun setDownPayment() {
-/*        downPayment.edit {
-            replace(0, length, formatDecimalString(downPayment.text.toString()))
-        }*/
         onChange(inputChannel)
     }
 
