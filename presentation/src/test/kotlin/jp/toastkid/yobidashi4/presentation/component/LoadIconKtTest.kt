@@ -11,13 +11,14 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
+import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_web
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
 
 class LoadIconKtTest {
 
@@ -78,6 +79,22 @@ class LoadIconKtTest {
 
             verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
             verify { anyConstructed<LoadIconViewModel>().defaultIconPath() }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun tabIcon() {
+        every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
+        every { anyConstructed<LoadIconViewModel>().contentDescription() } returns "test description"
+
+        runDesktopComposeUiTest {
+            setContent {
+                TabIcon(WebTab(title = "test", url = "https://test.yahoo.co.jp/favicon.ico"), Modifier)
+            }
+
+            verify { anyConstructed<LoadIconViewModel>().loadBitmap(any()) }
+            verify { anyConstructed<LoadIconViewModel>().contentDescription() }
         }
     }
 
