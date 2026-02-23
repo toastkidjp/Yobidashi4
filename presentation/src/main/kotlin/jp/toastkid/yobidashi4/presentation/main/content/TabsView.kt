@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.model.tab.ClusteringToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
@@ -71,6 +72,7 @@ import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.photo.PhotoTabView
 import jp.toastkid.yobidashi4.presentation.setting.SettingEditorView
+import jp.toastkid.yobidashi4.presentation.tool.clustering.ClusteringToolTabView
 import jp.toastkid.yobidashi4.presentation.tool.file.FileRenameToolView
 import jp.toastkid.yobidashi4.presentation.tool.notification.NotificationListTabView
 import jp.toastkid.yobidashi4.presentation.tool.roulette.RouletteToolTabView
@@ -189,6 +191,7 @@ internal fun TabsView(modifier: Modifier) {
             is PhotoTab -> PhotoTabView(currentTab)
             is SettingEditorTab -> SettingEditorView()
             is InputHistoryTab -> InputHistoryView(currentTab)
+            is ClusteringToolTab -> ClusteringToolTabView()
             else -> Unit
         }
     }
