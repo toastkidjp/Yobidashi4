@@ -19,7 +19,7 @@ dependencyResolutionManagement {
             library("slf4j", "org.slf4j", "slf4j-api").version("2.0.17")
             library("reload4j", "org.slf4j", "slf4j-reload4j").version("2.0.17")
             library("zxing", "com.google.zxing", "core").version("3.5.4")
-            library("jcef", "me.friwi", "jcefmaven").version("141.0.10")
+            library("jcef", "me.friwi", "jcefmaven").version("143.0.14")
             library("jsoup", "org.jsoup", "jsoup").version("1.21.2")
             version("compose", "1.10.0")
             version("kover", "0.9.7")
