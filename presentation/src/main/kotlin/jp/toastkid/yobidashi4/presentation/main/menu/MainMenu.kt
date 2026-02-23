@@ -352,6 +352,11 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
                 icon = painterResource(Res.drawable.ic_world_time),
                 onClick = viewModel::toggleWorldTime
             )
+
+            Item(
+                "Clustering tool",
+                onClick = viewModel::openClusteringTool
+            )
         }
 
         Menu("User agent") {
