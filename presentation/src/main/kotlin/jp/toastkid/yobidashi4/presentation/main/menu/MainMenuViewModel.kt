@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.model.tab.ClusteringToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
@@ -336,6 +337,10 @@ class MainMenuViewModel : KoinComponent {
 
     fun toggleWorldTime() {
         viewModel.toggleWorldTime()
+    }
+
+    fun openClusteringTool() {
+        viewModel.openTab(ClusteringToolTab())
     }
 
     fun isSelectedUserAgent(it: UserAgent): Boolean {
