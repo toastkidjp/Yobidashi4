@@ -34,6 +34,9 @@ dependencies {
     implementation("org.apache.lucene:lucene-queryparser:10.0.0") {
         exclude("org.apache.lucene", "lucene-sandbox")
     }
+
+    implementation("org.tribuo:tribuo-clustering-kmeans:4.3.1")
+    implementation("org.tribuo:tribuo-data:4.3.1")
 }
 
 ksp {
