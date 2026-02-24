@@ -16,6 +16,7 @@ import org.tribuo.impl.ArrayExample
 import org.tribuo.provenance.SimpleDataSourceProvenance
 import java.time.OffsetDateTime
 import kotlin.math.ln
+import kotlin.math.sqrt
 
 @Single
 class KMeansImplementation : KMeans {
@@ -55,7 +56,7 @@ class KMeansImplementation : KMeans {
             dataset.add(example)
         }
 
-        val k = (Math.sqrt(docs.size.toDouble() / 2.0).toInt()).coerceIn(2, docs.size / 3)
+        val k = (sqrt(docs.size.toDouble() / 2.0).toInt()).coerceIn(2, docs.size / 3)
         val trainer = KMeansTrainer(k, 10, KMeansTrainer.Distance.COSINE, 1, 42L)
 
         val model = trainer.train(dataset)
