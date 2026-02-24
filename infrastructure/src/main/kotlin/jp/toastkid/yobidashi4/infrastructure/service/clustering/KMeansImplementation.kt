@@ -102,7 +102,7 @@ class KMeansImplementation : KMeans {
     private fun makeBiGram(text: Pair<String, String>): List<String> = text.second
         .replace("\n", "")
         .windowed(2, 1)
-        .filter { it.isNotBlank() }
+        .filter(CharSequence::isNotBlank)
         .filter { it.matches(Regex("[\\p{IsHan}\\p{IsHira}\\p{IsKana}]{2}")) }
         .filter { it.any { char -> char in '\u4E00'..'\u9FFF' } }
         .filter { stopWords.all { stopWord -> it.contains(stopWord).not() } }
