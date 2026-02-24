@@ -30,9 +30,10 @@ class KMeansImplementation : KMeans {
 
         val dataset = MutableDataset(provenance, factory)
 
-        val dfMap = docs.flatMap { text ->
-            makeBiGram(text).distinct()
-        }.groupingBy { it }.eachCount()
+        val dfMap = docs
+            .flatMap { text -> makeBiGram(text).distinct() }
+            .groupingBy { it }
+            .eachCount()
 
         docs.forEach { text ->
             // ここで一旦、このドキュメント内の 2-gram の頻度を計算する
