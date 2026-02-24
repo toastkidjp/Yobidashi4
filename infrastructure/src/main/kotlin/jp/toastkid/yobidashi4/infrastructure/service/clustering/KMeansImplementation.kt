@@ -13,6 +13,7 @@ import org.tribuo.MutableDataset
 import org.tribuo.clustering.ClusteringFactory
 import org.tribuo.clustering.kmeans.KMeansTrainer
 import org.tribuo.impl.ArrayExample
+import org.tribuo.math.distance.CosineDistance
 import org.tribuo.provenance.SimpleDataSourceProvenance
 import java.time.OffsetDateTime
 import kotlin.math.ln
@@ -58,7 +59,7 @@ class KMeansImplementation : KMeans {
         }
 
         val k = (sqrt(docs.size.toDouble() / 2.0).toInt()).coerceIn(2, docs.size / 3)
-        val trainer = KMeansTrainer(k, 10, KMeansTrainer.Distance.COSINE, 1, 42L)
+        val trainer = KMeansTrainer(k, 10, CosineDistance(), 1, 42L)
 
         val model = trainer.train(dataset)
 
