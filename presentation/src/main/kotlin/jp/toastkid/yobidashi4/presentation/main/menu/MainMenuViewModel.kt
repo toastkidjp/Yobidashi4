@@ -339,10 +339,6 @@ class MainMenuViewModel : KoinComponent {
         viewModel.toggleWorldTime()
     }
 
-    fun openClusteringTool() {
-        viewModel.openTab(ClusteringToolTab())
-    }
-
     fun isSelectedUserAgent(it: UserAgent): Boolean {
         return it == currentUserAgent.value
     }
@@ -358,6 +354,10 @@ class MainMenuViewModel : KoinComponent {
 
     fun openNotificationList() {
         viewModel.openTab(NotificationListTab())
+    }
+
+    fun openClusteringTool() {
+        viewModel.openTab(ClusteringToolTab())
     }
 
     private val notification: ScheduledNotification by inject()
