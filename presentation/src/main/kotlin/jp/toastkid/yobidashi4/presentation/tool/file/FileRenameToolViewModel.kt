@@ -72,9 +72,7 @@ class FileRenameToolViewModel : KoinComponent {
     }
 
     fun collectDroppedPaths() {
-        viewModel.registerDroppedPathReceiver {
-            paths.add(it)
-        }
+        viewModel.registerDroppedPathReceiver(paths::add)
     }
 
     fun dispose() {
