@@ -28,6 +28,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
+import jp.toastkid.yobidashi4.domain.model.tab.ClusteringToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CompoundInterestCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.EditorSettingTab
@@ -852,6 +853,15 @@ class MainMenuViewModelTest {
         subject.openNotificationList()
 
         verify { mainViewModel.openTab(any<NotificationListTab>()) }
+    }
+
+    @Test
+    fun openClusteringTool() {
+        every { mainViewModel.openTab(any()) } just Runs
+
+        subject.openClusteringTool()
+
+        verify { mainViewModel.openTab(any<ClusteringToolTab>()) }
     }
 
     @Test
