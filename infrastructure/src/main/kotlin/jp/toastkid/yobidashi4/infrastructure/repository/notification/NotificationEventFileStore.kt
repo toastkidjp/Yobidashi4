@@ -61,7 +61,7 @@ class NotificationEventFileStore : NotificationEventRepository {
         toMutableList[index] = event
         Files.write(
             path,
-            toMutableList.map { it.toTsv() }
+            toMutableList.map(NotificationEvent::toTsv)
         )
     }
 
