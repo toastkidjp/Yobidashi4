@@ -428,7 +428,12 @@ fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
             Item(
                 "Switch dark mode",
                 icon = painterResource(Res.drawable.ic_dark_mode),
-                shortcut = KeyShortcut(key = Key.D, alt = true, ctrl = !viewModel.useMetaKey(), meta = viewModel.useMetaKey()),
+                shortcut = KeyShortcut(
+                    key = Key.D,
+                    alt = true,
+                    ctrl = !viewModel.useMetaKey(),
+                    meta = viewModel.useMetaKey()
+                ),
                 onClick = viewModel::switchDarkMode
             )
 
