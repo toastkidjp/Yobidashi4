@@ -43,7 +43,7 @@ class KMeansImplementation : KMeans {
                 .eachCount()
                 .filter { it.value > 2 }
 
-            val example = ArrayExample(factory.unknownOutput)
+            val example = ArrayExample(factory.getUnknownOutput())
 
             // 集計済みの頻度を重み(Value)として add する
             counts.forEach { (word, tf) ->
@@ -55,10 +55,12 @@ class KMeansImplementation : KMeans {
                     example.add(word, tfIdf)
                 }
             }
-            dataset.add(example)
+            if (example.any()) {
+                dataset.add(example)
+            }
         }
 
-        val k = (sqrt(docs.size.toDouble() / 2.0).toInt()).coerceIn(2, docs.size / 3)
+        val k = (sqrt(docs.size.toDouble() / 2.0).toInt()).coerceIn(1, docs.size / 3)
         val trainer = KMeansTrainer(k, 10, CosineDistance(), 1, 42L)
 
         val model = trainer.train(dataset)
