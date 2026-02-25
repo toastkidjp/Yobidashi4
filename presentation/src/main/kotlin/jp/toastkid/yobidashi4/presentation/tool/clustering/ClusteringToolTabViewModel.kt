@@ -74,6 +74,7 @@ class ClusteringToolTabViewModel : KoinComponent {
                     )
             } catch (e: Exception) {
                 LoggerFactory.getLogger(javaClass).error("Clustering error.", e)
+                viewModel.showSnackbar("Clustering error.")
             } finally {
                 processing.value = false
             }
