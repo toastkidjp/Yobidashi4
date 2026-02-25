@@ -106,7 +106,7 @@ private fun SourceArea(
         modifier = Modifier.padding(top = 12.dp, start = 4.dp, end = 4.dp, bottom = 4.dp)
     )
 
-    Box() {
+    Box {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.horizontalScroll(horizontalSourceScrollState)
