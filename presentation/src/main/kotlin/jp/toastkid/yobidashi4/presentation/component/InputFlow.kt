@@ -28,15 +28,15 @@ suspend fun collectCommittedInput(
         }
 }
 
-private fun Flow<Pair<CharSequence, Boolean>>.filterCommitted(): Flow<CharSequence> {
-    return this.distinctUntilChanged()
-        .filter { !it.second } // 変換中 (isComposing) は通さない
-        .map { it.first }
-}
-
 /**
  * snapshotFlow 部分を切り出し
  */
 private fun TextFieldState.asCommittedFlow(): Flow<CharSequence> =
     snapshotFlow { text to (composition != null) }
         .filterCommitted()
+
+private fun Flow<Pair<CharSequence, Boolean>>.filterCommitted(): Flow<CharSequence> {
+    return this.distinctUntilChanged()
+        .filter { !it.second } // 変換中 (isComposing) は通さない
+        .map { it.first }
+}
