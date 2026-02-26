@@ -95,9 +95,6 @@ class LoanCalculatorViewModel {
     fun renovationReserves() = renovationReserves
 
     fun setRenovationReserves() {
-/*        renovationReserves.edit {
-            replace(0, length, formatDecimalString(renovationReserves.text.toString()))
-        }*/
         onChange(inputChannel)
     }
 
