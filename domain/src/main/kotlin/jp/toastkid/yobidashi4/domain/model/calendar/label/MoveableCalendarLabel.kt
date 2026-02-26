@@ -17,7 +17,7 @@ enum class MoveableCalendarLabel(
     val dayOfWeek: DayOfWeek,
     val title: String
 ) {
-    START_DAY_OF_DAYLIGHT_SAVING_TIME(3, 1, DayOfWeek.SUNDAY, "夏時間入り"),
+    START_DAY_OF_DAYLIGHT_SAVING_TIME(3, 2, DayOfWeek.SUNDAY, "夏時間入り"),
     END_DAY_OF_DAYLIGHT_SAVING_TIME(11, 1, DayOfWeek.SUNDAY, "冬時間入り");
 
     private val DAYS_OF_WEEK_FOR_LAST_WEEK =
