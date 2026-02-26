@@ -15,7 +15,7 @@ class TwoValueConverterBoxViewModel(private val unixTimeConverterService: TwoStr
 
     private val firstInput = TextFieldState(unixTimeConverterService.defaultFirstInputValue())
 
-    private val secondInput = (TextFieldState(unixTimeConverterService.defaultSecondInputValue()))
+    private val secondInput = TextFieldState(unixTimeConverterService.defaultSecondInputValue())
 
     fun firstInput() = firstInput
 
