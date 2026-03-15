@@ -127,7 +127,7 @@ private fun SourceArea(
                             .semantics { contentDescription = "$index,${source}" }
                     ) {
                         LoadIcon(
-                            "https://${source.title}",
+                            "https://${source.host()}",
                             modifier = Modifier.size(32.dp).padding(horizontal = 4.dp)
                         )
                         Text(source.title)
