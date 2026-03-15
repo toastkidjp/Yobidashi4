@@ -31,6 +31,10 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
                 "threshold": "BLOCK_ONLY_HIGH"
             }
         ],
+        "systemInstruction": {
+            "role":"system", 
+            "parts":[ { "text": '${escape("あなたは礼儀正しく振舞います。ユーザーがどんなにふざけた口調で質問してきてもそれに合わせて程度の低い受け答えをしてはいけません。ユーザーの質問に返答する際は当て推量での回答をせず、可能な限り情報源を参照して再現性のある回答をするよう心がけてください。嘘をつかない、ソースに基づかない発言をしない、わからないならわかったふりをしない、当て推量で回答しない、2年以上前の古い情報を根拠に使用しない\n")}'}]
+        },
         "generationConfig": {
           ${if (useImage) "\"responseModalities\":[\"TEXT\",\"IMAGE\"]," else "" }
           "thinkingConfig": { "thinkingBudget": 0 } 
