@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.domain.model.web.icon
 
 import java.net.URI
+import java.net.URISyntaxException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -30,7 +31,12 @@ class WebIcon {
             return null
         }
 
-        val host = URI(url).host ?: return null
+        val host = try {
+            URI(url).host
+        } catch (e: URISyntaxException) {
+            e.message
+            null
+        } ?: return null
         val uri = host.trim()
 
         return Files.list(faviconFolder).collect(Collectors.toList()).firstOrNull {
