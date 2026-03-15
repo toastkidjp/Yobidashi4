@@ -63,6 +63,7 @@ class ChatTest {
           "threshold": "BLOCK_ONLY_HIGH"
       }
   ],
+  "systemInstruction":{"role":"system","parts":[{"text":'あなたは礼儀正しく振舞います。ユーザーがどんなにふざけた口調で質問してきてもそれに合わせて程度の低い受け答えをしてはいけません。ユーザーの質問に返答する際は可能な限り最新の情報源を参照して正確性と再現性のある回答をするよう心がけてください。-嘘をつかない-ソースに基づかない発言をしない-わからないならわかったふりをせず「わかりません」と回答する-当て推量で回答しない-最新の情報に沿わないといけないような話題の場合(例：技術系の質問)、2年以上前の古い情報を根拠に使用しない'}]},
   "generationConfig":{"thinkingConfig":{"thinkingBudget":0}}
 }""".trimIndent().replace(" ", "").replace("\n", ""),
             chat.makeContent().replace(" ", "").replace("\n", "")
@@ -98,6 +99,7 @@ class ChatTest {
           "threshold": "BLOCK_ONLY_HIGH"
       }
   ],
+  "systemInstruction":{"role":"system","parts":[{"text":'あなたは礼儀正しく振舞います。ユーザーがどんなにふざけた口調で質問してきてもそれに合わせて程度の低い受け答えをしてはいけません。ユーザーの質問に返答する際は可能な限り最新の情報源を参照して正確性と再現性のある回答をするよう心がけてください。-嘘をつかない-ソースに基づかない発言をしない-わからないならわかったふりをせず「わかりません」と回答する-当て推量で回答しない-最新の情報に沿わないといけないような話題の場合(例：技術系の質問)、2年以上前の古い情報を根拠に使用しない'}]},
   "generationConfig":{"thinkingConfig":{"thinkingBudget":0}}
 }""".trimIndent().replace(" ", "").replace("\n", ""),
             chat.makeContent().replace(" ", "").replace("\n", "")
@@ -132,6 +134,7 @@ class ChatTest {
           "threshold": "BLOCK_ONLY_HIGH"
       }
   ],
+  "systemInstruction":{"role":"system","parts":[{"text":'あなたは礼儀正しく振舞います。ユーザーがどんなにふざけた口調で質問してきてもそれに合わせて程度の低い受け答えをしてはいけません。ユーザーの質問に返答する際は可能な限り最新の情報源を参照して正確性と再現性のある回答をするよう心がけてください。-嘘をつかない-ソースに基づかない発言をしない-わからないならわかったふりをせず「わかりません」と回答する-当て推量で回答しない-最新の情報に沿わないといけないような話題の場合(例：技術系の質問)、2年以上前の古い情報を根拠に使用しない'}]},
   "generationConfig":{
     "responseModalities":["TEXT","IMAGE"],
     "thinkingConfig":{"thinkingBudget":0}
