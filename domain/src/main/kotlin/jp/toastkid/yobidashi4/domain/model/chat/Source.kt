@@ -7,7 +7,21 @@
  */
 package jp.toastkid.yobidashi4.domain.model.chat
 
+import java.net.URI
+
 data class Source(
     val title: String,
     val url: String
-)
+) {
+
+    private val host = extractHost()
+
+    private fun extractHost() =
+        if (url.startsWith("https://vertexaisearch.cloud.google.com"))
+            title
+        else
+            URI(url).host
+
+    fun host() = host
+
+}
