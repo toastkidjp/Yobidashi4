@@ -101,6 +101,13 @@ class WebIconTest {
     }
 
     @Test
+    fun findIrregularInputCase() {
+        val find = webIcon.find("https://Current time information in Rome, IT.")
+
+        assertNull(find)
+    }
+
+    @Test
     fun readAll() {
         every { Files.list(any()) } returns Stream.of(mockk())
 
