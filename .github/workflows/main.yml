@@ -15,7 +15,7 @@ jobs:
     outputs:
       release_tag: ${{ steps.check_release.outputs.tag_title }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check if release exists
         id: check_release
         env:
@@ -52,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install
         timeout-minutes: 3
@@ -102,7 +102,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: install
         timeout-minutes: 3
