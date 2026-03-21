@@ -70,7 +70,7 @@ jobs:
       - name: Upload artifact
         timeout-minutes: 1
         if: ${{ success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: UberJar-${{ runner.os }}
           path: |
@@ -89,7 +89,7 @@ jobs:
 
       - name: Upload Kotlin build report
         timeout-minutes: 1
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Kotlin build report-${{ runner.os }}
           path: |
@@ -122,7 +122,7 @@ jobs:
       - name: Upload Unit Test Results
         timeout-minutes: 3
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Unit Test Results
           path: |
@@ -134,7 +134,7 @@ jobs:
       - name: Upload Kover Results
         timeout-minutes: 3
         if: ${{ success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Kover Results
           path: |
@@ -142,7 +142,7 @@ jobs:
 
       - name: Upload Kotlin build report
         timeout-minutes: 2
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Kotlin build report-test
           path: |
