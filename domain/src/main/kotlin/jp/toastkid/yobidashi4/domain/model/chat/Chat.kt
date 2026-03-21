@@ -16,7 +16,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         "contents": [
           ${makeContents()}
         ],
-        ${if (useWebGrounding) "\"tools\": [ { \"google_search\": {} }, {\"googleMaps\": { \"enableWidget\": true }} ]," else "" }
+        ${if (useWebGrounding) "\"tools\": [ { \"google_search\": {} }, {\"googleMaps\": { }} ]," else "" }
         "safetySettings": [
             {
                 "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
