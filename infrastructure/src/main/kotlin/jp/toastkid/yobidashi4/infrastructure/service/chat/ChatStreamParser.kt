@@ -30,8 +30,8 @@ class ChatStreamParser {
             while (sourceMatcher.find()) {
                 sources.add(
                     Source(
-                        sourceMatcher.group(2),
-                        sourceMatcher.group(1)
+                        sourceMatcher.group(3),
+                        sourceMatcher.group(2)
                     )
                 )
             }
@@ -58,4 +58,4 @@ private val pattern = Pattern.compile("\\{\"parts\": \\[\\{\"text\": \"(.*?)\"}]
 
 private val imagePattern = Pattern.compile("\"inlineData\":(.+?)\"data\": \"(.+?)\"", Pattern.DOTALL)
 
-private val sourcePattern = Pattern.compile("\\{\"web\": \\{\"uri\": \"(.+?)\",\"title\": \"(.+?)\"}}", Pattern.DOTALL)
+private val sourcePattern = Pattern.compile("\\{\"(web|maps)\": \\{\"uri\": \"(.+?)\",\"title\": \"(.+?)\"", Pattern.DOTALL)
