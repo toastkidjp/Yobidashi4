@@ -66,9 +66,13 @@ class NotificationEventFileStore : NotificationEventRepository {
     }
 
     override fun deleteAt(index: Int) {
+        writeToFile(readAll().filterIndexed { i, _ -> i != index }.map(NotificationEvent::toTsv))
+    }
+
+    private fun writeToFile(content: Iterable<String>) {
         Files.write(
             path,
-            readAll().filterIndexed { i, _ -> i != index }.map(NotificationEvent::toTsv)
+            content
         )
     }
 
