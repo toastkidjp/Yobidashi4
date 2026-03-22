@@ -56,4 +56,17 @@ class ClusteringToolTabViewKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun processingCase() {
+        every { anyConstructed<ClusteringToolTabViewModel>().processing() } returns true
+        every { anyConstructed<ClusteringToolTabViewModel>().result() } returns mapOf("test" to listOf("Good"))
+
+        runDesktopComposeUiTest {
+            setContent {
+                ClusteringToolTabView()
+            }
+        }
+    }
+    //
 }
