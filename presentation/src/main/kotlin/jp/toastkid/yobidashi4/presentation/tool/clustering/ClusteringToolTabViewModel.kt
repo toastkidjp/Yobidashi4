@@ -46,7 +46,7 @@ class ClusteringToolTabViewModel : KoinComponent {
 
     private val result = mutableStateMapOf<String, List<String>>()
 
-    fun result() = result
+    fun result(): Map<String, List<String>> = result
 
     private val listState = LazyListState()
 
