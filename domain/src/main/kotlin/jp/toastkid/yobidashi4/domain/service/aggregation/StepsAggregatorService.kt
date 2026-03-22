@@ -15,7 +15,7 @@ class StepsAggregatorService(private val articlesReaderService: ArticlesReaderSe
             .filter { it.nameWithoutExtension.startsWith(keyword) }
             .map { it.nameWithoutExtension to Files.readAllLines(it) }
             .forEach {
-                it.second.filter { line -> containsTarget(line) }
+                it.second.filter(::containsTarget)
                     .forEach { line ->
                         val matcher = pattern.matcher(line)
                         while (matcher.find()) {
