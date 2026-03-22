@@ -27,7 +27,7 @@ import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
 @Composable
 fun MarkdownSubhead(
     subheadings: List<Subhead>,
-    function: (Int) -> Unit,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -42,7 +42,7 @@ fun MarkdownSubhead(
                         fontSize = subheading.fontSize().sp,
                         lineHeight = subheading.fontSize().sp,
                         modifier = Modifier.fillMaxWidth().clickable {
-                            function(subheading.indexOf())
+                            onClick(subheading.indexOf())
                         }
                     )
                 }
