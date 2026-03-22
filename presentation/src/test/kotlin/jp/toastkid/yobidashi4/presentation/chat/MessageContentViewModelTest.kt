@@ -132,7 +132,7 @@ class MessageContentViewModelTest {
 
         subject.openLinkOnBackground("https://www.yahoo.co.jp")
 
-        verify { mainViewModel.openUrl(any(), true) }
+        verify { mainViewModel.openUrl("https://www.yahoo.co.jp", true) }
     }
 
 }
