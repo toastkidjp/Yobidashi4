@@ -73,9 +73,10 @@ fun CalendarView(tab: CalendarTab) {
             )
 
             LaunchedEffect(calendarViewModel.yearInput()) {
-                collectCommittedInput(calendarViewModel.yearInput()) {
-                    calendarViewModel.setYearInput()
-                }
+                collectCommittedInput(
+                    calendarViewModel.yearInput(),
+                    calendarViewModel::setYearInput
+                )
             }
 
             Row {
