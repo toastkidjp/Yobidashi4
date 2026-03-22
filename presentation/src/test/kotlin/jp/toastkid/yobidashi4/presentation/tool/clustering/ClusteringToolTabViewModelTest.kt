@@ -17,12 +17,15 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.domain.service.tool.clustering.KMeans
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -33,6 +36,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.name
 
 class ClusteringToolTabViewModelTest {
 
@@ -40,6 +46,9 @@ class ClusteringToolTabViewModelTest {
 
     @MockK
     private lateinit var viewModel: MainViewModel
+
+    @MockK
+    private lateinit var kmeans: KMeans
 
     @MockK
     private lateinit var articleFactory: ArticleFactory
@@ -52,6 +61,7 @@ class ClusteringToolTabViewModelTest {
             modules(
                 module {
                     single(qualifier=null) { viewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { kmeans } bind(KMeans::class)
                     single(qualifier=null) { articleFactory } bind(ArticleFactory::class)
                 }
             )
@@ -66,6 +76,11 @@ class ClusteringToolTabViewModelTest {
         val article = mockk<Article>()
         every { articleFactory.withTitle(any()) } returns article
         every { article.path() } returns mockk()
+
+        every { kmeans.invoke(any()) } returns emptyMap()
+
+        mockkStatic(Files::class)
+        every { Files.readString(any()) } returns "test content"
 
         subject = ClusteringToolTabViewModel()
     }
@@ -98,6 +113,14 @@ class ClusteringToolTabViewModelTest {
 
     @Test
     fun invoke() {
+        val path = mockk<Path>()
+        every { path.name } returns "name"
+        subject.addPath(path)
+
+        subject.invoke(Dispatchers.Unconfined)
+
+        verify { kmeans.invoke(any()) }
+        verify { viewModel.showSnackbar(any(), any(), any()) }
     }
 
     @Test
