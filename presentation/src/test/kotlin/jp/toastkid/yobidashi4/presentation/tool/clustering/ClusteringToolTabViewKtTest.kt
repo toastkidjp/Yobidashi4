@@ -33,6 +33,7 @@ class ClusteringToolTabViewKtTest {
         every { element.fileName } returns element
         every { element.toString() } returns "test"
         every { anyConstructed<ClusteringToolTabViewModel>().items() } returns listOf(element)
+        every { anyConstructed<ClusteringToolTabViewModel>().invoke(any()) } just Runs
         every { anyConstructed<ClusteringToolTabViewModel>().dispose() } just Runs
         every { anyConstructed<ClusteringToolTabViewModel>().remove(any()) } just Runs
         coEvery { anyConstructed<ClusteringToolTabViewModel>().collectDroppedPaths() } just Runs
@@ -53,6 +54,9 @@ class ClusteringToolTabViewKtTest {
 
             onNodeWithText("x").performClick()
             verify { anyConstructed<ClusteringToolTabViewModel>().remove(any()) }
+
+            onNodeWithText("Invoke").performClick()
+            verify { anyConstructed<ClusteringToolTabViewModel>().invoke(any()) }
         }
     }
 
