@@ -87,13 +87,13 @@ class ChatStreamParserTest {
     fun groundingSources() {
         val responseItem = subject.invoke(
             """
-data: {"candidates": [{"content": {"parts": [{"text": " ここにテキストが入ってます。"}],"role": "model"},"finishReason": "STOP","index": 0,"groundingMetadata": {"groundingChunks": [{"web": {"uri": "https://maps.google.com/?cid=1234","title": "Gyoguntanchiki","placeId": "places/dummy"}},{"maps": {"uri": "https://maps.google.com/?cid=5678","title": "Isoshin Shokudo","placeId": "places/dummy-_WDco"}}],"groundingSupports": [{"segment": {"startIndex": 414,"endIndex": 444,"text": "評価は4.3と高いです。"},"groundingChunkIndices": [0]},{"segment": {"startIndex": 641,"endIndex": 662,"text": "評価は4.2です。"}],"webSearchQueries": ["磯原駅 和食 ランチ"],"googleMapsWidgetContextToken": "widgetcontent/dummyNz"}}],"usageMetadata": {"promptTokenCount": 186,"candidatesTokenCount": 406,"totalTokenCount": 815,"promptTokensDetails": [{"modality": "TEXT","tokenCount": 186}],"toolUsePromptTokenCount": 223,"toolUsePromptTokensDetails": [{"modality": "TEXT","tokenCount": 223}]},"modelVersion": "gemini-2.5-flash","responseId": "Xvu1aYmQBpbKrfcPxNHr0A8"}
+data: {"candidates": [{"content": {"parts": [{"text": " ここにテキストが入ってます。"}],"role": "model"},"finishReason": "STOP","index": 0,"groundingMetadata": {"groundingChunks": [{"web": {"uri": "https://maps.google.com/?cid=1234","title": "Dummy place1","placeId": "places/dummy"}},{"maps": {"uri": "https://maps.google.com/?cid=5678","title": "Isoshin Shokudo","placeId": "places/dummy-_WDco"}}],"groundingSupports": [{"segment": {"startIndex": 414,"endIndex": 444,"text": "評価は4.3と高いです。"},"groundingChunkIndices": [0]},{"segment": {"startIndex": 641,"endIndex": 662,"text": "評価は4.2です。"}],"webSearchQueries": ["磯原駅 和食 ランチ"],"googleMapsWidgetContextToken": "widgetcontent/dummyNz"}}],"usageMetadata": {"promptTokenCount": 186,"candidatesTokenCount": 406,"totalTokenCount": 815,"promptTokensDetails": [{"modality": "TEXT","tokenCount": 186}],"toolUsePromptTokenCount": 223,"toolUsePromptTokensDetails": [{"modality": "TEXT","tokenCount": 223}]},"modelVersion": "gemini-2.5-flash","responseId": "Xvu1aYmQBpbKrfcPxNHr0A8"}
         """.trimIndent()
         )
 
         assertNotNull(responseItem)
         assertEquals(2, responseItem.sources().size)
-        assertEquals("Gyoguntanchiki", responseItem.sources()[0].title)
+        assertEquals("Dummy place1", responseItem.sources()[0].title)
         assertEquals("https://maps.google.com/?cid=1234", responseItem.sources()[0].url)
     }
 
