@@ -144,8 +144,9 @@ class ClusteringToolTabViewModelTest {
         subject = spyk(subject)
         every { subject.invoke(any()) } just Runs
 
-        subject.onKeyEvent(KeyEvent(Key.Enter, KeyEventType.KeyDown))
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Enter, KeyEventType.KeyDown))
 
+        assertTrue(consumed)
         verify { subject.invoke(any()) }
     }
 
