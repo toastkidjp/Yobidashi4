@@ -119,4 +119,8 @@ class ClusteringToolTabViewModel : KoinComponent {
         viewModel.editWithTitle(title)
     }
 
+    fun addPath(path: Path) {
+        paths.add(path)
+    }
+
 }
