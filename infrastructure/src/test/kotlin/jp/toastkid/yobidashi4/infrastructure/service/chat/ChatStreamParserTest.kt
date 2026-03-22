@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 
 class ChatStreamParserTest {
 
@@ -80,6 +81,20 @@ class ChatStreamParserTest {
     @Test
     fun irregularCase() {
         assertNull(subject.invoke("data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"\"}],\"role\": \"model\"},\"finishReason\": \"STOP\"}],\"usageMetadata\": {\"promptTokenCount\": 712,\"candidatesTokenCount\": 19,\"totalTokenCount\": 731,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 712}],\"candidatesTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 19}]},\"modelVersion\": \"gemini-2.0-flash\",\"responseId\": \"gVc8aKuXPNHB7dcPwf7a4QY\"}\n"))
+    }
+
+    @Test
+    fun groundingSources() {
+        val responseItem = subject.invoke(
+            """
+data: {"candidates": [{"content": {"parts": [{"text": " ここにテキストが入ってます。"}],"role": "model"},"finishReason": "STOP","index": 0,"groundingMetadata": {"groundingChunks": [{"web": {"uri": "https://maps.google.com/?cid=1234","title": "Gyoguntanchiki","placeId": "places/dummy"}},{"maps": {"uri": "https://maps.google.com/?cid=5678","title": "Isoshin Shokudo","placeId": "places/dummy-_WDco"}}],"groundingSupports": [{"segment": {"startIndex": 414,"endIndex": 444,"text": "評価は4.3と高いです。"},"groundingChunkIndices": [0]},{"segment": {"startIndex": 641,"endIndex": 662,"text": "評価は4.2です。"}],"webSearchQueries": ["磯原駅 和食 ランチ"],"googleMapsWidgetContextToken": "widgetcontent/dummyNz"}}],"usageMetadata": {"promptTokenCount": 186,"candidatesTokenCount": 406,"totalTokenCount": 815,"promptTokensDetails": [{"modality": "TEXT","tokenCount": 186}],"toolUsePromptTokenCount": 223,"toolUsePromptTokensDetails": [{"modality": "TEXT","tokenCount": 223}]},"modelVersion": "gemini-2.5-flash","responseId": "Xvu1aYmQBpbKrfcPxNHr0A8"}
+        """.trimIndent()
+        )
+
+        assertNotNull(responseItem)
+        assertEquals(2, responseItem.sources().size)
+        assertEquals("Gyoguntanchiki", responseItem.sources()[0].title)
+        assertEquals("https://maps.google.com/?cid=1234", responseItem.sources()[0].url)
     }
 
 }
