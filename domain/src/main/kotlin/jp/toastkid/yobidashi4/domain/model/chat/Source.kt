@@ -22,6 +22,6 @@ data class Source(
         else
             URI(url).host
 
-    fun host() = host
+    fun host(): String = host
 
 }
