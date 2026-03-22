@@ -7,12 +7,17 @@
  */
 package jp.toastkid.yobidashi4.presentation.tool.clustering
 
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.article.Article
@@ -131,6 +136,17 @@ class ClusteringToolTabViewModelTest {
         subject.edit("test")
 
         verify { viewModel.editWithTitle(any()) }
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEvent() {
+        subject = spyk(subject)
+        every { subject.invoke(any()) } just Runs
+
+        subject.onKeyEvent(KeyEvent(Key.Enter, KeyEventType.KeyDown))
+
+        verify { subject.invoke(any()) }
     }
 
 }
