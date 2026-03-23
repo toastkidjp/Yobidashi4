@@ -124,6 +124,19 @@ class ClusteringToolTabViewModelTest {
     }
 
     @Test
+    fun invokeWithException() {
+        val path = mockk<Path>()
+        every { path.name } returns "name"
+        subject.addPath(path)
+        every { kmeans.invoke(any()) } throws Exception()
+
+        subject.invoke(Dispatchers.Unconfined)
+
+        verify { kmeans.invoke(any()) }
+        verify { viewModel.showSnackbar(any(), any(), any()) }
+    }
+
+    @Test
     fun noopInvoke() {
         subject.invoke(Dispatchers.Unconfined)
 
