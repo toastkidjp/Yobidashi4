@@ -66,6 +66,7 @@ class ClusteringToolTabViewKtTest {
     fun processingCase() {
         every { anyConstructed<ClusteringToolTabViewModel>().processing() } returns true
         every { anyConstructed<ClusteringToolTabViewModel>().openMarkdownPreview(any()) } just Runs
+        every { anyConstructed<ClusteringToolTabViewModel>().edit(any()) } just Runs
         every { anyConstructed<ClusteringToolTabViewModel>().result() } returns mapOf("test" to listOf("Good"))
 
         runDesktopComposeUiTest {
@@ -75,6 +76,9 @@ class ClusteringToolTabViewKtTest {
 
             onNode(hasContentDescription("Open preview")).performClick()
             verify { anyConstructed<ClusteringToolTabViewModel>().openMarkdownPreview(any()) }
+
+            onNode(hasContentDescription("Open file")).performClick()
+            verify { anyConstructed<ClusteringToolTabViewModel>().edit(any()) }
         }
     }
     //
