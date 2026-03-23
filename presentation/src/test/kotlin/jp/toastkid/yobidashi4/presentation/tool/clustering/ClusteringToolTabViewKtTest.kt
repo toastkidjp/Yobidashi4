@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.tool.clustering
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
@@ -64,12 +65,16 @@ class ClusteringToolTabViewKtTest {
     @Test
     fun processingCase() {
         every { anyConstructed<ClusteringToolTabViewModel>().processing() } returns true
+        every { anyConstructed<ClusteringToolTabViewModel>().openMarkdownPreview(any()) } just Runs
         every { anyConstructed<ClusteringToolTabViewModel>().result() } returns mapOf("test" to listOf("Good"))
 
         runDesktopComposeUiTest {
             setContent {
                 ClusteringToolTabView()
             }
+
+            onNode(hasContentDescription("Open preview")).performClick()
+            verify { anyConstructed<ClusteringToolTabViewModel>().openMarkdownPreview(any()) }
         }
     }
     //
