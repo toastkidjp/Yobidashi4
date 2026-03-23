@@ -133,7 +133,7 @@ class ClusteringToolTabViewModelTest {
         subject.invoke(Dispatchers.Unconfined)
 
         verify { kmeans.invoke(any()) }
-        verify { viewModel.showSnackbar(any(), any(), any()) }
+        verify { viewModel.showSnackbar("Clustering error.") }
     }
 
     @Test
