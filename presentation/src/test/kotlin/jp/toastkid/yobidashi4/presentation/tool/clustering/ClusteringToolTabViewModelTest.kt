@@ -124,6 +124,13 @@ class ClusteringToolTabViewModelTest {
     }
 
     @Test
+    fun noopInvoke() {
+        subject.invoke(Dispatchers.Unconfined)
+
+        verify(inverse = true) { kmeans.invoke(any()) }
+    }
+
+    @Test
     fun clearPaths() {
         subject.clearPaths()
     }
