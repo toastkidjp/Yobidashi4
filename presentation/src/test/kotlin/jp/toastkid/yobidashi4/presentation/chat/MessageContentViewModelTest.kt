@@ -123,7 +123,7 @@ class MessageContentViewModelTest {
 
         subject.openLink("https://www.yahoo.co.jp")
 
-        verify { mainViewModel.openUrl("https://www.yahoo.co.jp", any()) }
+        verify { mainViewModel.openUrl("https://www.yahoo.co.jp", false) }
     }
 
     @Test
