@@ -38,6 +38,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.Collections.emptyMap
 import kotlin.io.path.name
 
 class ClusteringToolTabViewModelTest {
@@ -203,6 +204,11 @@ class ClusteringToolTabViewModelTest {
 
         assertFalse(consumed)
         verify(inverse = true) { subject.invoke(any()) }
+    }
+
+    @Test
+    fun addPath() {
+        subject.addPath(mockk())
     }
 
 }
