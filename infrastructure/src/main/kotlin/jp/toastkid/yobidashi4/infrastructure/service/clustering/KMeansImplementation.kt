@@ -114,6 +114,6 @@ class KMeansImplementation : KMeans {
         .filter(CharSequence::isNotBlank)
         .filter { it.matches(regex) }
         .filter { it.any(::isKanjiCharacter) }
-        .filter { stopWords.all { stopWord -> it.contains(stopWord).not() } }
+        .filter { stopWords.none { stopWord -> it.contains(stopWord) } }
 
 }
