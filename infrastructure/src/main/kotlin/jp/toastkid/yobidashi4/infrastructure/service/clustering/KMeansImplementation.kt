@@ -44,7 +44,7 @@ class KMeansImplementation : KMeans {
                 .eachCount()
                 .filter { it.value > 2 }
 
-            val example = ArrayExample(factory.getUnknownOutput())
+            val example = ArrayExample(factory.unknownOutput)
 
             // 集計済みの頻度を重み(Value)として add する
             counts.forEach { (word, tf) ->
