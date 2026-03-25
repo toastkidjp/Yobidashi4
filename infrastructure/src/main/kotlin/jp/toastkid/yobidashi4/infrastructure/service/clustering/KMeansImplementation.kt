@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi4.infrastructure.service.clustering
 
 import jp.toastkid.yobidashi4.domain.service.tool.clustering.KMeans
 import org.koin.core.annotation.Single
+import org.tribuo.Feature
 import org.tribuo.MutableDataset
 import org.tribuo.clustering.ClusteringFactory
 import org.tribuo.clustering.kmeans.KMeansTrainer
@@ -69,8 +70,7 @@ class KMeansImplementation : KMeans {
             // 重心内の特徴量を取得し、スコアが高い順にソート
             val topFeatures = centroid
                 .sortedByDescending { it.value }
-                // 助詞などのノイズを簡易的に排除（2文字以下を捨てる、または特定の文字を含むものを捨てる）
-                .filter { it.name.length >= 2 && !it.name.endsWith("の") && !it.name.endsWith("に") }
+                .filter { notContainsNoise(it) }
                 .take(3) // 上位3つをラベル候補にする
                 .joinToString("/") { it.name }
 
@@ -103,6 +103,12 @@ class KMeansImplementation : KMeans {
 
         return groupBy
     }
+
+    /**
+     * 助詞などのノイズを簡易的に排除（2文字以下を捨てる、または特定の文字を含むものを捨てる）.
+     */
+    private fun notContainsNoise(feature: Feature): Boolean =
+        feature.name.length >= 2 && !feature.name.endsWith("の") && !feature.name.endsWith("に")
 
     private val regex = Regex("[\\p{IsHan}\\p{IsHira}\\p{IsKana}]{2}")
 
