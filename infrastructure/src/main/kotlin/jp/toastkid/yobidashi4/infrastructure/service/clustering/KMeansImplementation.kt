@@ -113,7 +113,7 @@ class KMeansImplementation : KMeans {
         .windowed(2, 1)
         .filter(CharSequence::isNotBlank)
         .filter { it.matches(regex) }
-        .filter { it.any { char -> isKanjiCharacter(char) } }
+        .filter { it.any(::isKanjiCharacter) }
         .filter { stopWords.all { stopWord -> it.contains(stopWord).not() } }
 
 }
