@@ -81,5 +81,5 @@ class ClusteringToolTabViewKtTest {
             verify { anyConstructed<ClusteringToolTabViewModel>().edit(any()) }
         }
     }
-    //
+
 }
