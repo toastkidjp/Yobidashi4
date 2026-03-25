@@ -70,7 +70,7 @@ class KMeansImplementation : KMeans {
             // 重心内の特徴量を取得し、スコアが高い順にソート
             val topFeatures = centroid
                 .sortedByDescending { it.value }
-                .filter { notContainsNoise(it) }
+                .filter(::notContainsNoise)
                 .take(3) // 上位3つをラベル候補にする
                 .joinToString("/") { it.name }
 
