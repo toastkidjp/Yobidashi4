@@ -121,7 +121,10 @@ fun TableView(tab: TableTab) {
                     )
                 }
             }
-            VerticalScrollbar(adapter = rememberScrollbarAdapter(viewModel.listState()), modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
+            VerticalScrollbar(
+                adapter = rememberScrollbarAdapter(viewModel.listState()),
+                modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+            )
             HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
                 Alignment.BottomCenter))
 
