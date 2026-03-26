@@ -57,12 +57,12 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                                 .wrapContentSize(unbounded = true)
                                 .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
                         ) {
-                            viewModel.lineNumberTexts().forEach {
+                            viewModel.lineNumberTexts().forEach { lineNumberText ->
                                 Box(
                                     contentAlignment = Alignment.CenterEnd
                                 ) {
                                     Text(
-                                        it,
+                                        lineNumberText,
                                         fontSize = fontSize,
                                         fontFamily = FontFamily.Monospace,
                                         textAlign = TextAlign.End,
