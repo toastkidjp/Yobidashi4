@@ -64,6 +64,7 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
                     }
                 }
             }
+
             VerticalScrollbar(
                 adapter = rememberScrollbarAdapter(viewModel.listState()),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
