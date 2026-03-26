@@ -99,9 +99,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
             )
             HorizontalScrollbar(
                 adapter = rememberScrollbarAdapter(viewModel.horizontalScrollState()),
-                modifier = Modifier.fillMaxWidth().align(
-                    Alignment.BottomCenter
-                )
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
             )
         }
     }
