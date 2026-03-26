@@ -48,7 +48,10 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
         Box {
             SelectionContainer {
                 LazyColumn(state = viewModel.listState()) {
-                    itemsIndexed(viewModel.textState(), { index, line -> "$index${line.hashCode()}" }) { index, line ->
+                    itemsIndexed(
+                        viewModel.textState(),
+                        { index, line -> "$index${line.hashCode()}" }
+                    ) { index, line ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             DisableSelection {
                                 Text(
