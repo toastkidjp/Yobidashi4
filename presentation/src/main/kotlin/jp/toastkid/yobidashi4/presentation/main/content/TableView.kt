@@ -127,8 +127,10 @@ fun TableView(tab: TableTab) {
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
 
-            HorizontalScrollbar(adapter = rememberScrollbarAdapter(horizontalScrollState), modifier = Modifier.fillMaxWidth().align(
-                Alignment.BottomCenter))
+            HorizontalScrollbar(
+                adapter = rememberScrollbarAdapter(horizontalScrollState),
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
+            )
 
             DisposableEffect(tab) {
                 coroutineScope.launch {
