@@ -102,6 +102,7 @@ internal fun NotificationListTabView() {
                     }
                 }
             }
+
             VerticalScrollbar(
                 adapter = rememberScrollbarAdapter(viewModel.listState()),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
