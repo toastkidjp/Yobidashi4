@@ -90,7 +90,7 @@ internal fun TabsView(modifier: Modifier) {
 
     Column(modifier = modifier) {
         ScrollableTabRow(
-            backgroundColor = primaryColor.copy(alpha = 0.75f),
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f).copy(alpha = 0.75f),
             selectedTabIndex = viewModel.selectedTabIndex(),
             indicator = { tabPositions ->
                 val currentTabIndex = viewModel.currentTabIndex(tabPositions.size)
