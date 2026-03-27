@@ -142,4 +142,9 @@ class MessageContentViewModelTest {
         verify { mainViewModel.openUrl("https://www.yahoo.co.jp", true) }
     }
 
+    @Test
+    fun horizontalSourceScrollState() {
+        assertEquals(0, subject.horizontalSourceScrollState().value)
+    }
+
 }
