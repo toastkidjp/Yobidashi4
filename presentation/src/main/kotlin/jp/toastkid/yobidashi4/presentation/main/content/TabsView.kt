@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -85,10 +86,11 @@ import kotlin.io.path.nameWithoutExtension
 @Composable
 internal fun TabsView(modifier: Modifier) {
     val viewModel = remember { TabsViewModel() }
+    val primaryColor = MaterialTheme.colors.onPrimary
 
     Column(modifier = modifier) {
         ScrollableTabRow(
-            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f),
+            backgroundColor = primaryColor.copy(alpha = 0.75f),
             selectedTabIndex = viewModel.selectedTabIndex(),
             indicator = { tabPositions ->
                 val currentTabIndex = viewModel.currentTabIndex(tabPositions.size)
@@ -100,7 +102,9 @@ internal fun TabsView(modifier: Modifier) {
                     .height(2.dp)
                     .clip(RoundedCornerShape(8.dp)) // clip modifier not working
                     .padding(horizontal = 4.dp)
-                    .background(color = MaterialTheme.colors.onPrimary)
+                    .drawBehind {
+                        drawRect(primaryColor)
+                    }
                 )
             }
         ) {
