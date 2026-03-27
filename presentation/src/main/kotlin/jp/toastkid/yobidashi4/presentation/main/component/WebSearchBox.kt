@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.key.onKeyEvent
@@ -49,9 +49,11 @@ import org.jetbrains.compose.resources.painterResource
 internal fun WebSearchBox() {
     val viewModel = remember { WebSearchBoxViewModel() }
 
+    val surfaceColor = MaterialTheme.colors.surface
+
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
-        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
+        color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
         Row(
@@ -61,7 +63,9 @@ internal fun WebSearchBox() {
         ) {
             Text("x", modifier = Modifier
                 .padding(start = 4.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                .drawBehind {
+                    drawRect(surfaceColor.copy(alpha = 0.2f))
+                }
                 .clickable { viewModel.setShowWebSearch(false) }
                 .padding(8.dp)
                 .semantics { contentDescription = "Close web search box." }
