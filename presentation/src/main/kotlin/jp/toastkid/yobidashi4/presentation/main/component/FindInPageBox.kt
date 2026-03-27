@@ -98,7 +98,9 @@ internal fun FindInPageBox() {
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .background(surface.copy(alpha = 0.2f))
+                    .drawBehind {
+                        drawRect(surface.copy(alpha = 0.2f))
+                    }
                     .clickable(onClick = viewModel::findDown)
                     .padding(8.dp)
             )
