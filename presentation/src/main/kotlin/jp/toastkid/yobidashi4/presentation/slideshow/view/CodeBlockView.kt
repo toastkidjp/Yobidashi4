@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,7 +45,9 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
     ) {
         Box(
             modifier = modifier
-                .background(surfaceColor)
+                .drawBehind {
+                    drawRect(surfaceColor)
+                }
                 .heightIn(max = viewModel.maxHeight(fontSize))
         ) {
             BasicTextField(
