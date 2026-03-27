@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -88,7 +87,9 @@ internal fun FindInPageBox() {
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .background(surface.copy(alpha = 0.2f))
+                    .drawBehind {
+                        drawRect(surface.copy(alpha = 0.2f))
+                    }
                     .clickable(onClick = viewModel::findUp)
                     .padding(8.dp)
             )
