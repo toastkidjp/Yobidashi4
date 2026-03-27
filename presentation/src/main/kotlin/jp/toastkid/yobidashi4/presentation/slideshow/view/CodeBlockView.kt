@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -37,11 +38,13 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modifier: Modifier = Modifier) {
     val viewModel = remember { CodeBlockViewModel() }
 
+    val surfaceColor = MaterialTheme.colors.surface
+
     Surface(
-        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
+        color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        Box(modifier = modifier.background(MaterialTheme.colors.surface).heightIn(max = viewModel.maxHeight(fontSize))) {
+        Box(modifier = modifier.background(surfaceColor).heightIn(max = viewModel.maxHeight(fontSize))) {
             BasicTextField(
                 state = viewModel.content(),
                 onTextLayout = {
@@ -55,7 +58,9 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .wrapContentSize(unbounded = true)
-                                .background(MaterialTheme.colors.surface.copy(alpha = 0.75f))
+                                .drawBehind {
+                                    drawRect(surfaceColor.copy(alpha = 0.75f))
+                                }
                         ) {
                             viewModel.lineNumberTexts().forEach { lineNumberText ->
                                 Box(
