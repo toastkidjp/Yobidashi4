@@ -44,7 +44,11 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
         color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
-        Box(modifier = modifier.background(surfaceColor).heightIn(max = viewModel.maxHeight(fontSize))) {
+        Box(
+            modifier = modifier
+                .background(surfaceColor)
+                .heightIn(max = viewModel.maxHeight(fontSize))
+        ) {
             BasicTextField(
                 state = viewModel.content(),
                 onTextLayout = {
