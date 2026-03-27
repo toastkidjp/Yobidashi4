@@ -9,6 +9,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.text.code.CodeBlockViewOutputTransformation
 import kotlin.math.min
 
@@ -23,6 +24,8 @@ class CodeBlockViewModel {
     private val outputTransformation = CodeBlockViewOutputTransformation()
 
     private val lineCountState = mutableStateOf(1)
+
+    private val cursorOn = mutableStateOf(false)
 
     fun maxHeight(fontSize: TextUnit) = min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
 
@@ -58,6 +61,22 @@ class CodeBlockViewModel {
 
     fun start(code: String) {
         content.setTextAndPlaceCursorAtEnd(code)
+    }
+
+    fun clipContent() {
+        ClipboardPutterService().invoke(content.text.toString())
+    }
+
+    fun cursorOn() {
+        cursorOn.value = true
+    }
+
+    fun cursorOff() {
+        cursorOn.value = false
+    }
+
+    fun alpha(): Float {
+        return if (cursorOn.value) 1f else 0f
     }
 
 }
