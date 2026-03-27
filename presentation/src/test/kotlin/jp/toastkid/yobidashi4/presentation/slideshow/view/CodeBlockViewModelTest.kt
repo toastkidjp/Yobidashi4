@@ -78,4 +78,13 @@ class CodeBlockViewModelTest {
         verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
+    @Test
+    fun cursor() {
+        assertEquals(0f, subject.alpha())
+        subject.cursorOn()
+        assertEquals(1f, subject.alpha())
+        subject.cursorOff()
+        assertEquals(0f, subject.alpha())
+    }
+
 }
