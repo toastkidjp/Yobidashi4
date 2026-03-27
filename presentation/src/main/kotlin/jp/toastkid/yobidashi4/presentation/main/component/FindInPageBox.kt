@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.semantics.contentDescription
@@ -29,8 +30,10 @@ import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 internal fun FindInPageBox() {
     val viewModel = remember { FindInPageBoxViewModel() }
 
+    val surface = MaterialTheme.colors.surface
+
     Surface(
-        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
+        color = surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier
             .fillMaxWidth()
@@ -41,7 +44,9 @@ internal fun FindInPageBox() {
                 "x",
                 modifier = Modifier
                     .padding(start = 4.dp)
-                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .drawBehind {
+                        drawRect(surface.copy(alpha = 0.2f))
+                    }
                     .clickable(onClick = viewModel::switchFind)
                     .padding(8.dp)
             )
@@ -83,7 +88,7 @@ internal fun FindInPageBox() {
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .background(surface.copy(alpha = 0.2f))
                     .clickable(onClick = viewModel::findUp)
                     .padding(8.dp)
             )
@@ -93,7 +98,7 @@ internal fun FindInPageBox() {
                 color = MaterialTheme.colors.secondary,
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                    .background(surface.copy(alpha = 0.2f))
                     .clickable(onClick = viewModel::findDown)
                     .padding(8.dp)
             )
