@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
@@ -64,6 +65,7 @@ fun LoanCalculatorView() {
                     viewModel::setLoanAmount,
                     viewModel.loanAmount()::clearText,
                     "Loan amount",
+                    viewModel.inputTransformation(),
                     viewModel.visualTransformation()
                 )
 
@@ -72,6 +74,7 @@ fun LoanCalculatorView() {
                     viewModel::setLoanTerm,
                     viewModel.loanTerm()::clearText,
                     "Loan term",
+                    viewModel.inputTransformation(),
                     viewModel.visualTransformation()
                 )
 
@@ -80,6 +83,7 @@ fun LoanCalculatorView() {
                     viewModel::setInterestRate,
                     viewModel.interestRate()::clearText,
                     "Interest rate",
+                    viewModel.inputTransformation(),
                     viewModel.visualTransformation()
                 )
 
@@ -88,6 +92,7 @@ fun LoanCalculatorView() {
                     viewModel::setDownPayment,
                     viewModel.downPayment()::clearText,
                     "Down payment",
+                    viewModel.inputTransformation(),
                     viewModel.visualTransformation()
                 )
 
@@ -96,6 +101,7 @@ fun LoanCalculatorView() {
                     viewModel::setManagementFee,
                     viewModel.managementFee()::clearText,
                     "Management fee (Monthly)",
+                    viewModel.inputTransformation(),
                     viewModel.visualTransformation()
                 )
 
@@ -104,6 +110,7 @@ fun LoanCalculatorView() {
                     viewModel::setRenovationReserves,
                     viewModel.renovationReserves()::clearText,
                     "Renovation reserves (Monthly)",
+                    viewModel.inputTransformation(),
                     viewModel.visualTransformation()
                 )
             }
@@ -160,6 +167,7 @@ private fun LoanCalculatorInput(
     onValueChange: () -> Unit,
     onClearInput: () -> Unit,
     labelText: String,
+    transformation: InputTransformation,
     inputTransformation: OutputTransformation
 ) {
     SingleLineTextField(
@@ -170,6 +178,7 @@ private fun LoanCalculatorInput(
             backgroundColor = Color.Transparent,
             cursorColor = MaterialTheme.colors.onSurface
         ),
+        inputTransformation = transformation,
         visualTransformation = inputTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         onClearInput = onClearInput
