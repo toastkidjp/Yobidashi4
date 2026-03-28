@@ -165,4 +165,6 @@ interface MainViewModel {
 
     fun askGenerativeAi(question: String, model: GenerativeAiModel)
 
+    fun clipText(text: CharSequence?)
+
 }
