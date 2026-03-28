@@ -50,6 +50,7 @@ import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -1499,6 +1500,19 @@ class MainViewModelImplementationTest {
 
         assertEquals(question, capturingSlot.captured.initialQuestion())
         assertEquals(model, capturingSlot.captured.initialModel())
+    }
+
+    @Test
+    fun clipText() {
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+        subject = spyk(subject)
+        every { subject.showSnackbar(any()) } just Runs
+
+        subject.clipText("test")
+
+        verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+        verify { subject.showSnackbar(any()) }
     }
 
 }
