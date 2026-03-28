@@ -9,11 +9,15 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.text.code.CodeBlockViewOutputTransformation
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.math.min
 
-class CodeBlockViewModel {
+class CodeBlockViewModel : KoinComponent {
+
+    private val mainViewModel: MainViewModel by inject()
 
     private val verticalScrollState = ScrollState(0)
 
@@ -64,7 +68,7 @@ class CodeBlockViewModel {
     }
 
     fun clipContent() {
-        ClipboardPutterService().invoke(content.text.toString())
+        mainViewModel.clipText(content.text)
     }
 
     fun cursorOn() {
