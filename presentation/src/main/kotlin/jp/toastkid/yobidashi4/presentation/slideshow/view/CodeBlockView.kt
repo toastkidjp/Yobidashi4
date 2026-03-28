@@ -4,6 +4,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,8 +29,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -47,6 +48,13 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
     val viewModel = remember { CodeBlockViewModel() }
 
     val surfaceColor = MaterialTheme.colors.surface
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+
+    LaunchedEffect(isHovered.value) {
+        if (isHovered.value) viewModel.cursorOn() else viewModel.cursorOff()
+    }
 
     Surface(
         color = surfaceColor.copy(alpha = 0.75f),
@@ -129,12 +137,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                     .clickable {
                         viewModel.clipContent()
                     }
-                    .onPointerEvent(PointerEventType.Enter) {
-                        viewModel.cursorOn()
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        viewModel.cursorOff()
-                    }
+                    .hoverable(interactionSource)
                     .align(Alignment.TopEnd)
                     .padding(end = 8.dp)
             )
