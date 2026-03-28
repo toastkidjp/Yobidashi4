@@ -212,6 +212,18 @@ class ClusteringToolTabViewModelTest {
         verify(inverse = true) { subject.invoke(any()) }
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun noopOnKeyEventWithQ() {
+        subject = spyk(subject)
+        every { subject.invoke(any()) } just Runs
+
+        val consumed = subject.onKeyEvent(KeyEvent(Key.Q, KeyEventType.KeyDown))
+
+        assertFalse(consumed)
+        verify(inverse = true) { subject.invoke(any()) }
+    }
+
     @Test
     fun addPath() {
         subject.addPath(mockk())
