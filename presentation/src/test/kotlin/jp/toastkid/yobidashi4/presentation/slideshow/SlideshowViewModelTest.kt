@@ -56,7 +56,7 @@ class SlideshowViewModelTest {
 
         every { onEscapeKeyReleased.invoke() } just Runs
         every { onFullscreenKeyReleased.invoke() } just Runs
-        coEvery { pagerState.animateScrollToPage(any()) } just Runs
+        coEvery { pagerState.scrollToPage(any()) } just Runs
         every { pagerState.currentPage } returns 1
         mockkConstructor(ImageCache::class)
         every { anyConstructed<ImageCache>().get(any()) } returns mockk()
@@ -89,7 +89,7 @@ class SlideshowViewModelTest {
                     pagerState
                 )
 
-                coVerify { pagerState.animateScrollToPage(any()) }
+                coVerify { pagerState.scrollToPage(any()) }
             }
         }
     }
@@ -106,7 +106,7 @@ class SlideshowViewModelTest {
                     pagerState
                 )
 
-                coVerify { pagerState.animateScrollToPage(any()) }
+                coVerify { pagerState.scrollToPage(any()) }
             }
         }
     }
@@ -123,7 +123,7 @@ class SlideshowViewModelTest {
                     pagerState
                 )
 
-                coVerify { pagerState.animateScrollToPage(any()) }
+                coVerify { pagerState.scrollToPage(any()) }
             }
         }
     }
