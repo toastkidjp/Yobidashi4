@@ -18,6 +18,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -114,14 +115,19 @@ class ClusteringToolTabViewModelTest {
 
     @Test
     fun invoke() {
+        val capturingSlot = slot<() -> Unit>()
+        every { viewModel.showSnackbar(any(), any(), capture(capturingSlot)) } just Runs
         val path = mockk<Path>()
         every { path.name } returns "name"
+        every { path.parent } returns mockk()
         subject.addPath(path)
 
         subject.invoke(Dispatchers.Unconfined)
 
         verify { kmeans.invoke(any()) }
         verify { viewModel.showSnackbar(any(), any(), any()) }
+        capturingSlot.captured.invoke()
+        verify { viewModel.openFile(any()) }
     }
 
     @Test
