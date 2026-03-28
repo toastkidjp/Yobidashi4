@@ -58,7 +58,7 @@ class CodeBlockViewTest {
                 }
 
             verify { anyConstructed<CodeBlockViewModel>().cursorOn() }
-            //verify { anyConstructed<CodeBlockViewModel>().cursorOff() }
+            verify { anyConstructed<CodeBlockViewModel>().cursorOff() }
             verify { anyConstructed<CodeBlockViewModel>().clipContent() }
         }
     }
