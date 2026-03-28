@@ -17,6 +17,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.LayoutCoordinates
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import kotlinx.coroutines.CoroutineScope
@@ -60,19 +61,19 @@ class SlideshowViewModel {
         return when (it.key) {
             Key.DirectionLeft -> {
                 coroutineScope.launch {
-                    pagerState.animateScrollToPage(max(0, pagerState.currentPage - 1))
+                    pagerState.scrollToPage(max(0, pagerState.currentPage - 1))
                 }
                 true
             }
             Key.DirectionRight -> {
                 coroutineScope.launch {
-                    pagerState.animateScrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
+                    pagerState.scrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
                 }
                 true
             }
             Key.Enter -> {
                 coroutineScope.launch {
-                    pagerState.animateScrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
+                    pagerState.scrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
                 }
                 true
             }
@@ -122,6 +123,8 @@ class SlideshowViewModel {
     fun requestFocus() {
         focusRequester().requestFocus()
     }
+
+    fun setPageSize(it: LayoutCoordinates) {}
 
 }
 
