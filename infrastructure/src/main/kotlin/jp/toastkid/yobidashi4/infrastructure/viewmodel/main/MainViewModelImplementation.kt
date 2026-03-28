@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
+import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -782,4 +783,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun askGenerativeAi(question: String, model: GenerativeAiModel) {
         openTab(ChatTab(Chat(), initialModel = model, initialQuestion = question))
     }
+
+    override fun clipText(text: CharSequence?) {
+        if (text.isNullOrBlank()) {
+            return
+        }
+
+        ClipboardPutterService().invoke(text.toString())
+        showSnackbar("Clip text: $text")
+    }
+
 }
