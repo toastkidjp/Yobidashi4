@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
@@ -28,10 +28,11 @@ import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 @Composable
 internal fun InputBox() {
     val viewModel = remember { InputBoxViewModel() }
+    val surfaceColor = MaterialTheme.colors.surface
 
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
-        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
+        color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
         Row(
@@ -41,7 +42,9 @@ internal fun InputBox() {
         ) {
             Text("x", modifier = Modifier
                 .padding(start = 4.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                .drawBehind {
+                    drawRect(surfaceColor.copy(alpha = 0.2f))
+                }
                 .clickable(onClick = viewModel::setShowInputBox)
                 .padding(8.dp)
             )
