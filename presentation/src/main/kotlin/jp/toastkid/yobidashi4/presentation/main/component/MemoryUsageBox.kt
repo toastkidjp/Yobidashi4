@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,15 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun MemoryUsageBox() {
     val viewModel = remember { MemoryUsageBoxViewModel() }
 
+    val surface = MaterialTheme.colors.surface
+
     Surface(
         modifier = Modifier.wrapContentHeight().fillMaxWidth(),
-        color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
+        color = surface.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
         Box {
@@ -44,7 +46,9 @@ fun MemoryUsageBox() {
             Text("x", modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(start = 4.dp)
-                .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                .drawBehind {
+                    drawRect(surface.copy(alpha = 0.2f))
+                }
                 .clickable(onClick = viewModel::clickClose)
                 .padding(8.dp)
             )
