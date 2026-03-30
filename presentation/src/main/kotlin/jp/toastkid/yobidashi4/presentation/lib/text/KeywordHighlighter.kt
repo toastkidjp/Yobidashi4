@@ -71,7 +71,7 @@ class KeywordHighlighter {
 
         if (!finderTarget.isNullOrBlank()) {
             val pattern = try {
-                Pattern.compile(finderTarget)
+                Pattern.compile(Pattern.quote(finderTarget))
             } catch (e: PatternSyntaxException) {
                 LoggerFactory.getLogger(javaClass).warn("Pattern compilation error", e)
                 return@buildAnnotatedString
