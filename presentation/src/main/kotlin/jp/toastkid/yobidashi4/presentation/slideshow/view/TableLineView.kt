@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,9 +39,12 @@ import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
     val viewModel = remember { TableLineViewModel() }
 
+    val surfaceColor = MaterialTheme.colors.surface
     Column(modifier = modifier) {
         DisableSelection {
-            Row(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface)) {
+            Row(modifier = Modifier.fillMaxWidth().drawBehind {
+                drawRect(surfaceColor.copy(alpha = 0.2f))
+            }) {
                 line.header.forEachIndexed { index, item ->
                     if (index != 0) {
                         VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
@@ -50,7 +52,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
 
                     val headerColumnBackgroundColor = animateColorAsState(
                         if (viewModel.onCursorOnHeader()) MaterialTheme.colors.primary
-                        else MaterialTheme.colors.surface
+                        else surfaceColor
                     )
 
                     Text(
