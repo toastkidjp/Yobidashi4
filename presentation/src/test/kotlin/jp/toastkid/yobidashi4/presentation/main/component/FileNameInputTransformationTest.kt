@@ -67,7 +67,6 @@ class FileNameInputTransformationTest {
     @Test
     fun filterMultipleIncorrectCharacters() {
         val input = "my/file:name*.txt"
-        val expected = "myfilename.txt"
         val buffer = mockk<TextFieldBuffer>()
         every { buffer.asCharSequence() } returns input
         every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
