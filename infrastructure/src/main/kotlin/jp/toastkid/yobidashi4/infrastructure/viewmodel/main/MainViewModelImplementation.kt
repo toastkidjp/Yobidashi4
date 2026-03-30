@@ -65,6 +65,7 @@ import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.awt.Desktop
+import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
@@ -399,7 +400,12 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
                 return@setShowInputBox
             }
 
-            val article = articleFactory.withTitle(input)
+            val article = try {
+                articleFactory.withTitle(input)
+            } catch (e: IOException) {
+                showSnackbar("Incorrect file name.: $input")
+                return@setShowInputBox
+            }
             article.makeFile { "# ${article.getTitle()}" }
             addNewArticle(article.path())
             edit(article.path())
