@@ -72,7 +72,6 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.awt.Desktop
 import java.awt.image.BufferedImage
-import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -922,7 +921,7 @@ class MainViewModelImplementationTest {
         every { article.makeFile(capture(slot)) } just Runs
         every { article.getTitle() } returns "title"
         every { article.path() } returns mockk()
-        every { articleFactory.withTitle(any()) } throws IOException("Incorrect input")
+        every { articleFactory.withTitle(any()) } throws IllegalArgumentException("Incorrect input")
 
         subject.makeNewArticle()
         assertTrue(subject.showInputBox())
