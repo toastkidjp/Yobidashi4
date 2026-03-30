@@ -53,6 +53,7 @@ internal fun InputBox() {
                 viewModel.query(),
                 "Please would you input file name?",
                 viewModel::clearInput,
+                inputTransformation = FileNameInputTransformation(),
                 keyboardActions = KeyboardActionHandler {
                     viewModel.invokeAction()
                 },
