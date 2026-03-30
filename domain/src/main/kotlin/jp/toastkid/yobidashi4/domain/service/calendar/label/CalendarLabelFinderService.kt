@@ -16,7 +16,7 @@ import java.time.LocalDate
 
 class CalendarLabelFinderService {
 
-    private fun calculateOffsetDays(dayOfWeek: DayOfWeek, ): Int {
+    private fun calculateOffsetDays(dayOfWeek: DayOfWeek): Int {
         val offsetDays =
             if (dayOfWeek <= DayOfWeek.FRIDAY) DayOfWeek.FRIDAY.value - dayOfWeek.value + 1
             else 7 - (dayOfWeek.value - DayOfWeek.FRIDAY.value - 1)
