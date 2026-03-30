@@ -202,7 +202,7 @@ class ClusteringToolTabViewModelTest {
 
     @OptIn(InternalComposeUiApi::class)
     @Test
-    fun noopOnKeyEvent() {
+    fun noopOnKeyEventWithKeyUp() {
         subject = spyk(subject)
         every { subject.invoke(any()) } just Runs
 
