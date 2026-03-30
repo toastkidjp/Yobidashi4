@@ -98,7 +98,7 @@ class KeywordHighlighterTest {
             "Africa)"
         )
 
-        assertTrue(annotate.spanStyles.isEmpty())
+        assertTrue(annotate.spanStyles.isNotEmpty())
     }
 
 }
