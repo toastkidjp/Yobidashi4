@@ -72,6 +72,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.awt.Desktop
 import java.awt.image.BufferedImage
+import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -907,6 +908,29 @@ class MainViewModelImplementationTest {
 
         verify { article.getTitle() }
         verify { subject.edit(any()) }
+    }
+
+    @Test
+    fun makeNewArticleWithIncorrectInput() {
+        every { setting.articleFolderPath() } returns mockk()
+        every { Files.list(any()) } returns Stream.empty()
+        subject = spyk(subject)
+        every { subject.edit(any()) } just Runs
+        every { subject.showSnackbar(any()) } just Runs
+        val article = mockk<Article>()
+        val slot = slot<() -> String>()
+        every { article.makeFile(capture(slot)) } just Runs
+        every { article.getTitle() } returns "title"
+        every { article.path() } returns mockk()
+        every { articleFactory.withTitle(any()) } throws IOException("Incorrect input")
+
+        subject.makeNewArticle()
+        assertTrue(subject.showInputBox())
+        subject.invokeInputAction("test")
+
+        verify(inverse = true) { article.getTitle() }
+        verify(inverse = true) { subject.edit(any()) }
+        verify { subject.showSnackbar(any()) }
     }
 
     @Test
