@@ -15,13 +15,13 @@ class FileNameInputTransformation : InputTransformation {
     private val invalidCharsRegex = Regex("""[\\/:*?"<>|]""")
 
     override fun TextFieldBuffer.transformInput() {
-        if (invalidCharsRegex.containsMatchIn(asCharSequence())) {
-            // 禁止文字を除去した新しい文字列を作成
-            val cleanText = asCharSequence().toString().replace(invalidCharsRegex, "")
-
-            // バッファ全体をクリーンなテキストで置き換える
-            replace(0, length, cleanText)
+        if (!invalidCharsRegex.containsMatchIn(asCharSequence())) {
+            return
         }
+
+        val cleanText = asCharSequence().toString().replace(invalidCharsRegex, "")
+
+        replace(0, length, cleanText)
     }
 
 }
