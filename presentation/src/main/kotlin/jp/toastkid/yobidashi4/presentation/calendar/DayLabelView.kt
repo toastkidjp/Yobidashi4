@@ -34,7 +34,13 @@ fun DayLabelView(
             modifier = Modifier.fillMaxWidth().padding(end = 8.dp).padding(bottom = 4.dp)
         )
         label.forEach { text ->
-            Text(text, fontSize = viewModel.labelSize(text), textAlign = TextAlign.Right, color = viewModel.labelColor(), modifier = Modifier.fillMaxWidth().padding(end = 8.dp))
+            Text(
+                text,
+                fontSize = viewModel.labelSize(text),
+                textAlign = TextAlign.Right,
+                color = viewModel.labelColor(),
+                modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
+            )
         }
     }
 }
