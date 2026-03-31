@@ -63,7 +63,9 @@ class TextLineViewModel : KoinComponent {
             linkBehaviorService.invoke(stringRange.item)
         }
 
-        vm.putSecondaryClickItem(if (it.button == PointerButton.Secondary && stringRange != null) stringRange.item else "")
+        vm.putSecondaryClickItem(
+            if (it.button == PointerButton.Secondary && stringRange != null) stringRange.item else ""
+        )
     }
 
 }
