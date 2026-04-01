@@ -28,7 +28,8 @@ class CalendarLabelFinderServiceTest {
         assertEquals(30, labels2024Dec.first { it.title == "大納会" }.day)
         val label2025Jan = subject.invoke(2025, 1)
         assertEquals(6, label2025Jan.first { it.title == "大発会" }.day)
-        println(subject.invoke(2025, 3))
+        val label2025Mar = subject.invoke(2025, 3)
+        assertEquals(9, label2025Mar.first { it.title == "夏時間入り" }.day)
         val labels2025Nov = subject.invoke(2025, 11)
         assertEquals(2, labels2025Nov.first { it.title == "冬時間入り" }.day)
     }
