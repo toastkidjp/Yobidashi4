@@ -21,6 +21,10 @@ class MoveableCalendarLabelTest {
         assertEquals(3, startDayOf2020Mar.month)
         assertEquals(8, startDayOf2020Mar.day)
 
+        val mothersDay = MoveableCalendarLabel.MOTHERS_DAY.find(2026, 5) ?: fail("")
+        assertEquals(5, mothersDay.month)
+        assertEquals(10, mothersDay.day)
+
         val startDayOf2020Nov = MoveableCalendarLabel.END_DAY_OF_DAYLIGHT_SAVING_TIME.find(2020, 11) ?: fail("")
         assertEquals(11, startDayOf2020Nov.month)
         assertEquals(1, startDayOf2020Nov.day)
