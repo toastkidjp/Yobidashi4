@@ -18,6 +18,7 @@ enum class MoveableCalendarLabel(
     val title: String
 ) {
     START_DAY_OF_DAYLIGHT_SAVING_TIME(3, 2, DayOfWeek.SUNDAY, "夏時間入り"),
+    MOTHERS_DAY(5, 2, DayOfWeek.SUNDAY, "母の日"),
     END_DAY_OF_DAYLIGHT_SAVING_TIME(11, 1, DayOfWeek.SUNDAY, "冬時間入り");
 
     private fun findCandidate(month: Int): MoveableCalendarLabel? {
