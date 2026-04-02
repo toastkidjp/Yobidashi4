@@ -186,7 +186,8 @@ class AggregationBoxViewModel : KoinComponent {
         if (requireSecondInput()) keywordHistories.isNotEmpty() else dateHistories.isNotEmpty()
 
     fun dateHistories(): List<String> {
-        return (if (requireSecondInput()) keywordHistories else dateHistories).map(InputHistory::word)
+        return (if (requireSecondInput()) keywordHistories else dateHistories)
+            .map(InputHistory::word)
     }
 
     fun putDate(text: String?) {
