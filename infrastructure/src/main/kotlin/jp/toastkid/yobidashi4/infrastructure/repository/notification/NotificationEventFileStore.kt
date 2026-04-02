@@ -67,10 +67,7 @@ class NotificationEventFileStore : NotificationEventRepository {
     }
 
     private fun writeToFile(content: Iterable<String>) {
-        Files.write(
-            path,
-            content
-        )
+        Files.write(path, content)
     }
 
     override fun clear() {
