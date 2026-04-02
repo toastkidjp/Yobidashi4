@@ -59,10 +59,7 @@ class NotificationEventFileStore : NotificationEventRepository {
 
         val toMutableList = readAll.toMutableList()
         toMutableList[index] = event
-        Files.write(
-            path,
-            toMutableList.map(NotificationEvent::toTsv)
-        )
+        writeToFile(toMutableList.map(NotificationEvent::toTsv))
     }
 
     override fun deleteAt(index: Int) {
