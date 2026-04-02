@@ -83,6 +83,19 @@ class RouletteToolTabViewModelTest {
     }
 
     @Test
+    fun noopOnKeyEventWithoutCtrlPressed() {
+        subject = spyk(subject)
+        coEvery { subject.roulette() } just Runs
+        subject.input().setTextAndPlaceCursorAtEnd("test")
+
+        val consumed = subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = false)
+        )
+
+        assertFalse(consumed)
+    }
+
+    @Test
     fun noopOnKeyEventWithComposition() {
         subject.input().setTextAndPlaceCursorAtEnd("test")
         subject.input().edit {
