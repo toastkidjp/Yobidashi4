@@ -125,7 +125,7 @@ class FileListViewModel : KoinComponent {
         articleStates.clear()
         articleStates.addAll(
             if (lowercase.isNotBlank())
-                completeItems.filter { it.keep() }.filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
+                completeItems.filter(FileListItem::keep).filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
             else
                 completeItems.filter(FileListItem::keep)
         )
