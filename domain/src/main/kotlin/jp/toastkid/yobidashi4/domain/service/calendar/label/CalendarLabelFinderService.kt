@@ -67,7 +67,7 @@ class CalendarLabelFinderService {
         }
 
         MoveableCalendarLabel.entries.filter { it.month == month }.mapNotNull { it.find(year, month) }
-            .forEach { labels.add(it) }
+            .forEach(labels::add)
 
         return labels
     }
