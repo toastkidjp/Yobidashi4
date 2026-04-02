@@ -126,7 +126,8 @@ class WebSearchBoxViewModelTest {
         "1/0, ∞",
         "10000000, '10,000,000'",
         "1., 1",
-        "12.0, 12"
+        "12.0, 12",
+        "test, ''"
     )
     fun onValueChange(input: String, expected: String) {
         subject.query().setTextAndPlaceCursorAtEnd(input)
