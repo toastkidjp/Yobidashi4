@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.NotificationListTab
 import jp.toastkid.yobidashi4.domain.model.tab.NumberPlaceGameTab
 import jp.toastkid.yobidashi4.domain.model.tab.RouletteToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.SettingEditorTab
+import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -265,12 +266,16 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openBookmarkTab() {
-        val webBookmarkTabs = viewModel.tabs.filterIsInstance<WebBookmarkTab>()
+        openUniqueTab<WebBookmarkTab>()
+    }
+
+    private inline fun <reified T: Tab> openUniqueTab() {
+        val webBookmarkTabs = viewModel.tabs.filterIsInstance<T>()
         if (webBookmarkTabs.isNotEmpty()) {
             viewModel.setSelectedIndex(viewModel.tabs.indexOf(webBookmarkTabs.first()))
             return
         }
-        viewModel.openTab(WebBookmarkTab())
+        viewModel.openTab(T::class.java.getDeclaredConstructor().newInstance())
     }
 
     fun openCalendarTab() {
