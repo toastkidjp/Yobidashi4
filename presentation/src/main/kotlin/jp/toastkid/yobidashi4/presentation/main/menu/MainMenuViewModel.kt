@@ -279,7 +279,7 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openCalendarTab() {
-        viewModel.openTab(CalendarTab())
+        openUniqueTab<CalendarTab>()
     }
 
     fun searchWithSelectedText() {
