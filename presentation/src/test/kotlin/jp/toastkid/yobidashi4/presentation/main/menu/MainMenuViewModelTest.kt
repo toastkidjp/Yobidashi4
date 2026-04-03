@@ -666,6 +666,18 @@ class MainMenuViewModelTest {
     }
 
     @Test
+    fun openBookmarkTabIfAlreadyOpened() {
+        every { mainViewModel.tabs } returns listOf(WebBookmarkTab(), BarcodeToolTab())
+        every { mainViewModel.openTab(any()) } just Runs
+        every { mainViewModel.setSelectedIndex(any()) } just Runs
+
+        subject.openBookmarkTab()
+
+        verify(inverse = true) { mainViewModel.openTab(any<WebBookmarkTab>()) }
+        verify { mainViewModel.setSelectedIndex(any()) }
+    }
+
+    @Test
     fun openCalendarTab() {
         every { mainViewModel.openTab(any()) } just Runs
 
