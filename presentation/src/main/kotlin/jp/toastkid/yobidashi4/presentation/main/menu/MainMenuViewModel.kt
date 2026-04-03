@@ -265,6 +265,11 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun openBookmarkTab() {
+        val webBookmarkTabs = viewModel.tabs.filterIsInstance<WebBookmarkTab>()
+        if (webBookmarkTabs.isNotEmpty()) {
+            viewModel.setSelectedIndex(viewModel.tabs.indexOf(webBookmarkTabs.first()))
+            return
+        }
         viewModel.openTab(WebBookmarkTab())
     }
 
