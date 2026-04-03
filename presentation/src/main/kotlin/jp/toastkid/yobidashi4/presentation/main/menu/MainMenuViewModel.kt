@@ -270,9 +270,9 @@ class MainMenuViewModel : KoinComponent {
     }
 
     private inline fun <reified T: Tab> openUniqueTab() {
-        val webBookmarkTabs = viewModel.tabs.filterIsInstance<T>()
-        if (webBookmarkTabs.isNotEmpty()) {
-            viewModel.setSelectedIndex(viewModel.tabs.indexOf(webBookmarkTabs.first()))
+        val targetTypeTabs = viewModel.tabs.filterIsInstance<T>()
+        if (targetTypeTabs.isNotEmpty()) {
+            viewModel.setSelectedIndex(viewModel.tabs.indexOf(targetTypeTabs.first()))
             return
         }
         viewModel.openTab(T::class.java.getDeclaredConstructor().newInstance())
