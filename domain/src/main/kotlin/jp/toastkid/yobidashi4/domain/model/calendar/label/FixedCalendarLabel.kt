@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi4.domain.model.calendar.label
 enum class FixedCalendarLabel(
     val month: Int, val date: Int, val title: String
 ) {
+    IDES_OF_MARCH(3, 15, "Ides of March"),
     APRIL_FOOLS_DAY(4, 1, "April fool's day"),
     MID_DAY(7, 2, "Mid day"),
     PREFECTURAL_CITIZENS_DAY(11, 13, "県民の日"),
