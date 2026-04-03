@@ -269,6 +269,10 @@ class MainMenuViewModel : KoinComponent {
         openUniqueTab<WebBookmarkTab>()
     }
 
+    fun openCalendarTab() {
+        openUniqueTab<CalendarTab>()
+    }
+
     private inline fun <reified T: Tab> openUniqueTab() {
         val targetTypeTabs = viewModel.tabs.filterIsInstance<T>()
         if (targetTypeTabs.isNotEmpty()) {
@@ -276,10 +280,6 @@ class MainMenuViewModel : KoinComponent {
             return
         }
         viewModel.openTab(T::class.java.getDeclaredConstructor().newInstance())
-    }
-
-    fun openCalendarTab() {
-        openUniqueTab<CalendarTab>()
     }
 
     fun searchWithSelectedText() {
