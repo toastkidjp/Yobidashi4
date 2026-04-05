@@ -125,10 +125,8 @@ internal fun HoverHighlightColumn(
     content: @Composable (Color) -> Unit
 ) {
     val cursorOn = remember { mutableStateOf(false) }
-    val backgroundColor = animateColorAsState(
-        if (cursorOn.value) MaterialTheme.colors.primary
-        else Color.Transparent
-    )
+    val primaryColor = MaterialTheme.colors.primary
+
     val fontColor = animateColorAsState(
         if (cursorOn.value) MaterialTheme.colors.onPrimary
         else MaterialTheme.colors.onSurface
@@ -136,7 +134,7 @@ internal fun HoverHighlightColumn(
 
     Column(
         modifier = Modifier
-            .drawBehind { drawRect(backgroundColor.value) }
+            .drawBehind { drawRect(if (cursorOn.value) primaryColor else Color.Transparent) }
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
