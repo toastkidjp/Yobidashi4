@@ -1538,4 +1538,17 @@ class MainViewModelImplementationTest {
         verify { subject.showSnackbar(any()) }
     }
 
+    @Test
+    fun noopClipText() {
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+        subject = spyk(subject)
+        every { subject.showSnackbar(any()) } just Runs
+
+        subject.clipText("")
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+        verify(inverse = true) { subject.showSnackbar(any()) }
+    }
+
 }
