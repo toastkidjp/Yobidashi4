@@ -134,9 +134,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                 contentDescription = "Clip this code.",
                 modifier = Modifier
                     .alpha(viewModel.alpha())
-                    .clickable {
-                        viewModel.clipContent()
-                    }
+                    .clickable(onClick = viewModel::clipContent)
                     .hoverable(interactionSource)
                     .align(Alignment.TopEnd)
                     .padding(end = 8.dp)
