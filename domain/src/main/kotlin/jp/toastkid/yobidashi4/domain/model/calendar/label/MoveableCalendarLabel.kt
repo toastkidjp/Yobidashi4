@@ -30,9 +30,7 @@ enum class MoveableCalendarLabel(
         dayOfWeek: DayOfWeek,
         candidateDayOfWeek: DayOfWeek
     ): Int {
-        val offsetDays =
-            if (dayOfWeek <= candidateDayOfWeek) candidateDayOfWeek.value - dayOfWeek.value + 1
-            else 7 - (dayOfWeek.value - candidateDayOfWeek.value - 1)
+        val offsetDays = candidateDayOfWeek.value - dayOfWeek.value + 1
         return offsetDays
     }
 
