@@ -18,8 +18,6 @@ class TableLineViewModel {
 
     private val tableData: MutableState<List<List<Any>>> =  mutableStateOf(emptyList())
 
-    private val headerCursorOn = mutableStateOf(false)
-
     private val tableSortService = TableSortService()
 
     fun tableData() = tableData.value
@@ -46,15 +44,5 @@ class TableLineViewModel {
 
         sort(lastSortOrder, index, tableData)
     }
-
-    fun setCursorOnHeader() {
-        headerCursorOn.value = true
-    }
-
-    fun setCursorOffHeader() {
-        headerCursorOn.value = false
-    }
-
-    fun onCursorOnHeader() = headerCursorOn.value
 
 }
