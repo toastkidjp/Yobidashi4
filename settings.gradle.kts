@@ -22,7 +22,7 @@ dependencyResolutionManagement {
             library("jcef", "me.friwi", "jcefmaven").version("143.0.14")
             library("jsoup", "org.jsoup", "jsoup").version("1.22.1")
             version("compose", "1.10.3")
-            version("kover", "0.9.7")
+            version("kover", "0.9.8")
             version("kotlin", "2.3.20")
             version("ksp", "2.3.6")
         }
