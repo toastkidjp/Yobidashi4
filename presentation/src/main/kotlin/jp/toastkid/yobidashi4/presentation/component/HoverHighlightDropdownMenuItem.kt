@@ -9,6 +9,9 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -17,6 +20,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,16 +58,18 @@ internal fun HoverHighlightDropdownMenuItem(
         else MaterialTheme.colors.onSurface
     )
 
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+
+    LaunchedEffect(isHovered.value) {
+        cursorOn.value = isHovered.value
+    }
+
     DropdownMenuItem(
         onClick = onClick,
         modifier = modifier
             .drawBehind { drawRect(if (cursorOn.value) primary else Color.Transparent) }
-            .onPointerEvent(PointerEventType.Enter) {
-                cursorOn.value = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                cursorOn.value = false
-            }
+            .hoverable(interactionSource)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
