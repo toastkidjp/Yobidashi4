@@ -46,10 +46,9 @@ internal fun HoverHighlightDropdownMenuItem(
     onClick: () -> Unit
 ) {
     val cursorOn = remember { mutableStateOf(false) }
-    val backgroundColor = animateColorAsState(
-        if (cursorOn.value) MaterialTheme.colors.primary
-        else Color.Transparent
-    )
+
+    val primary = MaterialTheme.colors.primary
+
     val fontColor = animateColorAsState(
         if (cursorOn.value) MaterialTheme.colors.onPrimary
         else MaterialTheme.colors.onSurface
@@ -58,7 +57,7 @@ internal fun HoverHighlightDropdownMenuItem(
     DropdownMenuItem(
         onClick = onClick,
         modifier = modifier
-            .drawBehind { drawRect(backgroundColor.value) }
+            .drawBehind { drawRect(if (cursorOn.value) primary else Color.Transparent) }
             .onPointerEvent(PointerEventType.Enter) {
                 cursorOn.value = true
             }
