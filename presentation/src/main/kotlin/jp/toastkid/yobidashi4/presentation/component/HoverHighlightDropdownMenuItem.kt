@@ -20,7 +20,6 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -28,8 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -93,13 +90,14 @@ internal fun HoverHighlightRow(
     modifier: Modifier = Modifier,
     content: @Composable (Color) -> Unit
 ) {
-    val cursorOn = remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
     val backgroundColor = animateColorAsState(
-        if (cursorOn.value) MaterialTheme.colors.primary
+        if (isHovered.value) MaterialTheme.colors.primary
         else Color.Transparent
     )
     val fontColor = animateColorAsState(
-        if (cursorOn.value) MaterialTheme.colors.onPrimary
+        if (isHovered.value) MaterialTheme.colors.onPrimary
         else MaterialTheme.colors.onSurface
     )
 
@@ -107,12 +105,7 @@ internal fun HoverHighlightRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .drawBehind { drawRect(backgroundColor.value) }
-            .onPointerEvent(PointerEventType.Enter) {
-                cursorOn.value = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                cursorOn.value = false
-            }
+            .hoverable(interactionSource)
     ) {
         content(fontColor.value)
     }
