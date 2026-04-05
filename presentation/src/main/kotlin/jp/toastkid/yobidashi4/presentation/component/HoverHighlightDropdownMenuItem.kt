@@ -20,7 +20,6 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,26 +48,20 @@ internal fun HoverHighlightDropdownMenuItem(
     useTint: Boolean = true,
     onClick: () -> Unit
 ) {
-    val cursorOn = remember { mutableStateOf(false) }
-
     val primary = MaterialTheme.colors.primary
-
-    val fontColor = animateColorAsState(
-        if (cursorOn.value) MaterialTheme.colors.onPrimary
-        else MaterialTheme.colors.onSurface
-    )
 
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
 
-    LaunchedEffect(isHovered.value) {
-        cursorOn.value = isHovered.value
-    }
+    val fontColor = animateColorAsState(
+        if (isHovered.value) MaterialTheme.colors.onPrimary
+        else MaterialTheme.colors.onSurface
+    )
 
     DropdownMenuItem(
         onClick = onClick,
         modifier = modifier
-            .drawBehind { drawRect(if (cursorOn.value) primary else Color.Transparent) }
+            .drawBehind { drawRect(if (isHovered.value) primary else Color.Transparent) }
             .hoverable(interactionSource)
     ) {
         Row(
