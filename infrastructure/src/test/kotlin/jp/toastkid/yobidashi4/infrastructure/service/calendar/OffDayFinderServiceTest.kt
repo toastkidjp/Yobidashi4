@@ -220,6 +220,17 @@ internal class OffDayFinderServiceTest {
         verify(exactly = 1) { userOffDayService.invoke(any(), any())}
     }
 
+    @Test
+    fun equinoxDayFinderReturnsNull() {
+        every { anyConstructed<EquinoxDayCalculator>().calculateVernalEquinoxDay(any()) } returns null
+        every { anyConstructed<EquinoxDayCalculator>().calculateAutumnalEquinoxDay(any()) } returns null
+
+        offDayFinderService = OffDayFinderServiceImplementation()
+
+        assertFalse(offDayFinderService.invoke(2026, 3, 20, DayOfWeek.FRIDAY))
+        assertFalse(offDayFinderService.invoke(2026, 9, 20, DayOfWeek.FRIDAY))
+    }
+
     @AfterEach
     fun tearDown() {
         stopKoin()
