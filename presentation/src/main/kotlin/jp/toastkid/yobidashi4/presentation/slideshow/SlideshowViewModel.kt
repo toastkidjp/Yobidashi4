@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi4.presentation.slideshow
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
@@ -100,18 +101,6 @@ class SlideshowViewModel {
         return bitmap
     }
 
-    fun sliderAlpha(): Float {
-        return if (sliderVisibility.value) 1f else 0f
-    }
-
-    fun showSlider() {
-        sliderVisibility.value = true
-    }
-
-    fun hideSlider() {
-        sliderVisibility.value = false
-    }
-
     fun sliderValue() = sliderState.value
 
     fun setSliderValue(newValue: Float) {
@@ -125,6 +114,10 @@ class SlideshowViewModel {
     }
 
     fun setPageSize(it: LayoutCoordinates) {}
+
+    private val interactionSource = MutableInteractionSource()
+
+    fun interactionSource() = interactionSource
 
 }
 
