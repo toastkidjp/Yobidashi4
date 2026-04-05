@@ -9,6 +9,8 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,8 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -54,6 +54,9 @@ internal fun Slideshow(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState { deck.slides.size }
     val viewModel = remember { SlideshowViewModel() }
+
+    val isHovered = viewModel.interactionSource().collectIsHoveredAsState()
+    val alpha = animateFloatAsState(if (isHovered.value) 1f else 0f)
 
     LaunchedEffect(deck) {
         withContext(Dispatchers.IO) {
@@ -109,7 +112,6 @@ internal fun Slideshow(
                 modifier = Modifier.align(Alignment.BottomEnd)
             )
 
-            val alpha = animateFloatAsState(viewModel.sliderAlpha())
             Slider(
                 viewModel.sliderValue(),
                 onValueChange = viewModel::setSliderValue,
@@ -125,12 +127,7 @@ internal fun Slideshow(
                 steps = max(1, deck.slides.size - 2),
                 modifier = Modifier.align(Alignment.BottomCenter)
                     .alpha(alpha.value)
-                    .onPointerEvent(PointerEventType.Enter) {
-                        viewModel.showSlider()
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        viewModel.hideSlider()
-                    }
+                    .hoverable(viewModel.interactionSource())
                     .semantics { contentDescription = "slider" }
             )
 
