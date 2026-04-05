@@ -9,6 +9,9 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,9 @@ import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
     val viewModel = remember { TableLineViewModel() }
 
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+
     val surfaceColor = MaterialTheme.colors.surface
     Column(modifier = modifier) {
         DisableSelection {
@@ -51,7 +55,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                     }
 
                     val headerColumnBackgroundColor = animateColorAsState(
-                        if (viewModel.onCursorOnHeader()) MaterialTheme.colors.primary
+                        if (isHovered.value) MaterialTheme.colors.primary
                         else surfaceColor
                     )
 
@@ -64,12 +68,7 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                             .clickable {
                                 viewModel.clickHeaderColumn(index)
                             }
-                            .onPointerEvent(PointerEventType.Enter) {
-                                viewModel.setCursorOnHeader()
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                viewModel.setCursorOffHeader()
-                            }
+                            .hoverable(interactionSource)
                             .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                             .padding(horizontal = 16.dp)
                     )
