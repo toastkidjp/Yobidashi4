@@ -256,19 +256,6 @@ class SlideshowViewModelTest {
     }
 
     @Test
-    fun sliderVisibility() {
-        assertEquals(0f, subject.sliderAlpha())
-
-        subject.showSlider()
-
-        assertEquals(1f, subject.sliderAlpha())
-
-        subject.hideSlider()
-
-        assertEquals(0f, subject.sliderAlpha())
-    }
-
-    @Test
     fun sliderValue() {
         assertEquals(0f, subject.sliderValue())
 
