@@ -25,7 +25,7 @@ class WebHistoryFileStore : WebHistoryRepository {
             it.add(item)
         }
 
-        Files.write(getPath(), newList.map { it.toTsv() })
+        Files.write(getPath(), newList.map(WebHistory::toTsv))
     }
 
     override fun storeAll(items: List<WebHistory>) {
