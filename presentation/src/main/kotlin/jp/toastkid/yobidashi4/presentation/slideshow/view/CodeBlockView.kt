@@ -52,10 +52,6 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
 
-    LaunchedEffect(isHovered.value) {
-        if (isHovered.value) viewModel.cursorOn() else viewModel.cursorOff()
-    }
-
     Surface(
         color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
@@ -133,7 +129,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
                 painterResource(Res.drawable.ic_clipboard),
                 contentDescription = "Clip this code.",
                 modifier = Modifier
-                    .alpha(viewModel.alpha())
+                    .alpha(if (isHovered.value) 1f else 0f)
                     .clickable(onClick = viewModel::clipContent)
                     .hoverable(interactionSource)
                     .align(Alignment.TopEnd)
