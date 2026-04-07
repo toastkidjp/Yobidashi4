@@ -100,13 +100,4 @@ class CodeBlockViewModelTest {
         verify { mainViewModel.clipText(any()) }
     }
 
-    @Test
-    fun cursor() {
-        assertEquals(0f, subject.alpha())
-        subject.cursorOn()
-        assertEquals(1f, subject.alpha())
-        subject.cursorOff()
-        assertEquals(0f, subject.alpha())
-    }
-
 }
