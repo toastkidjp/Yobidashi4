@@ -1315,6 +1315,11 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun replaceInputValue() {
+        assertTrue(subject.replaceInputValue().text.isEmpty())
+    }
+
+    @Test
     fun findUp() {
         val countDownLatch = CountDownLatch(1)
 
