@@ -346,8 +346,12 @@ class MainViewModelImplementationTest {
         assertEquals(1, subject.tabs.size)
     }
 
-    @Test
-    fun openFileWithMusicFile() {
+    @ParameterizedTest
+    @CsvSource(
+        "mp3",
+        "m4a"
+    )
+    fun openFileWithMusicFile(extension: String) {
         mockkStatic(Files::class, Desktop::class)
         every { Files.exists(any()) } returns true
         val desktop = mockk<Desktop>()
@@ -356,7 +360,7 @@ class MainViewModelImplementationTest {
         mockkConstructor(MediaPlayerInvokerImplementation::class)
         every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
         val path = mockk<Path>()
-        every { path.extension } returns "test.m4a"
+        every { path.extension } returns "test.${extension}"
 
         subject.openFile(path)
 
