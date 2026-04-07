@@ -29,8 +29,6 @@ class CodeBlockViewModel : KoinComponent {
 
     private val lineCountState = mutableStateOf(1)
 
-    private val cursorOn = mutableStateOf(false)
-
     fun maxHeight(fontSize: TextUnit) =
         min(lineCountState.value * fontSize.value * 1.55.em.value, 800f).dp
 
@@ -70,18 +68,6 @@ class CodeBlockViewModel : KoinComponent {
 
     fun clipContent() {
         mainViewModel.clipText(content.text)
-    }
-
-    fun cursorOn() {
-        cursorOn.value = true
-    }
-
-    fun cursorOff() {
-        cursorOn.value = false
-    }
-
-    fun alpha(): Float {
-        return if (cursorOn.value) 1f else 0f
     }
 
 }
