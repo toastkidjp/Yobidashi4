@@ -66,6 +66,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -1538,14 +1540,20 @@ class MainViewModelImplementationTest {
         verify { subject.showSnackbar(any()) }
     }
 
-    @Test
-    fun noopClipText() {
+    @ParameterizedTest
+    @CsvSource(
+        "''",
+        "' '",
+        "null",
+        nullValues = ["null"]
+    )
+    fun noopClipText(arg: String?) {
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
         subject = spyk(subject)
         every { subject.showSnackbar(any()) } just Runs
 
-        subject.clipText("")
+        subject.clipText(arg)
 
         verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
         verify(inverse = true) { subject.showSnackbar(any()) }
