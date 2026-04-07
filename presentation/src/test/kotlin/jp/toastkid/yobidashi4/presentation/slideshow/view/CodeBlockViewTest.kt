@@ -29,8 +29,6 @@ class CodeBlockViewTest {
     fun setUp() {
         mockkConstructor(CodeBlockViewModel::class)
         every { anyConstructed<CodeBlockViewModel>().start(any()) } just Runs
-        every { anyConstructed<CodeBlockViewModel>().cursorOn() } just Runs
-        every { anyConstructed<CodeBlockViewModel>().cursorOff() } just Runs
         every { anyConstructed<CodeBlockViewModel>().clipContent() } just Runs
     }
 
@@ -57,8 +55,6 @@ class CodeBlockViewTest {
                     click()
                 }
 
-            verify { anyConstructed<CodeBlockViewModel>().cursorOn() }
-            verify { anyConstructed<CodeBlockViewModel>().cursorOff() }
             verify { anyConstructed<CodeBlockViewModel>().clipContent() }
         }
     }
