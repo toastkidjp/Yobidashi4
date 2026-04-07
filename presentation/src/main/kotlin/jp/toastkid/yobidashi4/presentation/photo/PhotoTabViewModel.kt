@@ -170,7 +170,7 @@ class PhotoTabViewModel : KoinComponent {
         return when {
             it.type != KeyEventType.KeyDown -> false
             it.isCtrlPressed && it.key == Key.Semicolon -> {
-                scale.value = scale.value + 0.2f
+                scale.value += 0.2f
                 true
             }
             it.isCtrlPressed && it.key == Key.Minus -> {
