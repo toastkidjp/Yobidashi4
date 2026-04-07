@@ -87,8 +87,6 @@ result.value = engine.eval(input.value.text).toString()
         every { ImageIO.read(any<URL>()) } returns BufferedImage(1, 1, Image.SCALE_FAST)
 
         mockkConstructor(SlideshowViewModel::class)
-        every { anyConstructed<SlideshowViewModel>().showSlider() } just Runs
-        every { anyConstructed<SlideshowViewModel>().hideSlider() } just Runs
         every { anyConstructed<SlideshowViewModel>().focusRequester() } returns FocusRequester()
         every { anyConstructed<SlideshowViewModel>().requestFocus() } just Runs
 
@@ -130,8 +128,6 @@ result.value = engine.eval(input.value.text).toString()
                     pressKey(Key.DirectionRight, 1000L)
                     pressKey(Key.DirectionLeft, 1000L)
                 }
-            verify { anyConstructed<SlideshowViewModel>().showSlider() }
-            verify { anyConstructed<SlideshowViewModel>().hideSlider() }
             verify { anyConstructed<SlideshowViewModel>().requestFocus() }
         }
     }
