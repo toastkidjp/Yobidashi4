@@ -561,7 +561,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     override fun showSnackbar(message: String, actionLabel: String?, action: () -> Unit) {
         if (actionLabel == null) {
             CoroutineScope(Dispatchers.Default).launch {
-                _snackbarHostState.currentSnackbarData?.dismiss()
                 _snackbarHostState.showSnackbar(message)
             }
             return
