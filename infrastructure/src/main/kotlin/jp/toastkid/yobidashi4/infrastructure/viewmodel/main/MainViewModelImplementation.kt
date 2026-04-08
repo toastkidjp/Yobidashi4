@@ -563,15 +563,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         actionLabel: String?,
         action: () -> Unit
     ) {
+        val snackbarHostState = snackbarHostState()
         if (actionLabel == null) {
             CoroutineScope(Dispatchers.Default).launch {
-                _snackbarHostState.showSnackbar(message)
+                snackbarHostState.showSnackbar(message)
             }
             return
         }
 
         CoroutineScope(Dispatchers.Default).launch {
-            val snackbarResult = _snackbarHostState.showSnackbar(
+            val snackbarResult = snackbarHostState.showSnackbar(
                 message,
                 actionLabel,
                 SnackbarDuration.Long
