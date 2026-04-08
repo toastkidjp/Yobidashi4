@@ -567,7 +567,6 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         }
 
         CoroutineScope(Dispatchers.Default).launch {
-            _snackbarHostState.currentSnackbarData?.dismiss()
             val snackbarResult = _snackbarHostState.showSnackbar(
                 message,
                 actionLabel,
