@@ -1233,9 +1233,6 @@ class MainViewModelImplementationTest {
     fun dismissSnackbar() {
         subject.dismissSnackbar()
 
-        subject.showSnackbar("test")
-        subject.dismissSnackbar()
-
         subject = spyk(subject)
         val snackbarHostState = mockk<SnackbarHostState>()
         every { subject.snackbarHostState() } returns snackbarHostState
