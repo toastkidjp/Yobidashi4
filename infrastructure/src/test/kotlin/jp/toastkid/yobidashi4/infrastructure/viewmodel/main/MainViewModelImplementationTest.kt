@@ -10,6 +10,8 @@ package jp.toastkid.yobidashi4.infrastructure.viewmodel.main
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.material.SnackbarData
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.AnnotatedString
@@ -1233,6 +1235,17 @@ class MainViewModelImplementationTest {
 
         subject.showSnackbar("test")
         subject.dismissSnackbar()
+
+        subject = spyk(subject)
+        val snackbarHostState = mockk<SnackbarHostState>()
+        every { subject.snackbarHostState() } returns snackbarHostState
+        val snackbarData = mockk<SnackbarData>()
+        every { snackbarHostState.currentSnackbarData } returns snackbarData
+        every { snackbarData.dismiss() } just Runs
+
+        subject.dismissSnackbar()
+
+        verify { snackbarData.dismiss() }
     }
 
     @Test
