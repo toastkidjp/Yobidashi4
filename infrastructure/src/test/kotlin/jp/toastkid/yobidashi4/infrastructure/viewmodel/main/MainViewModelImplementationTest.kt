@@ -1240,6 +1240,8 @@ class MainViewModelImplementationTest {
         every { snackbarHostState.currentSnackbarData } returns snackbarData
         every { snackbarData.dismiss() } just Runs
 
+        assertTrue(subject.showingSnackbar())
+
         subject.dismissSnackbar()
 
         verify { snackbarData.dismiss() }
