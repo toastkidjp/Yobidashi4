@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.SnackbarData
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.AnnotatedString
@@ -22,6 +23,7 @@ import androidx.compose.ui.window.WindowPosition
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.invoke
@@ -75,6 +77,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.fail
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
@@ -1223,10 +1226,30 @@ class MainViewModelImplementationTest {
         assertFalse(subject.showingSnackbar())
         assertNull(subject.snackbarHostState().currentSnackbarData)
 
+        subject.showSnackbar("test", "Test", { fail("This code should not be called.") })
+        subject.snackbarHostState().currentSnackbarData?.performAction()
+
+        subject = spyk(subject)
+        val snackbarHostState = mockk<SnackbarHostState>()
+        every { subject.snackbarHostState() } returns snackbarHostState
+        val snackbarData = mockk<SnackbarData>()
+        every { snackbarHostState.currentSnackbarData } returns snackbarData
+        val snackbarResult = mockk<SnackbarResult>()
+        every { snackbarResult.ordinal } returns 1
+        coEvery { snackbarHostState.showSnackbar(any(), any(), any()) } returns snackbarResult
+        every { snackbarData.performAction() } just Runs
+        every { snackbarData.dismiss() } just Runs
+
         val countDownLatch = CountDownLatch(1)
         subject.showSnackbar("test", "Test", countDownLatch::countDown)
         subject.snackbarHostState().currentSnackbarData?.performAction()
         countDownLatch.await(1, TimeUnit.SECONDS)
+        verify { snackbarData.performAction() }
+
+        coEvery { snackbarHostState.showSnackbar(any(), any(), any()) } returns SnackbarResult.Dismissed
+
+        subject.showSnackbar("test", "Test", countDownLatch::countDown)
+        subject.snackbarHostState().currentSnackbarData?.performAction()
     }
 
     @Test
