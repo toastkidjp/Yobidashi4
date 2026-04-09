@@ -176,8 +176,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openFileListTab(title: String, items: Collection<Path>, type: FileTab.Type) {
-        openTab(FileTab(title, items.sortedByDescending { Files.getLastModifiedTime(it).toMillis() }, type))
+        openTab(FileTab(title, items.sortedByDescending { getLastModifiedMillis(it) }, type))
     }
+
+    private fun getLastModifiedMillis(paths: Path): Long = Files.getLastModifiedTime(paths).toMillis()
 
     override fun openFile(path: Path) {
         if (Files.exists(path).not()) {
