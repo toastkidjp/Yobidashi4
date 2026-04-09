@@ -33,9 +33,13 @@ class WebHistoryFileStore : WebHistoryRepository {
     }
 
     override fun delete(item: WebHistory) {
+        writeToFile(readAll().minus(item))
+    }
+
+    private fun writeToFile(items: List<WebHistory>) {
         Files.write(
             getPath(),
-            readAll().minus(item).map(WebHistory::toTsv)
+            items.map(WebHistory::toTsv)
         )
     }
 
