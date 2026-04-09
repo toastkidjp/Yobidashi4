@@ -11,6 +11,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,7 +30,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -37,8 +39,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
@@ -74,20 +74,17 @@ internal fun NotificationListTabView() {
                     val titleState = remember { (TextFieldState(item.title)) }
                     val textState = remember { (TextFieldState(item.text)) }
                     val dateTimeState = remember { (TextFieldState(item.dateTimeString())) }
-                    val headerCursorOn = mutableStateOf(false)
+                    val interactionSource = remember { MutableInteractionSource() }
+                    val isHovered = interactionSource.collectIsHoveredAsState()
                     val headerColumnBackgroundColor = animateColorAsState(
-                        if (headerCursorOn.value) MaterialTheme.colors.primary
+                        if (isHovered.value) MaterialTheme.colors.primary
                         else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
                         else Color.Transparent
                     )
+
                     Row(modifier = Modifier.fillMaxWidth()
                         .animateItem()
-                        .onPointerEvent(PointerEventType.Enter) {
-                            headerCursorOn.value = true
-                        }
-                        .onPointerEvent(PointerEventType.Exit) {
-                            headerCursorOn.value = false
-                        }
+                        .hoverable(interactionSource)
                         .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     ) {
                         NotificationEventRow(titleState)
