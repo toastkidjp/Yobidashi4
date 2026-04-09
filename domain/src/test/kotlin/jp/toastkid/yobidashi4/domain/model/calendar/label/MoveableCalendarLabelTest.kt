@@ -16,8 +16,9 @@ class MoveableCalendarLabelTest {
 
     @Test
     fun find() {
-        assertNull(MoveableCalendarLabel.START_DAY_OF_DAYLIGHT_SAVING_TIME.find(2000, 1))
-        val startDayOf2020Mar = MoveableCalendarLabel.START_DAY_OF_DAYLIGHT_SAVING_TIME.find(2020, 3) ?: fail("")
+        val startDayOfDaylightSavingTime = MoveableCalendarLabel.START_DAY_OF_DAYLIGHT_SAVING_TIME
+        assertNull(startDayOfDaylightSavingTime.find(2000, 1))
+        val startDayOf2020Mar = startDayOfDaylightSavingTime.find(2020, 3) ?: fail("")
         assertEquals(3, startDayOf2020Mar.month)
         assertEquals(8, startDayOf2020Mar.day)
 
