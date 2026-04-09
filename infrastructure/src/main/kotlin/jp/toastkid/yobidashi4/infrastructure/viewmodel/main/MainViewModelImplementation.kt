@@ -176,7 +176,7 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     override fun openFileListTab(title: String, items: Collection<Path>, type: FileTab.Type) {
-        openTab(FileTab(title, items.sortedByDescending { getLastModifiedMillis(it) }, type))
+        openTab(FileTab(title, items.sortedByDescending(::getLastModifiedMillis), type))
     }
 
     private fun getLastModifiedMillis(paths: Path): Long = Files.getLastModifiedTime(paths).toMillis()
