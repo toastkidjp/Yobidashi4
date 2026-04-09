@@ -15,6 +15,9 @@ import androidx.compose.foundation.gestures.animateRotateBy
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,8 +43,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -64,6 +65,13 @@ fun PhotoTabView(tab: PhotoTab) {
     val viewModel = remember { PhotoTabViewModel() }
 
     val coroutineScope = rememberCoroutineScope()
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+
+    LaunchedEffect(isHovered.value) {
+        if (isHovered.value) viewModel.showHandle() else viewModel.hideHandle()
+    }
 
     Box(
         Modifier
@@ -108,12 +116,7 @@ fun PhotoTabView(tab: PhotoTab) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
-                    .onPointerEvent(PointerEventType.Enter) {
-                        viewModel.showHandle()
-                    }
-                    .onPointerEvent(PointerEventType.Exit) {
-                        viewModel.hideHandle()
-                    }
+                    .hoverable(interactionSource)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
