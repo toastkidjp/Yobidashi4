@@ -5,6 +5,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,14 +19,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -135,19 +135,16 @@ private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun ArticleListSwitch(iconDrawableResource: DrawableResource, onClick: () -> Unit, modifier: Modifier) {
-    val visibility = remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+
     Icon(
         painterResource(iconDrawableResource),
         contentDescription = "Clear input.",
         tint = MaterialTheme.colors.secondary,
         modifier = modifier
-            .alpha(animateFloatAsState(if (visibility.value) 1f else 0f).value)
-            .onPointerEvent(PointerEventType.Enter) {
-                visibility.value = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                visibility.value = false
-            }
+            .alpha(animateFloatAsState(if (isHovered.value) 1f else 0f).value)
+            .hoverable(interactionSource)
             .clickable(onClick = onClick)
     )
 }
