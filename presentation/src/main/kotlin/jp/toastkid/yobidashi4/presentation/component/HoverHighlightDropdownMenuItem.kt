@@ -92,10 +92,7 @@ internal fun HoverHighlightRow(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
-    val backgroundColor = animateColorAsState(
-        if (isHovered.value) MaterialTheme.colors.primary
-        else Color.Transparent
-    )
+    val primaryColor = MaterialTheme.colors.primary
     val fontColor = animateColorAsState(
         if (isHovered.value) MaterialTheme.colors.onPrimary
         else MaterialTheme.colors.onSurface
@@ -104,7 +101,7 @@ internal fun HoverHighlightRow(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .drawBehind { drawRect(backgroundColor.value) }
+            .drawBehind { drawRect(if (isHovered.value) primaryColor else Color.Transparent) }
             .hoverable(interactionSource)
     ) {
         content(fontColor.value)
