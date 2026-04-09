@@ -33,7 +33,7 @@ class WebHistoryFileStore : WebHistoryRepository {
     }
 
     override fun delete(item: WebHistory) {
-        writeToFile(readAll().minus(item))
+        storeAll(readAll().minus(item))
     }
 
     private fun writeToFile(items: List<WebHistory>) {
