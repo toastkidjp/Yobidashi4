@@ -13,6 +13,9 @@ import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +37,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -46,8 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
@@ -84,9 +84,10 @@ fun TableView(tab: TableTab) {
                             if (index != 0) {
                                 VerticalDivider(modifier = Modifier.height(32.dp).padding(vertical = 1.dp))
                             }
-                            val headerCursorOn = remember { mutableStateOf(false) }
+                            val interactionSource = remember { MutableInteractionSource() }
+                            val isHovered = interactionSource.collectIsHoveredAsState()
                             val headerColumnBackgroundColor = animateColorAsState(
-                                if (headerCursorOn.value) MaterialTheme.colors.primary
+                                if (isHovered.value) MaterialTheme.colors.primary
                                 else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
                                 else Color.Transparent
                             )
@@ -98,18 +99,13 @@ fun TableView(tab: TableTab) {
                                     .clickable {
                                         viewModel.sort(index, tab.items())
                                     }
-                                    .onPointerEvent(PointerEventType.Enter) {
-                                        headerCursorOn.value = true
-                                    }
-                                    .onPointerEvent(PointerEventType.Exit) {
-                                        headerCursorOn.value = false
-                                    }
+                                    .hoverable(interactionSource)
                                     .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                                     .weight(viewModel.makeWeight(index))
                             ) {
                                 Text(
                                     item.toString(),
-                                    color = if (headerCursorOn.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+                                    color = if (isHovered.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                             }
