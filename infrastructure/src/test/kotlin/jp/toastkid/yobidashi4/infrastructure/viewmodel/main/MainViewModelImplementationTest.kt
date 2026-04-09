@@ -571,7 +571,9 @@ class MainViewModelImplementationTest {
         every { webTab.closeable() } returns true
         every { webTab.id() } returns "test"
         subject.openTab(webTab)
-        subject.openTab(mockk<EditorTab>())
+        val editorTab = mockk<EditorTab>()
+        every { editorTab.closeable() } returns true
+        subject.openTab(editorTab)
 
         subject.removeTabAt(0)
 
@@ -586,6 +588,9 @@ class MainViewModelImplementationTest {
         verify { tab.closeable() }
         verify { webTab.closeable() }
         verify { webViewPool.dispose("test") }
+
+        subject.removeTabAt(1)
+        verify { editorTab.closeable() }
     }
 
     @Test
