@@ -36,13 +36,6 @@ class WebHistoryFileStore : WebHistoryRepository {
         storeAll(readAll().minus(item))
     }
 
-    private fun writeToFile(items: List<WebHistory>) {
-        Files.write(
-            getPath(),
-            items.map(WebHistory::toTsv)
-        )
-    }
-
     override fun readAll(): List<WebHistory> {
         val path = getPath()
         makeFolderIfNeed(path)
