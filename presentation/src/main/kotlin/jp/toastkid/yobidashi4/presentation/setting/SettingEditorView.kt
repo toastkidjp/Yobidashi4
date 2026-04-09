@@ -4,6 +4,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -29,8 +32,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 
@@ -44,6 +45,9 @@ fun SettingEditorView() {
         if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
         else Color.Transparent
     )
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
@@ -73,19 +77,13 @@ fun SettingEditorView() {
                 }
 
                 itemsIndexed(viewModel.items(), { _, item -> item.first }) { _, item ->
-                    val cursorOn = mutableStateOf(false)
                     val columnBackgroundColor = animateColorAsState(
-                        if (cursorOn.value) MaterialTheme.colors.primary
+                        if (isHovered.value) MaterialTheme.colors.primary
                         else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
                         else Color.Transparent
                     )
                     Row(modifier = Modifier.fillMaxWidth().animateItem()
-                        .onPointerEvent(PointerEventType.Enter) {
-                            cursorOn.value = true
-                        }
-                        .onPointerEvent(PointerEventType.Exit) {
-                            cursorOn.value = false
-                        }
+                        .hoverable(interactionSource)
                         .drawBehind { drawRect(columnBackgroundColor.value) }
                     ) {
                         val state = mutableStateOf(item.second)
