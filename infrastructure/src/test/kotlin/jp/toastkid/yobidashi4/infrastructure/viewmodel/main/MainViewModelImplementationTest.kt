@@ -1226,7 +1226,11 @@ class MainViewModelImplementationTest {
         assertFalse(subject.showingSnackbar())
         assertNull(subject.snackbarHostState().currentSnackbarData)
 
-        subject.showSnackbar("test", "Test", { fail("This code should not be called.") })
+        subject.showSnackbar(
+            "test",
+            "Test",
+            { fail("This code should not be called.") }
+        )
         subject.snackbarHostState().currentSnackbarData?.performAction()
 
         subject = spyk(subject)
