@@ -23,7 +23,7 @@ class TfIdfDataSetPreparator {
 
     private fun isKanjiCharacter(char: Char): Boolean = char in '\u4E00'..'\u9FFF'
 
-    fun prepareDataSet(docs: List<Pair<String, String>>): MutableDataset<ClusterID?> {
+    operator fun invoke(docs: List<Pair<String, String>>): MutableDataset<ClusterID?> {
         val factory = ClusteringFactory()
 
         val provenance = SimpleDataSourceProvenance("empty-dataset", OffsetDateTime.now(), factory)

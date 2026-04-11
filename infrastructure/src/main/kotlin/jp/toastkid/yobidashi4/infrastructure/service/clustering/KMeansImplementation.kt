@@ -18,7 +18,7 @@ import kotlin.math.sqrt
 class KMeansImplementation : KMeans {
 
     override fun invoke(docs: List<Pair<String, String>>): Map<String, List<String>> {
-        val dataset = TfIdfDataSetPreparator().prepareDataSet(docs)
+        val dataset = TfIdfDataSetPreparator().invoke(docs)
 
         val k = (sqrt(docs.size.toDouble() / 2.0).toInt()).coerceIn(1, docs.size / 3)
         val trainer = KMeansTrainer(k, 10, CosineDistance(), 1, 42L)
