@@ -28,7 +28,7 @@ dependencyResolutionManagement {
         }
 
         create("testLibraries") {
-            version("junit", "5.14.1")
+            version("junit", "5.14.3")
         }
     }
 }
