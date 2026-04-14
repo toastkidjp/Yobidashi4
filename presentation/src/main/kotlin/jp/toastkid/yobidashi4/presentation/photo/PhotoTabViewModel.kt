@@ -174,7 +174,7 @@ class PhotoTabViewModel : KoinComponent {
                 true
             }
             it.isCtrlPressed && it.key == Key.Minus -> {
-                scale.value = scale.value - 0.2f
+                scale.value -= 0.2f
                 true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.DirectionUp -> {
