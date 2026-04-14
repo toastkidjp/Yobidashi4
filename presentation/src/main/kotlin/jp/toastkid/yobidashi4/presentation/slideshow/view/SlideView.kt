@@ -43,7 +43,14 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     val viewModel = remember { SlideViewModel() }
 
     Box(
-        modifier = Modifier.padding(8.dp).fillMaxSize().clickable(onClick = viewModel::requestFocus, indication = null, interactionSource = remember { MutableInteractionSource() })
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxSize()
+            .clickable(
+                onClick = viewModel::requestFocus,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            )
     ) {
         val columnModifier =
             if (slide.isFront()) {
