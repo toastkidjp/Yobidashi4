@@ -26,6 +26,7 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
+import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
@@ -212,9 +213,13 @@ class TextEditorViewModel : KoinComponent {
         update()
         CoroutineScope(dispatcher).launch {
             mainViewModel.finderFlow().collect {
-                findOrderReceiver(it, content)
+                invokeFindAction(it)
             }
         }
+    }
+
+    private fun invokeFindAction(order: FindOrder) {
+        findOrderReceiver(order, content)
     }
 
     fun currentLineOffset(): Offset {
