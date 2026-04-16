@@ -52,7 +52,7 @@ internal fun EditorTabView(tab: EditorTab) {
                 }
             }
             StatusLabel(
-                { viewModel.status() },
+                viewModel::status,
                 modifier = Modifier.height(24.dp)
             )
         }
