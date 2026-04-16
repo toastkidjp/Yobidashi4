@@ -67,7 +67,7 @@ class FindOrderReceiverTest {
 
         subject.invoke(FindOrder("test", ""), TextFieldState("test"))
 
-        subject.invoke(FindOrder("test", "", true, true, false), TextFieldState("test"))
+        subject.invoke(FindOrder("test", "", upper = true, invokeReplace = true, caseSensitive = false), TextFieldState("test"))
         verify { mainViewModel.setFindStatus(any()) }
 
         subject.invoke(FindOrder("", "", true, false, false), TextFieldState("test"))
