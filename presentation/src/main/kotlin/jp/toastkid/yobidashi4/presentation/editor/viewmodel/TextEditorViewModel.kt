@@ -212,9 +212,7 @@ class TextEditorViewModel : KoinComponent {
         applyStyle(newContent)
         update()
         CoroutineScope(dispatcher).launch {
-            mainViewModel.finderFlow().collect {
-                invokeFindAction(it)
-            }
+            mainViewModel.finderFlow().collect(::invokeFindAction)
         }
     }
 
