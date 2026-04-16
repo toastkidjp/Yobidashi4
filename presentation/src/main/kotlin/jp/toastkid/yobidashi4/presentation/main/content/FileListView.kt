@@ -124,7 +124,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
                     FileListItemRow(
                         fileListItem,
-                        viewModel.openingDropdown(fileListItem),
+                        { viewModel.openingDropdown(fileListItem) },
                         viewModel::closeDropdown,
                         viewModel::selectedFiles,
                         viewModel::openFile,
@@ -174,7 +174,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 @Composable
 private fun FileListItemRow(
     fileListItem: FileListItem,
-    openOption: Boolean,
+    openOption: () -> Boolean,
     closeOption: () -> Unit,
     selectedFiles: () -> List<Path>,
     openFile: (Path) -> Unit,
@@ -206,7 +206,7 @@ private fun FileListItemRow(
         }
 
         DropdownMenu(
-            openOption,
+            openOption(),
             onDismissRequest = closeOption
         ) {
             HoverHighlightDropdownMenuItem(
