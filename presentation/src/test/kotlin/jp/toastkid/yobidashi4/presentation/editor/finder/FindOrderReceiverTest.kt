@@ -59,7 +59,7 @@ class FindOrderReceiverTest {
         every { mainViewModel.finderFlow() } returns flowOf(
             FindOrder.EMPTY,
             FindOrder("test", ""),
-            FindOrder("test", "", true, true, false)
+            FindOrder("test", "", upper = true, invokeReplace = true, caseSensitive = false)
         )
 
         val content = TextFieldState("test")
