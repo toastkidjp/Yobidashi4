@@ -64,7 +64,7 @@ fun CalendarView(tab: CalendarTab) {
                 calendarViewModel.yearInput(),
                 calendarViewModel.japaneseYear(),
                 { calendarViewModel.localDate().month.value },
-                { calendarViewModel.openingMonthChooser() },
+                calendarViewModel::openingMonthChooser,
                 calendarViewModel::openMonthChooser,
                 calendarViewModel::closeMonthChooser,
                 calendarViewModel::plusMonths,
