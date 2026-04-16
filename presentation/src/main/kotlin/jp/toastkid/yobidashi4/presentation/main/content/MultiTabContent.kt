@@ -76,7 +76,7 @@ fun MultiTabContent() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box {
                     ArticleListView(
-                        viewModel.openArticleList(),
+                        { viewModel.openArticleList() },
                         viewModel.articles()
                     )
 
@@ -123,8 +123,8 @@ fun MultiTabContent() {
 }
 
 @Composable
-private fun ArticleListView(openArticleList: Boolean, articles: List<Path>) {
-    val width = animateDpAsState(if (openArticleList) 330.dp else 0.dp)
+private fun ArticleListView(openArticleList: () -> Boolean, articles: List<Path>) {
+    val width = animateDpAsState(if (openArticleList()) 330.dp else 0.dp)
 
     FileListView(
         articles,
