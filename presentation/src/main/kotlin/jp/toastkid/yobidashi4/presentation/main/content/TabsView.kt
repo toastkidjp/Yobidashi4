@@ -152,8 +152,8 @@ internal fun TabsView(modifier: Modifier) {
                         }
 
                         TabOptionMenu(
-                            viewModel.openingDropdown(tab),
-                            tab,
+                            { viewModel.openingDropdown(tab) },
+                            { tab },
                             viewModel::closeOtherTabs,
                             viewModel::openFile,
                             viewModel::slideshow,
@@ -203,8 +203,8 @@ internal fun TabsView(modifier: Modifier) {
 
 @Composable
 private fun TabOptionMenu(
-    openingDropdownMenu: Boolean,
-    tab: Tab,
+    openingDropdownMenu: () -> Boolean,
+    tab: () -> Tab,
     closeOtherTabs: () -> Unit,
     openFile: (Path) -> Unit,
     slideshow: (Path) -> Unit,
@@ -214,8 +214,9 @@ private fun TabOptionMenu(
     exportChat: (ChatTab) -> Unit,
     close: () -> Unit
 ) {
+    val tab = tab()
     DropdownMenu(
-        expanded = openingDropdownMenu,
+        expanded = openingDropdownMenu(),
         onDismissRequest = close
     ) {
         HoverHighlightDropdownMenuItem("Copy title") {
