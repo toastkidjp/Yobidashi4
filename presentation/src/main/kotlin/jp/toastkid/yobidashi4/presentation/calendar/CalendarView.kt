@@ -63,8 +63,8 @@ fun CalendarView(tab: CalendarTab) {
             TopComponent(
                 calendarViewModel.yearInput(),
                 calendarViewModel.japaneseYear(),
-                calendarViewModel.localDate().month.value,
-                calendarViewModel.openingMonthChooser(),
+                { calendarViewModel.localDate().month.value },
+                { calendarViewModel.openingMonthChooser() },
                 calendarViewModel::openMonthChooser,
                 calendarViewModel::closeMonthChooser,
                 calendarViewModel::plusMonths,
@@ -141,8 +141,8 @@ fun CalendarView(tab: CalendarTab) {
 private fun TopComponent(
     yearInput: TextFieldState,
     japaneseYear: String,
-    currentMonth: Int,
-    openingMonthChooser: Boolean,
+    currentMonth: () -> Int,
+    openingMonthChooser: () -> Boolean,
     openMonthChooser: () -> Unit,
     closeMonthChooser: () -> Unit,
     plusMonths: (Long) -> Unit,
@@ -180,8 +180,8 @@ private fun TopComponent(
 
         Surface(modifier = Modifier.padding(8.dp)) {
             Box(modifier = Modifier.clickable(onClick = openMonthChooser)) {
-                Text("$currentMonth", fontSize = 16.sp)
-                DropdownMenu(expanded = openingMonthChooser, onDismissRequest = closeMonthChooser) {
+                Text("${currentMonth()}", fontSize = 16.sp)
+                DropdownMenu(expanded = openingMonthChooser(), onDismissRequest = closeMonthChooser) {
                     Month.entries.forEach {
                         HoverHighlightDropdownMenuItem(
                             "${it.value}",
