@@ -105,7 +105,7 @@ fun ChatTabView(chatTab: ChatTab) {
                         modifier = Modifier.clickable(onClick = viewModel::openModelChooser)
                             .semantics { contentDescription = "Model chooser" }
                     ) {
-                        GenerativeAiModelLabel(viewModel.currentModelLabel(), viewModel.currentModelIcon())
+                        GenerativeAiModelLabel({ viewModel.currentModelLabel() }, viewModel.currentModelIcon())
                     }
                 }
 
@@ -156,7 +156,7 @@ fun ChatTabView(chatTab: ChatTab) {
 
 @Composable
 private fun GenerativeAiModelLabel(
-    label: String,
+    label: () -> String,
     drawableResource: DrawableResource,
     labelColor: Color = MaterialTheme.colors.onSurface
 ) {
@@ -166,11 +166,11 @@ private fun GenerativeAiModelLabel(
     ) {
         Icon(
             painter = painterResource(drawableResource),
-            contentDescription = label,
+            contentDescription = label(),
             tint = labelColor
         )
         Text(
-            label,
+            label(),
             color = labelColor,
             modifier = Modifier.padding(start = 4.dp)
         )
