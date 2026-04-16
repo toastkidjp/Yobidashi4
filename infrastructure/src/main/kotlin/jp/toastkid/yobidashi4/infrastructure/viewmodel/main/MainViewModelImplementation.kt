@@ -568,12 +568,14 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         val snackbarHostState = snackbarHostState()
         if (actionLabel == null) {
             CoroutineScope(Dispatchers.Default).launch {
+                snackbarHostState.currentSnackbarData?.dismiss()
                 snackbarHostState.showSnackbar(message)
             }
             return
         }
 
         CoroutineScope(Dispatchers.Default).launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
             val snackbarResult = snackbarHostState.showSnackbar(
                 message,
                 actionLabel,
