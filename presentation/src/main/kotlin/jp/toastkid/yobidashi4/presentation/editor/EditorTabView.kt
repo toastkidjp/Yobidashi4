@@ -52,7 +52,7 @@ internal fun EditorTabView(tab: EditorTab) {
                 }
             }
             StatusLabel(
-                viewModel.status(),
+                { viewModel.status() },
                 modifier = Modifier.height(24.dp)
             )
         }
@@ -60,10 +60,10 @@ internal fun EditorTabView(tab: EditorTab) {
 }
 
 @Composable
-private fun StatusLabel(labelText: String, modifier: Modifier) {
+private fun StatusLabel(labelText: () -> String, modifier: Modifier) {
     Box(
         contentAlignment = Alignment.BottomEnd,
         modifier = modifier.fillMaxWidth().padding(end = 8.dp)) {
-        Text(labelText, fontSize = 16.sp)
+        Text(labelText(), fontSize = 16.sp)
     }
 }
