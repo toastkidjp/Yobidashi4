@@ -23,11 +23,11 @@ class FindOrderReceiver : KoinComponent {
 
         if (it.invokeReplace) {
             content.edit {
-                val start = it.target.indexOf(it.replace, content.selection.start)
+                val start = content.text.indexOf(it.target, content.selection.start)
                 if (start == -1) {
                     return@edit
                 }
-                replace(start, start + it.replace.length, it.replace)
+                replace(start, start + it.target.length, it.replace)
             }
             return
         }
