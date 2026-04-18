@@ -155,28 +155,29 @@ private fun Cell(
     fontSize: TextUnit,
     modifier: Modifier
 ) {
-    if (cellValue == -1) {
-        MaskedCell(
-            open,
-            close,
-            numberLabel,
-            onMenuItemClick,
-            fontSize,
-            modifier = modifier
-                .combinedClickable(
-                    onClick = openCellOption,
-                    onLongClick = onLongClick
-                )
-                .semantics { contentDescription = "Masked cell" }
-        )
-    } else {
+    if (cellValue != -1) {
         Text(
             cellValue.toString(),
             fontSize = fontSize,
             textAlign = TextAlign.Center,
             modifier = modifier
         )
+        return
     }
+
+    MaskedCell(
+        open,
+        close,
+        numberLabel,
+        onMenuItemClick,
+        fontSize,
+        modifier = modifier
+            .combinedClickable(
+                onClick = openCellOption,
+                onLongClick = onLongClick
+            )
+            .semantics { contentDescription = "Masked cell" }
+    )
 }
 
 @Composable
