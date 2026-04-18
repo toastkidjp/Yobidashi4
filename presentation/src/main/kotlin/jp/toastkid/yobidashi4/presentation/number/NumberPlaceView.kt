@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -91,7 +90,22 @@ fun NumberPlaceView() {
                         VerticalDivider(thickness = viewModel.calculateThickness(0), modifier = Modifier.height(44.dp))
 
                         row.forEachIndexed { columnIndex, cellValue ->
-                            Cell(cellValue, viewModel, rowIndex, columnIndex)
+                            Cell(cellValue, viewModel, rowIndex, columnIndex,
+                                { viewModel.openingCellOption(rowIndex, columnIndex) },
+                                { viewModel.closeCellOption(rowIndex, columnIndex) },
+                                viewModel.numberLabel(rowIndex, columnIndex),
+                                {
+                                    viewModel.place(rowIndex, columnIndex, it)
+                                },
+                                openCellOption = {
+                                    viewModel.openCellOption(rowIndex, columnIndex)
+                                },
+                                onLongClick = {
+                                    viewModel.onCellLongClick(rowIndex, columnIndex)
+                                },
+                                fontSize = viewModel.fontSize(),
+                                modifier = Modifier.weight(1f)
+                            )
 
                             VerticalDivider(thickness = viewModel.calculateThickness(columnIndex), modifier = Modifier.height(44.dp))
                         }
@@ -130,29 +144,34 @@ fun NumberPlaceView() {
 }
 
 @Composable
-private fun RowScope.Cell(
+private fun Cell(
     cellValue: Int,
     viewModel: NumberPlaceViewModel,
     rowIndex: Int,
-    columnIndex: Int
+    columnIndex: Int,
+    open: () -> Boolean,
+    close: () -> Unit,
+    numberLabel: String,
+    onMenuItemClick: (Int) -> Unit,
+    openCellOption: () -> Unit,
+    onLongClick: () -> Unit,
+    fontSize: TextUnit,
+    modifier: Modifier
 ) {
     if (cellValue == -1) {
         MaskedCell(
-            { viewModel.openingCellOption(rowIndex, columnIndex) },
-            { viewModel.closeCellOption(rowIndex, columnIndex) },
-            viewModel.numberLabel(rowIndex, columnIndex),
-            {
-                viewModel.place(rowIndex, columnIndex, it)
-            },
-            viewModel.fontSize(),
-            modifier = Modifier
-                .weight(1f)
+            open,
+            close,
+            numberLabel,
+            onMenuItemClick,
+            fontSize,
+            modifier = modifier
                 .combinedClickable(
                     onClick = {
-                        viewModel.openCellOption(rowIndex, columnIndex)
+                        openCellOption()
                     },
                     onLongClick = {
-                        viewModel.onCellLongClick(rowIndex, columnIndex)
+                        onLongClick()
                     }
                 )
                 .semantics { contentDescription = "Masked cell" }
@@ -160,9 +179,9 @@ private fun RowScope.Cell(
     } else {
         Text(
             cellValue.toString(),
-            fontSize = viewModel.fontSize(),
+            fontSize = fontSize,
             textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
+            modifier = modifier
         )
     }
 }
