@@ -165,9 +165,7 @@ private fun Cell(
             modifier = modifier
                 .combinedClickable(
                     onClick = openCellOption,
-                    onLongClick = {
-                        onLongClick()
-                    }
+                    onLongClick = onLongClick
                 )
                 .semantics { contentDescription = "Masked cell" }
         )
