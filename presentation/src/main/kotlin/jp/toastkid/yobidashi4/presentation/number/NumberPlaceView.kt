@@ -164,9 +164,7 @@ private fun Cell(
             fontSize,
             modifier = modifier
                 .combinedClickable(
-                    onClick = {
-                        openCellOption()
-                    },
+                    onClick = openCellOption,
                     onLongClick = {
                         onLongClick()
                     }
