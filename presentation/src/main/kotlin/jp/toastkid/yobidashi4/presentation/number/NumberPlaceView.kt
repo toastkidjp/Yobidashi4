@@ -75,7 +75,7 @@ fun NumberPlaceView() {
                     viewModel::reloadGame,
                     viewModel.getMaskingCount(),
                     viewModel::setMaskingCount,
-                    viewModel.openingMaskingCount(),
+                    { viewModel.openingMaskingCount() },
                     viewModel::openMaskingCount,
                     viewModel::closeMaskingCount,
                     viewModel.fontSize()
@@ -161,7 +161,7 @@ private fun AppBarContent(
     reloadGame: () -> Unit,
     maskingCount: Int,
     setMaskingCount: (Int) -> Unit,
-    openingMaskingCount: Boolean,
+    openingMaskingCount: () -> Boolean,
     openMaskingCount: () -> Unit,
     closeMaskingCount: () -> Unit,
     fontSize: TextUnit
@@ -192,7 +192,7 @@ private fun AppBarContent(
             )
 
             DropdownMenu(
-                openingMaskingCount,
+                openingMaskingCount(),
                 scrollState = rememberScrollState(),
                 onDismissRequest = closeMaskingCount) {
                 (1 .. 64).forEach { count ->
