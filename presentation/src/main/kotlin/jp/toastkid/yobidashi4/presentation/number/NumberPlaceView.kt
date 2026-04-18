@@ -75,7 +75,7 @@ fun NumberPlaceView() {
                     viewModel::reloadGame,
                     viewModel.getMaskingCount(),
                     viewModel::setMaskingCount,
-                    { viewModel.openingMaskingCount() },
+                    viewModel::openingMaskingCount,
                     viewModel::openMaskingCount,
                     viewModel::closeMaskingCount,
                     viewModel.fontSize()
