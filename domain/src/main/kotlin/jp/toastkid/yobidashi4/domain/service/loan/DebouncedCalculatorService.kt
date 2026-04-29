@@ -21,7 +21,7 @@ class DebouncedCalculatorService(
     private val inputChannel: Channel<String>,
     private val currentFactorProvider: () -> Factor,
     private val onResult: (LoanPayment) -> Unit,
-    private val calculator: LoanCalculator = LoanCalculator(),
+    private val calculator: LevelPaymentCalculator = LevelPaymentCalculator(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 

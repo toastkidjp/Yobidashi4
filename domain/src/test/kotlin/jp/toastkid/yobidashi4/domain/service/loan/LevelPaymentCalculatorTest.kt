@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class LoanCalculatorTest {
+class LevelPaymentCalculatorTest {
 
     @InjectMockKs
-    private lateinit var calculator: LoanCalculator
+    private lateinit var calculator: LevelPaymentCalculator
 
     @BeforeEach
     fun setUp() {

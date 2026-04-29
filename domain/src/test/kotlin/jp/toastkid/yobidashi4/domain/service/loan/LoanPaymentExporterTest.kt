@@ -5,13 +5,13 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.io.BufferedWriter
-import java.io.StringWriter
-import java.nio.file.Files
 import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.BufferedWriter
+import java.io.StringWriter
+import java.nio.file.Files
 
 class LoanPaymentExporterTest {
 
@@ -40,7 +40,7 @@ class LoanPaymentExporterTest {
         val factor = Factor(30_000_000, 35, 1.0, 1_000_000, 10000, 10000)
         subject.invoke(
             factor,
-            LoanCalculator().invoke(factor)
+            LevelPaymentCalculator().invoke(factor)
         )
 
         verify { Files.exists(any()) }
@@ -55,7 +55,7 @@ class LoanPaymentExporterTest {
 
         subject.invoke(
             factor,
-            LoanCalculator().invoke(factor)
+            LevelPaymentCalculator().invoke(factor)
         )
 
         verify { Files.exists(any()) }

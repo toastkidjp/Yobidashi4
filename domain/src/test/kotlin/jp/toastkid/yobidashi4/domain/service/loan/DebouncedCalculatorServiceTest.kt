@@ -34,7 +34,7 @@ class DebouncedCalculatorServiceTest {
     private lateinit var onResult: (LoanPayment) -> Unit
 
     @MockK
-    private lateinit var calculator: LoanCalculator
+    private lateinit var calculator: LevelPaymentCalculator
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
