@@ -12,9 +12,9 @@ import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import kotlin.math.roundToLong
 
-class PrincipalEqualPaymentCalculator {
+class PrincipalEqualPaymentCalculator : LoanPaymentCalculator {
 
-    operator fun invoke(factor: Factor): LoanPayment {
+    override operator fun invoke(factor: Factor): LoanPayment {
         val totalMonths = factor.term * 12
         val loanAmount = factor.amount - factor.downPayment
 
