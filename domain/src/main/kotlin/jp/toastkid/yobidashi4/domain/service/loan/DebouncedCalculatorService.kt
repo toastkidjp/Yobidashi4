@@ -13,29 +13,35 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class DebouncedCalculatorService(
     private val inputChannel: Channel<String>,
+    private val calculatorFlow: Channel<LoanPaymentCalculator>,
     private val currentFactorProvider: () -> Factor,
     private val onResult: (LoanPayment) -> Unit,
-    private val calculator: LevelPaymentCalculator = LevelPaymentCalculator(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke() {
         CoroutineScope(ioDispatcher).launch {
-            inputChannel
-                .receiveAsFlow()
-                .distinctUntilChanged()
-                .collect {
-                    val factor = currentFactorProvider()
-                    val payment = calculator(factor)
+            combine(
+                inputChannel
+                    .receiveAsFlow()
+                    .distinctUntilChanged(),
+                calculatorFlow
+                    .receiveAsFlow()
+                    .distinctUntilChanged()
+            ) { _, calculator ->
+                val factor = currentFactorProvider()
+                val payment = calculator(factor)
 
-                    onResult(payment)
-                }
+                payment
+            }
+                .collect { onResult(it) }
         }
     }
 
