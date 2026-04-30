@@ -17,6 +17,8 @@ class LoanPaymentExporterTest {
 
     private lateinit var subject: LoanPaymentExporter
 
+    private val calculator = LevelPaymentCalculator()
+
     private lateinit var writer: BufferedWriter
 
     @BeforeEach
@@ -40,7 +42,7 @@ class LoanPaymentExporterTest {
         val factor = Factor(30_000_000, 35, 1.0, 1_000_000, 10000, 10000)
         subject.invoke(
             factor,
-            LevelPaymentCalculator().invoke(factor)
+            calculator.invoke(factor)
         )
 
         verify { Files.exists(any()) }
@@ -55,7 +57,7 @@ class LoanPaymentExporterTest {
 
         subject.invoke(
             factor,
-            LevelPaymentCalculator().invoke(factor)
+            calculator.invoke(factor)
         )
 
         verify { Files.exists(any()) }
