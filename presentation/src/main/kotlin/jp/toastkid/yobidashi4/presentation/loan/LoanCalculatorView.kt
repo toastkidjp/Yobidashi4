@@ -19,12 +19,14 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -35,11 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LoanCalculatorView() {
     val viewModel = remember { LoanCalculatorViewModel() }
+
+    val coroutineScope = rememberCoroutineScope()
 
     Surface(
         elevation = 4.dp,
@@ -52,6 +57,22 @@ fun LoanCalculatorView() {
                     .padding(8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        viewModel.isSelectedLevel(),
+                        onClick = { coroutineScope.launch { viewModel.selectLevel() } }
+                    )
+
+                    Text("Level payment")
+
+                    RadioButton(
+                        viewModel.isSelectedPrincipal(),
+                        onClick = { coroutineScope.launch { viewModel.selectPrincipal() } }
+                    )
+
+                    Text("Principal equal payment")
+                }
+
                 SelectionContainer {
                     Column {
                         Text(text = viewModel.result(), fontSize = 18.sp)
