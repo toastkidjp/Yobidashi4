@@ -14,7 +14,10 @@ import jp.toastkid.yobidashi4.domain.model.loan.Factor
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import jp.toastkid.yobidashi4.domain.service.loan.DebouncedCalculatorService
+import jp.toastkid.yobidashi4.domain.service.loan.LevelPaymentCalculator
+import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentCalculator
 import jp.toastkid.yobidashi4.domain.service.loan.LoanPaymentExporter
+import jp.toastkid.yobidashi4.domain.service.loan.PrincipalEqualPaymentCalculator
 import jp.toastkid.yobidashi4.presentation.component.DecimalInputTransformation
 import jp.toastkid.yobidashi4.presentation.component.DecimalVisualTransformation
 import kotlinx.coroutines.CoroutineScope
@@ -113,9 +116,36 @@ class LoanCalculatorViewModel {
 
     fun inputChannel() = inputChannel
 
+    private val levelPaymentCalculator = LevelPaymentCalculator()
+
+    private val principalEqualPaymentCalculator = PrincipalEqualPaymentCalculator()
+
+    private val currentCalculator: AtomicReference<LoanPaymentCalculator> = AtomicReference(levelPaymentCalculator)
+
+    private val calculatorFlow = Channel<LoanPaymentCalculator>()
+
+    fun isSelectedLevel(): Boolean {
+        return currentCalculator.get() === levelPaymentCalculator
+    }
+
+    fun isSelectedPrincipal(): Boolean {
+        return currentCalculator.get() === principalEqualPaymentCalculator
+    }
+
+    suspend fun selectLevel() {
+        currentCalculator.set(levelPaymentCalculator)
+        calculatorFlow.send(levelPaymentCalculator)
+    }
+
+    suspend fun selectPrincipal() {
+        currentCalculator.set(principalEqualPaymentCalculator)
+        calculatorFlow.send(principalEqualPaymentCalculator)
+    }
+
     fun launch() {
         DebouncedCalculatorService(
             inputChannel,
+            calculatorFlow,
             ::makeFactor,
             {
                 lastPaymentResult.set(it)
