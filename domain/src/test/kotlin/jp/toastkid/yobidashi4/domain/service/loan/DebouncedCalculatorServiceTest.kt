@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.domain.service.loan
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
@@ -22,10 +21,11 @@ import org.junit.jupiter.api.Test
 
 class DebouncedCalculatorServiceTest {
 
-    @InjectMockKs
     private lateinit var debouncedCalculatorService: DebouncedCalculatorService
 
     private val inputChannel: Channel<String> = Channel()
+
+    private val calculatorFlow: Channel<LoanPaymentCalculator> = Channel()
 
     @MockK
     private lateinit var currentFactorProvider: () -> Factor
@@ -54,6 +54,11 @@ class DebouncedCalculatorServiceTest {
         )
         every { calculator.invoke(any()) } returns mockk()
         every { onResult(any()) } just Runs
+
+
+        debouncedCalculatorService = DebouncedCalculatorService(
+            inputChannel, calculatorFlow, currentFactorProvider, onResult
+        )
     }
 
     @AfterEach
@@ -66,6 +71,8 @@ class DebouncedCalculatorServiceTest {
         debouncedCalculatorService.invoke()
 
         CoroutineScope(Dispatchers.Unconfined).launch {
+            inputChannel.send("test")
+            calculatorFlow.send(calculator)
             inputChannel.send("test")
 
             verify { currentFactorProvider() }
