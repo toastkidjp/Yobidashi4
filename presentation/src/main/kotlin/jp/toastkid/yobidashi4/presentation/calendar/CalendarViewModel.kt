@@ -58,6 +58,10 @@ class CalendarViewModel : KoinComponent {
         localDateState.value = newDate
     }
 
+    fun currentMonth(): Int {
+        return localDate().month.value
+    }
+
     private val japaneseZodiac = JapaneseZodiac()
 
     private fun makeJapaneseYearLabel(year: Int, month: Int): String {
