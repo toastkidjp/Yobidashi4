@@ -65,4 +65,16 @@ class JapaneseOffDayFinderServiceTest {
         assertEquals(1, japaneseOffDayFinderService.invoke(20124, 4, false).size)
     }
 
+    @Test
+    fun septemberSubstitute() {
+        assertEquals(1, japaneseOffDayFinderService.invoke(1006, 9).size)
+        assertEquals(2, japaneseOffDayFinderService.invoke(2006, 9).size)
+        assertEquals(3, japaneseOffDayFinderService.invoke(2009, 9).size)
+        assertEquals(3, japaneseOffDayFinderService.invoke(2015, 9).size)
+        assertEquals(2, japaneseOffDayFinderService.invoke(2020, 9).size)
+        assertEquals(2, japaneseOffDayFinderService.invoke(2021, 9).size)
+        assertEquals(2, japaneseOffDayFinderService.invoke(2025, 9).size)
+        assertEquals(3, japaneseOffDayFinderService.invoke(2026, 9).size)
+    }
+
 }
