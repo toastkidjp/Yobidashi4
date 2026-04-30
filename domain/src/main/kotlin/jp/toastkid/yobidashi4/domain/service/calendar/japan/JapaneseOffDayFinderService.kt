@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.domain.service.calendar.japan
 
-import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.FixedJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.FixedJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.japan.MoveableJapaneseHoliday
 import jp.toastkid.yobidashi4.domain.service.calendar.EquinoxDayCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.OffDayFinderService
@@ -52,6 +52,10 @@ class JapaneseOffDayFinderService(
 
         holidays.addAll(specialCaseOffDayCalculator(year, month))
         holidays.addAll(MoveableJapaneseHoliday.find(year, month))
+
+        if (month == 9 && holidays.size >= 2 && holidays.any { it.day == 21 } && holidays.any { it.day == 23 }) {
+            holidays.add(Holiday("Substitute Holiday", month, 22, "\uD83C\uDDEF\uD83C\uDDF5"))
+        }
 
         return substitutes.union(holidays).toList()
     }
