@@ -3,8 +3,12 @@ package jp.toastkid.yobidashi4.presentation.loan
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockkConstructor
@@ -15,7 +19,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class LoanCalculatorViewKtTest {
+class LevelPaymentCalculatorViewKtTest {
 
     @BeforeEach
     fun setUp() {
@@ -33,6 +37,8 @@ class LoanCalculatorViewKtTest {
         every { anyConstructed<LoanCalculatorViewModel>().roundToIntSafely(any()) } returns "0"
         every { anyConstructed<LoanCalculatorViewModel>().launch() } just Runs
         every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(0)
+        coEvery { anyConstructed<LoanCalculatorViewModel>().selectLevel() } just Runs
+        coEvery { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() } just Runs
     }
 
     @AfterEach
@@ -47,6 +53,14 @@ class LoanCalculatorViewKtTest {
             setContent {
                 LoanCalculatorView()
             }
+
+            onNode(hasContentDescription("Radio Level payment"), useUnmergedTree = true)
+                .performClick()
+            coVerify { anyConstructed<LoanCalculatorViewModel>().selectLevel() }
+
+            onNode(hasContentDescription("Radio Principal equal payment"), useUnmergedTree = true)
+                .performClick()
+            coVerify { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() }
         }
     }
 
