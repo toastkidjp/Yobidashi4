@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,14 +62,20 @@ fun LoanCalculatorView() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
                         viewModel.isSelectedLevel(),
-                        onClick = { coroutineScope.launch { viewModel.selectLevel() } }
+                        onClick = { coroutineScope.launch { viewModel.selectLevel() } },
+                        modifier = Modifier.semantics {
+                            contentDescription = "Radio Level payment"
+                        }
                     )
 
                     Text("Level payment")
 
                     RadioButton(
                         viewModel.isSelectedPrincipal(),
-                        onClick = { coroutineScope.launch { viewModel.selectPrincipal() } }
+                        onClick = { coroutineScope.launch { viewModel.selectPrincipal() } },
+                        modifier = Modifier.semantics {
+                            contentDescription = "Radio Principal equal payment"
+                        }
                     )
 
                     Text("Principal equal payment")
