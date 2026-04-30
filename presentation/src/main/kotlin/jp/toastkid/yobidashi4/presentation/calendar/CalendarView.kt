@@ -63,7 +63,7 @@ fun CalendarView(tab: CalendarTab) {
             TopComponent(
                 calendarViewModel.yearInput(),
                 calendarViewModel.japaneseYear(),
-                { calendarViewModel.localDate().month.value },
+                { calendarViewModel.currentMonth() },
                 calendarViewModel::openingMonthChooser,
                 calendarViewModel::openMonthChooser,
                 calendarViewModel::closeMonthChooser,
