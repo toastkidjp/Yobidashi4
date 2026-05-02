@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -72,7 +71,7 @@ fun LoanCalculatorView() {
 
                     RadioButton(
                         viewModel.isSelectedPrincipal(),
-                        onClick = { coroutineScope.launch { viewModel.selectPrincipal() } },
+                        onClick = { viewModel.selectPrincipal() },
                         modifier = Modifier.semantics {
                             contentDescription = "Radio Principal equal payment"
                         }
