@@ -135,7 +135,7 @@ class LoanCalculatorViewModel {
         calculatorFlow.value = (levelPaymentCalculator)
     }
 
-    suspend fun selectPrincipal() {
+    fun selectPrincipal() {
         calculatorFlow.value = (principalEqualPaymentCalculator)
     }
 
