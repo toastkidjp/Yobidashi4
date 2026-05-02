@@ -54,7 +54,7 @@ class JapaneseOffDayFinderService(
         holidays.addAll(MoveableJapaneseHoliday.find(year, month))
 
         if (month == 9 && holidays.size >= 2 && holidays.any { it.day == 21 } && holidays.any { it.day == 23 }) {
-            holidays.add(Holiday("Substitute Holiday", month, 22, "\uD83C\uDDEF\uD83C\uDDF5"))
+            holidays.add(Holiday("Citizen's Holiday", month, 22, "\uD83C\uDDEF\uD83C\uDDF5"))
         }
 
         return substitutes.union(holidays).toList()
