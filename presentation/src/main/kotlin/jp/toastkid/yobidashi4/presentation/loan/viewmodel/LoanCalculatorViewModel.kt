@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.presentation.component.DecimalVisualTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.TestOnly
 import java.text.DecimalFormat
@@ -120,26 +121,22 @@ class LoanCalculatorViewModel {
 
     private val principalEqualPaymentCalculator = PrincipalEqualPaymentCalculator()
 
-    private val currentCalculator: AtomicReference<LoanPaymentCalculator> = AtomicReference(levelPaymentCalculator)
-
-    private val calculatorFlow = Channel<LoanPaymentCalculator>()
+    private val calculatorFlow = MutableStateFlow<LoanPaymentCalculator>(levelPaymentCalculator)
 
     fun isSelectedLevel(): Boolean {
-        return currentCalculator.get() === levelPaymentCalculator
+        return calculatorFlow.value === levelPaymentCalculator
     }
 
     fun isSelectedPrincipal(): Boolean {
-        return currentCalculator.get() === principalEqualPaymentCalculator
+        return calculatorFlow.value === principalEqualPaymentCalculator
     }
 
     suspend fun selectLevel() {
-        currentCalculator.set(levelPaymentCalculator)
-        calculatorFlow.send(levelPaymentCalculator)
+        calculatorFlow.value = (levelPaymentCalculator)
     }
 
     suspend fun selectPrincipal() {
-        currentCalculator.set(principalEqualPaymentCalculator)
-        calculatorFlow.send(principalEqualPaymentCalculator)
+        calculatorFlow.value = (principalEqualPaymentCalculator)
     }
 
     fun launch() {
