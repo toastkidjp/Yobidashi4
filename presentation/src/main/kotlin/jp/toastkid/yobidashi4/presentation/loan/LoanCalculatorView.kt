@@ -62,7 +62,7 @@ fun LoanCalculatorView() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
                         viewModel.isSelectedLevel(),
-                        onClick = { coroutineScope.launch { viewModel.selectLevel() } },
+                        onClick = { viewModel.selectLevel() },
                         modifier = Modifier.semantics {
                             contentDescription = "Radio Level payment"
                         }
