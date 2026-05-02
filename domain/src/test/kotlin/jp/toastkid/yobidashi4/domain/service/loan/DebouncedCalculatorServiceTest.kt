@@ -14,10 +14,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class DebouncedCalculatorServiceTest {
 
@@ -25,7 +28,7 @@ class DebouncedCalculatorServiceTest {
 
     private val inputChannel: Channel<String> = Channel()
 
-    private val calculatorFlow: Channel<LoanPaymentCalculator> = Channel()
+    private val calculatorFlow = MutableStateFlow<LoanPaymentCalculator>(mockk())
 
     @MockK
     private lateinit var currentFactorProvider: () -> Factor
@@ -70,14 +73,21 @@ class DebouncedCalculatorServiceTest {
     fun invoke() {
         debouncedCalculatorService.invoke()
 
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            inputChannel.send("test")
-            calculatorFlow.send(calculator)
-            inputChannel.send("test")
-
-            verify { currentFactorProvider() }
-            verify { calculator.invoke(any()) }
-            verify { onResult(any()) }
+        val countDownLatch = CountDownLatch(1)
+        every { onResult(any()) } answers {
+            countDownLatch.countDown()
         }
+
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            calculatorFlow.value = (calculator)
+            inputChannel.send("test")
+        }
+
+        countDownLatch.await(5, TimeUnit.SECONDS)
+        job.cancel()
+
+        verify { currentFactorProvider() }
+        verify { calculator.invoke(any()) }
+        verify { onResult(any()) }
     }
 }
