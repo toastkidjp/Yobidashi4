@@ -10,15 +10,19 @@ package jp.toastkid.yobidashi4.presentation.editor.finder
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.text.TextRange
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.service.dispatcher.UiThreadDispatcherProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.concurrent.atomic.AtomicInteger
-import javax.swing.SwingUtilities
 
 class FindOrderReceiver : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
+
+    private val uiThreadDispatcherProvider: UiThreadDispatcherProvider by inject()
 
     private val finderMessageFactory = FinderMessageFactory()
 
@@ -30,7 +34,7 @@ class FindOrderReceiver : KoinComponent {
         }
 
         if (it.invokeReplace) {
-            SwingUtilities.invokeLater {
+            CoroutineScope(uiThreadDispatcherProvider()).launch {
                 content.edit {
                     val start = content.text.indexOf(it.target, content.selection.start)
                     if (start == -1) {
@@ -52,7 +56,7 @@ class FindOrderReceiver : KoinComponent {
         mainViewModel.setFindStatus(finderMessageFactory(it.target, foundCount))
 
         if (selected.get() == -1) {
-            SwingUtilities.invokeLater {
+            CoroutineScope(uiThreadDispatcherProvider()).launch {
                 content.edit {
                     selection = TextRange(content.selection.start)
                 }
@@ -61,7 +65,7 @@ class FindOrderReceiver : KoinComponent {
             return
         }
 
-        SwingUtilities.invokeLater {
+        CoroutineScope(uiThreadDispatcherProvider()).launch {
             content.edit {
                 selection = TextRange(selected.get(), selected.get() + it.target.length)
             }
