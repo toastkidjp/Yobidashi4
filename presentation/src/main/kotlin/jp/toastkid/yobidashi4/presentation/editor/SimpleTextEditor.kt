@@ -52,9 +52,7 @@ import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import java.util.regex.Pattern
 
 @Immutable
@@ -184,16 +182,24 @@ fun SimpleTextEditor(
     }
 
     LaunchedEffect(viewModel.content()) {
-        snapshotFlow { viewModel.content() }
-            .filter { it.composition == null }
-            .map { it.text.toString() }
+        snapshotFlow {
+            val text = viewModel.content().text
+
+            val lineCount = viewModel.lineNumbers().size
+
+            val lineStarts = text.splitToSequence('\n')
+                .map { if (it.isNotEmpty()) it[0] else '\n' }
+                .joinToString("")
+
+            Pair(lineCount, lineStarts)
+        }
             .distinctUntilChanged()
-            .debounce(160)
-            .flowOn(Dispatchers.Default) // 裏スレッドへ移動
-            .collect { currentText ->
+            .debounce(100)
+            .flowOn(Dispatchers.Default)
+            .collect { _ ->
+                val currentText = viewModel.content().text.toString()
                 val styles = calculateStyleAsync(true, currentText)
 
-                // パース結果だけをシンプルに保持
                 parseResult.value = ParseResult(currentText, styles)
             }
     }
