@@ -218,7 +218,7 @@ class TextEditorOutputTransformation(
 ) : OutputTransformation {
 
     override fun TextFieldBuffer.transformOutput() {
-        val currentText = this.asCharSequence().toString()
+        val currentText = this.asCharSequence()
         val parsedText = currentParseResult.text
 
         if (currentText == parsedText) {
