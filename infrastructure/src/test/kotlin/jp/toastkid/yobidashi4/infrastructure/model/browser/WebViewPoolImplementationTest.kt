@@ -11,7 +11,9 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.service.dispatcher.UiThreadDispatcherProvider
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
+import kotlinx.coroutines.Dispatchers
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
@@ -21,6 +23,10 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 import javax.swing.SwingUtilities
 
 class WebViewPoolImplementationTest {
@@ -35,9 +41,22 @@ class WebViewPoolImplementationTest {
 
     private val slot = slot<Runnable>()
 
+    @MockK
+    private lateinit var dispatcherProvider: UiThreadDispatcherProvider
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { dispatcherProvider } bind(UiThreadDispatcherProvider::class)
+                }
+            )
+        }
+
+        every { dispatcherProvider.invoke() } returns Dispatchers.Unconfined
 
         every { cefClient.createBrowser(any(), any(), any()) } returns cefBrowser
         every { cefClient.doClose(any()) } returns true
@@ -54,13 +73,14 @@ class WebViewPoolImplementationTest {
         mockkStatic(CefApp::class, SwingUtilities::class)
         every { CefApp.getInstance().dispose() } just Runs
         every { CefApp.getState() } returns CefApp.CefAppState.INITIALIZED
-        every { SwingUtilities.invokeLater(capture(slot)) } just Runs
+        //every { SwingUtilities.invokeLater(capture(slot)) } just Runs
 
         subject = WebViewPoolImplementation()
     }
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -99,7 +119,7 @@ class WebViewPoolImplementationTest {
         assertNotNull(component)
 
         subject.dispose("1")
-        slot.captured.run()
+        //slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { cefClient.doClose(any()) }
@@ -119,7 +139,7 @@ class WebViewPoolImplementationTest {
     fun disposeAll() {
         subject.component("1", "https://www.yahoo.co.jp")
         subject.disposeAll()
-        slot.captured.run()
+        //slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
@@ -134,7 +154,7 @@ class WebViewPoolImplementationTest {
         subject.component("3", "https://www.yahoo.co.jp")
 
         subject.disposeAll()
-        slot.captured.run()
+        //slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
