@@ -286,7 +286,7 @@ class TextEditorOutputTransformation(
         return minLen
     }
 
-    private fun findCurrentLineRange(text: String, selectionStart: Int): Pair<Int, Int> {
+    private fun findCurrentLineRange(text: CharSequence, selectionStart: Int): Pair<Int, Int> {
         val start = text.lastIndexOf('\n', selectionStart - 1).coerceAtKeyAtLeast(0)
         val end = text.indexOf('\n', selectionStart).let { if (it == -1) text.length else it }
         return Pair(start, end)
