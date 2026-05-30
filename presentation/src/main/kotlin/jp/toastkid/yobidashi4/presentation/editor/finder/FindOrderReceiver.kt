@@ -14,6 +14,7 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.concurrent.atomic.AtomicInteger
+import javax.swing.SwingUtilities
 
 class FindOrderReceiver : KoinComponent {
 
@@ -29,12 +30,14 @@ class FindOrderReceiver : KoinComponent {
         }
 
         if (it.invokeReplace) {
-            content.edit {
-                val start = content.text.indexOf(it.target, content.selection.start)
-                if (start == -1) {
-                    return@edit
+            SwingUtilities.invokeLater {
+                content.edit {
+                    val start = content.text.indexOf(it.target, content.selection.start)
+                    if (start == -1) {
+                        return@edit
+                    }
+                    replace(start, start + it.target.length, it.replace)
                 }
-                replace(start, start + it.target.length, it.replace)
             }
             return
         }
@@ -49,14 +52,19 @@ class FindOrderReceiver : KoinComponent {
         mainViewModel.setFindStatus(finderMessageFactory(it.target, foundCount))
 
         if (selected.get() == -1) {
-            content.edit {
-                selection = TextRange(content.selection.start)
+            SwingUtilities.invokeLater {
+                content.edit {
+                    selection = TextRange(content.selection.start)
+                }
             }
+
             return
         }
 
-        content.edit {
-            selection = TextRange(selected.get(), selected.get() + it.target.length)
+        SwingUtilities.invokeLater {
+            content.edit {
+                selection = TextRange(selected.get(), selected.get() + it.target.length)
+            }
         }
     }
 
