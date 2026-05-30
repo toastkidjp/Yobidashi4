@@ -8,7 +8,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
-import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.dispatcher.UiThreadDispatcherProvider
@@ -38,8 +37,6 @@ class WebViewPoolImplementationTest {
 
     @MockK
     private lateinit var cefBrowser: CefBrowser
-
-    private val slot = slot<Runnable>()
 
     @MockK
     private lateinit var dispatcherProvider: UiThreadDispatcherProvider
@@ -73,7 +70,6 @@ class WebViewPoolImplementationTest {
         mockkStatic(CefApp::class, SwingUtilities::class)
         every { CefApp.getInstance().dispose() } just Runs
         every { CefApp.getState() } returns CefApp.CefAppState.INITIALIZED
-        //every { SwingUtilities.invokeLater(capture(slot)) } just Runs
 
         subject = WebViewPoolImplementation()
     }
@@ -119,7 +115,6 @@ class WebViewPoolImplementationTest {
         assertNotNull(component)
 
         subject.dispose("1")
-        //slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { cefClient.doClose(any()) }
@@ -139,7 +134,6 @@ class WebViewPoolImplementationTest {
     fun disposeAll() {
         subject.component("1", "https://www.yahoo.co.jp")
         subject.disposeAll()
-        //slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
@@ -154,7 +148,6 @@ class WebViewPoolImplementationTest {
         subject.component("3", "https://www.yahoo.co.jp")
 
         subject.disposeAll()
-        //slot.captured.run()
 
         verify { cefBrowser.close(any()) }
         verify { CefApp.getInstance().dispose() }
