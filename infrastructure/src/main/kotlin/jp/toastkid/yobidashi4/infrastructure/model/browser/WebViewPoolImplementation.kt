@@ -1,17 +1,21 @@
 package jp.toastkid.yobidashi4.infrastructure.model.browser
 
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
+import jp.toastkid.yobidashi4.domain.service.dispatcher.UiThreadDispatcherProvider
 import jp.toastkid.yobidashi4.infrastructure.service.web.CefClientFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.cef.CefApp
 import org.cef.CefClient
 import org.cef.browser.CefBrowser
 import org.koin.core.annotation.Single
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.awt.Component
 import java.util.concurrent.atomic.AtomicReference
-import javax.swing.SwingUtilities
 
 @Single
-class WebViewPoolImplementation : WebViewPool {
+class WebViewPoolImplementation : WebViewPool, KoinComponent {
 
     private val cefClientFactory = CefClientFactory()
 
@@ -20,6 +24,8 @@ class WebViewPoolImplementation : WebViewPool {
     private val browsers = mutableMapOf<String, CefBrowser>()
 
     private val lastId = AtomicReference("")
+
+    private val dispatcherProvider: UiThreadDispatcherProvider by inject()
 
     override fun component(id: String, initialUrl: String): Component {
         val browser = getBrowser(id, initialUrl)
@@ -53,9 +59,9 @@ class WebViewPoolImplementation : WebViewPool {
     override fun dispose(id: String) {
         val browser = browsers.get(id) ?: return
 
-        SwingUtilities.invokeLater(Runnable {
+        CoroutineScope(dispatcherProvider()).launch {
             browser.close(true)
-        })
+        }
 
         client.doClose(browser)
         browsers.remove(id)
