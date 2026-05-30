@@ -264,19 +264,26 @@ private fun TabOptionMenu(
             }
         }
 
-        if (tab is EditorTab) {
+        if (tab is EditorTab || tab is MarkdownPreviewTab) {
+            val path = {
+                when (tab) {
+                    is EditorTab -> tab.path
+                    is MarkdownPreviewTab -> tab.slideshowSourcePath()
+                    else -> Path.of(".")
+                }
+            }
             HoverHighlightDropdownMenuItem("Open with editor") {
-                openFile(tab.path)
+                openFile(path())
                 close()
             }
 
             HoverHighlightDropdownMenuItem("Clip internal link") {
-                clipText("[[${tab.path.nameWithoutExtension}]]")
+                clipText("[[${path().nameWithoutExtension}]]")
                 close()
             }
 
             HoverHighlightDropdownMenuItem("Slideshow") {
-                slideshow(tab.path)
+                slideshow(path())
                 close()
             }
         }
