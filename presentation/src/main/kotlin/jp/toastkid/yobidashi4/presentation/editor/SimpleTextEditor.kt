@@ -276,7 +276,7 @@ class TextEditorOutputTransformation(
         append("[EOF]")
     }
 
-    private fun findDiffIndexFast(current: String, parsed: String): Int {
+    private fun findDiffIndexFast(current: CharSequence, parsed: String): Int {
         val minLen = minOf(current.length, parsed.length)
         for (i in 0 until minLen) {
             if (current[i] != parsed[i]) {
