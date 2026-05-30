@@ -16,7 +16,9 @@ import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
+import jp.toastkid.yobidashi4.domain.service.dispatcher.UiThreadDispatcherProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -33,6 +35,9 @@ class FindOrderReceiverTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
+    @MockK
+    private lateinit var dispatcherProvider: UiThreadDispatcherProvider
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -40,11 +45,13 @@ class FindOrderReceiverTest {
             modules(
                 module {
                     single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { dispatcherProvider } bind(UiThreadDispatcherProvider::class)
                 }
             )
         }
 
         subject = FindOrderReceiver()
+        every { dispatcherProvider.invoke() } returns Dispatchers.Unconfined
     }
 
     @AfterEach
