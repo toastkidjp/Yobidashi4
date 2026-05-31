@@ -186,9 +186,9 @@ fun SimpleTextEditor(
         val textFieldState = viewModel.content()
 
         snapshotFlow {
-                val text = textFieldState.text
+            val text = textFieldState.text
 
-                val lineCount = viewModel.lineNumbers().size
+            val lineCount = viewModel.lineNumbers().size
 
             val lineStarts = run {
                 if (text.isEmpty()) return@run ""
@@ -209,7 +209,7 @@ fun SimpleTextEditor(
             }
 
             Triple(lineCount, lineStarts, textFieldState.composition == null)
-            }
+        }
             .distinctUntilChanged()
             .filter { it.third }
             .debounce(100)
