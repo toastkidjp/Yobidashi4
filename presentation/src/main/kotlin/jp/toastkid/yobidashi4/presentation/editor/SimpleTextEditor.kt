@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import java.util.regex.Pattern
 
@@ -182,18 +183,21 @@ fun SimpleTextEditor(
     }
 
     LaunchedEffect(viewModel.content()) {
+        val textFieldState = viewModel.content()
+
         snapshotFlow {
-            val text = viewModel.content().text
+                val text = textFieldState.text
 
-            val lineCount = viewModel.lineNumbers().size
+                val lineCount = viewModel.lineNumbers().size
 
-            val lineStarts = text.splitToSequence('\n')
-                .map { if (it.isNotEmpty()) it[0] else '\n' }
-                .joinToString("")
+                val lineStarts = text.splitToSequence('\n')
+                    .map { if (it.isNotEmpty()) it[0] else '\n' }
+                    .joinToString("")
 
-            Pair(lineCount, lineStarts)
-        }
+                Triple(lineCount, lineStarts, textFieldState.composition == null)
+            }
             .distinctUntilChanged()
+            .filter { it.third }
             .debounce(100)
             .flowOn(Dispatchers.Default)
             .collect { _ ->
