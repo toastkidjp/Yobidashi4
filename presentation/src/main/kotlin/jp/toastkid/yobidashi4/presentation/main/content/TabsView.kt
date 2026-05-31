@@ -56,6 +56,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.domain.model.tab.WithFilePath
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
 import jp.toastkid.yobidashi4.presentation.barcode.BarcodeToolTabView
 import jp.toastkid.yobidashi4.presentation.calendar.CalendarView
@@ -264,26 +265,19 @@ private fun TabOptionMenu(
             }
         }
 
-        if (tab is EditorTab || tab is MarkdownPreviewTab) {
-            val path = {
-                when (tab) {
-                    is EditorTab -> tab.path
-                    is MarkdownPreviewTab -> tab.slideshowSourcePath()
-                    else -> Path.of(".")
-                }
-            }
+        if (tab is WithFilePath) {
             HoverHighlightDropdownMenuItem("Open with editor") {
-                openFile(path())
+                openFile(tab.filePath())
                 close()
             }
 
             HoverHighlightDropdownMenuItem("Clip internal link") {
-                clipText("[[${path().nameWithoutExtension}]]")
+                clipText("[[${tab.filePath().nameWithoutExtension}]]")
                 close()
             }
 
             HoverHighlightDropdownMenuItem("Slideshow") {
-                slideshow(path())
+                slideshow(tab.filePath())
                 close()
             }
         }
