@@ -1,18 +1,18 @@
 package jp.toastkid.yobidashi4.domain.model.tab
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
-import kotlin.io.path.nameWithoutExtension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.io.path.nameWithoutExtension
 
-data class EditorTab(val path: Path): Tab {
+data class EditorTab(val path: Path): Tab, WithFilePath {
 
     private val editing: Editing = Editing()
 
@@ -84,6 +84,8 @@ data class EditorTab(val path: Path): Tab {
     fun switchEditable() {
         editable.set(editable.get().not())
     }
+
+    override fun filePath(): Path = path
 
     enum class Preview {
         HALF, CLOSE
