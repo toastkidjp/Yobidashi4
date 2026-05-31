@@ -190,11 +190,25 @@ fun SimpleTextEditor(
 
                 val lineCount = viewModel.lineNumbers().size
 
-                val lineStarts = text.splitToSequence('\n')
-                    .map { if (it.isNotEmpty()) it[0] else '\n' }
-                    .joinToString("")
+            val lineStarts = run {
+                if (text.isEmpty()) return@run ""
 
-                Triple(lineCount, lineStarts, textFieldState.composition == null)
+                val sb = StringBuilder(lineCount)
+
+                sb.append(text[0])
+
+                var index = text.indexOf('\n')
+                while (index != -1 && index < text.lastIndex) {
+                    val nextChar = text[index + 1]
+                    sb.append(nextChar)
+
+                    index = text.indexOf('\n', index + 1)
+                }
+
+                sb.toString()
+            }
+
+            Triple(lineCount, lineStarts, textFieldState.composition == null)
             }
             .distinctUntilChanged()
             .filter { it.third }
