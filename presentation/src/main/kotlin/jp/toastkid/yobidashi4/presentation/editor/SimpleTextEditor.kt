@@ -63,7 +63,9 @@ private data class EditorStylePattern(
     val darkStyle: SpanStyle
 )
 
-// スタイル計算結果を保持するデータクラス
+/**
+ * Data class for keeping calculation result.
+ */
 data class ParseResult(
     val text: String,
     val styles: List<Triple<Int, Int, SpanStyle>>
@@ -276,17 +278,15 @@ class TextEditorOutputTransformation(
 
         val selectionStart = content.selection.start
         if (selectionStart <= currentText.length) {
-            // 現在の行の「始まり」と「終わり」のインデックスを取得
             val (lineStart, lineEnd) = findCurrentLineRange(currentText, selectionStart)
             val currentLineText = currentText.substring(lineStart, lineEnd)
 
-            // その1行だけに対して、定義済みの正規表現を回す（数十文字なので 0ms で終わる）
             patterns.forEach { pattern ->
                 val matcher = pattern.regex.matcher(currentLineText)
                 while (matcher.find()) {
-                    val style = if (true) pattern.darkStyle else pattern.lightStyle // 必要に応じてdarkMode判定を
+                    // TODO
+                    val style = if (true) pattern.darkStyle else pattern.lightStyle
 
-                    // 全体のインデックス（lineStartからの相対位置）に直して上書き適用
                     val globalStart = lineStart + matcher.start()
                     val globalEnd = lineStart + matcher.end()
 
