@@ -248,10 +248,6 @@ class TextEditorOutputTransformation(
 ) : OutputTransformation {
 
     override fun TextFieldBuffer.transformOutput() {
-        if (content.composition != null) {
-            return
-        }
-
         val currentText = this.asCharSequence()
         val parsedText = currentParseResult.text
 
@@ -261,7 +257,11 @@ class TextEditorOutputTransformation(
                     addStyle(style, start, end)
                 }
             }
-            append("[EOF]")
+
+            if (content.composition == null) {
+                append("[EOF]")
+            }
+
             return
         }
 
@@ -305,7 +305,9 @@ class TextEditorOutputTransformation(
             }
         }
 
-        append("[EOF]")
+        if (content.composition == null) {
+            append("[EOF]")
+        }
     }
 
     private fun findDiffIndexFast(current: CharSequence, parsed: String): Int {
