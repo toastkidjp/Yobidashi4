@@ -10,6 +10,11 @@ class UncaughtExceptionHandler : Thread.UncaughtExceptionHandler {
     override fun uncaughtException(t: Thread?, e: Throwable?) {
         logger.error(t?.name, e)
 
-        AppCloserAction().invoke()
+        try {
+            AppCloserAction().invoke()
+        } catch (koinError: IllegalStateException) {
+            // Koinが死んでいたら、最低限のログだけ出して強制終了させる
+            logger.error("Koin context was lost during crash handling", koinError)
+        }
     }
 }
