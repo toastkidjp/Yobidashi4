@@ -79,7 +79,7 @@ fun SimpleTextEditor(
     setStatus: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel = remember { TextEditorViewModel() }
+    val viewModel = remember(tab.path) { TextEditorViewModel() }
     val coroutineScope = rememberCoroutineScope()
     val parseResult = remember { mutableStateOf(ParseResult("", emptyList())) }
     val transformation = remember(parseResult.value) {
