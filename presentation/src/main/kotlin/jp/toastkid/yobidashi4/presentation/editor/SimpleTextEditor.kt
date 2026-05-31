@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -158,12 +159,15 @@ fun SimpleTextEditor(
                 .semantics { contentDescription = "Editor input area" }
         )
 
+        val focusManager = LocalFocusManager.current
+
         DisposableEffect(tab.path) {
             viewModel.launchTab(tab)
             viewModel.initialScroll(coroutineScope)
 
             setStatus(viewModel.makeCharacterCountMessage(tab.getContent().length))
 
+            focusManager.clearFocus(true)
             onDispose(viewModel::dispose)
         }
 
