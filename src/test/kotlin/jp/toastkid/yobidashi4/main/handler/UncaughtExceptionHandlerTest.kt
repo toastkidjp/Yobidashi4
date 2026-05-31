@@ -77,4 +77,17 @@ class UncaughtExceptionHandlerTest {
         verify { anyConstructed<AppCloserAction>().invoke() }
     }
 
+    @Test
+    fun tryCase() {
+        val throwable = mockk<Throwable>()
+        val koinError = mockk<IllegalStateException>()
+        every { anyConstructed<AppCloserAction>().invoke() } throws koinError
+
+        subject.uncaughtException(Thread.currentThread(), throwable)
+
+        verify { logger.error(any(), throwable) }
+        verify { logger.error(any(), koinError) }
+        verify { anyConstructed<AppCloserAction>().invoke() }
+    }
+
 }
