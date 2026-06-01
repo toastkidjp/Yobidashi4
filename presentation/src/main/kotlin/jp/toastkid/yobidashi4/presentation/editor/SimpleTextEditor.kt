@@ -82,8 +82,8 @@ fun SimpleTextEditor(
     val viewModel = remember(tab.path) { TextEditorViewModel() }
     val coroutineScope = rememberCoroutineScope()
     val parseResult = remember { mutableStateOf(ParseResult("", emptyList())) }
-    val transformation = remember(parseResult.value) {
-        TextEditorOutputTransformation(viewModel.content(), parseResult.value)
+    val transformation = remember {
+        TextEditorOutputTransformation(viewModel.content(), { parseResult.value })
     }
 
     Box {
@@ -244,11 +244,12 @@ private fun calculateStyleAsync(darkTheme: Boolean, str: String): List<Triple<In
 
 class TextEditorOutputTransformation(
     private val content: TextFieldState,
-    private val currentParseResult: ParseResult
+    private val parseResultProvider: () -> ParseResult
 ) : OutputTransformation {
 
     override fun TextFieldBuffer.transformOutput() {
         val currentText = this.asCharSequence()
+        val currentParseResult = parseResultProvider()
         val parsedText = currentParseResult.text
 
         if (currentText == parsedText) {
