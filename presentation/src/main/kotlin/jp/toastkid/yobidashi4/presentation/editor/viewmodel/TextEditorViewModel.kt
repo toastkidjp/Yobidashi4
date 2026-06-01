@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
@@ -32,6 +33,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
+import jp.toastkid.yobidashi4.presentation.editor.transformation.ParseResult
 import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorOutputTransformation
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -79,6 +81,11 @@ class TextEditorViewModel : KoinComponent {
     private val conversionLimit = setting.editorConversionLimit()
 
     private val formatter = DecimalFormat("#,###.##")
+
+    private val parseResult = mutableStateOf(ParseResult("", emptyList()))
+
+    private val transformation =
+        TextEditorOutputTransformation(content, mainViewModel.darkMode(), { parseResult.value })
 
     fun content() = content
 
@@ -242,7 +249,7 @@ class TextEditorViewModel : KoinComponent {
         }
     }
 
-    private val visualTransformation = TextEditorOutputTransformation(content, mainViewModel.darkMode())
+    private val visualTransformation = transformation
 
     private val none = OutputTransformation {
         append("[EOF]")
@@ -280,6 +287,26 @@ class TextEditorViewModel : KoinComponent {
         content.edit {
             delete(0, length)
         }
+    }
+
+    fun parseContent() {
+        val currentText = content.text.toString()
+        val styles = calculateStyleAsync(true, currentText)
+
+        parseResult.value = ParseResult(currentText, styles)
+    }
+
+    private fun calculateStyleAsync(darkTheme: Boolean, str: String): List<Triple<Int, Int, SpanStyle>> {
+        val list = mutableListOf<Triple<Int, Int, SpanStyle>>()
+
+        transformation.getPatterns().forEach { pattern ->
+            val find = pattern.regex.matcher(str)
+            while (find.find()) {
+                val spanStyle = if (darkTheme) pattern.darkStyle else pattern.lightStyle
+                list.add(Triple(find.start(), find.end(), spanStyle))
+            }
+        }
+        return list
     }
 
 }
