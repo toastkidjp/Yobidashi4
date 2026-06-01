@@ -291,7 +291,7 @@ class TextEditorViewModel : KoinComponent {
 
     fun parseContent() {
         val currentText = content.text.toString()
-        val styles = calculateStyleAsync(true, currentText)
+        val styles = calculateStyleAsync(mainViewModel.darkMode(), currentText)
 
         parseResult.value = ParseResult(currentText, styles)
     }
