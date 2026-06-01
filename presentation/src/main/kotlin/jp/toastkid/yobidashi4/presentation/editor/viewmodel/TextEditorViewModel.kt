@@ -289,6 +289,32 @@ class TextEditorViewModel : KoinComponent {
         }
     }
 
+    fun calculateConversionTrigger(): Triple<Int, String, Boolean> {
+        val text = content.text
+
+        val lineCount = lineNumbers().size
+
+        val lineStarts = run {
+            if (text.isEmpty()) return@run ""
+
+            val sb = StringBuilder(lineCount)
+
+            sb.append(text[0])
+
+            var index = text.indexOf('\n')
+            while (index != -1 && index < text.lastIndex) {
+                val nextChar = text[index + 1]
+                sb.append(nextChar)
+
+                index = text.indexOf('\n', index + 1)
+            }
+
+            sb.toString()
+        }
+
+        return Triple(lineCount, lineStarts, content.composition == null)
+    }
+
     fun parseContent() {
         val currentText = content.text.toString()
         val styles = calculateStyleAsync(mainViewModel.darkMode(), currentText)
