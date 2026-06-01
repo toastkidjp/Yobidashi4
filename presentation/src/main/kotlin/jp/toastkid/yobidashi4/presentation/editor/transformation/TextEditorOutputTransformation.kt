@@ -116,8 +116,7 @@ class TextEditorOutputTransformation(
             patterns.forEach { pattern ->
                 val matcher = pattern.regex.matcher(currentLineText)
                 while (matcher.find()) {
-                    // TODO
-                    val style = if (true) pattern.darkStyle else pattern.lightStyle
+                    val style = if (darkMode) pattern.darkStyle else pattern.lightStyle
 
                     val globalStart = lineStart + matcher.start()
                     val globalEnd = lineStart + matcher.end()
