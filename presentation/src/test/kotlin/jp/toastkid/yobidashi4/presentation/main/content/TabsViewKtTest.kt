@@ -100,7 +100,7 @@ class TabsViewKtTest {
         every { editorTab.title() } returns "test"
         val editorTabsPath = mockk<Path>()
         every { editorTabsPath.nameWithoutExtension } returns "test"
-        every { editorTab.path } returns editorTabsPath
+        every { editorTab.filePath() } returns editorTabsPath
         every { editorTab.closeable() } returns true
         every { editorTab.update() } returns flowOf(1, 2, 3)
         every { anyConstructed<TabsViewModel>().setSelectedIndex(any()) } just Runs
