@@ -161,9 +161,7 @@ fun SimpleTextEditor(
     }
 
     LaunchedEffect(viewModel.content()) {
-        snapshotFlow {
-            viewModel.calculateConversionTrigger()
-        }
+        snapshotFlow(viewModel::calculateConversionTrigger)
             .distinctUntilChanged()
             .filter { it.third }
             .debounce(100)
