@@ -161,32 +161,8 @@ fun SimpleTextEditor(
     }
 
     LaunchedEffect(viewModel.content()) {
-        val textFieldState = viewModel.content()
-
         snapshotFlow {
-            val text = textFieldState.text
-
-            val lineCount = viewModel.lineNumbers().size
-
-            val lineStarts = run {
-                if (text.isEmpty()) return@run ""
-
-                val sb = StringBuilder(lineCount)
-
-                sb.append(text[0])
-
-                var index = text.indexOf('\n')
-                while (index != -1 && index < text.lastIndex) {
-                    val nextChar = text[index + 1]
-                    sb.append(nextChar)
-
-                    index = text.indexOf('\n', index + 1)
-                }
-
-                sb.toString()
-            }
-
-            Triple(lineCount, lineStarts, textFieldState.composition == null)
+            viewModel.calculateConversionTrigger()
         }
             .distinctUntilChanged()
             .filter { it.third }
