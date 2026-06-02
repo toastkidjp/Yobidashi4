@@ -70,7 +70,7 @@ fun SimpleTextEditor(
             outputTransformation = viewModel.visualTransformation(),
             decorator = {
                 Row {
-                    LineNumber(viewModel::lineNumbers, viewModel.lineNumberScrollState(), viewModel.fontSize(), viewModel.lineHeight(), { viewModel.onClickLineNumber(it) })
+                    LineNumber(viewModel::lineNumbers, viewModel.lineNumberScrollState(), viewModel.fontSize(), viewModel.lineHeight(), viewModel::onClickLineNumber)
                     it()
                 }
             },
