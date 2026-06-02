@@ -15,7 +15,7 @@ class ArticleFilesFinder {
 
     operator fun invoke(path: Path): MutableList<Path> {
         return Files.list(path)
-            .sorted { p1, p2 -> compareByLastModified(p1, p2) }
+            .sorted(::compareByLastModified)
             .filter {
                 val name = it.fileName.toString()
                 name.startsWith("20") || name.startsWith("『")
