@@ -15,12 +15,14 @@ class ArticleFilesFinder {
 
     operator fun invoke(path: Path): MutableList<Path> {
         return Files.list(path)
-            .sorted { p1, p2 -> Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1 }
+            .sorted { p1, p2 -> compareByLastModified(p1, p2) }
             .filter {
                 val name = it.fileName.toString()
                 name.startsWith("20") || name.startsWith("『")
             }
             .collect(Collectors.toList())
     }
+
+    private fun compareByLastModified(p1: Path, p2: Path): Int = Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1
 
 }
