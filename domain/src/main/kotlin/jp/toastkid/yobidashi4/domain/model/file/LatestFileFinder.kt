@@ -25,6 +25,7 @@ class LatestFileFinder {
             .collect(Collectors.toList())
     }
 
-    private fun compareByLastModified(p1: Path, p2: Path): Int = Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1
+    private fun compareByLastModified(p1: Path, p2: Path): Int =
+        Files.getLastModifiedTime(p1).compareTo(Files.getLastModifiedTime(p2)) * -1
 
 }
