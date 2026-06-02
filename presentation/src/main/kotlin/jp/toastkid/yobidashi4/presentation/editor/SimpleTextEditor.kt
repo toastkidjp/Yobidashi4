@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.editor
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -69,36 +70,7 @@ fun SimpleTextEditor(
             outputTransformation = viewModel.visualTransformation(),
             decorator = {
                 Row {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(viewModel.lineNumberScrollState())
-                            .padding(horizontal = 8.dp)
-                            .wrapContentSize(unbounded = true)
-                    ) {
-                        viewModel.lineNumbers().forEach { (lineNumber, lineNumberText) ->
-                            Box(
-                                contentAlignment = Alignment.CenterEnd,
-                                modifier = Modifier.clickable {
-                                    viewModel.onClickLineNumber(lineNumber)
-                                }
-                                    .semantics { contentDescription = "Line number $lineNumberText" }
-                            ) {
-                                Text(
-                                    lineNumberText,
-                                    fontSize = viewModel.fontSize().sp,
-                                    fontFamily = FontFamily("MS Gothic"),
-                                    textAlign = TextAlign.End,
-                                    style = TextStyle(
-                                        lineHeight = viewModel.lineHeight().em,
-                                        lineHeightStyle = LineHeightStyle(
-                                            alignment = LineHeightStyle.Alignment.Center,
-                                            trim = LineHeightStyle.Trim.None
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    }
+                    LineNumber({ viewModel.lineNumbers() }, viewModel.lineNumberScrollState(), viewModel.fontSize(), viewModel.lineHeight(), { viewModel.onClickLineNumber(it) })
                     it()
                 }
             },
@@ -169,5 +141,46 @@ fun SimpleTextEditor(
             .collect { _ ->
                 viewModel.parseContent()
             }
+    }
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+private fun LineNumber(
+    lineNumbers: () -> List<Pair<Int, String>>,
+    scrollState: ScrollState,
+    fontSize: Int,
+    lineHeight: Float,
+    onClickLineNumber: (Int) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .verticalScroll(scrollState)
+            .padding(horizontal = 8.dp)
+            .wrapContentSize(unbounded = true)
+    ) {
+        lineNumbers().forEach { (lineNumber, lineNumberText) ->
+            Box(
+                contentAlignment = Alignment.CenterEnd,
+                modifier = Modifier.clickable {
+                    onClickLineNumber(lineNumber)
+                }
+                    .semantics { contentDescription = "Line number $lineNumberText" }
+            ) {
+                Text(
+                    lineNumberText,
+                    fontSize = fontSize.sp,
+                    fontFamily = FontFamily("MS Gothic"),
+                    textAlign = TextAlign.End,
+                    style = TextStyle(
+                        lineHeight = lineHeight.em,
+                        lineHeightStyle = LineHeightStyle(
+                            alignment = LineHeightStyle.Alignment.Center,
+                            trim = LineHeightStyle.Trim.None
+                        )
+                    )
+                )
+            }
+        }
     }
 }
