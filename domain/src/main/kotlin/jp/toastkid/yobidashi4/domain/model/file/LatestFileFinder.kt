@@ -18,7 +18,7 @@ class LatestFileFinder {
     operator fun invoke(path: Path, latest: LocalDateTime): MutableList<Path> {
         val toEpochMilli =  latest.toInstant(OffsetDateTime.now().offset).toEpochMilli()
         return Files.list(path)
-            .sorted { p1, p2 -> compareByLastModified(p1, p2) }
+            .sorted(::compareByLastModified)
             .filter {
                 Files.getLastModifiedTime(it).toMillis() > toEpochMilli
             }
