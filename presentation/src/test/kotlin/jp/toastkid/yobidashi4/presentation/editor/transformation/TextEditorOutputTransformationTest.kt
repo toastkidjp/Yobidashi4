@@ -24,12 +24,13 @@ class TextEditorOutputTransformationTest {
 
     @BeforeEach
     fun setUp() {
-        subject = TextEditorOutputTransformation(TextFieldState(), true)
+        subject = TextEditorOutputTransformation(TextFieldState(), true, { ParseResult("test", emptyList()) })
     }
 
     @Test
     fun visualTransformation() {
         val buffer = mockk<TextFieldBuffer>()
+        every { buffer.length } returns "# Test doc".length
         every { buffer.asCharSequence() } returns "# Test doc"
         every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
         every { buffer.append(any<String>()) } returns buffer
