@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalFocusManager
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -58,6 +60,14 @@ internal fun WebTabView(tab: WebTab) {
 
         withContext(Dispatchers.Unconfined) {
             viewModel.start(tab.id())
+        }
+    }
+
+    val focusManager = LocalFocusManager.current
+
+    DisposableEffect(tab.id()) {
+        onDispose {
+            focusManager.clearFocus(true)
         }
     }
 }
