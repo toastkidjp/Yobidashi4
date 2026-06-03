@@ -11,18 +11,21 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
-import java.util.stream.Collectors
+import kotlin.streams.asSequence
 
 class LatestFileFinder {
 
     operator fun invoke(path: Path, latest: LocalDateTime): MutableList<Path> {
         val toEpochMilli =  latest.toInstant(OffsetDateTime.now().offset).toEpochMilli()
         return Files.list(path)
-            .sorted(::compareByLastModified)
+            .asSequence()
+            .map { it to Files.getLastModifiedTime(it) }
+            .sortedByDescending { it.second }
             .filter {
-                Files.getLastModifiedTime(it).toMillis() > toEpochMilli
+                it.second.toMillis() > toEpochMilli
             }
-            .collect(Collectors.toList())
+            .map { it.first }
+            .toMutableList()
     }
 
     private fun compareByLastModified(p1: Path, p2: Path): Int =
