@@ -7,8 +7,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
 import kotlin.io.path.extension
+import kotlin.streams.asSequence
 
 @Single
 class TopArticleLoaderServiceImplementation : KoinComponent, TopArticleLoaderService {
@@ -19,8 +19,11 @@ class TopArticleLoaderServiceImplementation : KoinComponent, TopArticleLoaderSer
 
     override operator fun invoke(): List<Path> =
         Files.list(setting.articleFolderPath())
+            .asSequence()
             .filter { item -> targetExtensions.contains(item.extension) }
-            .sorted { o1, o2 -> -Files.getLastModifiedTime(o1).compareTo(Files.getLastModifiedTime(o2)) }
-            .collect(Collectors.toList())
+            .map { it to Files.getLastModifiedTime(it) }
+            .sortedByDescending { it.second }
+            .map { it.first }
+            .toList()
 
 }
