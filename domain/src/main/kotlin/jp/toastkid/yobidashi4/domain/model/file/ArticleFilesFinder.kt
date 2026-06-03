@@ -9,18 +9,21 @@ package jp.toastkid.yobidashi4.domain.model.file
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Collectors
+import kotlin.streams.asSequence
 
 class ArticleFilesFinder {
 
     operator fun invoke(path: Path): MutableList<Path> {
         return Files.list(path)
-            .sorted(::compareByLastModified)
+            .asSequence()
+            .map { it to Files.getLastModifiedTime(it) }
+            .sortedByDescending { it.second }
             .filter {
-                val name = it.fileName.toString()
+                val name = it.first.fileName.toString()
                 name.startsWith("20") || name.startsWith("『")
             }
-            .collect(Collectors.toList())
+            .map { it.first }
+            .toMutableList()
     }
 
     private fun compareByLastModified(p1: Path, p2: Path): Int =
