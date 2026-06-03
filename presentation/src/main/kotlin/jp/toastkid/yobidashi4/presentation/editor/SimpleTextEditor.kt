@@ -166,27 +166,39 @@ private fun LineNumber(
             .wrapContentSize(unbounded = true)
     ) {
         lineNumbers().forEach { (lineNumber, lineNumberText) ->
-            Box(
-                contentAlignment = Alignment.CenterEnd,
-                modifier = Modifier.clickable {
-                    onClickLineNumber(lineNumber)
-                }
-                    .semantics { contentDescription = "Line number $lineNumberText" }
-            ) {
-                Text(
-                    lineNumberText,
-                    fontSize = fontSize.sp,
-                    fontFamily = FontFamily("MS Gothic"),
-                    textAlign = TextAlign.End,
-                    style = TextStyle(
-                        lineHeight = lineHeight.em,
-                        lineHeightStyle = LineHeightStyle(
-                            alignment = LineHeightStyle.Alignment.Center,
-                            trim = LineHeightStyle.Trim.None
-                        )
-                    )
-                )
-            }
+            LineNumberBox(onClickLineNumber, lineNumber, lineNumberText, fontSize, lineHeight)
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalTextApi::class)
+private fun LineNumberBox(
+    onClickLineNumber: (Int) -> Unit,
+    lineNumber: Int,
+    lineNumberText: String,
+    fontSize: Int,
+    lineHeight: Float
+) {
+    Box(
+        contentAlignment = Alignment.CenterEnd,
+        modifier = Modifier.clickable {
+            onClickLineNumber(lineNumber)
+        }
+            .semantics { contentDescription = "Line number $lineNumberText" }
+    ) {
+        Text(
+            lineNumberText,
+            fontSize = fontSize.sp,
+            fontFamily = FontFamily("MS Gothic"),
+            textAlign = TextAlign.End,
+            style = TextStyle(
+                lineHeight = lineHeight.em,
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Center,
+                    trim = LineHeightStyle.Trim.None
+                )
+            )
+        )
     }
 }
