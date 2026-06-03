@@ -27,6 +27,7 @@ data class MarkdownPreviewTab(
     override fun filePath(): Path = path
 
     companion object {
+
         fun with(path: Path) = MarkdownPreviewTab(
             path,
             MarkdownParser().invoke(path)
