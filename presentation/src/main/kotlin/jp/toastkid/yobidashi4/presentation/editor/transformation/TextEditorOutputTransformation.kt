@@ -70,6 +70,8 @@ class TextEditorOutputTransformation(
         )
     )
 
+    private val END_OF_FILE_MARKER = "[EOF]"
+
     override fun TextFieldBuffer.transformOutput() {
         val currentText = this.asCharSequence()
         val currentParseResult = parseResultProvider()
@@ -83,7 +85,7 @@ class TextEditorOutputTransformation(
             }
 
             if (content.composition == null) {
-                append("[EOF]")
+                append(END_OF_FILE_MARKER)
             }
 
             return
@@ -129,7 +131,7 @@ class TextEditorOutputTransformation(
         }
 
         if (content.composition == null) {
-            append("[EOF]")
+            append(END_OF_FILE_MARKER)
         }
     }
 
