@@ -132,7 +132,7 @@ class LoanCalculatorViewModel {
     }
 
     fun selectLevel() {
-        calculatorFlow.value = (levelPaymentCalculator)
+        calculatorFlow.value = levelPaymentCalculator
     }
 
     fun selectPrincipal() {
