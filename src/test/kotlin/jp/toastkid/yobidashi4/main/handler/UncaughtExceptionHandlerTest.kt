@@ -6,13 +6,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.infrastructure.service.main.AppCloserAction
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,8 +43,6 @@ class UncaughtExceptionHandlerTest {
                 }
             )
         }
-        mockkConstructor(AppCloserAction::class)
-        every { anyConstructed<AppCloserAction>().invoke() } just Runs
 
         subject = UncaughtExceptionHandler()
     }
@@ -64,7 +60,6 @@ class UncaughtExceptionHandlerTest {
         subject.uncaughtException(Thread.currentThread(), throwable)
 
         verify { logger.error(any(), throwable) }
-        verify { anyConstructed<AppCloserAction>().invoke() }
     }
 
     @Test
@@ -74,20 +69,6 @@ class UncaughtExceptionHandlerTest {
         subject.uncaughtException(null, throwable)
 
         verify { logger.error(null, throwable) }
-        verify { anyConstructed<AppCloserAction>().invoke() }
-    }
-
-    @Test
-    fun tryCase() {
-        val throwable = mockk<Throwable>()
-        val koinError = mockk<IllegalStateException>()
-        every { anyConstructed<AppCloserAction>().invoke() } throws koinError
-
-        subject.uncaughtException(Thread.currentThread(), throwable)
-
-        verify { logger.error(any(), throwable) }
-        verify { logger.error(any(), koinError) }
-        verify { anyConstructed<AppCloserAction>().invoke() }
     }
 
 }
