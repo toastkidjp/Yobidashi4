@@ -87,9 +87,9 @@ internal fun NotificationListTabView() {
                         .hoverable(interactionSource)
                         .drawBehind { drawRect(headerColumnBackgroundColor.value) }
                     ) {
-                        NotificationEventRow(titleState)
-                        NotificationEventRow(textState)
-                        NotificationEventRow(dateTimeState)
+                        NotificationEventRow(titleState, "Title")
+                        NotificationEventRow(textState, "Text")
+                        NotificationEventRow(dateTimeState, "DateTime")
 
                         Button(onClick = {
                             viewModel.update(index, titleState.text, textState.text, dateTimeState.text)
@@ -121,14 +121,15 @@ internal fun NotificationListTabView() {
 
 @Composable
 private fun NotificationEventRow(
-    initialInput: TextFieldState
+    initialInput: TextFieldState,
+    label: String
 ) {
     Box(
         contentAlignment = Alignment.CenterStart
     ) {
         SingleLineTextField(
             initialInput,
-            "Keyword",
+            label,
             { initialInput.clearText() }
         )
     }
