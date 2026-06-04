@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.loan.PaymentDetail
 import jp.toastkid.yobidashi4.presentation.loan.viewmodel.LoanCalculatorViewModel
 import org.junit.jupiter.api.AfterEach
@@ -56,7 +57,7 @@ class LevelPaymentCalculatorViewKtTest {
 
             onNode(hasContentDescription("Radio Level payment"), useUnmergedTree = true)
                 .performClick()
-            coVerify { anyConstructed<LoanCalculatorViewModel>().selectLevel() }
+            verify { anyConstructed<LoanCalculatorViewModel>().selectLevel() }
 
             onNode(hasContentDescription("Radio Principal equal payment"), useUnmergedTree = true)
                 .performClick()
