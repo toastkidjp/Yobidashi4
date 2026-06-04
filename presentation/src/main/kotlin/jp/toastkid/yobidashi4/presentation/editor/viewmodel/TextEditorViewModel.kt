@@ -230,7 +230,10 @@ class TextEditorViewModel : KoinComponent {
     fun currentLineOffset(): Offset {
         val paragraph = lastParagraph.get() ?: return Offset.Zero
         val currentLine = paragraph.getLineForOffset(content.selection.start)
-        return Offset(paragraph.getLineLeft(currentLine), paragraph.getLineTop(currentLine) - verticalScrollState.value)
+        return Offset(
+            paragraph.getLineLeft(currentLine),
+            paragraph.getLineTop(currentLine) - verticalScrollState.value
+        )
     }
 
     fun currentLineHighlightColor(): Color {
