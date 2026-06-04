@@ -14,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
@@ -35,6 +37,7 @@ internal fun InputBox() {
         color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
+
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
@@ -69,6 +72,13 @@ internal fun InputBox() {
             LaunchedEffect(viewModel.showInputBox()) {
                 viewModel.start()
             }
+        }
+    }
+
+    val focusManager = LocalFocusManager.current
+    DisposableEffect(Unit) {
+        onDispose {
+            focusManager.clearFocus(true)
         }
     }
 }
