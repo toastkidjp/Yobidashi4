@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi4.domain.model.file
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.attribute.FileTime
 import kotlin.streams.asSequence
 
 class ArticleFilesFinder {
@@ -19,11 +20,15 @@ class ArticleFilesFinder {
             .map { it to Files.getLastModifiedTime(it) }
             .sortedByDescending { it.second }
             .filter {
-                val name = it.first.fileName.toString()
-                name.startsWith("20") || name.startsWith("『")
+                containsSpecificCharacters(it)
             }
             .map { it.first }
             .toMutableList()
+    }
+
+    private fun containsSpecificCharacters(pair: Pair<Path, FileTime>): Boolean {
+        val name = pair.first.fileName.toString()
+        return name.startsWith("20") || name.startsWith("『")
     }
 
 }
