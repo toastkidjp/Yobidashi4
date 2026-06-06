@@ -37,7 +37,7 @@ class LevelPaymentCalculatorViewKtTest {
         every { anyConstructed<LoanCalculatorViewModel>().roundToIntSafely(any()) } returns "0"
         every { anyConstructed<LoanCalculatorViewModel>().launch() } just Runs
         every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(0)
-        coEvery { anyConstructed<LoanCalculatorViewModel>().selectLevel() } just Runs
+        every { anyConstructed<LoanCalculatorViewModel>().selectLevel() } just Runs
         coEvery { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() } just Runs
     }
 
