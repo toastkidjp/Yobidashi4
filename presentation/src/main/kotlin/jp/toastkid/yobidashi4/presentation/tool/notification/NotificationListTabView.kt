@@ -130,7 +130,7 @@ private fun NotificationEventRow(
         SingleLineTextField(
             initialInput,
             label,
-            { initialInput.clearText() }
+            initialInput::clearText
         )
     }
 }
