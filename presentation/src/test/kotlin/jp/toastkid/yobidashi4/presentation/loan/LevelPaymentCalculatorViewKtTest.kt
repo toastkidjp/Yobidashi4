@@ -8,7 +8,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockkConstructor
@@ -61,7 +60,7 @@ class LevelPaymentCalculatorViewKtTest {
 
             onNode(hasContentDescription("Radio Principal equal payment"), useUnmergedTree = true)
                 .performClick()
-            coVerify { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() }
+            verify { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() }
         }
     }
 
