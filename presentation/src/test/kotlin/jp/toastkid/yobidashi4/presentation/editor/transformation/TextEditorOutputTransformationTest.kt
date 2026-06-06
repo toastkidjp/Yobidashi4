@@ -24,7 +24,11 @@ class TextEditorOutputTransformationTest {
 
     @BeforeEach
     fun setUp() {
-        subject = TextEditorOutputTransformation(TextFieldState(), true, { ParseResult("test", emptyList()) })
+        subject = TextEditorOutputTransformation(
+            TextFieldState(),
+            true,
+            { ParseResult("test", emptyList()) }
+        )
     }
 
     @Test
