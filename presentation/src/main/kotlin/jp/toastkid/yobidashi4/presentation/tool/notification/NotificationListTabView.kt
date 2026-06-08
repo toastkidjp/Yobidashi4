@@ -71,7 +71,10 @@ internal fun NotificationListTabView() {
                     }
                 }
 
-                itemsIndexed(viewModel.items(), { _, item -> item.title + item.text + item.date }) { index, item ->
+                itemsIndexed(
+                    viewModel.items(),
+                    { _, item -> item.title + item.text + item.date }
+                ) { index, item ->
                     ItemRow(
                         item,
                         viewModel,
