@@ -100,7 +100,7 @@ fun MultiTabContent() {
             }
 
             Box(modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End)) {
-                WorldTimeArea(viewModel.openWorldTime())
+                WorldTimeArea({ viewModel.openWorldTime() })
 
                 if (viewModel.openWorldTime()) {
                     ArticleListSwitch(
@@ -150,8 +150,8 @@ private fun ArticleListSwitch(iconDrawableResource: DrawableResource, onClick: (
 }
 
 @Composable
-private fun WorldTimeArea(open: Boolean) {
-    val width = animateDpAsState(if (open) 330.dp else 0.dp)
+private fun WorldTimeArea(open: () -> Boolean) {
+    val width = animateDpAsState(if (open()) 330.dp else 0.dp)
 
     WorldTimeView(
         modifier = Modifier.widthIn(max = width.value)
