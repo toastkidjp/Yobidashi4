@@ -181,17 +181,7 @@ private fun TopComponent(
         Surface(modifier = Modifier.padding(8.dp)) {
             Box(modifier = Modifier.clickable(onClick = openMonthChooser)) {
                 Text("${currentMonth()}", fontSize = 16.sp)
-                DropdownMenu(expanded = openingMonthChooser(), onDismissRequest = closeMonthChooser) {
-                    Month.entries.forEach {
-                        HoverHighlightDropdownMenuItem(
-                            "${it.value}",
-                            modifier = Modifier.semantics { contentDescription = "month_chooser_button_${it.value}" }
-                        ) {
-                            moveMonth(it.value)
-                            closeMonthChooser()
-                        }
-                    }
-                }
+                MonthChooser(openingMonthChooser, closeMonthChooser, moveMonth)
             }
         }
 
@@ -209,6 +199,25 @@ private fun TopComponent(
                 "Current month",
                 modifier = Modifier.padding(8.dp)
             )
+        }
+    }
+}
+
+@Composable
+private fun MonthChooser(
+    openingMonthChooser: () -> Boolean,
+    closeMonthChooser: () -> Unit,
+    moveMonth: (Int) -> Unit
+) {
+    DropdownMenu(expanded = openingMonthChooser(), onDismissRequest = closeMonthChooser) {
+        Month.entries.forEach {
+            HoverHighlightDropdownMenuItem(
+                "${it.value}",
+                modifier = Modifier.semantics { contentDescription = "month_chooser_button_${it.value}" }
+            ) {
+                moveMonth(it.value)
+                closeMonthChooser()
+            }
         }
     }
 }
