@@ -40,6 +40,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
@@ -71,39 +72,12 @@ internal fun NotificationListTabView() {
                 }
 
                 itemsIndexed(viewModel.items(), { _, item -> item.title + item.text + item.date }) { index, item ->
-                    val titleState = remember { (TextFieldState(item.title)) }
-                    val textState = remember { (TextFieldState(item.text)) }
-                    val dateTimeState = remember { (TextFieldState(item.dateTimeString())) }
-                    val interactionSource = remember { MutableInteractionSource() }
-                    val isHovered = interactionSource.collectIsHoveredAsState()
-                    val headerColumnBackgroundColor = animateColorAsState(
-                        if (isHovered.value) MaterialTheme.colors.primary
-                        else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
-                        else Color.Transparent
+                    ItemRow(
+                        item,
+                        viewModel,
+                        index,
+                        Modifier.fillMaxWidth().animateItem()
                     )
-
-                    Row(modifier = Modifier.fillMaxWidth()
-                        .animateItem()
-                        .hoverable(interactionSource)
-                        .drawBehind { drawRect(headerColumnBackgroundColor.value) }
-                    ) {
-                        NotificationEventRow(titleState, "Title")
-                        NotificationEventRow(textState, "Text")
-                        NotificationEventRow(dateTimeState, "DateTime")
-
-                        Button(onClick = {
-                            viewModel.update(index, titleState.text, textState.text, dateTimeState.text)
-                        }) {
-                            Text("Update")
-                        }
-                        Button(onClick = {
-                            viewModel.deleteAt(index)
-                        },
-                            modifier = Modifier.padding(start = 4.dp)
-                        ) {
-                            Text("x")
-                        }
-                    }
                 }
             }
 
@@ -115,6 +89,49 @@ internal fun NotificationListTabView() {
             LaunchedEffect(Unit) {
                 viewModel.start(Dispatchers.IO)
             }
+        }
+    }
+}
+
+@Composable
+private fun ItemRow(
+    item: NotificationEvent,
+    viewModel: NotificationListTabViewModel,
+    index: Int,
+    modifier: Modifier
+) {
+    val titleState = remember { (TextFieldState(item.title)) }
+    val textState = remember { (TextFieldState(item.text)) }
+    val dateTimeState = remember { (TextFieldState(item.dateTimeString())) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+    val headerColumnBackgroundColor = animateColorAsState(
+        if (isHovered.value) MaterialTheme.colors.primary
+        else if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
+        else Color.Transparent
+    )
+
+    Row(
+        modifier = modifier
+            .hoverable(interactionSource)
+            .drawBehind { drawRect(headerColumnBackgroundColor.value) }
+    ) {
+        NotificationEventRow(titleState, "Title")
+        NotificationEventRow(textState, "Text")
+        NotificationEventRow(dateTimeState, "DateTime")
+
+        Button(onClick = {
+            viewModel.update(index, titleState.text, textState.text, dateTimeState.text)
+        }) {
+            Text("Update")
+        }
+        Button(
+            onClick = {
+                viewModel.deleteAt(index)
+            },
+            modifier = Modifier.padding(start = 4.dp)
+        ) {
+            Text("x")
         }
     }
 }
