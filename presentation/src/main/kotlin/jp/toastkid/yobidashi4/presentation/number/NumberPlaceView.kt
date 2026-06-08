@@ -90,7 +90,8 @@ fun NumberPlaceView() {
                         VerticalDivider(thickness = viewModel.calculateThickness(0), modifier = Modifier.height(44.dp))
 
                         row.forEachIndexed { columnIndex, cellValue ->
-                            Cell(cellValue,
+                            Cell(
+                                cellValue,
                                 { viewModel.openingCellOption(rowIndex, columnIndex) },
                                 { viewModel.closeCellOption(rowIndex, columnIndex) },
                                 viewModel.numberLabel(rowIndex, columnIndex),
