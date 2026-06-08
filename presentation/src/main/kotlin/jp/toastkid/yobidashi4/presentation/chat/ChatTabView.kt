@@ -145,7 +145,12 @@ fun ChatTabView(chatTab: ChatTab) {
 
     DisposableEffect(chatTab) {
         coroutineScope.launch {
-            viewModel.launch(chatTab.chat(), chatTab.scrollPosition(), chatTab.initialModel(), chatTab.initialQuestion())
+            viewModel.launch(
+                chatTab.chat(),
+                chatTab.scrollPosition(),
+                chatTab.initialModel(),
+                chatTab.initialQuestion()
+            )
         }
 
         onDispose {
