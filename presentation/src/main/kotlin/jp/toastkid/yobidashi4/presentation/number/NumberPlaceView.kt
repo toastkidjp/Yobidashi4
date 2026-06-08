@@ -108,7 +108,10 @@ fun NumberPlaceView() {
                                 modifier = Modifier.weight(1f)
                             )
 
-                            VerticalDivider(thickness = viewModel.calculateThickness(columnIndex), modifier = Modifier.height(44.dp))
+                            VerticalDivider(
+                                thickness = viewModel.calculateThickness(columnIndex),
+                                modifier = Modifier.height(44.dp)
+                            )
                         }
                     }
                     Divider(thickness = viewModel.calculateThickness(rowIndex))
