@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi4.presentation.loan.viewmodel
 
+import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.text.input.VisualTransformation
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -19,14 +19,14 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-class LoanCalculatorViewModelTest {
+class LevelPaymentCalculatorViewModelTest {
 
     private lateinit var subject: LoanCalculatorViewModel
 
@@ -156,7 +156,7 @@ class LoanCalculatorViewModelTest {
     fun visualTransformation() {
         val visualTransformation = subject.visualTransformation()
 
-        assertNotSame(VisualTransformation.None, visualTransformation)
+        assertInstanceOf<OutputTransformation>(visualTransformation)
     }
 
     @Test
