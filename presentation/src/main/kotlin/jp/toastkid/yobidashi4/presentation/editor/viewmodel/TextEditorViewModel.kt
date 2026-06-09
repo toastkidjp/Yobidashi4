@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.em
 import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.data.ConversionTrigger
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
@@ -292,7 +293,7 @@ class TextEditorViewModel : KoinComponent {
         }
     }
 
-    fun calculateConversionTrigger(): Triple<Int, String, Boolean> {
+    fun calculateConversionTrigger(): ConversionTrigger {
         val text = content.text
 
         val lineCount = lineNumbers().size
@@ -315,7 +316,7 @@ class TextEditorViewModel : KoinComponent {
             sb.toString()
         }
 
-        return Triple(lineCount, lineStarts, content.composition == null)
+        return ConversionTrigger(lineCount, lineStarts, content.composition == null)
     }
 
     fun parseContent() {
