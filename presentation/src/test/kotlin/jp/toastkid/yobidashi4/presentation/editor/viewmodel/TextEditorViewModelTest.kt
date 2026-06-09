@@ -335,4 +335,12 @@ class TextEditorViewModelTest {
         viewModel.visualTransformation()
     }
 
+    @Test
+    fun calculateConversionTrigger() {
+        val (lineCount, lineStarts, inComposition) = viewModel.calculateConversionTrigger()
+        assertEquals(0, lineCount)
+        assertEquals("", lineStarts)
+        assertTrue(inComposition)
+    }
+
 }
