@@ -141,7 +141,7 @@ fun SimpleTextEditor(
     LaunchedEffect(viewModel.content()) {
         snapshotFlow(viewModel::calculateConversionTrigger)
             .distinctUntilChanged()
-            .filter { it.third }
+            .filter { it.inComposition }
             .debounce(100)
             .flowOn(Dispatchers.Default)
             .collect { _ ->
