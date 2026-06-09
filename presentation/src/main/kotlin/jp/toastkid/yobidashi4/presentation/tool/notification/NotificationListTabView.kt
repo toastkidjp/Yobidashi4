@@ -103,7 +103,7 @@ private fun ItemRow(
     index: Int,
     modifier: Modifier
 ) {
-    val titleState = remember { (TextFieldState(item.title)) }
+    val titleState = remember { TextFieldState(item.title) }
     val textState = remember { (TextFieldState(item.text)) }
     val dateTimeState = remember { (TextFieldState(item.dateTimeString())) }
     val interactionSource = remember { MutableInteractionSource() }
