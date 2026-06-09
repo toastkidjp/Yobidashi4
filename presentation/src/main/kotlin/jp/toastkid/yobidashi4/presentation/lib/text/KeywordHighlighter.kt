@@ -9,17 +9,28 @@ package jp.toastkid.yobidashi4.presentation.lib.text
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 import kotlin.math.min
 
-class KeywordHighlighter {
+class KeywordHighlighter : KoinComponent {
+
+    private val mainViewModel: MainViewModel by inject()
+
+    private val articleFactory: ArticleFactory by inject()
 
     private val underLineStyle = SpanStyle(
         color = Color(0xff64B5F6),
@@ -45,22 +56,38 @@ class KeywordHighlighter {
             }
 
             val annotateStart = length
-            append(title)
 
-            addStyle(
-                style = underLineStyle,
-                start = annotateStart,
-                end = annotateStart + title.length
-            )
+            withLink(
+                LinkAnnotation.Clickable(
+                    tag = "URL",
+                    styles = TextLinkStyles(
+                        style = SpanStyle(
+                            color = Color.Red,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    ),
+                    linkInteractionListener = {
+                        mainViewModel.openPreview(articleFactory.withTitle(title).path(), false)
+                    }
+                )
+            ) {
+                append(title)
 
-            // attach a string annotation that stores a URL to the text "link"
-            addStringAnnotation(
-                tag = "URL",
-                annotation = url,
-                start = annotateStart,
-                end = annotateStart + title.length
-            )
-            lastIndex = matcher.end()
+                addStyle(
+                    style = underLineStyle,
+                    start = annotateStart,
+                    end = annotateStart + title.length
+                )
+
+                addStringAnnotation(
+                    tag = "URL",
+                    annotation = url,
+                    start = annotateStart,
+                    end = annotateStart + title.length
+                )
+            }
+
+            lastIndex = matcher.end() + 1
         }
 
         if (lastIndex >= text.length) {
