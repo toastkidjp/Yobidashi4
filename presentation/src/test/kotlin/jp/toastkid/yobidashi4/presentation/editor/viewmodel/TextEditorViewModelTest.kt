@@ -343,4 +343,13 @@ class TextEditorViewModelTest {
         assertTrue(inComposition)
     }
 
+    @Test
+    fun parseContent() {
+        every { mainViewModel.darkMode() } returns false
+
+        viewModel.parseContent()
+
+        verify { mainViewModel.darkMode() }
+    }
+
 }
