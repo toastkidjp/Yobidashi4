@@ -87,7 +87,7 @@ class KeywordHighlighter : KoinComponent {
                 )
             }
 
-            lastIndex = matcher.end() + 1
+            lastIndex = matcher.end()
         }
 
         if (lastIndex >= text.length) {
