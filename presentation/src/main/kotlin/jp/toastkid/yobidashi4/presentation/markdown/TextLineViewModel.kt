@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
+import androidx.compose.foundation.gestures.isDeepPress
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.text.AnnotatedString
@@ -60,11 +62,37 @@ class TextLineViewModel : KoinComponent {
             .firstOrNull()
 
         if (it.button == PointerButton.Primary && stringRange != null) {
-            linkBehaviorService.invoke(stringRange.item)
+            linkBehaviorService.invoke(stringRange.item, it.isDeepPress)
         }
 
         vm.putSecondaryClickItem(
             if (it.button == PointerButton.Secondary && stringRange != null) stringRange.item else ""
+        )
+    }
+
+    fun onLinkTap(offset: Offset) {
+        onLinkTapWithOffset(offset, false)
+    }
+
+    fun onLinkLongPress(offset: Offset) {
+        onLinkTapWithOffset(offset, true)
+    }
+
+    private fun onLinkTapWithOffset(offset: Offset, onBackground: Boolean) {
+        val textLayoutResult = lastLayoutResult.value ?: return
+        val offset = textLayoutResult.getOffsetForPosition(offset)
+
+        val stringRange = annotatedString
+            .value
+            .getStringAnnotations(tag = "URL", start = offset, end = offset)
+            .firstOrNull()
+
+        if (stringRange != null) {
+            linkBehaviorService.invoke(stringRange.item, onBackground)
+        }
+
+        vm.putSecondaryClickItem(
+            if (stringRange != null) stringRange.item else ""
         )
     }
 
