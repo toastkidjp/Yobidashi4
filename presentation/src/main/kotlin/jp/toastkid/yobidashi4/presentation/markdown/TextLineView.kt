@@ -1,14 +1,13 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import kotlinx.coroutines.Dispatchers
@@ -22,12 +21,15 @@ fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
     Text(
         viewModel.annotatedString(),
         style = textStyle,
-        modifier = modifier.onPointerEvent(PointerEventType.Release) {
-            //viewModel.onPointerReleased(it)
-        }.pointerInput(Unit) {
-            awaitEachGesture {
-                viewModel.onPointerReleased(awaitPointerEvent())
-            }
+        modifier = modifier.pointerInput(Unit) {
+            detectTapGestures(
+                onTap = { offset ->
+                    viewModel.onLinkTap(offset)
+                },
+                onLongPress = { offset ->
+                    viewModel.onLinkLongPress(offset)
+                }
+            )
         },
         onTextLayout = viewModel::putLayoutResult
     )
