@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi4.presentation.editor.preview
 
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +29,8 @@ class LinkBehaviorService(
 
     private val viewModel: MainViewModel by inject()
 
+    private val articleFactory: ArticleFactory by inject()
+
     operator fun invoke(url: String?, onBackground: Boolean = false) {
         if (url.isNullOrBlank()) {
             return
@@ -42,7 +45,7 @@ class LinkBehaviorService(
         CoroutineScope(mainDispatcher).launch {
             val exists = withContext(ioDispatcher) { exists(title) }
             if (exists) {
-                viewModel.editWithTitle(title)
+                viewModel.openPreview(articleFactory.withTitle(title).path(), onBackground)
             } else {
                 viewModel.showSnackbar("\"$title\" does not exist.")
             }
