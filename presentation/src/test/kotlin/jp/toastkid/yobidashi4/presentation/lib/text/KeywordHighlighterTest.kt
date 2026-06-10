@@ -8,51 +8,18 @@
 package jp.toastkid.yobidashi4.presentation.lib.text
 
 import androidx.compose.ui.text.style.TextDecoration.Companion.Underline
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
-import io.mockk.unmockkAll
-import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class KeywordHighlighterTest {
 
     private lateinit var subject: KeywordHighlighter
 
-    @MockK
-    private lateinit var viewModel: MainViewModel
-
-    @MockK
-    private lateinit var articleFactory: ArticleFactory
-
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
-
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { articleFactory } bind(ArticleFactory::class)
-                }
-            )
-        }
-
         subject = KeywordHighlighter()
-    }
-
-    @AfterEach
-    fun tearDown() {
-        stopKoin()
-        unmockkAll()
     }
 
     @Test
@@ -99,6 +66,15 @@ class KeywordHighlighterTest {
     @Test
     fun multipleLink() {
         val annotate = subject.invoke("It [longs](https://www.yahoo.co.jp) to [make](https://www.make.it/sample) it.", null)
+
+        assertEquals(2, annotate.spanStyles.size)
+        assertTrue(annotate.spanStyles.any { it.item.textDecoration == Underline })
+        assertEquals("It longs to make it.", annotate.text)
+    }
+
+    @Test
+    fun articleLink() {
+        val annotate = subject.invoke("It [longs](https://internal/2026-06-10(Wed)) to [make](https://www.make.it/sample) it.", null)
 
         assertEquals(2, annotate.spanStyles.size)
         assertTrue(annotate.spanStyles.any { it.item.textDecoration == Underline })
