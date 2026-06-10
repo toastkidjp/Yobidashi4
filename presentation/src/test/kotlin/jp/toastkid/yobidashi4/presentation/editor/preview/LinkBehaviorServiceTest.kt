@@ -4,11 +4,13 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.article.Article
+import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -23,7 +25,6 @@ import org.koin.dsl.module
 
 class LinkBehaviorServiceTest {
 
-    @InjectMockKs
     private lateinit var linkBehaviorService: LinkBehaviorService
 
     @MockK
@@ -41,12 +42,16 @@ class LinkBehaviorServiceTest {
     @MockK
     private lateinit var viewModel: MainViewModel
 
+    @MockK
+    private lateinit var articleFactory: ArticleFactory
+
     @BeforeEach
     fun setUp() {
         startKoin {
             modules(
                 module {
                     single(qualifier = null) { viewModel } bind(MainViewModel::class)
+                    single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
                 }
             )
         }
@@ -59,6 +64,12 @@ class LinkBehaviorServiceTest {
         every { viewModel.edit(any()) } just Runs
         every { viewModel.showSnackbar(any()) } just Runs
         every { viewModel.editWithTitle(any(), any()) } just Runs
+        every { viewModel.openPreview(any(), any()) } just Runs
+        val article = mockk<Article>()
+        every { articleFactory.withTitle(any()) } returns article
+        every { article.path() } returns mockk()
+
+        linkBehaviorService = LinkBehaviorService(exists, internalLinkScheme, mainDispatcher, ioDispatcher)
     }
 
     @AfterEach
@@ -110,7 +121,8 @@ class LinkBehaviorServiceTest {
         linkBehaviorService.invoke("internal-article://yahoo")
 
         verify { exists(any()) }
-        verify(inverse = !returnsExists) { viewModel.editWithTitle("yahoo", any()) }
+        verify(inverse = !returnsExists) { articleFactory.withTitle(any()) }
+        verify(inverse = !returnsExists) { viewModel.openPreview(any(), any()) }
         verify(inverse = returnsExists) { viewModel.showSnackbar(any()) }
     }
 
@@ -120,7 +132,7 @@ class LinkBehaviorServiceTest {
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
-        verify { viewModel.editWithTitle(any(), any()) }
+        verify { viewModel.openPreview(any(), any()) }
     }
 
 }
