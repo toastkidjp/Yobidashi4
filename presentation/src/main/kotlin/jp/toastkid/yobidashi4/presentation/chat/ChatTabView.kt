@@ -67,7 +67,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 SelectionContainer {
                     MessageList(
                         viewModel.scrollState(),
-                        viewModel.messages(),
+                        { viewModel.messages() },
                         viewModel::name,
                         viewModel::nameColor,
                         viewModel::clipText
@@ -188,13 +188,13 @@ private fun GenerativeAiModelLabel(
 @Composable
 private fun MessageList(
     listState: LazyListState,
-    chatMessages: List<ChatMessage>,
+    chatMessages: () -> List<ChatMessage>,
     name: (String) -> String,
     nameColor: (String) -> Color,
     clipText: (String) -> Unit
 ) {
     LazyColumn(state = listState) {
-        items(chatMessages) {
+        items(chatMessages()) {
             Row {
                 Spacer(modifier = Modifier.weight(0.2f))
                 MessageContent(
