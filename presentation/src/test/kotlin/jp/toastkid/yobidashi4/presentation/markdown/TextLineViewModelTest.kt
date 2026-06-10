@@ -343,4 +343,38 @@ class TextLineViewModelTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun onLinkTap() {
+        val annotation = "https://www.yahoo.com"
+        val annotatedString = buildAnnotatedString {
+            append("test https://www.yahoo.com")
+            addStringAnnotation("URL", annotation, 0, 10)
+        }
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
+
+        var textLayoutResult: TextLayoutResult? = null
+
+        runBlocking {
+            runDesktopComposeUiTest {
+                setContent {
+                    Text(annotatedString, onTextLayout = {
+                        textLayoutResult = it
+                    })
+                }
+            }
+
+            subject = TextLineViewModel()
+
+            subject.launch("test")
+            textLayoutResult?.let {
+                subject.putLayoutResult(it)
+            }
+
+            subject.onLinkTap(Offset.Zero)
+        }
+
+        verify { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
+    }
+
 }
