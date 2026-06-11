@@ -7,7 +7,6 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockkConstructor
@@ -38,7 +37,7 @@ class LevelPaymentCalculatorViewKtTest {
         every { anyConstructed<LoanCalculatorViewModel>().launch() } just Runs
         every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(0)
         every { anyConstructed<LoanCalculatorViewModel>().selectLevel() } just Runs
-        coEvery { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() } just Runs
+        every { anyConstructed<LoanCalculatorViewModel>().selectPrincipal() } just Runs
     }
 
     @AfterEach
