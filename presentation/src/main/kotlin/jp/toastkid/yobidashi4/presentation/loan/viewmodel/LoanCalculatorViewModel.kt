@@ -167,14 +167,6 @@ class LoanCalculatorViewModel {
 
     fun visualTransformation() = visualTransformation
 
-    private fun formatDecimalString(input: String): String {
-        if (input.isBlank()) {
-            return "0"
-        }
-
-        return input.filter { it.isDigit() || it == '.' }.trim()
-    }
-
     private fun extractLong(editText: CharSequence) = editText.toString().toLongOrNull() ?: 0
 
     private fun extractInt(editText: CharSequence) = editText.toString().toIntOrNull() ?: 0
