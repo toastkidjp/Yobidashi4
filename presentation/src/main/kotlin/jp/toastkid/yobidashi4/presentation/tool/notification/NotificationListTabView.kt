@@ -54,9 +54,12 @@ internal fun NotificationListTabView() {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
-        modifier = Modifier.onKeyEvent {
-            return@onKeyEvent viewModel.onKeyEvent(coroutineScope, it)
-        }.focusRequester(viewModel.focusRequester()).focusable(true)
+        modifier = Modifier
+            .onKeyEvent {
+                return@onKeyEvent viewModel.onKeyEvent(coroutineScope, it)
+            }
+            .focusRequester(viewModel.focusRequester())
+            .focusable(true)
     ) {
         Box {
             LazyColumn(
