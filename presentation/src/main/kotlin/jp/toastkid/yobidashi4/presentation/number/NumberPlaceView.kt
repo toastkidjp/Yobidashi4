@@ -87,7 +87,10 @@ fun NumberPlaceView() {
                     Row(
                         modifier = Modifier.height(IntrinsicSize.Min)
                     ) {
-                        VerticalDivider(thickness = viewModel.calculateThickness(0), modifier = Modifier.height(44.dp))
+                        VerticalDivider(
+                            thickness = viewModel.calculateThickness(0),
+                            modifier = Modifier.height(44.dp)
+                        )
 
                         row.forEachIndexed { columnIndex, cellValue ->
                             Cell(
