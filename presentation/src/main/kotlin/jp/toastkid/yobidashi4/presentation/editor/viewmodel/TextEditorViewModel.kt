@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.data.ConversionTrigger
+import jp.toastkid.yobidashi4.presentation.editor.data.LineNumber
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
@@ -198,17 +199,20 @@ class TextEditorViewModel : KoinComponent {
         }
     }
 
-    fun lineNumbers(): List<Pair<Int, String>> {
+    fun lineNumbers(): List<LineNumber> {
         val max = lineCount.value
         val length = max.toString().length
         return (1 .. max).map {
             val fillCount = length - it.toString().length
-            return@map it - 1 to with(StringBuilder()) {
-                repeat(fillCount) {
-                    append(" ")
-                }
-                append(it)
-            }.toString()
+            return@map LineNumber(
+                it - 1,
+                with(StringBuilder()) {
+                    repeat(fillCount) {
+                        append(" ")
+                    }
+                    append(it)
+                }.toString()
+            )
         }
     }
 
