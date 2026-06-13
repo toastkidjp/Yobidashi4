@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
@@ -71,8 +72,8 @@ class TextLineViewKtTest {
             onNode(hasText("test-text-line"), useUnmergedTree = true).performMouseInput {
                 press()
                 release()
+                longClick()
             }
-            //verify { anyConstructed<TextLineViewModel>().onLinkTap(any<Offset>()) }
         }
     }
 
