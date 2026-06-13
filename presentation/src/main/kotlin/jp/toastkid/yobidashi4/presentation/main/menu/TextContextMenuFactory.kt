@@ -30,19 +30,19 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                     val items = mutableListOf<ContextMenuItem>()
                     val cut = textManager.cut
                     if (cut != null) {
-                        items.add(ContextMenuItem(localization.cut, cut))
+                        items.add(ContextMenuItem(localization.cut, cut.execute))
                     }
                     val copy = textManager.copy
                     if (copy != null) {
-                        items.add(ContextMenuItem(localization.copy, copy))
+                        items.add(ContextMenuItem(localization.copy, copy.execute))
                     }
                     val paste = textManager.paste
                     if (paste != null) {
-                        items.add(ContextMenuItem(localization.paste, paste))
+                        items.add(ContextMenuItem(localization.paste, paste.execute))
                     }
                     val selectAll = textManager.selectAll
                     if (selectAll != null) {
-                        items.add(ContextMenuItem(localization.selectAll, selectAll))
+                        items.add(ContextMenuItem(localization.selectAll, selectAll.execute))
                     }
                     items.add(
                         ContextMenuItem("Search") {
