@@ -95,7 +95,7 @@ fun NumberPlaceView() {
                         row.forEachIndexed { columnIndex, cellValue ->
                             Cell(
                                 cellValue,
-                                viewModel.openingCellOption(rowIndex, columnIndex),
+                                { viewModel.openingCellOption(rowIndex, columnIndex) },
                                 { viewModel.closeCellOption(rowIndex, columnIndex) },
                                 viewModel.numberLabel(rowIndex, columnIndex),
                                 {
@@ -153,7 +153,7 @@ fun NumberPlaceView() {
 @Composable
 private fun Cell(
     cellValue: Int,
-    open: Boolean,
+    open: () -> Boolean,
     close: () -> Unit,
     numberLabel: String,
     onMenuItemClick: (Int) -> Unit,
@@ -173,7 +173,7 @@ private fun Cell(
     }
 
     MaskedCell(
-        open,
+        open(),
         close,
         numberLabel,
         onMenuItemClick,
