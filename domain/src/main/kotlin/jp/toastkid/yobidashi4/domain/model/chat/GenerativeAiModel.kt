@@ -20,6 +20,11 @@ enum class GenerativeAiModel(
         "gemini-3.5-flash",
         "v1beta",
     ),
+    GEMINI_3_1_FLASH_LITE(
+        "Gemini 3.1 Flash Lite",
+        "gemini-3.1-flash-lite",
+        "v1beta"
+    ),
     GEMINI_3_0_FLASH(
         "Gemini 3 Flash",
         "gemini-3-flash-preview",
