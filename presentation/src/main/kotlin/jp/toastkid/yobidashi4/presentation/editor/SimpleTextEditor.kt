@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
+import jp.toastkid.yobidashi4.presentation.editor.data.LineNumber
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
@@ -161,7 +162,7 @@ fun SimpleTextEditor(
 @OptIn(ExperimentalTextApi::class)
 @Composable
 private fun LineNumber(
-    lineNumbers: () -> List<Pair<Int, String>>,
+    lineNumbers: () -> List<LineNumber>,
     scrollState: ScrollState,
     fontSize: Int,
     lineHeight: Float,
