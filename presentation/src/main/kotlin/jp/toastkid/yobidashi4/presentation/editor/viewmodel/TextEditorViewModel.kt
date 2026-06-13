@@ -203,12 +203,12 @@ class TextEditorViewModel : KoinComponent {
         val length = max.toString().length
         return (1 .. max).map {
             val fillCount = length - it.toString().length
-            return@map (it - 1 to with(StringBuilder()) {
+            return@map it - 1 to with(StringBuilder()) {
                 repeat(fillCount) {
                     append(" ")
                 }
                 append(it)
-            }.toString())
+            }.toString()
         }
     }
 
