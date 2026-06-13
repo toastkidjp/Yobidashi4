@@ -76,7 +76,16 @@ fun SimpleTextEditor(
             inputTransformation = viewModel.inputTransformation(),
             outputTransformation = viewModel.visualTransformation(),
             decorator = {
-                Row {
+                Row(modifier = Modifier
+                    .drawBehind {
+                        val currentLineOffset = viewModel.currentLineOffset()
+                        drawRect(
+                            viewModel.currentLineHighlightColor(),
+                            topLeft = currentLineOffset,
+                            size = viewModel.getHighlightSize()
+                        )
+                    }
+                ) {
                     LineNumber(
                         viewModel::lineNumbers,
                         viewModel.lineNumberScrollState(),
@@ -105,14 +114,6 @@ fun SimpleTextEditor(
                     viewModel.onPreviewKeyEvent(it, coroutineScope)
                 }
                 .onKeyEvent(viewModel::onKeyEvent)
-                .drawBehind {
-                    val currentLineOffset = viewModel.currentLineOffset()
-                    drawRect(
-                        viewModel.currentLineHighlightColor(),
-                        topLeft = currentLineOffset,
-                        size = viewModel.getHighlightSize()
-                    )
-                }
                 .semantics { contentDescription = "Editor input area" }
         )
 
