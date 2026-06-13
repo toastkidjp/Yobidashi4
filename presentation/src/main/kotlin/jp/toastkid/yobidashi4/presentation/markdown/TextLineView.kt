@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
