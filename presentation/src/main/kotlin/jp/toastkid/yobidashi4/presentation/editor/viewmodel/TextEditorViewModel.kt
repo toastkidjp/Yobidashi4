@@ -202,13 +202,12 @@ class TextEditorViewModel : KoinComponent {
         val max = lineCount.value
         val length = max.toString().length
         return (1 .. max).map {
-            val lineNumberCount = it
-            val fillCount = length - lineNumberCount.toString().length
+            val fillCount = length - it.toString().length
             return@map (it - 1 to with(StringBuilder()) {
                 repeat(fillCount) {
                     append(" ")
                 }
-                append(lineNumberCount)
+                append(it)
             }.toString())
         }
     }
