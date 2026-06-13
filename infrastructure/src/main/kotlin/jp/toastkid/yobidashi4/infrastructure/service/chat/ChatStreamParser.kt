@@ -54,7 +54,7 @@ class ChatStreamParser {
 
 }
 
-private val pattern = Pattern.compile("\\{\"parts\": \\[\\{\"text\": \"(.*?)\"}]", Pattern.DOTALL)
+private val pattern = Pattern.compile("\"text\": \"(.*?)\"", Pattern.DOTALL)
 
 private val imagePattern = Pattern.compile("\"inlineData\":(.+?)\"data\": \"(.+?)\"", Pattern.DOTALL)
 
