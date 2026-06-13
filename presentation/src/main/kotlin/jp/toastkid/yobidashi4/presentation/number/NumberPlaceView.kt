@@ -95,7 +95,7 @@ fun NumberPlaceView() {
                         row.forEachIndexed { columnIndex, cellValue ->
                             Cell(
                                 cellValue,
-                                { viewModel.openingCellOption(rowIndex, columnIndex) },
+                                viewModel.openingCellOption(rowIndex, columnIndex),
                                 { viewModel.closeCellOption(rowIndex, columnIndex) },
                                 viewModel.numberLabel(rowIndex, columnIndex),
                                 {
@@ -153,7 +153,7 @@ fun NumberPlaceView() {
 @Composable
 private fun Cell(
     cellValue: Int,
-    open: () -> Boolean,
+    open: Boolean,
     close: () -> Unit,
     numberLabel: String,
     onMenuItemClick: (Int) -> Unit,
@@ -243,7 +243,7 @@ private fun AppBarContent(
 
 @Composable
 private fun MaskedCell(
-    open: () -> Boolean,
+    open: Boolean,
     close: () -> Unit,
     numberLabel: String,
     onMenuItemClick: (Int) -> Unit,
@@ -260,7 +260,7 @@ private fun MaskedCell(
             fontSize = fontSize,
             textAlign = TextAlign.Center
         )
-        DropdownMenu(open(), onDismissRequest = close) {
+        DropdownMenu(open, onDismissRequest = close) {
             HoverHighlightDropdownMenuItem(
                 "_",
                 modifier = Modifier.semantics { contentDescription = "chooser_-1" },
