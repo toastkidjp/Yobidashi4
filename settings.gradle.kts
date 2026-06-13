@@ -21,7 +21,7 @@ dependencyResolutionManagement {
             library("zxing", "com.google.zxing", "core").version("3.5.4")
             library("jcef", "me.friwi", "jcefmaven").version("146.0.10")
             library("jsoup", "org.jsoup", "jsoup").version("1.22.2")
-            version("compose", "1.10.3")
+            version("compose", "1.11.1")
             version("kover", "0.9.8")
             version("kotlin", "2.3.20")
             version("ksp", "2.3.6")
