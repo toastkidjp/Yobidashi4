@@ -22,9 +22,7 @@ fun TextLineView(text: String, textStyle: TextStyle, modifier: Modifier) {
         style = textStyle,
         modifier = modifier.pointerInput(Unit) {
             detectTapGestures(
-                onTap = { offset ->
-                    viewModel.onLinkTap(offset)
-                },
+                onTap = viewModel::onLinkTap,
                 onLongPress = { offset ->
                     viewModel.onLinkLongPress(offset)
                 }
