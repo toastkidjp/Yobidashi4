@@ -26,6 +26,7 @@ enum class FixedJapaneseHoliday(val month: Int, val date: Int, val japaneseTitle
     companion object {
         fun find(year: Int, month: Int): List<Holiday> {
             return entries.filter { it.month == month }
+                .filter { it.month != 8 || year >= 2016 }
                 .map {
                     Holiday(
                         it.japaneseTitle,
