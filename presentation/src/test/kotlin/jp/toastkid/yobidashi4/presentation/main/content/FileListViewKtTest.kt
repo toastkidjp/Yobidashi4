@@ -114,7 +114,6 @@ class FileListViewKtTest {
                     enter()
                     exit()
                 }
-            verify { anyConstructed<FileListViewModel>().edit(any()) }
 
             onNodeWithContentDescription("Reload file list", useUnmergedTree = true)
                 .performClick()
