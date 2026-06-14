@@ -54,10 +54,12 @@ class TextContextMenuFactoryTest {
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
         every { mainViewModel.askGenerativeAi(any(), any()) } just Runs
         every { textManager.selectedText } returns AnnotatedString("test")
-        every { textManager.cut } returns mockk()
-        every { textManager.copy } returns mockk()
-        every { textManager.paste } returns mockk()
-        every { textManager.selectAll } returns mockk()
+        val textContextMenuAction = mockk<TextContextMenu.Action>()
+        every { textManager.cut } returns textContextMenuAction
+        every { textManager.copy } returns textContextMenuAction
+        every { textManager.paste } returns textContextMenuAction
+        every { textManager.selectAll } returns textContextMenuAction
+        every { textContextMenuAction.execute } returns mockk()
         every { state.status } returns mockk()
         every { state.status = any() } just Runs
     }
