@@ -27,6 +27,7 @@ class JapaneseOffDayFinderServiceTest {
 
     @ParameterizedTest
     @CsvSource(
+        "2016, 11",
         "2020, 10",
         "2021, 9",
         "2022, 11"
