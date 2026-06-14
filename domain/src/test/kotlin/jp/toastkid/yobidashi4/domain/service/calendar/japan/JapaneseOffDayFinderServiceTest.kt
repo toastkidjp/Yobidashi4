@@ -53,16 +53,14 @@ class JapaneseOffDayFinderServiceTest {
         assertEquals(23, japaneseOffDayFinderService.invoke(2024, 9).first().day)
     }
 
-    @Test
-    fun check224() {
-        assertTrue(japaneseOffDayFinderService.invoke(224, 3, false).isEmpty())
-        assertEquals(1, japaneseOffDayFinderService.invoke(224, 9, false).size)
-    }
-
-    @Test
-    fun check20124() {
-        assertTrue(japaneseOffDayFinderService.invoke(20124, 3, false).isEmpty())
-        assertEquals(1, japaneseOffDayFinderService.invoke(20124, 4, false).size)
+    @ParameterizedTest
+    @CsvSource(
+        "224, 9, 1",
+        "20124, 4, 1",
+    )
+    fun checkIrregularYearInputCases(year: Int, month: Int, expected: Int) {
+        assertTrue(japaneseOffDayFinderService.invoke(year, 3, false).isEmpty())
+        assertEquals(expected, japaneseOffDayFinderService.invoke(224, month, false).size)
     }
 
     @ParameterizedTest
