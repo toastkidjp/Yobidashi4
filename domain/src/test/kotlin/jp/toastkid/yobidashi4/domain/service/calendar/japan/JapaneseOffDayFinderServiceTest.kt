@@ -37,6 +37,11 @@ class JapaneseOffDayFinderServiceTest {
     }
 
     @Test
+    fun mountainDayBefore2016() {
+        assertTrue(japaneseOffDayFinderService.invoke(2015, 8).isEmpty())
+    }
+
+    @Test
     fun substituteHolidayInMay() {
         assertNotNull(japaneseOffDayFinderService.invoke(2013, 5).firstOrNull { it.day == 6 })
         assertNotNull(japaneseOffDayFinderService.invoke(2014, 5).firstOrNull { it.day == 6 })
