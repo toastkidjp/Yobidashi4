@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.TextContextMenu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLocalization
+import androidx.compose.ui.platform.PlatformLocalization
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.service.text.TextCountMessageFactory
 import jp.toastkid.yobidashi4.presentation.editor.preview.LinkBehaviorService
@@ -28,10 +29,9 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
 
                 val itemConsumer = {
                     val items = mutableListOf<ContextMenuItem>()
-                    val cut = textManager.cut
-                    if (cut != null) {
-                        items.add(ContextMenuItem(localization.cut, cut.execute))
-                    }
+
+                    addIfNeed(textManager.cut, items, localization)
+
                     val copy = textManager.copy
                     if (copy != null) {
                         items.add(ContextMenuItem(localization.copy, copy.execute))
@@ -86,6 +86,16 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                 }
 
                 ContextMenuArea(itemConsumer, state, content = content)
+            }
+
+            private fun addIfNeed(
+                action: TextContextMenu.Action?,
+                items: MutableList<ContextMenuItem>,
+                localization: PlatformLocalization
+            ) {
+                if (action != null) {
+                    items.add(ContextMenuItem(localization.cut, action.execute))
+                }
             }
 
         }
