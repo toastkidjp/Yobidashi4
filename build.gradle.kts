@@ -55,7 +55,7 @@ allprojects {
         testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-        testImplementation("io.mockk:mockk:1.10.6")
+        testImplementation("io.mockk:mockk:1.14.11")
         testRuntimeOnly("net.bytebuddy:byte-buddy:1.15.7")
     }
 
