@@ -21,9 +21,7 @@ class LatestFileFinder {
             .asSequence()
             .map { it to Files.getLastModifiedTime(it) }
             .sortedByDescending { it.second }
-            .filter {
-                it.second.toMillis() > toEpochMilli
-            }
+            .filter { it.second.toMillis() > toEpochMilli }
             .map { it.first }
             .toMutableList()
     }
