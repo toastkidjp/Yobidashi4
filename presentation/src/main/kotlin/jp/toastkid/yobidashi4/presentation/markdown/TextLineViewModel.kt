@@ -99,7 +99,7 @@ class TextLineViewModel : KoinComponent {
         }
 
         vm.putSecondaryClickItem(
-            if (stringRange != null) stringRange.item else ""
+            stringRange?.item ?: ""
         )
     }
 
