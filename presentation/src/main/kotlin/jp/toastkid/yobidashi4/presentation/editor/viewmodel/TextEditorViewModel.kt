@@ -256,8 +256,6 @@ class TextEditorViewModel : KoinComponent {
         }
     }
 
-    private val visualTransformation = transformation
-
     private val none = OutputTransformation {
         append("[EOF]")
     }
@@ -267,7 +265,7 @@ class TextEditorViewModel : KoinComponent {
             return none
         }
 
-        return visualTransformation
+        return transformation
     }
 
     fun makeCharacterCountMessage(count: Int): String {
