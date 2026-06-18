@@ -41,11 +41,18 @@ class JapaneseOffDayFinderServiceTest {
         assertTrue(japaneseOffDayFinderService.invoke(2015, 8).isEmpty())
     }
 
+    @ParameterizedTest
+    @CsvSource(
+        "2013",
+        "2014",
+        "2015"
+    )
+    fun substituteHolidayInMay(year: Int) {
+        assertNotNull(japaneseOffDayFinderService.invoke(year, 5).firstOrNull { it.day == 6 })
+    }
+
     @Test
-    fun substituteHolidayInMay() {
-        assertNotNull(japaneseOffDayFinderService.invoke(2013, 5).firstOrNull { it.day == 6 })
-        assertNotNull(japaneseOffDayFinderService.invoke(2014, 5).firstOrNull { it.day == 6 })
-        assertNotNull(japaneseOffDayFinderService.invoke(2015, 5).firstOrNull { it.day == 6 })
+    fun noneSubstituteHolidayInMayCase() {
         assertNull(japaneseOffDayFinderService.invoke(2016, 5).firstOrNull { it.day == 6 })
     }
 
