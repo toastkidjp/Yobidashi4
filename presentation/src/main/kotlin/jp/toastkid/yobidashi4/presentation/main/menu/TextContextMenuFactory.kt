@@ -30,11 +30,8 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                     val items = mutableListOf<ContextMenuItem>()
 
                     addIfNeed(items, localization.cut, textManager.cut)
+                    addIfNeed(items, localization.copy, textManager.copy)
 
-                    val copy = textManager.copy
-                    if (copy != null) {
-                        items.add(ContextMenuItem(localization.copy, copy.execute))
-                    }
                     val paste = textManager.paste
                     if (paste != null) {
                         items.add(ContextMenuItem(localization.paste, paste.execute))
