@@ -10,5 +10,4 @@ package jp.toastkid.yobidashi4.presentation.editor.data
 data class LineNumber(
     val number: Int,
     val text: String
-) {
-}
+)
