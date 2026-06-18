@@ -126,8 +126,10 @@ fun SimpleTextEditor(
 
             setStatus(viewModel.makeCharacterCountMessage(tab.getContent().length))
 
-            focusManager.clearFocus(true)
-            onDispose(viewModel::dispose)
+            onDispose {
+                focusManager.clearFocus(true)
+                viewModel.dispose()
+            }
         }
 
         VerticalScrollbar(
