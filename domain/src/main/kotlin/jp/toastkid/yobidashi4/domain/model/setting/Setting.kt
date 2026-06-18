@@ -22,12 +22,6 @@ interface Setting {
 
     fun setArticleFolderPath(path: String)
 
-    /*
-    fun sorting(): String
-
-    fun setSorting(newValue: Sorting)
-*/
-
     fun userOffDay(): List<Pair<Int, Int>>
 
     fun setUseCaseSensitiveInFinder(use: Boolean)
