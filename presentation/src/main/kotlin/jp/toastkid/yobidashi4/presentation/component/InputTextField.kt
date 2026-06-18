@@ -55,7 +55,10 @@ internal fun InputTextField(
         MultiLineTextField(
             textFieldValue,
             maxLines = 1,
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                cursorColor = MaterialTheme.colors.secondary
+            ),
             labelText = labelText,
             onClearInput = clearButton,
             keyboardActions = KeyboardActionHandler {
