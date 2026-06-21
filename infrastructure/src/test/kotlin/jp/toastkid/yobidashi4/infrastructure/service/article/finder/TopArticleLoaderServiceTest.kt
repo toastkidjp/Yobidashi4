@@ -1,31 +1,34 @@
+/*
+ * Copyright (c) 2026 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
 import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import okio.Path.Companion.toPath
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.attribute.FileTime
-import java.util.stream.Stream
-import kotlin.io.path.nameWithoutExtension
 
 class TopArticleLoaderServiceTest {
 
-    @InjectMockKs
     private lateinit var topArticleLoaderService: TopArticleLoaderServiceImplementation
+
+    private lateinit var fakeFileSystem: FakeFileSystem
 
     @MockK
     private lateinit var setting: Setting
@@ -33,6 +36,7 @@ class TopArticleLoaderServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        fakeFileSystem = FakeFileSystem()
 
         startKoin {
             modules(
@@ -42,17 +46,19 @@ class TopArticleLoaderServiceTest {
             )
         }
 
-        every { setting.articleFolderPath() }.returns(mockk())
+        val folder = "test".toPath()
 
-        mockkStatic(Files::class)
-        val path1 = mockk<Path>()
-        every { path1.nameWithoutExtension } returns "test.md"
-        val path2 = mockk<Path>()
-        every { path2.nameWithoutExtension } returns "test.jar"
-        val path3 = mockk<Path>()
-        every { path3.nameWithoutExtension } returns "test.txt"
-        every { Files.list(any()) } answers { Stream.of(path1, path2, path3) }
-        every { Files.getLastModifiedTime(any()) }.returns(FileTime.fromMillis(System.currentTimeMillis()))
+        every { setting.articleFolderPath() }.returns(folder.toNioPath())
+
+        val path1 = "test/test.md".toPath()
+        val path2 = "test/test.jar".toPath()
+        val path3 = "test/test.txt".toPath()
+        fakeFileSystem.createDirectory(folder)
+        fakeFileSystem.write(path1) {}
+        fakeFileSystem.write(path2) {}
+        fakeFileSystem.write(path3) {}
+
+        topArticleLoaderService = TopArticleLoaderServiceImplementation(fakeFileSystem)
     }
 
     @AfterEach
@@ -63,11 +69,10 @@ class TopArticleLoaderServiceTest {
 
     @Test
     fun invoke() {
-        topArticleLoaderService.invoke()
+        val paths = topArticleLoaderService.invoke()
 
         verify { setting.articleFolderPath() }
-        verify { Files.list(any()) }
-        verify(exactly = 2) { Files.getLastModifiedTime(any()) }
+        assertEquals(2, paths.size)
     }
 
 }
