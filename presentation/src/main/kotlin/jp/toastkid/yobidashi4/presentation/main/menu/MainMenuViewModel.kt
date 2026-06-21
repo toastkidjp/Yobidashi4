@@ -107,12 +107,14 @@ class MainMenuViewModel : KoinComponent {
         asynchronousArticleIndexerService.invoke(ioContextProvider())
     }
 
+    private val articleFilesFinder: ArticleFilesFinder by inject()
+
     private val latestFileFinder: LatestFileFinder by inject()
 
     fun dumpAll() {
         val zipArchiver = ZipArchiver()
         CoroutineScope(ioContextProvider()).launch {
-            zipArchiver.invoke(ArticleFilesFinder().invoke(setting.articleFolderPath()))
+            zipArchiver.invoke(articleFilesFinder.invoke(setting.articleFolderPath()))
             viewModel.openFile(zipArchiver.outputFolder())
         }
         CoroutineScope(ioContextProvider()).launch {
