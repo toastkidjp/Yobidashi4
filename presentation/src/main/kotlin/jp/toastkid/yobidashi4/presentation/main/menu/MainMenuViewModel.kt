@@ -76,6 +76,10 @@ class MainMenuViewModel : KoinComponent {
 
     private val useMetaKey: Boolean = System.getProperty("os.name").contains("Mac")
 
+    private val articleFilesFinder: ArticleFilesFinder by inject()
+
+    private val latestFileFinder: LatestFileFinder by inject()
+
     fun makeNewArticle() {
         viewModel.makeNewArticle()
     }
@@ -106,10 +110,6 @@ class MainMenuViewModel : KoinComponent {
     fun updateFinderIndex() {
         asynchronousArticleIndexerService.invoke(ioContextProvider())
     }
-
-    private val articleFilesFinder: ArticleFilesFinder by inject()
-
-    private val latestFileFinder: LatestFileFinder by inject()
 
     fun dumpAll() {
         val zipArchiver = ZipArchiver()
