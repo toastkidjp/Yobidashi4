@@ -38,6 +38,8 @@ dependencies {
 
     implementation("org.tribuo:tribuo-clustering-kmeans:4.3.1")
     implementation("org.tribuo:tribuo-data:4.3.1")
+
+    testImplementation("com.squareup.okio:okio-fakefilesystem:3.9.0")
 }
 
 ksp {
