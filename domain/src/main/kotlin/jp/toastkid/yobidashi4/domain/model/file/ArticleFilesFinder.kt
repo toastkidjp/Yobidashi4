@@ -19,9 +19,7 @@ class ArticleFilesFinder {
             .asSequence()
             .map { it to Files.getLastModifiedTime(it) }
             .sortedByDescending { it.second }
-            .filter {
-                containsSpecificCharacters(it)
-            }
+            .filter(::containsSpecificCharacters)
             .map { it.first }
             .toMutableList()
     }
