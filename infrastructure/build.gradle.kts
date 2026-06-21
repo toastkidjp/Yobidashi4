@@ -24,6 +24,7 @@ dependencies {
     implementation(libraries.koinAnnotations)
     ksp(libraries.koinKspCompiler)
 
+    implementation(libraries.okio)
     implementation(libraries.jsoup)
     implementation(libraries.slf4j)
     implementation(libraries.reload4j)
