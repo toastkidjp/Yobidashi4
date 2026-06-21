@@ -7,26 +7,10 @@
  */
 package jp.toastkid.yobidashi4.domain.model.file
 
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.attribute.FileTime
-import kotlin.streams.asSequence
 
-class ArticleFilesFinder {
+interface ArticleFilesFinder {
 
-    operator fun invoke(path: Path): MutableList<Path> {
-        return Files.list(path)
-            .asSequence()
-            .map { it to Files.getLastModifiedTime(it) }
-            .sortedByDescending { it.second }
-            .filter(::containsSpecificCharacters)
-            .map { it.first }
-            .toMutableList()
-    }
-
-    private fun containsSpecificCharacters(pair: Pair<Path, FileTime>): Boolean {
-        val name = pair.first.fileName.toString()
-        return name.startsWith("20") || name.startsWith("『")
-    }
+    operator fun invoke(path: Path): MutableList<Path>
 
 }
