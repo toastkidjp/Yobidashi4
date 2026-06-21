@@ -7,23 +7,11 @@
  */
 package jp.toastkid.yobidashi4.domain.model.file
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import kotlin.streams.asSequence
 
-class LatestFileFinder {
+interface LatestFileFinder {
 
-    operator fun invoke(path: Path, latest: LocalDateTime): MutableList<Path> {
-        val toEpochMilli =  latest.toInstant(OffsetDateTime.now().offset).toEpochMilli()
-        return Files.list(path)
-            .asSequence()
-            .map { it to Files.getLastModifiedTime(it) }
-            .sortedByDescending { it.second }
-            .filter { it.second.toMillis() > toEpochMilli }
-            .map { it.first }
-            .toMutableList()
-    }
+    operator fun invoke(path: Path, latest: LocalDateTime): MutableList<Path>
 
 }
