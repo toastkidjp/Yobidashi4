@@ -107,6 +107,8 @@ class MainMenuViewModel : KoinComponent {
         asynchronousArticleIndexerService.invoke(ioContextProvider())
     }
 
+    private val latestFileFinder: LatestFileFinder by inject()
+
     fun dumpAll() {
         val zipArchiver = ZipArchiver()
         CoroutineScope(ioContextProvider()).launch {
@@ -115,7 +117,7 @@ class MainMenuViewModel : KoinComponent {
         }
         CoroutineScope(ioContextProvider()).launch {
             zipArchiver.invoke(
-                LatestFileFinder().invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
+                latestFileFinder.invoke(setting.articleFolderPath(), LocalDateTime.now().minusWeeks(1)),
                 "latestArticles${makeCurrentTimeSuffix()}.zip"
             )
         }
