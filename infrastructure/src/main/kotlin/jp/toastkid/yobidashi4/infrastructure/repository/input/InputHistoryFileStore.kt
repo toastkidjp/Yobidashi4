@@ -9,7 +9,10 @@ import okio.buffer
 import org.koin.core.annotation.Single
 
 @Single
-class InputHistoryFileStore(private val fileSystem: FileSystem, private val context: String) : InputHistoryRepository {
+class InputHistoryFileStore(
+    private val fileSystem: FileSystem,
+    private val context: String
+) : InputHistoryRepository {
 
     override fun list(): List<InputHistory> {
         return filter("")
