@@ -1,16 +1,12 @@
 package jp.toastkid.yobidashi4.infrastructure.repository.bookmark
 
 import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
+import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
+import okio.Path.Companion.toPath
+import okio.buffer
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -19,25 +15,22 @@ import org.junit.jupiter.api.Test
 
 class BookmarkFileStoreTest {
 
-    @InjectMockKs
     private lateinit var bookmarkFileStore: BookmarkFileStore
 
-    @MockK
-    private lateinit var path: Path
+    private lateinit var fakeFileSystem: FakeFileSystem
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
-        mockkStatic(Files::class)
-        every { Files.exists(any()) }.returns(true)
-        every { Files.readAllLines(any()) }.returns(listOf("test\thttps://www.yahoo.co.jp"))
-        every { Files.write(any(), any<Iterable<String>>()) }.returns(mockk())
-        every { Files.createDirectories(any()) }.returns(mockk())
+        fakeFileSystem = FakeFileSystem()
 
-        mockkStatic(Path::class)
-        every { Path.of(any<String>()) }.returns(path)
-        every { path.parent }.returns(path)
+        val path = WebBookmarkPath().getPath()
+        val folderName = path.parent.toString()
+        fakeFileSystem.createDirectories(folderName.toPath())
+        fakeFileSystem.write("$folderName/${path.fileName}".toPath()) { writeUtf8("test\thttps://www.yahoo.co.jp") }
+
+        bookmarkFileStore = BookmarkFileStore(fakeFileSystem)
     }
 
     @AfterEach
@@ -47,7 +40,10 @@ class BookmarkFileStoreTest {
 
     @Test
     fun listEmptyCase() {
-        every { Files.exists(any()) }.returns(false)
+        val path = WebBookmarkPath().getPath()
+        val folderName = path.parent.toString()
+        fakeFileSystem.delete("$folderName/${path.fileName}".toPath())
+        fakeFileSystem.delete(folderName.toPath())
 
         assertTrue(bookmarkFileStore.list().isEmpty())
     }
@@ -62,29 +58,59 @@ class BookmarkFileStoreTest {
 
     @Test
     fun add() {
+        val path = WebBookmarkPath().getPath()
+        val folderName = path.parent.toString()
+
         bookmarkFileStore.add(Bookmark("test", "https://www.yahoo.co.jp"))
 
-        verify(inverse = true) { Files.createDirectories(any()) }
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        assertEquals(
+            2,
+            fakeFileSystem.source("$folderName/${path.fileName}".toPath())
+                .buffer()
+                .use {
+                    it.readUtf8()
+                        .split("\n")
+                        .size
+                }
+        )
     }
 
     @Test
     fun addNotFoundCase() {
-        every { Files.exists(any()) }.returns(false)
+        val path = WebBookmarkPath().getPath()
+        val folderName = path.parent.toString()
+        fakeFileSystem.delete("$folderName/${path.fileName}".toPath())
+        fakeFileSystem.delete(folderName.toPath())
 
         bookmarkFileStore.add(Bookmark("test", "https://www.yahoo.co.jp"))
 
-        verify { Files.createDirectories(any()) }
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        assertEquals(
+            "test\thttps://www.yahoo.co.jp",
+            fakeFileSystem.source("$folderName/${path.fileName}".toPath())
+                .buffer()
+                .use {
+                    it.readUtf8()
+                }
+        )
     }
 
     @Test
     fun delete() {
+        val path = WebBookmarkPath().getPath()
+        val folderName = path.parent.toString()
         val item = Bookmark("test", "https://www.yahoo.co.jp")
+
         bookmarkFileStore.delete(item)
 
-        verify(inverse = true) { Files.createDirectories(any()) }
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        assertTrue(
+            fakeFileSystem.source("$folderName/${path.fileName}".toPath())
+                .buffer()
+                .use {
+                    it.readUtf8()
+                }
+                .trim()
+                .isEmpty()
+        )
     }
 
 }
