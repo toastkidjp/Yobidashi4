@@ -3,10 +3,10 @@ package jp.toastkid.yobidashi4.infrastructure.repository.input
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import okio.FileSystem
-import okio.Path.Companion.toOkioPath
+import okio.Path
+import okio.Path.Companion.toPath
 import okio.buffer
 import org.koin.core.annotation.Single
-import java.nio.file.Path
 
 @Single
 class InputHistoryFileStore(private val fileSystem: FileSystem, private val context: String) : InputHistoryRepository {
@@ -17,11 +17,11 @@ class InputHistoryFileStore(private val fileSystem: FileSystem, private val cont
 
     override fun filter(query: String?): List<InputHistory> {
         val path = path()
-        if (fileSystem.exists(path.toOkioPath()).not()) {
+        if (fileSystem.exists(path).not()) {
             return emptyList()
         }
 
-        return fileSystem.source(path.toOkioPath()).buffer().use { buffer ->
+        return fileSystem.source(path).buffer().use { buffer ->
             buffer.readUtf8().split("\n").filter { query.isNullOrBlank() || it.contains(query) }
                 .mapNotNull(InputHistory::from)
         }
@@ -40,15 +40,16 @@ class InputHistoryFileStore(private val fileSystem: FileSystem, private val cont
     }
 
     override fun clear() {
-        fileSystem.delete(path().toOkioPath())
+        fileSystem.delete(path())
     }
 
     private fun save(list: List<InputHistory>) {
-        if (fileSystem.exists(path().parent.toOkioPath()).not()) {
-            fileSystem.createDirectories(path().parent.toOkioPath())
+        val parent = path().parent ?: return
+        if (fileSystem.exists(parent).not()) {
+            fileSystem.createDirectories(parent)
         }
 
-        fileSystem.sink(path().toOkioPath()).buffer().use {
+        fileSystem.sink(path()).buffer().use {
             it.writeUtf8(
                 list.sortedByDescending(InputHistory::timestamp).distinctBy { it.word }.map(InputHistory::toTsv)
                     .joinToString("\n")
@@ -57,11 +58,11 @@ class InputHistoryFileStore(private val fileSystem: FileSystem, private val cont
     }
 
     private fun path(): Path {
-        return folder.resolve("$context.$extension")
+        return folder.resolve("$context.$extension", false)
     }
 
 }
 
-private val folder = Path.of("temporary/input/history/")
+private val folder = "temporary/input/history/".toPath()
 
 private const val extension = "tsv"
