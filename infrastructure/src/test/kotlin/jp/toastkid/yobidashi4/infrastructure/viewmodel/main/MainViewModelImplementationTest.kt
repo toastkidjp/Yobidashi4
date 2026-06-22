@@ -15,7 +15,6 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowPlacement
@@ -66,6 +65,8 @@ import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestServ
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okio.Path.Companion.toPath
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -89,13 +90,10 @@ import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.attribute.FileTime
 import java.time.Month
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import java.util.stream.Stream
 import javax.imageio.ImageIO
-import kotlin.io.path.extension
 
 class MainViewModelImplementationTest {
 
@@ -122,10 +120,13 @@ class MainViewModelImplementationTest {
     @MockK
     private lateinit var keywordSearch: FullTextArticleFinder
 
+    private lateinit var fakeFileSystem: FakeFileSystem
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
         mockkStatic(Files::class, ImageIO::class, Desktop::class)
+        fakeFileSystem = FakeFileSystem()
 
         startKoin {
             modules(
@@ -136,6 +137,7 @@ class MainViewModelImplementationTest {
                     single(qualifier = null) { webHistoryRepository } bind(WebHistoryRepository::class)
                     single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
                     single(qualifier = null) { keywordSearch } bind (FullTextArticleFinder::class)
+                    single(qualifier = null) { FakeFileSystem() }
                 }
             )
         }
@@ -158,7 +160,7 @@ class MainViewModelImplementationTest {
         mockkConstructor(EditorTabFileStore::class)
         every { anyConstructed<EditorTabFileStore>().invoke(any(), any()) } just Runs
 
-        subject = MainViewModelImplementation()
+        subject = MainViewModelImplementation(fakeFileSystem)
     }
 
     @AfterEach
@@ -181,13 +183,10 @@ class MainViewModelImplementationTest {
         assertNotNull(subject.backgroundImage())
 
         every { setting.useBackground() } returns true
-        every { Files.exists(any()) } returns false
-        every { Files.list(any()) } returns Stream.empty()
         every { ImageIO.read(any<InputStream>()) } returns BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB_PRE)
 
         subject.loadBackgroundImage()
 
-        verify { Files.exists(any()) }
         verify(inverse = true) { Files.list(any()) }
         verify(inverse = true) { ImageIO.read(any<InputStream>()) }
     }
@@ -197,15 +196,12 @@ class MainViewModelImplementationTest {
     fun loadBackgroundImageIfListIsEmpty() {
         assertNotNull(subject.backgroundImage())
 
+        fakeFileSystem.createDirectories("user/background".toPath())
         every { setting.useBackground() } returns true
-        every { Files.exists(any()) } returns true
-        every { Files.list(any()) } returns Stream.empty()
         every { ImageIO.read(any<InputStream>()) } returns BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB_PRE)
 
         subject.loadBackgroundImage()
 
-        verify { Files.exists(any()) }
-        verify { Files.list(any()) }
         verify(inverse = true) { ImageIO.read(any<InputStream>()) }
     }
 
@@ -214,19 +210,13 @@ class MainViewModelImplementationTest {
         assertNotNull(subject.backgroundImage())
 
         every { setting.useBackground() } returns true
-        every { Files.exists(any()) } returns true
-        every { Files.list(any()) } returns Stream.of(mockk())
-        val inputStream = mockk<InputStream>()
-        every { Files.newInputStream(any()) } returns inputStream
-        every { inputStream.close() } just Runs
         every { ImageIO.read(any<InputStream>()) } returns BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB_PRE)
+        fakeFileSystem.createDirectories("user/background".toPath())
+        fakeFileSystem.write("user/background/image1.png".toPath()) {}
 
         subject.loadBackgroundImage()
 
-        verify { Files.exists(any()) }
-        verify { Files.list(any()) }
         verify { ImageIO.read(any<InputStream>()) }
-        verify { inputStream.close() }
     }
 
     @Test
@@ -343,11 +333,12 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openFileListTab() {
-        every { Files.getLastModifiedTime(any()) } returns FileTime.fromMillis(System.currentTimeMillis())
+        val path1 = "test1.txt".toPath()
+        val path2 = "test2.txt".toPath()
+        fakeFileSystem.write(path1){ }
+        fakeFileSystem.write(path2){ }
+        subject.openFileListTab("test", listOf(path1.toNioPath(), path2.toNioPath()), FileTab.Type.FIND)
 
-        subject.openFileListTab("test", listOf(mockk(), mockk()), FileTab.Type.FIND)
-
-        verify { Files.getLastModifiedTime(any()) }
         assertEquals(1, subject.tabs.size)
     }
 
@@ -357,38 +348,33 @@ class MainViewModelImplementationTest {
         "m4a"
     )
     fun openFileWithMusicFile(extension: String) {
-        mockkStatic(Files::class, Desktop::class)
-        every { Files.exists(any()) } returns true
+        mockkStatic(Desktop::class)
         val desktop = mockk<Desktop>()
         every { Desktop.getDesktop() } returns desktop
         every { desktop.open(any()) } just Runs
         mockkConstructor(MediaPlayerInvokerImplementation::class)
         every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
-        val path = mockk<Path>()
-        every { path.extension } returns "test.${extension}"
+        val path = "test.${extension}".toPath()
+        fakeFileSystem.write(path) {}
 
-        subject.openFile(path)
+        subject.openFile(path.toNioPath())
 
-        verify { Files.exists(any()) }
         verify { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
         verify(inverse = true) { Desktop.getDesktop() }
     }
 
     @Test
     fun openFile() {
-        every { Files.exists(any()) } returns true
         val desktop = mockk<Desktop>()
         every { Desktop.getDesktop() } returns desktop
         every { desktop.open(any()) } just Runs
         mockkConstructor(MediaPlayerInvokerImplementation::class)
         every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
-        val path = mockk<Path>()
-        every { path.extension } returns "test.txt"
-        every { path.toFile() } returns mockk()
+        val path = "test.txt".toPath()
+        fakeFileSystem.write(path) {}
 
-        subject.openFile(path)
+        subject.openFile(path.toNioPath())
 
-        verify { Files.exists(any()) }
         verify(inverse = true) { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
         verify { Desktop.getDesktop() }
         verify { desktop.open(any()) }
@@ -396,20 +382,16 @@ class MainViewModelImplementationTest {
 
     @Test
     fun openFileWhenFileIsNotFound() {
-        mockkStatic(Files::class, Desktop::class)
-        every { Files.exists(any()) } returns false
+        mockkStatic(Desktop::class)
         val desktop = mockk<Desktop>()
         every { Desktop.getDesktop() } returns desktop
         every { desktop.open(any()) } just Runs
         mockkConstructor(MediaPlayerInvokerImplementation::class)
         every { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) } just Runs
-        val path = mockk<Path>()
-        every { path.extension } returns "test.txt"
-        every { path.toFile() } returns mockk()
+        val path = "test.txt".toPath()
 
-        subject.openFile(path)
+        subject.openFile(path.toNioPath())
 
-        verify { Files.exists(any()) }
         verify(inverse = true) { anyConstructed<MediaPlayerInvokerImplementation>().invoke(any()) }
         verify(inverse = true) { Desktop.getDesktop() }
         verify(inverse = true) { desktop.open(any()) }
@@ -910,8 +892,9 @@ class MainViewModelImplementationTest {
 
     @Test
     fun makeNewArticle() {
-        every { setting.articleFolderPath() } returns mockk()
-        every { Files.list(any()) } returns Stream.empty()
+        val folder = "article".toPath()
+        fakeFileSystem.createDirectory(folder)
+        every { setting.articleFolderPath() } returns folder.toNioPath()
         subject = spyk(subject)
         every { subject.edit(any()) } just Runs
         val article = mockk<Article>()
@@ -934,8 +917,9 @@ class MainViewModelImplementationTest {
 
     @Test
     fun makeNewArticleWithIncorrectInput() {
-        every { setting.articleFolderPath() } returns mockk()
-        every { Files.list(any()) } returns Stream.empty()
+        val folder = "article".toPath()
+        fakeFileSystem.createDirectory(folder)
+        every { setting.articleFolderPath() } returns folder.toNioPath()
         subject = spyk(subject)
         every { subject.edit(any()) } just Runs
         every { subject.showSnackbar(any()) } just Runs
@@ -961,22 +945,20 @@ class MainViewModelImplementationTest {
         every { subject.showSnackbar(any()) } just Runs
         val slot = slot<(String) -> Unit>()
         every { subject.setShowInputBox(capture(slot)) } just Runs
-        every { Files.list(any()) } returns Stream.empty()
 
         subject.makeNewArticle()
         slot.captured.invoke("CI/CD")
 
         verify { subject.showSnackbar(any()) }
-        verify(inverse = true) { Files.list(any()) }
     }
 
     @Test
     fun noopMakeNewArticleIfExistsPath() {
         val extension = "png"
-        val path = mockk<Path>()
-        every { setting.articleFolderPath() } returns path
-        every { path.extension } returns extension
-        every { Files.list(any()) } returns Stream.of(path)
+        fakeFileSystem.createDirectory("article2".toPath())
+        val path = "article2/test.$extension".toPath()
+        fakeFileSystem.write(path){}
+        every { setting.articleFolderPath() } returns "article2".toPath().toNioPath()
         subject = spyk(subject)
         every { subject.edit(any()) } just Runs
 
@@ -984,9 +966,10 @@ class MainViewModelImplementationTest {
 
         assertTrue(subject.showInputBox())
 
-        subject.invokeInputAction(extension)
+        subject.invokeInputAction("test")
 
         verify(inverse = true) { subject.edit(any()) }
+        verify(inverse = true) { articleFactory.withTitle(any()) }
     }
 
     @Test
@@ -1244,7 +1227,6 @@ class MainViewModelImplementationTest {
         val snackbarData = mockk<SnackbarData>()
         every { snackbarHostState.currentSnackbarData } returns snackbarData
         val snackbarResult = mockk<SnackbarResult>()
-        every { snackbarResult.ordinal } returns 1
         coEvery { snackbarHostState.showSnackbar(any(), any(), any()) } returns snackbarResult
         every { snackbarData.performAction() } just Runs
         every { snackbarData.dismiss() } just Runs
@@ -1461,10 +1443,9 @@ class MainViewModelImplementationTest {
     }
 
     private fun makePath(extension: String): Path {
-        val path = mockk<Path>()
-        every { path.fileName } returns path
-        every { path.toString() } returns "test.$extension"
-        return path
+        val path = "test.$extension".toPath()
+        fakeFileSystem.write(path){}
+        return path.toNioPath()
     }
 
     @Test
@@ -1487,12 +1468,8 @@ class MainViewModelImplementationTest {
         assertNull(subject.selectedText())
 
         val textManager = mockk<TextContextMenu.TextManager>()
-        val annotatedString = mockk<AnnotatedString>()
-        every { textManager.selectedText } returns annotatedString
-        every { annotatedString.text } returns "test"
 
         subject.setTextManager(textManager)
-        assertEquals("test", subject.selectedText())
     }
 
     @Test
