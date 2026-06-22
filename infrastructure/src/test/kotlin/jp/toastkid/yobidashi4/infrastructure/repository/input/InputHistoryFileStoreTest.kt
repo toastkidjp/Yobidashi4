@@ -3,19 +3,19 @@ package jp.toastkid.yobidashi4.infrastructure.repository.input
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.slot
 import io.mockk.unmockkAll
-import io.mockk.verify
-import java.nio.file.Files
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
+import okio.Path.Companion.toPath
+import okio.buffer
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 
 class InputHistoryFileStoreTest {
 
@@ -24,22 +24,22 @@ class InputHistoryFileStoreTest {
     @MockK
     private lateinit var path: Path
 
+    private lateinit var fakeFileSystem: FakeFileSystem
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-
-        mockkStatic(Files::class)
-        every { Files.exists(any()) }.returns(true)
-        every { Files.readAllLines(any()) }.returns(listOf("test\t$timestamp"))
-        every { Files.write(any(), any<Iterable<String>>()) }.returns(mockk())
-        every { Files.createDirectories(any()) }.returns(mockk())
 
         mockkStatic(Path::class)
         every { Path.of(any<String>()) }.returns(path)
         every { path.parent }.returns(path)
         every { path.resolve(any<String>()) }.returns(path)
 
-        subject = InputHistoryFileStore("test")
+        fakeFileSystem = FakeFileSystem()
+        fakeFileSystem.createDirectories("temporary/input/history/".toPath())
+        fakeFileSystem.write("temporary/input/history/test.tsv".toPath()) { writeUtf8("test\t$timestamp") }
+
+        subject = InputHistoryFileStore(fakeFileSystem, "test")
     }
 
     @AfterEach
@@ -49,7 +49,8 @@ class InputHistoryFileStoreTest {
 
     @Test
     fun listEmptyCase() {
-        every { Files.exists(any()) }.returns(false)
+        fakeFileSystem.delete("temporary/input/history/test.tsv".toPath())
+        fakeFileSystem.delete("temporary/input/history/".toPath())
 
         assertTrue(subject.list().isEmpty())
     }
@@ -86,32 +87,30 @@ class InputHistoryFileStoreTest {
 
     @Test
     fun add() {
-        val slot = slot<Iterable<String>>()
-        every { Files.write(any(), capture(slot)) }.returns(mockk())
-        every { Files.readAllLines(any()) }.returns(
-            listOf(
-                "test\t1",
-                "test\t3",
-                "test\t2",
-            )
-        )
+        fakeFileSystem.write("temporary/input/history/test.tsv".toPath()) {
+            writeUtf8("test\t1\ntest\t3\ntest\t2",)
+        }
 
         subject.add(InputHistory("test", 1))
 
-        verify(inverse = true) { Files.createDirectories(any()) }
-        verify { Files.write(any(), any<Iterable<String>>()) }
-        assertEquals(1, slot.captured.toList().size)
-        assertEquals("test\t3", slot.captured.toList().first())
+        fakeFileSystem.source("temporary/input/history/test.tsv".toPath()).buffer().use {
+            val content = it.readUtf8()
+            assertEquals("test\t3", content)
+            assertEquals(1, content.split("\n").size)
+        }
     }
 
     @Test
     fun addNotFoundCase() {
-        every { Files.exists(any()) }.returns(false)
+        fakeFileSystem.delete("temporary/input/history/test.tsv".toPath())
+        fakeFileSystem.delete("temporary/input/history/".toPath())
 
         subject.add(InputHistory("test", timestamp))
 
-        verify { Files.createDirectories(any()) }
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        fakeFileSystem.source("temporary/input/history/test.tsv".toPath()).buffer().use {
+            val content = it.readUtf8()
+            assertEquals("test", content.split("\t")[0])
+        }
     }
 
     @Test
@@ -119,24 +118,27 @@ class InputHistoryFileStoreTest {
         val item = InputHistory("test", timestamp)
         subject.delete(item)
 
-        verify(inverse = true) { Files.createDirectories(any()) }
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        fakeFileSystem.source("temporary/input/history/test.tsv".toPath()).buffer().use {
+            val content = it.readUtf8()
+            assertTrue(content.isEmpty())
+        }
     }
 
     @Test
     fun deleteWithWord() {
         subject.deleteWithWord("test")
 
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        fakeFileSystem.source("temporary/input/history/test.tsv".toPath()).buffer().use {
+            val content = it.readUtf8()
+            assertTrue(content.isEmpty())
+        }
     }
 
     @Test
     fun clear() {
-        every { Files.deleteIfExists(any()) } returns true
-
         subject.clear()
 
-        verify { Files.deleteIfExists(any()) }
+        assertFalse(fakeFileSystem.exists("temporary/input/history/test.tsv".toPath()))
     }
 
 }
