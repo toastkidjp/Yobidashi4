@@ -59,38 +59,29 @@ class LatestFileFinderImplementationTest {
 
         fakeFileSystem.write(path) { writeUtf8("log_content") }
         fakeFileSystem.write(path2) { writeUtf8("log_content") }
-        val fileMetadata2 = mockk<FileMetadata>()
-        every { fileMetadata2.lastModifiedAtMillis } returns now.minusDays(8)
-            .toInstant(OffsetDateTime.now().offset)
-            .toKotlinInstant()
-            .toEpochMilliseconds()
-
         fakeFileSystem.write(path3) { writeUtf8("log_content") }
-        val fileMetadata3 = mockk<FileMetadata>()
-        every { fileMetadata3.lastModifiedAtMillis } returns now.minusDays(9)
-            .toInstant(OffsetDateTime.now().offset)
-            .toKotlinInstant()
-            .toEpochMilliseconds()
-        every { fakeFileSystem.metadata(path3) } returns fileMetadata3
-
-        val fileMetadata = mockk<FileMetadata>()
-        every { fileMetadata.lastModifiedAtMillis } returns now
-            .toInstant(OffsetDateTime.now().offset)
-            .toKotlinInstant()
-            .toEpochMilliseconds()
 
         every { fakeFileSystem.metadata(any()) } answers {
             if (arg<Path>(0).name.endsWith("2"))
-                fileMetadata2
+                makeFakeMetadata(now.minusDays(8))
             else if (arg<Path>(0).name.endsWith("3"))
-                fileMetadata3
+                makeFakeMetadata(now.minusDays(9))
             else
-                fileMetadata
+                makeFakeMetadata(now)
         }
 
         val paths = subject.invoke(toPath.toNioPath(), now.minusDays(7))
 
         assertEquals(1, paths.size)
+    }
+
+    private fun makeFakeMetadata(dateTime: LocalDateTime): FileMetadata {
+        val fileMetadata2 = mockk<FileMetadata>()
+        every { fileMetadata2.lastModifiedAtMillis } returns dateTime
+            .toInstant(OffsetDateTime.now().offset)
+            .toKotlinInstant()
+            .toEpochMilliseconds()
+        return fileMetadata2
     }
 
 }
