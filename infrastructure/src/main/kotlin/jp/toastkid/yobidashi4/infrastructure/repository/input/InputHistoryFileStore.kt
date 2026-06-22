@@ -2,12 +2,14 @@ package jp.toastkid.yobidashi4.infrastructure.repository.input
 
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
+import okio.buffer
 import org.koin.core.annotation.Single
-import java.nio.file.Files
 import java.nio.file.Path
 
 @Single
-class InputHistoryFileStore(private val context: String) : InputHistoryRepository {
+class InputHistoryFileStore(private val fileSystem: FileSystem, private val context: String) : InputHistoryRepository {
 
     override fun list(): List<InputHistory> {
         return filter("")
@@ -15,12 +17,14 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
 
     override fun filter(query: String?): List<InputHistory> {
         val path = path()
-        if (Files.exists(path).not()) {
+        if (fileSystem.exists(path.toOkioPath()).not()) {
             return emptyList()
         }
 
-        return Files.readAllLines(path).filter { query.isNullOrBlank() || it.contains(query) }
-            .mapNotNull(InputHistory::from)
+        return fileSystem.source(path.toOkioPath()).buffer().use { buffer ->
+            buffer.readUtf8().split("\n").filter { query.isNullOrBlank() || it.contains(query) }
+                .mapNotNull(InputHistory::from)
+        }
     }
 
     override fun add(item: InputHistory) {
@@ -36,15 +40,20 @@ class InputHistoryFileStore(private val context: String) : InputHistoryRepositor
     }
 
     override fun clear() {
-        Files.deleteIfExists(path())
+        fileSystem.delete(path().toOkioPath())
     }
 
     private fun save(list: List<InputHistory>) {
-        if (Files.exists(path().parent).not()) {
-            Files.createDirectories(path().parent)
+        if (fileSystem.exists(path().parent.toOkioPath()).not()) {
+            fileSystem.createDirectories(path().parent.toOkioPath())
         }
 
-        Files.write(path(), list.sortedByDescending(InputHistory::timestamp).distinctBy { it.word }.map(InputHistory::toTsv))
+        fileSystem.sink(path().toOkioPath()).buffer().use {
+            it.writeUtf8(
+                list.sortedByDescending(InputHistory::timestamp).distinctBy { it.word }.map(InputHistory::toTsv)
+                    .joinToString("\n")
+            )
+        }
     }
 
     private fun path(): Path {
