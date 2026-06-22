@@ -61,6 +61,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
+import okio.Path.Companion.toPath
+import okio.buffer
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -70,16 +74,15 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import kotlin.io.path.extension
-import kotlin.io.path.inputStream
-import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
 import kotlin.math.roundToInt
 
 @Single
-class MainViewModelImplementation : MainViewModel, KoinComponent {
+class MainViewModelImplementation(
+    private val fileSystem: FileSystem
+) : MainViewModel, KoinComponent {
 
     private val setting: Setting by inject()
 
@@ -125,15 +128,16 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
             return
         }
 
-        val imageFolder = Path.of("user/background")
-        if (Files.exists(imageFolder).not()) {
+        val imageFolder = "user/background".toPath()
+        if (fileSystem.exists(imageFolder).not()) {
             return
         }
 
-        val images = Files.list(imageFolder).collect(Collectors.toList())
+        val images = fileSystem.list(imageFolder)
         if (images.isNotEmpty()) {
-            backgroundImage.value = images[((images.size - 1) * Math.random()).roundToInt()].inputStream().use {
-                ImageIO.read(it).toComposeImageBitmap()
+            val path = images[((images.size - 1) * Math.random()).roundToInt()]
+            backgroundImage.value = fileSystem.source(path).buffer().use {
+                ImageIO.read(it.inputStream()).toComposeImageBitmap()
             }
         }
     }
@@ -179,10 +183,10 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
         openTab(FileTab(title, items.sortedByDescending(::getLastModifiedMillis), type))
     }
 
-    private fun getLastModifiedMillis(paths: Path): Long = Files.getLastModifiedTime(paths).toMillis()
+    private fun getLastModifiedMillis(paths: Path): Long = fileSystem.metadata(paths.toOkioPath()).lastModifiedAtMillis ?: -1L
 
     override fun openFile(path: Path) {
-        if (Files.exists(path).not()) {
+        if (fileSystem.exists(path.toOkioPath()).not()) {
             return
         }
 
@@ -418,7 +422,13 @@ class MainViewModelImplementation : MainViewModel, KoinComponent {
     }
 
     private fun existsArticle(input: String, articleFolderPath: Path): Boolean {
-        return Files.list(articleFolderPath).anyMatch { it.nameWithoutExtension == input }
+        return fileSystem.list(articleFolderPath.toOkioPath()).any {
+            val fileName = it.name
+            val dotIndex = fileName.lastIndexOf('.')
+            val nameWithoutExt = if (dotIndex > 0) fileName.substring(0, dotIndex) else fileName
+
+            nameWithoutExt == input
+        }
     }
 
     private fun addNewArticle(path: Path) {
