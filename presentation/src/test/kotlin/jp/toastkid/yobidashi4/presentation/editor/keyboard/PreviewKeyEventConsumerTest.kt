@@ -208,7 +208,7 @@ class PreviewKeyEventConsumerTest {
         assertFalse(consumed)
         verify { scrollBy wasNot called }
         verify { multiParagraph wasNot called }
-        verify { anyConstructed<ClipboardPutterService>() wasNot called }
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
     @Test
