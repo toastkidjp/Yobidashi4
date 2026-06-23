@@ -38,11 +38,11 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
-import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.media.MediaFileFinder
+import jp.toastkid.yobidashi4.domain.service.notification.NotificationEventExporter
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
@@ -53,7 +53,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.nio.file.Files
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -394,13 +393,10 @@ class MainMenuViewModel : KoinComponent {
         viewModel.openFile(path)
     }
 
+    private val notificationEventExporter: NotificationEventExporter by inject()
+
     fun exportNotifications() {
-        val path = Path.of(
-            "notification${
-                makeCurrentTimeSuffix()
-            }.tsv"
-        )
-        Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
+        notificationEventExporter.invoke()
 
         viewModel.showSnackbar("Done export.", "Open") {
             viewModel.openFile(Path.of("."))
