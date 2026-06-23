@@ -21,7 +21,6 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
-import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -88,6 +87,9 @@ class MainMenuViewModelTest {
     @MockK
     private lateinit var notificationEventExporter: NotificationEventExporter
 
+    @MockK
+    private lateinit var articleFilesFinder: ArticleFilesFinder
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -102,6 +104,7 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { notificationEventExporter } bind (NotificationEventExporter::class)
                     single(qualifier = null) { TestIoContextProvider() } bind (IoContextProvider::class)
+                    single(qualifier = null) { articleFilesFinder } bind (ArticleFilesFinder::class)
                 }
             )
         }
@@ -109,6 +112,7 @@ class MainMenuViewModelTest {
         every { asynchronousArticleIndexerService.invoke(any()) } just Runs
         every { setting.userAgentName() } returns "test"
         coEvery { notification.start(any()) } just Runs
+        every { articleFilesFinder.invoke(any()) } returns mutableListOf()
 
         subject = MainMenuViewModel()
     }
@@ -212,12 +216,10 @@ class MainMenuViewModelTest {
     @Test
     fun dumpAll() {
         every { setting.articleFolderPath() } returns mockk()
-        mockkConstructor(ZipArchiver::class, ArticleFilesFinder::class, LatestFileFinder::class)
+        mockkConstructor(ZipArchiver::class)
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
         val outputFolder = mockk<Path>()
         every { anyConstructed<ZipArchiver>().outputFolder() } returns outputFolder
-        every { anyConstructed<ArticleFilesFinder>().invoke(any()) } returns mutableListOf()
-        every { anyConstructed<LatestFileFinder>().invoke(any(), any()) } returns mutableListOf()
         every { mainViewModel.openFile(any()) } just Runs
 
         subject.dumpAll()
