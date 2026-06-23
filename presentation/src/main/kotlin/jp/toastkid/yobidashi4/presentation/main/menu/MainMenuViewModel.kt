@@ -395,13 +395,14 @@ class MainMenuViewModel : KoinComponent {
     }
 
     fun exportNotifications() {
+        val path = Path.of(
+            "notification${
+                makeCurrentTimeSuffix()
+            }.tsv"
+        )
+        Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
+
         viewModel.showSnackbar("Done export.", "Open") {
-            val path = Path.of(
-                "notification${
-                    makeCurrentTimeSuffix()
-                }.tsv"
-            )
-            Files.write(path, object : KoinComponent { val repo: NotificationEventRepository by inject() }.repo.readAll().map { it.toTsv() } )
             viewModel.openFile(Path.of("."))
         }
     }
