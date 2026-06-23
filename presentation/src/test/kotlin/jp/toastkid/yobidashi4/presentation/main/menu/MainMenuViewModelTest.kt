@@ -17,13 +17,11 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
 import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
-import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -45,10 +43,10 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
-import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
+import jp.toastkid.yobidashi4.domain.service.notification.NotificationEventExporter
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.test.TestIoContextProvider
@@ -66,7 +64,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.nio.file.Files
 import java.nio.file.Path
 
 class MainMenuViewModelTest {
@@ -89,7 +86,7 @@ class MainMenuViewModelTest {
     private lateinit var notification: ScheduledNotification
 
     @MockK
-    private lateinit var notificationEventRepository: NotificationEventRepository
+    private lateinit var notificationEventExporter: NotificationEventExporter
 
     @BeforeEach
     fun setUp() {
@@ -103,7 +100,7 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
-                    single(qualifier = null) { notificationEventRepository } bind (NotificationEventRepository::class)
+                    single(qualifier = null) { notificationEventExporter } bind (NotificationEventExporter::class)
                     single(qualifier = null) { TestIoContextProvider() } bind (IoContextProvider::class)
                 }
             )
@@ -894,10 +891,7 @@ class MainMenuViewModelTest {
 
     @Test
     fun exportNotifications() {
-        mockkStatic(Path::class, Files::class)
-        every { Path.of(any<String>()) } returns mockk()
-        every { Files.write(any(), any<Iterable<String>>()) } returns mockk()
-        every { notificationEventRepository.readAll() } returns listOf(NotificationEvent.makeDefault())
+        every { notificationEventExporter.invoke() } just Runs
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
         every { mainViewModel.openFile(any()) } just Runs
@@ -907,7 +901,7 @@ class MainMenuViewModelTest {
 
         verify { mainViewModel.showSnackbar(any(), any(), any()) }
         verify { mainViewModel.openFile(any()) }
-        verify { notificationEventRepository.readAll() }
+        verify { notificationEventExporter.invoke() }
     }
 
     @Test
