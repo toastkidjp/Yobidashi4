@@ -1,12 +1,15 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web.icon
 
+import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
 import java.io.BufferedInputStream
 import java.net.URL
-import java.nio.file.Files
 import java.nio.file.Path
-import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
 
-class WebIconDownloader {
+class WebIconDownloader(
+    private val fileSystem: FileSystem
+) {
 
     private val httpUrlConnectionFactory = HttpUrlConnectionFactory()
 
@@ -21,8 +24,8 @@ class WebIconDownloader {
                 else null
                 ) ?: "png"
 
-        val iconPath = faviconFolder.resolve("$targetHost.$fileExtension")
-        if (Files.exists(iconPath)) {
+        val iconPath = faviconFolder.resolve("$targetHost.$fileExtension").toOkioPath()
+        if (fileSystem.exists(iconPath)) {
             return
         }
         val urlConnection = httpUrlConnectionFactory.invoke(iconUrl) ?: return
@@ -30,7 +33,9 @@ class WebIconDownloader {
             return
         }
         BufferedInputStream(urlConnection.inputStream).use {
-            Files.write(iconPath, it.readAllBytes())
+            fileSystem.write(iconPath) {
+                write(it.readAllBytes())
+            }
         }
     }
 
