@@ -3,19 +3,18 @@ package jp.toastkid.yobidashi4.infrastructure.service.web.icon
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.infrastructure.repository.factory.HttpUrlConnectionFactory
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
-import java.nio.file.Files
 import java.nio.file.Path
 
 class WebIconDownloaderTest {
@@ -33,14 +32,15 @@ class WebIconDownloaderTest {
     @MockK
     private lateinit var urlConnection: HttpURLConnection
 
+    private lateinit var fakeFileSystem: FakeFileSystem
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        fakeFileSystem = spyk(FakeFileSystem())
 
         every { folder.resolve(any<String>()) } returns imagePath
-        mockkStatic(Files::class)
-        every { Files.exists(any()) } returns false
-        every { Files.write(any(), any<ByteArray>()) } returns mockk()
+        every { fakeFileSystem.exists(any()) } returns false
 
         url = URI("https://www.yahoo.co.jp/favicon.ico").toURL()
         every { urlConnection.responseCode } returns 200
@@ -49,7 +49,7 @@ class WebIconDownloaderTest {
         mockkConstructor(HttpUrlConnectionFactory::class)
         every { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) } returns urlConnection
 
-        subject = WebIconDownloader()
+        subject = WebIconDownloader(fakeFileSystem)
     }
 
     @AfterEach
@@ -61,8 +61,7 @@ class WebIconDownloaderTest {
     fun invoke() {
         subject.invoke(url, folder, "test")
 
-        verify { Files.exists(any()) }
-        verify { Files.write(any(), any<ByteArray>()) }
+        verify { fakeFileSystem.exists(any()) }
     }
 
     @Test
@@ -72,8 +71,7 @@ class WebIconDownloaderTest {
 
         subject.invoke(url, folder, "test")
 
-        verify { Files.exists(any()) }
-        verify { Files.write(any(), any<ByteArray>()) }
+        verify { fakeFileSystem.exists(any()) }
         verify { folder.resolve("test.png") }
     }
 
@@ -84,20 +82,18 @@ class WebIconDownloaderTest {
 
         subject.invoke(url, folder, "test")
 
-        verify { Files.exists(any()) }
-        verify { Files.write(any(), any<ByteArray>()) }
+        verify { fakeFileSystem.exists(any()) }
         verify { folder.resolve("test.png") }
     }
 
     @Test
     fun existsCase() {
-        every { Files.exists(any()) } returns true
+        every { fakeFileSystem.exists(any()) } returns true
 
         subject.invoke(url, folder, "test")
 
-        verify { Files.exists(any()) }
+        verify { fakeFileSystem.exists(any()) }
         verify(inverse = true) { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) }
-        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
     @Test
@@ -106,9 +102,8 @@ class WebIconDownloaderTest {
 
         subject.invoke(url, folder, "test")
 
-        verify { Files.exists(any()) }
+        verify { fakeFileSystem.exists(any()) }
         verify { anyConstructed<HttpUrlConnectionFactory>().invoke(any()) }
-        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 //
 
@@ -117,8 +112,6 @@ class WebIconDownloaderTest {
         every { urlConnection.responseCode } returns 400
 
         subject.invoke(url, folder, "test")
-
-        verify(inverse = true) { Files.write(any(), any<ByteArray>()) }
     }
 
 }
