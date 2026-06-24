@@ -3,12 +3,11 @@ package jp.toastkid.yobidashi4.infrastructure.service.article
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
-import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.article.Article
@@ -17,6 +16,8 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTemplate
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.article.OffDayFinderService
+import okio.Path.Companion.toOkioPath
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,12 +25,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.nio.file.Files
 import java.nio.file.Path
 
 class TodayArticleGeneratorTest {
 
-    @InjectMockKs
     private lateinit var todayArticleGenerator: TodayArticleGeneratorImplementation
 
     @MockK
@@ -50,6 +49,8 @@ class TodayArticleGeneratorTest {
     @MockK
     private lateinit var offDayFinderService: OffDayFinderService
 
+    private lateinit var fakeFileSystem: FakeFileSystem
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -63,16 +64,19 @@ class TodayArticleGeneratorTest {
             )
         }
 
+        fakeFileSystem = spyk(FakeFileSystem())
+
         every { setting.articleFolderPath() } returns articleFolder
         every { articleFolder.resolve(any<String>()) } returns path
-        every { articleFactory.withTitle(any()) }.returns(article)
+        every { articleFactory.withTitle(any()) } returns article
         every { article.getTitle() } returns "title"
         every { article.makeFile(any()) }.just(Runs)
         every { offDayFinderService.invoke(any(), any(), any(), any(), any()) } returns false
 
-        mockkStatic(Files::class)
-        every { Files.exists(articleFolder) } returns true
-        every { Files.exists(path) }.returns(false)
+        every { fakeFileSystem.exists(articleFolder.toOkioPath()) } returns true
+        every { fakeFileSystem.exists(path.toOkioPath()) }.returns(false)
+
+        todayArticleGenerator = TodayArticleGeneratorImplementation(fakeFileSystem)
 
         mockkConstructor(ArticleTitleGenerator::class)
         every { anyConstructed<ArticleTitleGenerator>().invoke(any()) }.returns("2023-03-08(Wed)")
@@ -105,12 +109,12 @@ class TodayArticleGeneratorTest {
 
         todayArticleGenerator.invoke()
 
-        verify(inverse = true) { Files.exists(path) }
+        verify(inverse = true) { fakeFileSystem.exists(path.toOkioPath()) }
     }
 
     @Test
     fun existsCase() {
-        every { Files.exists(path) }.returns(true)
+        every { fakeFileSystem.exists(path.toOkioPath()) }.returns(true)
 
         todayArticleGenerator.invoke()
 
@@ -120,8 +124,8 @@ class TodayArticleGeneratorTest {
 
     @Test
     fun articleFolderDoesNotExistsCase() {
-        every { Files.exists(articleFolder) }.returns(false)
-        every { Files.exists(path) }.returns(true)
+        every { fakeFileSystem.exists(articleFolder.toOkioPath()) }.returns(false)
+        every { fakeFileSystem.exists(path.toOkioPath()) }.returns(true)
 
         todayArticleGenerator.invoke()
 
