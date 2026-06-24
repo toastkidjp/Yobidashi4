@@ -2,36 +2,40 @@ package jp.toastkid.yobidashi4.infrastructure.repository.notification
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
+import okio.Path.Companion.toPath
+import okio.buffer
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 
 class NotificationEventFileStoreTest {
 
     private lateinit var subject: NotificationEventFileStore
 
+    private lateinit var fakeFileSystem: FakeFileSystem
+
+    private lateinit var path: okio.Path
+
     @BeforeEach
     fun setUp() {
-        subject = NotificationEventFileStore()
+        fakeFileSystem = FakeFileSystem()
+        subject = NotificationEventFileStore(fakeFileSystem)
 
-        mockkStatic(Path::class, Files::class)
-        every { Path.of(any<String>()) } returns mockk()
-        every { Files.write(any(), any<Iterable<String>>()) } returns mockk()
-        every { Files.write(any(), any<ByteArray>()) } returns mockk()
-        every { Files.write(any(), any<ByteArray>(), StandardOpenOption.APPEND) } returns mockk()
-        every { Files.exists(any()) } returns true
-        every { Files.readAllLines(any()) } returns """
+        path = "user/notification/list.tsv".toPath()
+        path.parent?.let {
+            fakeFileSystem.createDirectories(it)
+        }
+        fakeFileSystem.write(path) {
+            writeUtf8(
+                """
 Test	This notification is only attempt to send.	2023-12-08 10:51:00
 Test2	This notification is only attempt to send.	2023-12-08 10:52:00
 Test3	This notification is only attempt to send.	2023-12-08 10:49:00
@@ -40,7 +44,9 @@ Test3	This notification is only attempt to send.
 Test3	This notification is only attempt to send.
 Test3
             
-        """.split("\n")
+        """
+            )
+        }
     }
 
     @AfterEach
@@ -50,26 +56,23 @@ Test3
 
     @Test
     fun add() {
-        every { Files.exists(any()) } returns true
-
         subject.add(NotificationEvent("test", "test", LocalDateTime.now()))
 
-        verify { Files.write(any(), any<ByteArray>(), StandardOpenOption.APPEND) }
-        verify(inverse = true) { Files.createDirectories(any()) }
-        verify(inverse = true) { Files.createFile(any()) }
+        fakeFileSystem.source(path).buffer().use {
+            assertTrue(it.readUtf8().contains("test\ttest\t"))
+        }
     }
 
     @Test
     fun addIfTheFileDoesNotExists() {
-        every { Files.exists(any()) } returns false
-        every { Files.createDirectories(any()) } returns mockk()
-        every { Files.createFile(any()) } returns mockk()
+        fakeFileSystem.delete(path)
 
         subject.add(NotificationEvent("test", "test", LocalDateTime.now()))
 
-        verify { Files.write(any(), any<ByteArray>(), StandardOpenOption.APPEND) }
-        verify { Files.createDirectories(any()) }
-        verify { Files.createFile(any()) }
+        fakeFileSystem.source(path).buffer().use {
+            val readUtf8 = it.readUtf8()
+            assertTrue(readUtf8.contains("test\ttest\t"))
+        }
     }
 
     @Test
@@ -84,16 +87,13 @@ Test3
 
     @Test
     fun fileDoseNotExistsCase() {
-        every { Files.exists(any()) } returns false
+        fakeFileSystem.delete(path)
 
         assertTrue(subject.readAll().isEmpty())
     }
 
     @Test
     fun update() {
-        val slot = slot<Iterable<String>>()
-        every { Files.write(any(), capture(slot)) } returns mockk()
-
         subject.update(
             1,
             NotificationEvent(
@@ -103,37 +103,45 @@ Test3
             )
         )
 
-        verify { Files.write(any(), any<Iterable<String>>()) }
-        val toList = slot.captured.toList()
-        assertEquals("Updated\tThis notification-event has updated.\t2024-01-01 02:03:00", toList[1])
-        assertEquals(3, toList.size)
+        fakeFileSystem.source(path).buffer().use {
+            val split = it.readUtf8().split("\n")
+            assertEquals("Updated\tThis notification-event has updated.\t2024-01-01 02:03:00", split[1])
+            assertEquals(3, split.size)
+        }
     }
 
     @Test
     fun updateWithMinusIndex() {
         subject.update(-1, mockk())
 
-        verify(inverse = true) { Files.write(any(), any<Iterable<String>>()) }
+        fakeFileSystem.source(path).buffer().use {
+            val split = it.readUtf8().split("\n")
+            assertEquals(10, split.size)
+        }
     }
 
     @Test
     fun updateWithOverIndex() {
-        subject.update(3, mockk())
+        val event = mockk<NotificationEvent>()
+        every { event.toTsv() } throws RuntimeException()
+        subject.update(3, event)
 
-        verify(inverse = true) { Files.write(any(), any<Iterable<String>>()) }
+        verify(inverse = true) { event.toTsv() }
     }
 
     @Test
     fun deleteAt() {
         subject.deleteAt(1)
 
-        verify { Files.write(any(), any<Iterable<String>>()) }
+        fakeFileSystem.source(path).buffer().use {
+            assertFalse(it.readUtf8().contains("Test2"))
+        }
     }
 
     @Test
     fun clear() {
         subject.clear()
 
-        verify { Files.write(any(), any<ByteArray>()) }
+        assertFalse(fakeFileSystem.exists(path))
     }
 }
