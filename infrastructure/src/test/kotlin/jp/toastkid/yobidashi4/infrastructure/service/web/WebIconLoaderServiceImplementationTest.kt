@@ -11,6 +11,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.WebIconDownloader
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,7 +38,7 @@ class WebIconLoaderServiceImplementationTest {
         every { webIcon.faviconFolder() } returns mockk()
         every { iconUrlFinder.invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg")
 
-        subject = WebIconLoaderServiceImplementation(webIconDownloader, webIcon, iconUrlFinder)
+        subject = WebIconLoaderServiceImplementation(FakeFileSystem(), webIconDownloader, webIcon, iconUrlFinder)
     }
 
     @AfterEach
