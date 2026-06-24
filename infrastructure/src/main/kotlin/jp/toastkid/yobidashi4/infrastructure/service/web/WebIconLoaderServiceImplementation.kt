@@ -4,6 +4,7 @@ import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.service.web.WebIconLoaderService
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.IconUrlFinder
 import jp.toastkid.yobidashi4.infrastructure.service.web.icon.WebIconDownloader
+import okio.FileSystem
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -11,7 +12,8 @@ import java.net.URL
 
 @Single
 class WebIconLoaderServiceImplementation(
-    private val webIconDownloader: WebIconDownloader = WebIconDownloader(),
+    private val fileSystem: FileSystem,
+    private val webIconDownloader: WebIconDownloader = WebIconDownloader(fileSystem),
     private val webIcon: WebIcon = WebIcon(),
     private val iconUrlFinder: IconUrlFinder = IconUrlFinder()
 ) : WebIconLoaderService {
