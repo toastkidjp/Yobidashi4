@@ -10,10 +10,10 @@ package jp.toastkid.yobidashi4.infrastructure.repository.notification
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.web.history.DELIMITER
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.buffer
 import org.koin.core.annotation.Single
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 
 /**
  * <pre>
@@ -23,26 +23,31 @@ import java.nio.file.StandardOpenOption
  * </pre>
  */
 @Single
-class NotificationEventFileStore : NotificationEventRepository {
+class NotificationEventFileStore(private val  fileSystem: FileSystem) : NotificationEventRepository {
 
-    private val path = Path.of("user/notification/list.tsv")
+    private val path = "user/notification/list.tsv".toPath()
 
     override fun add(event: NotificationEvent) {
-        if (Files.exists(path.parent).not()) {
-            Files.createDirectories(path.parent)
+        val parent = path.parent ?: return
+        if (fileSystem.exists(parent).not()) {
+            fileSystem.createDirectories(parent)
         }
-        if (Files.exists(path).not()) {
-            Files.createFile(path)
+        if (fileSystem.exists(path).not()) {
+            fileSystem.write(path) {}
         }
-        Files.write(path, event.toTsv().toByteArray(), StandardOpenOption.APPEND)
+        fileSystem.appendingSink(path).buffer().use {
+            it.writeUtf8("\n" + event.toTsv())
+        }
     }
 
     override fun readAll(): List<NotificationEvent> {
-        if (Files.exists(path).not()) {
+        if (fileSystem.exists(path).not()) {
             return emptyList()
         }
 
-        return Files.readAllLines(path).filter { it.contains(DELIMITER) }
+        return fileSystem.source(path).buffer().use {
+            it.readUtf8().trim().split("\n")
+        }.filter { it.contains(DELIMITER) }
             .mapNotNull {
                 val split = it.split(DELIMITER)
                 if (split.size < 3 || split[2].isBlank()) {
@@ -74,11 +79,13 @@ class NotificationEventFileStore : NotificationEventRepository {
     }
 
     private fun writeToFile(content: Iterable<String>) {
-        Files.write(path, content)
+        fileSystem.write(path) {
+            writeUtf8(content.joinToString("\n"))
+        }
     }
 
     override fun clear() {
-        Files.write(path, byteArrayOf())
+        fileSystem.delete(path)
     }
 
 }
