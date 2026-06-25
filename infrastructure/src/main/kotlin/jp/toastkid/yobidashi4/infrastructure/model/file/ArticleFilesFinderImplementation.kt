@@ -23,14 +23,8 @@ class ArticleFilesFinderImplementation(
             .asSequence()
             .map { it to (fileSystem.metadata(it).lastModifiedAtMillis ?: -1) }
             .sortedByDescending { it.second }
-            .filter(::containsSpecificCharacters)
             .map { it.first.toNioPath() }
             .toMutableList()
-    }
-
-    private fun containsSpecificCharacters(pair: Pair<okio.Path, Long>): Boolean {
-        val name = pair.first.name
-        return name.startsWith("20") || name.startsWith("『")
     }
 
 }
