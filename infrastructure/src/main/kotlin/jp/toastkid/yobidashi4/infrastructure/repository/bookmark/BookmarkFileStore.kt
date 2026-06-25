@@ -18,8 +18,8 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
 
         return fileSystem.source(path.toOkioPath()).buffer().use {
             val lines = it.readUtf8().split("\n")
-            lines.map {
-                val split = it.split("\t")
+            lines.filter { line -> line.contains("\t") }.map { line ->
+                val split = line.split("\t")
                 Bookmark(
                     title = split[0],
                     url = split[1]
@@ -41,7 +41,7 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
             .buffer()
             .use {
                 it.writeUtf8(
-                    list.map(Bookmark::toTsv).joinToString(System.lineSeparator())
+                    list.map(Bookmark::toTsv).joinToString("\n")
                 )
                     .emit()
             }
