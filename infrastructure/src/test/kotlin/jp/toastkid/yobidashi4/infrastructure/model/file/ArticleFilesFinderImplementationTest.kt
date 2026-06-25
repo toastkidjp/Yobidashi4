@@ -48,7 +48,7 @@ class ArticleFilesFinderImplementationTest {
 
         val paths = subject.invoke(folder.toNioPath())
 
-        assertEquals(2, paths.size)
+        assertEquals(3, paths.size)
     }
 
 }
