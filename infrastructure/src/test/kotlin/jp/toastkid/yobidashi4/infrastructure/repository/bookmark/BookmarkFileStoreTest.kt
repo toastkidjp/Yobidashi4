@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
+import okio.Path
 import okio.Path.Companion.toPath
 import okio.buffer
 import okio.fakefilesystem.FakeFileSystem
@@ -19,6 +20,8 @@ class BookmarkFileStoreTest {
 
     private lateinit var fakeFileSystem: FakeFileSystem
 
+    private lateinit var filePath: Path
+    
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -28,7 +31,8 @@ class BookmarkFileStoreTest {
         val path = WebBookmarkPath().getPath()
         val folderName = path.parent.toString()
         fakeFileSystem.createDirectories(folderName.toPath())
-        fakeFileSystem.write("$folderName/${path.fileName}".toPath()) { writeUtf8("test\thttps://www.yahoo.co.jp") }
+        filePath = "$folderName/${path.fileName}".toPath()
+        fakeFileSystem.write(filePath) { writeUtf8("test\thttps://www.yahoo.co.jp") }
 
         bookmarkFileStore = BookmarkFileStore(fakeFileSystem)
     }
@@ -42,7 +46,7 @@ class BookmarkFileStoreTest {
     fun listEmptyCase() {
         val path = WebBookmarkPath().getPath()
         val folderName = path.parent.toString()
-        fakeFileSystem.delete("$folderName/${path.fileName}".toPath())
+        fakeFileSystem.delete(filePath)
         fakeFileSystem.delete(folderName.toPath())
 
         assertTrue(bookmarkFileStore.list().isEmpty())
@@ -65,7 +69,7 @@ class BookmarkFileStoreTest {
 
         assertEquals(
             2,
-            fakeFileSystem.source("$folderName/${path.fileName}".toPath())
+            fakeFileSystem.source(filePath)
                 .buffer()
                 .use {
                     it.readUtf8()
@@ -79,14 +83,14 @@ class BookmarkFileStoreTest {
     fun addNotFoundCase() {
         val path = WebBookmarkPath().getPath()
         val folderName = path.parent.toString()
-        fakeFileSystem.delete("$folderName/${path.fileName}".toPath())
+        fakeFileSystem.delete(filePath)
         fakeFileSystem.delete(folderName.toPath())
 
         bookmarkFileStore.add(Bookmark("test", "https://www.yahoo.co.jp"))
 
         assertEquals(
             "test\thttps://www.yahoo.co.jp",
-            fakeFileSystem.source("$folderName/${path.fileName}".toPath())
+            fakeFileSystem.source(filePath)
                 .buffer()
                 .use {
                     it.readUtf8()
@@ -103,7 +107,7 @@ class BookmarkFileStoreTest {
         bookmarkFileStore.delete(item)
 
         assertTrue(
-            fakeFileSystem.source("$folderName/${path.fileName}".toPath())
+            fakeFileSystem.source(filePath)
                 .buffer()
                 .use {
                     it.readUtf8()
