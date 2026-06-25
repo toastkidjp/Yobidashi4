@@ -21,6 +21,7 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.file.ArticleFilesFinder
+import jp.toastkid.yobidashi4.domain.model.file.LatestFileFinder
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
@@ -90,6 +91,9 @@ class MainMenuViewModelTest {
     @MockK
     private lateinit var articleFilesFinder: ArticleFilesFinder
 
+    @MockK
+    private lateinit var latestFileFinder: LatestFileFinder
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -105,6 +109,7 @@ class MainMenuViewModelTest {
                     single(qualifier = null) { notificationEventExporter } bind (NotificationEventExporter::class)
                     single(qualifier = null) { TestIoContextProvider() } bind (IoContextProvider::class)
                     single(qualifier = null) { articleFilesFinder } bind (ArticleFilesFinder::class)
+                    single(qualifier = null) { latestFileFinder } bind (LatestFileFinder::class)
                 }
             )
         }
