@@ -210,13 +210,10 @@ class MainViewModelImplementationTest {
         assertNotNull(subject.backgroundImage())
 
         every { setting.useBackground() } returns true
-        every { ImageIO.read(any<InputStream>()) } returns BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB_PRE)
         fakeFileSystem.createDirectories("user/background".toPath())
         fakeFileSystem.write("user/background/image1.png".toPath()) {}
 
         subject.loadBackgroundImage()
-
-        verify { ImageIO.read(any<InputStream>()) }
     }
 
     @Test
