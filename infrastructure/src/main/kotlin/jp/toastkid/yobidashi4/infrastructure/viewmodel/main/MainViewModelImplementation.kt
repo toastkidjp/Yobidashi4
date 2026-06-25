@@ -19,7 +19,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Notification
@@ -74,7 +74,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import javax.imageio.ImageIO
 import kotlin.io.path.extension
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -136,9 +135,14 @@ class MainViewModelImplementation(
         val images = fileSystem.list(imageFolder)
         if (images.isNotEmpty()) {
             val path = images[((images.size - 1) * Math.random()).roundToInt()]
-            backgroundImage.value = fileSystem.source(path).buffer().use {
-                ImageIO.read(it.inputStream()).toComposeImageBitmap()
-            }
+            val imageBitmap = fileSystem.source(path).buffer().use { inputStream ->
+                try {
+                    inputStream.readByteArray().decodeToImageBitmap()
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
+            } ?: return
+            backgroundImage.value = imageBitmap
         }
     }
 
