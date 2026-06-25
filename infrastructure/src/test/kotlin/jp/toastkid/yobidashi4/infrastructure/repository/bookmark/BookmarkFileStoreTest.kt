@@ -63,7 +63,6 @@ class BookmarkFileStoreTest {
     @Test
     fun add() {
         val path = WebBookmarkPath().getPath()
-        val folderName = path.parent.toString()
 
         bookmarkFileStore.add(Bookmark("test", "https://www.yahoo.co.jp"))
 
