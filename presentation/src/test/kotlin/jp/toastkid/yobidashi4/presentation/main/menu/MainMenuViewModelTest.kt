@@ -118,6 +118,7 @@ class MainMenuViewModelTest {
         every { setting.userAgentName() } returns "test"
         coEvery { notification.start(any()) } just Runs
         every { articleFilesFinder.invoke(any()) } returns mutableListOf()
+        every { latestFileFinder.invoke(any(), any()) } returns mutableListOf()
 
         subject = MainMenuViewModel()
     }
