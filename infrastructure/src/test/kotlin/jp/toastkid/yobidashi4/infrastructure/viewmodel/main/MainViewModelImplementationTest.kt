@@ -1213,9 +1213,8 @@ class MainViewModelImplementationTest {
 
         subject.showSnackbar(
             "test",
-            "Test",
-            { fail("This code should not be called.") }
-        )
+            "Test"
+        ) { fail("This code should not be called.") }
         subject.snackbarHostState().currentSnackbarData?.performAction()
 
         subject = spyk(subject)
