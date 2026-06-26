@@ -11,8 +11,6 @@ import org.koin.core.annotation.Single
 @Single
 class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository {
 
-    private val SPLITTER = "\t"
-
     override fun list(): List<Bookmark> {
         if (fileSystem.exists(path.toOkioPath()).not()) {
             return emptyList()
@@ -57,3 +55,5 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
 }
 
 private val path = WebBookmarkPath().getPath()
+
+private val SPLITTER = "\t"
