@@ -31,11 +31,8 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
 
                     addIfNeed(items, localization.cut, textManager.cut)
                     addIfNeed(items, localization.copy, textManager.copy)
+                    addIfNeed(items, localization.paste, textManager.paste)
 
-                    val paste = textManager.paste
-                    if (paste != null) {
-                        items.add(ContextMenuItem(localization.paste, paste.execute))
-                    }
                     val selectAll = textManager.selectAll
                     if (selectAll != null) {
                         items.add(ContextMenuItem(localization.selectAll, selectAll.execute))
