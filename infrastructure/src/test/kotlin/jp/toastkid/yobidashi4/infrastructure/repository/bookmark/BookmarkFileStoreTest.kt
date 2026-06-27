@@ -99,7 +99,6 @@ class BookmarkFileStoreTest {
 
     @Test
     fun delete() {
-        val path = WebBookmarkPath().getPath()
         val item = Bookmark("test", "https://www.yahoo.co.jp")
 
         bookmarkFileStore.delete(item)
