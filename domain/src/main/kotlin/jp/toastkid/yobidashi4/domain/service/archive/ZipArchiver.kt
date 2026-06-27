@@ -29,7 +29,7 @@ class ZipArchiver(
 
     @Throws(IOException::class)
     private fun createZip(zos: ZipOutputStream, paths: Collection<Path>) {
-        val buffer = ByteArray(1024)
+        val buffer = ByteArray(8192)
         paths.forEach { path ->
             val entry = ZipEntry(path.fileName.toString())
             entry.time = Files.getLastModifiedTime(path).toMillis()
