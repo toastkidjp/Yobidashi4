@@ -103,4 +103,23 @@ class SimpleTextEditorKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun notShowLineNumber() {
+        val setStatus = mockk<(String) -> Unit>()
+        every { setStatus(any()) } just Runs
+        val textFieldValue = TextFieldState("test_content\nSecond line\n3rd line")
+        every { anyConstructed<TextEditorViewModel>().content() } returns textFieldValue
+        every { anyConstructed<TextEditorViewModel>().showLineNumber() } returns false
+
+        runDesktopComposeUiTest {
+            setContent {
+                SimpleTextEditor(
+                    EditorTab(mockk()),
+                    setStatus
+                )
+            }
+        }
+    }
+
 }
