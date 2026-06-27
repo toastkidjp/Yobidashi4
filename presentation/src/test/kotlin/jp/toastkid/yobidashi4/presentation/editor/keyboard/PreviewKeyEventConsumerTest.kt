@@ -61,6 +61,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.A, KeyEventType.KeyUp, isCtrlPressed = true),
             TextFieldState(),
             mockk(),
+            mockk(),
             scrollBy
         )
 
@@ -72,6 +73,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             scrollBy
         )
@@ -85,6 +87,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             scrollBy
         )
@@ -100,6 +103,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             content,
             mockk(),
+            mockk(),
             scrollBy
         )
 
@@ -113,6 +117,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             scrollBy
         )
@@ -129,6 +134,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldState(),
             mockk(),
+            mockk(),
             scrollBy
         )
 
@@ -143,6 +149,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = false, isShiftPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             scrollBy
         )
@@ -162,6 +169,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState("test\ntest2\ntest3"),
             multiParagraph,
+            mockk(),
             scrollBy
         )
 
@@ -182,6 +190,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState("test\ntest2\ntest3"),
             null,
+            mockk(),
             scrollBy
         )
 
@@ -202,6 +211,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState("test\ntest2\ntest3", TextRange(1, 3)),
             multiParagraph,
+            mockk(),
             scrollBy
         )
 
@@ -222,6 +232,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
             multiParagraph,
+            mockk(),
             scrollBy
         )
 
@@ -243,6 +254,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState("test\ntest2\ntest3", TextRange(0, 3)),
             multiParagraph,
+            mockk(),
             scrollBy
         )
 
@@ -257,6 +269,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState("test\ntest2\ntest3"),
             null,
+            mockk(),
             scrollBy
         )
 
@@ -268,6 +281,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             scrollBy
         )
@@ -283,6 +297,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             mockk()
         )
@@ -301,6 +316,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             scrollBy
         )
@@ -321,6 +337,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldState(),
             mockk(),
+            mockk(),
             scrollBy
         )
 
@@ -336,6 +353,7 @@ class PreviewKeyEventConsumerTest {
         val consumed = previewKeyEventConsumer.invoke(
             KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldState(),
+            mockk(),
             mockk(),
             mockk()
         )
@@ -355,6 +373,7 @@ class PreviewKeyEventConsumerTest {
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
             TextFieldState("test\ntest2\ntest3"),
             multiParagraph,
+            mockk(),
             scrollBy
         )
 
