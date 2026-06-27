@@ -27,6 +27,7 @@ class PreviewKeyEventConsumer(
         it: KeyEvent,
         content: TextFieldState,
         lastParagraph: MultiParagraph?,
+        switchLineNumber: () -> Unit,
         scrollBy: (Float) -> Unit
     ): Boolean {
         if (it.type != KeyEventType.KeyDown) {
@@ -90,6 +91,10 @@ class PreviewKeyEventConsumer(
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionLeft -> {
                 mainViewModel.hideArticleList()
+                return true
+            }
+            it.isCtrlPressed && it.isShiftPressed && it.key == Key.L -> {
+                switchLineNumber()
                 return true
             }
             else -> return false
