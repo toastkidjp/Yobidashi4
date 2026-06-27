@@ -85,12 +85,12 @@ fun PhotoTabView(tab: PhotoTab) {
             colorFilter = viewModel.colorFilter(),
             modifier = Modifier
                 .fillMaxSize()
-                .graphicsLayer(
-                    scaleX = viewModel.scale(),
-                    scaleY = viewModel.scale(),
-                    rotationY = viewModel.rotationY(),
+                .graphicsLayer {
+                    scaleX = viewModel.scale()
+                    scaleY = viewModel.scale()
+                    rotationY = viewModel.rotationY()
                     rotationZ = viewModel.rotationZ()
-                )
+                }
                 .offset {
                     viewModel.offset()
                 }
