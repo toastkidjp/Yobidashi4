@@ -14,6 +14,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,13 +88,18 @@ fun SimpleTextEditor(
                         )
                     }
                 ) {
-                    LineNumber(
-                        viewModel::lineNumbers,
-                        viewModel.lineNumberScrollState(),
-                        viewModel.fontSize(),
-                        viewModel.lineHeight(),
-                        viewModel::onClickLineNumber
-                    )
+                    if (viewModel.showLineNumber()) {
+                        LineNumber(
+                            viewModel::lineNumbers,
+                            viewModel.lineNumberScrollState(),
+                            viewModel.fontSize(),
+                            viewModel.lineHeight(),
+                            viewModel::onClickLineNumber
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                    }
+
                     it()
                 }
             },
