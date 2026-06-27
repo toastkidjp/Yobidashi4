@@ -174,6 +174,7 @@ class TextEditorViewModel : KoinComponent {
             it,
             content,
             lastParagraph.get(),
+            { switchShowLineNumber() }
         ) {
             coroutineScope.launch {
                 verticalScrollState.scrollBy(it)
@@ -338,6 +339,14 @@ class TextEditorViewModel : KoinComponent {
             }
         }
         return list
+    }
+
+    private val showLineNumber = mutableStateOf(true)
+
+    fun showLineNumber(): Boolean = showLineNumber.value
+
+    fun switchShowLineNumber() {
+        showLineNumber.value = showLineNumber.value.not()
     }
 
 }
