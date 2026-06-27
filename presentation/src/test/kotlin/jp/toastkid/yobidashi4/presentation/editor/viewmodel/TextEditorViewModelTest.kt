@@ -359,4 +359,13 @@ class TextEditorViewModelTest {
         verify { mainViewModel.darkMode() }
     }
 
+    @Test
+    fun showLineNumber() {
+        assertTrue(viewModel.showLineNumber())
+
+        viewModel.switchShowLineNumber()
+
+        assertFalse(viewModel.showLineNumber())
+    }
+
 }
