@@ -35,9 +35,11 @@ import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -121,6 +123,20 @@ class TextEditorViewModelTest {
     @Test
     fun verticalScrollState() {
         assertFalse(viewModel.verticalScrollState().isScrollInProgress)
+    }
+
+    @Test
+    fun scrollEventFlow() {
+        runTest {
+            val job = launch {
+                viewModel.scrollEventFlow().collect {
+                    assertEquals(1f, it)
+                }
+            }
+
+            viewModel.emitScrollEvent(1f)
+            job.cancelAndJoin()
+        }
     }
 
     @Test
