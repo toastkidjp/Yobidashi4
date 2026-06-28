@@ -11,6 +11,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,6 +58,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class)
 @Composable
@@ -164,6 +166,15 @@ fun SimpleTextEditor(
             .collect { _ ->
                 viewModel.parseContent()
             }
+    }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            viewModel.scrollEventFlow()
+                .collect {
+                    viewModel.verticalScrollState().scrollBy(it)
+                }
+        }
     }
 }
 
