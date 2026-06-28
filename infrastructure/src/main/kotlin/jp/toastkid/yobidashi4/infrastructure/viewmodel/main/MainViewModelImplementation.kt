@@ -138,7 +138,7 @@ class MainViewModelImplementation(
             val imageBitmap = fileSystem.source(path).buffer().use { inputStream ->
                 try {
                     inputStream.readByteArray().decodeToImageBitmap()
-                } catch (e: IllegalArgumentException) {
+                } catch (_: IllegalArgumentException) {
                     null
                 }
             } ?: return
