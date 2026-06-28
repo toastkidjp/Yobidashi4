@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.editor.keyboard
 
-import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.foundation.text.input.delete
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
@@ -10,91 +8,53 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.text.MultiParagraph
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.sp
-import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import kotlin.math.min
+import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUseCase
 
 class PreviewKeyEventConsumer(
-    private val mainViewModel: MainViewModel = object : KoinComponent { val vm: MainViewModel by inject() }.vm
+    private val useCase: TextEditorOperationUseCase
 ) {
 
     operator fun invoke(
         it: KeyEvent,
-        content: TextFieldState,
-        lastParagraph: MultiParagraph?,
-        switchLineNumber: () -> Unit,
-        scrollBy: (Float) -> Unit
     ): Boolean {
         if (it.type != KeyEventType.KeyDown) {
             return false
         }
         when {
             it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionUp -> {
-                content.edit {
-                    selection = TextRange.Zero
-                }
+                useCase.moveToTop()
                 return true
             }
             it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                content.edit {
-                    selection = TextRange(length)
-                }
+                useCase.moveToBottom()
                 return true
             }
             it.isCtrlPressed && it.key == Key.DirectionUp -> {
-                scrollBy(-16.sp.value)
+                useCase.scrollBy(-16.sp.value)
                 return true
             }
             it.isCtrlPressed && it.key == Key.DirectionDown -> {
-                scrollBy(16.sp.value)
+                useCase.scrollBy(16.sp.value)
                 return true
             }
             it.isCtrlPressed && it.key == Key.X -> {
-                if (content.selection.start != content.selection.end) {
-                    return false
-                }
-
-                val textLayoutResult = lastParagraph ?: return false
-                val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
-                val lineStart = textLayoutResult.getLineStart(currentLine)
-                val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                val targetEnd = min(content.text.length, lineEnd + 1)
-                val currentLineText = content.text.substring(lineStart, targetEnd)
-                ClipboardPutterService().invoke(currentLineText)
-                content.edit { delete(lineStart, targetEnd) }
-                return true
+                return useCase.cutLine()
             }
             it.isCtrlPressed && it.key == Key.Enter -> {
-                if (content.selection.start != content.selection.end) {
-                    return true
-                }
-
-                val textLayoutResult = lastParagraph ?: return false
-                val currentLine = textLayoutResult.getLineForOffset(content.selection.start)
-                val lineStart = textLayoutResult.getLineStart(currentLine)
-                val lineEnd = textLayoutResult.getLineEnd(currentLine)
-                content.edit {
-                    delete(lineStart, min(length, lineEnd + 1))
-                }
+                useCase.deleteLine()
                 return true
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionRight -> {
-                if (mainViewModel.openArticleList().not()) {
-                    mainViewModel.switchArticleList()
-                }
+                useCase.switchArticleList()
                 return true
             }
             it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionLeft -> {
-                mainViewModel.hideArticleList()
+                useCase.hideArticleList()
                 return true
             }
             it.isCtrlPressed && it.isShiftPressed && it.key == Key.L -> {
-                switchLineNumber()
+                useCase.switchLineNumber()
                 return true
             }
             else -> return false
