@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldState
@@ -37,11 +36,14 @@ import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
 import jp.toastkid.yobidashi4.presentation.editor.transformation.ParseResult
 import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorOutputTransformation
+import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUseCase
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -68,7 +70,25 @@ class TextEditorViewModel : KoinComponent {
 
     private val keyEventConsumer = KeyEventConsumer()
 
-    private val previewKeyEventConsumer = PreviewKeyEventConsumer()
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+
+    fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
+
+    fun emitScrollEvent(value: Float) {
+        scrollEventFlow.tryEmit(value)
+    }
+
+    private val textEditorOperationUseCase = TextEditorOperationUseCase(
+        mainViewModel,
+        content,
+        {
+            println("lastParagraph.get() ${lastParagraph.get()}")
+            lastParagraph.get() },
+        { emitScrollEvent(it) },
+        { switchShowLineNumber() }
+    )
+
+    private val previewKeyEventConsumer = PreviewKeyEventConsumer(textEditorOperationUseCase)
 
     private val verticalScrollState = ScrollState(0)
 
@@ -170,9 +190,9 @@ class TextEditorViewModel : KoinComponent {
     fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
         altPressed.set(it.isAltPressed)
 
-        return previewKeyEventConsumer.invoke(
-            it,
-            content,
+        return previewKeyEventConsumer.invoke(it,)
+        /*
+        content,
             lastParagraph.get(),
             { switchShowLineNumber() }
         ) {
@@ -180,6 +200,7 @@ class TextEditorViewModel : KoinComponent {
                 verticalScrollState.scrollBy(it)
             }
         }
+         */
     }
 
     suspend fun adjustLineNumberState() {
