@@ -62,8 +62,6 @@ class BookmarkFileStoreTest {
 
     @Test
     fun add() {
-        val path = WebBookmarkPath().getPath()
-
         bookmarkFileStore.add(Bookmark("test", "https://www.yahoo.co.jp"))
 
         assertEquals(
