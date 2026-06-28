@@ -41,7 +41,7 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
             .buffer()
             .use {
                 it.writeUtf8(
-                    list.map(Bookmark::toTsv).joinToString("\n")
+                    list.joinToString("\n", transform = Bookmark::toTsv)
                 )
                     .emit()
             }
