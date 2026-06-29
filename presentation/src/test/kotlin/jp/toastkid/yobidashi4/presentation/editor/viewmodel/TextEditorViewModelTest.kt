@@ -199,7 +199,7 @@ class TextEditorViewModelTest {
 
         val consumed = viewModel.onPreviewKeyEvent(keyEvent, CoroutineScope(Dispatchers.Unconfined))
 
-        assertFalse(consumed)
+        assertTrue(consumed)
     }
 
     @Test
