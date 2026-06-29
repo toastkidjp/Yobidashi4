@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -102,8 +103,9 @@ class TextEditorOperationUseCaseTest {
             selection = TextRange(1, 3)
         }
 
-        subject.cutLine()
+        val consumed = subject.cutLine()
 
+        assertFalse(consumed)
         verify { scrollBy wasNot called }
         verify { multiParagraph wasNot called }
         verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
