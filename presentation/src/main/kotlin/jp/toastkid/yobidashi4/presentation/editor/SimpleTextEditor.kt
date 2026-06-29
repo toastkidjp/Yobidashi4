@@ -98,9 +98,9 @@ fun SimpleTextEditor(
                             viewModel.lineHeight(),
                             viewModel::onClickLineNumber
                         )
-                    } else {
-                        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                     }
+
+                    Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
                     it()
                 }
@@ -190,7 +190,7 @@ private fun LineNumber(
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
-            .padding(horizontal = 8.dp)
+            .padding(start = 8.dp)
             .wrapContentSize(unbounded = true)
     ) {
         lineNumbers().forEach { (lineNumber, lineNumberText) ->
