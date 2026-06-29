@@ -119,9 +119,7 @@ fun SimpleTextEditor(
             cursorBrush = SolidColor(MaterialTheme.colors.secondary),
             modifier = modifier.focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
-                .onPreviewKeyEvent {
-                    viewModel.onPreviewKeyEvent(it)
-                }
+                .onPreviewKeyEvent(viewModel::onPreviewKeyEvent)
                 .onKeyEvent(viewModel::onKeyEvent)
                 .semantics { contentDescription = "Editor input area" }
         )
