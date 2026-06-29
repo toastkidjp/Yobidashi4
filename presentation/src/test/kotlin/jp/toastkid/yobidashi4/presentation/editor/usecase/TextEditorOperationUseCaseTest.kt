@@ -166,7 +166,7 @@ class TextEditorOperationUseCaseTest {
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.switchArticleList() } just Runs
 
-        val consumed = subject.switchArticleList()
+        subject.switchArticleList()
 
         verify { mainViewModel.openArticleList() }
         verify { mainViewModel.switchArticleList() }
