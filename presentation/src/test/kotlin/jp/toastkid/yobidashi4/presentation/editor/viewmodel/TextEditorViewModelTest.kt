@@ -197,7 +197,7 @@ class TextEditorViewModelTest {
         val keyEvent = KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true)
         viewModel = TextEditorViewModel()
 
-        val consumed = viewModel.onPreviewKeyEvent(keyEvent, CoroutineScope(Dispatchers.Unconfined))
+        val consumed = viewModel.onPreviewKeyEvent(keyEvent)
 
         assertTrue(consumed)
     }
@@ -207,7 +207,7 @@ class TextEditorViewModelTest {
         val keyEvent = KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
         viewModel = TextEditorViewModel()
 
-        val consumed = viewModel.onPreviewKeyEvent(keyEvent, CoroutineScope(Dispatchers.Unconfined))
+        val consumed = viewModel.onPreviewKeyEvent(keyEvent)
 
         assertTrue(consumed)
     }
