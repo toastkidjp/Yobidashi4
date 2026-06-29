@@ -187,7 +187,7 @@ class TextEditorViewModel : KoinComponent {
         )
     }
 
-    fun onPreviewKeyEvent(it: KeyEvent, coroutineScope: CoroutineScope): Boolean {
+    fun onPreviewKeyEvent(it: KeyEvent): Boolean {
         altPressed.set(it.isAltPressed)
 
         return previewKeyEventConsumer.invoke(it,)
