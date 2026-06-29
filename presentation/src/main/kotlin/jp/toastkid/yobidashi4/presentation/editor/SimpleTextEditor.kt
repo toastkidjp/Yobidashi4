@@ -54,13 +54,14 @@ import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
 import jp.toastkid.yobidashi4.presentation.editor.data.LineNumber
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class, FlowPreview::class)
 @Composable
 fun SimpleTextEditor(
     tab: EditorTab,
