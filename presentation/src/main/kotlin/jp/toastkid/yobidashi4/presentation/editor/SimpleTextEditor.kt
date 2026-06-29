@@ -120,7 +120,7 @@ fun SimpleTextEditor(
             modifier = modifier.focusRequester(viewModel.focusRequester())
                 .fillMaxWidth()
                 .onPreviewKeyEvent {
-                    viewModel.onPreviewKeyEvent(it, coroutineScope)
+                    viewModel.onPreviewKeyEvent(it)
                 }
                 .onKeyEvent(viewModel::onKeyEvent)
                 .semantics { contentDescription = "Editor input area" }
