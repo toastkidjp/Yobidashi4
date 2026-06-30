@@ -33,7 +33,7 @@ import jp.toastkid.yobidashi4.presentation.editor.data.ConversionTrigger
 import jp.toastkid.yobidashi4.presentation.editor.data.LineNumber
 import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.editor.keyboard.KeyEventConsumer
-import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventConsumer
+import jp.toastkid.yobidashi4.presentation.editor.keyboard.PreviewKeyEventHandler
 import jp.toastkid.yobidashi4.presentation.editor.transformation.ParseResult
 import jp.toastkid.yobidashi4.presentation.editor.transformation.TextEditorOutputTransformation
 import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUseCase
@@ -88,7 +88,7 @@ class TextEditorViewModel : KoinComponent {
         { switchShowLineNumber() }
     )
 
-    private val previewKeyEventConsumer = PreviewKeyEventConsumer(textEditorOperationUseCase)
+    private val previewKeyEventHandler = PreviewKeyEventHandler(textEditorOperationUseCase)
 
     private val verticalScrollState = ScrollState(0)
 
@@ -190,7 +190,7 @@ class TextEditorViewModel : KoinComponent {
     fun onPreviewKeyEvent(it: KeyEvent): Boolean {
         altPressed.set(it.isAltPressed)
 
-        return previewKeyEventConsumer.invoke(it,)
+        return previewKeyEventHandler.invoke(it,)
     }
 
     suspend fun adjustLineNumberState() {
