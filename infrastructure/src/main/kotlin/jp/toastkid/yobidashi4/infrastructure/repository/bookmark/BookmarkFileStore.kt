@@ -40,9 +40,8 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
         fileSystem.sink(path.toOkioPath())
             .buffer()
             .use {
-                it.writeUtf8(
-                    list.joinToString("\n", transform = Bookmark::toTsv)
-                )
+                it
+                    .writeUtf8(list.joinToString("\n", transform = Bookmark::toTsv))
                     .emit()
             }
 
