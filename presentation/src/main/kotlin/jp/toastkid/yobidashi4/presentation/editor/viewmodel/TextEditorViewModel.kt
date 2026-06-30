@@ -191,16 +191,6 @@ class TextEditorViewModel : KoinComponent {
         altPressed.set(it.isAltPressed)
 
         return previewKeyEventConsumer.invoke(it,)
-        /*
-        content,
-            lastParagraph.get(),
-            { switchShowLineNumber() }
-        ) {
-            coroutineScope.launch {
-                verticalScrollState.scrollBy(it)
-            }
-        }
-         */
     }
 
     suspend fun adjustLineNumberState() {
