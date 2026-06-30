@@ -21,13 +21,17 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
             lines
                 .filter { line -> line.contains(SPLITTER) }
                 .map { line ->
-                    val split = line.split(SPLITTER)
-                    Bookmark(
-                        title = split[0],
-                        url = split[1]
-                    )
+                    toBookmark(line)
                 }
         }
+    }
+
+    private fun toBookmark(line: String): Bookmark {
+        val split = line.split(SPLITTER)
+        return Bookmark(
+            title = split[0],
+            url = split[1]
+        )
     }
 
     override fun add(item: Bookmark) {
