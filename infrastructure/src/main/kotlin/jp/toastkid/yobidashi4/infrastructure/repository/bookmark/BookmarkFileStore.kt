@@ -55,4 +55,4 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
 
 private val path = WebBookmarkPath().getPath()
 
-private val SPLITTER = "\t"
+private const val SPLITTER = "\t"
