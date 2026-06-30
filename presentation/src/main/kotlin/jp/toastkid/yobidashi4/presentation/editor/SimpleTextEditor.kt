@@ -167,7 +167,7 @@ fun SimpleTextEditor(
             }
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(tab.path) {
         coroutineScope.launch {
             viewModel.scrollEventFlow()
                 .collect {
