@@ -23,10 +23,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @OptIn(InternalComposeUiApi::class)
-class PreviewKeyEventConsumerTest {
+class PreviewKeyEventHandlerTest {
 
     @InjectMockKs
-    private lateinit var previewKeyEventConsumer: PreviewKeyEventConsumer
+    private lateinit var previewKeyEventHandler: PreviewKeyEventHandler
 
     @MockK
     private lateinit var useCase: TextEditorOperationUseCase
@@ -52,7 +52,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun onKeyUp() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.A, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
@@ -61,7 +61,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun scrollUp() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -71,7 +71,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun scrollDown() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -81,7 +81,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun moveToTop() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
@@ -91,7 +91,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun moveToBottom() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
         )
 
@@ -101,7 +101,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun noopCtrlShift() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
@@ -113,7 +113,7 @@ class PreviewKeyEventConsumerTest {
         val setNewContent = mockk<(TextFieldState) -> Unit>()
         every { setNewContent.invoke(any()) } just Runs
 
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = false, isShiftPressed = true)
         )
 
@@ -122,7 +122,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun cutLine() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -132,7 +132,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun deleteLine() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -142,7 +142,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun elseCase() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -152,7 +152,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun hideFileList() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
         )
 
@@ -162,7 +162,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun openFileList() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.DirectionRight, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true)
         )
 
@@ -172,7 +172,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun noopAltCombination() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.Unknown, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true)
         )
 
@@ -181,7 +181,7 @@ class PreviewKeyEventConsumerTest {
 
     @Test
     fun lastLine() {
-        val consumed = previewKeyEventConsumer.invoke(
+        val consumed = previewKeyEventHandler.invoke(
             KeyEvent(Key.X, KeyEventType.KeyDown, isCtrlPressed = true),
         )
 
