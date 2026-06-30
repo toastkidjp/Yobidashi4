@@ -11,7 +11,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUseCase
 
-class PreviewKeyEventConsumer(
+class PreviewKeyEventHandler(
     private val useCase: TextEditorOperationUseCase
 ) {
 
