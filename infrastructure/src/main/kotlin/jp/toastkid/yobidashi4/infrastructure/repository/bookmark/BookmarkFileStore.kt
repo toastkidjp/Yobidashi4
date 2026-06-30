@@ -18,13 +18,15 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
 
         return fileSystem.source(path.toOkioPath()).buffer().use {
             val lines = it.readUtf8().split("\n")
-            lines.filter { line -> line.contains(SPLITTER) }.map { line ->
-                val split = line.split(SPLITTER)
-                Bookmark(
-                    title = split[0],
-                    url = split[1]
-                )
-            }
+            lines
+                .filter { line -> line.contains(SPLITTER) }
+                .map { line ->
+                    val split = line.split(SPLITTER)
+                    Bookmark(
+                        title = split[0],
+                        url = split[1]
+                    )
+                }
         }
     }
 
