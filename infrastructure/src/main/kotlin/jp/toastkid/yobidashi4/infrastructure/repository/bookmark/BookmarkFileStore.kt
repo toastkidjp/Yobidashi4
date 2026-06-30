@@ -20,9 +20,7 @@ class BookmarkFileStore(private val fileSystem: FileSystem) : BookmarkRepository
             val lines = it.readUtf8().split("\n")
             lines
                 .filter { line -> line.contains(SPLITTER) }
-                .map { line ->
-                    toBookmark(line)
-                }
+                .map(::toBookmark)
         }
     }
 
