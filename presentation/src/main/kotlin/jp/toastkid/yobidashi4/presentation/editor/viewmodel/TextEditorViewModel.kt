@@ -84,7 +84,7 @@ class TextEditorViewModel : KoinComponent {
         {
             lastParagraph.get() },
         { emitScrollEvent(it) },
-        { switchShowLineNumber() }
+        ::switchShowLineNumber
     )
 
     private val previewKeyEventHandler = PreviewKeyEventHandler(textEditorOperationUseCase)
