@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
+import okio.BufferedSource
 import okio.Path
 import okio.Path.Companion.toPath
 import okio.buffer
@@ -104,9 +105,7 @@ class BookmarkFileStoreTest {
         assertTrue(
             fakeFileSystem.source(filePath)
                 .buffer()
-                .use {
-                    it.readUtf8()
-                }
+                .use(BufferedSource::readUtf8)
                 .trim()
                 .isEmpty()
         )
