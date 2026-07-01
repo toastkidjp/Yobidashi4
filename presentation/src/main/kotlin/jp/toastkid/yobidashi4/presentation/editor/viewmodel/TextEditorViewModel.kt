@@ -189,7 +189,7 @@ class TextEditorViewModel : KoinComponent {
     fun onPreviewKeyEvent(it: KeyEvent): Boolean {
         altPressed.set(it.isAltPressed)
 
-        return previewKeyEventHandler.invoke(it,)
+        return previewKeyEventHandler.invoke(it)
     }
 
     suspend fun adjustLineNumberState() {
