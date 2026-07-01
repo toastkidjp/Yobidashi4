@@ -159,7 +159,7 @@ class TextEditorOperationUseCaseTest {
         every { mainViewModel.switchArticleList() } just Runs
         every { mainViewModel.hideArticleList() } just Runs
 
-        val consumed = subject.hideArticleList()
+        subject.hideArticleList()
 
         verify(inverse = true) { mainViewModel.switchArticleList() }
         verify { mainViewModel.hideArticleList() }
