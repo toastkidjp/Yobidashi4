@@ -81,8 +81,7 @@ class TextEditorViewModel : KoinComponent {
     private val textEditorOperationUseCase = TextEditorOperationUseCase(
         mainViewModel,
         content,
-        {
-            lastParagraph.get() },
+        { lastParagraph.get() },
         { emitScrollEvent(it) },
         ::switchShowLineNumber
     )
