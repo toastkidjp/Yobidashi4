@@ -108,8 +108,9 @@ class TextEditorViewModel : KoinComponent {
     private val transformation =
         TextEditorOutputTransformation(
             content,
-            mainViewModel.darkMode()
-        ) { parseResult.value }
+            mainViewModel.darkMode(),
+            parseResult::value
+        )
 
     fun content() = content
 
