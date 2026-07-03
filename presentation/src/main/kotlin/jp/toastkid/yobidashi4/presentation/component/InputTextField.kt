@@ -105,7 +105,10 @@ fun SingleLineTextField(
     onClearInput: () -> Unit = emptyClearInputAction,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActionHandler = KeyboardActionHandler { },
-    colors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent, cursorColor = MaterialTheme.colors.secondary),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.Transparent,
+        cursorColor = MaterialTheme.colors.secondary
+    ),
     inputTransformation: InputTransformation = SingleLineTransformation(),
     visualTransformation: OutputTransformation = OutputTransformation { },
     modifier: Modifier = Modifier
