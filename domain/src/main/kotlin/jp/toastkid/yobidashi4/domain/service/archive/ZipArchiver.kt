@@ -18,7 +18,13 @@ class ZipArchiver(
                 Files.createDirectories(outputFolder)
             }
 
-            ZipOutputStream(BufferedOutputStream(Files.newOutputStream(outputFolder.resolve(fileName)))).use {
+            ZipOutputStream(
+                BufferedOutputStream(
+                    Files.newOutputStream(
+                        outputFolder.resolve(fileName)
+                    )
+                )
+            ).use {
                 createZip(it, paths)
             }
         } catch (e: IOException) {
