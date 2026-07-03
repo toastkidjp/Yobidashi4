@@ -206,7 +206,7 @@ class PhotoTabViewModel : KoinComponent {
     fun launch(path: Path) {
         focusRequester().requestFocus()
 
-        val bufferedImage = Files.newInputStream(path).use { inputStream ->
+        val imageBitmap = Files.newInputStream(path).use { inputStream ->
             try {
                 inputStream.readAllBytes().decodeToImageBitmap()
             } catch (e: IllegalArgumentException) {
@@ -214,7 +214,7 @@ class PhotoTabViewModel : KoinComponent {
             }
         } ?: return
 
-        bitmap.value =  bufferedImage
+        bitmap.value =  imageBitmap
     }
 
     fun resetStates() {
