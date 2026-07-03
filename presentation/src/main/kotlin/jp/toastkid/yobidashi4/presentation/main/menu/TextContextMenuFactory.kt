@@ -32,11 +32,8 @@ class TextContextMenuFactory(private val mainViewModel: MainViewModel) {
                     addIfNeed(items, localization.cut, textManager.cut)
                     addIfNeed(items, localization.copy, textManager.copy)
                     addIfNeed(items, localization.paste, textManager.paste)
+                    addIfNeed(items, localization.selectAll, textManager.selectAll)
 
-                    val selectAll = textManager.selectAll
-                    if (selectAll != null) {
-                        items.add(ContextMenuItem(localization.selectAll, selectAll.execute))
-                    }
                     items.add(
                         ContextMenuItem("Search") {
                             mainViewModel.webSearch(textManager.selectedText.text)
