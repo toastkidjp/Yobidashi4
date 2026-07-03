@@ -67,7 +67,7 @@ fun ChatTabView(chatTab: ChatTab) {
                 SelectionContainer {
                     MessageList(
                         viewModel.scrollState(),
-                        { viewModel.messages() },
+                        viewModel::messages,
                         viewModel::name,
                         viewModel::nameColor,
                         viewModel::clipText
