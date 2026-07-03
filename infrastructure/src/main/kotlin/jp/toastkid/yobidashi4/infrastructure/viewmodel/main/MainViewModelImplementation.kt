@@ -411,7 +411,7 @@ class MainViewModelImplementation(
 
             val article = try {
                 articleFactory.withTitle(input)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 showSnackbar("Incorrect file name.: $input")
                 return@setShowInputBox
             }
