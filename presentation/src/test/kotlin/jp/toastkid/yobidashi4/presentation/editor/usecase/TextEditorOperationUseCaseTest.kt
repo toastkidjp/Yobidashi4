@@ -10,7 +10,6 @@ import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -41,16 +40,20 @@ class TextEditorOperationUseCaseTest {
     @MockK
     private lateinit var scrollBy: (Float) -> Unit
 
+    @MockK
+    private lateinit var switchLineNumber: () -> Unit
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { scrollBy.invoke(any()) } just Runs
         every { multiParagraphState.invoke() } returns multiParagraph
+        every { switchLineNumber.invoke() } just Runs
         content.clearText()
 
         subject = TextEditorOperationUseCase(
-            mainViewModel, content, multiParagraphState, scrollBy, mockk()
+            mainViewModel, content, multiParagraphState, scrollBy, switchLineNumber
         )
     }
 
@@ -175,6 +178,13 @@ class TextEditorOperationUseCaseTest {
         verify { mainViewModel.openArticleList() }
         verify { mainViewModel.switchArticleList() }
         verify { scrollBy wasNot called }
+    }
+
+    @Test
+    fun switchLineNumber() {
+        subject.switchLineNumber()
+
+        verify { switchLineNumber.invoke() }
     }
 
 }
