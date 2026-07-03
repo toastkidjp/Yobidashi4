@@ -42,7 +42,10 @@ internal class LinkDecoratorServiceImplementationTest {
     fun testException() {
         every { Jsoup.parse(any<URL>(), any()) } throws IOException()
 
-        assertEquals("https://www.yahoo.co.jp", LinkDecoratorServiceImplementation().invoke("https://www.yahoo.co.jp"))
+        assertEquals(
+            "https://www.yahoo.co.jp",
+            LinkDecoratorServiceImplementation().invoke("https://www.yahoo.co.jp")
+        )
     }
 
     @Test
