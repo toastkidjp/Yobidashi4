@@ -76,7 +76,7 @@ fun MultiTabContent() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box {
                     ArticleListView(
-                        { viewModel.openArticleList() },
+                        viewModel::openArticleList,
                         viewModel.articles()
                     )
 
