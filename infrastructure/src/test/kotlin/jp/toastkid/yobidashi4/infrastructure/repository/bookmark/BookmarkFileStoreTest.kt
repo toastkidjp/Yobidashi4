@@ -90,9 +90,7 @@ class BookmarkFileStoreTest {
             "test\thttps://www.yahoo.co.jp",
             fakeFileSystem.source(filePath)
                 .buffer()
-                .use {
-                    it.readUtf8()
-                }
+                .use(BufferedSource::readUtf8)
         )
     }
 
