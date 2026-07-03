@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi4.infrastructure.service.notification
 
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.notification.NotificationEventExporter
 import okio.FileSystem
@@ -31,7 +32,7 @@ class NotificationEventExporterImplementation(
             makeCurrentTimeSuffix()
         }.tsv".toPath()
         fileSystem.write(path) {
-            writeUtf8(repo.readAll().joinToString(System.lineSeparator()) { it.toTsv() })
+            writeUtf8(repo.readAll().joinToString(System.lineSeparator(), transform = NotificationEvent::toTsv))
         }
     }
 
