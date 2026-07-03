@@ -82,7 +82,7 @@ class TextEditorViewModel : KoinComponent {
         mainViewModel,
         content,
         { lastParagraph.get() },
-        { emitScrollEvent(it) },
+        ::emitScrollEvent,
         ::switchShowLineNumber
     )
 
