@@ -88,7 +88,7 @@ class InputHistoryFileStoreTest {
     @Test
     fun add() {
         fakeFileSystem.write("temporary/input/history/test.tsv".toPath()) {
-            writeUtf8("test\t1\ntest\t3\ntest\t2",)
+            writeUtf8("test\t1\ntest\t3\ntest\t2")
         }
 
         subject.add(InputHistory("test", 1))
