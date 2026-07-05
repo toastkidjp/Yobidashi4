@@ -29,6 +29,7 @@ class NotificationEventExporterImplementation(
 
     override fun invoke() {
         val path = "notification${makeCurrentTimeSuffix()}.tsv".toPath()
+
         fileSystem.write(path) {
             writeUtf8(
                 repo.readAll()
