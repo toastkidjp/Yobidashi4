@@ -22,43 +22,43 @@ class PreviewKeyEventHandler(
     private val useCase: TextEditorOperationUseCase
 ) {
 
-    operator fun invoke(it: KeyEvent): Boolean {
-        if (it.type != KeyEventType.KeyDown) {
+    operator fun invoke(keyEvent: KeyEvent): Boolean {
+        if (keyEvent.type != KeyEventType.KeyDown) {
             return false
         }
         when {
-            it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionUp -> {
+            keyEvent.isShiftPressed && keyEvent.isCtrlPressed && keyEvent.key == Key.DirectionUp -> {
                 useCase.moveToTop()
                 return true
             }
-            it.isShiftPressed && it.isCtrlPressed && it.key == Key.DirectionDown -> {
+            keyEvent.isShiftPressed && keyEvent.isCtrlPressed && keyEvent.key == Key.DirectionDown -> {
                 useCase.moveToBottom()
                 return true
             }
-            it.isCtrlPressed && it.key == Key.DirectionUp -> {
+            keyEvent.isCtrlPressed && keyEvent.key == Key.DirectionUp -> {
                 useCase.scrollBy(-16.sp.value)
                 return true
             }
-            it.isCtrlPressed && it.key == Key.DirectionDown -> {
+            keyEvent.isCtrlPressed && keyEvent.key == Key.DirectionDown -> {
                 useCase.scrollBy(16.sp.value)
                 return true
             }
-            it.isCtrlPressed && it.key == Key.X -> {
+            keyEvent.isCtrlPressed && keyEvent.key == Key.X -> {
                 return useCase.cutLine()
             }
-            it.isCtrlPressed && it.key == Key.Enter -> {
+            keyEvent.isCtrlPressed && keyEvent.key == Key.Enter -> {
                 useCase.deleteLine()
                 return true
             }
-            it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionRight -> {
+            keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.DirectionRight -> {
                 useCase.switchArticleList()
                 return true
             }
-            it.isCtrlPressed && it.isAltPressed && it.key == Key.DirectionLeft -> {
+            keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.DirectionLeft -> {
                 useCase.hideArticleList()
                 return true
             }
-            it.isCtrlPressed && it.isShiftPressed && it.key == Key.L -> {
+            keyEvent.isCtrlPressed && keyEvent.isShiftPressed && keyEvent.key == Key.L -> {
                 useCase.switchLineNumber()
                 return true
             }
