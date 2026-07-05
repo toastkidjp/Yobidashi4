@@ -12,43 +12,26 @@ import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
-import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
-import jp.toastkid.yobidashi4.domain.service.editor.LinkDecoratorService
-import jp.toastkid.yobidashi4.domain.service.editor.text.JsonPrettyPrint
-import jp.toastkid.yobidashi4.domain.service.editor.text.TextReformat
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.CommaInserter
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ListHeadAdder
-import jp.toastkid.yobidashi4.presentation.editor.markdown.text.NumberedListHeadAdder
+import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUseCase
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardFetcher
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 @OptIn(InternalComposeUiApi::class)
 class KeyEventConsumerTest {
@@ -56,60 +39,47 @@ class KeyEventConsumerTest {
     private lateinit var subject: KeyEventConsumer
 
     @MockK
-    private lateinit var mainViewModel: MainViewModel
-
-    @MockK
-    private lateinit var controlAndLeftBracketCase: ControlAndLeftBracketCase
-
-    @MockK
-    private lateinit var selectedTextConversion: SelectedTextConversion
-
-    @MockK
-    private lateinit var searchUrlFactory: SearchUrlFactory
-
-    @MockK
-    private lateinit var multiParagraph: MultiParagraph
-
-    @MockK
-    private lateinit var linkDecoratorService: LinkDecoratorService
-
-    @MockK
-    private lateinit var expressionTextCalculatorService: ExpressionTextCalculatorService
-
-    @MockK
-    private lateinit var blockQuotation: BlockQuotation
-
-    @MockK
-    private lateinit var textReformat: TextReformat
-
-    @MockK
-    private lateinit var jsonPrettyPrint: JsonPrettyPrint
-
-    private val conversionCapturingSlot = slot<(String) -> String?>()
+    private lateinit var useCase: TextEditorOperationUseCase
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { linkDecoratorService } bind(LinkDecoratorService::class)
-                }
-            )
-        }
+        every { useCase.toTable() } returns true
+        every { useCase.joinLines() } returns true
+        every { useCase.quote() } returns true
+        every { useCase.decorateLink() } returns true
+        every { useCase.duplicateLine() } returns true
+        every { useCase.toListLines() } returns true
+        every { useCase.openFile() } returns true
+        every { useCase.surroundMultibyteBrackets() } just Runs
+        every { useCase.surroundCodeFence() } returns true
+        every { useCase.surroundBrackets() } returns true
+        every { useCase.decorateLink() } returns true
+        every { useCase.reformat() } returns true
+        every { useCase.insertComma() } returns true
+        every { useCase.calculate() } returns true
+        every { useCase.openFile() } returns true
+        every { useCase.openUrl() } returns true
+        every { useCase.search() } returns true
+        every { useCase.moveToLineStart() } returns true
+        every { useCase.moveToLineEnd() } returns true
+        every { useCase.italic() } returns true
+        every { useCase.bold() } returns true
+        every { useCase.doubleQuote() } returns true
+        every { useCase.switchEditable() } just Runs
+        every { useCase.switchCase() } returns true
+        every { useCase.toOrderedList() } returns true
+        every { useCase.toTaskList() } returns true
+        every { useCase.prettyPrint() } returns true
+        every { useCase.controlAndLeftBracket() } returns true
+        every { useCase.toHalfWidth() } just Runs
 
-        subject = KeyEventConsumer(mainViewModel, controlAndLeftBracketCase, selectedTextConversion, searchUrlFactory, blockQuotation = blockQuotation, textReformat = textReformat, jsonPrettyPrint = jsonPrettyPrint)
-        every { searchUrlFactory.invoke(any()) } returns "https://search.yahoo.co.jp/search?p=test"
-        every { expressionTextCalculatorService.invoke(any()) } returns "3"
-        every { selectedTextConversion.invoke(any(), any(), any(), capture(conversionCapturingSlot)) } returns true
-        every { controlAndLeftBracketCase.invoke(any(), any()) } returns true
+        subject = KeyEventConsumer(useCase, mockk(), mockk(), mockk(), mockk(), blockQuotation = mockk(), textReformat = mockk(), jsonPrettyPrint = mockk())
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
-        conversionCapturingSlot.clear()
     }
 
     @Test
@@ -124,241 +94,86 @@ class KeyEventConsumerTest {
     }
 
     @Test
-    fun duplicateSelectedText() {
-        val content = TextFieldState("Angel has fallen.", TextRange(6, 10))
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
-            content,
-            mockk()
-        )
-
-        assertTrue(consumed)
-        assertEquals("Angel has has fallen.", content.text)
-    }
-
-    @Test
     fun duplicateCurrentLine() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
         val content = TextFieldState("Angel has fallen.\nHe has gone.")
 
         val consumed = subject.invoke(
             KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
-            multiParagraph,
-        )
-
-        assertTrue(consumed)
-        assertEquals("Angel has fallen.\nAngel has fallen.\nHe has gone.", content.text)
-    }
-
-    @Test
-    fun noopDuplicateCurrentLine() {
-        val content = TextFieldState("Angel has fallen.\nHe has gone.")
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.D, KeyEventType.KeyDown, isCtrlPressed = true),
-            content,
-            null
-        )
-
-        assertFalse(consumed)
-    }
-
-    @Test
-    fun noopListConversionIfNotSelectedAnyText() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.Minus, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("Angel has fallen.\nHe has gone."),
             mockk(),
         )
 
-        assertFalse(consumed)
-    }
-
-    @Test
-    fun noopListConversion() {
-        mockkConstructor(ListHeadAdder::class)
-        every { anyConstructed<ListHeadAdder>().invoke(any(), any()) } returns null
-
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
-        val content = TextFieldState("Angel has fallen.\nHe has gone.", TextRange(0, 30))
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.Minus, KeyEventType.KeyDown, isCtrlPressed = true),
-            content,
-            multiParagraph,
-        )
-
-        assertFalse(consumed)
+        assertTrue(consumed)
+        verify { useCase.duplicateLine() }
     }
 
     @Test
     fun listConversion() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
         val content = TextFieldState("Angel has fallen.\nHe has gone.", TextRange(0, 30))
 
         val consumed = subject.invoke(
             KeyEvent(Key.Minus, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
-            multiParagraph,
-        )
-
-        assertTrue(consumed)
-        assertEquals("- Angel has fallen.\n- He has gone.", content.text)
-    }
-
-    @Test
-    fun noopOrderedListConversionIfNotSelectedAnyText() {
-        val content = TextFieldState("Angel has fallen.\nHe has gone.")
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.One, KeyEventType.KeyDown, isCtrlPressed = true),
-            content,
             mockk(),
         )
 
-        assertFalse(consumed)
-    }
-
-    @Test
-    fun noopOrderedListConversionWhenReturnsNullConversionResult() {
-        mockkConstructor(NumberedListHeadAdder::class)
-        every { anyConstructed<NumberedListHeadAdder>().invoke(any()) } returns null
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.One, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("Angel has fallen.\nHe has gone.", TextRange(0, 30)),
-            multiParagraph,
-        )
-
-        assertFalse(consumed)
+        assertTrue(consumed)
+        verify { useCase.toListLines() }
     }
 
     @Test
     fun orderedListConversion() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
         val content = TextFieldState("Angel has fallen.\nHe has gone.", TextRange(0, 30))
 
         val consumed = subject.invoke(
             KeyEvent(Key.One, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
-            multiParagraph,
-        )
-
-        assertTrue(consumed)
-        assertEquals("1. Angel has fallen.\n2. He has gone.", content.text)
-    }
-
-    @Test
-    fun noopTaskListConversionIfNotSelectedAnyText() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.Zero, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("Angel has fallen.\nHe has gone."),
             mockk(),
         )
 
-        assertFalse(consumed)
-    }
-
-    @Test
-    fun noopTaskListConversion() {
-        mockkConstructor(ListHeadAdder::class)
-        every { anyConstructed<ListHeadAdder>().invoke(any(), any()) } returns null
-
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.Zero, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("Angel has fallen.\nHe has gone.", TextRange(0, 30)),
-            multiParagraph,
-        )
-
-        assertFalse(consumed)
+        assertTrue(consumed)
+        verify { useCase.toOrderedList() }
     }
 
     @Test
     fun taskListConversion() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 17
         val content = TextFieldState("Angel has fallen.\nHe has gone.\n", TextRange(0, 30))
 
         val consumed = subject.invoke(
             KeyEvent(Key.Zero, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
-            multiParagraph,
+            mockk(),
         )
 
         assertTrue(consumed)
-        assertEquals("- [ ] Angel has fallen.\n- [ ] He has gone.\n", content.text)
+        verify { useCase.toTaskList() }
     }
 
     @Test
     fun moveToLineStart() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
         val content = TextFieldState("Angel has fallen.\nHe has gone.", TextRange(5))
         
         val consumed = subject.invoke(
             KeyEvent(Key.Four, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
-            multiParagraph,
+            mockk(),
         )
 
         assertTrue(consumed)
-        assertEquals(0, content.selection.start)
-    }
-
-    @Test
-    fun noopMoveToLineStart() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.Four, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("Angel has fallen.\nHe has gone.", TextRange(5)),
-            null,
-        )
-
-        assertFalse(consumed)
+        verify { useCase.moveToLineStart() }
     }
 
     @Test
     fun moveToLineEnd() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineEnd(0) } returns 15
         val content = TextFieldState("Angel has fallen.\nHe has gone.", TextRange(5))
-        
-        val consumed = subject.invoke(
+
+        subject.invoke(
             KeyEvent(Key.E, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
-            multiParagraph,
+            mockk(),
         )
 
-        assertTrue(consumed)
-        assertEquals(15, content.selection.start)
-    }
-
-    @Test
-    fun noopMoveToLineEnd() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.E, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("Angel has fallen.\nHe has gone.", TextRange(5)),
-            null
-        )
-
-        assertFalse(consumed)
+        verify { useCase.moveToLineEnd() }
     }
 
     @Test
@@ -372,7 +187,7 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("2,000,000", content.text)
+        verify { useCase.insertComma() }
     }
 
     @Test
@@ -380,26 +195,14 @@ class KeyEventConsumerTest {
         mockkConstructor(CommaInserter::class)
         every { anyConstructed<CommaInserter>().invoke(any()) } returns null
         val content = TextFieldState("2000000", TextRange(0, "2000000".length))
-        
-        val consumed = subject.invoke(
+
+        subject.invoke(
             KeyEvent(Key.Comma, KeyEventType.KeyDown, isCtrlPressed = true),
             content,
             mockk(),
         )
 
-        assertFalse(consumed)
-        verify { anyConstructed<CommaInserter>().invoke(any()) }
-    }
-
-    @Test
-    fun noopTableConversion() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.T, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState("test test"),
-            mockk()
-        )
-
-        assertFalse(consumed)
+        verify(inverse = true) { anyConstructed<CommaInserter>().invoke(any()) }
     }
 
     @Test
@@ -413,7 +216,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("| test | test", content.text)
     }
 
     @Test
@@ -427,8 +229,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("TEST", conversionCapturingSlot.captured.invoke("test"))
-        assertEquals("test", conversionCapturingSlot.captured.invoke("TEST"))
     }
 
     @Test
@@ -453,7 +253,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
@@ -467,7 +266,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
@@ -481,7 +279,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
@@ -495,7 +292,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
@@ -520,7 +316,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        // TODO assertEquals("(test)", content.text)
     }
 
     @Test
@@ -532,7 +327,7 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { controlAndLeftBracketCase.invoke(any(), any()) }
+        verify { useCase.controlAndLeftBracket() }
     }
 
     @Test
@@ -544,7 +339,6 @@ class KeyEventConsumerTest {
         )
 
         assertFalse(consumed)
-        verify { controlAndLeftBracketCase wasNot Called }
     }
 
     @Test
@@ -560,7 +354,6 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
         assertEquals(0, content.selection.start)
         assertEquals(4, content.selection.end)
-        //TODO assertEquals("「test」", content.text)
     }
 
     @Test
@@ -576,7 +369,6 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
         assertEquals(0, content.selection.start)
         assertEquals(4, content.selection.end)
-        // TODO assertEquals("```test```", content.text)
     }
 
     @Test
@@ -592,15 +384,10 @@ class KeyEventConsumerTest {
         assertTrue(consumed)
         assertEquals(0, content.selection.start)
         assertEquals(3, content.selection.end)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
     fun switchEditable() {
-        val editorTab = mockk<EditorTab>()
-        every { editorTab.switchEditable() } just Runs
-        every { mainViewModel.currentTab() } returns editorTab
-
         val consumed = subject.invoke(
             KeyEvent(Key.N, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldState("1+2", TextRange(0, 3)),
@@ -608,14 +395,11 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { editorTab.switchEditable() }
-        verify { mainViewModel.currentTab() }
+        verify { useCase.switchEditable() }
     }
 
     @Test
     fun noopSwitchEditable() {
-        every { mainViewModel.currentTab() } returns mockk()
-
         val consumed = subject.invoke(
             KeyEvent(Key.N, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldState("1+2", TextRange(0, 3)),
@@ -623,13 +407,10 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { mainViewModel.currentTab() }
     }
 
     @Test
     fun openUrl() {
-        every { mainViewModel.openUrl(any(), any()) } just Runs
-
         val consumed = subject.invoke(
             KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
             TextFieldState("test", TextRange(0, 4)),
@@ -637,27 +418,10 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { mainViewModel.openUrl(any(), any()) }
-    }
-
-    @Test
-    fun noopOpenUrl() {
-        every { mainViewModel.openUrl(any(), any()) } just Runs
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldState("test"),
-            mockk(),
-        )
-
-        assertFalse(consumed)
-        verify { mainViewModel wasNot called }
     }
 
     @Test
     fun browseUri() {
-        every { mainViewModel.browseUri(any()) } just Runs
-
         val consumed = subject.invoke(
             KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
             TextFieldState("test", TextRange(0, 4)),
@@ -665,27 +429,13 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { mainViewModel.browseUri(any()) }
-    }
-
-    @Test
-    fun noopBrowseUri() {
-        val consumed = subject.invoke(
-            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true, isAltPressed = true),
-            TextFieldState("test"),
-            mockk(),
-        )
-
-        assertFalse(consumed)
-        verify { mainViewModel wasNot called }
+        verify { useCase.search() }
     }
 
     @Test
     fun openFile() {
         val editorTab = mockk<EditorTab>()
         every { editorTab.path } returns mockk()
-        every { mainViewModel.currentTab() } returns editorTab
-        every { mainViewModel.openFile(any()) } just Runs
 
         val consumed = subject.invoke(
             KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true),
@@ -694,30 +444,11 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { mainViewModel.currentTab() }
-        verify { mainViewModel.openFile(any()) }
-    }
-
-    @Test
-    fun noopOpenFileIfCurrentTabIsNotEditorTab() {
-        every { mainViewModel.currentTab() } returns mockk<WebTab>()
-        every { mainViewModel.openFile(any()) } just Runs
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState(),
-            mockk(),
-        )
-
-        assertFalse(consumed)
-        verify { mainViewModel.currentTab() }
-        verify(inverse = true) { mainViewModel.openFile(any()) }
     }
 
     @Test
     fun noopCombineLines() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
+        every { useCase.joinLines() } returns false
 
         val consumed = subject.invoke(
             KeyEvent(Key.J, KeyEventType.KeyDown, isCtrlPressed = true),
@@ -730,8 +461,6 @@ class KeyEventConsumerTest {
 
     @Test
     fun combineLines() {
-        every { multiParagraph.getLineForOffset(any()) } returns 0
-        every { multiParagraph.getLineStart(0) } returns 0
         val content = TextFieldState("a\nb\nc", TextRange.Zero)
 
         val consumed = subject.invoke(
@@ -741,7 +470,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("ab\nc", content.text)
     }
 
     @Test
@@ -756,16 +484,12 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals(0, content.selection.start)
-        assertEquals(10, content.selection.end)
-        verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
     fun quoteInsertion() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
-        every { blockQuotation.invoke(any()) } returns "> test"
         val content = TextFieldState("", TextRange(0))
 
         val consumed = subject.invoke(
@@ -775,8 +499,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify(inverse = true) { selectedTextConversion.invoke(any(), any(), any(), any()) }
-        verify { blockQuotation.invoke(any()) }
     }
 
     @Test
@@ -794,26 +516,10 @@ class KeyEventConsumerTest {
     }
 
     @Test
-    fun noopQuoteInsertionWhenReturnsNullFromConversionResult() {
-        mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
-        every { blockQuotation.invoke(any()) } returns null
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true),
-            TextFieldState(""),
-            mockk(),
-        )
-
-        assertFalse(consumed)
-    }
-
-    @Test
     fun pasteDecoratedLink() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
         val decoratedLink = "[test](https://test.yahoo.com)"
-        every { linkDecoratorService.invoke(any()) } returns decoratedLink
         val content = TextFieldState("", TextRange(0))
 
         val consumed = subject.invoke(
@@ -823,15 +529,11 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals(decoratedLink, content.text)
     }
 
     @Test
     fun toDecoratedLink() {
         val selected = "https://test.yahoo.com"
-        mockkConstructor(ClipboardFetcher::class, LinkPasteCase::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns selected
-        every { anyConstructed<LinkPasteCase>().invoke(any(), any(), any(), any()) } returns true
         val content = TextFieldState(selected, TextRange(0, selected.length))
 
         val consumed = subject.invoke(
@@ -841,7 +543,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        verify { anyConstructed<LinkPasteCase>().invoke(any(), any(), any(), any()) }
     }
 
     @Test
@@ -856,7 +557,7 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        // TODO assertEquals("10月21日ABCホールにて", content.text)
+        verify { useCase.toHalfWidth() }
     }
 
     @Test
@@ -871,7 +572,6 @@ class KeyEventConsumerTest {
         )
 
         assertFalse(consumed)
-        verify(inverse = true) { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
     @Test
@@ -915,26 +615,20 @@ class KeyEventConsumerTest {
 
     @Test
     fun textReformat() {
-        mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
-        every { textReformat.invoke(any()) } returns "reformat"
-        val content = TextFieldState("", TextRange(0))
-
         val consumed = subject.invoke(
             KeyEvent(Key.F, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            content,
+            TextFieldState(),
             mockk(),
         )
 
         assertTrue(consumed)
-        assertEquals("reformat", content.text)
+        verify { useCase.reformat() }
     }
 
     @Test
     fun textReformatIfClipboardIsEmpty() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
-        every { textReformat.invoke(any()) } returns "reformat"
         val content = TextFieldState("test", TextRange(0, 1))
 
         val consumed = subject.invoke(
@@ -944,29 +638,13 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("reformatest", content.text)
-    }
-
-    @Test
-    fun noopTextReformat() {
-        mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
-        every { textReformat.invoke(any()) } returns "reformat"
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.F, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldState("test"),
-            mockk(),
-        )
-
-        assertFalse(consumed)
+        every { useCase.reformat() }
     }
 
     @Test
     fun jsonPrettyPrint() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "test"
-        every { jsonPrettyPrint.invoke(any()) } returns "{}"
         val content = TextFieldState("", TextRange(0))
 
         val consumed = subject.invoke(
@@ -976,14 +654,12 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("{}", content.text)
     }
 
     @Test
     fun jsonPrettyPrintIfClipboardIsEmpty() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
-        every { jsonPrettyPrint.invoke(any()) } returns "{}"
         val content = TextFieldState("test", TextRange(0, 1))
 
         val consumed = subject.invoke(
@@ -993,37 +669,6 @@ class KeyEventConsumerTest {
         )
 
         assertTrue(consumed)
-        assertEquals("{}est", content.text)
-    }
-
-    @Test
-    fun noopJsonPrettyPrint() {
-        mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
-        every { jsonPrettyPrint.invoke(any()) } returns "{}}"
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldState("test"),
-            mockk(),
-        )
-
-        assertFalse(consumed)
-    }
-
-    @Test
-    fun noopJsonPrettyPrintWithNull() {
-        mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns null
-        every { jsonPrettyPrint.invoke(any()) } returns "{}}"
-
-        val consumed = subject.invoke(
-            KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
-            TextFieldState("test"),
-            mockk(),
-        )
-
-        assertFalse(consumed)
     }
 
 }
