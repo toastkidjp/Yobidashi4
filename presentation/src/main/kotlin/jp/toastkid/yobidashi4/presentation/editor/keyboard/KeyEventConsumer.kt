@@ -146,8 +146,6 @@ class KeyEventConsumer(
         }
     }
 
-    private fun surroundBrackets(it: String) = "($it)"
-
     private fun doubleQuote(it: String) = "\"$it\""
 
     private fun italic(it: String) = "***$it***"
