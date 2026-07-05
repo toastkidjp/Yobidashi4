@@ -1,4 +1,3 @@
-package jp.toastkid.yobidashi4.infrastructure.service.notification
 /*
  * Copyright (c) 2026 toastkidjp.
  * All rights reserved. This program and the accompanying materials
@@ -6,6 +5,8 @@ package jp.toastkid.yobidashi4.infrastructure.service.notification
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
+package jp.toastkid.yobidashi4.infrastructure.service.notification
+
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
