@@ -233,7 +233,10 @@ class TextEditorViewModel : KoinComponent {
     fun launchTab(tab: EditorTab, dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         this.tab.set(tab)
 
-        val newContent = TextFieldState(tab.getContent().toString(), TextRange(tab.caretPosition()))
+        val newContent = TextFieldState(
+            tab.getContent().toString(),
+            TextRange(tab.caretPosition())
+        )
         applyStyle(newContent)
         update()
         CoroutineScope(dispatcher).launch {
