@@ -519,7 +519,6 @@ class KeyEventConsumerTest {
     fun pasteDecoratedLink() {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns "https://test.yahoo.com"
-        "[test](https://test.yahoo.com)"
         val content = TextFieldState("", TextRange(0))
 
         val consumed = subject.invoke(
