@@ -22,9 +22,7 @@ class PreviewKeyEventHandler(
     private val useCase: TextEditorOperationUseCase
 ) {
 
-    operator fun invoke(
-        it: KeyEvent,
-    ): Boolean {
+    operator fun invoke(it: KeyEvent, ): Boolean {
         if (it.type != KeyEventType.KeyDown) {
             return false
         }
