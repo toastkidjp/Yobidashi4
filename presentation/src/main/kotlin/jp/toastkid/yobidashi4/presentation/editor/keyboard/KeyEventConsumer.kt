@@ -146,8 +146,6 @@ class KeyEventConsumer(
         }
     }
 
-    private fun surroundCodeFence(it: String) = "```$it```"
-
     private fun surroundMultibyteBrackets(it: String) = "「$it」"
 
     private fun surroundBrackets(it: String) = "($it)"
