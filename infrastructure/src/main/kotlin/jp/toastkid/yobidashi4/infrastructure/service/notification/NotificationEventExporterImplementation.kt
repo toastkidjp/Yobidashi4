@@ -32,7 +32,10 @@ class NotificationEventExporterImplementation(
             makeCurrentTimeSuffix()
         }.tsv".toPath()
         fileSystem.write(path) {
-            writeUtf8(repo.readAll().joinToString(System.lineSeparator(), transform = NotificationEvent::toTsv))
+            writeUtf8(
+                repo.readAll()
+                    .joinToString(System.lineSeparator(), transform = NotificationEvent::toTsv)
+            )
         }
     }
 
