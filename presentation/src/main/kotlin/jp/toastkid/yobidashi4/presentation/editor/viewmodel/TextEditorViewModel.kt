@@ -68,8 +68,6 @@ class TextEditorViewModel : KoinComponent {
 
     private val lineCount = mutableStateOf(0)
 
-    private val keyEventConsumer = KeyEventConsumer()
-
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
     fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
@@ -87,6 +85,8 @@ class TextEditorViewModel : KoinComponent {
     )
 
     private val previewKeyEventHandler = PreviewKeyEventHandler(textEditorOperationUseCase)
+
+    private val keyEventConsumer = KeyEventConsumer(textEditorOperationUseCase)
 
     private val verticalScrollState = ScrollState(0)
 
