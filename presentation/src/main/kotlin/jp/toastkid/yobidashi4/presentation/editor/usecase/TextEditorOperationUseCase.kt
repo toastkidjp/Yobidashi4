@@ -32,6 +32,11 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlin.math.max
 import kotlin.math.min
 
+private data class SelectionIndices(
+    val start: Int,
+    val end: Int
+)
+
 class TextEditorOperationUseCase(
     private val mainViewModel: MainViewModel,
     private val content: TextFieldState,
@@ -152,10 +157,7 @@ class TextEditorOperationUseCase(
 
     //it.isCtrlPressed && it.key == Key.One
     fun toOrderedList(): Boolean {
-        val rawSelectionStartIndex = content.selection.start
-        val rauSelectionEndIndex = content.selection.end
-        val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
-        val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
+        val (selectionStartIndex, selectionEndIndex) = calculateSelectionIndices()
 
         val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
         if (selected.isEmpty()) {
@@ -576,4 +578,12 @@ class TextEditorOperationUseCase(
     private fun switchCase(it: String) =
         if (it.toCharArray()[0].isUpperCase()) it.lowercase()
         else it.uppercase()
+
+    private fun calculateSelectionIndices(): SelectionIndices {
+        val rawSelectionStartIndex = content.selection.start
+        val rauSelectionEndIndex = content.selection.end
+        val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
+        val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
+        return SelectionIndices(selectionStartIndex, selectionEndIndex)
+    }
 }
