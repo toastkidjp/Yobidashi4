@@ -137,10 +137,7 @@ class TextEditorOperationUseCase(
 
     // it.isCtrlPressed && it.key == Key.Minus
     fun toListLines(): Boolean {
-        val rawSelectionStartIndex = content.selection.start
-        val rauSelectionEndIndex = content.selection.end
-        val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
-        val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
+        val (selectionStartIndex, selectionEndIndex) = calculateSelectionIndices()
 
         val selected = getSelectedText(content)
         if (selected.isEmpty()) {
