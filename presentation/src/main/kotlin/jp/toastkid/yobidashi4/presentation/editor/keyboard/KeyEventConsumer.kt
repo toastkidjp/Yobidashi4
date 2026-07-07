@@ -146,8 +146,6 @@ class KeyEventConsumer(
         }
     }
 
-    private fun doubleQuote(it: String) = "\"$it\""
-
     private fun italic(it: String) = "***$it***"
 
     private fun bold(it: String) = "**$it**"
