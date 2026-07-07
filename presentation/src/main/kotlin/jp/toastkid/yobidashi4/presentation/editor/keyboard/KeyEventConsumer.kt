@@ -146,8 +146,6 @@ class KeyEventConsumer(
         }
     }
 
-    private fun bold(it: String) = "**$it**"
-
     private fun switchCase(it: String) =
         if (it.toCharArray()[0].isUpperCase()) it.lowercase()
         else it.uppercase()
