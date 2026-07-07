@@ -146,8 +146,6 @@ class KeyEventConsumer(
         }
     }
 
-    private fun italic(it: String) = "***$it***"
-
     private fun bold(it: String) = "**$it**"
 
     private fun switchCase(it: String) =
