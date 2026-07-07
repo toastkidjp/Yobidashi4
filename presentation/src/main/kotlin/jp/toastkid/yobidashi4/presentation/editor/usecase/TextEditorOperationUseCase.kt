@@ -365,10 +365,7 @@ class TextEditorOperationUseCase(
 
     // it.isCtrlPressed && it.isShiftPressed && it.key == Key.O
     fun openUrl(): Boolean {
-        val rawSelectionStartIndex = content.selection.start
-        val rauSelectionEndIndex = content.selection.end
-        val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
-        val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
+        val (selectionStartIndex, selectionEndIndex) = calculateSelectionIndices()
 
         val selected = content.text.substring(selectionStartIndex, selectionEndIndex)
         if (selected.isEmpty()) {
