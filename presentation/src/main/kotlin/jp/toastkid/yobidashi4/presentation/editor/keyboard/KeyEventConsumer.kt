@@ -52,8 +52,6 @@ class KeyEventConsumer(
             return false
         }
 
-        val rawSelectionStartIndex = content.selection.start
-
         return when {
             it.isCtrlPressed && it.key == Key.D -> {
                 return useCase.duplicateLine()
