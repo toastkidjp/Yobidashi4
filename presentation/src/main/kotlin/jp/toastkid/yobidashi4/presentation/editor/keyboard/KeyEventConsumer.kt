@@ -20,8 +20,6 @@ import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUse
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import kotlin.math.max
-import kotlin.math.min
 
 class KeyEventConsumer(
     private val useCase: TextEditorOperationUseCase,
@@ -35,13 +33,6 @@ class KeyEventConsumer(
     private val textReformat: TextReformat = TextReformat(),
     private val jsonPrettyPrint: JsonPrettyPrint = JsonPrettyPrint(),
 ) {
-
-    private fun getSelectedText(content: TextFieldState): CharSequence {
-        val selection = content.selection
-        val selectionStartIndex = min(selection.start, selection.end)
-        val selectionEndIndex = max(selection.start, selection.end)
-        return content.text.subSequence(selectionStartIndex, selectionEndIndex)
-    }
 
     operator fun invoke(
         it: KeyEvent,
