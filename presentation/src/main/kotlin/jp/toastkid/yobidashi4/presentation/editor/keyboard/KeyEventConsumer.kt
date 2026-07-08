@@ -53,7 +53,6 @@ class KeyEventConsumer(
         }
 
         val rawSelectionStartIndex = content.selection.start
-        val rauSelectionEndIndex = content.selection.end
 
         return when {
             it.isCtrlPressed && it.key == Key.D -> {
