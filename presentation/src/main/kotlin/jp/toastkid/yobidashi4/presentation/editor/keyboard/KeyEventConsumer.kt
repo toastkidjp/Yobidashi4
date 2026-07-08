@@ -55,7 +55,6 @@ class KeyEventConsumer(
         val rawSelectionStartIndex = content.selection.start
         val rauSelectionEndIndex = content.selection.end
         val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
-        val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
 
         return when {
             it.isCtrlPressed && it.key == Key.D -> {
@@ -145,9 +144,5 @@ class KeyEventConsumer(
             else -> false
         }
     }
-
-    private fun switchCase(it: String) =
-        if (it.toCharArray()[0].isUpperCase()) it.lowercase()
-        else it.uppercase()
 
 }
