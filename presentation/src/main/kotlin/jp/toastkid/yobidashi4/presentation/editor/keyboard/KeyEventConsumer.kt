@@ -19,7 +19,6 @@ import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUse
 
 class KeyEventConsumer(
     private val useCase: TextEditorOperationUseCase,
-    private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
     private val toHalfWidth: ToHalfWidth = ToHalfWidth(),
     private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService(),
