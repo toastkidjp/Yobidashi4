@@ -27,7 +27,7 @@ class KeyEventConsumer(
 
         return when {
             it.isCtrlPressed && it.key == Key.D -> {
-                return useCase.duplicateLine()
+                useCase.duplicateLine()
             }
             it.isCtrlPressed && it.key == Key.Minus -> {
                 return useCase.toListLines()
