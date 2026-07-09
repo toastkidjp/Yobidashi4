@@ -16,13 +16,9 @@ import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ToHalfWidth
 import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUseCase
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class KeyEventConsumer(
     private val useCase: TextEditorOperationUseCase,
-    private val mainViewModel: MainViewModel = object : KoinComponent { val vm : MainViewModel by inject() }.vm,
     private val controlAndLeftBracketCase: ControlAndLeftBracketCase = ControlAndLeftBracketCase(),
     private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
