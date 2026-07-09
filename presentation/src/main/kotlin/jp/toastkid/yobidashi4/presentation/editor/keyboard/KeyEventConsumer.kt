@@ -19,7 +19,6 @@ import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUse
 
 class KeyEventConsumer(
     private val useCase: TextEditorOperationUseCase,
-    private val controlAndLeftBracketCase: ControlAndLeftBracketCase = ControlAndLeftBracketCase(),
     private val selectedTextConversion: SelectedTextConversion = SelectedTextConversion(),
     private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
     private val toHalfWidth: ToHalfWidth = ToHalfWidth(),
