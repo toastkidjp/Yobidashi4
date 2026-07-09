@@ -11,7 +11,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
 import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
-import jp.toastkid.yobidashi4.domain.service.editor.text.JsonPrettyPrint
 import jp.toastkid.yobidashi4.domain.service.editor.text.TextReformat
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
@@ -31,7 +30,6 @@ class KeyEventConsumer(
     private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService(),
     private val blockQuotation: BlockQuotation = BlockQuotation(),
     private val textReformat: TextReformat = TextReformat(),
-    private val jsonPrettyPrint: JsonPrettyPrint = JsonPrettyPrint(),
 ) {
 
     operator fun invoke(
