@@ -10,7 +10,6 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.MultiParagraph
-import jp.toastkid.yobidashi4.domain.model.web.search.SearchUrlFactory
 import jp.toastkid.yobidashi4.domain.service.editor.text.TextReformat
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.BlockQuotation
 import jp.toastkid.yobidashi4.presentation.editor.markdown.text.ExpressionTextCalculatorService
@@ -19,7 +18,6 @@ import jp.toastkid.yobidashi4.presentation.editor.usecase.TextEditorOperationUse
 
 class KeyEventConsumer(
     private val useCase: TextEditorOperationUseCase,
-    private val searchUrlFactory: SearchUrlFactory = SearchUrlFactory(),
     private val toHalfWidth: ToHalfWidth = ToHalfWidth(),
     private val expressionTextCalculatorService: ExpressionTextCalculatorService = ExpressionTextCalculatorService(),
     private val blockQuotation: BlockQuotation = BlockQuotation(),
