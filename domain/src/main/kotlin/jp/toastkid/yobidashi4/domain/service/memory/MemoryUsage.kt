@@ -16,4 +16,4 @@ class MemoryUsage(private val runtime: Runtime = Runtime.getRuntime()) {
 
 }
 
-private val MEGA_BYTE = 1024 * 1024
+private const val MEGA_BYTE = 1024 * 1024
