@@ -175,7 +175,10 @@ class TextEditorViewModel : KoinComponent {
         val multiParagraph = lastParagraph.get() ?: return
 
         content.edit {
-            selection = TextRange(multiParagraph.getLineStart(it), multiParagraph.getLineEnd(it))
+            selection = TextRange(
+                multiParagraph.getLineStart(it),
+                multiParagraph.getLineEnd(it)
+            )
         }
     }
 
