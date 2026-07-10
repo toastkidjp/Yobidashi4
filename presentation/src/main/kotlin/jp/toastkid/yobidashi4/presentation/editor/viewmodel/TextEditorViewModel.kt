@@ -267,13 +267,15 @@ class TextEditorViewModel : KoinComponent {
         )
     }
 
-    fun inputTransformation(): InputTransformation {
-        return InputTransformation {
-            if (altPressed.get()) {
-                revertAllChanges()
-                return@InputTransformation
-            }
+    private val inputTransformation = InputTransformation {
+        if (altPressed.get()) {
+            revertAllChanges()
+            return@InputTransformation
         }
+    }
+
+    fun inputTransformation(): InputTransformation {
+        return inputTransformation
     }
 
     private val none = OutputTransformation {
