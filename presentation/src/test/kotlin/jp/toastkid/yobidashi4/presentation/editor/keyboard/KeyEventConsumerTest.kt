@@ -74,7 +74,7 @@ class KeyEventConsumerTest {
         every { useCase.controlAndLeftBracket() } returns true
         every { useCase.toHalfWidth() } just Runs
 
-        subject = KeyEventConsumer(useCase, mockk(), mockk(), mockk(), mockk(), blockQuotation = mockk(), textReformat = mockk(), jsonPrettyPrint = mockk())
+        subject = KeyEventConsumer(useCase)
     }
 
     @AfterEach
