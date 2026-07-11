@@ -94,6 +94,7 @@ class FileListViewKtTest {
             makeMockElement("test-list-item2"),
             makeMockElement("test-list-item3"),
             makeMockElement("test-list-item4"),
+            makeMockElement("test-list-item5", editable = false),
             element
         )
 
@@ -173,12 +174,16 @@ class FileListViewKtTest {
         }
     }
 
-    private fun makeMockElement(fileName: String, selected: Boolean = false): FileListItem {
+    private fun makeMockElement(
+        fileName: String,
+        selected: Boolean = false,
+        editable: Boolean = true,
+    ): FileListItem {
         val path = mockk<Path>()
         every { path.nameWithoutExtension } returns fileName
         val element = mockk<FileListItem>()
         every { element.path } returns path
-        every { element.editable } returns true
+        every { element.editable } returns editable
         every { element.selected } returns selected
         every { element.subText() } returns "2024-01-22"
         return element
