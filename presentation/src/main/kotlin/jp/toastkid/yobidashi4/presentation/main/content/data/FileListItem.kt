@@ -8,15 +8,10 @@
 package jp.toastkid.yobidashi4.presentation.main.content.data
 
 import androidx.compose.runtime.Immutable
-import java.nio.file.Files
 import java.nio.file.Path
-import java.text.DecimalFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.io.path.nameWithoutExtension
 
 @Immutable
 data class FileListItem(
@@ -29,30 +24,16 @@ data class FileListItem(
 
     private val sortKey = AtomicLong(-1L)
 
-    init {
-        subText.set(makeSubText())
-    }
-
-    private fun makeSubText(): String? {
-        if (Files.exists(path).not()) {
-            return null
-        }
-
-        val size = Files.size(path).toDouble()
-        val unit = if (size > 1_000_000) "MB" else "KB"
-        val displaySize = decimalFormat.format(size / (if (size > 1_000_000) 1_000_000 else 1000))
-        val lastModifiedTime = Files.getLastModifiedTime(path)
-        sortKey.set(lastModifiedTime.toMillis())
-        return "$displaySize $unit | ${
-            LocalDateTime
-                .ofInstant(lastModifiedTime.toInstant(), ZoneId.systemDefault())
-                .format(dateTimeFormatter)
-        }"
+    fun setMeta(meta: FileListItemMeta) {
+        subText.set(meta.subText)
+        sortKey.set(meta.lastModified)
     }
 
     fun reverseSelection() = FileListItem(path, selected.not(), editable)
 
     fun unselect() = FileListItem(path, false, editable)
+
+    fun name() = path.nameWithoutExtension
 
     fun subText(): String? = subText.get()
 
@@ -61,8 +42,3 @@ data class FileListItem(
     fun keep() = !subText.get().isNullOrBlank()
 
 }
-
-private val decimalFormat = DecimalFormat("#,###.##")
-
-private val dateTimeFormatter =
-    DateTimeFormatter.ofPattern("yyyy-MM-dd(E) HH:mm:ss").withLocale(Locale.ENGLISH)
