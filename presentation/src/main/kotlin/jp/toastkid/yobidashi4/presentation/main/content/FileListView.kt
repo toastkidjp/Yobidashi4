@@ -46,7 +46,6 @@ import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import org.jetbrains.compose.resources.painterResource
 import java.nio.file.Path
-import kotlin.io.path.nameWithoutExtension
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -155,7 +154,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             .onKeyEvent {
                                 viewModel.onKeyEventFromCell(it, fileListItem)
                             }
-                            .semantics { contentDescription = fileListItem.path.nameWithoutExtension }
+                            .semantics { contentDescription = fileListItem.name() }
                     )
                 }
             }
@@ -191,7 +190,7 @@ private fun FileListItemRow(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) { textColor ->
             Text(
-                fileListItem.path.nameWithoutExtension,
+                fileListItem.name(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = textColor
@@ -248,13 +247,13 @@ private fun FileListItemRow(
                 HoverHighlightDropdownMenuItem(
                     "Copy title"
                 ) {
-                    clipText(fileListItem.path.nameWithoutExtension)
+                    clipText(fileListItem.name())
                 }
 
                 HoverHighlightDropdownMenuItem(
                     "Clip internal link"
                 ) {
-                    clipText("[[${fileListItem.path.nameWithoutExtension}]]")
+                    clipText("[[${fileListItem.name()}]]")
                 }
             }
         }
