@@ -32,8 +32,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.nio.file.Files
-import java.nio.file.Path
-import kotlin.io.path.nameWithoutExtension
 
 class FileListViewKtTest {
 
@@ -81,12 +79,7 @@ class FileListViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun fileListView() {
-        val path = mockk<Path>()
-        every { path.nameWithoutExtension } returns "none-sub-text.txt"
-        val element = mockk<FileListItem>()
-        every { element.path } returns path
-        every { element.editable } returns true
-        every { element.selected } returns false
+        val element = makeMockElement("none-sub-text.txt")
         every { element.subText() } returns null
 
         every { anyConstructed<FileListViewModel>().items() } returns listOf(
@@ -179,10 +172,9 @@ class FileListViewKtTest {
         selected: Boolean = false,
         editable: Boolean = true,
     ): FileListItem {
-        val path = mockk<Path>()
-        every { path.nameWithoutExtension } returns fileName
         val element = mockk<FileListItem>()
-        every { element.path } returns path
+        every { element.path } returns mockk()
+        every { element.name() } returns fileName
         every { element.editable } returns editable
         every { element.selected } returns selected
         every { element.subText() } returns "2024-01-22"
