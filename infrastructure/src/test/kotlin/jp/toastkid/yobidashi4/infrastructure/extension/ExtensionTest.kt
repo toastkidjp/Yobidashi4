@@ -9,19 +9,22 @@ package jp.toastkid.yobidashi4.infrastructure.extension
 
 import okio.Path.Companion.toPath
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class ExtensionTest {
 
-    @Test
-    fun getExtension() {
-        assertTrue("test".toPath().extension.isEmpty())
-        assertTrue("test.".toPath().extension.isEmpty())
-        assertEquals("txt", "test.txt".toPath().extension)
-        assertEquals("exe", "test.txt.exe".toPath().extension)
-        assertTrue(".".toPath().extension.isEmpty())
-        assertTrue("..".toPath().extension.isEmpty())
+    @ParameterizedTest
+    @CsvSource(
+        "test, ''",
+        "test., ''",
+        "., ''",
+        ".., ''",
+        "test.txt, txt",
+        "test.txt.ext, ext",
+    )
+    fun getExtension(fileName: String, expected: String) {
+        assertEquals(expected, fileName.toPath().extension)
     }
 
 }
