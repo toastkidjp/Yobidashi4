@@ -27,6 +27,8 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemFactory
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -63,10 +65,14 @@ class FileListViewModel : KoinComponent {
 
     fun keyword() = keyword
 
+    private val metaExtractor: FileListItemMetaExtractor by inject()
+
+    private val itemFactory = FileListItemFactory(metaExtractor)
+
     fun start(paths: List<Path>) {
         articleStates.clear()
         paths
-            .map { FileListItem(it, editable = editableExtensions.contains(it.extension)) }
+            .map { itemFactory.invoke(it, editable = editableExtensions.contains(it.extension)) }
             .sortedByDescending(FileListItem::sortKey)
             .forEach(articleStates::add)
         completeItems.clear()
