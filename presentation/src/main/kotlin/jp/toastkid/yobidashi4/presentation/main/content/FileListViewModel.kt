@@ -109,16 +109,17 @@ class FileListViewModel : KoinComponent {
     }
 
     fun onKeyEventFromCell(it: KeyEvent, fileListItem: FileListItem): Boolean {
-        if (it.key == Key.Enter) {
-            if (fileListItem.editable) {
-                edit(fileListItem.path)
-                viewModel.hideArticleList()
-            } else {
-                viewModel.openFile(fileListItem.path)
-            }
-            return true
+        if (it.key != Key.Enter) {
+            return false
         }
-        return false
+
+        if (fileListItem.editable) {
+            edit(fileListItem.path)
+            viewModel.hideArticleList()
+        } else {
+            viewModel.openFile(fileListItem.path)
+        }
+        return true
     }
 
     fun currentIsTop(): Boolean {
