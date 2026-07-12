@@ -11,10 +11,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 
 class FileListItemTest {
 
@@ -30,10 +32,18 @@ class FileListItemTest {
 
     @Test
     fun test() {
-        val fileListItem = FileListItem(mockk(), true)
+        val fileListItem = FileListItem(mockk(), true, true, "test-sub", System.currentTimeMillis())
         assertTrue(fileListItem.selected)
-        assertFalse(fileListItem.unselect().selected)
-        assertFalse(fileListItem.reverseSelection().selected)
+        val unselect = fileListItem.unselect()
+        assertFalse(unselect.selected)
+        val reverseSelection = fileListItem.reverseSelection()
+        assertFalse(reverseSelection.selected)
+        assertAll(
+            { assertEquals(fileListItem.subText(), unselect.subText()) },
+            { assertEquals(fileListItem.sortKey(), unselect.sortKey()) },
+            { assertEquals(fileListItem.subText(), reverseSelection.subText()) },
+            { assertEquals(fileListItem.sortKey(), reverseSelection.sortKey()) }
+        )
     }
 
     @Test
