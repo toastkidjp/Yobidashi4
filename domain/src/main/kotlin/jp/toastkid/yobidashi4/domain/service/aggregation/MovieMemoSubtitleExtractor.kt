@@ -27,7 +27,7 @@ class MovieMemoSubtitleExtractor(private val articlesReaderService: ArticlesRead
                 .filter(::keepSpecificLine)
                 .map { line -> line.substring(line.indexOf(" ")).trim() }
 
-    private fun keepSpecificLine(line: String) = line.startsWith("##") && line.contains("年、")
+    private fun keepSpecificLine(line: String) = line.startsWith("## ") && line.contains("年、")
 
     private fun keepIsNotEmpty(it: Pair<String, List<String>>) = it.second.isNotEmpty()
 
