@@ -18,9 +18,8 @@ class FileListItemFactory(
         selected: Boolean = false,
         editable: Boolean = true
     ): FileListItem {
-        val item = FileListItem(path, selected, editable)
-        metaDataExtractor.make(path)?.let { item.setMeta(it) }
-        return item
+        val listItemMeta = metaDataExtractor.make(path)
+        return FileListItem(path, selected, editable, listItemMeta?.subText, listItemMeta?.lastModified ?: 0L)
     }
 
 }
