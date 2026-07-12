@@ -9,8 +9,6 @@ package jp.toastkid.yobidashi4.presentation.main.content.data
 
 import androidx.compose.runtime.Immutable
 import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicLong
-import java.util.concurrent.atomic.AtomicReference
 import kotlin.io.path.nameWithoutExtension
 
 @Immutable
@@ -18,27 +16,20 @@ data class FileListItem(
     val path: Path,
     val selected: Boolean = false,
     val editable: Boolean = false,
+    private val subText: String? = null,
+    private val sortKey: Long = -1L
 ) {
 
-    private val subText = AtomicReference("")
+    fun reverseSelection() = copy(selected = selected.not())
 
-    private val sortKey = AtomicLong(-1L)
-
-    fun setMeta(meta: FileListItemMeta) {
-        subText.set(meta.subText)
-        sortKey.set(meta.lastModified)
-    }
-
-    fun reverseSelection() = FileListItem(path, selected.not(), editable)
-
-    fun unselect() = FileListItem(path, false, editable)
+    fun unselect() = copy(selected = false)
 
     fun name() = path.nameWithoutExtension
 
-    fun subText(): String? = subText.get()
+    fun subText(): String? = subText
 
-    fun sortKey(): Long = sortKey.get()
+    fun sortKey(): Long = sortKey
 
-    fun keep() = !subText.get().isNullOrBlank()
+    fun keep() = !subText.isNullOrBlank()
 
 }
