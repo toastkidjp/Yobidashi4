@@ -37,6 +37,7 @@ internal class MovieMemoSubtitleExtractorTest {
         every { Files.readAllLines(any()) } returns listOf(
             "## 『ミッション：インポッシブル(原題：MISSION:IMPOSSIBLE)』(1996年、アメリカ合衆国)",
             "## 『JSA』(2001、韓国)",
+            "##『Failure』(2001年、イギリス)",
             "## 『WBS』",
             "年、",
         )
