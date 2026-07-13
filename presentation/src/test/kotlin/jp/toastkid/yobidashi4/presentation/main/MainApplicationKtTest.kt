@@ -22,6 +22,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -50,6 +52,9 @@ class MainApplicationKtTest {
     @MockK
     private lateinit var notification: ScheduledNotification
 
+    @MockK
+    private lateinit var metaExtractor: FileListItemMetaExtractor
+
     @OptIn(ExperimentalFoundationApi::class)
     @BeforeEach
     fun setUp() {
@@ -75,12 +80,18 @@ class MainApplicationKtTest {
                     single(qualifier = null) { ioContextProvider } bind (IoContextProvider::class)
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
+                    single(qualifier = null) { metaExtractor } bind (FileListItemMetaExtractor::class)
                 }
             )
         }
         every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
         mockkConstructor(LauncherJarTimestampReader::class)
         every { anyConstructed<LauncherJarTimestampReader>().invoke() } returns "test"
+
+        every { metaExtractor.make(any()) } returns FileListItemMeta(
+            "test",
+            20000
+        )
     }
 
     private fun mockMainMenu(setting: Setting) {
