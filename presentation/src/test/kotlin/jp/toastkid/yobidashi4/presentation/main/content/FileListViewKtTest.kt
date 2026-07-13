@@ -23,6 +23,8 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -38,6 +40,9 @@ class FileListViewKtTest {
     @MockK
     private lateinit var mainViewModel: MainViewModel
 
+    @MockK
+    private lateinit var metaExtractor: FileListItemMetaExtractor
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -46,6 +51,7 @@ class FileListViewKtTest {
             modules(
                 module {
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
+                    single(qualifier = null) { metaExtractor } bind (FileListItemMetaExtractor::class)
                 }
             )
         }
@@ -68,6 +74,10 @@ class FileListViewKtTest {
         every { anyConstructed<FileListViewModel>().clipText(any()) } just Runs
         every { anyConstructed<FileListViewModel>().onPointerEvent(any(), any()) } just Runs
         every { anyConstructed<FileListViewModel>().start(any()) } just Runs
+        every { metaExtractor.make(any()) } returns FileListItemMeta(
+            "test",
+            20000
+        )
     }
 
     @AfterEach
