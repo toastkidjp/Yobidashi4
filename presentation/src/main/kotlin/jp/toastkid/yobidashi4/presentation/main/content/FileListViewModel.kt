@@ -147,7 +147,9 @@ class FileListViewModel : KoinComponent {
 
     fun items(): List<FileListItem> = articleStates
 
-    fun selectedFiles() = articleStates.filter(FileListItem::selected).map(FileListItem::path)
+    fun selectedFiles() = articleStates
+        .filter(FileListItem::selected)
+        .map(FileListItem::path)
 
     fun onSingleClick(fileListItem: FileListItem) {
         val clickedIndex = items().indexOf(fileListItem)
