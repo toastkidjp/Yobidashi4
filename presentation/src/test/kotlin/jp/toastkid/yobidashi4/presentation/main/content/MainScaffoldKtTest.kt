@@ -28,6 +28,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -39,7 +41,6 @@ import org.koin.dsl.module
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
-import kotlin.io.path.extension
 
 class MainScaffoldKtTest {
 
@@ -58,6 +59,9 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var inputHistoryRepository: InputHistoryRepository
 
+    @MockK
+    private lateinit var metaExtractor: FileListItemMetaExtractor
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -70,6 +74,7 @@ class MainScaffoldKtTest {
                     single(qualifier=null) { articlesReaderService } bind(ArticlesReaderService::class)
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                     single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
+                    single(qualifier=null) { metaExtractor } bind(FileListItemMetaExtractor::class)
                 }
             )
         }
@@ -93,6 +98,10 @@ class MainScaffoldKtTest {
         every { mainViewModel.tabs } returns mutableListOf()
         every { setting.chatApiKey() } returns "test-key"
         every { inputHistoryRepository.filter(any()) } returns emptyList()
+        every { metaExtractor.make(any()) } returns FileListItemMeta(
+            "test",
+            20000
+        )
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
@@ -188,8 +197,6 @@ class MainScaffoldKtTest {
     @Test
     fun articles() {
         val path = mockk<Path>()
-        every { path.extension } returns "md"
-        every { mainViewModel.articles() } returns listOf(path)
 
         runDesktopComposeUiTest {
             setContent {
@@ -203,10 +210,6 @@ class MainScaffoldKtTest {
     fun articlesWithOpenArticleList() {
         every { mainViewModel.openArticleList() } returns true
         every { mainViewModel.hideArticleList() } just Runs
-
-        val path = mockk<Path>()
-        every { path.extension } returns "md"
-        every { mainViewModel.articles() } returns listOf(path)
 
         runDesktopComposeUiTest {
             setContent {
