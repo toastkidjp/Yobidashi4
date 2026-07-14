@@ -1,19 +1,16 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -25,10 +22,15 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -80,70 +82,64 @@ class SlideshowViewModelTest {
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
-    fun onKeyEventLeft() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.DirectionLeft, KeyEventType.KeyUp, isCtrlPressed = true),
-                    pagerState
-                )
-
-                coVerify { pagerState.scrollToPage(any()) }
+    fun onKeyEventLeft() = runTest {
+        val job = launch(Dispatchers.Unconfined) {
+            subject.scrollEventFlow().collect {
+                assertEquals(0, it)
             }
         }
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.DirectionLeft, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
+        job.cancelAndJoin()
+        assertTrue(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
-    fun onKeyEventRight() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.DirectionRight, KeyEventType.KeyUp, isCtrlPressed = true),
-                    pagerState
-                )
-
-                coVerify { pagerState.scrollToPage(any()) }
+    fun onKeyEventRight() = runTest {
+        val job = launch(Dispatchers.Unconfined) {
+            subject.scrollEventFlow().collect {
+                assertEquals(1, it)
             }
         }
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.DirectionRight, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
+        job.cancelAndJoin()
+        assertTrue(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
-    fun onKeyEventEnter() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true),
-                    pagerState
-                )
-
-                coVerify { pagerState.scrollToPage(any()) }
+    fun onKeyEventEnter() = runTest {
+        val job = launch(Dispatchers.Unconfined) {
+            subject.scrollEventFlow().collect {
+                assertEquals(1, it)
             }
         }
+
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
+        job.cancelAndJoin()
+        assertTrue(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventF5() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
-                    mockk()
-                )
-
-                verify { onFullscreenKeyReleased.invoke() }
-            }
-        }
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
+        assertTrue(consumed)
+        verify { onFullscreenKeyReleased.invoke() }
     }
 
 
@@ -152,52 +148,34 @@ class SlideshowViewModelTest {
     fun onKeyEventF5ForCoverage() {
         subject = SlideshowViewModel()
 
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
-                    mockk()
-                )
-
-                verify { onFullscreenKeyReleased wasNot called }
-            }
-        }
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
+        assertTrue(consumed)
+        verify { onFullscreenKeyReleased wasNot called }
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onNoopKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.F7, KeyEventType.KeyUp, isCtrlPressed = true),
-                    mockk()
-                )
-
-                assertFalse(consumed)
-            }
-        }
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.F7, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
+        assertFalse(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventEscape() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
-                    mockk()
-                )
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
 
-                verify { onEscapeKeyReleased.invoke() }
-            }
-        }
+        assertTrue(consumed)
+        verify { onEscapeKeyReleased.invoke() }
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
@@ -205,35 +183,24 @@ class SlideshowViewModelTest {
     fun onKeyEventEscapeForCoverage() {
         subject = SlideshowViewModel()
 
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
-                    mockk()
-                )
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
+            pagerState
+        )
 
-                verify { onEscapeKeyReleased wasNot called }
-            }
-        }
+        assertTrue(consumed)
+        verify { onEscapeKeyReleased wasNot called }
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun otherKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Escape, KeyEventType.KeyDown, isCtrlPressed = true),
-                    mockk()
-                )
+        val consumed = subject.onKeyEvent(
+            KeyEvent(Key.Escape, KeyEventType.KeyDown, isCtrlPressed = true),
+            pagerState
+        )
 
-                assertFalse(consumed)
-            }
-        }
+        assertFalse(consumed)
     }
 
     @Test
