@@ -18,7 +18,6 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.layout.LayoutCoordinates
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import kotlinx.coroutines.CoroutineScope
@@ -110,8 +109,6 @@ class SlideshowViewModel {
     fun requestFocus() {
         focusRequester().requestFocus()
     }
-
-    fun setPageSize(it: LayoutCoordinates) {}
 
     private val interactionSource = MutableInteractionSource()
 
