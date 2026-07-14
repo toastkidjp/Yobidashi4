@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.net.URL
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 
 class SlideshowViewModelTest {
@@ -253,6 +254,19 @@ class SlideshowViewModelTest {
 
         verify { ImageIO.read(any<URL>()) }
         verify { anyConstructed<ImageCache>().put(any(), any()) }
+    }
+
+    @Test
+    fun loadImageThrowIIOExceptionCase() {
+        every { anyConstructed<ImageCache>().get(any()) } returns null
+        val backgroundUrl = javaClass.classLoader.getResource("icon/icon.png")?.toString() ?: return fail("Resource is not found.")
+        mockkStatic(ImageIO::class)
+        every { ImageIO.read(any<URL>()) } throws IIOException("Test")
+
+        subject.loadImage(backgroundUrl)
+
+        verify { ImageIO.read(any<URL>()) }
+        verify(inverse = true) { anyConstructed<ImageCache>().put(any(), any()) }
     }
 
     @Test
