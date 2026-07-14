@@ -30,6 +30,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.awt.Image
 import java.net.URL
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 
 class CefContextMenuActionTest {
@@ -462,6 +463,16 @@ class CefContextMenuActionTest {
     fun noopClipImageWithNullParam() {
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } returns null
+
+        subject.invoke(browser, null, "test", ContextMenu.CLIP_IMAGE.id)
+
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<Image>()) }
+    }
+
+    @Test
+    fun noopClipImageWithThrowingIIOException() {
+        mockkStatic(ImageIO::class)
+        every { ImageIO.read(any<URL>()) } throws IIOException("Test")
 
         subject.invoke(browser, null, "test", ContextMenu.CLIP_IMAGE.id)
 
