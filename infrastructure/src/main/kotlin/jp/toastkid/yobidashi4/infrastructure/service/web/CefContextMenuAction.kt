@@ -12,7 +12,9 @@ import org.cef.browser.CefBrowser
 import org.cef.callback.CefContextMenuParams
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.slf4j.LoggerFactory
 import java.net.URI
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 
 class CefContextMenuAction : KoinComponent {
@@ -74,7 +76,12 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.CLIP_IMAGE.id -> {
                 val sourceUrl = params?.sourceUrl ?: return
-                val image = ImageIO.read(URI(sourceUrl).toURL()) ?: return
+                val image = try {
+                    ImageIO.read(URI(sourceUrl).toURL())
+                } catch (e: IIOException) {
+                    LoggerFactory.getLogger(javaClass).warn("IIO Exception", e)
+                    null
+                } ?: return
                 ClipboardPutterService().invoke(image)
             }
 
