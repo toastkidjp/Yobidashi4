@@ -22,9 +22,11 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
 import java.net.URI
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 import kotlin.math.max
 import kotlin.math.min
@@ -93,7 +95,13 @@ class SlideshowViewModel {
             return fromCache
         }
 
-        val bitmap = ImageIO.read(URI(backgroundUrl).toURL()).toComposeImageBitmap()
+        val bitmap =
+            try {
+                ImageIO.read(URI(backgroundUrl).toURL()).toComposeImageBitmap()
+            } catch (e: IIOException) {
+                LoggerFactory.getLogger(javaClass).warn("IIO Exception", e)
+                return ImageBitmap(1, 1)
+            }
         imageCache.put(backgroundUrl, bitmap)
         return bitmap
     }
