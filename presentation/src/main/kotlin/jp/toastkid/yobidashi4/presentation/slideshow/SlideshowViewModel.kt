@@ -34,8 +34,6 @@ class SlideshowViewModel {
 
     private val imageCache = ImageCache()
 
-    private val sliderVisibility = mutableStateOf(false)
-
     private val sliderState = mutableStateOf(0f)
 
     private val onEscapeKeyReleased = AtomicReference(EMPTY_ACTION)
