@@ -69,7 +69,7 @@ internal fun Slideshow(
         elevation = 4.dp,
         modifier = modifier
             .onKeyEvent {
-                viewModel.onKeyEvent(coroutineScope, it, pagerState)
+                viewModel.onKeyEvent(it, pagerState)
             }
             .focusRequester(viewModel.focusRequester())
     ) {
@@ -135,5 +135,14 @@ internal fun Slideshow(
                 viewModel.setSliderValue(pagerState.currentPage.toFloat())
             }
         }
+    }
+
+    LaunchedEffect(deck) {
+        viewModel.scrollEventFlow()
+            .collect {
+                coroutineScope.launch {
+                    pagerState.scrollToPage(it)
+                }
+            }
     }
 }

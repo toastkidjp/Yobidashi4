@@ -20,8 +20,8 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.presentation.slideshow.lib.ImageCache
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import org.slf4j.LoggerFactory
 import java.net.URI
 import java.util.concurrent.atomic.AtomicInteger
@@ -45,6 +45,10 @@ class SlideshowViewModel {
 
     private val focusRequester = FocusRequester()
 
+    private val scrollEventFlow = MutableSharedFlow<Int>(extraBufferCapacity = 1)
+
+    fun scrollEventFlow(): SharedFlow<Int> = scrollEventFlow
+
     fun launch(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit) {
         this.onEscapeKeyReleased.set(onEscapeKeyReleased)
         this.onFullscreenKeyReleased.set(onFullscreenKeyReleased)
@@ -54,27 +58,21 @@ class SlideshowViewModel {
         maxSize.set(deck.slides.size)
     }
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent, pagerState: PagerState): Boolean {
+    fun onKeyEvent(it: KeyEvent, pagerState: PagerState): Boolean {
         if (it.type == KeyEventType.KeyDown) {
             return false
         }
         return when (it.key) {
             Key.DirectionLeft -> {
-                coroutineScope.launch {
-                    pagerState.scrollToPage(max(0, pagerState.currentPage - 1))
-                }
+                scrollEventFlow.tryEmit(max(0, pagerState.currentPage - 1))
                 true
             }
             Key.DirectionRight -> {
-                coroutineScope.launch {
-                    pagerState.scrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
-                }
+                scrollEventFlow.tryEmit(min(maxSize.get() - 1, pagerState.currentPage + 1))
                 true
             }
             Key.Enter -> {
-                coroutineScope.launch {
-                    pagerState.scrollToPage(min(maxSize.get() - 1, pagerState.currentPage + 1))
-                }
+                scrollEventFlow.tryEmit(min(maxSize.get() - 1, pagerState.currentPage + 1))
                 true
             }
             Key.Escape -> {
