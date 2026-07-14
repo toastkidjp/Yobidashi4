@@ -54,7 +54,7 @@ class SlideshowViewModel {
 
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent, pagerState: PagerState): Boolean {
         if (it.type == KeyEventType.KeyDown) {
-            return@onKeyEvent false
+            return false
         }
         return when (it.key) {
             Key.DirectionLeft -> {
