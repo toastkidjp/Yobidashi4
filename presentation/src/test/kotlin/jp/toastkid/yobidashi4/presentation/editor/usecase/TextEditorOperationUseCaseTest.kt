@@ -1042,7 +1042,11 @@ class TextEditorOperationUseCaseTest {
         mockkConstructor(ClipboardFetcher::class)
         every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
         every { jsonPrettyPrint.invoke(any()) } returns "{}"
-        val content = TextFieldState("test", TextRange(0, 1))
+        content.clearText()
+        content.edit {
+            append("test")
+            selection = TextRange(0, 1)
+        }
 
         val consumed = subject.prettyPrint()
 
