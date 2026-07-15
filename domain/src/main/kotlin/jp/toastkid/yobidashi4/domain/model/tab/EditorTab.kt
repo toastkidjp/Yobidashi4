@@ -23,7 +23,8 @@ data class EditorTab(val path: Path): Tab, WithFilePath {
 
     private val editing: Editing = Editing()
 
-    override fun title(): String = "${path.nameWithoutExtension}${if (editing.shouldShowIndicator()) " * " else ""}"
+    override fun title(): String =
+        "${path.nameWithoutExtension}${if (editing.shouldShowIndicator()) " * " else ""}"
 
     override fun closeable(): Boolean = editing.shouldShowIndicator().not()
 
