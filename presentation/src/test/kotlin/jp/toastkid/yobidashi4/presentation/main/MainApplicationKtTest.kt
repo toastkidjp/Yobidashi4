@@ -143,7 +143,7 @@ class MainApplicationKtTest {
         every { mainViewModel.openArticleList() } returns false
         every { mainViewModel.articles() } returns emptyList()
         every { mainViewModel.reloadAllArticle() } just Runs
-        every { mainViewModel.tabs } returns mutableListOf<Tab>()
+        every { mainViewModel.tabs } returns mutableListOf()
         every { mainViewModel.selected } returns mutableStateOf(0)
 
         every { setting.articleFolderPath() } returns mockk()
