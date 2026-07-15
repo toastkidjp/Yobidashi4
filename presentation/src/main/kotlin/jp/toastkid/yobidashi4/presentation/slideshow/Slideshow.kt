@@ -69,7 +69,7 @@ internal fun Slideshow(
         elevation = 4.dp,
         modifier = modifier
             .onKeyEvent {
-                viewModel.onKeyEvent(it, pagerState)
+                viewModel.onKeyEvent(it, pagerState.currentPage)
             }
             .focusRequester(viewModel.focusRequester())
     ) {
