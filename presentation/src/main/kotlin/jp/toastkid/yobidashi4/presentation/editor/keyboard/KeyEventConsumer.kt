@@ -33,7 +33,7 @@ class KeyEventConsumer(
                 useCase.toListLines()
             }
             it.isCtrlPressed && it.key == Key.One -> {
-                return useCase.toOrderedList()
+                useCase.toOrderedList()
             }
             it.isCtrlPressed && it.key == Key.Zero -> {
                 return useCase.toTaskList()
