@@ -91,7 +91,7 @@ class SlideshowViewModelTest {
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.DirectionLeft, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
         job.cancelAndJoin()
         assertTrue(consumed)
@@ -108,7 +108,7 @@ class SlideshowViewModelTest {
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.DirectionRight, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
         job.cancelAndJoin()
         assertTrue(consumed)
@@ -125,7 +125,7 @@ class SlideshowViewModelTest {
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
         job.cancelAndJoin()
         assertTrue(consumed)
@@ -136,7 +136,7 @@ class SlideshowViewModelTest {
     fun onKeyEventF5() {
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
         assertTrue(consumed)
         verify { onFullscreenKeyReleased.invoke() }
@@ -150,7 +150,7 @@ class SlideshowViewModelTest {
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.F5, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
         assertTrue(consumed)
         verify { onFullscreenKeyReleased wasNot called }
@@ -161,7 +161,7 @@ class SlideshowViewModelTest {
     fun onNoopKeyEvent() {
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.F7, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
         assertFalse(consumed)
     }
@@ -171,7 +171,7 @@ class SlideshowViewModelTest {
     fun onKeyEventEscape() {
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
 
         assertTrue(consumed)
@@ -185,7 +185,7 @@ class SlideshowViewModelTest {
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
 
         assertTrue(consumed)
@@ -197,7 +197,7 @@ class SlideshowViewModelTest {
     fun otherKeyEvent() {
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Escape, KeyEventType.KeyDown, isCtrlPressed = true),
-            pagerState
+            pagerState.currentPage
         )
 
         assertFalse(consumed)
