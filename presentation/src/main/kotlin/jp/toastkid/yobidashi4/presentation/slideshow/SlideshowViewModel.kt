@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ImageBitmap
@@ -58,21 +57,21 @@ class SlideshowViewModel {
         maxSize.set(deck.slides.size)
     }
 
-    fun onKeyEvent(it: KeyEvent, pagerState: PagerState): Boolean {
+    fun onKeyEvent(it: KeyEvent, currentPage: Int): Boolean {
         if (it.type == KeyEventType.KeyDown) {
             return false
         }
         return when (it.key) {
             Key.DirectionLeft -> {
-                scrollEventFlow.tryEmit(max(0, pagerState.currentPage - 1))
+                scrollEventFlow.tryEmit(max(0, currentPage - 1))
                 true
             }
             Key.DirectionRight -> {
-                scrollEventFlow.tryEmit(min(maxSize.get() - 1, pagerState.currentPage + 1))
+                scrollEventFlow.tryEmit(min(maxSize.get() - 1, currentPage + 1))
                 true
             }
             Key.Enter -> {
-                scrollEventFlow.tryEmit(min(maxSize.get() - 1, pagerState.currentPage + 1))
+                scrollEventFlow.tryEmit(min(maxSize.get() - 1, currentPage + 1))
                 true
             }
             Key.Escape -> {
