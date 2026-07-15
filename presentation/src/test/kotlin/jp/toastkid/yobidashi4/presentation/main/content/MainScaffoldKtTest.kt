@@ -39,7 +39,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.attribute.FileTime
 
 class MainScaffoldKtTest {
@@ -196,8 +195,6 @@ class MainScaffoldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun articles() {
-        val path = mockk<Path>()
-
         runDesktopComposeUiTest {
             setContent {
                 MainScaffold()
