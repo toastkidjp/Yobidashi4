@@ -340,7 +340,12 @@ class TextEditorOperationUseCase(
         val selectionStartIndex = min(rawSelectionStartIndex, rauSelectionEndIndex)
         val selectionEndIndex = max(rawSelectionStartIndex, rauSelectionEndIndex)
 
-        return selectedTextConversion.invoke(content, selectionStartIndex, selectionEndIndex, ::surroundCodeFence)
+        return selectedTextConversion.invoke(
+            content,
+            selectionStartIndex,
+            selectionEndIndex,
+            ::surroundCodeFence
+        )
     }
 
     // it.isCtrlPressed && it.isShiftPressed && it.key == Key.C
