@@ -16,7 +16,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -167,18 +167,16 @@ class ChatTabViewModelTest {
     @Test
     fun sendAndReceiveImage() {
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
-        every { service.send(any(), any(), capture(capturingSlot)) } returns ""
-
-        runDesktopComposeUiTest {
-            setContent {
-                subject.textInput().setTextAndPlaceCursorAtEnd("test")
-
-                subject.send(rememberCoroutineScope())
-
-                verify { service.send(any(), any(), any()) }
-                capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
-            }
+        every { service.send(any(), any(), capture(capturingSlot)) } answers {
+            val callback = lastArg<(ChatResponseItem?) -> Unit>()
+            callback.invoke(ChatResponseItem("Answer", image = true))
+            ""
         }
+
+        subject.textInput().setTextAndPlaceCursorAtEnd("test")
+        subject.send(CoroutineScope(Dispatchers.Unconfined))
+
+        verify { service.send(any(), any(), any()) }
     }
 
     @Test
@@ -293,24 +291,6 @@ class ChatTabViewModelTest {
                     KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
                 )
                 assertTrue(consumed)
-            }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
-    @Test
-    fun onKeyEventWithComposition() {
-        runDesktopComposeUiTest {
-            setContent {
-                subject.textInput().setTextAndPlaceCursorAtEnd("test")
-                //TODO composition
-
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
-                )
-                //TODO assertFalse(consumed)
             }
         }
     }
