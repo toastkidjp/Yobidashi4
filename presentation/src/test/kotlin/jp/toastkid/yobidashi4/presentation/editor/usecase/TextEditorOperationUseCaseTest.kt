@@ -1045,7 +1045,7 @@ class TextEditorOperationUseCaseTest {
         content.clearText()
         content.edit {
             append("test")
-            selection = TextRange(0, 1)
+            selection = TextRange.Zero
         }
 
         val consumed = subject.prettyPrint()
