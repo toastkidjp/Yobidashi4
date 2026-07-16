@@ -115,7 +115,7 @@ class KeyEventConsumer(
                 return useCase.joinLines()
             }
             it.isCtrlPressed && it.key == Key.L -> {
-                return useCase.decorateLink()
+                useCase.decorateLink()
             }
             else -> false
         }
