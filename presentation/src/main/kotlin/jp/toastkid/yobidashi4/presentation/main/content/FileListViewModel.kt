@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
@@ -68,6 +69,10 @@ class FileListViewModel : KoinComponent {
     private val metaExtractor: FileListItemMetaExtractor by inject()
 
     private val itemFactory = FileListItemFactory(metaExtractor)
+
+    private val focusRequester = FocusRequester()
+
+    fun focusRequester() = focusRequester
 
     fun start(paths: List<Path>) {
         articleStates.clear()

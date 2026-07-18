@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.pointerInput
@@ -77,6 +78,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 state = viewModel.listState(),
                 userScrollEnabled = true,
                 modifier = Modifier
+                    .focusRequester(viewModel.focusRequester())
                     .onKeyEvent { keyEvent ->
                         viewModel.onKeyEvent(keyEvent)
                     }
@@ -137,6 +139,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                             .combinedClickable(
                                 enabled = true,
                                 onClick = {
+                                    viewModel.focusRequester().requestFocus()
                                     viewModel.onSingleClick(fileListItem)
                                 },
                                 onLongClick = {
