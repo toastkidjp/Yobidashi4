@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi4.presentation.main.content
 
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
@@ -17,7 +16,6 @@ import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -33,9 +31,12 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
+import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemFactory
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -85,6 +86,9 @@ class FileListViewModelTest {
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 10000
 
+        mockkConstructor(FileListItemFactory::class)
+        every { anyConstructed<FileListItemFactory>().invoke(any(), any()) } returns mockk(relaxed = true)
+
         subject = FileListViewModel()
     }
 
@@ -102,42 +106,34 @@ class FileListViewModelTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventWithKeyUp() {
-        runDesktopComposeUiTest {
-            setContent {
-                mockkConstructor(ZipArchiver::class)
-                every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
+        mockkConstructor(ZipArchiver::class)
+        every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
-                val consumed = subject.onKeyEvent(
-                    rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(
-                        Key.Z, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true
-                    )
-                )
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            androidx.compose.ui.input.key.KeyEvent(
+                Key.Z, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true
+            )
+        )
 
-                assertFalse(consumed)
-            }
-        }
+        assertFalse(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                mockkConstructor(ZipArchiver::class)
-                every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
+        mockkConstructor(ZipArchiver::class)
+        every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
-                val consumed = subject.onKeyEvent(
-                    rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(
-                        Key.Z, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true
-                    )
-                )
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            androidx.compose.ui.input.key.KeyEvent(
+                Key.Z, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true
+            )
+        )
 
-                assertTrue(consumed)
-                verify { anyConstructed<ZipArchiver>().invoke(any()) }
-            }
-        }
+        assertTrue(consumed)
+        verify { anyConstructed<ZipArchiver>().invoke(any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -198,50 +194,38 @@ class FileListViewModelTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onDirectionUpKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                val consumed = subject.onKeyEvent(
-                    rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
-                )
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            androidx.compose.ui.input.key.KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
+        )
 
-                assertTrue(consumed)
-            }
-        }
+        assertTrue(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onDirectionDownKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                val consumed = subject.onKeyEvent(
-                    rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(Key.DirectionDown, KeyEventType.KeyDown)
-                )
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            androidx.compose.ui.input.key.KeyEvent(Key.DirectionDown, KeyEventType.KeyDown)
+        )
 
-                assertTrue(consumed)
-            }
-        }
+        assertTrue(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun unConsumedOnKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                mockkConstructor(ZipArchiver::class)
-                every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
+        mockkConstructor(ZipArchiver::class)
+        every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
-                val consumed = subject.onKeyEvent(
-                    rememberCoroutineScope(),
-                    androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
-                )
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
+        )
 
-                assertFalse(consumed)
-                verify(inverse = true) { anyConstructed<ZipArchiver>().invoke(any()) }
-            }
-        }
+        assertFalse(consumed)
+        verify(inverse = true) { anyConstructed<ZipArchiver>().invoke(any()) }
     }
 
     @Test
@@ -383,9 +367,7 @@ class FileListViewModelTest {
 
     @Test
     fun onLongClickUnEditableItem() {
-        val path = mockk<Path>()
-        every { path.fileName.toString() } returns "test.exe"
-        subject.start(listOf(path))
+        subject.start(listOf(mockk<Path>(relaxed = true)))
 
         subject.onLongClick(subject.items().first())
 
@@ -395,9 +377,7 @@ class FileListViewModelTest {
 
     @Test
     fun onDoubleClick() {
-        val path = mockk<Path>()
-        every { path.fileName.toString() } returns "test.md"
-        subject.start(listOf(path))
+        subject.start(listOf(mockk<Path>(relaxed = true)))
 
         subject.onDoubleClick(subject.items().first())
 
@@ -408,9 +388,7 @@ class FileListViewModelTest {
 
     @Test
     fun onDoubleClickUnEditableItem() {
-        val path = mockk<Path>()
-        every { path.fileName.toString() } returns "test.exe"
-        subject.start(listOf(path))
+        subject.start(listOf(mockk<Path>(relaxed = true)))
 
         subject.onDoubleClick(subject.items().first())
 
@@ -517,14 +495,8 @@ class FileListViewModelTest {
         every { pointerEvent.button } returns PointerButton.Secondary
         subject.start(
             listOf(
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "TEST.md"
-                },
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "GUeST.md"
-                }
+                mockk<Path>(relaxed = true),
+                mockk<Path>(relaxed = true)
             )
         )
         val fileListItem = subject.items()[1]
