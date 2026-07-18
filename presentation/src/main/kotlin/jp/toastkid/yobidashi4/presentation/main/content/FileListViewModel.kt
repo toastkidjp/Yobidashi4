@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemFactory
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.core.component.KoinComponent
@@ -84,7 +83,7 @@ class FileListViewModel : KoinComponent {
 
     fun listScrollEventFlow(): SharedFlow<Int> = listScrollEventFlow
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+    fun onKeyEvent(keyEvent: KeyEvent): Boolean {
         controlPressing.set(keyEvent.isCtrlPressed)
         shiftPressing.set(keyEvent.isShiftPressed)
 
