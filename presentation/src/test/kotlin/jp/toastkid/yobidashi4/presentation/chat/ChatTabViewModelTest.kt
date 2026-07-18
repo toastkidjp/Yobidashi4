@@ -126,8 +126,7 @@ class ChatTabViewModelTest {
 
         subject.textInput().setTextAndPlaceCursorAtEnd("test")
 
-        val job = launch { subject.send() }
-        job.cancel()
+        subject.send()
         capturingSlot.captured.invoke(null)
         capturingSlot.captured.invoke(ChatResponseItem("Answer"))
         capturingSlot.captured.invoke(ChatResponseItem("on going"))
@@ -170,8 +169,7 @@ class ChatTabViewModelTest {
         }
 
         subject.textInput().setTextAndPlaceCursorAtEnd("test")
-        val job = launch { subject.send() }
-        job.cancel()
+        subject.send()
 
         verify { service.send(any(), any(), any()) }
     }
@@ -197,10 +195,7 @@ class ChatTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
 
-        val job = launch {
-            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "")
-        }
-        job.cancel()
+        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "")
 
         coVerify { listState.scrollToItem(any()) }
         verify { subject.focusRequester() }
@@ -246,10 +241,7 @@ class ChatTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
 
-        val job = launch {
-            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "With initial query")
-        }
-        job.cancel()
+        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "With initial query")
 
         coVerify { listState.scrollToItem(any()) }
         verify { subject.focusRequester() }
