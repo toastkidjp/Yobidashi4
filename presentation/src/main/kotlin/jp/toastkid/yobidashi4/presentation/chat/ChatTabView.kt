@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.GlowingButton
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -131,13 +132,15 @@ fun ChatTabView(chatTab: ChatTab) {
                         .focusRequester(viewModel.focusRequester())
                         .fillMaxWidth()
                         .weight(0.2f)
-                        .onKeyEvent { viewModel.onKeyEvent(coroutineScope, it) }
+                        .onKeyEvent {
+                            viewModel.onKeyEvent(coroutineScope, it)
+                        }
                         .semantics { contentDescription = "Input message box." }
                 )
 
                 GlowingButton(
                     modifier = Modifier
-                        .clickable { viewModel.send(coroutineScope) }
+                        .clickable { viewModel.trySend() }
                         .semantics { contentDescription = "Send chat" }
                 ) {
                     Text("Send", color = MaterialTheme.colors.onPrimary, fontWeight = FontWeight.Bold)
@@ -154,6 +157,14 @@ fun ChatTabView(chatTab: ChatTab) {
                 chatTab.initialModel(),
                 chatTab.initialQuestion()
             )
+        }
+
+        coroutineScope.launch {
+            viewModel.sendEventFlow()
+                .distinctUntilChanged()
+                .collect {
+                    viewModel.send()
+                }
         }
 
         onDispose {
