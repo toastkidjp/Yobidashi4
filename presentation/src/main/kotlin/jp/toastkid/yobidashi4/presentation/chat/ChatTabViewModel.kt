@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -119,7 +120,9 @@ class ChatTabViewModel : KoinComponent {
             )
         )
 
-        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
+        CoroutineScope(Dispatchers.Default).launch {
+            scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
+        }
 
         labelState.value = "Connecting in progress..."
 
