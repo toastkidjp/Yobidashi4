@@ -35,8 +35,6 @@ import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemFactory
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -110,7 +108,6 @@ class FileListViewModelTest {
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             androidx.compose.ui.input.key.KeyEvent(
                 Key.Z, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true
             )
@@ -126,7 +123,6 @@ class FileListViewModelTest {
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             androidx.compose.ui.input.key.KeyEvent(
                 Key.Z, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true
             )
@@ -195,7 +191,6 @@ class FileListViewModelTest {
     @Test
     fun onDirectionUpKeyEvent() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             androidx.compose.ui.input.key.KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
         )
 
@@ -206,7 +201,6 @@ class FileListViewModelTest {
     @Test
     fun onDirectionDownKeyEvent() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             androidx.compose.ui.input.key.KeyEvent(Key.DirectionDown, KeyEventType.KeyDown)
         )
 
@@ -220,7 +214,6 @@ class FileListViewModelTest {
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
@@ -298,7 +291,6 @@ class FileListViewModelTest {
     @Test
     fun onSingleClickWithShift() {
         subject.onKeyEvent(
-            mockk(),
             androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isShiftPressed = true)
         )
 
@@ -327,7 +319,6 @@ class FileListViewModelTest {
         )
         subject.onSingleClick(subject.items().last())
         subject.onKeyEvent(
-            mockk(),
             androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isShiftPressed = true)
         )
 
