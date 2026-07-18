@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -57,8 +56,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
     LaunchedEffect(paths.size) {
         viewModel.start(paths)
     }
-
-    val coroutineScope = rememberCoroutineScope()
 
     val oddBackground = MaterialTheme.colors.primary.copy(alpha = 0.5f)
     val evenBackground = MaterialTheme.colors.surface.copy(alpha = 0.5f)
