@@ -46,12 +46,12 @@ data class EditorTab(val path: Path): Tab, WithFilePath {
 
     private val preview: AtomicReference<Preview> = AtomicReference(Preview.CLOSE)
 
-    private val content: AtomicReference<CharSequence> = AtomicReference("")
+    private val contentHolder: AtomicReference<CharSequence> = AtomicReference("")
 
-    fun getContent(): CharSequence = content.get()
+    fun getContent(): CharSequence = contentHolder.get()
 
     fun setContent(newContent: CharSequence?, resetEditing: Boolean) {
-        editing.setCurrentSize((newContent ?: content.get()).length)
+        editing.setCurrentSize((newContent ?: contentHolder.get()).length)
         if (resetEditing) {
             editing.clear()
         }
@@ -59,7 +59,7 @@ data class EditorTab(val path: Path): Tab, WithFilePath {
         if (newContent.isNullOrBlank()) {
             return
         }
-        content.set(newContent)
+        contentHolder.set(newContent)
 
         CoroutineScope(Dispatchers.IO).launch {
             _updateFlow.emit(System.currentTimeMillis())
@@ -82,7 +82,7 @@ data class EditorTab(val path: Path): Tab, WithFilePath {
     }
 
     fun loadContent() {
-        content.set(Files.readString(path))
+        contentHolder.set(Files.readString(path))
     }
 
     private val editable = AtomicBoolean(true)
