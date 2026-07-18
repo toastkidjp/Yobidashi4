@@ -31,7 +31,8 @@ import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemFactory
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
@@ -79,6 +80,10 @@ class FileListViewModel : KoinComponent {
         completeItems.addAll(articleStates)
     }
 
+    private val listScrollEventFlow = MutableSharedFlow<Int>(extraBufferCapacity = 1)
+
+    fun listScrollEventFlow(): SharedFlow<Int> = listScrollEventFlow
+
     fun onKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
         controlPressing.set(keyEvent.isCtrlPressed)
         shiftPressing.set(keyEvent.isShiftPressed)
@@ -93,15 +98,11 @@ class FileListViewModel : KoinComponent {
             return true
         }
         if (keyEvent.key == Key.DirectionUp) {
-            coroutineScope.launch {
-                listState.scrollToItem(max(0, listState.firstVisibleItemIndex - 1), 0)
-            }
+            listScrollEventFlow.tryEmit(max(0, listState.firstVisibleItemIndex - 1))
             return true
         }
         if (keyEvent.key == Key.DirectionDown) {
-            coroutineScope.launch {
-                listState.scrollToItem(min(items().size - 1, listState.firstVisibleItemIndex + 1), 0)
-            }
+            listScrollEventFlow.tryEmit(min(items().size - 1, listState.firstVisibleItemIndex + 1))
             return true
         }
 
