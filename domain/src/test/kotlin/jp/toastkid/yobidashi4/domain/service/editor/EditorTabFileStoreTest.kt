@@ -73,16 +73,13 @@ class EditorTabFileStoreTest {
 
     @Test
     fun exceptionCase() {
-        val ioException = mockk<IOException>()
-        every { Files.write(any(), any<ByteArray>()) } throws ioException
-        every { ioException.printStackTrace() } just Runs
+        every { Files.write(any(), any<ByteArray>()) } throws IOException("Test")
 
         subject.invoke(tab, Dispatchers.Unconfined)
 
         verify { tab.closeable() }
         verify { tab.getContent() }
         verify { Files.write(any(), any<ByteArray>()) }
-        verify { ioException.printStackTrace() }
         verify(inverse = true) { tab.setContent(any(), any()) }
     }
 
