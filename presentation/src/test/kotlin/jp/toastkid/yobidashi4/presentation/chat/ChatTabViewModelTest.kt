@@ -9,14 +9,12 @@ package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -318,25 +316,20 @@ class ChatTabViewModelTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onChatListKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                mapOf(
-                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true) to true,
-                    KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true) to true,
-                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown) to true,
-                    KeyEvent(Key.DirectionDown, KeyEventType.KeyDown) to true,
-                    KeyEvent(Key.DirectionUp, KeyEventType.KeyUp) to false,
-                    KeyEvent(Key.Q, KeyEventType.KeyDown) to false,
-                    KeyEvent(Key.Q, KeyEventType.KeyUp) to false
-                ).forEach {
-                    val coroutineScope = rememberCoroutineScope()
-                    val consumed = subject.onChatListKeyEvent(
-                        coroutineScope,
-                        it.key
-                    )
-                    assertEquals(it.value, consumed)
-                }
-            }
+        mapOf(
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true) to true,
+            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true) to true,
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown) to true,
+            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown) to true,
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyUp) to false,
+            KeyEvent(Key.Q, KeyEventType.KeyDown) to false,
+            KeyEvent(Key.Q, KeyEventType.KeyUp) to false
+        ).forEach {
+            val consumed = subject.onChatListKeyEvent(
+                CoroutineScope(Dispatchers.Unconfined),
+                it.key
+            )
+            assertEquals(it.value, consumed)
         }
     }
 
