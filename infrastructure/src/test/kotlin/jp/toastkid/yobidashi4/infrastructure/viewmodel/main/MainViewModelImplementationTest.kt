@@ -1222,8 +1222,7 @@ class MainViewModelImplementationTest {
         every { subject.snackbarHostState() } returns snackbarHostState
         val snackbarData = mockk<SnackbarData>()
         every { snackbarHostState.currentSnackbarData } returns snackbarData
-        val snackbarResult = mockk<SnackbarResult>()
-        coEvery { snackbarHostState.showSnackbar(any(), any(), any()) } returns snackbarResult
+        coEvery { snackbarHostState.showSnackbar(any(), any(), any()) } returns SnackbarResult.Dismissed
         every { snackbarData.performAction() } just Runs
         every { snackbarData.dismiss() } just Runs
 
