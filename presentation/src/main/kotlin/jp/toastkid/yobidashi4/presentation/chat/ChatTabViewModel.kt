@@ -31,17 +31,23 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.util.UUID
 import kotlin.math.max
 import kotlin.math.min
 
 class ChatTabViewModel : KoinComponent {
 
     private val mainViewModel: MainViewModel by inject()
+
+    private val sendEventFlow = MutableSharedFlow<UUID>(extraBufferCapacity = 1)
+
+    fun sendEventFlow(): SharedFlow<UUID> = sendEventFlow
 
     private val service: ChatService by inject()
 
@@ -99,7 +105,7 @@ class ChatTabViewModel : KoinComponent {
         useImageGeneration.value = useImageGeneration.value.not()
     }
 
-    fun send(coroutineScope: CoroutineScope) {
+    suspend fun send() {
         val text = textInput.text
         if (text.isBlank()) {
             return
@@ -112,20 +118,17 @@ class ChatTabViewModel : KoinComponent {
                 text.toString()
             )
         )
-        coroutineScope.launch {
-            scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
-        }
+
+        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount)
 
         labelState.value = "Connecting in progress..."
 
-        coroutineScope.launch {
-            withContext(ioContextProvider()) {
-                service.send(messages, currentModel.value) {
-                    onReceive(it)
-                }
+        withContext(ioContextProvider()) {
+            service.send(messages, currentModel.value) {
+                onReceive(it)
             }
-            labelState.value = DEFAULT_LABEL
         }
+        labelState.value = DEFAULT_LABEL
     }
 
     private fun onReceive(item: ChatResponseItem?) {
@@ -224,7 +227,7 @@ class ChatTabViewModel : KoinComponent {
 
         if (initialQuestion.isNotEmpty()) {
             textInput.setTextAndPlaceCursorAtEnd(initialQuestion)
-            send(CoroutineScope(Dispatchers.IO))
+            send()
         }
     }
 
@@ -256,11 +259,13 @@ class ChatTabViewModel : KoinComponent {
         return scrollState
     }
 
+    fun trySend() {
+        sendEventFlow.tryEmit(UUID.randomUUID())
+    }
+
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
         if (textInput().composition == null && it.isCtrlPressed && it.key == Key.Enter) {
-            coroutineScope.launch {
-                send(coroutineScope)
-            }
+            trySend()
             return true
         }
 
