@@ -112,7 +112,7 @@ class ChatTabViewModelTest {
     @Test
     fun noopSend() {
         runBlocking {
-            subject.send(CoroutineScope(Dispatchers.Unconfined))
+            subject.send()
 
             verify(inverse = true) { service.send(any(), any(), any()) }
         }
@@ -120,52 +120,48 @@ class ChatTabViewModelTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun send() {
+    fun send() = runTest {
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { service.send(any(), any(), capture(capturingSlot)) } returns ""
 
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.textInput().setTextAndPlaceCursorAtEnd("test")
+        subject.textInput().setTextAndPlaceCursorAtEnd("test")
 
-                subject.send(coroutineScope)
-                capturingSlot.captured.invoke(null)
-                capturingSlot.captured.invoke(ChatResponseItem("Answer"))
-                capturingSlot.captured.invoke(ChatResponseItem("on going"))
+        val job = launch { subject.send() }
+        job.cancel()
+        capturingSlot.captured.invoke(null)
+        capturingSlot.captured.invoke(ChatResponseItem("Answer"))
+        capturingSlot.captured.invoke(ChatResponseItem("on going"))
 
-                verify { service.send(any(), any(), any()) }
+        verify { service.send(any(), any(), any()) }
 
-                capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
+        capturingSlot.captured.invoke(ChatResponseItem("Answer", image = true))
 
-                subject.send(coroutineScope)
-                capturingSlot.captured.invoke(null)
-                capturingSlot.captured.invoke(ChatResponseItem("Answer"))
-                assertEquals(2, subject.messages().size)
+        subject.send()
+        capturingSlot.captured.invoke(null)
+        capturingSlot.captured.invoke(ChatResponseItem("Answer"))
+        assertEquals(2, subject.messages().size)
 
-                subject.textInput().setTextAndPlaceCursorAtEnd("2nd send")
-                subject.send(coroutineScope)
-                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
-                assertEquals(4, subject.messages().size)
+        subject.textInput().setTextAndPlaceCursorAtEnd("2nd send")
+        subject.send()
+        capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
+        assertEquals(4, subject.messages().size)
 
-                subject.textInput().setTextAndPlaceCursorAtEnd("Image send")
-                subject.chooseModel(GenerativeAiModel.GEMINI_2_5_FLASH_LITE_WITHOUT_WEB_GROUNDING)
-                subject.send(coroutineScope)
-                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
-                assertEquals(6, subject.messages().size)
+        subject.textInput().setTextAndPlaceCursorAtEnd("Image send")
+        subject.chooseModel(GenerativeAiModel.GEMINI_2_5_FLASH_LITE_WITHOUT_WEB_GROUNDING)
+        subject.send()
+        capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
+        assertEquals(6, subject.messages().size)
 
-                // For test coverage.
-                subject.clearChat()
-                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
-                subject.clearChat()
-                capturingSlot.captured.invoke(ChatResponseItem("2nd Answer", image = true))
-            }
-        }
+        // For test coverage.
+        subject.clearChat()
+        capturingSlot.captured.invoke(ChatResponseItem("2nd Answer"))
+        subject.clearChat()
+        capturingSlot.captured.invoke(ChatResponseItem("2nd Answer", image = true))
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun sendAndReceiveImage() {
+    fun sendAndReceiveImage() = runTest {
         val capturingSlot = slot<(ChatResponseItem?) -> Unit>()
         every { service.send(any(), any(), capture(capturingSlot)) } answers {
             val callback = lastArg<(ChatResponseItem?) -> Unit>()
@@ -174,7 +170,8 @@ class ChatTabViewModelTest {
         }
 
         subject.textInput().setTextAndPlaceCursorAtEnd("test")
-        subject.send(CoroutineScope(Dispatchers.Unconfined))
+        val job = launch { subject.send() }
+        job.cancel()
 
         verify { service.send(any(), any(), any()) }
     }
@@ -200,7 +197,10 @@ class ChatTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
 
-        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "")
+        val job = launch {
+            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "")
+        }
+        job.cancel()
 
         coVerify { listState.scrollToItem(any()) }
         verify { subject.focusRequester() }
@@ -246,7 +246,10 @@ class ChatTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
 
-        subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "With initial query")
+        val job = launch {
+            subject.launch(Chat(mutableListOf(ChatMessage("user","test"))), 1, mockk(), "With initial query")
+        }
+        job.cancel()
 
         coVerify { listState.scrollToItem(any()) }
         verify { subject.focusRequester() }
@@ -279,52 +282,37 @@ class ChatTabViewModelTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                subject = spyk(subject)
-                coEvery { subject.send(any()) } just Runs
-                subject.textInput().setTextAndPlaceCursorAtEnd("test")
+        subject = spyk(subject)
+        coEvery { subject.send() } just Runs
+        subject.textInput().setTextAndPlaceCursorAtEnd("test")
 
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
-                )
-                assertTrue(consumed)
-            }
-        }
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
+        )
+        assertTrue(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventWithoutCtrlMask() {
-        runDesktopComposeUiTest {
-            setContent {
-                subject.textInput().setTextAndPlaceCursorAtEnd("test")
+        subject.textInput().setTextAndPlaceCursorAtEnd("test")
 
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.Enter, KeyEventType.KeyUp, isAltPressed = true)
-                )
-                assertFalse(consumed)
-            }
-        }
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.Enter, KeyEventType.KeyUp, isAltPressed = true)
+        )
+        assertFalse(consumed)
     }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEventOtherKey() {
-        runDesktopComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                val consumed = subject.onKeyEvent(
-                    coroutineScope,
-                    KeyEvent(Key.One, KeyEventType.KeyUp, isCtrlPressed = true)
-                )
-                assertFalse(consumed)
-            }
-        }
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.One, KeyEventType.KeyUp, isCtrlPressed = true)
+        )
+        assertFalse(consumed)
     }
 
     @Test
