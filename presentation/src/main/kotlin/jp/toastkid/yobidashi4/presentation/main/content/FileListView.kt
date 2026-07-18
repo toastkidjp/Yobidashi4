@@ -78,7 +78,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 userScrollEnabled = true,
                 modifier = Modifier
                     .onKeyEvent { keyEvent ->
-                        viewModel.onKeyEvent(coroutineScope, keyEvent)
+                        viewModel.onKeyEvent(keyEvent)
                     }
                     .semantics { contentDescription = "File list" }
             ) {
