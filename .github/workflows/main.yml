@@ -113,12 +113,19 @@ jobs:
           java-version: '21'
           cache: gradle
 
-      - name: kover
-        timeout-minutes: 18
+      - name: Run Tests ONLY
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        run: "./gradlew koverHtmlReport"
+        timeout-minutes: 18
+        run: ./gradlew test --info # --info ‚ğ‚Â‚¯‚ÄÚ×ƒƒO‚ğo‚·
+
+      - name: kover
+        env:
+          TZ: 'Asia/Tokyo'
+          _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
+        timeout-minutes: 18
+        run: ./gradlew :koverHtmlReport
 
       - name: Upload Unit Test Results
         timeout-minutes: 3
