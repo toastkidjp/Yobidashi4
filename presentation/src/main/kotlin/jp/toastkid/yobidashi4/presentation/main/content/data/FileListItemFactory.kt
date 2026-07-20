@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.main.content.data
 
 import java.nio.file.Path
+import kotlin.io.path.extension
 
 class FileListItemFactory(
     private val metaDataExtractor: FileListItemMetaExtractor
@@ -15,11 +16,12 @@ class FileListItemFactory(
 
     operator fun invoke(
         path: Path,
-        selected: Boolean = false,
-        editable: Boolean = true
+        selected: Boolean = false
     ): FileListItem {
         val listItemMeta = metaDataExtractor.make(path)
-        return FileListItem(path, selected, editable, listItemMeta?.subText, listItemMeta?.lastModified ?: 0L)
+        return FileListItem(path, selected, editableExtensions.contains(path.extension), listItemMeta?.subText, listItemMeta?.lastModified ?: 0L)
     }
 
 }
+
+private val editableExtensions = setOf("md", "txt")
