@@ -344,13 +344,9 @@ class FileListViewModelTest {
 
     @Test
     fun onLongClick() {
-        val path = mockk<Path>()
-        every { path.fileName.toString() } returns "test.md"
-        subject.start(listOf(path))
+        val item = FileListItem(mockk(), editable = true)
 
-        val fileListItem = subject.items().first()
-        println(fileListItem)
-        subject.onLongClick(fileListItem)
+        subject.onLongClick(item)
 
         verify(inverse = true) { mainViewModel.openFile(any()) }
         verify { mainViewModel.edit(any(), any()) }
@@ -368,9 +364,9 @@ class FileListViewModelTest {
 
     @Test
     fun onDoubleClick() {
-        subject.start(listOf(mockk<Path>(relaxed = true)))
+        val item = FileListItem(mockk(), selected = false, editable = true)
 
-        subject.onDoubleClick(subject.items().first())
+        subject.onDoubleClick(item)
 
         verify(inverse = true) { mainViewModel.openFile(any()) }
         verify { mainViewModel.hideArticleList() }
