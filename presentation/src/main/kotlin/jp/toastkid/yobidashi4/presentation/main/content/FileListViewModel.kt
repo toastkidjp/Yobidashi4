@@ -255,5 +255,3 @@ class FileListViewModel : KoinComponent {
     }
 
 }
-
-private val editableExtensions = setOf("md", "txt")
