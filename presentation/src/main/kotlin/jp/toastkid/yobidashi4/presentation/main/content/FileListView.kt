@@ -76,9 +76,7 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
                 userScrollEnabled = true,
                 modifier = Modifier
                     .focusRequester(viewModel.focusRequester())
-                    .onKeyEvent { keyEvent ->
-                        viewModel.onKeyEvent(keyEvent)
-                    }
+                    .onKeyEvent(viewModel::onKeyEvent)
                     .semantics { contentDescription = "File list" }
             ) {
                 stickyHeader {
