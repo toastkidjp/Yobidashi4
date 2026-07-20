@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
+import kotlin.io.path.name
 
 class FileListItemFactoryTest {
 
@@ -34,11 +36,15 @@ class FileListItemFactoryTest {
 
     @Test
     fun invoke() {
-        val fileListItem1 = subject.invoke(mockk(), true, false)
+        val path = mockk<Path>()
+        every { path.name } returns "test.exe"
+        val fileListItem1 = subject.invoke(path, true)
         assertTrue(fileListItem1.selected)
         assertFalse(fileListItem1.editable)
 
-        val fileListItem2 = subject.invoke(mockk())
+        val path2 = mockk<Path>()
+        every { path2.name } returns "test2.md"
+        val fileListItem2 = subject.invoke(path2)
         assertFalse(fileListItem2.selected)
         assertTrue(fileListItem2.editable)
 
