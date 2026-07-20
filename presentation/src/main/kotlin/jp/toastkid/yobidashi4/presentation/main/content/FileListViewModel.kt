@@ -37,7 +37,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
 import kotlin.math.min
 
@@ -137,7 +136,7 @@ class FileListViewModel : KoinComponent {
         articleStates.addAll(
             if (lowercase.isNotBlank())
                 completeItems.filter(FileListItem::keep)
-                    .filter { item -> item.path.nameWithoutExtension.lowercase().contains(lowercase) }
+                    .filter { item -> item.name().lowercase().contains(lowercase) }
             else
                 completeItems.filter(FileListItem::keep)
         )
