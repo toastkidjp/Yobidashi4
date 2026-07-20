@@ -37,7 +37,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.io.path.extension
 import kotlin.io.path.nameWithoutExtension
 import kotlin.math.max
 import kotlin.math.min
@@ -77,7 +76,7 @@ class FileListViewModel : KoinComponent {
     fun start(paths: List<Path>) {
         articleStates.clear()
         paths
-            .map { itemFactory.invoke(it, editable = editableExtensions.contains(it.extension)) }
+            .map { itemFactory.invoke(it) }
             .sortedByDescending(FileListItem::sortKey)
             .forEach(articleStates::add)
         completeItems.clear()
