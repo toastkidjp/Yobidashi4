@@ -247,16 +247,21 @@ class FileListViewModelTest {
 
     @Test
     fun onValueChangeWithEmpty() {
+        val path1 = mockk<Path>()
+        val path2 = mockk<Path>()
+        every { anyConstructed<FileListItemFactory>().invoke(any(), any()) } answers {
+            val path = arg<Path>(0)
+            val fileListItem = mockk<FileListItem>(relaxed = true)
+            every { fileListItem.keep() } returns true
+            every { fileListItem.name() } answers {
+                if (path1 === path) "TEST.md" else "GUeST.md"
+            }
+            fileListItem
+        }
         subject.start(
             listOf(
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "TEST.md"
-                },
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "GUeST.md"
-                }
+                path1,
+                path2
             )
         )
 
