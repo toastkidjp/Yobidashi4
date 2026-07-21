@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi4.presentation.main.content
 
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
@@ -228,21 +229,31 @@ class FileListViewModelTest {
 
     @Test
     fun onValueChange() {
+        val path1 = mockk<Path>()
+        val path2 = mockk<Path>()
+        every { anyConstructed<FileListItemFactory>().invoke(any(), any()) } answers {
+            val path = arg<Path>(0)
+            val fileListItem = mockk<FileListItem>(relaxed = true)
+            every { fileListItem.keep() } returns true
+            every { fileListItem.name() } answers {
+                if (path1 === path) "TEST.md" else "GUeST.md"
+            }
+            fileListItem
+        }
         subject.start(
             listOf(
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "TEST.md"
-                },
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "GUeST.md"
-                }
+                path1,
+                path2
             )
         )
+        subject.keyword().clearText()
+        subject.keyword().edit {
+            append("TEST")
+        }
 
         subject.onValueChange()
-        assertEquals(2, subject.items().size)
+        assertEquals(1, subject.items().size)
+        subject.keyword().clearText()
     }
 
     @Test
