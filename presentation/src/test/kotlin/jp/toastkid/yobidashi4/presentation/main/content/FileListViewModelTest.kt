@@ -344,6 +344,9 @@ class FileListViewModelTest {
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun onSingleClickWithUnSelection() {
+        every { anyConstructed<FileListItemFactory>().invoke(any(), any()) } answers {
+            FileListItem(mockk())
+        }
         subject.start(
             listOf(
                 mockk<Path>(),
