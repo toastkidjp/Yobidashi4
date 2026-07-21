@@ -512,14 +512,8 @@ class FileListViewModelTest {
         every { pointerEvent.button } returns PointerButton.Primary
         subject.start(
             listOf(
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "TEST.md"
-                },
-                mockk<Path>().also {
-                    every { it.extension } returns "md"
-                    every { it.nameWithoutExtension } returns "GUeST.md"
-                }
+                mockk<Path>(),
+                mockk<Path>()
             )
         )
         val fileListItem = subject.items()[1]
