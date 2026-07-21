@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.markdown.HorizontalRule
 import jp.toastkid.yobidashi4.domain.model.markdown.ListLineBuilder
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.service.slideshow.CodeBlockBuilder
 import jp.toastkid.yobidashi4.domain.service.slideshow.ImageExtractor
 import jp.toastkid.yobidashi4.domain.service.slideshow.TableBuilder
@@ -54,114 +55,7 @@ class MarkdownParser {
     private fun invoke(stream: Stream<String>, title: String): Markdown {
         val markdown = Markdown(title)
         stream.forEach { line ->
-            if (line.startsWith("#")) {
-                markdown.add(
-                    TextBlock(
-                        line.substring(line.indexOf(" ") + 1),
-                        level = line.split(" ")[0].length
-                    )
-                )
-                return@forEach
-            }
-
-            if (line.startsWith("![")) {
-                markdown.addAll(imageExtractor.invoke(line))
-                return@forEach
-            }
-
-            if (line.startsWith("> ")) {
-                markdown.add(TextBlock(line.substring(2), quote = true))
-                return@forEach
-            }
-            // Adding code block.
-            if (line.startsWith("```") && !codeFencePattern.matcher(line).find()) {
-                if (codeBlockBuilder.inCodeBlock()) {
-                    codeBlockBuilder.build().let {
-                        markdown.add(it)
-                        codeBlockBuilder.initialize()
-                    }
-                    return@forEach
-                }
-
-                codeBlockBuilder.startCodeBlock()
-                val index = line.indexOf(":")
-                val lastIndex = if (index == -1) line.length else index
-                codeBlockBuilder.setCodeFormat(line.substring(3, lastIndex))
-                return@forEach
-            }
-            if (codeBlockBuilder.shouldAppend(line)) {
-                codeBlockBuilder.append(line)
-                return@forEach
-            }
-
-            if (TableBuilder.isTableStart(line)) {
-                if (!tableBuilder.active()) {
-                    tableBuilder.setActive()
-                }
-
-                if (TableBuilder.shouldIgnoreLine(line)) {
-                    return@forEach
-                }
-
-                if (!tableBuilder.hasColumns()) {
-                    tableBuilder.setColumns(line)
-                    return@forEach
-                }
-
-                tableBuilder.addTableLines(line)
-                return@forEach
-            }
-
-            if (tableBuilder.active()) {
-                markdown.add(tableBuilder.build())
-                tableBuilder.setInactive()
-                tableBuilder.clear()
-            }
-
-            if (line.startsWith("- [ ] ") || line.startsWith("- [x] ")) {
-                listLineBuilder.setTaskList()
-                listLineBuilder.add(line)
-                return@forEach
-            }
-
-            if (line.startsWith("- ")) {
-                listLineBuilder.add(line)
-                return@forEach
-            }
-
-            if (line.startsWith("* ")) {
-                listLineBuilder.add(line)
-                return@forEach
-            }
-
-            if (orderedListPrefixPattern.containsMatchIn(line)) {
-                listLineBuilder.setOrdered()
-                listLineBuilder.add(line)
-                return@forEach
-            }
-
-            if (horizontalRulePattern.containsMatchIn(line)) {
-                markdown.add(HorizontalRule())
-                return@forEach
-            }
-
-            if (listLineBuilder.isNotEmpty()) {
-                markdown.add(listLineBuilder.build())
-                listLineBuilder.clear()
-                return@forEach
-            }
-
-            // Not code.
-            if (line.isNotEmpty()) {
-                stringBuilder.append(line)
-                return@forEach
-            }
-
-            if (stringBuilder.isNotEmpty()) {
-                markdown.add(TextBlock(stringBuilder.toString()))
-                stringBuilder.setLength(0)
-                return@forEach
-            }
+            parseLine(line, { markdown.add(it) })
         }
 
         if (stringBuilder.isNotEmpty()) {
@@ -178,6 +72,117 @@ class MarkdownParser {
         }
 
         return markdown
+    }
+
+    private fun parseLine(line: String, appendNewLine: (Line) -> Unit) {
+        if (line.startsWith("#")) {
+            appendNewLine(
+                TextBlock(
+                    line.substring(line.indexOf(" ") + 1),
+                    level = line.split(" ")[0].length
+                )
+            )
+            return
+        }
+
+        if (line.startsWith("![")) {
+            imageExtractor.invoke(line).forEach { appendNewLine(it) }
+            return
+        }
+
+        if (line.startsWith("> ")) {
+            appendNewLine(TextBlock(line.substring(2), quote = true))
+            return
+        }
+        // Adding code block.
+        if (line.startsWith("```") && !codeFencePattern.matcher(line).find()) {
+            if (codeBlockBuilder.inCodeBlock()) {
+                codeBlockBuilder.build().let {
+                    appendNewLine(it)
+                    codeBlockBuilder.initialize()
+                }
+                return
+            }
+
+            codeBlockBuilder.startCodeBlock()
+            val index = line.indexOf(":")
+            val lastIndex = if (index == -1) line.length else index
+            codeBlockBuilder.setCodeFormat(line.substring(3, lastIndex))
+            return
+        }
+        if (codeBlockBuilder.shouldAppend(line)) {
+            codeBlockBuilder.append(line)
+            return
+        }
+
+        if (TableBuilder.isTableStart(line)) {
+            if (!tableBuilder.active()) {
+                tableBuilder.setActive()
+            }
+
+            if (TableBuilder.shouldIgnoreLine(line)) {
+                return
+            }
+
+            if (!tableBuilder.hasColumns()) {
+                tableBuilder.setColumns(line)
+                return
+            }
+
+            tableBuilder.addTableLines(line)
+            return
+        }
+
+        if (tableBuilder.active()) {
+            appendNewLine(tableBuilder.build())
+            tableBuilder.setInactive()
+            tableBuilder.clear()
+        }
+
+        if (line.startsWith("- [ ] ") || line.startsWith("- [x] ")) {
+            listLineBuilder.setTaskList()
+            listLineBuilder.add(line)
+            return
+        }
+
+        if (line.startsWith("- ")) {
+            listLineBuilder.add(line)
+            return
+        }
+
+        if (line.startsWith("* ")) {
+            listLineBuilder.add(line)
+            return
+        }
+
+        if (orderedListPrefixPattern.containsMatchIn(line)) {
+            listLineBuilder.setOrdered()
+            listLineBuilder.add(line)
+            return
+        }
+
+        if (horizontalRulePattern.containsMatchIn(line)) {
+            appendNewLine(HorizontalRule())
+            return
+        }
+
+        if (listLineBuilder.isNotEmpty()) {
+            appendNewLine(listLineBuilder.build())
+            listLineBuilder.clear()
+            return
+        }
+
+        // Not code.
+        if (line.isNotEmpty()) {
+            stringBuilder.append(line)
+            return
+        }
+
+        if (stringBuilder.isNotEmpty()) {
+            appendNewLine(TextBlock(stringBuilder.toString()))
+            stringBuilder.setLength(0)
+            return
+        }
     }
 
 }
