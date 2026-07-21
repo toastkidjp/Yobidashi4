@@ -312,10 +312,10 @@ class FileListViewModelTest {
 
         subject.start(
             listOf(
-                mockk<Path>().also { every { it.extension } returns "md" },
-                mockk<Path>().also { every { it.extension } returns "txt" },
-                mockk<Path>().also { every { it.extension } returns "exe" },
-                mockk<Path>().also { every { it.extension } returns "html" }
+                mockk<Path>(),
+                mockk<Path>(),
+                mockk<Path>(),
+                mockk<Path>()
             )
         )
 
