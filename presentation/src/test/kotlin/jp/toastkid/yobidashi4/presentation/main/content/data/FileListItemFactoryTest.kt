@@ -7,8 +7,10 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
@@ -49,6 +51,19 @@ class FileListItemFactoryTest {
         assertTrue(fileListItem2.editable)
 
         verify(exactly = 2) { metaExtractor.make(any()) }
+    }
+
+    @Test
+    fun metaIsNotFoundCase() {
+        every { metaExtractor.make(any()) } returns null
+        subject = FileListItemFactory(metaExtractor)
+
+        val path = mockk<Path>()
+        every { path.name } returns "test.exe"
+        val item = subject.invoke(path, true)
+
+        assertNull(item.subText())
+        assertEquals(0L, item.sortKey())
     }
 
 }
