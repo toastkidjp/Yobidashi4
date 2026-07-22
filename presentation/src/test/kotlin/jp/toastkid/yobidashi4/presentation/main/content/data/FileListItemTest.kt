@@ -70,4 +70,10 @@ class FileListItemTest {
         assertEquals("test", name)
     }
 
+    @Test
+    fun keep() {
+        assertFalse(FileListItem(mockk<Path>(), selected = true, editable = true).keep())
+        assertTrue(FileListItem(mockk<Path>(), selected = true, editable = true, subText = "test").keep())
+    }
+
 }
