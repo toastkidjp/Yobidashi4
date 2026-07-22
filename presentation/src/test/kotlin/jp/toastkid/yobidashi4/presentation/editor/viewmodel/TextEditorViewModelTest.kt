@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
@@ -98,6 +99,7 @@ class TextEditorViewModelTest {
     fun tearDown() {
         unmockkAll()
         stopKoin()
+        viewModel.content().clearText()
     }
 
     @Test
@@ -303,9 +305,13 @@ class TextEditorViewModelTest {
 
     @Test
     fun dispose() {
+        viewModel.content().edit {
+            append("a")
+        }
+
         viewModel.dispose()
 
-        //verify { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
+        verify { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
         assertTrue(viewModel.content().text.isEmpty())
     }
 
