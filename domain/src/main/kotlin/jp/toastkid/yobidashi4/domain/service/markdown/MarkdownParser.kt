@@ -55,7 +55,7 @@ class MarkdownParser {
     private fun invoke(stream: Stream<String>, title: String): Markdown {
         val markdown = Markdown(title)
         stream.forEach { line ->
-            parseLine(line) { markdown.add(it) }
+            parseLine(line, markdown::add)
         }
 
         if (stringBuilder.isNotEmpty()) {
