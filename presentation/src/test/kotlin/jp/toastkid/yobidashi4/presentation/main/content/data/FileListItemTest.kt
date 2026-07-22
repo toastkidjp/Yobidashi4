@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.main.content.data
 
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.junit.jupiter.api.AfterEach
@@ -17,6 +18,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import java.nio.file.Path
+import kotlin.io.path.nameWithoutExtension
 
 class FileListItemTest {
 
@@ -54,6 +57,17 @@ class FileListItemTest {
         assertFalse(fileListItem.reverseSelection().selected)
         assertTrue(fileListItem.editable)
         assertTrue(fileListItem.reverseSelection().editable)
+    }
+
+    @Test
+    fun name() {
+        val path = mockk<Path>()
+        every { path.nameWithoutExtension } returns "test"
+        val fileListItem = FileListItem(path, selected = true, editable = true)
+
+        val name = fileListItem.name()
+
+        assertEquals("test", name)
     }
 
 }
