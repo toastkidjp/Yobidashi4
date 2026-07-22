@@ -35,7 +35,13 @@ class FileListItemTest {
 
     @Test
     fun test() {
-        val fileListItem = FileListItem(mockk(), true, true, "test-sub", System.currentTimeMillis())
+        val fileListItem = FileListItem(
+            mockk(),
+            true,
+            true,
+            "test-sub",
+            System.currentTimeMillis()
+        )
         assertTrue(fileListItem.selected)
         val unselect = fileListItem.unselect()
         assertFalse(unselect.selected)
