@@ -27,7 +27,7 @@ class TextEditorOutputTransformationTest {
         subject = TextEditorOutputTransformation(
             TextFieldState(),
             true
-        ) { ParseResult("test", emptyList()) }
+        ) { ParseResult("test", listOf(Triple(0, 1, SpanStyle()))) }
     }
 
     @Test
@@ -40,10 +40,29 @@ class TextEditorOutputTransformationTest {
 
         with(subject) {
             buffer.transformOutput()
-            buffer.transformOutput()
         }
 
         verify { buffer.addStyle(any<SpanStyle>(), any(), any()) }
+        verify { buffer.append("[EOF]") }
+    }
+
+    @Test
+    fun cacheUseCase() {
+        val buffer = mockk<TextFieldBuffer>()
+        every { buffer.length } returns "# Test doc".length
+        every { buffer.asCharSequence() } returns "# Test doc"
+        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.append(any<String>()) } returns buffer
+        subject = TextEditorOutputTransformation(
+            TextFieldState(),
+            true
+        ) { ParseResult("test", listOf(Triple(0, 1, SpanStyle()))) }
+
+        with(subject) {
+            buffer.transformOutput()
+        }
+
+        verify(inverse = true) { buffer.addStyle(any<SpanStyle>(), any(), any()) }
         verify { buffer.append("[EOF]") }
     }
 
