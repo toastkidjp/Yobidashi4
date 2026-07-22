@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
@@ -361,7 +362,12 @@ class TextEditorViewModelTest {
         every { setting.editorConversionLimit() } returns -1
 
         viewModel = TextEditorViewModel()
-        viewModel.visualTransformation()
+        val textFieldBuffer = mockk<TextFieldBuffer>()
+        every { textFieldBuffer.append(any<String>()) } returns mockk()
+        with(viewModel.visualTransformation()) {
+            textFieldBuffer.transformOutput()
+        }
+        verify { textFieldBuffer.append(any<String>()) }
     }
 
     @Test
