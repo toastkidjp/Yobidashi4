@@ -390,4 +390,16 @@ class TextEditorViewModelTest {
         assertFalse(viewModel.showLineNumber())
     }
 
+    @Test
+    fun calculateConversionTrigger2() {
+        viewModel.content().edit {
+            append("a")
+        }
+
+        val (lineCount, lineStarts, inComposition) = viewModel.calculateConversionTrigger()
+        assertEquals(0, lineCount)
+        assertEquals("a", lineStarts)
+        assertTrue(inComposition)
+    }
+
 }
