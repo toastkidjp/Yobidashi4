@@ -22,10 +22,16 @@ class CalendarLabelFinderServiceTest {
 
     @Test
     fun invoke() {
+        val labels2018Dec = subject.invoke(2018, 12)
+        assertEquals(28, labels2018Dec.first { it.title == "大納会" }.day)
         val labels2023Dec = subject.invoke(2023, 12)
         assertEquals(29, labels2023Dec.first { it.title == "大納会" }.day)
         val labels2024Dec = subject.invoke(2024, 12)
         assertEquals(30, labels2024Dec.first { it.title == "大納会" }.day)
+        val label2018Jan = subject.invoke(2018, 1)
+        assertEquals(4, label2018Jan.first { it.title == "大発会" }.day)
+        val label2026Jan = subject.invoke(2026, 1)
+        assertEquals(5, label2026Jan.first { it.title == "大発会" }.day)
         val label2025Jan = subject.invoke(2025, 1)
         assertEquals(6, label2025Jan.first { it.title == "大発会" }.day)
         val label2025Mar = subject.invoke(2025, 3)
