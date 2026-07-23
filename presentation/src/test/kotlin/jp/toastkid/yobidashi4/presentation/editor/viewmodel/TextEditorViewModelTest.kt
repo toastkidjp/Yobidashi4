@@ -400,6 +400,18 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun parseContentOnDarkTheme() {
+        viewModel.content().edit {
+            append("# test")
+        }
+        every { mainViewModel.darkMode() } returns true
+
+        viewModel.parseContent()
+
+        verify { mainViewModel.darkMode() }
+    }
+
+    @Test
     fun showLineNumber() {
         assertTrue(viewModel.showLineNumber())
 
