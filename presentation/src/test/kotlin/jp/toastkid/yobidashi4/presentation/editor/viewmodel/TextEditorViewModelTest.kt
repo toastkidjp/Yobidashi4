@@ -356,6 +356,21 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun inputTransformation() {
+        viewModel.onPreviewKeyEvent(
+            KeyEvent(Key.Enter, KeyEventType.KeyDown, isAltPressed = true)
+        )
+        val textFieldBuffer = mockk<TextFieldBuffer>()
+        every { textFieldBuffer.revertAllChanges() } just Runs
+
+        with(viewModel.inputTransformation()) {
+            textFieldBuffer.transformInput()
+        }
+
+        verify { textFieldBuffer.revertAllChanges() }
+    }
+
+    @Test
     fun visualTransformation() {
         viewModel.visualTransformation()
 
