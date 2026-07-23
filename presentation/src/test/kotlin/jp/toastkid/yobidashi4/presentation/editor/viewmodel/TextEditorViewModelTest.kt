@@ -371,6 +371,18 @@ class TextEditorViewModelTest {
     }
 
     @Test
+    fun inputTransformationWithoutAltPressed() {
+        val textFieldBuffer = mockk<TextFieldBuffer>()
+        every { textFieldBuffer.revertAllChanges() } just Runs
+
+        with(viewModel.inputTransformation()) {
+            textFieldBuffer.transformInput()
+        }
+
+        verify(inverse = true) { textFieldBuffer.revertAllChanges() }
+    }
+
+    @Test
     fun visualTransformation() {
         viewModel.visualTransformation()
 
