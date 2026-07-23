@@ -394,7 +394,7 @@ class TextEditorViewModelTest {
         with(viewModel.visualTransformation()) {
             textFieldBuffer.transformOutput()
         }
-        verify { textFieldBuffer.append(any<String>()) }
+        verify { textFieldBuffer.append("[EOF]") }
     }
 
     @Test
