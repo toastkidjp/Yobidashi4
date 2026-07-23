@@ -6,7 +6,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.service.markdown.MarkdownParser
 import org.junit.jupiter.api.AfterEach
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 
 class MarkdownPreviewTabTest {
 
@@ -70,6 +70,11 @@ class MarkdownPreviewTabTest {
     @Test
     fun slideshowSourcePath() {
         assertSame(path, tab.slideshowSourcePath())
+    }
+
+    @Test
+    fun filePath() {
+        assertSame(path, tab.filePath())
     }
 
 }
