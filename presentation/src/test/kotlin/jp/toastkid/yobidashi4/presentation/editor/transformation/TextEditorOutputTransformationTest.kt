@@ -62,7 +62,7 @@ class TextEditorOutputTransformationTest {
             buffer.transformOutput()
         }
 
-        verify(inverse = true) { buffer.addStyle(any<SpanStyle>(), any(), any()) }
+        verify { buffer.addStyle(any<SpanStyle>(), any(), any()) }
         verify { buffer.append("[EOF]") }
     }
 
