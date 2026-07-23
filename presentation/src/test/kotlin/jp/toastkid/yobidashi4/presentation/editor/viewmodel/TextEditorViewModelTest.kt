@@ -380,6 +380,18 @@ class TextEditorViewModelTest {
 
     @Test
     fun parseContent() {
+        viewModel.content().edit {
+            append("# test")
+        }
+        every { mainViewModel.darkMode() } returns false
+
+        viewModel.parseContent()
+
+        verify { mainViewModel.darkMode() }
+    }
+
+    @Test
+    fun parseContentNoneMatchPatternCase() {
         every { mainViewModel.darkMode() } returns false
 
         viewModel.parseContent()
