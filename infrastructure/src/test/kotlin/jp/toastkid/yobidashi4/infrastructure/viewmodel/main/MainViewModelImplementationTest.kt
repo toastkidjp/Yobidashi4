@@ -15,6 +15,7 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.TrayState
 import androidx.compose.ui.window.WindowPlacement
@@ -1463,8 +1464,11 @@ class MainViewModelImplementationTest {
         assertNull(subject.selectedText())
 
         val textManager = mockk<TextContextMenu.TextManager>()
+        every { textManager.selectedText } returns AnnotatedString("test")
 
         subject.setTextManager(textManager)
+
+        assertEquals("test", subject.selectedText())
     }
 
     @Test
