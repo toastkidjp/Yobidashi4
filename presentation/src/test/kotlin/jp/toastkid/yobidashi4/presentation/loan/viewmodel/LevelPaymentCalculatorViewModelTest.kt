@@ -254,4 +254,13 @@ class LevelPaymentCalculatorViewModelTest {
         assertFalse(subject.isSelectedLevel())
     }
 
+    @Test
+    fun selectPrincipal() {
+        assertFalse(subject.isSelectedPrincipal())
+
+        subject.selectPrincipal()
+
+        assertTrue(subject.isSelectedPrincipal())
+    }
+
 }
