@@ -245,4 +245,13 @@ class LevelPaymentCalculatorViewModelTest {
         assertEquals(expected, subject.brokerageFee().split(" ")[2])
     }
 
+    @Test
+    fun selectLevel() {
+        assertTrue(subject.isSelectedLevel())
+
+        subject.selectPrincipal()
+
+        assertFalse(subject.isSelectedLevel())
+    }
+
 }
