@@ -91,6 +91,18 @@ class ChatServiceImplementationTest {
     }
 
     @Test
+    fun sendWithFakeModel() {
+        every { repository.request(any(), any()) } just Runs
+        val model = mockk<GenerativeAiModel>()
+        every { model.webGrounding() } returns false
+        every { model.image() } returns false
+
+        subject.send(mutableListOf(ChatMessage("user", "test")), model, callback)
+
+        verify { repository.request(any(), any()) }
+    }
+
+    @Test
     fun accessors() {
         assertTrue(subject.getChat().list().isEmpty())
 
