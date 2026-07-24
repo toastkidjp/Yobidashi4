@@ -63,7 +63,7 @@ class InputHistoryFileStore(
             it.writeUtf8(
                 list
                     .sortedByDescending(InputHistory::timestamp)
-                    .distinctBy { it.word }
+                    .distinctBy(InputHistory::word)
                     .map(InputHistory::toTsv)
                     .joinToString("\n")
             )
