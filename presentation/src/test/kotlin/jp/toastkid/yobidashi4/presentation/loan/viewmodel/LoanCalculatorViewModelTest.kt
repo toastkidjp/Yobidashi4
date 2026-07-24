@@ -26,7 +26,7 @@ import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-class LevelPaymentCalculatorViewModelTest {
+class LoanCalculatorViewModelTest {
 
     private lateinit var subject: LoanCalculatorViewModel
 
