@@ -61,7 +61,10 @@ class InputHistoryFileStore(
 
         fileSystem.sink(path()).buffer().use {
             it.writeUtf8(
-                list.sortedByDescending(InputHistory::timestamp).distinctBy { it.word }.map(InputHistory::toTsv)
+                list
+                    .sortedByDescending(InputHistory::timestamp)
+                    .distinctBy { it.word }
+                    .map(InputHistory::toTsv)
                     .joinToString("\n")
             )
         }
