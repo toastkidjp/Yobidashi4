@@ -180,4 +180,13 @@ class FileRenameToolViewModelTest {
         subject.remove(mockk())
     }
 
+    @Test
+    fun useResize() {
+        assertFalse(subject.useResize().value)
+
+        subject.switchUseResize()
+
+        assertTrue(subject.useResize().value)
+    }
+
 }
