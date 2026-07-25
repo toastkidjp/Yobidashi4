@@ -48,4 +48,20 @@ class FileRenameToolViewKtTest {
             verify { anyConstructed<FileRenameToolViewModel>().remove(any()) }
         }
     }
+
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun emptyCase() {
+        every { anyConstructed<FileRenameToolViewModel>().items() } returns emptyList()
+
+        runDesktopComposeUiTest {
+            setContent {
+                FileRenameToolView()
+            }
+
+            onNodeWithText("x").assertDoesNotExist()
+        }
+    }
+
 }
