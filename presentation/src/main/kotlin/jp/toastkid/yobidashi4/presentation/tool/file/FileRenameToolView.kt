@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -25,7 +26,10 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_image
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun FileRenameToolView() {
@@ -90,6 +94,17 @@ fun FileRenameToolView() {
                         }
                     }
                 }
+
+                if (viewModel.items().isEmpty()) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.align(Alignment.Center).padding(8.dp)
+                    ) {
+                        Icon(vectorResource(Res.drawable.ic_image), contentDescription = "icon")
+                        Text("Drop image files.", modifier = Modifier.padding(8.dp))
+                    }
+                }
+
                 VerticalScrollbar(
                     adapter = rememberScrollbarAdapter(viewModel.listState()),
                     modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
