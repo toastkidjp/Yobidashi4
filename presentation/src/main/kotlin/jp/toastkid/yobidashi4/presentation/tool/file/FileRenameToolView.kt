@@ -54,7 +54,7 @@ fun FileRenameToolView() {
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { viewModel.switchUseResize() }
+                modifier = Modifier.clickable(onClick = viewModel::switchUseResize)
             ) {
                 Checkbox(
                     checked = viewModel.useResize().collectAsState().value,
