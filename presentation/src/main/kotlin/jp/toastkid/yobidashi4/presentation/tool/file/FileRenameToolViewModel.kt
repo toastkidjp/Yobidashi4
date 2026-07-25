@@ -50,6 +50,14 @@ class FileRenameToolViewModel : KoinComponent {
 
     fun input() = input
 
+    fun renamedSampleFileName(): String {
+        return makeRenamedFileName(
+            DecimalFormat("0".repeat(paths.size.toString().length)),
+            paths.size,
+            "png"
+        )
+    }
+
     /**
      * 画像の縦横サイズを半分にして保存する関数
      * @return 処理が成功したかどうか
