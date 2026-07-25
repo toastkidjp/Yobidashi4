@@ -196,4 +196,14 @@ class PreviewKeyEventHandlerTest {
         verify { useCase.cutLine() }
     }
 
+    @Test
+    fun switchLineNumber() {
+        val consumed = previewKeyEventHandler.invoke(
+            KeyEvent(Key.L, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true),
+        )
+
+        assertTrue(consumed)
+        verify { useCase.switchLineNumber() }
+    }
+
 }
