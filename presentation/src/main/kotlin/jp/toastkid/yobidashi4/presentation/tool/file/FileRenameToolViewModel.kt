@@ -88,11 +88,11 @@ class FileRenameToolViewModel : KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             paths.forEachIndexed { i, p ->
                 if (useResize50Percent.value) {
-                    resizeImageToHalf(p, p.resolveSibling("${input.text}_${decimalFormat.format(i + 1)}.${p.extension}"))
+                    resizeImageToHalf(p, p.resolveSibling(makeRenamedFileName(decimalFormat, i, p.extension)))
                     return@forEachIndexed
                 }
 
-                Files.copy(p, p.resolveSibling("${input.text}_${decimalFormat.format(i + 1)}.${p.extension}"))
+                Files.copy(p, p.resolveSibling(makeRenamedFileName(decimalFormat, i, p.extension)))
             }
 
             withContext(Dispatchers.Unconfined) {
@@ -105,6 +105,9 @@ class FileRenameToolViewModel : KoinComponent {
             }
         }
     }
+
+    private fun makeRenamedFileName(decimalFormat: DecimalFormat, i: Int, extension: String): String =
+        "${input.text}_${decimalFormat.format(i + 1)}.$extension"
 
     private fun openFolder() {
         viewModel.openFile(paths.first().parent)
