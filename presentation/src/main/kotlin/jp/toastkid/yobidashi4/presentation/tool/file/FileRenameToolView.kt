@@ -47,6 +47,11 @@ fun FileRenameToolView() {
                 modifier = Modifier.onKeyEvent(viewModel::onKeyEvent)
             )
 
+            if (viewModel.input().text.isNotBlank()) {
+                Text("Renamed file name: ", modifier = Modifier.padding(start = 8.dp))
+                Text(viewModel.renamedSampleFileName(), modifier = Modifier.padding(start = 8.dp))
+            }
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable { viewModel.switchUseResize() }
