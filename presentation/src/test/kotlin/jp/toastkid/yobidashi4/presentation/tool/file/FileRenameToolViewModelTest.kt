@@ -12,12 +12,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -28,9 +27,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.nio.file.Files
-import java.nio.file.Path
-import kotlin.io.path.extension
 
 class FileRenameToolViewModelTest {
 
@@ -38,6 +34,9 @@ class FileRenameToolViewModelTest {
 
     @MockK
     private lateinit var mainViewModel: MainViewModel
+
+    @MockK
+    private lateinit var fileRenamer: FileRenamer
 
     @BeforeEach
     fun setUp() {
@@ -47,14 +46,12 @@ class FileRenameToolViewModelTest {
             modules(
                 module {
                     single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
+                    single(qualifier = null) { fileRenamer } bind(FileRenamer::class)
                 }
             )
         }
 
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
-
-        mockkStatic(Files::class)
-        every { Files.copy(any<Path>(), any<Path>()) } returns mockk()
 
         subject = FileRenameToolViewModel()
     }
@@ -85,34 +82,21 @@ class FileRenameToolViewModelTest {
 
     @Test
     fun rename() {
-        subject.input().setTextAndPlaceCursorAtEnd("ABC")
-        val value = mockk<Path>()
-        every { value.resolveSibling(any<String>()) } returns mockk()
-        every { value.extension } returns "png"
-        every { value.parent } returns value
+        val fileRenamerSlot = slot<() -> Unit>()
+        every { fileRenamer.invoke(any(), any(), any(), capture(fileRenamerSlot)) } just Runs
         val slot = slot<() -> Unit>()
         every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
         every { mainViewModel.openFile(any()) } just Runs
-        val capturingSlot = slot<(Path) -> Unit>()
-        every { mainViewModel.registerDroppedPathReceiver(capture(capturingSlot)) } just Runs
 
-        runBlocking {
-            subject.collectDroppedPaths()
-            capturingSlot.captured.invoke(value)
+        subject.rename()
 
-            subject.rename()
+        verify { fileRenamer.invoke(any(), any(), any(), any()) }
+        fileRenamerSlot.captured.invoke()
 
-            verify(exactly = 1) { Files.copy(any<Path>(), any<Path>()) }
-            verify(exactly = 1) { mainViewModel.showSnackbar(any(), any(), any()) }
-            assertTrue(slot.isCaptured)
-
-            slot.captured.invoke()
-            verify { mainViewModel.openFile(any()) }
-
-            subject.clearPaths()
-
-            assertTrue(subject.items().isEmpty())
-        }
+        verify(exactly = 1) { mainViewModel.showSnackbar(any(), any(), any()) }
+        assertTrue(slot.isCaptured)
+        slot.captured.invoke()
+        verify(inverse = true) { mainViewModel.openFile(any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -123,7 +107,6 @@ class FileRenameToolViewModelTest {
         val consumed = subject.onKeyEvent(KeyEvent(Key.Enter, KeyEventType.KeyDown))
 
         assertTrue(consumed)
-        verify(inverse = true) { Files.copy(any<Path>(), any<Path>()) }
         verify(inverse = true) { mainViewModel.showSnackbar(any(), any(), any()) }
     }
 
