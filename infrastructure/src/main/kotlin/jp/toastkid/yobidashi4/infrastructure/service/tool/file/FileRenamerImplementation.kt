@@ -39,7 +39,7 @@ class FileRenamerImplementation(
             return
         }
 
-        val decimalFormat = DecimalFormat("0".repeat(paths.size.toString().length))
+        val decimalFormat = makeDecimalFormat(paths.size)
         CoroutineScope(ioContextProvider()).launch {
             paths.forEachIndexed { i, p ->
                 val renamedPath = AtomicReference(p.resolveSibling(makeRenamedFileName(decimalFormat, baseName, i, p.extension)))
@@ -62,6 +62,11 @@ class FileRenamerImplementation(
                 onComplete()
             }
         }
+    }
+
+    private fun makeDecimalFormat(listSize: Int): DecimalFormat {
+        val decimalFormat = DecimalFormat("0".repeat(listSize.toString().length))
+        return decimalFormat
     }
 
     /**
