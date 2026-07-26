@@ -122,6 +122,11 @@ class FileRenameToolViewModelTest {
         verify { mainViewModel.openFile(any()) }
     }
 
+    @Test
+    fun renamedSampleFileName() {
+        assertEquals("img_1.png", subject.renamedSampleFileName())
+    }
+
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
