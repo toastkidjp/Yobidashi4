@@ -13,6 +13,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
@@ -97,6 +98,28 @@ class FileRenameToolViewModelTest {
         assertTrue(slot.isCaptured)
         slot.captured.invoke()
         verify(inverse = true) { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun renameIfFilesAreEmptyCase() {
+        val fileRenamerSlot = slot<() -> Unit>()
+        every { fileRenamer.invoke(any(), any(), any(), capture(fileRenamerSlot)) } just Runs
+        val slot = slot<() -> Unit>()
+        every { mainViewModel.showSnackbar(any(), any(), capture(slot)) } just Runs
+        every { mainViewModel.openFile(any()) } just Runs
+        subject = spyk(subject)
+        val element = kotlin.io.path.createTempFile()
+        every { subject.items() } returns listOf(element)
+
+        subject.rename()
+
+        verify { fileRenamer.invoke(any(), any(), any(), any()) }
+        fileRenamerSlot.captured.invoke()
+
+        verify(exactly = 1) { mainViewModel.showSnackbar(any(), any(), any()) }
+        assertTrue(slot.isCaptured)
+        slot.captured.invoke()
+        verify { mainViewModel.openFile(any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
