@@ -99,6 +99,6 @@ class FileRenamerImplementation(
     }
 
     override fun makeRenamedFileName(decimalFormat: DecimalFormat, baseName: CharSequence, i: Int, extension: String): String =
-        "${baseName}_${decimalFormat.format(i + 1)}.$extension"
+        "${baseName}_${makeDecimalFormat(i).format(i + 1)}.$extension"
 
 }
