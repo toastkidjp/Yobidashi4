@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi4.domain.model.notification
 
-import java.time.LocalDateTime
-import java.time.Month
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.fail
+import java.time.LocalDateTime
+import java.time.Month
 
 class NotificationEventTest {
 
@@ -20,7 +20,7 @@ class NotificationEventTest {
 
     @Test
     fun dateTimeString() {
-        println(subject.dateTimeString())
+        assertEquals("2023-12-23 12:33:44", subject.dateTimeString())
     }
 
     @Test
