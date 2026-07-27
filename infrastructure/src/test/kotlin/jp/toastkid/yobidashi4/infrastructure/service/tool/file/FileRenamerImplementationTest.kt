@@ -29,7 +29,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.nio.file.Path
-import java.text.DecimalFormat
 import kotlin.io.path.extension
 
 class FileRenamerImplementationTest {
@@ -98,7 +97,6 @@ class FileRenamerImplementationTest {
         assertEquals(
             "test_11.webp",
             subject.makeRenamedFileName(
-                DecimalFormat("0".repeat(10.toString().length)),
                 "test",
                 10,
                 "webp"
