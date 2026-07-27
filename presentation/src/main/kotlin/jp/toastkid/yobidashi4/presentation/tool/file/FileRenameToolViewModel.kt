@@ -63,7 +63,6 @@ class FileRenameToolViewModel : KoinComponent {
     }
 
     private fun openFolder() {
-        println(items())
         if (items().isEmpty()) {
             return
         }
