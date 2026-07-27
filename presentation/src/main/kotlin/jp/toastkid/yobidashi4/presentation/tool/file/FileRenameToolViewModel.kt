@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
-import java.text.DecimalFormat
 
 class FileRenameToolViewModel : KoinComponent {
 
@@ -44,7 +43,6 @@ class FileRenameToolViewModel : KoinComponent {
 
     fun renamedSampleFileName(): String {
         return fileRenamer.makeRenamedFileName(
-            DecimalFormat("0".repeat(paths.size.toString().length)),
             input.text,
             paths.size,
             "png"
