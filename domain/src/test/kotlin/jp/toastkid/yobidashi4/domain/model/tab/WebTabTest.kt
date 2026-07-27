@@ -58,7 +58,7 @@ class WebTabTest {
 
     @Test
     fun markdownLink() {
-        println(webTab.markdownLink())
+        assertEquals("[test](https://test.yahoo.co.jp)", webTab.markdownLink())
     }
 
 }
