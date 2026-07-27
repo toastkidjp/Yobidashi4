@@ -8,12 +8,11 @@
 package jp.toastkid.yobidashi4.domain.service.tool.file
 
 import java.nio.file.Path
-import java.text.DecimalFormat
 
 interface FileRenamer {
 
     operator fun invoke(paths: List<Path>, baseName: CharSequence, useResize: Boolean, onComplete: () -> Unit)
 
-    fun makeRenamedFileName(decimalFormat: DecimalFormat, baseName: CharSequence, i: Int, extension: String): String
+    fun makeRenamedFileName(baseName: CharSequence, i: Int, extension: String): String
 
 }
