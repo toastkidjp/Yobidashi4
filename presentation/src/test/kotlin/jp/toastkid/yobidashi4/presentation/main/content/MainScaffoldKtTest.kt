@@ -8,7 +8,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performMouseInput
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -28,6 +28,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
+import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -61,6 +62,9 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var metaExtractor: FileListItemMetaExtractor
 
+    @MockK
+    private lateinit var fileRenamer: FileRenamer
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -74,6 +78,7 @@ class MainScaffoldKtTest {
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                     single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                     single(qualifier=null) { metaExtractor } bind(FileListItemMetaExtractor::class)
+                    single(qualifier = null) { fileRenamer } bind(FileRenamer::class)
                 }
             )
         }
@@ -101,6 +106,7 @@ class MainScaffoldKtTest {
             "test",
             20000
         )
+        every { fileRenamer.makeRenamedFileName(any(), any(), any()) } returns "test"
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
