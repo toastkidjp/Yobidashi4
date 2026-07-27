@@ -42,7 +42,7 @@ class FileRenamerImplementation(
         val decimalFormat = makeDecimalFormat(paths.size)
         CoroutineScope(ioContextProvider()).launch {
             paths.forEachIndexed { i, p ->
-                val renamedPath = AtomicReference(p.resolveSibling(makeRenamedFileName(decimalFormat, baseName, i, p.extension)))
+                val renamedPath = AtomicReference(p.resolveSibling(makeRenamedFileName(baseName, i, p.extension)))
                 var maxAttempts = 4
                 while (fileSystem.exists(renamedPath.get().toOkioPath())) {
                     val current = renamedPath.get()
@@ -98,7 +98,7 @@ class FileRenamerImplementation(
         return ImageIO.write(resizedImage, formatName, targetPath.toFile())
     }
 
-    override fun makeRenamedFileName(decimalFormat: DecimalFormat, baseName: CharSequence, i: Int, extension: String): String =
+    override fun makeRenamedFileName(baseName: CharSequence, i: Int, extension: String): String =
         "${baseName}_${makeDecimalFormat(i).format(i + 1)}.$extension"
 
 }
