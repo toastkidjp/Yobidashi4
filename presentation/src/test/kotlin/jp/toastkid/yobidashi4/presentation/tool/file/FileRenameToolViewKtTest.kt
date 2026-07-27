@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.tool.file
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -54,6 +55,7 @@ class FileRenameToolViewKtTest {
     @Test
     fun emptyCase() {
         every { anyConstructed<FileRenameToolViewModel>().items() } returns emptyList()
+        every { anyConstructed<FileRenameToolViewModel>().input() } returns TextFieldState()
 
         runDesktopComposeUiTest {
             setContent {
