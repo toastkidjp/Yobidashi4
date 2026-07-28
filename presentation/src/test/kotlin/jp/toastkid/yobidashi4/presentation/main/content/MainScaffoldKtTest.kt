@@ -22,13 +22,11 @@ import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
-import jp.toastkid.yobidashi4.domain.model.tab.FileRenameToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
-import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -62,9 +60,6 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var metaExtractor: FileListItemMetaExtractor
 
-    @MockK
-    private lateinit var fileRenamer: FileRenamer
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -78,7 +73,6 @@ class MainScaffoldKtTest {
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                     single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                     single(qualifier=null) { metaExtractor } bind(FileListItemMetaExtractor::class)
-                    single(qualifier = null) { fileRenamer } bind(FileRenamer::class)
                 }
             )
         }
@@ -106,7 +100,6 @@ class MainScaffoldKtTest {
             "test",
             20000
         )
-        every { fileRenamer.makeRenamedFileName(any(), any(), any()) } returns "test"
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
@@ -167,28 +160,6 @@ class MainScaffoldKtTest {
         every { mainViewModel.tabs } returns mutableListOf(
             LoanCalculatorTab(),
             BarcodeToolTab(),
-            FileRenameToolTab()
-        )
-
-        runDesktopComposeUiTest {
-            setContent {
-                MainScaffold()
-            }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun useFileRenameToolTabContents() {
-        every { mainViewModel.selected } returns mutableStateOf(2)
-        every { mainViewModel.currentTab() } returns FileRenameToolTab()
-        every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
-        every { mainViewModel.unregisterDroppedPathReceiver() } just Runs
-        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
-        every { mainViewModel.tabs } returns mutableListOf(
-            LoanCalculatorTab(),
-            BarcodeToolTab(),
-            FileRenameToolTab()
         )
 
         runDesktopComposeUiTest {
