@@ -14,10 +14,11 @@ import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.loan.LoanPayment
@@ -32,23 +33,39 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
 class LoanCalculatorViewModelTest {
 
     private lateinit var subject: LoanCalculatorViewModel
 
+    @MockK
+    private lateinit var exporter: LoanPaymentExporter
+    
     @BeforeEach
     fun setUp() {
-        subject = LoanCalculatorViewModel()
+        MockKAnnotations.init(this)
 
-        mockkConstructor(LoanPaymentExporter::class)
-        every { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) } just Runs
+        startKoin {
+            modules(
+                module {
+                    single(qualifier=null) { exporter } bind(LoanPaymentExporter::class)
+                }
+            )   
+        }
+        every { exporter.invoke(any(), any()) } just Runs
+        
+        subject = LoanCalculatorViewModel()
 
         subject.launch()
     }
 
     @AfterEach
     fun tearDown() {
+        stopKoin()
         unmockkAll()
     }
 
@@ -178,7 +195,7 @@ class LoanCalculatorViewModelTest {
 
         subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
 
-        verify { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+        verify { exporter.invoke(any(), any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -188,7 +205,7 @@ class LoanCalculatorViewModelTest {
 
         subject.onKeyEvent(KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true))
 
-        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+        verify(inverse = true) { exporter.invoke(any(), any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -198,7 +215,7 @@ class LoanCalculatorViewModelTest {
 
         subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyUp, isCtrlPressed = true))
 
-        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+        verify(inverse = true) { exporter.invoke(any(), any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -208,7 +225,7 @@ class LoanCalculatorViewModelTest {
 
         subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = false))
 
-        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+        verify(inverse = true) { exporter.invoke(any(), any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -216,7 +233,7 @@ class LoanCalculatorViewModelTest {
     fun onKeyEventWithoutLastPaymentResult() {
         subject.onKeyEvent(KeyEvent(Key.P, KeyEventType.KeyDown, isCtrlPressed = true))
 
-        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+        verify(inverse = true) { exporter.invoke(any(), any()) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -225,7 +242,7 @@ class LoanCalculatorViewModelTest {
         val invoked = subject.onKeyEvent(KeyEvent(Key.LanguageSwitch, KeyEventType.KeyDown))
 
         assertFalse(invoked)
-        verify(inverse = true) { anyConstructed<LoanPaymentExporter>().invoke(any(), any()) }
+        verify(inverse = true) { exporter.invoke(any(), any()) }
     }
 
     @Test
