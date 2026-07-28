@@ -26,12 +26,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.annotations.TestOnly
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.text.DecimalFormat
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.roundToInt
 
-class LoanCalculatorViewModel {
+class LoanCalculatorViewModel : KoinComponent {
 
     private val scrollState = LazyListState(0)
 
@@ -181,6 +183,8 @@ class LoanCalculatorViewModel {
 
     fun listState() = scrollState
 
+    private val exporter: LoanPaymentExporter by inject()
+
     fun onKeyEvent(keyEvent: KeyEvent): Boolean {
         if (keyEvent.type != KeyEventType.KeyDown) {
             return false
@@ -188,7 +192,7 @@ class LoanCalculatorViewModel {
 
         if (keyEvent.isCtrlPressed && keyEvent.key == Key.P) {
             val loanPayment = lastPaymentResult.get() ?: return true
-            LoanPaymentExporter().invoke(
+            exporter.invoke(
                 makeFactor(),
                 loanPayment
             )
