@@ -30,6 +30,7 @@ class FileRenameToolViewKtTest {
         every { anyConstructed<FileRenameToolViewModel>().dispose() } just Runs
         every { anyConstructed<FileRenameToolViewModel>().remove(any()) } just Runs
         coEvery { anyConstructed<FileRenameToolViewModel>().collectDroppedPaths() } just Runs
+        coEvery { anyConstructed<FileRenameToolViewModel>().renamedSampleFileName() } returns ""
     }
 
     @AfterEach
