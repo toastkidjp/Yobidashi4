@@ -70,6 +70,7 @@ import jp.toastkid.yobidashi4.presentation.editor.setting.EditorSettingComponent
 import jp.toastkid.yobidashi4.presentation.input.InputHistoryView
 import jp.toastkid.yobidashi4.presentation.loan.LoanCalculatorView
 import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabView
+import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRegistry
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabView
 import jp.toastkid.yobidashi4.presentation.number.NumberPlaceView
 import jp.toastkid.yobidashi4.presentation.photo.PhotoTabView
@@ -84,8 +85,34 @@ import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
+private val DefaultTabContentRegistry = TabContentRegistry.Builder()
+    .register(FileTab::class) { FileListView(it.items, Modifier) }
+    .register(TableTab::class) { TableView(it) }
+    .register(EditorTab::class) { EditorTabView(it) }
+    .register(EditorSettingTab::class) { EditorSettingComponent(modifier = Modifier) }
+    .register(MarkdownPreviewTab::class) { MarkdownTabView(it, Modifier) }
+    .register(CalendarTab::class) { CalendarView(it) }
+    .register(WebTab::class) { WebTabView(it) }
+    .register(WebBookmarkTab::class) { WebBookmarkTabView(it) }
+    .register(WebHistoryTab::class) { WebHistoryView(it) }
+    .register(TextFileViewerTab::class) { TextFileViewerTabView(it) }
+    .register(ChatTab::class) { ChatTabView(it) }
+    .register(PhotoTab::class) { PhotoTabView(it) }
+    .register(InputHistoryTab::class) { InputHistoryView(it) }
+    .register(CompoundInterestCalculatorTab::class) { CompoundInterestCalculatorView() }
+    .register(FileRenameToolTab::class) { FileRenameToolView() }
+    .register(RouletteToolTab::class) { RouletteToolTabView() }
+    .register(NumberPlaceGameTab::class) { NumberPlaceView() }
+    .register(LoanCalculatorTab::class) { LoanCalculatorView() }
+    .register(ConverterToolTab::class) { ConverterToolTabView() }
+    .register(BarcodeToolTab::class) { BarcodeToolTabView() }
+    .register(NotificationListTab::class) { NotificationListTabView() }
+    .register(SettingEditorTab::class) { SettingEditorView() }
+    .register(ClusteringToolTab::class) { ClusteringToolTabView() }
+    .build()
+
 @Composable
-internal fun TabsView(modifier: Modifier) {
+internal fun TabsView(modifier: Modifier = Modifier, tabContentRegistry: TabContentRegistry = DefaultTabContentRegistry) {
     val viewModel = remember { TabsViewModel() }
     val primaryColor = MaterialTheme.colors.onPrimary
 
@@ -173,32 +200,7 @@ internal fun TabsView(modifier: Modifier) {
             }
         }
 
-        when (val currentTab = viewModel.currentTab()) {
-            is FileTab -> FileListView(currentTab.items, Modifier)
-            is TableTab -> TableView(currentTab)
-            is EditorTab -> EditorTabView(currentTab)
-            is MarkdownPreviewTab -> MarkdownTabView(currentTab, Modifier)
-            is EditorSettingTab -> EditorSettingComponent(modifier = Modifier)
-            is CalendarTab -> CalendarView(currentTab)
-            is CompoundInterestCalculatorTab -> CompoundInterestCalculatorView()
-            is FileRenameToolTab -> FileRenameToolView()
-            is RouletteToolTab -> RouletteToolTabView()
-            is WebTab -> WebTabView(currentTab)
-            is WebBookmarkTab -> WebBookmarkTabView(currentTab)
-            is WebHistoryTab -> WebHistoryView(currentTab)
-            is NumberPlaceGameTab -> NumberPlaceView()
-            is LoanCalculatorTab -> LoanCalculatorView()
-            is TextFileViewerTab -> TextFileViewerTabView(currentTab)
-            is ConverterToolTab -> ConverterToolTabView()
-            is BarcodeToolTab -> BarcodeToolTabView()
-            is NotificationListTab -> NotificationListTabView()
-            is ChatTab -> ChatTabView(currentTab)
-            is PhotoTab -> PhotoTabView(currentTab)
-            is SettingEditorTab -> SettingEditorView()
-            is InputHistoryTab -> InputHistoryView(currentTab)
-            is ClusteringToolTab -> ClusteringToolTabView()
-            else -> Unit
-        }
+        tabContentRegistry.Render(viewModel.currentTab())
     }
 }
 
