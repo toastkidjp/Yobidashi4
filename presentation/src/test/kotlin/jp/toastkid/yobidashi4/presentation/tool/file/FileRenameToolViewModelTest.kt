@@ -60,6 +60,8 @@ class FileRenameToolViewModelTest {
         }
 
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+        every { fileRenamer.invoke(any(), any(), any(), any()) } just Runs
+        every { fileRenamer.makeRenamedFileName(any(), any(), any()) } returns "img_1.png"
 
         subject = FileRenameToolViewModel()
     }
