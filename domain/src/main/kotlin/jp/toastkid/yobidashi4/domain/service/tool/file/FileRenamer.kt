@@ -13,6 +13,6 @@ interface FileRenamer {
 
     operator fun invoke(paths: List<Path>, baseName: CharSequence, useResize: Boolean, onComplete: () -> Unit)
 
-    fun makeRenamedFileName(baseName: CharSequence, i: Int, extension: String): String
+    fun makeRenamedFileName(baseName: CharSequence, fileCount: Int, extension: String): String
 
 }
