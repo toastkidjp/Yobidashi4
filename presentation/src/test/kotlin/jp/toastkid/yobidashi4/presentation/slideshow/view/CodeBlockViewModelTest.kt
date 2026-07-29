@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -56,7 +57,7 @@ class CodeBlockViewModelTest {
 
     @Test
     fun maxHeight() {
-        println(subject.maxHeight(16.sp))
+        assertEquals(24.8.dp, subject.maxHeight(16.sp))
     }
 
     @OptIn(ExperimentalFoundationApi::class)
