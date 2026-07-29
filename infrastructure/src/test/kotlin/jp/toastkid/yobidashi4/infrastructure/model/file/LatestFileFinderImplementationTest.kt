@@ -51,6 +51,7 @@ class LatestFileFinderImplementationTest {
         val path = "data/path1".toPath()
         val path2 = "data/path2".toPath()
         val path3 = "data/path3".toPath()
+        val path4 = "data/path4".toPath()
 
         val toPath = "data".toPath()
         fakeFileSystem.createDirectories(toPath)
@@ -60,13 +61,18 @@ class LatestFileFinderImplementationTest {
         fakeFileSystem.write(path) { writeUtf8("log_content") }
         fakeFileSystem.write(path2) { writeUtf8("log_content") }
         fakeFileSystem.write(path3) { writeUtf8("log_content") }
+        fakeFileSystem.write(path4) { writeUtf8("log_content") }
 
         every { fakeFileSystem.metadata(any()) } answers {
             if (arg<Path>(0).name.endsWith("2"))
                 makeFakeMetadata(now.minusDays(8))
             else if (arg<Path>(0).name.endsWith("3"))
                 makeFakeMetadata(now.minusDays(9))
-            else
+            else if (arg<Path>(0).name.endsWith("4")) {
+                val makeFakeMetadata = makeFakeMetadata(now.minusDays(9))
+                every { makeFakeMetadata.lastModifiedAtMillis } returns null
+                makeFakeMetadata
+            } else
                 makeFakeMetadata(now)
         }
 
