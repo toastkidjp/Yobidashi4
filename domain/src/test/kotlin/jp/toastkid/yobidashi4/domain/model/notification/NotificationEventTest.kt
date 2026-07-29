@@ -25,7 +25,7 @@ class NotificationEventTest {
 
     @Test
     fun toTsv() {
-        println(subject.toTsv())
+        assertEquals("test\tmessage\t2023-12-23 12:33:44", subject.toTsv())
     }
 
     @Test
