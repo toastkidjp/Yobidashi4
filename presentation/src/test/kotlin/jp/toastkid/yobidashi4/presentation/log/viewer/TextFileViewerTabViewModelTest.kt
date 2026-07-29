@@ -106,8 +106,8 @@ class TextFileViewerTabViewModelTest {
             )
             subject.launch(mockk(), Dispatchers.Unconfined)
 
-            println(subject.lineNumber(0))
-            println(subject.lineNumber(10))
+            assertEquals(" 1", subject.lineNumber(0))
+            assertEquals("11", subject.lineNumber(10))
         }
     }
 
