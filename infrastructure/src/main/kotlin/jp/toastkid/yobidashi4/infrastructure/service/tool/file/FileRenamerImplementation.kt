@@ -98,7 +98,7 @@ class FileRenamerImplementation(
         return ImageIO.write(resizedImage, formatName, targetPath.toFile())
     }
 
-    override fun makeRenamedFileName(baseName: CharSequence, i: Int, extension: String): String =
-        "${baseName}_${makeDecimalFormat(i).format(i + 1)}.$extension"
+    override fun makeRenamedFileName(baseName: CharSequence, fileCount: Int, extension: String): String =
+        "${baseName}_${makeDecimalFormat(fileCount).format(fileCount + 1)}.$extension"
 
 }
