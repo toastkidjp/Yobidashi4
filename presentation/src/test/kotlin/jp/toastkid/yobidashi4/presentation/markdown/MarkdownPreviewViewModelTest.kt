@@ -1,13 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
 import androidx.compose.ui.text.font.FontWeight
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -80,16 +78,12 @@ class MarkdownPreviewViewModelTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        runDesktopComposeUiTest {
-            setContent {
-                val consumed = subject.onKeyEvent(
-                    rememberCoroutineScope(),
-                    KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
-                )
+        val consumed = subject.onKeyEvent(
+            CoroutineScope(Dispatchers.Unconfined),
+            KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
+        )
 
-                assertTrue(consumed)
-            }
-        }
+        assertTrue(consumed)
     }
 
     @OptIn(InternalComposeUiApi::class)
