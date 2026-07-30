@@ -46,7 +46,6 @@ class TfIdfDataSetPreparatorTest {
         )
 
         val dataset = preparator(docs)
-        println(dataset)
 
         assertEquals(0, dataset.size(), "None of results.")
     }
