@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi4.domain.model.slideshow
 
+import io.mockk.mockk
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -39,6 +42,18 @@ class SlideDeckTest {
 
         val imageUrls = slides.extractImageUrls()
         assertEquals(2, imageUrls.size)
+    }
+
+    @Test
+    fun shouldSetBackground() {
+        slides = SlideDeck()
+        assertTrue(slides.shouldSetBackground())
+        slides.add(mockk())
+        assertFalse(slides.shouldSetBackground())
+
+        slides = SlideDeck()
+        slides.background = "test.png"
+        assertFalse(slides.shouldSetBackground())
     }
 
 }
