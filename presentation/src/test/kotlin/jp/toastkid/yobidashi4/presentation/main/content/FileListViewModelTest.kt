@@ -49,8 +49,6 @@ import org.koin.dsl.module
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.FileTime
-import kotlin.io.path.extension
-import kotlin.io.path.nameWithoutExtension
 
 class FileListViewModelTest {
 
@@ -110,7 +108,10 @@ class FileListViewModelTest {
 
         val consumed = subject.onKeyEvent(
             androidx.compose.ui.input.key.KeyEvent(
-                Key.Z, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true
+                Key.Z,
+                KeyEventType.KeyUp,
+                isCtrlPressed = true,
+                isShiftPressed = true
             )
         )
 
