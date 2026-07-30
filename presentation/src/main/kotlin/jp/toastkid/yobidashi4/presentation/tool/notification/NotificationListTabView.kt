@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -96,6 +97,14 @@ internal fun NotificationListTabView() {
                 viewModel.start(Dispatchers.IO)
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.scrollEventFlow()
+            .distinctUntilChanged()
+            .collect {
+                viewModel.listState().animateScrollToItem(it)
+            }
     }
 }
 
