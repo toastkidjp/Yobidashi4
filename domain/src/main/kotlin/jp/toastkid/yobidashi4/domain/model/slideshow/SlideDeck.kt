@@ -18,4 +18,8 @@ data class SlideDeck(
         slides.map(Slide::extractImageUrls).flatten().forEach(imageUrls::add)
         return imageUrls
     }
+
+    fun shouldSetBackground(): Boolean =
+        slides.isEmpty() && background.isBlank()
+
 }
