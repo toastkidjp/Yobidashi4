@@ -33,7 +33,7 @@ class NotificationListTabViewModel : KoinComponent {
 
     fun scrollEventFlow(): SharedFlow<Int> = scrollEventFlow
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
+    fun onKeyEvent(it: KeyEvent): Boolean {
         return when (it.key) {
             Key.DirectionUp -> {
                 scrollEventFlow.tryEmit(0)
