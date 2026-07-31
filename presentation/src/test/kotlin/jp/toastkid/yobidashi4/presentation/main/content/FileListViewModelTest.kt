@@ -79,7 +79,9 @@ class FileListViewModelTest {
         every { fileListItemMetaExtractor.make(any()) } returns FileListItemMeta("test", 0L)
 
         mockkStatic(Files::class)
-        every { Files.getLastModifiedTime(any()) } answers { FileTime.fromMillis(System.currentTimeMillis()) }
+        every { Files.getLastModifiedTime(any()) } answers {
+            FileTime.fromMillis(System.currentTimeMillis())
+        }
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 10000
 
