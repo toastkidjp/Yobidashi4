@@ -22,7 +22,6 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -88,7 +87,6 @@ class NotificationListTabViewModelTest {
     @Test
     fun onKeyEvent() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
