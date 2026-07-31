@@ -57,7 +57,7 @@ internal fun NotificationListTabView() {
         elevation = 4.dp,
         modifier = Modifier
             .onKeyEvent {
-                return@onKeyEvent viewModel.onKeyEvent(coroutineScope, it)
+                return@onKeyEvent viewModel.onKeyEvent(it)
             }
             .focusRequester(viewModel.focusRequester())
             .focusable(true)
