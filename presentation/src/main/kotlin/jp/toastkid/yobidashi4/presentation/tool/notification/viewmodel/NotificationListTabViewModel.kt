@@ -9,7 +9,6 @@ import androidx.compose.ui.input.key.key
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +33,6 @@ class NotificationListTabViewModel : KoinComponent {
 
     fun scrollEventFlow(): SharedFlow<Int> = scrollEventFlow
 
-    private val scrollAction = KeyboardScrollAction(state)
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
         return when (it.key) {
             Key.DirectionUp -> {
