@@ -61,7 +61,6 @@ import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import jp.toastkid.yobidashi4.presentation.slideshow.view.CodeBlockView
 import jp.toastkid.yobidashi4.presentation.slideshow.view.TableLineView
-import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -113,7 +112,6 @@ fun MarkdownPreview(
 
     LaunchedEffect(content) {
         viewModel.scrollEventFlow()
-            .distinctUntilChanged()
             .collect {
                 scrollState.animateScrollBy(it)
             }
