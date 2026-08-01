@@ -33,6 +33,8 @@ class WebHistoryViewModel : KoinComponent {
 
     private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss").withLocale(Locale.ENGLISH)
 
+    private val allItems = mutableStateListOf<WebHistory>()
+
     private val list = mutableStateListOf<WebHistory>()
 
     private val state = LazyListState()
@@ -51,14 +53,34 @@ class WebHistoryViewModel : KoinComponent {
     fun launch(coroutineScope: CoroutineScope, tab: WebHistoryTab) {
         reloadItems()
         focusRequester().requestFocus()
+
+        coroutineScope.launch {
+            viewModel.finderFlow().collect { order ->
+                list.clear()
+
+                if (order.target.isEmpty()) {
+                    list.addAll(allItems)
+                    return@collect
+                }
+
+                list.addAll(allItems.filter {
+                    it.title.contains(order.target) ||
+                            it.url.contains(order.target)
+                })
+            }
+        }
+
         coroutineScope.launch {
             state.scrollToItem(tab.scrollPosition())
         }
     }
 
     private fun reloadItems() {
+        allItems.clear()
         list.clear()
-        repository.readAll().sortedByDescending { it.lastVisitedTime }.forEach(list::add)
+        val sortedByDescending = repository.readAll().sortedByDescending { it.lastVisitedTime }
+        sortedByDescending.forEach(allItems::add)
+        sortedByDescending.forEach(list::add)
     }
 
     fun list(): List<WebHistory> = list
@@ -108,9 +130,10 @@ class WebHistoryViewModel : KoinComponent {
 
     fun clear() {
         val current = mutableListOf<WebHistory>().also {
-            it.addAll(list)
+            it.addAll(allItems)
         }
 
+        allItems.clear()
         list.clear()
         repository.clear()
 
