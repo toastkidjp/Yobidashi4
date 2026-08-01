@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
@@ -14,6 +17,8 @@ import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.main.content.sort.TableSorter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.concurrent.atomic.AtomicReference
@@ -46,8 +51,36 @@ class TableViewModel : KoinComponent {
 
     fun listState() = state
 
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+
+    fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
+
     fun scrollAction(coroutineScope: CoroutineScope, key: Key, isCtrlPressed: Boolean): Boolean {
         return scrollAction.invoke(coroutineScope, key, isCtrlPressed)
+    }
+
+    fun onKeyEvent(it: KeyEvent): Boolean {
+        return when (it.key) {
+            Key.DirectionUp -> {
+                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
+                scrollEventFlow.tryEmit(-1f * max)
+                true
+            }
+            Key.DirectionDown -> {
+                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
+                scrollEventFlow.tryEmit(max)
+                true
+            }
+            Key.PageUp -> {
+                scrollEventFlow.tryEmit(-300f)
+                true
+            }
+            Key.PageDown -> {
+                scrollEventFlow.tryEmit(300f)
+                true
+            }
+            else -> false
+        }
     }
 
     suspend fun start(tab: TableTab) {
