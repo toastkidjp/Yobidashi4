@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,8 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -55,7 +54,7 @@ fun ConverterToolTabView() {
                 .padding(8.dp)
                 .verticalScroll(viewModel.scrollState())
                 .fillMaxWidth()
-                .onKeyEvent { viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed) }
+                .onKeyEvent { viewModel.keyboardScrollAction(it) }
                 .focusRequester(viewModel.focusRequester())
                 .semantics { contentDescription = "surface" }
             ) {
@@ -76,6 +75,11 @@ fun ConverterToolTabView() {
 
             LaunchedEffect(Unit) {
                 viewModel.launch()
+
+                viewModel.scrollEventFlow()
+                    .collect {
+                        viewModel.scrollState().animateScrollBy(it)
+                    }
             }
         }
     }
