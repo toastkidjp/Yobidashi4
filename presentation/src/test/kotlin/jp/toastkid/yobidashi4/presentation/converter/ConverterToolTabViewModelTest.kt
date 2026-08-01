@@ -8,8 +8,11 @@
 package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.TestMonotonicFrameClock
 import androidx.compose.ui.test.runComposeUiTest
@@ -70,6 +73,13 @@ class ConverterToolTabViewModelTest {
                 }
             }
         }
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun keyboardScrollAction2() {
+        subject.keyboardScrollAction(KeyEvent(Key.DirectionUp, KeyEventType.KeyUp))
+        subject.keyboardScrollAction(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown))
     }
 
 }
