@@ -13,6 +13,7 @@ import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -37,6 +38,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -45,8 +47,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
@@ -69,7 +69,7 @@ fun TableView(tab: TableTab) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            viewModel.scrollAction(coroutineScope, it.key, it.isCtrlPressed)
+            viewModel.onKeyEvent(it)
         }.focusRequester(viewModel.focusRequester()).focusable(true)
     ) {
         Box {
@@ -145,6 +145,11 @@ fun TableView(tab: TableTab) {
                 }
             }
         }
+    }
+
+    LaunchedEffect(tab) {
+        viewModel.scrollEventFlow()
+            .collect { viewModel.listState().animateScrollBy(it) }
     }
 }
 
