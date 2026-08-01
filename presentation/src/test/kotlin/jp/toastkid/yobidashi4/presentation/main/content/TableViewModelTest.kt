@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -26,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -79,6 +83,18 @@ class TableViewModelTest {
         subject.scrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionDown, true)
 
         assertNotNull(subject.listState())
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEvent() {
+        assertTrue(subject.onKeyEvent(KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)))
+        assertTrue(subject.onKeyEvent(KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = false)))
+        assertTrue(subject.onKeyEvent(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)))
+        assertTrue(subject.onKeyEvent(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = false)))
+        assertTrue(subject.onKeyEvent(KeyEvent(Key.PageUp, KeyEventType.KeyDown)))
+        assertTrue(subject.onKeyEvent(KeyEvent(Key.PageDown, KeyEventType.KeyDown)))
+        assertFalse(subject.onKeyEvent(KeyEvent(Key.Z, KeyEventType.KeyDown)))
     }
 
     @Test
