@@ -29,6 +29,7 @@ import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,8 +40,6 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.UUID
-import kotlin.math.max
-import kotlin.math.min
 
 class ChatTabViewModel : KoinComponent {
 
@@ -173,44 +172,20 @@ class ChatTabViewModel : KoinComponent {
         messages.set(messages.lastIndex, element.copy(text = element.text + newText))
     }
 
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+
+    fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
+
+    private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
+
     fun onChatListKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
         if (keyEvent.type != KeyEventType.KeyDown) {
             return false
         }
 
-        return when {
-            keyEvent.key == Key.DirectionUp && keyEvent.isCtrlPressed -> {
-                coroutineScope.launch {
-                    scrollState.scrollToItem(0, 0)
-                }
-                return true
-            }
-            keyEvent.key == Key.DirectionDown && keyEvent.isCtrlPressed -> {
-                coroutineScope.launch {
-                    scrollState.scrollToItem(scrollState.layoutInfo.totalItemsCount - 1, 0)
-                }
-                return true
-            }
-            keyEvent.key == Key.DirectionUp -> {
-                coroutineScope.launch {
-                    scrollState.scrollToItem(max(0, scrollState.firstVisibleItemIndex - 1), 0)
-                }
-                return true
-            }
-            keyEvent.key == Key.DirectionDown -> {
-                coroutineScope.launch {
-                    scrollState.scrollToItem(
-                        min(
-                            scrollState.layoutInfo.totalItemsCount - 1,
-                            scrollState.firstVisibleItemIndex + 1
-                        ),
-                        0
-                    )
-                }
-                return true
-            }
-            else -> false
-        }
+        val result = keyboardDrivenScrollEventHandler.invoke(keyEvent)
+        scrollEventFlow.tryEmit(result.delta)
+        return result.consumed
     }
 
     fun textInput() = textInput
