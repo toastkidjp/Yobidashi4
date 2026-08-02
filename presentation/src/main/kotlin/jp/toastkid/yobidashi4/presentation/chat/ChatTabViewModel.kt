@@ -266,7 +266,7 @@ class ChatTabViewModel : KoinComponent {
         sendEventFlow.tryEmit(UUID.randomUUID())
     }
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
+    fun onKeyEvent(it: KeyEvent): Boolean {
         if (textInput().composition == null && it.isCtrlPressed && it.key == Key.Enter) {
             trySend()
             return true
