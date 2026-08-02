@@ -4,11 +4,9 @@ import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.text.font.FontWeight
+import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -23,28 +21,12 @@ class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
 
     fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
 
+    private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
+
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
-        return when (it.key) {
-            Key.DirectionUp -> {
-                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
-                scrollEventFlow.tryEmit(-1f * max)
-                true
-            }
-            Key.DirectionDown -> {
-                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
-                scrollEventFlow.tryEmit(max)
-                true
-            }
-            Key.PageUp -> {
-                scrollEventFlow.tryEmit(-300f)
-                true
-            }
-            Key.PageDown -> {
-                scrollEventFlow.tryEmit(300f)
-                true
-            }
-            else -> false
-        }
+        val result = keyboardDrivenScrollEventHandler.invoke(it)
+        scrollEventFlow.tryEmit(result.delta)
+        return result.consumed
     }
 
     fun extractText(it: String, taskList: Boolean): String {
