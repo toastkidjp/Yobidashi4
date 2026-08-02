@@ -6,13 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
+import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.main.content.sort.TableSorter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -59,28 +58,12 @@ class TableViewModel : KoinComponent {
         return scrollAction.invoke(coroutineScope, key, isCtrlPressed)
     }
 
-    fun onKeyEvent(it: KeyEvent): Boolean {
-        return when (it.key) {
-            Key.DirectionUp -> {
-                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
-                scrollEventFlow.tryEmit(-1f * max)
-                true
-            }
-            Key.DirectionDown -> {
-                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
-                scrollEventFlow.tryEmit(max)
-                true
-            }
-            Key.PageUp -> {
-                scrollEventFlow.tryEmit(-300f)
-                true
-            }
-            Key.PageDown -> {
-                scrollEventFlow.tryEmit(300f)
-                true
-            }
-            else -> false
-        }
+    private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
+
+    fun onKeyEvent(keyEvent: KeyEvent): Boolean {
+        val result = keyboardDrivenScrollEventHandler.invoke(keyEvent)
+        scrollEventFlow.tryEmit(result.delta)
+        return result.consumed
     }
 
     suspend fun start(tab: TableTab) {
