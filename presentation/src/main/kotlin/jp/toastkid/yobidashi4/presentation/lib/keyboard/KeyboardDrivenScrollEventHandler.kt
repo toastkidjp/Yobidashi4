@@ -21,7 +21,7 @@ class KeyboardDrivenScrollEventHandler {
                 KeyboardDrivenScrollResult(-1f * max, true)
             }
             Key.DirectionDown -> {
-                val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
+                val max = if (it.isCtrlPressed) 100_000f else 50f
                 KeyboardDrivenScrollResult(max, true)
             }
             Key.PageUp -> {
@@ -30,7 +30,7 @@ class KeyboardDrivenScrollEventHandler {
             Key.PageDown -> {
                 KeyboardDrivenScrollResult(300f, true)
             }
-            else -> KeyboardDrivenScrollResult(-1f, false)
+            else -> KeyboardDrivenScrollResult(0f, false)
         }
     }
     
