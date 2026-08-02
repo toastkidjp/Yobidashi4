@@ -9,7 +9,6 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.text.font.FontWeight
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -23,8 +22,6 @@ class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
     fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
-
-    private val scrollAction = KeyboardScrollAction(scrollState)
 
     fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
         return when (it.key) {
