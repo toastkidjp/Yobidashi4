@@ -4,7 +4,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
@@ -15,7 +14,6 @@ import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEven
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.main.content.sort.TableSorter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.core.component.KoinComponent
@@ -53,10 +51,6 @@ class TableViewModel : KoinComponent {
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
     fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
-
-    fun scrollAction(coroutineScope: CoroutineScope, key: Key, isCtrlPressed: Boolean): Boolean {
-        return scrollAction.invoke(coroutineScope, key, isCtrlPressed)
-    }
 
     private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
 
