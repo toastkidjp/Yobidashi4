@@ -277,7 +277,6 @@ class ChatTabViewModelTest {
         subject.textInput().setTextAndPlaceCursorAtEnd("test")
 
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.Enter, KeyEventType.KeyUp, isCtrlPressed = true)
         )
         assertTrue(consumed)
@@ -289,7 +288,6 @@ class ChatTabViewModelTest {
         subject.textInput().setTextAndPlaceCursorAtEnd("test")
 
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.Enter, KeyEventType.KeyUp, isAltPressed = true)
         )
         assertFalse(consumed)
@@ -299,7 +297,6 @@ class ChatTabViewModelTest {
     @Test
     fun onKeyEventOtherKey() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.One, KeyEventType.KeyUp, isCtrlPressed = true)
         )
         assertFalse(consumed)
