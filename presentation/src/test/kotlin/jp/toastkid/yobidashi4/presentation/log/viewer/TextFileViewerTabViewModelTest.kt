@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.log.viewer
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -13,7 +16,6 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
@@ -62,12 +64,14 @@ class TextFileViewerTabViewModelTest {
         unmockkAll()
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun keyboardScrollAction() {
-        subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, false)
-        subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, true)
+        subject.keyboardScrollAction(KeyEvent(Key.DirectionUp, KeyEventType.KeyUp))
+        subject.keyboardScrollAction(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown))
     }
 
+    @OptIn(InternalComposeUiApi::class)
     @Test
     fun openWithKeyboardShortcut() {
         runBlocking {
@@ -78,7 +82,7 @@ class TextFileViewerTabViewModelTest {
             every { Files.readAllLines(any()) } returns listOf("test")
             val path = mockk<Path>()
             subject.launch(path, Dispatchers.Unconfined)
-            subject.keyboardScrollAction(CoroutineScope(Dispatchers.Unconfined), Key.O, true)
+            subject.keyboardScrollAction(KeyEvent(Key.O, KeyEventType.KeyUp, isCtrlPressed = true))
 
             verify { mainViewModel.openFile(path) }
         }
