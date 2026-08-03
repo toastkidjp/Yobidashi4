@@ -86,7 +86,12 @@ class FileRenamerImplementationTest {
         fileSystem.write(path) {}
 
         runBlocking {
-            subject.invoke(listOf(path.toNioPath()), "test", false, System::lineSeparator)
+            subject.invoke(
+                listOf(path.toNioPath()),
+                "test",
+                false,
+                System::lineSeparator
+            )
 
             verify { fileSystem.copy(any(), any()) }
         }
