@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.text.font.FontWeight
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import org.koin.core.component.KoinComponent
@@ -23,7 +22,7 @@ class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
 
     private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
 
-    fun onKeyEvent(coroutineScope: CoroutineScope, it: KeyEvent): Boolean {
+    fun onKeyEvent(it: KeyEvent): Boolean {
         val result = keyboardDrivenScrollEventHandler.invoke(it)
         scrollEventFlow.tryEmit(result.delta)
         return result.consumed
