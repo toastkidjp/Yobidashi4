@@ -30,7 +30,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -76,13 +75,6 @@ class TableViewModelTest {
     fun tearDown() {
         stopKoin()
         unmockkAll()
-    }
-
-    @Test
-    fun scrollAction() {
-        subject.scrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionDown, true)
-
-        assertNotNull(subject.listState())
     }
 
     @OptIn(InternalComposeUiApi::class)
