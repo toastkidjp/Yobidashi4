@@ -4,11 +4,16 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
+import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -32,14 +37,24 @@ class TextFileViewerTabViewModel : KoinComponent {
 
     private val lastPath = AtomicReference<Path>()
 
-    fun keyboardScrollAction(coroutineScope: CoroutineScope, key: Key, isCtrlPressed: Boolean): Boolean {
-        if (isCtrlPressed && key == Key.O) {
+    private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
+
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+
+    fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
+
+    fun keyboardScrollAction(keyEvent: KeyEvent): Boolean {
+        if (keyEvent.isCtrlPressed && keyEvent.key == Key.O) {
             val path = lastPath.get()
             mainViewModel.openFile(path)
             return true
         }
 
-        return keyboardScrollAction.invoke(coroutineScope, key, isCtrlPressed)
+        val keyboardDrivenScrollResult = keyboardDrivenScrollEventHandler.invoke(keyEvent)
+        if (keyboardDrivenScrollResult.delta != -1f) {
+            scrollEventFlow.tryEmit(keyboardDrivenScrollResult.delta)
+        }
+        return keyboardDrivenScrollResult.consumed
     }
 
     fun focusRequester(): FocusRequester = focusRequester
