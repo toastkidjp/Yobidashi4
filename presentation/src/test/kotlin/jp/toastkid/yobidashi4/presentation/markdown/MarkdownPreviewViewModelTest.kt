@@ -20,8 +20,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -79,7 +77,6 @@ class MarkdownPreviewViewModelTest {
     @Test
     fun onKeyEvent() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
         )
 
@@ -90,7 +87,6 @@ class MarkdownPreviewViewModelTest {
     @Test
     fun noopOnKeyEventWithWebSearchShortcutWithKeyPressed() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true)
         )
 
@@ -102,7 +98,6 @@ class MarkdownPreviewViewModelTest {
     @Test
     fun elseCaseOnKeyEventWithWebSearchShortcut() {
         val consumed = subject.onKeyEvent(
-            CoroutineScope(Dispatchers.Unconfined),
             KeyEvent(Key.Q, KeyEventType.KeyUp, isCtrlPressed = true, isShiftPressed = true)
         )
 
