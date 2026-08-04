@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -24,8 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -80,7 +80,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
             modifier = withDrawBehind
                 .onKeyEvent {
-                    return@onKeyEvent viewModel.keyboardScrollAction(coroutineScope, it.key, it.isCtrlPressed)
+                    return@onKeyEvent viewModel.keyboardScrollAction(it)
                 }
                 .focusRequester(viewModel.focusRequester())
                 .verticalScroll(viewModel.scrollState())
@@ -128,5 +128,10 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             adapter = rememberScrollbarAdapter(viewModel.scrollState()),
             modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
         )
+    }
+
+    LaunchedEffect(slide) {
+        viewModel.scrollEventFlow()
+            .collect { viewModel.scrollState().animateScrollBy(it) }
     }
 }
