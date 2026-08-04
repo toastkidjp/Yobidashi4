@@ -24,7 +24,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
@@ -37,8 +36,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 @Composable
 internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
     val viewModel = remember { TextFileViewerTabViewModel() }
-
-    val coroutineScope = rememberCoroutineScope()
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
