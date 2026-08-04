@@ -79,9 +79,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
         Column(
             horizontalAlignment = if (slide.isFront()) Alignment.CenterHorizontally else Alignment.Start,
             modifier = withDrawBehind
-                .onKeyEvent {
-                    return@onKeyEvent viewModel.keyboardScrollAction(it)
-                }
+                .onKeyEvent(viewModel::keyboardScrollAction)
                 .focusRequester(viewModel.focusRequester())
                 .verticalScroll(viewModel.scrollState())
         ) {
