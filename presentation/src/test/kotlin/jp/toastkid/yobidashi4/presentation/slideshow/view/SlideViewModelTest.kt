@@ -1,6 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.view
 
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -39,6 +43,13 @@ class SlideViewModelTest {
         subject.requestFocus()
 
         verify { focusRequester.requestFocus() }
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun keyboardScrollAction() {
+        subject.keyboardScrollAction(KeyEvent(Key.DirectionUp, KeyEventType.KeyUp))
+        subject.keyboardScrollAction(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown))
     }
 
 }
