@@ -61,7 +61,7 @@ fun ChatTabView(chatTab: ChatTab) {
     ) {
         Column(
             modifier = Modifier
-                .onKeyEvent { viewModel.onChatListKeyEvent(coroutineScope, it) }
+                .onKeyEvent { viewModel.onChatListKeyEvent(it) }
                 .semantics { contentDescription = "Chat list" }
         ) {
             Box(Modifier.padding(8.dp).weight(1f)) {
