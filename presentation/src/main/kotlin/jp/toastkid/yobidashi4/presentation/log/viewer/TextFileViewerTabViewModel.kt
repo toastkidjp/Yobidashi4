@@ -7,7 +7,6 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,8 +29,6 @@ class TextFileViewerTabViewModel : KoinComponent {
     private val listState = LazyListState()
 
     private val textState = mutableStateListOf<String>()
-
-    private val keyboardScrollAction = KeyboardScrollAction(listState)
 
     private val focusRequester = FocusRequester()
 
