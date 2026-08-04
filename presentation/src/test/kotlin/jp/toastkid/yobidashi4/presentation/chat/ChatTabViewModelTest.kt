@@ -323,7 +323,6 @@ class ChatTabViewModelTest {
             KeyEvent(Key.Q, KeyEventType.KeyUp) to false
         ).forEach {
             val consumed = subject.onChatListKeyEvent(
-                CoroutineScope(Dispatchers.Unconfined),
                 it.key
             )
             assertEquals(it.value, consumed)
