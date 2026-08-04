@@ -178,7 +178,7 @@ class ChatTabViewModel : KoinComponent {
 
     private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
 
-    fun onChatListKeyEvent(coroutineScope: CoroutineScope, keyEvent: KeyEvent): Boolean {
+    fun onChatListKeyEvent(keyEvent: KeyEvent): Boolean {
         if (keyEvent.type != KeyEventType.KeyDown) {
             return false
         }
