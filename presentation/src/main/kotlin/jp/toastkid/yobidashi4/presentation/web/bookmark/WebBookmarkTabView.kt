@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,14 +21,13 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,7 +48,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            return@onKeyEvent viewModel.scrollAction(coroutineScope, it.key, it.isCtrlPressed)
+            return@onKeyEvent viewModel.onKeyEvent(it)
         }.focusRequester(viewModel.focusRequester()).focusable(true)
     ) {
         Box {
@@ -100,6 +100,13 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
                 adapter = rememberScrollbarAdapter(viewModel.listState()),
                 modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
             )
+
+            LaunchedEffect(tab) {
+                viewModel.scrollEventFlow()
+                    .collect {
+                        viewModel.listState().animateScrollBy(it)
+                    }
+            }
 
             DisposableEffect(tab) {
                 viewModel.launch(coroutineScope, tab.scrollPosition())
