@@ -1,8 +1,11 @@
 package jp.toastkid.yobidashi4.presentation.web.history
 
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -86,6 +89,13 @@ class WebHistoryViewModelTest {
     @Test
     fun scrollAction() {
         subject.scrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, false)
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEvent() {
+        subject.onKeyEvent(KeyEvent(Key.DirectionUp, KeyEventType.KeyUp))
+        subject.onKeyEvent(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown))
     }
 
     @Test
