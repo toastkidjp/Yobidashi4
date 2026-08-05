@@ -68,4 +68,18 @@ class FileListItemMetaExtractorImplementationTest {
         assertEquals("120.56 KB | 2023-12-10(Sun) 09:55:56", fileListItem?.subText)
     }
 
+    @Test
+    fun subTextUnder1K() {
+        val path = "test".toPath()
+        fakeFileSystem.write(path) {}
+        fakeFileSystem = spyk(fakeFileSystem)
+        every { fakeFileSystem.metadata(any()).size } returns 123L
+        every { fakeFileSystem.metadata(any()).lastModifiedAtMillis } returns 1702169756151
+        subject = FileListItemMetaExtractorImplementation(fakeFileSystem)
+
+        val fileListItem = subject.make(path.toNioPath())
+
+        assertEquals("123 B | 2023-12-10(Sun) 09:55:56", fileListItem?.subText)
+    }
+
 }
