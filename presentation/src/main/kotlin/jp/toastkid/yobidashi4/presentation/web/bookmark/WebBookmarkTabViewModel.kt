@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
@@ -15,8 +16,11 @@ import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -46,6 +50,18 @@ class WebBookmarkTabViewModel : KoinComponent {
 
     fun scrollAction(coroutineScope: CoroutineScope, key: Key, controlDown: Boolean) =
         scrollAction.invoke(coroutineScope, key, controlDown)
+
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+
+    fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
+
+    private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
+
+    fun onKeyEvent(keyEvent: KeyEvent): Boolean {
+        val result = keyboardDrivenScrollEventHandler.invoke(keyEvent)
+        scrollEventFlow.tryEmit(result.delta)
+        return result.consumed
+    }
 
     fun launch(coroutineScope: CoroutineScope, scrollPosition: Int) {
         repository.list().forEach(bookmarks::add)
