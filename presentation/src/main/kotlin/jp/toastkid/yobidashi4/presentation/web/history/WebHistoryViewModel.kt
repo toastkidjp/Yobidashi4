@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
@@ -50,9 +49,6 @@ class WebHistoryViewModel : KoinComponent {
     fun listState() = state
 
     fun focusRequester() = focusRequester
-
-    fun scrollAction(coroutineScope: CoroutineScope, key: Key, controlDown: Boolean) =
-        scrollAction.invoke(coroutineScope, key, controlDown)
 
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
