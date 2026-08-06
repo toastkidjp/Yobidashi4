@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 import androidx.compose.foundation.ScrollState
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.KeyEvent
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -11,8 +10,6 @@ import kotlinx.coroutines.flow.SharedFlow
 class SlideViewModel {
 
     private val scrollState = ScrollState(0)
-
-    private val keyboardScrollAction =  KeyboardScrollAction(scrollState)
 
     private val focusRequester =  FocusRequester()
 
