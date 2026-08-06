@@ -36,7 +36,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -71,8 +70,6 @@ fun MarkdownPreview(
     modifier: Modifier
 ) {
     val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
-
-    val coroutineScope = rememberCoroutineScope()
 
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
