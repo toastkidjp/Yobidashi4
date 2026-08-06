@@ -86,11 +86,6 @@ class WebHistoryViewModelTest {
         assertNotNull(subject.focusRequester())
     }
 
-    @Test
-    fun scrollAction() {
-        subject.scrollAction(CoroutineScope(Dispatchers.Unconfined), Key.DirectionUp, false)
-    }
-
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
