@@ -44,7 +44,6 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -56,9 +55,7 @@ internal fun NotificationListTabView() {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier
-            .onKeyEvent {
-                return@onKeyEvent viewModel.onKeyEvent(it)
-            }
+            .onKeyEvent(viewModel::onKeyEvent)
             .focusRequester(viewModel.focusRequester())
             .focusable(true)
     ) {
@@ -101,7 +98,6 @@ internal fun NotificationListTabView() {
 
     LaunchedEffect(Unit) {
         viewModel.scrollEventFlow()
-            .distinctUntilChanged()
             .collect {
                 viewModel.listState().animateScrollToItem(it)
             }
