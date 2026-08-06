@@ -12,7 +12,6 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -43,8 +42,6 @@ class WebHistoryViewModel : KoinComponent {
     private val state = LazyListState()
 
     private val focusRequester = FocusRequester()
-
-    private val scrollAction = KeyboardScrollAction(state)
 
     fun listState() = state
 
