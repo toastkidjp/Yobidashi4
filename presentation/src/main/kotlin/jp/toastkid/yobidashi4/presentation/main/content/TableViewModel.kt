@@ -9,7 +9,6 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.aggregation.FindResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.main.content.sort.TableSorter
@@ -33,8 +32,6 @@ class TableViewModel : KoinComponent {
     private val focusRequester = FocusRequester()
 
     private val state = LazyListState()
-
-    private val scrollAction = KeyboardScrollAction(state)
 
     private val highlighter = KeywordHighlighter()
 
