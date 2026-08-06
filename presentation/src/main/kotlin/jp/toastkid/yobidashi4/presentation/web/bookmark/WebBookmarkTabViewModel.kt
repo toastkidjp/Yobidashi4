@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -36,8 +35,6 @@ class WebBookmarkTabViewModel : KoinComponent {
     private val state = LazyListState()
 
     private val focusRequester = FocusRequester()
-
-    private val scrollAction = KeyboardScrollAction(state)
 
     private val faviconFolder = WebIcon()
 
