@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -41,6 +43,10 @@ class TextFileViewerTabViewModel : KoinComponent {
     fun scrollEventFlow(): SharedFlow<Float> = scrollEventFlow
 
     fun keyboardScrollAction(keyEvent: KeyEvent): Boolean {
+        if (keyEvent.type != KeyEventType.KeyDown) {
+            return false
+        }
+
         if (keyEvent.isCtrlPressed && keyEvent.key == Key.O) {
             val path = lastPath.get()
             mainViewModel.openFile(path)
