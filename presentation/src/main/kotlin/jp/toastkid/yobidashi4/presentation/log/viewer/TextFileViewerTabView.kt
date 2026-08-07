@@ -27,9 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 
@@ -41,9 +39,6 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier.onKeyEvent {
-            if (it.type != KeyEventType.KeyDown) {
-                return@onKeyEvent false
-            }
             viewModel.keyboardScrollAction(it)
         }
             .focusRequester(viewModel.focusRequester())
