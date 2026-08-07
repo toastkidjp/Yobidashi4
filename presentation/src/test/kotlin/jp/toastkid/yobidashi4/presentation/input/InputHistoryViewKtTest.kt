@@ -9,6 +9,8 @@ import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -63,7 +65,7 @@ class InputHistoryViewKtTest {
             InputHistory("test", 1),
             InputHistory("test2", 2),
         )
-        every { anyConstructed<InputHistoryViewModel>().launch(any(), any()) } just Runs
+        coEvery { anyConstructed<InputHistoryViewModel>().launch(any()) } just Runs
     }
 
     @AfterEach
@@ -95,7 +97,7 @@ class InputHistoryViewKtTest {
             verify { anyConstructed<InputHistoryViewModel>().delete(any()) }
             verify { anyConstructed<InputHistoryViewModel>().dateTimeString(any()) }
             verify { anyConstructed<InputHistoryViewModel>().items() }
-            verify { anyConstructed<InputHistoryViewModel>().launch(any(), any()) }
+            coVerify { anyConstructed<InputHistoryViewModel>().launch(any()) }
         }
     }
 }
