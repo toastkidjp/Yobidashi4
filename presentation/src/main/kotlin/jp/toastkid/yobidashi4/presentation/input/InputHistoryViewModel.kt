@@ -16,8 +16,6 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinde
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationInvoker
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.Instant
@@ -62,10 +60,8 @@ class InputHistoryViewModel : KoinComponent {
             .format(dateFormatter)
     }
 
-    fun launch(coroutineScope: CoroutineScope, tab: InputHistoryTab) {
-        coroutineScope.launch {
-            listState.scrollToItem(tab.scrollPosition())
-        }
+    suspend fun launch(tab: InputHistoryTab) {
+        listState().scrollToItem(tab.scrollPosition())
 
         val inputHistoryService = InputHistoryService(tab.category)
         inputHistoryService.all(items)
