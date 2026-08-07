@@ -1,15 +1,17 @@
 package jp.toastkid.yobidashi4.presentation.input
 
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.clearMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
@@ -19,6 +21,7 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinde
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationInvoker
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -110,16 +113,18 @@ class InputHistoryViewModelTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun launch() {
-        runComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                subject.launch(coroutineScope, InputHistoryTab("test"))
-                subject.delete(InputHistory("test", 1))
+    fun launch() = runTest {
+        subject = spyk(subject)
+        val listState = mockk<LazyListState>()
+        every { subject.listState() } returns listState
+        coEvery { listState.scrollToItem(any<Int>()) } just Runs
 
-                verify { anyConstructed<InputHistoryService>().all(any()) }
-            }
-        }
+        subject.launch(InputHistoryTab("test"))
+        subject.delete(InputHistory("test", 1))
+
+        verify { anyConstructed<InputHistoryService>().all(any()) }
+
+        clearMocks(subject)
     }
 
     @Test
