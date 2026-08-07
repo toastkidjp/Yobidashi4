@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -98,7 +99,9 @@ fun InputHistoryView(tab: InputHistoryTab) {
 
             val coroutineScope = rememberCoroutineScope()
             DisposableEffect(tab) {
-                viewModel.launch(coroutineScope, tab)
+                coroutineScope.launch {
+                    viewModel.launch(tab)
+                }
 
                 onDispose {
                     viewModel.onDispose(tab)
