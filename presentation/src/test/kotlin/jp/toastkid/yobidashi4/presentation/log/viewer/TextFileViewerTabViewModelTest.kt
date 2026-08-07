@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -69,6 +70,9 @@ class TextFileViewerTabViewModelTest {
     fun keyboardScrollAction() {
         subject.keyboardScrollAction(KeyEvent(Key.DirectionUp, KeyEventType.KeyUp))
         subject.keyboardScrollAction(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown))
+
+        assertFalse(subject.keyboardScrollAction(KeyEvent(Key.Q, KeyEventType.KeyUp, isCtrlPressed = true)))
+        assertFalse(subject.keyboardScrollAction(KeyEvent(Key.O, KeyEventType.KeyUp, isCtrlPressed = false)))
     }
 
     @OptIn(InternalComposeUiApi::class)
