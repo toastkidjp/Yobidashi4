@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.web.bookmark
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
@@ -12,6 +13,7 @@ import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -25,8 +27,7 @@ import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -92,7 +93,7 @@ class WebBookmarkTabViewModelTest {
     }
 
     @Test
-    fun launch() {
+    fun launch() = runTest {
         assertTrue(subject.bookmarks().isEmpty())
 
         subject = spyk(subject)
@@ -100,8 +101,11 @@ class WebBookmarkTabViewModelTest {
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
         every { repository.list() } returns listOf(mockk(), mockk())
+        val listState = mockk<LazyListState>()
+        every { subject.listState() } returns listState
+        coEvery { listState.scrollToItem(any()) } just Runs
 
-        subject.launch(CoroutineScope(Dispatchers.Unconfined), 20)
+        subject.launch(20)
 
         verify { focusRequester.requestFocus() }
         verify { repository.list() }
