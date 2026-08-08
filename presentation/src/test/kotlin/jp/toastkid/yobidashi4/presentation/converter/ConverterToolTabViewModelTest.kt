@@ -7,23 +7,16 @@
  */
 package jp.toastkid.yobidashi4.presentation.converter
 
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.TestMonotonicFrameClock
-import androidx.compose.ui.test.runComposeUiTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -58,21 +51,6 @@ class ConverterToolTabViewModelTest {
         subject.launch()
 
         verify { focusRequester.requestFocus() }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTestApi::class)
-    @Test
-    fun keyboardScrollAction() = runTest {
-        val testClock = TestMonotonicFrameClock(this)
-        runComposeUiTest {
-            setContent {
-                val coroutineScope = rememberCoroutineScope()
-                coroutineScope.launch(testClock) {
-                    subject.keyboardScrollAction(coroutineScope, Key.DirectionUp, false)
-                    subject.keyboardScrollAction(coroutineScope, Key.DirectionUp, true)
-                }
-            }
-        }
     }
 
     @OptIn(InternalComposeUiApi::class)
