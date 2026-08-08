@@ -37,6 +37,7 @@ import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -107,7 +108,9 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
             }
 
             DisposableEffect(tab) {
-                viewModel.launch(coroutineScope, tab.scrollPosition())
+                coroutineScope.launch {
+                    viewModel.launch(tab.scrollPosition())
+                }
 
                 onDispose {
                     viewModel.update(tab)
