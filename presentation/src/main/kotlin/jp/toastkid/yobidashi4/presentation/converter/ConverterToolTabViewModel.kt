@@ -9,11 +9,8 @@ package jp.toastkid.yobidashi4.presentation.converter
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
-import jp.toastkid.yobidashi4.presentation.lib.KeyboardScrollAction
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -22,12 +19,6 @@ class ConverterToolTabViewModel {
     private val state = ScrollState(0)
 
     fun scrollState() = state
-
-    private val keyboardScrollAction = KeyboardScrollAction(state)
-
-    fun keyboardScrollAction(coroutineScope: CoroutineScope, key: Key, isCtrlPressed: Boolean): Boolean {
-        return this.keyboardScrollAction.invoke(coroutineScope, key, isCtrlPressed)
-    }
 
     private val keyboardDrivenScrollEventHandler = KeyboardDrivenScrollEventHandler()
 
