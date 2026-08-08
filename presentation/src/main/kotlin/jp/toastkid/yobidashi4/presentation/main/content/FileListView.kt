@@ -44,7 +44,6 @@ import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuI
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
-import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.painterResource
 import java.nio.file.Path
 
@@ -170,7 +169,6 @@ internal fun FileListView(paths: List<Path>, modifier: Modifier = Modifier) {
 
     LaunchedEffect(paths) {
         viewModel.listScrollEventFlow()
-            .distinctUntilChanged()
             .collect {
                 viewModel.listState().scrollToItem(it, 0)
             }
