@@ -16,6 +16,7 @@ import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -23,14 +24,12 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIconViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlin.io.path.absolutePathString
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -38,6 +37,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
+import kotlin.io.path.absolutePathString
 
 class WebBookmarkTabViewKtTest {
 
@@ -77,7 +78,7 @@ class WebBookmarkTabViewKtTest {
         every { webBookmarkTab.withNewPosition(any()) } returns mockk()
         every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
 
-        every { anyConstructed<WebBookmarkTabViewModel>().launch(any(), any()) } just Runs
+        coEvery { anyConstructed<WebBookmarkTabViewModel>().launch(any()) } just Runs
         every { anyConstructed<WebBookmarkTabViewModel>().openUrl(any(), any()) } just Runs
         every { anyConstructed<WebBookmarkTabViewModel>().browseUri(any()) } just Runs
         every { anyConstructed<WebBookmarkTabViewModel>().clipText(any()) } just Runs
