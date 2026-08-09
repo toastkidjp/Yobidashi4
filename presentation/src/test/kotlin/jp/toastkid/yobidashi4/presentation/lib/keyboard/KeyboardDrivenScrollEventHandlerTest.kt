@@ -21,6 +21,7 @@ class KeyboardDrivenScrollEventHandlerTest {
         assertTrue(subject.invoke(KeyEvent(Key.PageUp, KeyEventType.KeyDown)).consumed)
         assertTrue(subject.invoke(KeyEvent(Key.PageDown, KeyEventType.KeyDown)).consumed)
         assertFalse(subject.invoke(KeyEvent(Key.Z, KeyEventType.KeyDown)).consumed)
+        assertFalse(subject.invoke(KeyEvent(Key.Z, KeyEventType.KeyUp)).consumed)
     }
 
 }
