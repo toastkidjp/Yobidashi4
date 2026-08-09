@@ -59,6 +59,10 @@ class FileRenameToolViewModel : KoinComponent {
     private val fileRenamer: FileRenamer by inject()
 
     fun rename() {
+        if (input.text.isEmpty()) {
+            return
+        }
+
         fileRenamer.invoke(paths, input.text, useResize50Percent.value, {
             viewModel
                 .showSnackbar(
