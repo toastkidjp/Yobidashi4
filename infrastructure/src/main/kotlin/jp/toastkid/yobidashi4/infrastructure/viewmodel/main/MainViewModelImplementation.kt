@@ -59,7 +59,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import okio.FileSystem
 import okio.Path.Companion.toOkioPath
@@ -75,8 +80,11 @@ import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.io.path.extension
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlin.streams.asSequence
 
 @Single
 class MainViewModelImplementation(
@@ -736,6 +744,25 @@ class MainViewModelImplementation(
     override suspend fun launchDroppedPathFlow() {
         droppedPathFlow
             .asSharedFlow()
+            .flatMapConcat { path ->
+                if (path.isRegularFile()) {
+                    return@flatMapConcat flowOf(path)
+                }
+
+                if (path.isDirectory()) {
+                    return@flatMapConcat try {
+                        Files.walk(path)
+                            .asSequence()
+                            .filter { it.isRegularFile() && !Files.isHidden(it) }
+                            .asFlow()
+                    } catch (e: Exception) {
+                        emptyFlow<Path>()
+                    }
+                }
+
+                emptyList<Path>().asFlow()
+            }
+            .flowOn(Dispatchers.IO)
             .collect {
                 val receiver = overrideReceiver.get()
                 if (receiver != null) {
