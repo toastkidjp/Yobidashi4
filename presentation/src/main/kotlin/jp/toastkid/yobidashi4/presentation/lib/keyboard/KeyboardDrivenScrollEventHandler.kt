@@ -9,12 +9,18 @@ package jp.toastkid.yobidashi4.presentation.lib.keyboard
 
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 
 class KeyboardDrivenScrollEventHandler {
     
     operator fun invoke(it: KeyEvent): KeyboardDrivenScrollResult {
+        if (it.type != KeyEventType.KeyDown) {
+            return KeyboardDrivenScrollResult(0f, false)
+        }
+
         return when (it.key) {
             Key.DirectionUp -> {
                 val max = if (it.isCtrlPressed) Float.MAX_VALUE else 50f
