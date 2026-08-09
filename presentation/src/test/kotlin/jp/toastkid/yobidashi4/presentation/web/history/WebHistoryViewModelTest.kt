@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.web.history
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
@@ -12,6 +13,7 @@ import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -27,8 +29,8 @@ import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -94,13 +96,17 @@ class WebHistoryViewModelTest {
     }
 
     @Test
-    fun launch() {
+    fun launch() = runTest {
         assertTrue(subject.list().isEmpty())
 
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
         every { focusRequester.requestFocus() } returns true
+        val listState = mockk<LazyListState>()
+        every { subject.listState() } returns listState
+        coEvery { listState.scrollToItem(any()) } just Runs
+        every { viewModel.finderFlow() } returns MutableSharedFlow(extraBufferCapacity = 1)
         every { repository.readAll() } returns listOf(
             WebHistory(
                 "test",
@@ -116,7 +122,7 @@ class WebHistoryViewModelTest {
         val tab = mockk<WebHistoryTab>()
         every { tab.scrollPosition() } returns 0
 
-        subject.launch(CoroutineScope(Dispatchers.Unconfined), tab)
+        subject.launch(tab)
 
         verify { repository.readAll() }
         assertEquals(2, subject.list().size)
