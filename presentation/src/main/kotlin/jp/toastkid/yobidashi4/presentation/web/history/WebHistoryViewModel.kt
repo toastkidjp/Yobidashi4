@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -59,11 +60,11 @@ class WebHistoryViewModel : KoinComponent {
         return result.consumed
     }
 
-    fun launch(coroutineScope: CoroutineScope, tab: WebHistoryTab) {
+    suspend fun launch(tab: WebHistoryTab) {
         reloadItems()
         focusRequester().requestFocus()
 
-        coroutineScope.launch {
+        CoroutineScope(Dispatchers.IO).launch() {
             viewModel.finderFlow().collect { order ->
                 list.clear()
 
@@ -79,9 +80,7 @@ class WebHistoryViewModel : KoinComponent {
             }
         }
 
-        coroutineScope.launch {
-            state.scrollToItem(tab.scrollPosition())
-        }
+        listState().scrollToItem(tab.scrollPosition())
     }
 
     private fun reloadItems() {
