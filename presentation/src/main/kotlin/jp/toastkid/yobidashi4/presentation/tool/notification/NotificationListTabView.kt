@@ -111,7 +111,7 @@ private fun ItemRow(
 ) {
     val titleState = remember { TextFieldState(item.title) }
     val textState = remember { TextFieldState(item.text) }
-    val dateTimeState = remember { (TextFieldState(item.dateTimeString())) }
+    val dateTimeState = remember { TextFieldState(item.dateTimeString()) }
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
     val headerColumnBackgroundColor = animateColorAsState(
