@@ -86,7 +86,7 @@ class TextFileViewerTabViewModelTest {
             every { Files.readAllLines(any()) } returns listOf("test")
             val path = mockk<Path>()
             subject.launch(path, Dispatchers.Unconfined)
-            subject.keyboardScrollAction(KeyEvent(Key.O, KeyEventType.KeyUp, isCtrlPressed = true))
+            subject.keyboardScrollAction(KeyEvent(Key.O, KeyEventType.KeyDown, isCtrlPressed = true))
 
             verify { mainViewModel.openFile(path) }
         }
