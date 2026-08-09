@@ -15,6 +15,7 @@ import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -54,7 +55,7 @@ class WebHistoryViewKtTest {
         mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
         mockkConstructor(WebHistoryViewModel::class)
-        every { anyConstructed<WebHistoryViewModel>().launch(any(), any()) } just Runs
+        coEvery { anyConstructed<WebHistoryViewModel>().launch(any()) } just Runs
         every { anyConstructed<WebHistoryViewModel>().onDispose(any()) } just Runs
         every { anyConstructed<WebHistoryViewModel>().listState() } returns LazyListState(0)
         every { anyConstructed<WebHistoryViewModel>().list() } returns mutableListOf(
