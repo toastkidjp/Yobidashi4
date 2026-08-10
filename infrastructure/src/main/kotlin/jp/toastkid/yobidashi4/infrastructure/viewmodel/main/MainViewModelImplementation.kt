@@ -51,6 +51,7 @@ import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
@@ -723,10 +724,12 @@ class MainViewModelImplementation(
         return findStatus.value
     }
 
+    private val ioContextProvider: IoContextProvider by inject()
+
     private val droppedPathFlow = MutableSharedFlow<Path>()
 
     override fun emitDroppedPath(paths: Collection<Path>) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioContextProvider()).launch {
             paths.forEach { droppedPathFlow.emit(it) }
         }
     }
