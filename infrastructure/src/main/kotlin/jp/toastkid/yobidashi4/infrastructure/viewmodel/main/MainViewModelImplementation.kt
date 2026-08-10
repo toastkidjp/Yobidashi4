@@ -765,7 +765,7 @@ class MainViewModelImplementation(
 
                 emptyList<Path>().asFlow()
             }
-            .flowOn(Dispatchers.IO)
+            .flowOn(ioContextProvider.invoke())
             .collect {
                 val receiver = overrideReceiver.get()
                 if (receiver != null) {
