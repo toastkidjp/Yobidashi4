@@ -56,7 +56,7 @@ class TextEditorOutputTransformationTest {
         subject = TextEditorOutputTransformation(
             TextFieldState(),
             true
-        ) { ParseResult("test", listOf(Triple(0, 1, SpanStyle()))) }
+        ) { ParseResult("# Test doc", listOf(Triple(0, 1, SpanStyle()))) }
 
         with(subject) {
             buffer.transformOutput()
