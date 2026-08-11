@@ -64,7 +64,7 @@ class WebHistoryViewModel : KoinComponent {
         reloadItems()
         focusRequester().requestFocus()
 
-        CoroutineScope(Dispatchers.IO).launch() {
+        CoroutineScope(Dispatchers.IO).launch {
             viewModel.finderFlow().collect { order ->
                 list.clear()
 
