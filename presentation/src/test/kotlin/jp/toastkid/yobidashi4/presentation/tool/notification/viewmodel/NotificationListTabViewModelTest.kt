@@ -86,11 +86,16 @@ class NotificationListTabViewModelTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        val consumed = subject.onKeyEvent(
-            KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)
+        assertTrue(
+            subject.onKeyEvent(
+                KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)
+            )
         )
-
-        assertTrue(consumed)
+        assertFalse(
+            subject.onKeyEvent(
+                KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true)
+            )
+        )
     }
 
     @Test
