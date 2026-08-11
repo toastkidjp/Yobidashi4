@@ -1428,7 +1428,8 @@ class MainViewModelImplementationTest {
         }
 
         val folder = makePathWithFolder("jpg")
-        val paths = listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif").map(::makePath)
+        val paths = listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif")
+            .map(::makePath)
             .union(folder)
         subject.emitDroppedPath(paths)
 
