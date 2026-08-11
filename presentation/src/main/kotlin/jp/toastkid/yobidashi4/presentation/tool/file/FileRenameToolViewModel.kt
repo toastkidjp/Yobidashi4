@@ -63,14 +63,14 @@ class FileRenameToolViewModel : KoinComponent {
             return
         }
 
-        fileRenamer.invoke(paths, input.text, useResize50Percent.value, {
+        fileRenamer.invoke(paths, input.text, useResize50Percent.value) {
             viewModel
                 .showSnackbar(
                     "Rename completed!",
                     "Open folder",
                     ::openFolder
                 )
-        })
+        }
     }
 
     private fun openFolder() {
