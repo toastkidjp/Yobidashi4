@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
+import jp.toastkid.yobidashi4.infrastructure.extension.extension
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
@@ -82,11 +83,8 @@ import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.io.path.extension
-import kotlin.io.path.isDirectory
-import kotlin.io.path.isRegularFile
 import kotlin.math.max
 import kotlin.math.roundToInt
-import kotlin.streams.asSequence
 
 @Single
 class MainViewModelImplementation(
@@ -748,41 +746,40 @@ class MainViewModelImplementation(
     override suspend fun launchDroppedPathFlow() {
         droppedPathFlow
             .asSharedFlow()
-            .flatMapConcat { path ->
-                if (path.isRegularFile()) {
+            .flatMapConcat { p ->
+                val path = p.toOkioPath()
+                if (fileSystem.metadata(path).isRegularFile) {
                     return@flatMapConcat flowOf(path)
                 }
 
-                if (path.isDirectory()) {
+                if (fileSystem.metadata(path).isDirectory) {
                     return@flatMapConcat try {
                         flow {
-                            Files.walk(path)
-                                .use {
-                                    it.asSequence()
-                                        .filter { it.isRegularFile() && !Files.isHidden(it) }
-                                }
+                            fileSystem.listRecursively(path)
+                                .filter { fileSystem.metadata(it).isRegularFile }
+                                .forEach { emit(it) }
                         }
                     } catch (e: Exception) {
-                        emptyFlow<Path>()
+                        emptyFlow()
                     }
                 }
 
-                emptyList<Path>().asFlow()
+                emptyList<okio.Path>().asFlow()
             }
             .flowOn(ioContextProvider.invoke())
             .collect {
                 val receiver = overrideReceiver.get()
                 if (receiver != null) {
-                    receiver.invoke(it)
+                    receiver.invoke(it.toNioPath())
                     return@collect
                 }
 
                 when (it.extension) {
                     "txt", "md", "log", "java", "kt", "py" -> {
-                        edit(it)
+                        edit(it.toNioPath())
                     }
                     "jpg", "webp", "png", "gif" -> {
-                        openTab(PhotoTab(it))
+                        openTab(PhotoTab(it.toNioPath()))
                     }
                     else -> Unit
                 }
