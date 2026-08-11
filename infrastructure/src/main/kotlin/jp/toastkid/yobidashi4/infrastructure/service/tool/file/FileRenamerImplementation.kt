@@ -41,7 +41,9 @@ class FileRenamerImplementation(
 
         CoroutineScope(ioContextProvider()).launch {
             paths.forEachIndexed { i, p ->
-                val renamedPath = AtomicReference(p.resolveSibling(makeRenamedFileName(baseName, i, p.extension)))
+                val renamedPath = AtomicReference(
+                    p.resolveSibling(makeRenamedFileName(baseName, i, p.extension))
+                )
                 var maxAttempts = 4
                 while (fileSystem.exists(renamedPath.get().toOkioPath())) {
                     val current = renamedPath.get()
