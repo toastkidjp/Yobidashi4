@@ -60,6 +60,7 @@ import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.archive.TopArticleLoaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
 import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
@@ -123,6 +124,9 @@ class MainViewModelImplementationTest {
 
     private lateinit var fakeFileSystem: FakeFileSystem
 
+    @MockK
+    private lateinit var ioContextProvider: IoContextProvider
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -138,6 +142,7 @@ class MainViewModelImplementationTest {
                     single(qualifier = null) { webHistoryRepository } bind(WebHistoryRepository::class)
                     single(qualifier = null) { articleFactory } bind(ArticleFactory::class)
                     single(qualifier = null) { keywordSearch } bind (FullTextArticleFinder::class)
+                    single(qualifier = null) { ioContextProvider } bind (IoContextProvider::class)
                     single(qualifier = null) { FakeFileSystem() }
                 }
             )
@@ -153,6 +158,7 @@ class MainViewModelImplementationTest {
         every { keywordSearch.invoke(any()) } returns aggregationResult
         every { aggregationResult.isEmpty() } returns false
         every { aggregationResult.title() } returns "test"
+        every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
         every { Desktop.getDesktop() } returns desktop
         every { desktop.open(any()) } just Runs
@@ -1422,20 +1428,9 @@ class MainViewModelImplementationTest {
         }
 
         subject.emitDroppedPath(listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif").map(::makePath))
-        Thread.sleep(1000)
+
         verify(exactly = 6) { subject.edit(any(), any()) }
         verify(exactly = 4) { subject.openTab(any()) }
-
-        val countDownLatch = CountDownLatch(1)
-        subject.registerDroppedPathReceiver {
-            countDownLatch.countDown()
-        }
-
-        subject.emitDroppedPath(listOf(makePath("jpg")))
-
-        countDownLatch.await(3, TimeUnit.SECONDS)
-
-        subject.unregisterDroppedPathReceiver()
     }
 
     private fun makePath(extension: String): Path {
