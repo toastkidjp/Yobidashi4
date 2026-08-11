@@ -48,7 +48,10 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
-        modifier = Modifier.onKeyEvent(viewModel::onKeyEvent).focusRequester(viewModel.focusRequester()).focusable(true)
+        modifier = Modifier
+            .onKeyEvent(viewModel::onKeyEvent)
+            .focusRequester(viewModel.focusRequester())
+            .focusable(true)
     ) {
         Box {
             LazyColumn(
