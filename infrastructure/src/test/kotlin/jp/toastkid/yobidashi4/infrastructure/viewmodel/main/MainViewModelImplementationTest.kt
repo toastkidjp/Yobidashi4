@@ -1433,6 +1433,29 @@ class MainViewModelImplementationTest {
         verify(exactly = 4) { subject.openTab(any()) }
     }
 
+    @Test
+    fun launchDroppedPathFlowWithReceiver() {
+        subject = spyk(subject)
+        every { subject.edit(any(), any()) } just Runs
+        every { subject.openTab(any()) } just Runs
+        val countDownLatch = CountDownLatch(1)
+        subject.registerDroppedPathReceiver {
+            countDownLatch.countDown()
+        }
+
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.launchDroppedPathFlow()
+        }
+
+        subject.emitDroppedPath(listOf(makePath("jpg")))
+
+        countDownLatch.await(3, TimeUnit.SECONDS)
+        job.cancel()
+
+        subject.unregisterDroppedPathReceiver()
+
+    }
+
     private fun makePath(extension: String): Path {
         val path = "test.$extension".toPath()
         fakeFileSystem.write(path){}
