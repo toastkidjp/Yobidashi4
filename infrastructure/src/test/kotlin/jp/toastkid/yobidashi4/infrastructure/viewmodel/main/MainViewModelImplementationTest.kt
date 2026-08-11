@@ -1427,10 +1427,13 @@ class MainViewModelImplementationTest {
             subject.launchDroppedPathFlow()
         }
 
-        subject.emitDroppedPath(listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif").map(::makePath))
+        val folder = makePathWithFolder("jpg")
+        val paths = listOf("zip", "txt", "md", "log", "java", "kt", "py", "jpg", "webp", "png", "gif").map(::makePath)
+            .union(folder)
+        subject.emitDroppedPath(paths)
 
         verify(exactly = 6) { subject.edit(any(), any()) }
-        verify(exactly = 4) { subject.openTab(any()) }
+        verify(exactly = 5) { subject.openTab(any()) }
     }
 
     @Test
@@ -1454,6 +1457,14 @@ class MainViewModelImplementationTest {
 
         subject.unregisterDroppedPathReceiver()
 
+    }
+
+    private fun makePathWithFolder(extension: String): Path {
+        val folder = "folder".toPath()
+        fakeFileSystem.createDirectory(folder)
+        val path = folder / "test.$extension".toPath()
+        fakeFileSystem.write(path){}
+        return folder.toNioPath()
     }
 
     private fun makePath(extension: String): Path {
