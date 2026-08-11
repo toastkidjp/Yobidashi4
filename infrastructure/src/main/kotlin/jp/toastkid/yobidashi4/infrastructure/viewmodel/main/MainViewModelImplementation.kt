@@ -59,6 +59,7 @@ import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestServ
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
@@ -742,6 +743,7 @@ class MainViewModelImplementation(
         overrideReceiver.set(null)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun launchDroppedPathFlow() {
         droppedPathFlow
             .asSharedFlow()
