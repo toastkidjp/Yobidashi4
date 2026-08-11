@@ -65,7 +65,6 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -754,11 +753,9 @@ class MainViewModelImplementation(
 
                 if (fileSystem.metadata(path).isDirectory) {
                     return@flatMapConcat try {
-                        flow {
-                            fileSystem.listRecursively(path)
-                                .filter { fileSystem.metadata(it).isRegularFile }
-                                .forEach { emit(it) }
-                        }
+                        fileSystem.listRecursively(path)
+                            .filter { fileSystem.metadata(it).isRegularFile }
+                            .asFlow()
                     } catch (e: Exception) {
                         emptyFlow()
                     }
