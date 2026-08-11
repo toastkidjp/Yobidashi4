@@ -11,6 +11,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -28,7 +29,10 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.awt.image.BufferedImage
+import java.io.File
 import java.nio.file.Path
+import javax.imageio.ImageIO
 import kotlin.io.path.extension
 
 class FileRenamerImplementationTest {
@@ -107,6 +111,34 @@ class FileRenamerImplementationTest {
                 "webp"
             )
         )
+    }
+
+    @Test
+    fun resize() {
+        val value = mockk<Path>()
+        every { value.resolveSibling(any<String>()) } returns mockk()
+        every { value.extension } returns "png"
+        every { value.parent } returns value
+        mockkStatic(ImageIO::class)
+        every { ImageIO.read(any<File>()) } returns BufferedImage(1, 1, 1)
+        every { ImageIO.write(any<BufferedImage>(), any<String>(), any<File>()) } returns true
+
+        val path = "folder/present.jpg".toPath()
+        fileSystem.createDirectories("folder".toPath())
+        fileSystem.write(path) {}
+
+        runBlocking {
+            subject.invoke(
+                listOf(path.toNioPath()),
+                "test",
+                true,
+                System::lineSeparator
+            )
+
+            verify(inverse = true) { fileSystem.copy(any(), any()) }
+            verify { ImageIO.read(any<File>()) }
+            verify { ImageIO.write(any<BufferedImage>(), any<String>(), any<File>()) }
+        }
     }
 
 }
