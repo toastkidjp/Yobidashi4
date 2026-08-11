@@ -39,7 +39,6 @@ class FileRenamerImplementation(
             return
         }
 
-        val decimalFormat = makeDecimalFormat(paths.size)
         CoroutineScope(ioContextProvider()).launch {
             paths.forEachIndexed { i, p ->
                 val renamedPath = AtomicReference(p.resolveSibling(makeRenamedFileName(baseName, i, p.extension)))
