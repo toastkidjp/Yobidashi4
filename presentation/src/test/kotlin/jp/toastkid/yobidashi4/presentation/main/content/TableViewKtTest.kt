@@ -25,6 +25,7 @@ import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -40,6 +41,8 @@ class TableViewKtTest {
 
     @MockK
     private lateinit var articleFactory: ArticleFactory
+
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
     @BeforeEach
     fun setUp() {
@@ -59,6 +62,7 @@ class TableViewKtTest {
         every { anyConstructed<TableViewModel>().sort(any(), any()) } just Runs
         every { anyConstructed<TableViewModel>().openMarkdownPreview(any()) } just Runs
         every { anyConstructed<TableViewModel>().edit(any()) } just Runs
+        every { anyConstructed<TableViewModel>().scrollEventFlow() } returns scrollEventFlow
     }
 
     @AfterEach
@@ -104,6 +108,9 @@ class TableViewKtTest {
 
             onAllNodesWithContentDescription("Open file", useUnmergedTree = true).onFirst().performClick()
             verify { anyConstructed<TableViewModel>().edit(any()) }
+
+            verify { anyConstructed<TableViewModel>().scrollEventFlow() }
+            scrollEventFlow.tryEmit(1f)
         }
     }
 
