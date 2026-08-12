@@ -224,4 +224,11 @@ class FileRenameToolViewModelTest {
         subject.clearPaths()
     }
 
+    @Test
+    fun collectDroppedPaths() {
+        subject.collectDroppedPaths()
+
+        verify { mainViewModel.registerDroppedPathReceiver(any()) }
+    }
+
 }
