@@ -202,18 +202,16 @@ class TextEditorViewModel : KoinComponent {
         lineNumberScrollState.scrollTo(verticalScrollState.value)
     }
 
-    fun initialScroll(coroutineScope: CoroutineScope, ms: Long = 150) {
+    suspend fun initialScroll(ms: Long = 150) {
         val tab = this.tab.get()
         if (tab.scroll() <= 0.0) {
             focusRequester().requestFocus()
             return
         }
 
-        coroutineScope.launch {
-            focusRequester().requestFocus()
-            delay(ms)
-            verticalScrollState.scrollTo(tab.scroll().toInt())
-        }
+        focusRequester().requestFocus()
+        delay(ms)
+        verticalScrollState().scrollTo(tab.scroll().toInt())
     }
 
     fun lineNumbers(): List<LineNumber> {
