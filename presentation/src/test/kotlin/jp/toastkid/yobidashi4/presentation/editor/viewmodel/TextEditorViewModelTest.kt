@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.editor.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.ui.InternalComposeUiApi
@@ -22,6 +23,8 @@ import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.MultiParagraphIntrinsics
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.clearMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
@@ -227,21 +230,27 @@ class TextEditorViewModelTest {
 
     @OptIn(ExperimentalFoundationApi::class)
     @Test
-    fun initialScroll() {
+    fun initialScroll() = runTest {
         val focusRequester = mockk<FocusRequester>()
         every { focusRequester.requestFocus() } returns true
         viewModel = spyk(viewModel)
         every { viewModel.focusRequester() } returns focusRequester
+        val scrollState = mockk<ScrollState>()
+        every { scrollState.value } returns 0
+        coEvery { scrollState.scrollTo(any()) } returns 1f
+        every { viewModel.verticalScrollState() } returns scrollState
 
-        viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
+        viewModel.initialScroll(0L)
 
         assertEquals(0, viewModel.verticalScrollState().value)
         verify { focusRequester.requestFocus() }
+
+        clearMocks(viewModel)
     }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Test
-    fun initialScrollWhenTabsScrollOverZero() {
+    fun initialScrollWhenTabsScrollOverZero() = runTest {
         val focusRequester = mockk<FocusRequester>()
         every { focusRequester.requestFocus() } returns true
         viewModel = spyk(viewModel)
@@ -253,9 +262,13 @@ class TextEditorViewModelTest {
         every { editorTab.editable() } returns true
         every { editorTab.path } returns mockk()
         every { mainViewModel.finderFlow() } returns emptyFlow()
+        val scrollState = mockk<ScrollState>()
+        every { scrollState.value } returns 1
+        coEvery { scrollState.scrollTo(any()) } returns 1f
+        every { viewModel.verticalScrollState() } returns scrollState
         viewModel.launchTab(editorTab)
 
-        viewModel.initialScroll(CoroutineScope(Dispatchers.Unconfined), 0L)
+        viewModel.initialScroll(0L)
 
         assertEquals(1, viewModel.verticalScrollState().value)
         verify { focusRequester.requestFocus() }
