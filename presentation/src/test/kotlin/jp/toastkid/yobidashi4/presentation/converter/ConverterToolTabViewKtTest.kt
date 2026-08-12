@@ -16,9 +16,29 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performKeyPress
 import androidx.compose.ui.test.runDesktopComposeUiTest
+import io.mockk.every
+import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
+import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ConverterToolTabViewKtTest {
+
+    private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+
+    @BeforeEach
+    fun setUp() {
+        mockkConstructor(ConverterToolTabViewModel::class)
+        every { anyConstructed<ConverterToolTabViewModel>().scrollEventFlow() } returns scrollEventFlow
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
+    }
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
@@ -34,6 +54,8 @@ class ConverterToolTabViewKtTest {
                 keyDown(Key.DirectionDown)
                 keyUp(Key.DirectionDown)
             }
+            verify { anyConstructed<ConverterToolTabViewModel>().scrollEventFlow() }
+            scrollEventFlow.tryEmit(1f)
         }
     }
 }
