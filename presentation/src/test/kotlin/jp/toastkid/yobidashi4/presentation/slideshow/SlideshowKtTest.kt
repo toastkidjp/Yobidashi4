@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,6 +46,8 @@ import javax.imageio.ImageIO
 class SlideshowKtTest {
 
     private lateinit var slideDeck: SlideDeck
+
+    private val scrollEventFlow = MutableSharedFlow<Int>(extraBufferCapacity = 1)
 
     @BeforeEach
     fun setUp() {
@@ -89,6 +92,7 @@ result.value = engine.eval(input.value.text).toString()
         mockkConstructor(SlideshowViewModel::class)
         every { anyConstructed<SlideshowViewModel>().focusRequester() } returns FocusRequester()
         every { anyConstructed<SlideshowViewModel>().requestFocus() } just Runs
+        every { anyConstructed<SlideshowViewModel>().scrollEventFlow() } returns scrollEventFlow
 
         slideDeck = SlideDeckReader(mockk()).invoke()
     }
@@ -129,6 +133,9 @@ result.value = engine.eval(input.value.text).toString()
                     pressKey(Key.DirectionLeft, 1000L)
                 }
             verify { anyConstructed<SlideshowViewModel>().requestFocus() }
+
+            verify { anyConstructed<SlideshowViewModel>().scrollEventFlow() }
+            scrollEventFlow.tryEmit(1)
         }
     }
 
