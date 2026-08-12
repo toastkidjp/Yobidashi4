@@ -219,4 +219,9 @@ class FileRenameToolViewModelTest {
         assertTrue(subject.useResize().value)
     }
 
+    @Test
+    fun clearPaths() {
+        subject.clearPaths()
+    }
+
 }
