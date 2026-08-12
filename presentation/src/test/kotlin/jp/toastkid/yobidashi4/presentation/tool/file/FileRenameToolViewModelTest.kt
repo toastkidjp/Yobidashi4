@@ -60,6 +60,7 @@ class FileRenameToolViewModelTest {
         }
 
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+        every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
         every { fileRenamer.invoke(any(), any(), any(), any()) } just Runs
         every { fileRenamer.makeRenamedFileName(any(), any(), any()) } returns "img_1.png"
 
@@ -107,6 +108,15 @@ class FileRenameToolViewModelTest {
         assertTrue(slot.isCaptured)
         slot.captured.invoke()
         verify(inverse = true) { mainViewModel.openFile(any()) }
+    }
+
+    @Test
+    fun renameWithoutInput() {
+        subject.input().clearText()
+
+        subject.rename()
+
+        verify(inverse = true) { fileRenamer.invoke(any(), any(), any(), any()) }
     }
 
     @Test
