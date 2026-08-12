@@ -129,7 +129,9 @@ fun SimpleTextEditor(
 
         DisposableEffect(tab.path) {
             viewModel.launchTab(tab)
-            viewModel.initialScroll(coroutineScope)
+            coroutineScope.launch {
+                viewModel.initialScroll()
+            }
 
             setStatus(viewModel.makeCharacterCountMessage(tab.getContent().length))
 
