@@ -59,7 +59,7 @@ class SimpleTextEditorKtTest {
 
         mockkConstructor(TextEditorViewModel::class)
         every { anyConstructed<TextEditorViewModel>().launchTab(any()) } just Runs
-        every { anyConstructed<TextEditorViewModel>().initialScroll(any()) } just Runs
+        coEvery { anyConstructed<TextEditorViewModel>().initialScroll(any()) } just Runs
         every { anyConstructed<TextEditorViewModel>().onClickLineNumber(any()) } just Runs
         every { anyConstructed<TextEditorViewModel>().dispose() } just Runs
         coEvery { anyConstructed<TextEditorViewModel>().adjustLineNumberState() } just Runs
