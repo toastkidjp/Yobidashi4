@@ -54,7 +54,7 @@ fun ConverterToolTabView() {
                 .padding(8.dp)
                 .verticalScroll(viewModel.scrollState())
                 .fillMaxWidth()
-                .onKeyEvent { viewModel.keyboardScrollAction(it) }
+                .onKeyEvent(viewModel::keyboardScrollAction)
                 .focusRequester(viewModel.focusRequester())
                 .semantics { contentDescription = "surface" }
             ) {
