@@ -91,9 +91,7 @@ internal fun Slideshow(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) {
-                val slide = deck.slides.get(it)
-
-                SlideView(slide, viewModel::loadImage)
+                SlideView(deck.slides.get(it), viewModel::loadImage)
 
                 LaunchedEffect(Unit) {
                     viewModel.requestFocus()
