@@ -109,7 +109,7 @@ class KeyEventConsumer(
                 return useCase.openFile()
             }
             it.isCtrlPressed && it.key == Key.Q -> {
-                return useCase.quote()
+                useCase.quote()
             }
             it.isCtrlPressed && it.key == Key.J -> {
                 useCase.joinLines()
