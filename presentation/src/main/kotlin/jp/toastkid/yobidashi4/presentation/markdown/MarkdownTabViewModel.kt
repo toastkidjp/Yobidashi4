@@ -17,7 +17,7 @@ class MarkdownTabViewModel : KoinComponent {
 
     suspend fun launch(scrollPosition: Int) {
         focusRequester().requestFocus()
-        scrollState.scrollToItem(scrollPosition)
+        scrollState().scrollToItem(scrollPosition)
     }
 
     fun scrollState() = scrollState
