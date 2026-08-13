@@ -1457,7 +1457,6 @@ class MainViewModelImplementationTest {
         job.cancel()
 
         subject.unregisterDroppedPathReceiver()
-
     }
 
     private fun makePathWithFolder(extension: String): Path {
