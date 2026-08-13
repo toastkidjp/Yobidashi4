@@ -38,9 +38,7 @@ internal fun TextFileViewerTabView(tab: TextFileViewerTab) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
-        modifier = Modifier.onKeyEvent {
-            viewModel.keyboardScrollAction(it)
-        }
+        modifier = Modifier.onKeyEvent(viewModel::keyboardScrollAction)
             .focusRequester(viewModel.focusRequester())
     ) {
         Box {
