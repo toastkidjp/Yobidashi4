@@ -24,7 +24,7 @@ dependencyResolutionManagement {
             library("jsoup", "org.jsoup", "jsoup").version("1.22.2")
             library("okio", "com.squareup.okio", "okio").version("3.17.0")
             version("compose", "1.11.1")
-            version("kover", "0.9.8")
+            version("kover", "0.9.9")
             version("kotlin", "2.4.0")
             version("ksp", "2.3.9")
         }
