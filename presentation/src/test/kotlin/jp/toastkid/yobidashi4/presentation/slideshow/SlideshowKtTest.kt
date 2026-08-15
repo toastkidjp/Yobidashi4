@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
@@ -45,10 +46,11 @@ class SlideshowKtTest {
         every { anyConstructed<SlideshowViewModel>().focusRequester() } returns FocusRequester()
         every { anyConstructed<SlideshowViewModel>().requestFocus() } just Runs
         every { anyConstructed<SlideshowViewModel>().scrollEventFlow() } returns scrollEventFlow
+        every { anyConstructed<SlideshowViewModel>().loadImage(any()) } returns ImageBitmap(1, 1)
 
         slideDeck = SlideDeck()
         slideDeck.add(Slide().also { it.addLine(TextLine("test")) })
-        slideDeck.add(Slide())
+        slideDeck.add(Slide().also { it.setBackground("test.jpg") })
     }
 
     @AfterEach
@@ -90,6 +92,8 @@ class SlideshowKtTest {
 
             verify { anyConstructed<SlideshowViewModel>().scrollEventFlow() }
             scrollEventFlow.tryEmit(1)
+
+            verify { anyConstructed<SlideshowViewModel>().loadImage(any()) }
         }
     }
 
