@@ -6,9 +6,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.presentation.main.theme.AppTheme
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.nio.file.Path
 
-class SlideshowWindow {
+class SlideshowWindow : KoinComponent {
+
+    private val slideDeckReader: SlideDeckReader by inject()
 
     @Composable
     fun openWindow(
@@ -16,7 +20,7 @@ class SlideshowWindow {
         onCloseWindow: () -> Unit
     ) {
         AppTheme(darkTheme = false) {
-            val deck = SlideDeckReader(path).invoke()
+            val deck = slideDeckReader(path)
             val viewModel = remember { SlideshowWindowViewModel() }
             Window(
                 onCloseRequest = onCloseWindow,
