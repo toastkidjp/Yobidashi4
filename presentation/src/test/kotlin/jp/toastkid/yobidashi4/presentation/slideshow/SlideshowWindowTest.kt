@@ -65,4 +65,18 @@ class SlideshowWindowTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun emptyDeckCase() {
+        every { slideDeckReader.invoke(any()) } returns SlideDeck()
+
+        runDesktopComposeUiTest {
+            setContent {
+                SlideshowWindow().openWindow(mockk()) {}
+            }
+
+            onNodeWithContentDescription("slider").assertDoesNotExist()
+        }
+    }
+
 }
