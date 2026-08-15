@@ -14,13 +14,15 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
+import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
+import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
+import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
@@ -36,7 +38,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.nio.file.Files
 
 class MainApplicationKtTest {
 
@@ -55,6 +56,9 @@ class MainApplicationKtTest {
     @MockK
     private lateinit var metaExtractor: FileListItemMetaExtractor
 
+    @MockK
+    private lateinit var slideDeckReader: SlideDeckReader
+
     @OptIn(ExperimentalFoundationApi::class)
     @BeforeEach
     fun setUp() {
@@ -70,6 +74,7 @@ class MainApplicationKtTest {
         every { mainViewModel.setTextManager(any()) } just Runs
         coEvery { notification.start(any()) } just Runs
         every { notification.notificationFlow() } returns MutableSharedFlow()
+        every { slideDeckReader.invoke(any()) } returns SlideDeck(mutableListOf(Slide()))
 
         mockMainMenu(setting)
 
@@ -81,6 +86,7 @@ class MainApplicationKtTest {
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { metaExtractor } bind (FileListItemMetaExtractor::class)
+                    single(qualifier = null) { slideDeckReader } bind (SlideDeckReader::class)
                 }
             )
         }
@@ -173,10 +179,6 @@ class MainApplicationKtTest {
         every { mainViewModel.slideshowPath() } returns mockk()
         mockkConstructor(SlideshowWindowViewModel::class)
         every { anyConstructed<SlideshowWindowViewModel>().windowVisible() } returns false
-        mockkStatic(Files::class)
-        every { Files.lines(any()) } returns """
-# Test
-""".split("\n").stream()
 
         launchMainApplication(false)
 
