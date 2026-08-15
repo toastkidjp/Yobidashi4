@@ -12,11 +12,11 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -31,6 +31,8 @@ import java.util.Locale
 class WebHistoryViewModel : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
+
+    private val ioContextProvider: IoContextProvider by inject()
 
     private val repository: WebHistoryRepository by inject()
 
@@ -64,7 +66,7 @@ class WebHistoryViewModel : KoinComponent {
         reloadItems()
         focusRequester().requestFocus()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioContextProvider()).launch {
             viewModel.finderFlow().collect { order ->
                 list.clear()
 
