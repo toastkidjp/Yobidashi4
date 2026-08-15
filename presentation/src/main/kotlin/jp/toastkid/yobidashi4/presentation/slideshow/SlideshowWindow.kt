@@ -19,8 +19,12 @@ class SlideshowWindow : KoinComponent {
         path: Path,
         onCloseWindow: () -> Unit
     ) {
+        val deck = slideDeckReader(path)
+        if (deck.slides.isEmpty()) {
+            return
+        }
+
         AppTheme(darkTheme = false) {
-            val deck = slideDeckReader(path)
             val viewModel = remember { SlideshowWindowViewModel() }
             Window(
                 onCloseRequest = onCloseWindow,
