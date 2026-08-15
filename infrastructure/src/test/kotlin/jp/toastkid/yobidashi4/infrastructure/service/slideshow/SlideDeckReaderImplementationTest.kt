@@ -1,32 +1,37 @@
 package jp.toastkid.yobidashi4.infrastructure.service.slideshow
 
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
+import okio.Path.Companion.toPath
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.IOException
-import java.nio.file.Files
+import java.nio.file.Path
 
 class SlideDeckReaderImplementationTest {
 
     private lateinit var slideDeckReader: SlideDeckReader
 
+    @MockK
+    private lateinit var path: Path
+
+    private val fakeFileSystem = FakeFileSystem()
+
     @BeforeEach
     fun setUp() {
-        slideDeckReader = SlideDeckReaderImplementation()
+        MockKAnnotations.init(this)
 
-        mockkStatic(Files::class)
-        every { Files.lines(any()) } returns
+        slideDeckReader = SlideDeckReaderImplementation(fakeFileSystem)
+
+        val okioPath = "test.md".toPath()
+        fakeFileSystem.write(okioPath) {
+            writeUtf8(
                 """
 ![background](
 ![background](https://www.yahoo.co.jp/all)
@@ -67,8 +72,10 @@ result.value = engine.eval(input.value.text).toString()
 > To be, or not to be, that is the question.
 
 # 完
-        """.split("\n").stream()
-
+        """
+            )
+        }
+        path = okioPath.toNioPath()
     }
 
     @AfterEach
@@ -78,7 +85,7 @@ result.value = engine.eval(input.value.text).toString()
 
     @Test
     fun invoke() {
-        val (slides, background, title, footerText) = slideDeckReader.invoke(mockk())
+        val (slides, background, title, footerText) = slideDeckReader.invoke(path)
 
         assertEquals(7, slides.size)
         assertEquals("https://www.yahoo.co.jp/all", background)
@@ -88,14 +95,8 @@ result.value = engine.eval(input.value.text).toString()
 
     @Test
     fun exception() {
-        val ioException = mockk<IOException>()
-        every { Files.lines(any()) } throws ioException
-        every { ioException.printStackTrace() } just Runs
+        val (slides, background, title, footerText) = slideDeckReader.invoke("doesNotExists".toPath().toNioPath())
 
-        val (slides, background, title, footerText) = slideDeckReader.invoke(mockk())
-
-        verify { Files.lines(any()) }
-        verify { ioException.printStackTrace() }
         assertTrue(slides.isEmpty())
         assertTrue(background.isEmpty())
         assertTrue(title.isEmpty())
@@ -104,7 +105,9 @@ result.value = engine.eval(input.value.text).toString()
 
     @Test
     fun lastTableCase() {
-        every { Files.lines(any()) } returns
+        val okioPath = "test2.md".toPath()
+        fakeFileSystem.write(okioPath) {
+            writeUtf8(
                 """
 ## Table
 
@@ -112,9 +115,11 @@ result.value = engine.eval(input.value.text).toString()
 |:---|:---|:---
 | 09:30 -11:30 | D1-KY| Java Day Tokyo 2017 基調講演
 | 13:00 -13:50 | D1-A1| Java 9 and Beyond: Java Renaissance in the Cloud
-| 14:05 -14:55 | D1-A2| Modular Development with JDK 9""".split("\n").stream()
+| 14:05 -14:55 | D1-A2| Modular Development with JDK 9"""
+            )
+        }
 
-        val (slides, background, title, footerText) = slideDeckReader.invoke(mockk())
+        val (slides, background, title, footerText) = slideDeckReader.invoke(okioPath.toNioPath())
 
         assertEquals(1, slides.size)
         assertTrue(slides.last().lines().last() is TableLine)
