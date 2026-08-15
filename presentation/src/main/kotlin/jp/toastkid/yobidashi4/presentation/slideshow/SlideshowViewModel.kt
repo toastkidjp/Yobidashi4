@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi4.presentation.slideshow
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ImageBitmap
@@ -114,10 +113,6 @@ class SlideshowViewModel {
     fun requestFocus() {
         focusRequester().requestFocus()
     }
-
-    private val interactionSource = MutableInteractionSource()
-
-    fun interactionSource() = interactionSource
 
 }
 
