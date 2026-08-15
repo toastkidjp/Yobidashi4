@@ -14,17 +14,17 @@ import jp.toastkid.yobidashi4.domain.service.slideshow.CodeBlockBuilder
 import jp.toastkid.yobidashi4.domain.service.slideshow.ImageExtractor
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.domain.service.slideshow.TableBuilder
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
 import org.koin.core.annotation.Single
 import java.io.IOException
-import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import java.util.stream.Stream
 
 @Single
-class SlideDeckReaderImplementation : SlideDeckReader {
+class SlideDeckReaderImplementation(private val fileSystem: FileSystem) : SlideDeckReader {
 
     /** Slide builder.  */
     private val builder = AtomicReference(Slide())
@@ -44,14 +44,17 @@ class SlideDeckReaderImplementation : SlideDeckReader {
      */
     override operator fun invoke(pathToMarkdown: Path): SlideDeck {
         try {
-            return Files.lines(pathToMarkdown).use(::readLines)
+            val okioPath = pathToMarkdown.toOkioPath()
+            return fileSystem.read(okioPath) {
+                readLines(readUtf8().split("\n"))
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
         return SlideDeck()
     }
 
-    private fun readLines(lines: Stream<String>): SlideDeck {
+    private fun readLines(lines: List<String>): SlideDeck {
         val deck = SlideDeck()
 
         lines.forEach { line: String ->
