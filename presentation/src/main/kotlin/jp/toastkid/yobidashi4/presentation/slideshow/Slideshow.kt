@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -55,7 +56,8 @@ internal fun Slideshow(
     val pagerState = rememberPagerState { deck.slides.size }
     val viewModel = remember { SlideshowViewModel() }
 
-    val isHovered = viewModel.interactionSource().collectIsHoveredAsState()
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
     val alpha = animateFloatAsState(if (isHovered.value) 1f else 0f)
 
     LaunchedEffect(deck) {
@@ -125,7 +127,7 @@ internal fun Slideshow(
                 steps = max(1, deck.slides.size - 2),
                 modifier = Modifier.align(Alignment.BottomCenter)
                     .alpha(alpha.value)
-                    .hoverable(viewModel.interactionSource())
+                    .hoverable(interactionSource)
                     .semantics { contentDescription = "slider" }
             )
 
