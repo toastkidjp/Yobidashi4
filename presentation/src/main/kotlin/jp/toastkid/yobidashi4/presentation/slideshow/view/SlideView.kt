@@ -5,7 +5,6 @@ import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -46,8 +45,8 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             .fillMaxSize()
             .clickable(
                 onClick = viewModel::requestFocus,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
+                onClickLabel = null,
+                role = null,
             )
     ) {
         val columnModifier =
