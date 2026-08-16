@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIconViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -102,6 +103,8 @@ class WebBookmarkTabViewKtTest {
     @Test
     fun webBookmarkTabView() {
         every { anyConstructed<WebBookmarkTabViewModel>().openingDropdown(any()) } returns false
+        val mutableSharedFlow = MutableSharedFlow<Float>(replay = 1, extraBufferCapacity = 1)
+        every { anyConstructed<WebBookmarkTabViewModel>().scrollEventFlow() } returns mutableSharedFlow
 
         runDesktopComposeUiTest {
             setContent {
@@ -119,6 +122,11 @@ class WebBookmarkTabViewKtTest {
             item.performKeyInput {
                 pressKey(Key.DirectionUp, 1000L)
             }
+
+            verify { anyConstructed<WebBookmarkTabViewModel>().scrollEventFlow() }
+            verify { anyConstructed<WebBookmarkTabViewModel>().listState() }
+            mutableSharedFlow.tryEmit(-1f)
+            mainClock.advanceTimeBy(500L)
         }
     }
 
