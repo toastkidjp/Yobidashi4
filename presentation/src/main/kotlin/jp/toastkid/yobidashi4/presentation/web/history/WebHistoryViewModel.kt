@@ -9,6 +9,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventType
+import jp.toastkid.yobidashi4.domain.model.find.FindOrder
 import jp.toastkid.yobidashi4.domain.model.tab.WebHistoryTab
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
@@ -68,21 +69,25 @@ class WebHistoryViewModel : KoinComponent {
 
         CoroutineScope(ioContextProvider()).launch {
             viewModel.finderFlow().collect { order ->
-                list.clear()
-
-                if (order.target.isEmpty()) {
-                    list.addAll(allItems)
-                    return@collect
-                }
-
-                list.addAll(allItems.filter {
-                    it.title.contains(order.target) ||
-                            it.url.contains(order.target)
-                })
+                filterItems(order)
             }
         }
 
         listState().scrollToItem(tab.scrollPosition())
+    }
+
+    private fun filterItems(order: FindOrder) {
+        list.clear()
+
+        if (order.target.isEmpty()) {
+            list.addAll(allItems)
+            return
+        }
+
+        list.addAll(allItems.filter {
+            it.title.contains(order.target) ||
+                    it.url.contains(order.target)
+        })
     }
 
     private fun reloadItems() {
