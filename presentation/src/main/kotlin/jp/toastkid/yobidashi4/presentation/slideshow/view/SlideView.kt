@@ -45,6 +45,8 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             .fillMaxSize()
             .clickable(
                 onClick = viewModel::requestFocus,
+                interactionSource = null,
+                indication = null,
                 onClickLabel = null,
                 role = null,
             )
