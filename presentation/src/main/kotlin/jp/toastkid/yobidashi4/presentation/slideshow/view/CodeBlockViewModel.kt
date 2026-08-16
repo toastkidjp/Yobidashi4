@@ -5,7 +5,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -57,8 +57,12 @@ class CodeBlockViewModel : KoinComponent {
         }
     }
 
-    fun setMultiParagraph(multiParagraph: MultiParagraph) {
-        val lineCount = multiParagraph.lineCount
+    fun setMultiParagraph(textLayoutResult: TextLayoutResult?) {
+        if (textLayoutResult == null) {
+            return
+        }
+
+        val lineCount = textLayoutResult.lineCount
         lineCountState.value = lineCount
     }
 
