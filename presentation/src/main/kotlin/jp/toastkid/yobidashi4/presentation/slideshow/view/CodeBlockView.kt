@@ -66,8 +66,7 @@ internal fun CodeBlockView(line: CodeBlockLine, fontSize: TextUnit = 28.sp, modi
             BasicTextField(
                 state = viewModel.content(),
                 onTextLayout = {
-                    val multiParagraph = it.invoke()?.multiParagraph ?: return@BasicTextField
-                    viewModel.setMultiParagraph(multiParagraph)
+                    viewModel.setMultiParagraph(it.invoke())
                 },
                 outputTransformation = viewModel.outputTransformation(),
                 decorator = {
