@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.ui.text.MultiParagraph
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.mockk.MockKAnnotations
@@ -73,9 +73,11 @@ class CodeBlockViewModelTest {
 
     @Test
     fun lineNumberTexts() {
-        val multiParagraph = mockk<MultiParagraph>()
-        every { multiParagraph.lineCount } returns 14
-        subject.setMultiParagraph(multiParagraph)
+        subject.setMultiParagraph(null)
+
+        val textLayoutResult = mockk<TextLayoutResult>()
+        every { textLayoutResult.lineCount } returns 14
+        subject.setMultiParagraph(textLayoutResult)
 
         assertEquals(14, subject.lineNumberTexts().size)
     }
