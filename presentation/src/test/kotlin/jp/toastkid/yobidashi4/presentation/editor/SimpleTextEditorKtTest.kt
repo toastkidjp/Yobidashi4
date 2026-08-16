@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -78,6 +79,8 @@ class SimpleTextEditorKtTest {
         every { setStatus(any()) } just Runs
         val textFieldValue = TextFieldState("test_content\nSecond line\n3rd line")
         every { anyConstructed<TextEditorViewModel>().content() } returns textFieldValue
+        val mutableSharedFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+        every { anyConstructed<TextEditorViewModel>().scrollEventFlow() } returns mutableSharedFlow
 
         runDesktopComposeUiTest {
             setContent {
@@ -100,6 +103,9 @@ class SimpleTextEditorKtTest {
                 .performClick()
             verify { anyConstructed<TextEditorViewModel>().onClickLineNumber(any()) }
             verify { mainViewModel.updateEditorContent(any(), any(), any(), any(), any()) }
+            verify { anyConstructed<TextEditorViewModel>().scrollEventFlow() }
+            mutableSharedFlow.tryEmit(1f)
+            mainClock.advanceTimeBy(1000)
         }
     }
 
