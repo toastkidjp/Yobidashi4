@@ -71,7 +71,6 @@ class ClusteringToolTabViewModelTest {
 
         every { viewModel.showSnackbar(any(), any(), any()) } just Runs
         every { viewModel.openFile(any()) } just Runs
-        every { viewModel.registerDroppedPathReceiver(any()) } just Runs
         every { viewModel.unregisterDroppedPathReceiver() } just Runs
         every { viewModel.openPreview(any()) } just Runs
         every { viewModel.editWithTitle(any()) } just Runs
@@ -157,7 +156,11 @@ class ClusteringToolTabViewModelTest {
 
     @Test
     fun collectDroppedPaths() {
+        val capturingSlot = slot<(Path) -> Unit>()
+        every { viewModel.registerDroppedPathReceiver(capture(capturingSlot)) } just Runs
+
         subject.collectDroppedPaths()
+        capturingSlot.captured.invoke(mockk())
 
         verify { viewModel.registerDroppedPathReceiver(any()) }
     }
