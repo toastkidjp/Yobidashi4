@@ -27,6 +27,7 @@ import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
 import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -74,6 +75,9 @@ class WebHistoryViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun webHistoryView() {
+        val mutableSharedFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
+        every { anyConstructed<WebHistoryViewModel>().scrollEventFlow() } returns mutableSharedFlow
+
         runDesktopComposeUiTest {
             setContent {
                 WebHistoryView(mockk())
@@ -92,6 +96,11 @@ class WebHistoryViewKtTest {
                 pressKey(Key.DirectionUp, 1000L)
                 pressKey(Key.DirectionDown, 1000L)
             }
+
+            verify { anyConstructed<WebHistoryViewModel>().scrollEventFlow() }
+            verify { anyConstructed<WebHistoryViewModel>().listState() }
+            mutableSharedFlow.tryEmit(1f)
+            mainClock.advanceTimeBy(500L)
         }
     }
 
