@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItem
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -107,6 +108,8 @@ class FileListViewKtTest {
             makeMockElement("test-list-item5", editable = false),
             element
         )
+        val mutableSharedFlow = MutableSharedFlow<Int>(extraBufferCapacity = 1)
+        every { anyConstructed<FileListViewModel>().listScrollEventFlow() } returns mutableSharedFlow
 
         runDesktopComposeUiTest {
             setContent {
@@ -129,6 +132,9 @@ class FileListViewKtTest {
             onNodeWithContentDescription("Reload file list", useUnmergedTree = true)
                 .performClick()
             verify { anyConstructed<FileListViewModel>().start(any()) }
+
+            mutableSharedFlow.tryEmit(1)
+            mainClock.advanceTimeBy(1000)
         }
     }
 
