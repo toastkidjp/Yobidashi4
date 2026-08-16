@@ -117,20 +117,20 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        timeout-minutes: 18
-        run: ./gradlew test --info # --info ‚ğ‚Â‚¯‚ÄÚ×ƒƒO‚ğo‚·
+        timeout-minutes: 14
+        run: ./gradlew test --info # --info ã‚’ã¤ã‘ã¦è©³ç´°ãƒ­ã‚°ã‚’å‡ºã™
 
       - name: kover
         env:
           TZ: 'Asia/Tokyo'
           _JAVA_OPTIONS: '-Duser.language=ja -Duser.country=JP -Duser.timezone=Asia/Tokyo'
-        timeout-minutes: 18
+        timeout-minutes: 3
         run: ./gradlew :koverHtmlReport
 
       - name: Upload Unit Test Results
-        timeout-minutes: 3
         if: ${{ always() }}
         uses: actions/upload-artifact@v7
+        timeout-minutes: 3
         with:
           name: Unit Test Results
           path: |
