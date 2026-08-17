@@ -1,9 +1,13 @@
 package jp.toastkid.yobidashi4.main.handler
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
@@ -34,8 +38,9 @@ class UncaughtExceptionHandlerTest {
                 }
             )
         }
+        every { logger.error(any(), any<Throwable>()) } just Runs
 
-        subject = UncaughtExceptionHandler()
+        subject = UncaughtExceptionHandler(logger)
     }
 
     @AfterEach
@@ -50,7 +55,7 @@ class UncaughtExceptionHandlerTest {
 
         subject.uncaughtException(Thread.currentThread(), throwable)
 
-        //TODO Fix verify { logger.error(any(), throwable) }
+        verify { logger.error(any(), throwable) }
     }
 
     @Test
@@ -59,7 +64,7 @@ class UncaughtExceptionHandlerTest {
 
         subject.uncaughtException(null, throwable)
 
-        //TODO Fix verify { logger.error(null, throwable) }
+        verify { logger.error(null, throwable) }
     }
 
 }
