@@ -76,6 +76,7 @@ import okio.buffer
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.slf4j.LoggerFactory
 import java.awt.Desktop
 import java.net.URI
 import java.nio.file.Files
@@ -759,6 +760,7 @@ class MainViewModelImplementation(
                             .filter { fileSystem.metadata(it).isRegularFile }
                             .asFlow()
                     } catch (e: Exception) {
+                        LoggerFactory.getLogger(javaClass).warn("I/O error", e)
                         emptyFlow()
                     }
                 }
