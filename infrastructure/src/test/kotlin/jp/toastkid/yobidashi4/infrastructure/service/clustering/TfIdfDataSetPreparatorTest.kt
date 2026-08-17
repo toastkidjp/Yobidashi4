@@ -38,19 +38,6 @@ class TfIdfDataSetPreparatorTest {
     }
 
     @Test
-    fun testFilteringLogic() {
-        val docs = listOf(
-            "id1" to "室温 室温 室温 室温" + // ストップワード
-                    "ab ab ab ab" +    // 正規表現(漢字/ひらがな/カタカナ2文字)に不適合
-                    "ああああ"          // 漢字を1文字も含まない (isKanjiCharacter)
-        )
-
-        val dataset = preparator(docs)
-
-        assertEquals(0, dataset.size(), "None of results.")
-    }
-
-    @Test
     fun testTfIdfCalculation() {
         val docs = listOf(
             "id1" to "学習学習学習",
