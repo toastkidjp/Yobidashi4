@@ -41,7 +41,7 @@ class PrincipalEqualPaymentCalculator : LoanPaymentCalculator {
         }
 
         return LoanPayment(
-            monthlyPayment = schedule.firstOrNull()?.amount ?: -1L,
+            monthlyPayment = schedule[0].amount,
             paymentSchedule = schedule
         )
     }
