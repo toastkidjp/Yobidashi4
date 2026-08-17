@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,6 +50,7 @@ internal fun WebBookmarkTabView(tab: WebBookmarkTab) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier
+            .fillMaxSize()
             .onKeyEvent(viewModel::onKeyEvent)
             .focusRequester(viewModel.focusRequester())
             .focusable(true)
