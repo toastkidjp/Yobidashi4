@@ -15,13 +15,9 @@ import org.tribuo.provenance.SimpleDataSourceProvenance
 import java.time.OffsetDateTime
 import kotlin.math.ln
 
-class TfIdfDataSetPreparator {
-
-    private val stopWords = setOf("食べ", "を食", "室温")
-
-    private val regex = Regex("[\\p{IsHan}\\p{IsHira}\\p{IsKana}]{2}")
-
-    private fun isKanjiCharacter(char: Char): Boolean = char in '\u4E00'..'\u9FFF'
+class TfIdfDataSetPreparator(
+    private val bigramGenerator: BigramGenerator = BigramGenerator()
+) {
 
     operator fun invoke(docs: List<Pair<String, String>>): MutableDataset<ClusterID?> {
         val factory = ClusteringFactory()
@@ -31,13 +27,13 @@ class TfIdfDataSetPreparator {
         val dataset = MutableDataset(provenance, factory)
 
         val dfMap = docs
-            .flatMap { text -> makeBiGram(text).distinct() }
+            .flatMap { text -> bigramGenerator.invoke(text).distinct() }
             .groupingBy { it }
             .eachCount()
 
         docs.forEach { text ->
             // ここで一旦、このドキュメント内の 2-gram の頻度を計算する
-            val counts = makeBiGram(text)
+            val counts = bigramGenerator.invoke(text)
                 .groupingBy { it }
                 .eachCount()
                 .filter { it.value > 2 }
@@ -60,13 +56,5 @@ class TfIdfDataSetPreparator {
         }
         return dataset
     }
-
-    private fun makeBiGram(text: Pair<String, String>): List<String> = text.second
-        .replace("\n", "")
-        .windowed(2, 1)
-        .filter(CharSequence::isNotBlank)
-        .filter { it.matches(regex) }
-        .filter { it.any(::isKanjiCharacter) }
-        .filter { stopWords.none { stopWord -> it.contains(stopWord) } }
 
 }
