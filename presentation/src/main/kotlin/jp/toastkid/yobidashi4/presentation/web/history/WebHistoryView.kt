@@ -50,6 +50,7 @@ internal fun WebHistoryView(tab: WebHistoryTab) {
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
         modifier = Modifier
+            .fillMaxSize()
             .onKeyEvent(viewModel::onKeyEvent)
             .focusRequester(viewModel.focusRequester())
             .focusable(true)
