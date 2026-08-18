@@ -39,7 +39,7 @@ class LoanPaymentExporterImplementation : LoanPaymentExporter {
             writer.write(lineSeparator)
             writer.write("Monthly payment: ${payment.monthlyPayment}")
             writer.write(lineSeparator)
-            payment.paymentSchedule.forEachIndexed() { index, schedule ->
+            payment.paymentSchedule.forEachIndexed { index, schedule ->
                 writer.write("${index + 1}\t${schedule.amount}\t${schedule.principal}\t${schedule.interest}")
                 writer.write(lineSeparator)
             }
