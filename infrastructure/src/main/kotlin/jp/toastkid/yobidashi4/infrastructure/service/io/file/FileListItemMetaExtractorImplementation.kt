@@ -33,7 +33,9 @@ class FileListItemMetaExtractorImplementation(
 
         val size = (fileSystem.metadata(path).size ?: 0L).toDouble()
         val unit = if (size > 1_048_576) "MB" else if (size > 1024) "KB" else "B"
-        val displaySize = decimalFormat.format(size / (if (size > 1_048_576) 1_048_576 else if (size > 1024) 1024 else 1))
+        val displaySize = decimalFormat.format(
+            size / (if (size > 1_048_576) 1_048_576 else if (size > 1024) 1024 else 1)
+        )
         val lastModifiedTime = fileSystem.metadata(path).lastModifiedAtMillis ?: 0L
         val sortKey = (lastModifiedTime)
         return FileListItemMeta(
