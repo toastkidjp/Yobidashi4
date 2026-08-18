@@ -60,9 +60,7 @@ class SlideDeckReaderImplementation(private val fileSystem: FileSystem) : SlideD
         lines.forEach { line: String ->
             if (line.startsWith("#")) {
                 if (this.builder.get().hasTitle()) {
-                    this.builder.get().let {
-                        deck.add(it)
-                    }
+                    this.builder.get().let(deck::add)
                     this.builder.set(Slide())
                 }
 
