@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.fail
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDateTime
 import java.time.Month
 
@@ -41,12 +43,15 @@ class NotificationEventTest {
         )
     }
 
-    @Test
-    fun parseFailure() {
-        assertNull(NotificationEvent.parse("2022-12-32 12:33:44"))
-        assertNull(NotificationEvent.parse("2022-12-30 2:33:44"))
-        assertNull(NotificationEvent.parse("test"))
-        assertNull(NotificationEvent.parse(""))
+    @ParameterizedTest
+    @CsvSource(
+        "2022-12-32 12:33:44",
+        "2022-12-30 2:33:44",
+        "test",
+        "''"
+    )
+    fun parseFailure(input: String) {
+        assertNull(NotificationEvent.parse(input))
     }
 
     @Test
