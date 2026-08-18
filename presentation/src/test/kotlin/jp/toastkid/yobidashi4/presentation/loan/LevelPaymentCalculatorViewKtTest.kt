@@ -5,7 +5,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
