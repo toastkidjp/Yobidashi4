@@ -9,7 +9,8 @@ package jp.toastkid.yobidashi4.domain.service.calendar.label
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class CalendarLabelFinderServiceTest {
 
@@ -20,24 +21,20 @@ class CalendarLabelFinderServiceTest {
         subject = CalendarLabelFinderService()
     }
 
-    @Test
-    fun invoke() {
-        val labels2018Dec = subject.invoke(2018, 12)
-        assertEquals(28, labels2018Dec.first { it.title == "大納会" }.day)
-        val labels2023Dec = subject.invoke(2023, 12)
-        assertEquals(29, labels2023Dec.first { it.title == "大納会" }.day)
-        val labels2024Dec = subject.invoke(2024, 12)
-        assertEquals(30, labels2024Dec.first { it.title == "大納会" }.day)
-        val label2018Jan = subject.invoke(2018, 1)
-        assertEquals(4, label2018Jan.first { it.title == "大発会" }.day)
-        val label2026Jan = subject.invoke(2026, 1)
-        assertEquals(5, label2026Jan.first { it.title == "大発会" }.day)
-        val label2025Jan = subject.invoke(2025, 1)
-        assertEquals(6, label2025Jan.first { it.title == "大発会" }.day)
-        val label2025Mar = subject.invoke(2025, 3)
-        assertEquals(9, label2025Mar.first { it.title == "夏時間入り" }.day)
-        val labels2025Nov = subject.invoke(2025, 11)
-        assertEquals(2, labels2025Nov.first { it.title == "冬時間入り" }.day)
+    @ParameterizedTest
+    @CsvSource(
+        "2018, 12, 28, 大納会",
+        "2023, 12, 29, 大納会",
+        "2024, 12, 30, 大納会",
+        "2018, 1, 4, 大発会",
+        "2026, 1, 5, 大発会",
+        "2025, 1, 6, 大発会",
+        "2025, 3, 9, 夏時間入り",
+        "2025, 11, 2, 冬時間入り",
+        )
+    fun invoke(year: Int, month: Int, date: Int, title: String) {
+        val labels2018Dec = subject.invoke(year, month)
+        assertEquals(date, labels2018Dec.first { it.title == title }.day)
     }
 
 }
