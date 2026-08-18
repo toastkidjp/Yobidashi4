@@ -63,7 +63,8 @@ class InputHistoryFileStore(
             it.writeUtf8(
                 list
                     .sortedByDescending(InputHistory::timestamp)
-                    .distinctBy(InputHistory::word).joinToString("\n", transform = InputHistory::toTsv)
+                    .distinctBy(InputHistory::word)
+                    .joinToString("\n", transform = InputHistory::toTsv)
             )
         }
     }
