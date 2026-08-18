@@ -68,9 +68,7 @@ class WebHistoryViewModel : KoinComponent {
         focusRequester().requestFocus()
 
         CoroutineScope(ioContextProvider()).launch {
-            viewModel.finderFlow().collect { order ->
-                filterItems(order)
-            }
+            viewModel.finderFlow().collect(::filterItems)
         }
 
         listState().scrollToItem(tab.scrollPosition())
