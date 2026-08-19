@@ -86,7 +86,7 @@ class MarkdownParser {
         }
 
         if (line.startsWith("![")) {
-            imageExtractor.invoke(line).forEach { appendNewLine(it) }
+            imageExtractor.invoke(line).forEach(appendNewLine::invoke)
             return
         }
 
