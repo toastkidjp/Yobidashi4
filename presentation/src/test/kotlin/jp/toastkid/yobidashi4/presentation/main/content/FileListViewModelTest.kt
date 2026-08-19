@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEvent
@@ -109,7 +110,7 @@ class FileListViewModelTest {
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
+            KeyEvent(
                 Key.Z,
                 KeyEventType.KeyUp,
                 isCtrlPressed = true,
