@@ -207,4 +207,9 @@ class TableViewModelTest {
         verify { mainViewModel.updateScrollableTab(any(), any()) }
     }
 
+    @Test
+    fun scrollEventFlow() {
+        subject.scrollEventFlow()
+    }
+
 }
