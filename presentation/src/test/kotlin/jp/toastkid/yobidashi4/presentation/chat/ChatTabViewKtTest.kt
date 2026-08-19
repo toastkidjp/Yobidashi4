@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -40,6 +41,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.util.UUID
 
 class ChatTabViewKtTest {
 
@@ -77,6 +79,7 @@ class ChatTabViewKtTest {
         every { anyConstructed<ChatTabViewModel>().clearChat() } just Runs
         every { anyConstructed<ChatTabViewModel>().clipText(any()) } just Runs
         every { anyConstructed<ChatTabViewModel>().trySend() } just Runs
+        coEvery { anyConstructed<ChatTabViewModel>().send() } just Runs
         every { tab.chat() } returns mockk()
         every { tab.scrollPosition() } returns 0
         every { tab.initialModel() } returns mockk()
@@ -92,6 +95,9 @@ class ChatTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun chatTabView() {
+        val mutableSharedFlow = MutableSharedFlow<UUID>(extraBufferCapacity = 1)
+        every { anyConstructed<ChatTabViewModel>().sendEventFlow() } returns mutableSharedFlow
+
         runDesktopComposeUiTest {
             setContent {
                 ChatTabView(tab)
@@ -125,6 +131,9 @@ class ChatTabViewKtTest {
                     click()
                 }
                 .assertDoesNotExist()
+
+            verify { anyConstructed<ChatTabViewModel>().sendEventFlow() }
+            mutableSharedFlow.tryEmit(UUID.randomUUID())
 
             onNodeWithContentDescription("Send chat", useUnmergedTree = true)
                 .performClick()
