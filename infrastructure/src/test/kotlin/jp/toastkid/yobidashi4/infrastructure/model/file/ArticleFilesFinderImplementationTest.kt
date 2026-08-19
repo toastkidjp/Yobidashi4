@@ -46,7 +46,7 @@ class ArticleFilesFinderImplementationTest {
     @Test
     fun test() {
         val folder = "data/".toPath()
-        val path3 = "data/『2021-01-02』".toPath()
+        val path3 = "data/『2021-01-02』3".toPath()
         val path1 = "data/2021-01-02".toPath()
         val path2 = "data/Test".toPath()
         val path4 = "data/path4".toPath()
