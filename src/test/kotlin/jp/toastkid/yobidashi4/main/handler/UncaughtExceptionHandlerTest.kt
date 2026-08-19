@@ -8,15 +8,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import org.slf4j.Logger
 
 class UncaughtExceptionHandlerTest {
@@ -30,14 +24,6 @@ class UncaughtExceptionHandlerTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { mockk<Setting>() } bind(Setting::class)
-                    single(qualifier=null) { mockk<WebViewPool>() } bind(WebViewPool::class)
-                }
-            )
-        }
         every { logger.error(any(), any<Throwable>()) } just Runs
 
         subject = UncaughtExceptionHandler(logger)
@@ -45,7 +31,6 @@ class UncaughtExceptionHandlerTest {
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
