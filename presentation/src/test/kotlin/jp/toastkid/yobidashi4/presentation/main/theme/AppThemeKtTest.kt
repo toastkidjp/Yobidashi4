@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.theme
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import org.junit.jupiter.api.Test
 
 class AppThemeKtTest {
