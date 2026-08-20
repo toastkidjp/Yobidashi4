@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi4.presentation.main.menu
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.window.Window
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
