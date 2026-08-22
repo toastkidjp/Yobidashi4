@@ -19,8 +19,10 @@ class BigramGenerator {
         .replace("\n", "")
         .windowed(2, 1)
         .filter(CharSequence::isNotBlank)
-        .filter { it.matches(regex) }
+        .filter { matchRegex(it) }
         .filter { it.any(::isKanjiCharacter) }
         .filter { stopWords.none { stopWord -> it.contains(stopWord) } }
+
+    private fun matchRegex(string: String): Boolean = string.matches(regex)
 
 }
