@@ -27,6 +27,8 @@ class BigramGenerator {
 
     private fun containsKanjiCharacter(string: String): Boolean = string.any(::isKanjiCharacter)
 
-    private fun noneStopWord(string: String): Boolean = stopWords.none { stopWord -> string.contains(stopWord) }
+    private fun noneStopWord(string: String): Boolean = stopWords.none { stopWord -> containsStopWord(string, stopWord) }
+
+    private fun containsStopWord(string: String, stopWord: String): Boolean = string.contains(stopWord)
 
 }
