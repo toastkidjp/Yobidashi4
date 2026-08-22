@@ -128,7 +128,7 @@ class FileListViewModelTest {
         every { anyConstructed<ZipArchiver>().invoke(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
-            androidx.compose.ui.input.key.KeyEvent(
+            KeyEvent(
                 Key.Z, KeyEventType.KeyDown, isCtrlPressed = true, isShiftPressed = true
             )
         )
