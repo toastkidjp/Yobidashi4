@@ -33,28 +33,38 @@ class TfIdfDataSetPreparator(
 
         docs.forEach { text ->
             // ここで一旦、このドキュメント内の 2-gram の頻度を計算する
-            val counts = bigramGenerator.invoke(text)
-                .groupingBy { it }
-                .eachCount()
-                .filter { it.value > 2 }
-
-            val example = ArrayExample(factory.unknownOutput)
-
-            // 集計済みの頻度を重み(Value)として add する
-            counts.forEach { (word, tf) ->
-                val df = dfMap[word] ?: 1
-                // 標準的な TF-IDF (スムージング版)
-                val tfIdf = tf * ln(docs.size / df.toDouble() + 1.0)
-
-                if (tfIdf > 0.0) {
-                    example.add(word, tfIdf)
-                }
-            }
+            val example = calculateExample(text, factory, dfMap, docs)
             if (example.any()) {
                 dataset.add(example)
             }
         }
         return dataset
+    }
+
+    private fun calculateExample(
+        text: Pair<String, String>,
+        factory: ClusteringFactory,
+        dfMap: Map<String, Int>,
+        docs: List<Pair<String, String>>
+    ): ArrayExample<ClusterID?> {
+        val counts = bigramGenerator.invoke(text)
+            .groupingBy { it }
+            .eachCount()
+            .filter { it.value > 2 }
+
+        val example = ArrayExample(factory.unknownOutput)
+
+        // 集計済みの頻度を重み(Value)として add する
+        counts.forEach { (word, tf) ->
+            val df = dfMap[word] ?: 1
+            // 標準的な TF-IDF (スムージング版)
+            val tfIdf = tf * ln(docs.size / df.toDouble() + 1.0)
+
+            if (tfIdf > 0.0) {
+                example.add(word, tfIdf)
+            }
+        }
+        return example
     }
 
 }
