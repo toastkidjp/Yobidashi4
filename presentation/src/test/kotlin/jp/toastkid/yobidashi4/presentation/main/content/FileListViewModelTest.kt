@@ -149,7 +149,7 @@ class FileListViewModelTest {
         every { mainViewModel.hideArticleList() } just Runs
 
         val consumed = subject.onKeyEventFromCell(
-            androidx.compose.ui.input.key.KeyEvent(Key.Enter, KeyEventType.KeyDown),
+            KeyEvent(Key.Enter, KeyEventType.KeyDown),
             fileListItem
         )
 
