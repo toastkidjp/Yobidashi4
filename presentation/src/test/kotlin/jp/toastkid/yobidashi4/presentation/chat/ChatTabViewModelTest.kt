@@ -31,6 +31,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.chat.Chat
 import jp.toastkid.yobidashi4.domain.model.chat.ChatMessage
 import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
+import jp.toastkid.yobidashi4.domain.model.chat.Source
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
@@ -127,7 +128,7 @@ class ChatTabViewModelTest {
         subject.send()
         capturingSlot.captured.invoke(null)
         capturingSlot.captured.invoke(ChatResponseItem("Answer"))
-        capturingSlot.captured.invoke(ChatResponseItem("on going"))
+        capturingSlot.captured.invoke(ChatResponseItem("on going", sources = listOf(Source("title", ""))))
 
         verify { service.send(any(), any(), any()) }
 
