@@ -28,7 +28,7 @@ dependencies {
     implementation(libraries.koinAnnotations)
     ksp(libraries.koinKspCompiler)
 
-    testImplementation(compose.desktop.uiTestJUnit4)
+    testImplementation("org.jetbrains.compose.ui:ui-test-junit4:1.11.1")
 }
 
 compose.resources {
