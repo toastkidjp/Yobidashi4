@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.yobidashi4.presentation.tool.file
 
 import androidx.compose.foundation.VerticalScrollbar
@@ -5,8 +12,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -22,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -79,40 +89,46 @@ fun FileRenameToolView() {
                 }
             }
 
-            Box {
-                LazyColumn(state = viewModel.listState()) {
-                    items(viewModel.items()) { path ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(4.dp)
+            Row {
+                Box {
+                    LazyColumn(state = viewModel.listState()) {
+                        items(viewModel.items()) { path ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(4.dp)
+                            ) {
+                                Text(path.fileName.toString())
+                                Text(
+                                    "x",
+                                    color = MaterialTheme.colors.secondary,
+                                    modifier = Modifier.padding(8.dp)
+                                        .clickable {
+                                            viewModel.remove(path)
+                                        }
+                                        .semantics { contentDescription = "Delete ${path.fileName}" }
+                                )
+                            }
+                        }
+                    }
+
+                    if (viewModel.items().isEmpty()) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.align(Alignment.Center).padding(8.dp)
                         ) {
-                            Text(path.fileName.toString())
-                            Text(
-                                "x",
-                                color = MaterialTheme.colors.secondary,
-                                modifier = Modifier.padding(8.dp)
-                                    .clickable {
-                                        viewModel.remove(path)
-                                    }
-                                    .semantics { contentDescription = "Delete ${path.fileName}" }
-                            )
+                            Icon(vectorResource(Res.drawable.ic_image), contentDescription = "icon")
+                            Text("Drop image files.", modifier = Modifier.padding(8.dp))
                         }
                     }
                 }
 
-                if (viewModel.items().isEmpty()) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.align(Alignment.Center).padding(8.dp)
-                    ) {
-                        Icon(vectorResource(Res.drawable.ic_image), contentDescription = "icon")
-                        Text("Drop image files.", modifier = Modifier.padding(8.dp))
-                    }
-                }
+                Spacer(modifier = Modifier.width(16.dp))
 
+                val onPrimary = MaterialTheme.colors.onPrimary
                 VerticalScrollbar(
                     adapter = rememberScrollbarAdapter(viewModel.listState()),
-                    modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+                    modifier = Modifier.fillMaxHeight()
+                        .drawBehind { drawRect(onPrimary) }
                 )
             }
         }
