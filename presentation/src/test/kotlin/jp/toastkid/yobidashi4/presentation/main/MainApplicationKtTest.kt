@@ -16,6 +16,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
@@ -170,7 +171,13 @@ class MainApplicationKtTest {
     @OptIn(ExperimentalTestApi::class, ExperimentalFoundationApi::class)
     @Test
     fun test() {
+        val mutableSharedFlow = MutableSharedFlow<NotificationEvent>(extraBufferCapacity = 1)
+        every { notification.notificationFlow() } returns mutableSharedFlow
+
         launchMainApplication(false)
+        mutableSharedFlow.tryEmit(mockk())
+
+        verify { notification.notificationFlow() }
     }
 
     @Test
