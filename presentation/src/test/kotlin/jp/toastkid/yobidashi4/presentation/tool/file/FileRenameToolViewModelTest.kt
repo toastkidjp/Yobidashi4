@@ -35,6 +35,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
 
 class FileRenameToolViewModelTest {
 
@@ -226,9 +227,14 @@ class FileRenameToolViewModelTest {
 
     @Test
     fun collectDroppedPaths() {
+        val capturingSlot = slot<(Path) -> Unit>()
+        every { mainViewModel.registerDroppedPathReceiver(capture(capturingSlot)) } just Runs
+
         subject.collectDroppedPaths()
 
         verify { mainViewModel.registerDroppedPathReceiver(any()) }
+        capturingSlot.captured.invoke(mockk())
+        assertEquals(1, subject.items().size)
     }
 
 }
