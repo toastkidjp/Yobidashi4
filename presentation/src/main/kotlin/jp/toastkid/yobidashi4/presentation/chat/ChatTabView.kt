@@ -26,6 +26,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -238,16 +240,20 @@ private fun MessageList(
                     modifier = Modifier.padding(horizontal = 4.dp).align(Alignment.BottomStart)
                 )
 
-                Icon(
-                    painterResource(Res.drawable.ic_clipboard),
-                    contentDescription = "Clip this message.",
+                IconButton(
+                    onClick = {
+                        clipText(it.text)
+                    },
                     modifier = Modifier
-                        .clickable {
-                            clipText(it.text)
-                        }
                         .align(Alignment.BottomEnd)
                         .padding(end = 8.dp)
-                )
+                        .testTag("ticon")
+                ) {
+                    Icon(
+                        painterResource(Res.drawable.ic_clipboard),
+                        contentDescription = "Clip this message.",
+                    )
+                }
             }
 
             Divider(modifier = Modifier.padding(start = 16.dp, end = 4.dp))
