@@ -115,8 +115,7 @@ class ChatTabViewKtTest {
 
             val onClickAction = node.config.getOrNull(SemanticsActions.OnClick)
 
-            val action = onClickAction?.action
-            action?.invoke()
+            onClickAction?.action?.invoke()
             verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
 
             onNodeWithContentDescription("Chat list", useUnmergedTree = true)
