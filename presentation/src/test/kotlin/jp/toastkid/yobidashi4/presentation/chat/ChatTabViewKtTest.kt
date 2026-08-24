@@ -112,10 +112,8 @@ class ChatTabViewKtTest {
 
             val onNodeWithContentDescription = onNodeWithTag("ticon")
             val node = onNodeWithContentDescription.fetchSemanticsNode()
+            node.config.getOrNull(SemanticsActions.OnClick)?.action?.invoke()
 
-            val onClickAction = node.config.getOrNull(SemanticsActions.OnClick)
-
-            onClickAction?.action?.invoke()
             verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
 
             onNodeWithContentDescription("Chat list", useUnmergedTree = true)
