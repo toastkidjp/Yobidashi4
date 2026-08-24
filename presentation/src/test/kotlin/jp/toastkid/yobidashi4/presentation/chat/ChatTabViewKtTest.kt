@@ -111,8 +111,8 @@ class ChatTabViewKtTest {
                 .performClick()
 
             val onNodeWithContentDescription = onNodeWithTag("ticon")
-            val node = onNodeWithContentDescription.fetchSemanticsNode()
-            node.config.getOrNull(SemanticsActions.OnClick)?.action?.invoke()
+            onNodeWithContentDescription.fetchSemanticsNode()
+                .config.getOrNull(SemanticsActions.OnClick)?.action?.invoke()
 
             verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
 
