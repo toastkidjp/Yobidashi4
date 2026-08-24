@@ -9,10 +9,13 @@ package jp.toastkid.yobidashi4.presentation.chat
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
@@ -102,14 +105,19 @@ class ChatTabViewKtTest {
             setContent {
                 ChatTabView(tab)
             }
+            mainClock.advanceTimeByFrame()
 
             onNodeWithContentDescription("Input message box.", useUnmergedTree = true)
                 .performClick()
 
-            onNodeWithContentDescription("Clip this message.", useUnmergedTree = true)
-                .performClick()
+            val onNodeWithContentDescription = onNodeWithTag("ticon")
+            val node = onNodeWithContentDescription.fetchSemanticsNode()
 
-            //TODO fix verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
+            val onClickAction = node.config.getOrNull(SemanticsActions.OnClick)
+
+            val action = onClickAction?.action
+            action?.invoke()
+            verify { anyConstructed<ChatTabViewModel>().clipText(any()) }
 
             onNodeWithContentDescription("Chat list", useUnmergedTree = true)
                 .performClick()
