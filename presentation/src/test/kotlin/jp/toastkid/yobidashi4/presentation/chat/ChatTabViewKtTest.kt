@@ -110,7 +110,7 @@ class ChatTabViewKtTest {
             onNodeWithContentDescription("Input message box.", useUnmergedTree = true)
                 .performClick()
 
-            onNodeWithTag("ticon")
+            onNodeWithTag("clip_icon")
                 .fetchSemanticsNode()
                 .config.getOrNull(SemanticsActions.OnClick)?.action?.invoke()
 
