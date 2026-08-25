@@ -148,7 +148,7 @@ class SettingImplementation : Setting {
     }
 
     override fun chatApiKey(): String? {
-        return properties.getProperty("chat_api_key")?.toString()
+        return properties.getProperty("chat_api_key")
     }
 
     override fun items() = properties.toMap()
