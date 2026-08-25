@@ -11,7 +11,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
     fun list(): List<ChatMessage> = texts
 
-    fun makeContent(useWebGrounding: Boolean = false, useImage: Boolean = false) = """
+    fun makeContent(useWebGrounding: Boolean = false, useThinking: Boolean = true, useImage: Boolean = false) = """
       {
         "contents": [
           ${makeContents()}
@@ -33,11 +33,11 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
         ],
         "systemInstruction": {
             "role":"system", 
-            "parts":[ { "text": '${escape(SystemInstruction.DEFAULT.print())}'}]
+            "parts":[ { "text": "${escape(SystemInstruction.DEFAULT.print())}"}]
         },
         "generationConfig": {
           ${if (useImage) "\"responseModalities\":[\"TEXT\",\"IMAGE\"]," else "" }
-          "thinkingConfig": { "thinkingBudget": 0 } 
+          ${if (useThinking) "\"thinkingConfig\": { \"thinkingBudget\": 0 }" else "" } 
         }
       }
     """.trimIndent()
@@ -48,7 +48,7 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
             .joinToString(",", transform = ::toContent)
 
     private fun toContent(it: ChatMessage) =
-        "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": '${escape(it.text)}'}" +
+        "{\"role\":\"${it.role}\", \"parts\":[ { \"text\": \"${escape(it.text)}\"}" +
                 " ${
                     if (it.image.isNullOrBlank().not()) 
                         ",{\"inline_data\": {\"mime_type\":\"image/jpeg\", \"data\": \"${it.image}\"}}"
