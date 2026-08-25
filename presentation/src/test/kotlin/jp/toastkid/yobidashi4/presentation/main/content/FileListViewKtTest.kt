@@ -8,8 +8,10 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.doubleClick
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -17,6 +19,7 @@ import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -116,7 +119,21 @@ class FileListViewKtTest {
                 FileListView(emptyList())
             }
 
-            onNode(hasText("test-list-item1"), useUnmergedTree = true)
+            val performKeyInput = onNode(hasContentDescription("test-list-item1"))
+                .assertExists("Not exists!")
+                .performSemanticsAction(SemanticsActions.RequestFocus)
+                .performKeyInput {
+                    pressKey(Key.DirectionUp)
+                    pressKey(Key.DirectionDown)
+                    pressKey(Key.Enter)
+                }
+            performKeyInput
+                .performMouseInput {
+                    enter()
+                    exit()
+                }
+
+            onNode(hasContentDescription("File list"), useUnmergedTree = true)
                 .assertExists("Not exists!")
                 .performClick()
                 .performKeyInput {
@@ -124,6 +141,7 @@ class FileListViewKtTest {
                     pressKey(Key.DirectionDown)
                     pressKey(Key.Enter)
                 }
+            performKeyInput
                 .performMouseInput {
                     enter()
                     exit()
