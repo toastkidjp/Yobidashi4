@@ -12,13 +12,26 @@ enum class GenerativeAiModel(
     private val urlParameter: String,
     private val versionPath: String,
     private val webGrounding: Boolean = false,
+    private val thinking: Boolean = true,
     private val image: Boolean = false
 ) {
 
+    GEMINI_3_6_FLASH(
+        "Gemini 3.6 Flash",
+        "gemini-3.6-flash",
+        "v1beta",
+        thinking = false
+    ),
     GEMINI_3_5_FLASH(
         "Gemini 3.5 Flash",
         "gemini-3.5-flash",
         "v1beta",
+    ),
+    GEMINI_3_5_FLASH_LITE(
+        "Gemini 3.5 Flash Lite",
+        "gemini-3.5-flash-lite",
+        "v1beta",
+        thinking = false
     ),
     GEMINI_3_1_FLASH_LITE(
         "Gemini 3.1 Flash Lite",
