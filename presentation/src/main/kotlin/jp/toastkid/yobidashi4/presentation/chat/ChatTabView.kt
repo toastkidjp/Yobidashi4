@@ -247,7 +247,7 @@ private fun MessageList(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(end = 8.dp)
-                        .testTag("ticon")
+                        .testTag("clip_icon")
                 ) {
                     Icon(
                         painterResource(Res.drawable.ic_clipboard),
