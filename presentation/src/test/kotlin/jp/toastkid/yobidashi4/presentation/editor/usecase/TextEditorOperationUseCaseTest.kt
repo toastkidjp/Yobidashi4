@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi4.presentation.editor.usecase
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.selectAll
+import androidx.compose.foundation.text.input.setTextAndSelectAll
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.TextRange
 import io.mockk.MockKAnnotations
@@ -434,6 +435,18 @@ class TextEditorOperationUseCaseTest {
 
         assertTrue(consumed)
         assertEquals("1. Angel has fallen.\n2. He has gone.", content.text)
+    }
+
+    @Test
+    fun toTaskList() {
+        content.clearText()
+        content.setTextAndSelectAll("Angel has fallen.\nHe has gone.")
+
+        val consumed = subject.toTaskList()
+
+        assertTrue(consumed)
+        assertTrue(content.text.contains("- [ ] Angel has fallen."))
+        assertTrue(content.text.contains("- [ ] He has gone."))
     }
 
     @Test
