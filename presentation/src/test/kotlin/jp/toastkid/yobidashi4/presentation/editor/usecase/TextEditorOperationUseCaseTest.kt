@@ -156,6 +156,17 @@ class TextEditorOperationUseCaseTest {
     }
 
     @Test
+    fun surroundMultibyteBrackets() {
+        val capturingSlot = slot<(String) -> String?>()
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot)) } returns true
+
+        subject.surroundMultibyteBrackets()
+        val result = capturingSlot.captured.invoke("test")
+
+        assertEquals("「test」", result)
+    }
+
+    @Test
     fun scrollBy() {
         subject.scrollBy(1f)
 
