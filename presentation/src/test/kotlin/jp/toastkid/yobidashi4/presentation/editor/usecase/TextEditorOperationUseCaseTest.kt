@@ -150,6 +150,12 @@ class TextEditorOperationUseCaseTest {
     }
 
     @Test
+    fun moveToBottom() {
+        subject.moveToBottom()
+        assertEquals(TextRange.Zero, content.selection)
+    }
+
+    @Test
     fun scrollBy() {
         subject.scrollBy(1f)
 
