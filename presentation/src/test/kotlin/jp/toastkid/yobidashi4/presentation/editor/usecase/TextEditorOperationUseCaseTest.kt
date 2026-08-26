@@ -286,6 +286,18 @@ class TextEditorOperationUseCaseTest {
     }
 
     @Test
+    fun noopOpenFileList() {
+        every { mainViewModel.openArticleList() } returns true
+        every { mainViewModel.switchArticleList() } just Runs
+
+        subject.switchArticleList()
+
+        verify { mainViewModel.openArticleList() }
+        verify(inverse = true) { mainViewModel.switchArticleList() }
+        verify { scrollBy wasNot called }
+    }
+
+    @Test
     fun switchLineNumber() {
         subject.switchLineNumber()
 
