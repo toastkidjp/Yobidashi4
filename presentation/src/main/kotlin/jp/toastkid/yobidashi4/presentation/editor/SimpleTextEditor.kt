@@ -75,8 +75,7 @@ fun SimpleTextEditor(
         BasicTextField(
             state = viewModel.content(),
             onTextLayout = {
-                val multiParagraph = it.invoke()?.multiParagraph ?: return@BasicTextField
-                viewModel.setMultiParagraph(multiParagraph)
+                viewModel.setMultiParagraph(it)
             },
             inputTransformation = viewModel.inputTransformation(),
             outputTransformation = viewModel.visualTransformation(),
