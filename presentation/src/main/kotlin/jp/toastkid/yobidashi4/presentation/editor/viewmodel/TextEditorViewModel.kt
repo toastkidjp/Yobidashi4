@@ -23,6 +23,7 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
@@ -135,7 +136,8 @@ class TextEditorViewModel : KoinComponent {
 
     private val lineHeights = mutableMapOf<Int, TextUnit>()
 
-    fun setMultiParagraph(multiParagraph: MultiParagraph) {
+    fun setMultiParagraph(it: () -> TextLayoutResult?) {
+        val multiParagraph = it.invoke()?.multiParagraph ?: return
         lastParagraph.set(multiParagraph)
         if (lineCount.value != multiParagraph.lineCount) {
             lineCount.value = multiParagraph.lineCount
