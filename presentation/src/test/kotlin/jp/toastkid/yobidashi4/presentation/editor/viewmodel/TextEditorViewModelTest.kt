@@ -21,12 +21,15 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.MultiParagraph
 import androidx.compose.ui.text.MultiParagraphIntrinsics
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.IntSize
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -69,7 +72,7 @@ class TextEditorViewModelTest {
     @MockK
     private lateinit var setting: Setting
 
-    @MockK
+    @RelaxedMockK
     private lateinit var multiParagraph: MultiParagraph
 
     @BeforeEach
@@ -117,7 +120,7 @@ class TextEditorViewModelTest {
         every { multiParagraph.getLineTop(any()) } returns 0f
         every { multiParagraph.lineCount } returns 11
 
-        viewModel.setMultiParagraph(multiParagraph)
+        viewModel.setMultiParagraph({ TextLayoutResult(mockk(), multiParagraph, IntSize(1, 1)) })
 
         val currentLineOffset = viewModel.currentLineOffset()
         assertEquals(20f, currentLineOffset.x)
@@ -155,7 +158,7 @@ class TextEditorViewModelTest {
         every { multiParagraph.getLineHeight(1) } returns 31.0f
         every { multiParagraph.getLineHeight(2) } returns 30.0f
         every { multiParagraph.lineCount } returns 3
-        viewModel.setMultiParagraph(multiParagraph)
+        viewModel.setMultiParagraph({ TextLayoutResult(mockk(), multiParagraph, IntSize(1, 1)) })
         viewModel.content().edit { append(text) }
 
         viewModel.onClickLineNumber(0)
