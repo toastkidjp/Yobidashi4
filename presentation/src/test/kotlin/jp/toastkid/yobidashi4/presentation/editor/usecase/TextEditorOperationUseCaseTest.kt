@@ -748,13 +748,17 @@ class TextEditorOperationUseCaseTest {
             append("test")
             selection = TextRange(0, 4)
         }
+        val capturingSlot = slot<(String) -> String?>()
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot)) } returns true
 
         val consumed = subject.surroundCodeFence()
+        val result = capturingSlot.captured.invoke("test")
 
         assertTrue(consumed)
         assertEquals(0, content.selection.start)
         assertEquals(4, content.selection.end)
         verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
+        assertEquals("```test```", result)
     }
 
     @Test
