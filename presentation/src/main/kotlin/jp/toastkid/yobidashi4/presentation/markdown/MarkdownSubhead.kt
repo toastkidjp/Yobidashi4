@@ -35,23 +35,33 @@ fun MarkdownSubhead(
     Box(modifier = modifier) {
         Column(modifier = Modifier.verticalScroll(scrollState)) {
             subheadings.forEach { subheading ->
-                HoverHighlightColumn { textColor ->
-                    Text(
-                        text = subheading.text(),
-                        color = textColor,
-                        fontSize = subheading.fontSize().sp,
-                        lineHeight = subheading.fontSize().sp,
-                        modifier = Modifier.fillMaxWidth().clickable {
-                            onClick(subheading.indexOf())
-                        }
-                    )
-                }
+                SubheadRow(subheading.text(), subheading.fontSize(), subheading.indexOf(), onClick)
             }
         }
 
         VerticalScrollbar(
             rememberScrollbarAdapter(scrollState),
             modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
+        )
+    }
+}
+
+@Composable
+private fun SubheadRow(
+    text: String,
+    fontSize: Int,
+    index: Int,
+    onClick: (Int) -> Unit
+) {
+    HoverHighlightColumn { textColor ->
+        Text(
+            text = text,
+            color = textColor,
+            fontSize = fontSize.sp,
+            lineHeight = fontSize.sp,
+            modifier = Modifier.fillMaxWidth().clickable {
+                onClick(index)
+            }
         )
     }
 }
