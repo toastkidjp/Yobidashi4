@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.infrastructure.model.setting
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.editor.setting.ColorDecoderService
 import org.koin.core.annotation.Single
+import java.awt.Color
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Properties
@@ -59,19 +60,19 @@ class SettingImplementation : Setting {
         return properties.getProperty("use_case_sensitive")?.toBoolean() ?: false
     }
 
-    override fun  setEditorBackgroundColor(color: java.awt.Color?) {
-        properties.setProperty("editor_background_color", Integer.toHexString((color ?: java.awt.Color.WHITE).rgb))
+    override fun  setEditorBackgroundColor(color: Color?) {
+        properties.setProperty("editor_background_color", Integer.toHexString((color ?: Color.WHITE).rgb))
     }
 
-    override fun  editorBackgroundColor(): java.awt.Color {
-        return java.awt.Color(225, 225, 225, 255)
+    override fun  editorBackgroundColor(): Color {
+        return Color(225, 225, 225, 255)
     }
 
-    override fun  setEditorForegroundColor(color: java.awt.Color?) {
-        properties.setProperty("editor_foreground_color", Integer.toHexString((color ?: java.awt.Color.BLACK).rgb))
+    override fun  setEditorForegroundColor(color: Color?) {
+        properties.setProperty("editor_foreground_color", Integer.toHexString((color ?: Color.BLACK).rgb))
     }
 
-    override fun  editorForegroundColor(): java.awt.Color? {
+    override fun  editorForegroundColor(): Color? {
         return ColorDecoderService().invoke(properties.getProperty("editor_foreground_color"))
     }
 
@@ -108,7 +109,7 @@ class SettingImplementation : Setting {
         return properties.getProperty("editor_conversion_limit")?.toIntOrNull() ?: 4_500
     }
 
-    override fun mediaPlayerPath() = properties.getProperty("media_player_path")
+    override fun mediaPlayerPath(): String? = properties.getProperty("media_player_path")
 
     override fun mediaFolderPath() = properties.getProperty("media_folder_path")
 
