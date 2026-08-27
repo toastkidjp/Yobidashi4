@@ -94,7 +94,9 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
         withContext(ioContextProvider()) {
             mainViewModel.loadBackgroundImage()
         }
+    }
 
+    LaunchedEffect(Unit) {
         withContext(ioContextProvider()) {
             notification
                 .notificationFlow()
