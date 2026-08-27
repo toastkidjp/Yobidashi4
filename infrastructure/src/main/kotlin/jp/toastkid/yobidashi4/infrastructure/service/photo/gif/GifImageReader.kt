@@ -13,7 +13,12 @@ class GifImageReader(private val fileSystem: FileSystem = FileSystem.SYSTEM) {
     operator fun invoke(path: Path, consumer: (BufferedImage, Int) -> Unit) {
         val it = ImageIO.getImageReadersByFormatName("gif")
         val imageReader: ImageReader = it.next()
-        imageReader.input = ImageIO.createImageInputStream(fileSystem.source(path.toOkioPath()).buffer().inputStream())
+        imageReader.input = ImageIO
+            .createImageInputStream(
+                fileSystem.source(path.toOkioPath())
+                    .buffer()
+                    .inputStream()
+            )
         val count: Int = imageReader.getNumImages(true)
         for (i in 0 until count) {
             consumer(imageReader.read(i), i)
