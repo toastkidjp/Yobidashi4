@@ -140,7 +140,7 @@ class SlideDeckReaderImplementation(private val fileSystem: FileSystem) : SlideD
                     return@forEach
                 }
 
-                if (tableBuilder.hasColumns() == false) {
+                if (!tableBuilder.hasColumns()) {
                     tableBuilder.setColumns(line)
                     return@forEach
                 }
