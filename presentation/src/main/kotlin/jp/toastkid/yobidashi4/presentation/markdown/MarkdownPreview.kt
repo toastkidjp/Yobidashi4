@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.markdown.TextBlock
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
@@ -133,71 +134,7 @@ private fun MarkdownContent(
         SelectionContainer {
             LazyColumn(state = scrollState, modifier = Modifier.padding(8.dp)) {
                 items(content.lines()) { line ->
-                    when (line) {
-                        is TextBlock -> {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                if (line.quote) {
-                                    VerticalDivider(
-                                        2.dp,
-                                        Color(0x88CCAAFF),
-                                        Modifier.padding(start = 4.dp, end = 8.dp).height(36.dp)
-                                    )
-                                }
-                                TextLineView(
-                                    line.text,
-                                    TextStyle(
-                                        color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
-                                        fontSize = line.fontSize().sp,
-                                        fontWeight = fontWeight(line.level),
-                                    ),
-                                    Modifier.padding(bottom = 8.dp)
-                                )
-                            }
-                        }
-
-                        is ListLine -> Column {
-                            line.list.forEachIndexed { index, it ->
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    when {
-                                        line.ordered -> DisableSelection {
-                                            Text("${index + 1}. ", fontSize = 14.sp)
-                                        }
-
-                                        line.taskList -> Checkbox(
-                                            checked = it.startsWith("[x]"),
-                                            enabled = false,
-                                            onCheckedChange = null,
-                                            modifier = Modifier.size(32.dp)
-                                        )
-
-                                        else -> DisableSelection {
-                                            Text("・ ", fontSize = 14.sp)
-                                        }
-                                    }
-                                    TextLineView(
-                                        extractText(it, line.taskList),
-                                        TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
-                                        Modifier.padding(bottom = 4.dp)
-                                    )
-                                }
-                            }
-                        }
-
-                        is ImageLine -> {
-                            val read = loadBitmap(line.source)
-                            if (read != null) {
-                                Image(
-                                    read,
-                                    contentDescription = line.source,
-                                    modifier = Modifier.padding(vertical = 8.dp)
-                                )
-                            }
-                        }
-
-                        is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
-                        is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                        is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
-                    }
+                    LineContent(line, fontWeight, extractText, loadBitmap)
                 }
             }
         }
@@ -206,5 +143,79 @@ private fun MarkdownContent(
             adapter = rememberScrollbarAdapter(scrollState),
             modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd)
         )
+    }
+}
+
+@Composable
+private fun LineContent(
+    line: Line,
+    fontWeight: (Int) -> FontWeight,
+    extractText: (String, Boolean) -> String,
+    loadBitmap: (String) -> ImageBitmap?
+) {
+    when (line) {
+        is TextBlock -> {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (line.quote) {
+                    VerticalDivider(
+                        2.dp,
+                        Color(0x88CCAAFF),
+                        Modifier.padding(start = 4.dp, end = 8.dp).height(36.dp)
+                    )
+                }
+                TextLineView(
+                    line.text,
+                    TextStyle(
+                        color = if (line.quote) Color(0xFFCCAAFF) else MaterialTheme.colors.onSurface,
+                        fontSize = line.fontSize().sp,
+                        fontWeight = fontWeight(line.level),
+                    ),
+                    Modifier.padding(bottom = 8.dp)
+                )
+            }
+        }
+
+        is ListLine -> Column {
+            line.list.forEachIndexed { index, it ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    when {
+                        line.ordered -> DisableSelection {
+                            Text("${index + 1}. ", fontSize = 14.sp)
+                        }
+
+                        line.taskList -> Checkbox(
+                            checked = it.startsWith("[x]"),
+                            enabled = false,
+                            onCheckedChange = null,
+                            modifier = Modifier.size(32.dp)
+                        )
+
+                        else -> DisableSelection {
+                            Text("・ ", fontSize = 14.sp)
+                        }
+                    }
+                    TextLineView(
+                        extractText(it, line.taskList),
+                        TextStyle(color = MaterialTheme.colors.onSurface, fontSize = 14.sp),
+                        Modifier.padding(bottom = 4.dp)
+                    )
+                }
+            }
+        }
+
+        is ImageLine -> {
+            val read = loadBitmap(line.source)
+            if (read != null) {
+                Image(
+                    read,
+                    contentDescription = line.source,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+        }
+
+        is HorizontalRule -> Divider(modifier = Modifier.padding(vertical = 8.dp))
+        is TableLine -> TableLineView(line, 16.sp, Modifier.padding(bottom = 8.dp))
+        is CodeBlockLine -> CodeBlockView(line, 16.sp, Modifier.padding(bottom = 8.dp))
     }
 }
