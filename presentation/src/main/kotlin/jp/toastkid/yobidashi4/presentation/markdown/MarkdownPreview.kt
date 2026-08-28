@@ -70,7 +70,7 @@ fun MarkdownPreview(
     scrollState: LazyListState,
     modifier: Modifier
 ) {
-    val viewModel = remember { MarkdownPreviewViewModel(scrollState) }
+    val viewModel = remember { MarkdownPreviewViewModel() }
 
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
