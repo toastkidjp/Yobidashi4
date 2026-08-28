@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
@@ -64,7 +63,7 @@ class MarkdownPreviewViewModelTest {
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } returns BufferedImage(1, 1, Image.SCALE_FAST)
 
-        subject = MarkdownPreviewViewModel(ScrollState(0))
+        subject = MarkdownPreviewViewModel()
     }
 
     @AfterEach
