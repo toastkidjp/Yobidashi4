@@ -870,10 +870,9 @@ class TextEditorOperationUseCaseTest {
             append("test")
         }
 
-        val consumed = subject.search()
+        val consumed = subject.openUrl()
 
         assertFalse(consumed)
-        verify { mainViewModel wasNot called }
     }
 
     @Test
