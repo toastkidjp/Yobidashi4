@@ -838,6 +838,16 @@ class TextEditorOperationUseCaseTest {
     }
 
     @Test
+    fun noopSwitchEditable() {
+        val tab = mockk<WebTab>()
+        every { mainViewModel.currentTab() } returns tab
+
+        subject.switchEditable()
+
+        verify { mainViewModel.currentTab() }
+    }
+
+    @Test
     fun openUrl() {
         every { mainViewModel.openUrl(any(), any()) } just Runs
         content.clearText()
