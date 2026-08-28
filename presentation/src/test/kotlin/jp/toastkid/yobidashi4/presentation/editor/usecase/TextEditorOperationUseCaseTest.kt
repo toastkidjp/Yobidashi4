@@ -743,15 +743,18 @@ class TextEditorOperationUseCaseTest {
 
     @Test
     fun braces() {
-        content.clearText()
+        val capturingSlot = slot<(String) -> String?>()
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot)) } returns true
         content.edit {
             append("test")
             selection = TextRange(0, 4)
         }
 
         val consumed = subject.surroundBrackets()
+        val result = capturingSlot.captured("test")
 
         assertTrue(consumed)
+        assertEquals("(test)", result)
         verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
     }
 
