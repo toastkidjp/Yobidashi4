@@ -120,7 +120,7 @@ class TextEditorViewModelTest {
         every { multiParagraph.getLineTop(any()) } returns 0f
         every { multiParagraph.lineCount } returns 11
 
-        viewModel.setMultiParagraph({ TextLayoutResult(mockk(), multiParagraph, IntSize(1, 1)) })
+        viewModel.setMultiParagraph { TextLayoutResult(mockk(), multiParagraph, IntSize(1, 1)) }
 
         val currentLineOffset = viewModel.currentLineOffset()
         assertEquals(20f, currentLineOffset.x)
