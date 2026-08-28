@@ -220,6 +220,24 @@ class TextEditorOperationUseCaseTest {
     }
 
     @Test
+    fun noopCutLine() {
+        every { multiParagraphState.invoke() } returns null
+
+        mockkConstructor(ClipboardPutterService::class)
+        every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
+        content.edit {
+            append("test\ntest2\ntest3")
+        }
+
+        val consumed = subject.cutLine()
+
+        assertFalse(consumed)
+        verify { multiParagraph wasNot called }
+        verify { multiParagraphState.invoke() }
+        verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
+    }
+
+    @Test
     fun deleteLine() {
         every { multiParagraph.getLineForOffset(any()) } returns 0
         every { multiParagraph.getLineStart(0) } returns 0
