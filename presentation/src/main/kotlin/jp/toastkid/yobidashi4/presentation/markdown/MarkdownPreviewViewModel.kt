@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi4.presentation.markdown
 
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
@@ -21,7 +20,7 @@ import java.io.IOException
 import java.net.URI
 import javax.imageio.ImageIO
 
-class MarkdownPreviewViewModel(scrollState: ScrollableState) : KoinComponent {
+class MarkdownPreviewViewModel() : KoinComponent {
 
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
