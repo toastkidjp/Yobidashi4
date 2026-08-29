@@ -23,7 +23,7 @@ dependencyResolutionManagement {
             library("jcef", "me.friwi", "jcefmaven").version("146.0.10")
             library("jsoup", "org.jsoup", "jsoup").version("1.23.1")
             library("okio", "com.squareup.okio", "okio").version("3.18.1")
-            version("compose", "1.11.1")
+            version("compose", "1.12.0")
             version("kover", "0.9.9")
             version("kotlin", "2.4.0")
             version("ksp", "2.3.9")
