@@ -44,13 +44,13 @@ public class Code {
             """
 
         val textBuffer = mockk<TextFieldBuffer>()
-        every { textBuffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { textBuffer.addStyle(any<SpanStyle>(), any<Int>(), any()) } just Runs
         every { textBuffer.asCharSequence() } returns code
         with(subject) {
             textBuffer.transformOutput()
         }
 
-        verify { textBuffer.addStyle(any<SpanStyle>(), any(), any()) }
+        verify { textBuffer.addStyle(any<SpanStyle>(), any<Int>(), any()) }
     }
 
 }
