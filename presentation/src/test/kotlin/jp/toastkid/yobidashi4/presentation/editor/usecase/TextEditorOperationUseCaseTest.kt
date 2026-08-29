@@ -717,6 +717,8 @@ class TextEditorOperationUseCaseTest {
 
     @Test
     fun doubleQuote() {
+        val capturingSlot = slot<(String) -> String?>()
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot)) } returns true
         content.clearText()
         content.edit {
             append("test")
@@ -724,9 +726,11 @@ class TextEditorOperationUseCaseTest {
         }
 
         val consumed = subject.doubleQuote()
+        val result = capturingSlot.captured.invoke("test")
 
         assertTrue(consumed)
         verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
+        assertEquals("\"test\"", result)
     }
 
     @Test
