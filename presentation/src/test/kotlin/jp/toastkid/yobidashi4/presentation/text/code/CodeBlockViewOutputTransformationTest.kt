@@ -13,6 +13,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -29,6 +30,7 @@ class CodeBlockViewOutputTransformationTest {
 
     @AfterEach
     fun tearDown() {
+        unmockkAll()
     }
 
     @Test
