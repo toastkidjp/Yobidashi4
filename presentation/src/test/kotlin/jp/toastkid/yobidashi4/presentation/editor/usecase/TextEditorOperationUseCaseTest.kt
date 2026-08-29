@@ -689,6 +689,8 @@ class TextEditorOperationUseCaseTest {
 
     @Test
     fun bolding() {
+        val capturingSlot = slot<(String) -> String?>()
+        every { selectedTextConversion.invoke(any(), any(), any(), capture(capturingSlot)) } returns true
         content.clearText()
         content.edit {
             append("test")
@@ -696,9 +698,11 @@ class TextEditorOperationUseCaseTest {
         }
 
         val consumed = subject.bold()
+        val result = capturingSlot.captured.invoke("test")
 
         assertTrue(consumed)
         verify { selectedTextConversion.invoke(any(), any(), any(), any()) }
+        assertEquals("**test**", result)
     }
 
     @Test
