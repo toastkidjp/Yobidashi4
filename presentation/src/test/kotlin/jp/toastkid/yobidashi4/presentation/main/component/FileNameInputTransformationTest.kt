@@ -34,7 +34,7 @@ class FileNameInputTransformationTest {
         val buffer = mockk<TextFieldBuffer>()
         val original = "valid_filename_123"
         every { buffer.asCharSequence() } returns original
-        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) } just Runs
         every { buffer.append(any<String>()) } returns buffer
         every { buffer.length } returns original.length
         every { buffer.replace(any(), any(), any()) } just Runs
@@ -52,7 +52,7 @@ class FileNameInputTransformationTest {
     fun filterIncorrectCharacter(input: String) {
         val buffer = mockk<TextFieldBuffer>()
         every { buffer.asCharSequence() } returns input
-        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) } just Runs
         every { buffer.append(any<String>()) } returns buffer
         every { buffer.length } returns input.length
         every { buffer.replace(any(), any(), any()) } just Runs
@@ -69,7 +69,7 @@ class FileNameInputTransformationTest {
         val input = "my/file:name*.txt"
         val buffer = mockk<TextFieldBuffer>()
         every { buffer.asCharSequence() } returns input
-        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) } just Runs
         every { buffer.append(any<String>()) } returns buffer
         every { buffer.length } returns input.length
         every { buffer.replace(any(), any(), any()) } just Runs
