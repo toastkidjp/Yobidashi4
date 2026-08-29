@@ -35,14 +35,14 @@ class TextEditorOutputTransformationTest {
         val buffer = mockk<TextFieldBuffer>()
         every { buffer.length } returns "# Test doc".length
         every { buffer.asCharSequence() } returns "# Test doc"
-        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) } just Runs
         every { buffer.append(any<String>()) } returns buffer
 
         with(subject) {
             buffer.transformOutput()
         }
 
-        verify { buffer.addStyle(any<SpanStyle>(), any(), any()) }
+        verify { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) }
         verify { buffer.append("[EOF]") }
     }
 
@@ -51,7 +51,7 @@ class TextEditorOutputTransformationTest {
         val buffer = mockk<TextFieldBuffer>()
         every { buffer.length } returns "# Test doc".length
         every { buffer.asCharSequence() } returns "# Test doc"
-        every { buffer.addStyle(any<SpanStyle>(), any(), any()) } just Runs
+        every { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) } just Runs
         every { buffer.append(any<String>()) } returns buffer
         subject = TextEditorOutputTransformation(
             TextFieldState(),
@@ -62,7 +62,7 @@ class TextEditorOutputTransformationTest {
             buffer.transformOutput()
         }
 
-        verify { buffer.addStyle(any<SpanStyle>(), any(), any()) }
+        verify { buffer.addStyle(any<SpanStyle>(), any<Int>(), any()) }
         verify { buffer.append("[EOF]") }
     }
 
