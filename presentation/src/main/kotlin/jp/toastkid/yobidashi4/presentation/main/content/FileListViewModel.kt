@@ -159,7 +159,7 @@ class FileListViewModel : KoinComponent {
 
         val shift = shiftPressing.get()
         if (shift) {
-            val startIndex = articleStates.indexOfFirst(FileListItem::selected)
+            val startIndex = items().indexOfFirst(FileListItem::selected)
             val range =
                 if (startIndex < clickedIndex) (startIndex + 1)..clickedIndex
                 else (clickedIndex until startIndex)
