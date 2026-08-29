@@ -370,6 +370,23 @@ class FileListViewModelTest {
         assertEquals(1, subject.items().filter { it.selected }.size)
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onSingleClickShiftElseCase() {
+        subject = spyk(subject)
+        val items = listOf(
+            FileListItem(mockk()),
+            FileListItem(mockk(), selected = true),
+            FileListItem(mockk())
+        )
+        every { subject.items() } returns items
+        subject.onKeyEvent(
+            androidx.compose.ui.input.key.KeyEvent(Key.Q, KeyEventType.KeyDown, isShiftPressed = true)
+        )
+
+        subject.onSingleClick(items[1])
+    }
+
     @Test
     fun onLongClick() {
         val item = FileListItem(mockk(), editable = true)
