@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.notification
 
-import java.time.LocalDateTime
-import java.util.concurrent.atomic.AtomicBoolean
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
@@ -11,6 +9,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.LocalDateTime
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Single
 class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent {
@@ -39,6 +39,8 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
                     continue
                 }
                 _notificationFlow.emit(event)
+                notificationEvents.remove(event)
+                repository.delete(event)
                 iterator.remove()
             }
             delay(delay)
