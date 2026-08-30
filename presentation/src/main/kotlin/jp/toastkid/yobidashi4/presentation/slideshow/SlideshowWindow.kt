@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi4.presentation.slideshow
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
@@ -39,13 +40,20 @@ class SlideshowWindow : KoinComponent {
                 state = viewModel.windowState(),
                 visible = viewModel.windowVisible(),
                 title = deck.title,
+                onKeyEvent = {
+                    return@Window viewModel.onKeyEvent(it)
+                }
             ) {
                 Slideshow(
                     deck,
-                    { viewModel.onEscapeKeyReleased(onCloseWindow) },
+                    {},
                     viewModel::toggleFullscreen,
                     modifier = Modifier
                 )
+            }
+
+            LaunchedEffect(path) {
+                viewModel.setOnCloseWindow(onCloseWindow)
             }
         }
     }
