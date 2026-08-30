@@ -139,6 +139,15 @@ Test3
     }
 
     @Test
+    fun delete() {
+        subject.delete(subject.readAll()[1])
+
+        fakeFileSystem.source(path).buffer().use {
+            assertFalse(it.readUtf8().contains("Test2"))
+        }
+    }
+
+    @Test
     fun clear() {
         subject.clear()
 
