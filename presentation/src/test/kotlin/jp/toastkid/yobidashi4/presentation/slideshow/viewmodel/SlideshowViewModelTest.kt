@@ -7,6 +7,10 @@
  */
 package jp.toastkid.yobidashi4.presentation.slideshow.viewmodel
 
+import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
 import io.mockk.Runs
 import io.mockk.called
 import io.mockk.every
@@ -19,6 +23,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
 
 class SlideshowViewModelTest {
 
@@ -84,6 +89,17 @@ class SlideshowViewModelTest {
     @Test
     fun windowVisible() {
         assertTrue(viewModel.windowVisible())
+    }
+
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEvent() {
+        val countDownLatch = CountDownLatch(1)
+        viewModel.setOnCloseWindow { countDownLatch.countDown() }
+
+        assertFalse(viewModel.onKeyEvent(KeyEvent(Key.Eight, KeyEventType.KeyUp)))
+        assertFalse(viewModel.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyDown)))
+        assertTrue(viewModel.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyUp)))
     }
 
 }
