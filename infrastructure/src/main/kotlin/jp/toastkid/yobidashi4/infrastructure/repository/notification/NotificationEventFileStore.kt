@@ -78,6 +78,10 @@ class NotificationEventFileStore(private val  fileSystem: FileSystem) : Notifica
         writeToFile(readAll().filterIndexed { i, _ -> i != index }.map(NotificationEvent::toTsv))
     }
 
+    override fun delete(event: NotificationEvent) {
+        writeToFile(readAll().filter { it != event }.map(NotificationEvent::toTsv))
+    }
+
     private fun writeToFile(content: Iterable<String>) {
         fileSystem.write(path) {
             writeUtf8(content.joinToString("\n"))
