@@ -48,7 +48,6 @@ class SlideshowViewModel {
     fun scrollEventFlow(): SharedFlow<Int> = scrollEventFlow
 
     fun launch(deck: SlideDeck, onEscapeKeyReleased: () -> Unit, onFullscreenKeyReleased: () -> Unit) {
-        this.onEscapeKeyReleased.set(onEscapeKeyReleased)
         this.onFullscreenKeyReleased.set(onFullscreenKeyReleased)
         deck.extractImageUrls().forEach {
             imageCache.get(it)
@@ -71,10 +70,6 @@ class SlideshowViewModel {
             }
             Key.Enter -> {
                 scrollEventFlow.tryEmit(min(maxSize.get() - 1, currentPage + 1))
-                true
-            }
-            Key.Escape -> {
-                onEscapeKeyReleased.get().invoke()
                 true
             }
             Key.F5 -> {
