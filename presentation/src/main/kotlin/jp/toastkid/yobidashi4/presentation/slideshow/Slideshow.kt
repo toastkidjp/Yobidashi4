@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -75,6 +76,11 @@ internal fun Slideshow(
             }
             .focusRequester(viewModel.focusRequester())
     ) {
+        // For testing.
+        if (LocalInspectionMode.current) {
+            return@Surface
+        }
+
         Box(
             modifier = Modifier.padding(8.dp).fillMaxHeight()
         ) {
