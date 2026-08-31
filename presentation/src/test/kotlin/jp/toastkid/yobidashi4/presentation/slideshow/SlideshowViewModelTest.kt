@@ -77,7 +77,7 @@ class SlideshowViewModelTest {
         val deck = mockk<SlideDeck>()
         every { deck.slides } returns mutableListOf(mockk(), mockk())
         every { deck.extractImageUrls() } returns setOf("a", "b", "c")
-        subject.launch(deck, onEscapeKeyReleased, onFullscreenKeyReleased)
+        subject.launch(deck, onFullscreenKeyReleased)
 
         verify(exactly = 3) { anyConstructed<ImageCache>().get(any()) }
     }
