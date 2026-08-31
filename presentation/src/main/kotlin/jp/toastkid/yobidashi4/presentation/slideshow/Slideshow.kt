@@ -49,7 +49,6 @@ import kotlin.math.roundToInt
 @Composable
 internal fun Slideshow(
     deck: SlideDeck,
-    onEscapeKeyReleased: () -> Unit,
     onFullscreenKeyReleased: () -> Unit,
     modifier: Modifier
 ) {
