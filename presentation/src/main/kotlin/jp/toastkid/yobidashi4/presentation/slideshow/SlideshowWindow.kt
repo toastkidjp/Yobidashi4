@@ -46,7 +46,6 @@ class SlideshowWindow : KoinComponent {
             ) {
                 Slideshow(
                     deck,
-                    {},
                     viewModel::toggleFullscreen,
                     modifier = Modifier
                 )
