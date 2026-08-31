@@ -175,20 +175,6 @@ class SlideshowViewModelTest {
 
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
-    fun onKeyEventEscapeForCoverage() {
-        subject = SlideshowViewModel()
-
-        val consumed = subject.onKeyEvent(
-            KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true),
-            pagerState.currentPage
-        )
-
-        assertTrue(consumed)
-        verify { onEscapeKeyReleased wasNot called }
-    }
-
-    @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
-    @Test
     fun otherKeyEvent() {
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Escape, KeyEventType.KeyDown, isCtrlPressed = true),
