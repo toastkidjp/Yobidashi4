@@ -63,7 +63,7 @@ internal fun Slideshow(
 
     LaunchedEffect(deck) {
         withContext(Dispatchers.IO) {
-            viewModel.launch(deck, onEscapeKeyReleased, onFullscreenKeyReleased)
+            viewModel.launch(deck, onFullscreenKeyReleased)
         }
     }
 
