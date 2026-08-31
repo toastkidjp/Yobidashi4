@@ -66,7 +66,6 @@ class SlideshowKtTest {
                 Slideshow(
                     slideDeck,
                     {},
-                    {},
                     Modifier
                 )
             }
