@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import okio.Path.Companion.toPath
@@ -139,6 +140,18 @@ class InputHistoryFileStoreTest {
         subject.clear()
 
         assertFalse(fakeFileSystem.exists("temporary/input/history/test.tsv".toPath()))
+    }
+
+    @Test
+    fun path() {
+        fakeFileSystem = spyk(fakeFileSystem)
+        every { fakeFileSystem.exists(any()) } returns false
+        subject = spyk(InputHistoryFileStore(fakeFileSystem, "test2"))
+        val toPath = "".toPath()
+        every { subject.path() } returns toPath
+        println(toPath.parent)
+
+        subject.add(InputHistory("test", 1))
     }
 
 }
