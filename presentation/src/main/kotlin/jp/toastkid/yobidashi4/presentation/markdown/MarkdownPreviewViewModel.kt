@@ -20,7 +20,7 @@ import java.io.IOException
 import java.net.URI
 import javax.imageio.ImageIO
 
-class MarkdownPreviewViewModel() : KoinComponent {
+class MarkdownPreviewViewModel : KoinComponent {
 
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
