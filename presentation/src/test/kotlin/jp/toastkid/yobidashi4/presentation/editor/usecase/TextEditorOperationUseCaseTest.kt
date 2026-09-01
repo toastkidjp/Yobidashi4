@@ -1147,4 +1147,17 @@ class TextEditorOperationUseCaseTest {
         assertFalse(consumed)
     }
 
+    @Test
+    fun jsonPrettyPrintWithSelectedText() {
+        mockkConstructor(ClipboardFetcher::class)
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { jsonPrettyPrint.invoke(any()) } returns "{}"
+        content.clearText()
+        content.setTextAndSelectAll("{\"key\": \"value\"}")
+
+        val consumed = subject.prettyPrint()
+
+        assertTrue(consumed)
+    }
+
 }
