@@ -49,18 +49,22 @@ class NotificationEventFileStore(private val  fileSystem: FileSystem) : Notifica
             it.readUtf8().trim().split("\n")
         }.filter { it.contains(DELIMITER) }
             .mapNotNull {
-                val split = it.split(DELIMITER)
-                if (split.size < 3 || split[2].isBlank()) {
-                    return@mapNotNull null
-                }
-
-                val date = NotificationEvent.parse(split[2]) ?: return@mapNotNull null
-                NotificationEvent(
-                    split[0],
-                    split[1],
-                    date
-                )
+                return@mapNotNull toEvent(it)
             }
+    }
+
+    private fun toEvent(string: String): NotificationEvent? {
+        val split = string.split(DELIMITER)
+        if (split.size < 3 || split[2].isBlank()) {
+            return null
+        }
+
+        val date = NotificationEvent.parse(split[2]) ?: return null
+        return NotificationEvent(
+            split[0],
+            split[1],
+            date
+        )
     }
 
     override fun update(index: Int, event: NotificationEvent) {
