@@ -66,6 +66,7 @@ Test3
     @Test
     fun addIfTheFileDoesNotExists() {
         fakeFileSystem.delete(path)
+        fakeFileSystem.delete(path.parent!!)
 
         subject.add(NotificationEvent("test", "test", LocalDateTime.now()))
 
