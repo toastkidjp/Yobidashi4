@@ -142,8 +142,9 @@ class InputHistoryServiceTest {
 
     @Test
     fun inputHistories() {
-        val mutableList = mutableListOf<InputHistory>()
+        val mutableList = mutableListOf(InputHistory("test", 1))
 
+        subject.inputHistories(mutableList)
         subject.inputHistories(mutableList)
     }
 
