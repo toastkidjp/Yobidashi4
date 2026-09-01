@@ -35,8 +35,6 @@ class SlideshowViewModel {
 
     private val sliderState = mutableStateOf(0f)
 
-    private val onEscapeKeyReleased = AtomicReference(EMPTY_ACTION)
-
     private val onFullscreenKeyReleased = AtomicReference(EMPTY_ACTION)
 
     private val maxSize = AtomicInteger(-1)
