@@ -48,6 +48,8 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -1131,10 +1133,15 @@ class TextEditorOperationUseCaseTest {
         assertEquals("{}", content.text)
     }
 
-    @Test
-    fun jsonPrettyPrintIfClipboardIsEmpty() {
+    @ParameterizedTest
+    @CsvSource(
+        "''",
+        "null",
+        nullValues = ["null"]
+    )
+    fun jsonPrettyPrintIfClipboardIsEmpty(parameter: String?) {
         mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns parameter
         every { jsonPrettyPrint.invoke(any()) } returns "{}"
         content.clearText()
         content.edit {
