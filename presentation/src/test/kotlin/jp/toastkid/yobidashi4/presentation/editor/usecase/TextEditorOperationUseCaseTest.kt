@@ -1088,10 +1088,15 @@ class TextEditorOperationUseCaseTest {
         assertEquals("reformat", content.text)
     }
 
-    @Test
-    fun textReformatIfClipboardIsEmpty() {
+    @ParameterizedTest
+    @CsvSource(
+        "''",
+        "null",
+        nullValues = ["null"]
+    )
+    fun textReformatIfClipboardIsEmpty(parameter: String?) {
         mockkConstructor(ClipboardFetcher::class)
-        every { anyConstructed<ClipboardFetcher>().invoke() } returns ""
+        every { anyConstructed<ClipboardFetcher>().invoke() } returns parameter
         every { textReformat.invoke(any()) } returns "reformat"
         content.clearText()
         content.edit {
