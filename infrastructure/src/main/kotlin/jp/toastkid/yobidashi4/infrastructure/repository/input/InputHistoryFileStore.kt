@@ -69,7 +69,7 @@ class InputHistoryFileStore(
         }
     }
 
-    private fun path(): Path {
+    fun path(): Path {
         return folder.resolve("$context.$extension", false)
     }
 
