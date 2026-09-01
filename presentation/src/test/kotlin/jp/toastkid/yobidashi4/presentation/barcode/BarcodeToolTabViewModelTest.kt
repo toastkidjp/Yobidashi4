@@ -30,6 +30,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import java.awt.Image
 import java.awt.image.BufferedImage
+import java.io.IOException
 import java.net.URL
 import javax.imageio.ImageIO
 
@@ -179,6 +180,21 @@ class BarcodeToolTabViewModelTest {
         verify { barcodeDecoder.invoke(any()) }
         assertEquals("https://www.yahoo.co.jp", barcodeToolTabViewModel.decodeInputValue().text)
         assertNotNull(barcodeToolTabViewModel.barcodeImage())
+    }
+
+    @Test
+    fun setDecodeInputValueIfThrowIOException() {
+        mockkStatic(ImageIO::class)
+        val image = mockk<BufferedImage>()
+        every { ImageIO.read(any<URL>()) } throws IOException()
+        every { image.width } returns 1
+        every { image.height } returns 1
+        every { image.getRGB(any(), any()) } returns 1
+
+        barcodeToolTabViewModel.decodeInputValue().setTextAndPlaceCursorAtEnd("https://www.yahoo.co.jp")
+        barcodeToolTabViewModel.setDecodeInputValue()
+
+        verify { barcodeDecoder wasNot called }
     }
 
     @Test
