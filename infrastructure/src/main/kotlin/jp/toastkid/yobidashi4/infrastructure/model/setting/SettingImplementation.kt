@@ -111,7 +111,7 @@ class SettingImplementation : Setting {
 
     override fun mediaPlayerPath(): String? = properties.getProperty("media_player_path")
 
-    override fun mediaFolderPath() = properties.getProperty("media_folder_path")
+    override fun mediaFolderPath(): String? = properties.getProperty("media_folder_path")
 
     override fun save() {
         val path = Path.of(PATH)
