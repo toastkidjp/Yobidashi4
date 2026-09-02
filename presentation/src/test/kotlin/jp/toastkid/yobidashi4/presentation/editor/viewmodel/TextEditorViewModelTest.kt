@@ -158,7 +158,7 @@ class TextEditorViewModelTest {
         every { multiParagraph.getLineHeight(1) } returns 31.0f
         every { multiParagraph.getLineHeight(2) } returns 30.0f
         every { multiParagraph.lineCount } returns 3
-        viewModel.setMultiParagraph({ TextLayoutResult(mockk(), multiParagraph, IntSize(1, 1)) })
+        viewModel.setMultiParagraph { TextLayoutResult(mockk(), multiParagraph, IntSize(1, 1)) }
         viewModel.content().edit { append(text) }
 
         viewModel.onClickLineNumber(0)
