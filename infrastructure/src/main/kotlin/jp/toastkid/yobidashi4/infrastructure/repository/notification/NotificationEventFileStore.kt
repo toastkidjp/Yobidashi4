@@ -48,9 +48,7 @@ class NotificationEventFileStore(private val  fileSystem: FileSystem) : Notifica
         return fileSystem.source(path).buffer().use {
             it.readUtf8().trim().split("\n")
         }.filter { it.contains(DELIMITER) }
-            .mapNotNull {
-                return@mapNotNull toEvent(it)
-            }
+            .mapNotNull(::toEvent)
     }
 
     private fun toEvent(string: String): NotificationEvent? {
