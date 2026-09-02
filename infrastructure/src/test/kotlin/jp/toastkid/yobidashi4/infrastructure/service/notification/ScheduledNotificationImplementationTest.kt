@@ -1,12 +1,11 @@
 package jp.toastkid.yobidashi4.infrastructure.service.notification
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
-import java.time.LocalDateTime
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +19,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.time.LocalDateTime
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class ScheduledNotificationImplementationTest {
 
@@ -43,6 +45,7 @@ class ScheduledNotificationImplementationTest {
         subject = ScheduledNotificationImplementation()
 
         val today = LocalDateTime.now()
+        every { repository.delete(any()) } just Runs
         every { repository.readAll() } returns listOf(
             NotificationEvent("test", "test", today.minusMinutes(3)),
             NotificationEvent("fail", "fail", today.plusYears(10))
