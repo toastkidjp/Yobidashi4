@@ -47,9 +47,7 @@ class SlideshowViewModel {
 
     fun launch(deck: SlideDeck, onFullscreenKeyReleased: () -> Unit) {
         this.onFullscreenKeyReleased.set(onFullscreenKeyReleased)
-        deck.extractImageUrls().forEach {
-            imageCache.get(it)
-        }
+        deck.extractImageUrls().forEach(imageCache::get)
         maxSize.set(deck.slides.size)
     }
 
