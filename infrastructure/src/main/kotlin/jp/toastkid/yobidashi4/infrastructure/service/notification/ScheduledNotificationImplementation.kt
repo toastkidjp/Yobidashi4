@@ -39,7 +39,6 @@ class ScheduledNotificationImplementation : ScheduledNotification, KoinComponent
                     continue
                 }
                 _notificationFlow.emit(event)
-                notificationEvents.remove(event)
                 repository.delete(event)
                 iterator.remove()
             }
