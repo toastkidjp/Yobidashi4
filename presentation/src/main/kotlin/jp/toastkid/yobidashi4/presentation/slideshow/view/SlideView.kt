@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.CodeBlockLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.ImageLine
+import jp.toastkid.yobidashi4.domain.model.slideshow.data.Line
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TableLine
 import jp.toastkid.yobidashi4.domain.model.slideshow.data.TextLine
 
@@ -101,30 +102,7 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
             }
 
             slide.lines().forEach { line ->
-                when (line) {
-                    is TextLine ->
-                        Text(
-                            line.text,
-                            fontSize = 28.sp,
-                            lineHeight = 36.sp,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-
-                    is ImageLine -> {
-                        Image(
-                            loadImage(line.source),
-                            contentDescription = line.source
-                        )
-                    }
-
-                    is CodeBlockLine -> CodeBlockView(line)
-
-                    is TableLine -> {
-                        TableLineView(line)
-                    }
-
-                    else -> Unit
-                }
+                SlideLineContent(line, loadImage)
             }
         }
 
@@ -137,5 +115,36 @@ fun SlideView(slide: Slide, loadImage: (String) -> ImageBitmap) {
     LaunchedEffect(slide) {
         viewModel.scrollEventFlow()
             .collect { viewModel.scrollState().animateScrollBy(it) }
+    }
+}
+
+@Composable
+private fun SlideLineContent(
+    line: Line,
+    loadImage: (String) -> ImageBitmap
+) {
+    when (line) {
+        is TextLine ->
+            Text(
+                line.text,
+                fontSize = 28.sp,
+                lineHeight = 36.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+        is ImageLine -> {
+            Image(
+                loadImage(line.source),
+                contentDescription = line.source
+            )
+        }
+
+        is CodeBlockLine -> CodeBlockView(line)
+
+        is TableLine -> {
+            TableLineView(line)
+        }
+
+        else -> Unit
     }
 }
