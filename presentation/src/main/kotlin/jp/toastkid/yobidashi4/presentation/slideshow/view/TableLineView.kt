@@ -14,6 +14,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,9 +41,6 @@ import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifier = Modifier) {
     val viewModel = remember { TableLineViewModel() }
 
-    val interactionSource = remember { MutableInteractionSource() }
-    val isHovered = interactionSource.collectIsHoveredAsState()
-
     val surfaceColor = MaterialTheme.colors.surface
     Column(modifier = modifier) {
         DisableSelection {
@@ -50,28 +48,9 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
                 drawRect(surfaceColor.copy(alpha = 0.2f))
             }) {
                 line.header.forEachIndexed { index, item ->
-                    if (index != 0) {
-                        VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
+                    HeaderColumnItem(index, item.toString(), fontSize) {
+                        viewModel.clickHeaderColumn(index)
                     }
-
-                    val headerColumnBackgroundColor = animateColorAsState(
-                        if (isHovered.value) MaterialTheme.colors.primary
-                        else surfaceColor
-                    )
-
-                    Text(
-                        item.toString(),
-                        fontSize = fontSize,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable {
-                                viewModel.clickHeaderColumn(index)
-                            }
-                            .hoverable(interactionSource)
-                            .drawBehind { drawRect(headerColumnBackgroundColor.value) }
-                            .padding(horizontal = 16.dp)
-                    )
                 }
             }
         }
@@ -86,6 +65,39 @@ fun TableLineView(line: TableLine, fontSize: TextUnit = 24.sp, modifier: Modifie
     LaunchedEffect(line.table) {
         viewModel.start(line.table)
     }
+}
+
+@Composable
+private fun RowScope.HeaderColumnItem(
+    index: Int,
+    text: String,
+    fontSize: TextUnit,
+    onClick: () -> Unit
+) {
+    val surfaceColor = MaterialTheme.colors.surface
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered = interactionSource.collectIsHoveredAsState()
+
+    if (index != 0) {
+        VerticalDivider(modifier = Modifier.height(24.dp).padding(vertical = 1.dp))
+    }
+
+    val headerColumnBackgroundColor = animateColorAsState(
+        if (isHovered.value) MaterialTheme.colors.primary
+        else surfaceColor
+    )
+
+    Text(
+        text,
+        fontSize = fontSize,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .weight(1f)
+            .clickable(onClick = onClick)
+            .hoverable(interactionSource)
+            .drawBehind { drawRect(headerColumnBackgroundColor.value) }
+            .padding(horizontal = 16.dp)
+    )
 }
 
 @Composable
