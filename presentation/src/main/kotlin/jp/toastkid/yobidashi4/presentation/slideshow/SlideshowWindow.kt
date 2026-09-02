@@ -40,9 +40,7 @@ class SlideshowWindow : KoinComponent {
                 state = viewModel.windowState(),
                 visible = viewModel.windowVisible(),
                 title = deck.title,
-                onKeyEvent = {
-                    return@Window viewModel.onKeyEvent(it)
-                }
+                onKeyEvent = viewModel::onKeyEvent
             ) {
                 Slideshow(
                     deck,
