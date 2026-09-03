@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi4.presentation.main.menu
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.window.FrameWindowScope
@@ -60,12 +59,14 @@ import jp.toastkid.yobidashi4.library.resources.ic_user_template
 import jp.toastkid.yobidashi4.library.resources.ic_wallpaper
 import jp.toastkid.yobidashi4.library.resources.ic_world_time
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import kotlin.math.min
 
 @Composable
-fun FrameWindowScope.MainMenu(exitApplication: () -> Unit) {
-    val viewModel = remember { MainMenuViewModel() }
-
+fun FrameWindowScope.MainMenu(
+    exitApplication: () -> Unit,
+    viewModel: MainMenuViewModel = koinInject()
+) {
     MenuBar {
         Menu("File") {
             Item(
