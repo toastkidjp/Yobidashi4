@@ -45,7 +45,6 @@ import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.domain.service.archive.ZipArchiver
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
-import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.NotificationEventExporter
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
@@ -60,10 +59,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Path
 
 class MainMenuViewModelTest {
@@ -98,21 +93,6 @@ class MainMenuViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
-                    single(qualifier = null) { asynchronousArticleIndexerService } bind (AsynchronousArticleIndexerService::class)
-                    single(qualifier = null) { setting } bind (Setting::class)
-                    single(qualifier = null) { webBookmarkRepository } bind (BookmarkRepository::class)
-                    single(qualifier = null) { notification } bind (ScheduledNotification::class)
-                    single(qualifier = null) { notificationEventExporter } bind (NotificationEventExporter::class)
-                    single(qualifier = null) { TestIoContextProvider() } bind (IoContextProvider::class)
-                    single(qualifier = null) { articleFilesFinder } bind (ArticleFilesFinder::class)
-                    single(qualifier = null) { latestFileFinder } bind (LatestFileFinder::class)
-                }
-            )
-        }
         every { mainViewModel.tabs } returns emptyList()
         every { asynchronousArticleIndexerService.invoke(any()) } just Runs
         every { setting.userAgentName() } returns "test"
@@ -120,12 +100,11 @@ class MainMenuViewModelTest {
         every { articleFilesFinder.invoke(any()) } returns mutableListOf()
         every { latestFileFinder.invoke(any(), any()) } returns mutableListOf()
 
-        subject = MainMenuViewModel()
+        subject = MainMenuViewModel(mainViewModel, setting, asynchronousArticleIndexerService, webBookmarkRepository, TestIoContextProvider(), articleFilesFinder, latestFileFinder, notification, notificationEventExporter, true)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -1026,24 +1005,16 @@ class MainMenuViewModelTest {
 
     @Test
     fun shortcutKey() {
-        val currentOsName = System.getProperty("os.name")
-        System.setProperty("os.name", "Mac OS")
-        subject = MainMenuViewModel()
+        subject = MainMenuViewModel(mainViewModel, setting, asynchronousArticleIndexerService, webBookmarkRepository, TestIoContextProvider(), articleFilesFinder, latestFileFinder, notification, notificationEventExporter, true)
 
         assertTrue(subject.useMetaKey())
-
-        System.setProperty("os.name", currentOsName)
     }
 
     @Test
     fun shortcutKeyWindowsCase() {
-        val currentOsName = System.getProperty("os.name")
-        System.setProperty("os.name", "Windows 11")
-        subject = MainMenuViewModel()
+        subject = MainMenuViewModel(mainViewModel, setting, asynchronousArticleIndexerService, webBookmarkRepository, TestIoContextProvider(), articleFilesFinder, latestFileFinder, notification, notificationEventExporter, false)
 
         assertFalse(subject.useMetaKey())
-
-        System.setProperty("os.name", currentOsName)
     }
 
 }
