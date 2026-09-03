@@ -8,11 +8,11 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -22,6 +22,8 @@ import org.koin.core.component.inject
 class NotificationListTabViewModel : KoinComponent {
 
     private val notification: ScheduledNotification by inject()
+
+    private val ioContextProvider: IoContextProvider by inject()
 
     private val focusRequester = FocusRequester()
     fun focusRequester() = focusRequester
@@ -68,7 +70,7 @@ class NotificationListTabViewModel : KoinComponent {
         repository.update(index, notificationEvent)
         mainViewModel.showSnackbar("Update notification event.")
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioContextProvider()).launch {
             notification.start()
         }
     }
