@@ -27,6 +27,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
+import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,9 @@ class NotificationListTabViewModelTest {
     @MockK
     private lateinit var notification: ScheduledNotification
 
+    @MockK
+    private lateinit var ioContextProvider: IoContextProvider
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -65,19 +69,21 @@ class NotificationListTabViewModelTest {
                     single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier = null) { repository } bind(NotificationEventRepository::class)
                     single(qualifier = null) { notification } bind(ScheduledNotification::class)
+                    single(qualifier = null) { ioContextProvider } bind(IoContextProvider::class)
                 }
             )
         }
 
         every { mainViewModel.showSnackbar(any()) } just Runs
+        every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
         subject = NotificationListTabViewModel()
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkAll()
         stopKoin()
+        unmockkAll()
     }
 
     @Test
