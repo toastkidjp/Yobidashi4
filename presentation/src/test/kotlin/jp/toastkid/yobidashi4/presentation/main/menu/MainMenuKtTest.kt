@@ -15,17 +15,17 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import io.mockk.unmockkConstructor
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
-import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.service.article.finder.AsynchronousArticleIndexerService
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -38,8 +38,11 @@ import org.koin.dsl.module
 
 class MainMenuKtTest {
 
+    @RelaxedMockK
+    private lateinit var viewModel: MainMenuViewModel
+
     @MockK
-    private lateinit var viewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     @MockK
     private lateinit var asynchronousArticleIndexerService: AsynchronousArticleIndexerService
@@ -53,54 +56,57 @@ class MainMenuKtTest {
         startKoin {
             modules(
                 module {
-                    single(qualifier=null) { viewModel } bind(MainViewModel::class)
+                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
                     single(qualifier=null) { asynchronousArticleIndexerService } bind(AsynchronousArticleIndexerService::class)
                     single(qualifier=null) { setting } bind(Setting::class)
                 }
             )
         }
 
-        every { viewModel.setShowInputBox(any()) } just Runs
-        every { viewModel.edit(any()) } just Runs
-        every { viewModel.openArticleList() } returns false
-        every { viewModel.switchArticleList() } just Runs
-        every { viewModel.showAggregationBox() } returns false
-        every { viewModel.setInitialAggregationType(any()) } just Runs
-        every { viewModel.switchAggregationBox(any()) } just Runs
-        every { viewModel.openFile(any()) } just Runs
-        every { viewModel.openTab(any()) } just Runs
-        every { viewModel.openFileListTab(any(), any(), any()) } just Runs
-        every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.openTextFile(any()) } just Runs
+        every { mainViewModel.setShowInputBox(any()) } just Runs
+        every { mainViewModel.edit(any()) } just Runs
+        every { mainViewModel.openArticleList() } returns false
+        every { mainViewModel.switchArticleList() } just Runs
+        every { mainViewModel.showAggregationBox() } returns false
+        every { mainViewModel.setInitialAggregationType(any()) } just Runs
+        every { mainViewModel.switchAggregationBox(any()) } just Runs
+        every { mainViewModel.openFile(any()) } just Runs
+        every { mainViewModel.openTab(any()) } just Runs
+        every { mainViewModel.openFileListTab(any(), any(), any()) } just Runs
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.openTextFile(any()) } just Runs
         val tab = mockk<Tab>()
-        every { viewModel.currentTab() } returns tab
+        every { mainViewModel.currentTab() } returns tab
         every { tab.title() } returns "test"
-        every { viewModel.saveCurrentEditorTab() } just Runs
-        every { viewModel.switchFind() } just Runs
-        every { viewModel.switchUseBackground() } just Runs
-        every { viewModel.switchDarkMode() } just Runs
-        every { viewModel.switchMemoryUsageBox() } just Runs
-        every { viewModel.toggleFullscreen() } just Runs
-        every { viewModel.toggleNarrowWindow() } just Runs
-        every { viewModel.toggleFullscreenLabel() } returns "test"
-        every { viewModel.closeCurrent() } just Runs
-        every { viewModel.closeAllTabs() } just Runs
-        every { viewModel.closeOtherTabs() } just Runs
-        every { viewModel.closeSlideshow() } just Runs
-        every { viewModel.showSnackbar(any(), any(), any()) } just Runs
-        every { viewModel.tabs } returns mutableListOf()
-        every { viewModel.slideshow(any()) } just Runs
-        every { viewModel.setSelectedIndex(any()) } just Runs
-        every { viewModel.openMemoryUsageBox() } returns false
-        every { viewModel.loadBackgroundImage() } just Runs
-        every { viewModel.setShowWebSearch(any()) } just Runs
-        every { viewModel.setInitialAggregationType(any()) } just Runs
-        every { viewModel.openWorldTime() } returns true
+        every { mainViewModel.saveCurrentEditorTab() } just Runs
+        every { mainViewModel.switchFind() } just Runs
+        every { mainViewModel.switchUseBackground() } just Runs
+        every { mainViewModel.switchDarkMode() } just Runs
+        every { mainViewModel.switchMemoryUsageBox() } just Runs
+        every { mainViewModel.toggleFullscreen() } just Runs
+        every { mainViewModel.toggleNarrowWindow() } just Runs
+        every { mainViewModel.toggleFullscreenLabel() } returns "test"
+        every { mainViewModel.closeCurrent() } just Runs
+        every { mainViewModel.closeAllTabs() } just Runs
+        every { mainViewModel.closeOtherTabs() } just Runs
+        every { mainViewModel.closeSlideshow() } just Runs
+        every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
+        every { mainViewModel.tabs } returns mutableListOf()
+        every { mainViewModel.slideshow(any()) } just Runs
+        every { mainViewModel.setSelectedIndex(any()) } just Runs
+        every { mainViewModel.openMemoryUsageBox() } returns false
+        every { mainViewModel.loadBackgroundImage() } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.setInitialAggregationType(any()) } just Runs
+        every { mainViewModel.openWorldTime() } returns true
 
         every { setting.articleFolderPath() } returns mockk()
         every { setting.userAgentName() } returns "test"
         every { setting.setUserAgentName(any()) } just Runs
         every { setting.save() } just Runs
+
+        every { viewModel.useEditorMenu() } returns false
+        every { viewModel.switchArticleListIconPath() } returns Res.drawable.ic_left_panel_close
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
@@ -118,7 +124,7 @@ class MainMenuKtTest {
         runDesktopComposeUiTest {
             setContent {
                 Window({}, visible = false) {
-                    MainMenu {  }
+                    MainMenu({}, viewModel)
                 }
             }
         }
@@ -127,16 +133,12 @@ class MainMenuKtTest {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun currentIsEditorTab() {
-        val editorTab = mockk<EditorTab>()
-        every { viewModel.currentTab() } returns editorTab
-        every { editorTab.showPreview() } returns true
-        every { editorTab.switchPreview() } just Runs
-        every { editorTab.path } returns mockk()
+        every { viewModel.useEditorMenu() } returns true
 
         runDesktopComposeUiTest {
             setContent {
                 Window({}, visible = false) {
-                    MainMenu {  }
+                    MainMenu({}, viewModel)
                 }
             }
         }
@@ -146,12 +148,12 @@ class MainMenuKtTest {
     @Test
     fun currentIsWebTab() {
         val tab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns tab
+        every { mainViewModel.currentTab() } returns tab
 
         runDesktopComposeUiTest {
             setContent {
                 Window({}, visible = false) {
-                    MainMenu {  }
+                    MainMenu({}, viewModel)
                 }
             }
         }
@@ -160,14 +162,12 @@ class MainMenuKtTest {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun currentIsMarkdownPreviewTab() {
-        val tab = mockk<MarkdownPreviewTab>()
-        every { viewModel.currentTab() } returns tab
-        every { tab.slideshowSourcePath() } returns mockk()
+        every { viewModel.useEditorMenu() } returns false
 
         runDesktopComposeUiTest {
             setContent {
                 Window({}, visible = false) {
-                    MainMenu {  }
+                    MainMenu({}, viewModel)
                 }
             }
         }
@@ -176,36 +176,30 @@ class MainMenuKtTest {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun useAdditionalTabMenu() {
-        mockkConstructor(MainMenuViewModel::class)
-        every { anyConstructed<MainMenuViewModel>().useAdditionalTabMenu() } returns true
-        every { anyConstructed<MainMenuViewModel>().currentIsWebTab() } returns true
+        every { viewModel.useAdditionalTabMenu() } returns true
+        every { viewModel.currentIsWebTab() } returns true
 
         runDesktopComposeUiTest {
             setContent {
                 Window({}, visible = false) {
-                    MainMenu {  }
+                    MainMenu({  }, viewModel)
                 }
             }
         }
-
-        unmockkConstructor(MainMenuViewModel::class)
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun canMoveTab() {
-        mockkConstructor(MainMenuViewModel::class)
-        every { anyConstructed<MainMenuViewModel>().canMoveTab() } returns true
+        every { viewModel.canMoveTab() } returns true
 
         runDesktopComposeUiTest {
             setContent {
                 Window({}, visible = false) {
-                    MainMenu {  }
+                    MainMenu({}, viewModel)
                 }
             }
         }
-
-        unmockkConstructor(MainMenuViewModel::class)
     }
 
 }
