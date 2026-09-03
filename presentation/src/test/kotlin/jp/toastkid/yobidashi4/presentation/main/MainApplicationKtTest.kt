@@ -11,6 +11,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -24,9 +25,12 @@ import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
+import jp.toastkid.yobidashi4.presentation.main.menu.MainMenuViewModel
 import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -44,6 +48,9 @@ class MainApplicationKtTest {
 
     @MockK
     private lateinit var mainViewModel: MainViewModel
+
+    @RelaxedMockK
+    private lateinit var mainMenuViewModel: MainMenuViewModel
 
     @MockK
     private lateinit var ioContextProvider: IoContextProvider
@@ -83,6 +90,7 @@ class MainApplicationKtTest {
             modules(
                 module {
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
+                    single(qualifier = null) { mainMenuViewModel } bind (MainMenuViewModel::class)
                     single(qualifier = null) { ioContextProvider } bind (IoContextProvider::class)
                     single(qualifier = null) { setting } bind (Setting::class)
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
@@ -99,6 +107,8 @@ class MainApplicationKtTest {
             "test",
             20000
         )
+        every { mainMenuViewModel.useEditorMenu() } returns false
+        every { mainMenuViewModel.switchArticleListIconPath() } returns Res.drawable.ic_left_panel_close
     }
 
     private fun mockMainMenu(setting: Setting) {
