@@ -52,32 +52,26 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class MainMenuViewModel : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
-
-    private val setting: Setting by inject()
-
-    private val asynchronousArticleIndexerService: AsynchronousArticleIndexerService by inject()
-
-    private val webBookmarkRepository: BookmarkRepository by inject()
+class MainMenuViewModel(
+    private val viewModel: MainViewModel,
+    private val setting: Setting,
+    private val asynchronousArticleIndexerService: AsynchronousArticleIndexerService,
+    private val webBookmarkRepository: BookmarkRepository,
+    private val ioContextProvider: IoContextProvider,
+    private val articleFilesFinder: ArticleFilesFinder,
+    private val latestFileFinder: LatestFileFinder,
+    private val notification: ScheduledNotification,
+    private val notificationEventExporter: NotificationEventExporter,
+    private val useMetaKey: Boolean = System.getProperty("os.name").contains("Mac")
+) : KoinComponent {
 
     private val currentUserAgent = mutableStateOf(UserAgent.findByName(setting.userAgentName()))
 
-    private val ioContextProvider: IoContextProvider by inject()
-
     private val currentTimeSuffixDateTimeFormatter = DateTimeFormatter.ofPattern("_yyyyMMdd_HHmmss")
-
-    private val useMetaKey: Boolean = System.getProperty("os.name").contains("Mac")
-
-    private val articleFilesFinder: ArticleFilesFinder by inject()
-
-    private val latestFileFinder: LatestFileFinder by inject()
 
     fun makeNewArticle() {
         viewModel.makeNewArticle()
@@ -380,8 +374,6 @@ class MainMenuViewModel : KoinComponent {
         viewModel.openTab(ClusteringToolTab())
     }
 
-    private val notification: ScheduledNotification by inject()
-
     fun restartNotification() {
         CoroutineScope(ioContextProvider()).launch {
             notification.start()
@@ -392,8 +384,6 @@ class MainMenuViewModel : KoinComponent {
         val path = Path.of("user/notification/list.tsv")
         viewModel.openFile(path)
     }
-
-    private val notificationEventExporter: NotificationEventExporter by inject()
 
     fun exportNotifications() {
         notificationEventExporter.invoke()
