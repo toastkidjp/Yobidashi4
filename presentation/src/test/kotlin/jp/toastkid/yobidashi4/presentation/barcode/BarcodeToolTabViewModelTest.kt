@@ -70,8 +70,8 @@ class BarcodeToolTabViewModelTest {
 
     @AfterEach
     fun tearDown() {
-        unmockkAll()
         stopKoin()
+        unmockkAll()
     }
 
     @Test
