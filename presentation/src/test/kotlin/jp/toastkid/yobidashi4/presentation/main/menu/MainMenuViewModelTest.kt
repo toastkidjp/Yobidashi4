@@ -827,6 +827,7 @@ class MainMenuViewModelTest {
     @Test
     fun isSelectedUserAgent() {
         assertTrue(subject.isSelectedUserAgent(UserAgent.DEFAULT))
+        assertFalse(subject.isSelectedUserAgent(UserAgent.ANDROID))
     }
 
     @Test
