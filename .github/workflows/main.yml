@@ -13,6 +13,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     outputs:
+      release_tag: ${{ steps.get_release.outputs.release_tag }}
       release_target: ${{ steps.get_release.outputs.release_target }}
     steps:
       - uses: actions/checkout@v6
@@ -23,6 +24,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag_title="v0.9.3_draft"
+          release_tag=tag_title >> $GITHUB_OUTPUT
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
 
           releases=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=50")
@@ -86,10 +88,9 @@ jobs:
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
+          RELEASE_TARGET: ${{ needs.release.outputs.release_target }}
         run: |
-          tag_title=$RELEASE_TAG
-          gh release upload ${tag_title} build/compose/jars/*.jar --clobber
+          gh release upload "${RELEASE_TARGET}" build/compose/jars/*.jar --clobber
         shell: bash
 
       - name: Upload Kotlin build report
