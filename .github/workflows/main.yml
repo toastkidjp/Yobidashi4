@@ -13,7 +13,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     outputs:
-      release_tag: ${{ steps.check_release.outputs.tag_title }}
+      release_target: ${{ steps.get_release.outputs.release_target }}
     steps:
       - uses: actions/checkout@v6
       - name: Check if release exists
@@ -24,14 +24,19 @@ jobs:
         run: |
           tag_title="v0.9.3_draft"
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
+
           releases=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=50")
-          RELEASE_EXISTS=$(echo $releases | jq --arg search_name $tag_title '[.[] | select(.draft == true and .name == $search_name)] | length > 0')
-          if [[ $RELEASE_EXISTS == true ]]; then
-            echo "release_exists=true" >> $GITHUB_OUTPUT
-            echo "Release ${tag_title} already exists, skipping creation."
+          DRAFT_URL=$(echo "$releases" | jq -r --arg search_name "$tag_title" '.[] | select(.draft == true and .name == $search_name) | .html_url' | head -n 1)
+
+          if [[ -n "$DRAFT_URL" && "$DRAFT_URL" != "null" ]]; then
+            echo "Draft release found: $DRAFT_URL"
+            echo "release_target=${DRAFT_URL}" >> $GITHUB_OUTPUT
           else
-            echo "release_exists=false" >> $GITHUB_OUTPUT
-            echo "Release ${tag_title} does not exist. I will create it on next step."
+            echo "Draft release not found. Creating a new one..."
+            # 新規ドラフトを作成し、その URL を取得
+            NEW_DRAFT_URL=$(gh release create "$tag_title" --title "$tag_title" --draft)
+            echo "Created draft release: $NEW_DRAFT_URL"
+            echo "release_target=${NEW_DRAFT_URL}" >> $GITHUB_OUTPUT
           fi
         shell: bash
       - name: Create Release
