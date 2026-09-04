@@ -50,7 +50,6 @@ class SlideshowKtTest {
 
         slideDeck = SlideDeck()
         slideDeck.add(Slide().also { it.addLine(TextLine("test")) })
-        slideDeck.add(Slide().also { it.setBackground("test.jpg") })
     }
 
     @AfterEach
@@ -93,6 +92,23 @@ class SlideshowKtTest {
             scrollEventFlow.tryEmit(1)
 
             verify { anyConstructed<SlideshowViewModel>().loadImage(any()) }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun withBackground() {
+        slideDeck = SlideDeck(background = "test.jpg", footerText = "test")
+        slideDeck.add(Slide().also { it.setBackground("test.jpg") })
+
+        runComposeUiTest {
+            setContent {
+                Slideshow(
+                    slideDeck,
+                    {},
+                    Modifier
+                )
+            }
         }
     }
 
