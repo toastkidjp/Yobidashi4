@@ -86,11 +86,16 @@ jobs:
           tag_title=$RELEASE_TAG
           release_id=$(gh api repos/${{ github.repository }}/releases --jq ".[] | select(.draft == true and (.tag_name == \"$tag_title\" or .name == \"$tag_title\")) | .id" | head -n 1)
 
-          if [ -z "$release_id" ]; then
-            echo "Error: Draft release '$tag_title' not found."
-            exit 1
-          fi
-          gh release upload ${release_id} build/compose/jars/*.jar --clobber
+          for file in build/compose/jars/*.jar; do
+            filename=$(basename "$file")
+            echo "Uploading $filename to release ID $release_id..."
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Content-Type: application/octet-stream" \
+              "/repos/${{ github.repository }}/releases/${release_id}/assets?name=${filename}" \
+              --input "$file"
+          done
         shell: bash
 
       - name: Upload Kotlin build report
