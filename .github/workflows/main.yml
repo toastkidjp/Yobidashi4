@@ -13,7 +13,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     outputs:
-      release_target: ${{ steps.get_release.outputs.release_target }}
+      release_tag: ${{ steps.check_release.outputs.tag_title }}
     steps:
       - uses: actions/checkout@v6
       - name: Check if release exists
@@ -24,19 +24,23 @@ jobs:
         run: |
           tag_title="v0.9.3_draft"
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
-
           releases=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=50")
-          DRAFT_URL=$(echo "$releases" | jq -r --arg search_name "$tag_title" '.[] | select(.draft == true and .name == $search_name) | .html_url' | head -n 1)
-
-          if [[ -n "$DRAFT_URL" && "$DRAFT_URL" != "null" ]]; then
-            echo "Draft release found: $DRAFT_URL"
-            echo "release_target=${DRAFT_URL}" >> $GITHUB_OUTPUT
+          RELEASE_EXISTS=$(echo $releases | jq --arg search_name $tag_title '[.[] | select(.draft == true and .name == $search_name)] | length > 0')
+          if [[ $RELEASE_EXISTS == true ]]; then
+            echo "release_exists=true" >> $GITHUB_OUTPUT
+            echo "Release ${tag_title} already exists, skipping creation."
           else
-            echo "Draft release not found. Creating a new one..."
-            NEW_DRAFT_URL=$(gh release create "$tag_title" --title "$tag_title" --draft)
-            echo "Created draft release: $NEW_DRAFT_URL"
-            echo "release_target=${NEW_DRAFT_URL}" >> $GITHUB_OUTPUT
+            echo "release_exists=false" >> $GITHUB_OUTPUT
+            echo "Release ${tag_title} does not exist. I will create it on next step."
           fi
+        shell: bash
+      - name: Create Release
+        id: create_release
+        if: steps.check_release.outputs.release_exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ steps.check_release.outputs.tag_title }} --title ${{ steps.check_release.outputs.tag_title }} --draft
         shell: bash
 
   build:
@@ -77,9 +81,11 @@ jobs:
         if: ${{ success() }}
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TARGET: ${{ needs.release.outputs.release_target }}
+          RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
         run: |
-          gh release upload ${RELEASE_TARGET} build/compose/jars/*.jar --clobber
+          tag_title=$RELEASE_TAG
+          release_id=$(gh api repos/${{ github.repository }}/releases --jq ".[] | select(.draft == true and .name == \"$tag_title\") | .id")
+          gh release upload ${release_id} build/compose/jars/*.jar --clobber
         shell: bash
 
       - name: Upload Kotlin build report
