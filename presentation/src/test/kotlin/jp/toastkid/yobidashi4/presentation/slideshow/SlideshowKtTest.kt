@@ -91,7 +91,7 @@ class SlideshowKtTest {
             verify { anyConstructed<SlideshowViewModel>().scrollEventFlow() }
             scrollEventFlow.tryEmit(1)
 
-            verify { anyConstructed<SlideshowViewModel>().loadImage(any()) }
+            verify(inverse = true) { anyConstructed<SlideshowViewModel>().loadImage(any()) }
         }
     }
 
@@ -109,6 +109,8 @@ class SlideshowKtTest {
                     Modifier
                 )
             }
+
+            verify { anyConstructed<SlideshowViewModel>().loadImage(any()) }
         }
     }
 
