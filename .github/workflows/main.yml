@@ -90,7 +90,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TARGET: ${{ needs.release.outputs.release_target }}
         run: |
-          gh release upload "${RELEASE_TARGET}" build/compose/jars/*.jar --clobber
+          gh release upload ${RELEASE_TARGET} build/compose/jars/*.jar --clobber
         shell: bash
 
       - name: Upload Kotlin build report
