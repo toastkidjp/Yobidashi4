@@ -13,7 +13,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
     outputs:
-      release_tag: ${{ steps.get_release.outputs.release_tag }}
       release_target: ${{ steps.get_release.outputs.release_target }}
     steps:
       - uses: actions/checkout@v6
@@ -24,7 +23,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag_title="v0.9.3_draft"
-          release_tag=tag_title >> $GITHUB_OUTPUT
           echo "tag_title=${tag_title}" >> $GITHUB_OUTPUT
 
           releases=$(curl -s -H "Authorization: token ${GH_TOKEN}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=50")
@@ -35,19 +33,10 @@ jobs:
             echo "release_target=${DRAFT_URL}" >> $GITHUB_OUTPUT
           else
             echo "Draft release not found. Creating a new one..."
-            # 新規ドラフトを作成し、その URL を取得
             NEW_DRAFT_URL=$(gh release create "$tag_title" --title "$tag_title" --draft)
             echo "Created draft release: $NEW_DRAFT_URL"
             echo "release_target=${NEW_DRAFT_URL}" >> $GITHUB_OUTPUT
           fi
-        shell: bash
-      - name: Create Release
-        id: create_release
-        if: steps.check_release.outputs.release_exists == 'false'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create ${{ steps.check_release.outputs.tag_title }} --title ${{ steps.check_release.outputs.tag_title }} --draft
         shell: bash
 
   build:
