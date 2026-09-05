@@ -84,7 +84,12 @@ jobs:
           RELEASE_TAG: ${{ needs.release.outputs.release_tag }}
         run: |
           tag_title=$RELEASE_TAG
-          release_id=$(gh api repos/${{ github.repository }}/releases --jq ".[] | select(.draft == true and .name == \"$tag_title\") | .id")
+          release_id=$(gh api repos/${{ github.repository }}/releases --jq ".[] | select(.draft == true and (.tag_name == \"$tag_title\" or .name == \"$tag_title\")) | .id" | head -n 1)
+
+          if [ -z "$release_id" ]; then
+            echo "Error: Draft release '$tag_title' not found."
+            exit 1
+          fi
           gh release upload ${release_id} build/compose/jars/*.jar --clobber
         shell: bash
 
