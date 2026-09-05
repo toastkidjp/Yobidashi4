@@ -90,6 +90,7 @@ jobs:
             filename=$(basename "$file")
             echo "Uploading $filename to release ID $release_id..."
             gh api \
+              --hostname uploads.github.com \
               --method POST \
               -H "Accept: application/vnd.github+json" \
               -H "Content-Type: application/octet-stream" \
