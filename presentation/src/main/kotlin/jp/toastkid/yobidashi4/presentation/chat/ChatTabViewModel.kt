@@ -27,29 +27,30 @@ import jp.toastkid.yobidashi4.domain.model.chat.GenerativeAiModel
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
-import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.util.UUID
 
-class ChatTabViewModel : KoinComponent {
-
-    private val mainViewModel: MainViewModel by inject()
+@Factory
+class ChatTabViewModel(
+    private val mainViewModel: MainViewModel,
+    private val service: ChatService,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : KoinComponent {
 
     private val sendEventFlow = MutableSharedFlow<UUID>(extraBufferCapacity = 1)
 
     fun sendEventFlow(): SharedFlow<UUID> = sendEventFlow
-
-    private val service: ChatService by inject()
 
     private val textInput = TextFieldState()
 
@@ -58,8 +59,6 @@ class ChatTabViewModel : KoinComponent {
     private val scrollState = LazyListState()
 
     private val clipboardPutterService = ClipboardPutterService()
-
-    private val ioContextProvider: IoContextProvider by inject()
 
     private val messages = mutableStateListOf<ChatMessage>()
 
@@ -125,7 +124,7 @@ class ChatTabViewModel : KoinComponent {
 
         labelState.value = "Connecting in progress..."
 
-        withContext(ioContextProvider()) {
+        withContext(ioDispatcher) {
             service.send(messages, currentModel.value) {
                 onReceive(it)
             }
