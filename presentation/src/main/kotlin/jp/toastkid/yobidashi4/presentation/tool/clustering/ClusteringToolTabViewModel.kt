@@ -24,10 +24,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
+@Factory
 class ClusteringToolTabViewModel(
     private val viewModel: MainViewModel,
     private val kMeans: KMeans,
