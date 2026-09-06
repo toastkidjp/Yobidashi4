@@ -24,6 +24,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
+import jp.toastkid.yobidashi4.domain.service.tool.clustering.ClusteringDocumentReader
 import jp.toastkid.yobidashi4.domain.service.tool.clustering.KMeans
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,14 +34,9 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Collections.emptyMap
-import kotlin.io.path.name
 
 class ClusteringToolTabViewModelTest {
 
@@ -53,21 +49,14 @@ class ClusteringToolTabViewModelTest {
     private lateinit var kmeans: KMeans
 
     @MockK
+    private lateinit var clusteringDocumentReader: ClusteringDocumentReader
+
+    @MockK
     private lateinit var articleFactory: ArticleFactory
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { kmeans } bind(KMeans::class)
-                    single(qualifier=null) { articleFactory } bind(ArticleFactory::class)
-                }
-            )
-        }
 
         every { viewModel.showSnackbar(any(), any(), any()) } just Runs
         every { viewModel.openFile(any()) } just Runs
@@ -77,18 +66,18 @@ class ClusteringToolTabViewModelTest {
         val article = mockk<Article>()
         every { articleFactory.withTitle(any()) } returns article
         every { article.path() } returns mockk()
+        every { clusteringDocumentReader.invoke(any()) } returns listOf("a" to "b")
 
         every { kmeans.invoke(any()) } returns emptyMap()
 
         mockkStatic(Files::class)
         every { Files.readString(any()) } returns "test content"
 
-        subject = ClusteringToolTabViewModel()
+        subject = ClusteringToolTabViewModel(viewModel, kmeans, clusteringDocumentReader, articleFactory)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -117,8 +106,6 @@ class ClusteringToolTabViewModelTest {
         val capturingSlot = slot<() -> Unit>()
         every { viewModel.showSnackbar(any(), any(), capture(capturingSlot)) } just Runs
         val path = mockk<Path>()
-        every { path.name } returns "name"
-        every { path.parent } returns mockk()
         subject.addPath(path)
 
         subject.invoke(Dispatchers.Unconfined)
@@ -131,10 +118,10 @@ class ClusteringToolTabViewModelTest {
 
     @Test
     fun invokeWithException() {
-        val path = mockk<Path>()
-        every { path.name } returns "name"
-        subject.addPath(path)
         every { kmeans.invoke(any()) } throws Exception()
+        val path = mockk<Path>()
+        every { path.parent } returns mockk()
+        subject.addPath(path)
 
         subject.invoke(Dispatchers.Unconfined)
 
