@@ -88,14 +88,20 @@ jobs:
 
           for file in build/compose/jars/*.jar; do
             filename=$(basename "$file")
+
+            existing_asset_id=$(gh api "repos/${{ github.repository }}/releases/${release_id}/assets" --jq ".[] | select(.name == \"$filename\") | .id")
+            if [ -n "$existing_asset_id" ]; then
+              echo "Deleting existing asset ID: $existing_asset_id"
+              gh api --method DELETE "repos/${{ github.repository }}/releases/assets/${existing_asset_id}"
+            fi
+
             echo "Uploading $filename to release ID $release_id..."
-            gh api \
-              --hostname uploads.github.com \
-              --method POST \
+            curl -s -S -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
               -H "Accept: application/vnd.github+json" \
               -H "Content-Type: application/octet-stream" \
-              "/repos/${{ github.repository }}/releases/${release_id}/assets?name=${filename}" \
-              --input "$file"
+              --data-binary @"$file" \
+              "https://uploads.github.com/repos/${{ github.repository }}/releases/${release_id}/assets?name=${filename}"
           done
         shell: bash
 
