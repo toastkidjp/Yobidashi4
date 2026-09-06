@@ -29,7 +29,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
@@ -40,11 +39,10 @@ import jp.toastkid.yobidashi4.library.resources.ic_edit
 import jp.toastkid.yobidashi4.library.resources.ic_markdown
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 @Composable
-fun ClusteringToolTabView() {
-    val viewModel = remember { ClusteringToolTabViewModel() }
-
+fun ClusteringToolTabView(viewModel: ClusteringToolTabViewModel = koinInject()) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
