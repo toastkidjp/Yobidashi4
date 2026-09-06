@@ -32,7 +32,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -57,11 +56,14 @@ import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ChatTabView(chatTab: ChatTab) {
-    val viewModel = remember { ChatTabViewModel() }
+fun ChatTabView(
+    chatTab: ChatTab,
+    viewModel: ChatTabViewModel = koinInject()
+) {
     val coroutineScope = rememberCoroutineScope()
 
     Surface(
