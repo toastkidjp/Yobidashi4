@@ -65,9 +65,7 @@ class ClusteringToolTabViewModel(
                 kMeans.invoke(docs).forEach(result::put)
                 viewModel
                     .showSnackbar(
-                        "Clustering completed!",
-                        "Open folder",
-                        ::openFolder
+                        "Clustering completed!"
                     )
             } catch (e: Exception) {
                 LoggerFactory.getLogger(javaClass).error("Clustering error.", e)
@@ -76,10 +74,6 @@ class ClusteringToolTabViewModel(
                 processing.value = false
             }
         }
-    }
-
-    private fun openFolder() {
-        viewModel.openFile(paths.first().parent)
     }
 
     fun onKeyEvent(it: KeyEvent): Boolean {

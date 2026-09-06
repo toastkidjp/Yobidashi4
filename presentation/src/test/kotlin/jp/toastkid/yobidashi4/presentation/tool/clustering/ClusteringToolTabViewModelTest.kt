@@ -112,15 +112,12 @@ class ClusteringToolTabViewModelTest {
 
         verify { kmeans.invoke(any()) }
         verify { viewModel.showSnackbar(any(), any(), any()) }
-        capturingSlot.captured.invoke()
-        verify { viewModel.openFile(any()) }
     }
 
     @Test
     fun invokeWithException() {
         every { kmeans.invoke(any()) } throws Exception()
         val path = mockk<Path>()
-        every { path.parent } returns mockk()
         subject.addPath(path)
 
         subject.invoke(Dispatchers.Unconfined)
