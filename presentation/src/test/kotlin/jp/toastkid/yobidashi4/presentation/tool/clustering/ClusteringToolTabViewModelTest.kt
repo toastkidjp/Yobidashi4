@@ -117,8 +117,7 @@ class ClusteringToolTabViewModelTest {
     @Test
     fun invokeWithException() {
         every { kmeans.invoke(any()) } throws Exception()
-        val path = mockk<Path>()
-        subject.addPath(path)
+        subject.addPath(mockk<Path>())
 
         subject.invoke(Dispatchers.Unconfined)
 
