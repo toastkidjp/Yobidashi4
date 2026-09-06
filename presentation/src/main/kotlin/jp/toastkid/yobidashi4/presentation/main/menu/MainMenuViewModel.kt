@@ -51,11 +51,13 @@ import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
 import java.nio.file.Path
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@Factory
 class MainMenuViewModel(
     private val viewModel: MainViewModel,
     private val setting: Setting,
