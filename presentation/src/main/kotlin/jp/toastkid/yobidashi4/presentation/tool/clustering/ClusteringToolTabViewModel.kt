@@ -25,19 +25,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
-class ClusteringToolTabViewModel : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
-
-    private val kMeans: KMeans by inject()
-
-    private val clusteringDocumentReader: ClusteringDocumentReader by inject()
-
-    private val articleFactory: ArticleFactory by inject()
+class ClusteringToolTabViewModel(
+    private val viewModel: MainViewModel,
+    private val kMeans: KMeans,
+    private val clusteringDocumentReader: ClusteringDocumentReader,
+    private val articleFactory: ArticleFactory
+) : KoinComponent {
 
     private val paths = mutableStateSetOf<Path>()
 
