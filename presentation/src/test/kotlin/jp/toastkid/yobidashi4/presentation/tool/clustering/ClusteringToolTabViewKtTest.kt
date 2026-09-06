@@ -7,17 +7,19 @@
  */
 package jp.toastkid.yobidashi4.presentation.tool.clustering
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
@@ -26,18 +28,23 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Path
 
 class ClusteringToolTabViewKtTest {
+    
+    @RelaxedMockK
+    private lateinit var viewModel: ClusteringToolTabViewModel
 
     @BeforeEach
     fun setUp() {
-        mockkConstructor(ClusteringToolTabViewModel::class)
+        MockKAnnotations.init(this)
+
         val element = mockk<Path>()
         every { element.fileName } returns element
         every { element.toString() } returns "test"
-        every { anyConstructed<ClusteringToolTabViewModel>().items() } returns listOf(element)
-        every { anyConstructed<ClusteringToolTabViewModel>().invoke(any()) } just Runs
-        every { anyConstructed<ClusteringToolTabViewModel>().dispose() } just Runs
-        every { anyConstructed<ClusteringToolTabViewModel>().remove(any()) } just Runs
-        coEvery { anyConstructed<ClusteringToolTabViewModel>().collectDroppedPaths() } just Runs
+        every { viewModel.items() } returns listOf(element)
+        every { viewModel.invoke(any()) } just Runs
+        every { viewModel.dispose() } just Runs
+        every { viewModel.remove(any()) } just Runs
+        every { viewModel.listState() } returns LazyListState()
+        coEvery { viewModel.collectDroppedPaths() } just Runs
     }
 
     @AfterEach
@@ -50,35 +57,35 @@ class ClusteringToolTabViewKtTest {
     fun clusteringToolTabView() {
         runDesktopComposeUiTest {
             setContent {
-                ClusteringToolTabView()
+                ClusteringToolTabView(viewModel)
             }
 
             onNodeWithText("x").performClick()
-            verify { anyConstructed<ClusteringToolTabViewModel>().remove(any()) }
+            verify { viewModel.remove(any()) }
 
             onNodeWithText("Invoke").performClick()
-            verify { anyConstructed<ClusteringToolTabViewModel>().invoke(any()) }
+            verify { viewModel.invoke(any()) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun processingCase() {
-        every { anyConstructed<ClusteringToolTabViewModel>().processing() } returns true
-        every { anyConstructed<ClusteringToolTabViewModel>().openMarkdownPreview(any()) } just Runs
-        every { anyConstructed<ClusteringToolTabViewModel>().edit(any()) } just Runs
-        every { anyConstructed<ClusteringToolTabViewModel>().result() } returns mapOf("test" to listOf("Good"))
+        every { viewModel.processing() } returns true
+        every { viewModel.openMarkdownPreview(any()) } just Runs
+        every { viewModel.edit(any()) } just Runs
+        every { viewModel.result() } returns mapOf("test" to listOf("Good"))
 
         runDesktopComposeUiTest {
             setContent {
-                ClusteringToolTabView()
+                ClusteringToolTabView(viewModel)
             }
 
             onNode(hasContentDescription("Open preview")).performClick()
-            verify { anyConstructed<ClusteringToolTabViewModel>().openMarkdownPreview(any()) }
+            verify { viewModel.openMarkdownPreview(any()) }
 
             onNode(hasContentDescription("Open file")).performClick()
-            verify { anyConstructed<ClusteringToolTabViewModel>().edit(any()) }
+            verify { viewModel.edit(any()) }
         }
     }
 
