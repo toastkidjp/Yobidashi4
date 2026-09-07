@@ -18,7 +18,6 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
@@ -30,16 +29,16 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.chat.Source
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import org.koin.compose.koinInject
 
 @Composable
 internal fun MessageContent(
     text: String,
     base64Image: String? = null,
     sources: List<Source>,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel: MessageContentViewModel = koinInject()
 ) {
-    val viewModel = remember { MessageContentViewModel() }
-
     Column(modifier) {
         text.split("\n").forEach {
             val listLine = it.startsWith("* ")
