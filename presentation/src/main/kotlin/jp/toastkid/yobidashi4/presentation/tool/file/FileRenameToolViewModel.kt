@@ -20,13 +20,15 @@ import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Path
 
-class FileRenameToolViewModel : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
+@Factory
+class FileRenameToolViewModel(
+    private val viewModel: MainViewModel,
+    private val fileRenamer: FileRenamer
+) : KoinComponent {
 
     private val paths = mutableStateListOf<Path>()
 
@@ -55,8 +57,6 @@ class FileRenameToolViewModel : KoinComponent {
             "png"
         )
     }
-
-    private val fileRenamer: FileRenamer by inject()
 
     fun rename() {
         if (input.text.isEmpty()) {
