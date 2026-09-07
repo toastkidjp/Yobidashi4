@@ -133,7 +133,8 @@ fun ChatTabView(
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(0.2f)
             ) {
                 MultiLineTextField(
                     viewModel.textInput(),
