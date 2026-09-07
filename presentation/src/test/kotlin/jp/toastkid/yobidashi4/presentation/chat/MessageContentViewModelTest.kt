@@ -24,10 +24,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
@@ -49,13 +45,6 @@ class MessageContentViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
-                }
-            )
-        }
 
         mockkStatic(Base64::class)
         every { Base64.getDecoder() } returns decoder
@@ -67,12 +56,11 @@ class MessageContentViewModelTest {
         every { image.height } returns 1
         every { image.getRGB(any(), any()) } returns 1
 
-        subject = MessageContentViewModel()
+        subject = MessageContentViewModel(mainViewModel)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
