@@ -9,8 +9,8 @@ import androidx.compose.ui.text.AnnotatedString
 import jp.toastkid.yobidashi4.domain.model.download.DownloadFolder
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
 import java.io.IOException
@@ -19,11 +19,12 @@ import java.util.Base64
 import java.util.concurrent.atomic.AtomicReference
 import javax.imageio.ImageIO
 
-class MessageContentViewModel : KoinComponent {
+@Factory
+class MessageContentViewModel(
+    private val mainViewModel: MainViewModel
+) : KoinComponent {
 
     private val keywordHighlighter = KeywordHighlighter()
-
-    private val mainViewModel: MainViewModel by inject()
 
     private val imageHolder = AtomicReference<ImageBitmap>(EMPTY_IMAGE)
 
