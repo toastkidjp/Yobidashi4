@@ -31,10 +31,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Path
 
 class FileRenameToolViewModelTest {
@@ -51,26 +47,16 @@ class FileRenameToolViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { fileRenamer } bind(FileRenamer::class)
-                }
-            )
-        }
-
         every { mainViewModel.showSnackbar(any(), any(), any()) } just Runs
         every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
         every { fileRenamer.invoke(any(), any(), any(), any()) } just Runs
         every { fileRenamer.makeRenamedFileName(any(), any(), any()) } returns "img_1.png"
 
-        subject = FileRenameToolViewModel()
+        subject = FileRenameToolViewModel(mainViewModel, fileRenamer)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
