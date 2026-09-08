@@ -16,17 +16,15 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
+import org.koin.compose.koinInject
 
 @Composable
-internal fun BarcodeToolTabView() {
-    val viewModel = remember { BarcodeToolTabViewModel() }
-
+internal fun BarcodeToolTabView(viewModel: BarcodeToolTabViewModel = koinInject()) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
