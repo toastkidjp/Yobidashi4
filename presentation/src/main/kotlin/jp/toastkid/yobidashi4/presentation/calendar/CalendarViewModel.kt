@@ -20,21 +20,20 @@ import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.domain.service.calendar.label.CalendarLabelFinderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.chrono.JapaneseDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicReference
 
-class CalendarViewModel : KoinComponent {
-
-    private val mainViewModel: MainViewModel by inject()
-
-    private val setting: Setting by inject()
-
-    private val userOffDayService: UserOffDayService by inject()
+@Factory
+class CalendarViewModel(
+    private val mainViewModel: MainViewModel,
+    private val setting: Setting,
+    private val userOffDayService: UserOffDayService
+) : KoinComponent {
 
     private val calendarLabelFinderService = CalendarLabelFinderService()
 
