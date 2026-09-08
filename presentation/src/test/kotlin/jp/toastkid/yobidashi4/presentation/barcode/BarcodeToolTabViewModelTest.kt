@@ -24,10 +24,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.IOException
@@ -50,27 +46,17 @@ class BarcodeToolTabViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { barcodeEncoder } bind(BarcodeEncoder::class)
-                    single(qualifier=null) { barcodeDecoder } bind(BarcodeDecoder::class)
-                }
-            )
-        }
 
         every { mainViewModel.showSnackbar(any()) } just Runs
         every { mainViewModel.openUrl(any(), any()) } just Runs
         every { barcodeEncoder.invoke(any(), any(), any()) } returns mockk()
         every { barcodeDecoder.invoke(any()) } returns "https://www.yahoo.co.jp"
 
-        barcodeToolTabViewModel = BarcodeToolTabViewModel()
+        barcodeToolTabViewModel = BarcodeToolTabViewModel(mainViewModel, barcodeEncoder, barcodeDecoder)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
