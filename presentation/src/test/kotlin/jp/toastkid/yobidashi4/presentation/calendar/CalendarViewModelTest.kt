@@ -31,10 +31,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Path
 import java.time.LocalDate
 
@@ -54,27 +50,17 @@ class CalendarViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { setting } bind(Setting::class)
-                    single(qualifier=null) { userOffDayService } bind(UserOffDayService::class)
-                }
-            )
-        }
         every { mainViewModel.edit(any(), any()) } just Runs
         val path = mockk<Path>()
         every { setting.articleFolderPath() } returns path
         every { path.resolve(any<String>()) } returns mockk()
         every { userOffDayService.findBy(any()) } returns emptySet()
 
-        viewModel = CalendarViewModel()
+        viewModel = CalendarViewModel(mainViewModel, setting, userOffDayService)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
