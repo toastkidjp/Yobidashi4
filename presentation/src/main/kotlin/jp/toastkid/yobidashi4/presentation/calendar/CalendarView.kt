@@ -27,7 +27,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -45,6 +44,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
+import org.koin.compose.koinInject
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.format.TextStyle
@@ -52,9 +52,10 @@ import java.util.Locale
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarView(tab: CalendarTab) {
-    val calendarViewModel = remember { CalendarViewModel() }
-
+fun CalendarView(
+    tab: CalendarTab,
+    calendarViewModel: CalendarViewModel = koinInject()
+) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
