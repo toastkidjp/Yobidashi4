@@ -17,8 +17,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
@@ -28,14 +28,13 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.time.DayOfWeek
 import java.time.LocalDate
 
 class CalendarViewKtTest {
+    
+    @RelaxedMockK
+    private lateinit var viewModel: CalendarViewModel
     
     @MockK
     private lateinit var userOffDayService: UserOffDayService
@@ -46,20 +45,11 @@ class CalendarViewKtTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { userOffDayService } bind(UserOffDayService::class)
-                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                }
-            )
-        }
         every { userOffDayService.findBy(any()) } returns emptySet()
         every { mainViewModel.updateCalendarTab(any(), any(), any()) } just Runs
 
-        mockkConstructor(CalendarViewModel::class)
-        every { anyConstructed<CalendarViewModel>().month() } returns mutableListOf(Week().also { it.add(LocalDate.now()) })
-        every { anyConstructed<CalendarViewModel>().dayOfWeeks() } returns listOf(
+        every { viewModel.month() } returns mutableListOf(Week().also { it.add(LocalDate.now()) })
+        every { viewModel.dayOfWeeks() } returns listOf(
             DayOfWeek.SUNDAY,
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,
@@ -68,39 +58,38 @@ class CalendarViewKtTest {
             DayOfWeek.FRIDAY,
             DayOfWeek.SATURDAY
         )
-        every { anyConstructed<CalendarViewModel>().isToday(any()) } returns false
-        every { anyConstructed<CalendarViewModel>().openDateArticle(any()) } just Runs
-        every { anyConstructed<CalendarViewModel>().openDateArticle(any(), any()) } just Runs
-        every { anyConstructed<CalendarViewModel>().plusMonths(any()) } just Runs
-        every { anyConstructed<CalendarViewModel>().yearInput() } returns TextFieldState()
-        every { anyConstructed<CalendarViewModel>().setYearInput() } just Runs
-        every { anyConstructed<CalendarViewModel>().moveMonth(any()) } just Runs
-        every { anyConstructed<CalendarViewModel>().closeMonthChooser() } just Runs
-        every { anyConstructed<CalendarViewModel>().moveToCurrentMonth() } just Runs
-        every { anyConstructed<CalendarViewModel>().launch(any()) } just Runs
-        every { anyConstructed<CalendarViewModel>().localDate() } returns LocalDate.now()
-        every { anyConstructed<CalendarViewModel>().openingMonthChooser() } returns false
+        every { viewModel.isToday(any()) } returns false
+        every { viewModel.openDateArticle(any()) } just Runs
+        every { viewModel.openDateArticle(any(), any()) } just Runs
+        every { viewModel.plusMonths(any()) } just Runs
+        every { viewModel.yearInput() } returns TextFieldState()
+        every { viewModel.setYearInput() } just Runs
+        every { viewModel.moveMonth(any()) } just Runs
+        every { viewModel.closeMonthChooser() } just Runs
+        every { viewModel.moveToCurrentMonth() } just Runs
+        every { viewModel.launch(any()) } just Runs
+        every { viewModel.localDate() } returns LocalDate.now()
+        every { viewModel.openingMonthChooser() } returns false
     }
 
     @AfterEach
     fun tearDown() {
         unmockkAll()
-        stopKoin()
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun calendarView() {
         val date = LocalDate.of(2024, 5, 5)
-        every { anyConstructed<CalendarViewModel>().month() } returns mutableListOf(Week().also { it.add(date) })
-        every { anyConstructed<CalendarViewModel>().localDate() } returns date
+        every { viewModel.month() } returns mutableListOf(Week().also { it.add(date) })
+        every { viewModel.localDate() } returns date
 
         runDesktopComposeUiTest {
             setContent {
-                CalendarView(CalendarTab())
+                CalendarView(CalendarTab(), viewModel)
             }
 
-            verify { anyConstructed<CalendarViewModel>().launch(any()) }
+            verify { viewModel.launch(any()) }
 
             onNodeWithContentDescription("day_label_5", useUnmergedTree = true)
                 .assertExists("Not found!")
@@ -108,23 +97,23 @@ class CalendarViewKtTest {
                     click()
                     longClick()
                 }
-            verify { anyConstructed<CalendarViewModel>().openDateArticle(any(), false) }
-            verify { anyConstructed<CalendarViewModel>().openDateArticle(any(), true) }
+            verify { viewModel.openDateArticle(any(), false) }
+            verify { viewModel.openDateArticle(any(), true) }
 
             onNode(hasText("<"), useUnmergedTree = true).onParent().performClick()
                 .performKeyInput {
                     pressKey(Key.DirectionLeft, 100L)
                 }
-            verify { anyConstructed<CalendarViewModel>().plusMonths(-1) }
+            verify { viewModel.plusMonths(-1) }
 
             onNode(hasText(">"), useUnmergedTree = true).onParent().performClick()
                 .performKeyInput {
                     pressKey(Key.DirectionRight, 100L)
                 }
-            verify { anyConstructed<CalendarViewModel>().plusMonths(1) }
+            verify { viewModel.plusMonths(1) }
 
             onNode(hasText("Current month"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<CalendarViewModel>().moveToCurrentMonth() }
+            verify { viewModel.moveToCurrentMonth() }
         }
     }
 
@@ -132,17 +121,17 @@ class CalendarViewKtTest {
     @Test
     fun withChooser() {
         val date = LocalDate.of(2024, 5, 5)
-        every { anyConstructed<CalendarViewModel>().month() } returns mutableListOf(Week().also { it.add(date) })
-        every { anyConstructed<CalendarViewModel>().openingMonthChooser() } returns true
+        every { viewModel.month() } returns mutableListOf(Week().also { it.add(date) })
+        every { viewModel.openingMonthChooser() } returns true
 
         runDesktopComposeUiTest {
             setContent {
-                CalendarView(CalendarTab())
+                CalendarView(CalendarTab(), viewModel)
             }
 
             onNodeWithContentDescription("month_chooser_button_7", useUnmergedTree = true).performClick()
-            verify { anyConstructed<CalendarViewModel>().moveMonth(any()) }
-            verify { anyConstructed<CalendarViewModel>().closeMonthChooser() }
+            verify { viewModel.moveMonth(any()) }
+            verify { viewModel.closeMonthChooser() }
         }
     }
 
