@@ -7,20 +7,19 @@ import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeDecoder
 import jp.toastkid.yobidashi4.domain.service.barcode.BarcodeEncoder
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.awt.image.BufferedImage
 import java.io.IOException
 import java.net.URI
 import javax.imageio.ImageIO
 
-class BarcodeToolTabViewModel : KoinComponent {
-
-    private val mainViewModel: MainViewModel by inject()
-
-    private val barcodeEncoder: BarcodeEncoder by inject()
-
-    private val barcodeDecoder: BarcodeDecoder by inject()
+@Factory
+class BarcodeToolTabViewModel(
+    private val mainViewModel: MainViewModel,
+    private val barcodeEncoder: BarcodeEncoder,
+    private val barcodeDecoder: BarcodeDecoder
+) : KoinComponent {
 
     private val lastBarcode = mutableStateOf<BufferedImage?>(null)
 
