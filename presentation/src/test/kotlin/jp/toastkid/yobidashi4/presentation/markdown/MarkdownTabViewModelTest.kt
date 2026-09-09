@@ -23,10 +23,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class MarkdownTabViewModelTest {
 
@@ -39,22 +35,13 @@ class MarkdownTabViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                }
-            )
-        }
-
         every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
 
-        subject = MarkdownTabViewModel()
+        subject = MarkdownTabViewModel(mainViewModel)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
