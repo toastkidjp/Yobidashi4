@@ -58,12 +58,15 @@ import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun TableView(tab: TableTab) {
+fun TableView(
+    tab: TableTab,
+    viewModel: TableViewModel = koinInject()
+) {
     val coroutineScope = rememberCoroutineScope()
-    val viewModel = remember { TableViewModel() }
 
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
