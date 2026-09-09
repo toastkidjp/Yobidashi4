@@ -33,10 +33,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class TableViewModelTest {
 
@@ -52,14 +48,6 @@ class TableViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
-                    single(qualifier = null) { articleFactory } bind (ArticleFactory::class)
-                }
-            )
-        }
         every { mainViewModel.openPreview(any()) } just Runs
         every { mainViewModel.editWithTitle(any()) } just Runs
         val article = mockk<Article>()
@@ -68,12 +56,11 @@ class TableViewModelTest {
         mockkConstructor(KeywordHighlighter::class)
         every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns mockk()
 
-        subject = TableViewModel()
+        subject = TableViewModel(mainViewModel, articleFactory)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
