@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi4.presentation.barcode
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
