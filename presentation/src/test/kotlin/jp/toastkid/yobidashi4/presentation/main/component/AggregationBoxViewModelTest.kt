@@ -37,10 +37,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.util.stream.Stream
 
 @OptIn(InternalComposeUiApi::class)
@@ -57,40 +53,33 @@ class AggregationBoxViewModelTest {
     @MockK
     private lateinit var articlesReaderService: ArticlesReaderService
 
+    @MockK
+    private lateinit var aggregationInvoker: AggregationInvoker
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
-                    single(qualifier = null) { keywordSearch } bind (FullTextArticleFinder::class)
-                    single(qualifier = null) { articlesReaderService } bind (ArticlesReaderService::class)
-                }
-            )
-        }
         every { mainViewModel.initialAggregationType() } returns 0
         every { mainViewModel.switchAggregationBox(any()) } just Runs
         every { mainViewModel.showAggregationBox() } returns true
         every { articlesReaderService.invoke() } answers { Stream.empty() }
 
-        mockkConstructor(InputHistoryService::class, AggregationInvoker::class)
+        mockkConstructor(InputHistoryService::class)
         every { anyConstructed<InputHistoryService>().add(any()) } just Runs
         every { anyConstructed<InputHistoryService>().clear(any()) } just Runs
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
         every { anyConstructed<InputHistoryService>().filter(any(), any()) } just Runs
-        every { anyConstructed<AggregationInvoker>().invoke(any(), any()) } just Runs
+        every { aggregationInvoker.invoke(any(), any()) } just Runs
 
         every { keywordSearch.label() } returns "Find article"
 
-        subject = AggregationBoxViewModel()
+        subject = AggregationBoxViewModel(mainViewModel, keywordSearch, articlesReaderService, aggregationInvoker)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkAll()
-        stopKoin()
     }
 
     @Test
@@ -281,7 +270,7 @@ class AggregationBoxViewModelTest {
 
         subject.onSearch()
 
-        verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
+        verify { aggregationInvoker.invoke(any(), any()) }
     }
 
     @Test
@@ -316,7 +305,7 @@ class AggregationBoxViewModelTest {
         subject.onSearch()
 
         verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
-        verify { anyConstructed<AggregationInvoker>().invoke(any(), capture(capturingSlot)) }
+        verify { aggregationInvoker.invoke(any(), capture(capturingSlot)) }
         assertEquals(expected, capturingSlot.captured)
     }
 
@@ -328,7 +317,7 @@ class AggregationBoxViewModelTest {
         subject.onSearch()
 
         verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
-        verify(inverse = true) { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
+        verify(inverse = true) { aggregationInvoker.invoke(any(), any()) }
     }
 
     @Test
@@ -336,7 +325,7 @@ class AggregationBoxViewModelTest {
         subject.onSearch()
 
         verify(inverse = true) { mainViewModel.switchAggregationBox(any()) }
-        verify { anyConstructed<AggregationInvoker>().invoke(any(), any()) }
+        verify { aggregationInvoker.invoke(any(), any()) }
     }
 
     @Test
