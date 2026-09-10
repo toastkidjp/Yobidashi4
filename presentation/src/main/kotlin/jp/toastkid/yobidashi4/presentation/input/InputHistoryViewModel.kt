@@ -16,8 +16,8 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinde
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationInvoker
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -25,13 +25,12 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 
-class InputHistoryViewModel : KoinComponent {
-
-    private val mainViewModel: MainViewModel by inject()
-
-    private val keywordSearch: FullTextArticleFinder by inject()
-
-    private val aggregator = AggregationInvoker()
+@Factory
+class InputHistoryViewModel(
+    private val mainViewModel: MainViewModel,
+    private val keywordSearch: FullTextArticleFinder,
+    private val aggregator: AggregationInvoker = AggregationInvoker()
+) : KoinComponent {
 
     private val inputHistoryServiceHolder = AtomicReference<InputHistoryService>()
 
