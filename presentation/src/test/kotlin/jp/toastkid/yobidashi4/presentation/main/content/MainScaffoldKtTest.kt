@@ -1,8 +1,10 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
@@ -13,6 +15,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -27,8 +30,12 @@ import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_search
+import jp.toastkid.yobidashi4.presentation.main.component.AggregationBoxViewModel
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
+import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -60,6 +67,12 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var metaExtractor: FileListItemMetaExtractor
 
+    @MockK
+    private lateinit var aggregationBoxViewModel: AggregationBoxViewModel
+
+    @RelaxedMockK
+    private lateinit var markdownTabViewModel: MarkdownTabViewModel
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -73,6 +86,8 @@ class MainScaffoldKtTest {
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                     single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                     single(qualifier=null) { metaExtractor } bind(FileListItemMetaExtractor::class)
+                    single(qualifier=null) { aggregationBoxViewModel } bind(AggregationBoxViewModel::class)
+                    single(qualifier=null) { markdownTabViewModel } bind(MarkdownTabViewModel::class)
                 }
             )
         }
@@ -100,6 +115,7 @@ class MainScaffoldKtTest {
             "test",
             20000
         )
+        every { markdownTabViewModel.scrollState() } returns LazyListState()
 
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
@@ -133,6 +149,24 @@ class MainScaffoldKtTest {
         every { mainViewModel.openFind() } returns true
         every { mainViewModel.showInputBox() } returns true
         every { mainViewModel.openMemoryUsageBox() } returns true
+
+        every { aggregationBoxViewModel.selectedCategoryIcon() } returns Res.drawable.ic_search
+        every { aggregationBoxViewModel.selectedCategoryName() } returns "test"
+        every { aggregationBoxViewModel.isCurrentSwingContent() } returns false
+        every { aggregationBoxViewModel.isOpeningChooser() } returns false
+        every { aggregationBoxViewModel.showAggregationBox() } returns false
+        every { aggregationBoxViewModel.shouldShowDateHistory() } returns false
+        every { aggregationBoxViewModel.useExactMatch() } returns false
+        every { aggregationBoxViewModel.dateHistories() } returns emptyList()
+        every { aggregationBoxViewModel.label() } returns ""
+        every { aggregationBoxViewModel.start() } just Runs
+        every { aggregationBoxViewModel.onDateInputValueChange() } just Runs
+        every { aggregationBoxViewModel.onKeywordInputValueChange() } just Runs
+        every { aggregationBoxViewModel.keyword() } returns TextFieldState()
+        every { aggregationBoxViewModel.dateInput() } returns TextFieldState()
+        every { aggregationBoxViewModel.focusingModifier() } returns Modifier
+        every { aggregationBoxViewModel.selectedCategoryIcon() } returns Res.drawable.ic_search
+
         val markdownPreviewTab = mockk<MarkdownPreviewTab>()
         val markdown = mockk<Markdown>()
         every { markdown.lines() } returns emptyList()
