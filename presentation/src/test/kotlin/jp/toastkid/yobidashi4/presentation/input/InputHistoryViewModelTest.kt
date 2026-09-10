@@ -28,10 +28,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.util.stream.Stream
 
 class InputHistoryViewModelTest {
@@ -47,34 +43,26 @@ class InputHistoryViewModelTest {
     @MockK
     private lateinit var articlesReaderService: ArticlesReaderService
 
+    @MockK
+    private lateinit var aggregationInvoker: AggregationInvoker
+    
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
-                    single(qualifier = null) { keywordSearch } bind (FullTextArticleFinder::class)
-                    single(qualifier = null) { articlesReaderService } bind (ArticlesReaderService::class)
-                }
-            )
-        }
-
         every { mainViewModel.initialAggregationType() } returns 0
         every { keywordSearch.invoke(any()) } returns mockk()
         every { articlesReaderService.invoke() } returns Stream.empty()
-        mockkConstructor(InputHistoryService::class, AggregationInvoker::class)
+        every { aggregationInvoker.invoke(any(), any()) } just Runs
+        mockkConstructor(InputHistoryService::class)
         every { anyConstructed<InputHistoryService>().delete(any(), any()) } just Runs
         every { anyConstructed<InputHistoryService>().all(any()) } just Runs
-        every { anyConstructed<AggregationInvoker>().invoke(any(), any()) } just Runs
 
-        subject = InputHistoryViewModel()
+        subject = InputHistoryViewModel(mainViewModel, keywordSearch, aggregationInvoker)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -94,7 +82,7 @@ class InputHistoryViewModelTest {
 
         subject.open(inputHistory)
 
-        verify { anyConstructed<AggregationInvoker>().invoke(any(), inputHistory.word) }
+        verify { aggregationInvoker.invoke(any(), inputHistory.word) }
     }
 
     @Test
@@ -103,7 +91,7 @@ class InputHistoryViewModelTest {
 
         subject.openOnBackground(inputHistory)
 
-        verify { anyConstructed<AggregationInvoker>().invoke(any(), inputHistory.word) }
+        verify { aggregationInvoker.invoke(any(), inputHistory.word) }
     }
 
     @Test
