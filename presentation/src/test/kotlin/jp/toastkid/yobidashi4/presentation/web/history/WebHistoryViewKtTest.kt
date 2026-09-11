@@ -17,7 +17,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -25,50 +25,35 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
-import jp.toastkid.yobidashi4.domain.repository.web.history.WebHistoryRepository
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class WebHistoryViewKtTest {
 
-    @MockK
-    private lateinit var repository: WebHistoryRepository
-
+    @RelaxedMockK
+    private lateinit var viewModel: WebHistoryViewModel
+    
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mockk<MainViewModel>() } bind (MainViewModel::class)
-                    single(qualifier = null) { repository } bind (WebHistoryRepository::class)
-                }
-            )
-        }
-        every { repository.readAll() } returns listOf(WebHistory("test", "https://www.yahoo.co.jp"))
+        
         mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
-        mockkConstructor(WebHistoryViewModel::class)
-        coEvery { anyConstructed<WebHistoryViewModel>().launch(any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().onDispose(any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().listState() } returns LazyListState(0)
-        every { anyConstructed<WebHistoryViewModel>().list() } returns mutableListOf(
+        
+        coEvery { viewModel.launch(any()) } just Runs
+        every { viewModel.onDispose(any()) } just Runs
+        every { viewModel.listState() } returns LazyListState(0)
+        every { viewModel.list() } returns mutableListOf(
             WebHistory("test item", "https://test.com/test"),
         )
-        every { anyConstructed<WebHistoryViewModel>().openUrl(any(), any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().focusRequester() } returns FocusRequester()
+        every { viewModel.openUrl(any(), any()) } just Runs
+        every { viewModel.focusRequester() } returns FocusRequester()
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -76,16 +61,16 @@ class WebHistoryViewKtTest {
     @Test
     fun webHistoryView() {
         val mutableSharedFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
-        every { anyConstructed<WebHistoryViewModel>().scrollEventFlow() } returns mutableSharedFlow
+        every { viewModel.scrollEventFlow() } returns mutableSharedFlow
 
         runDesktopComposeUiTest {
             setContent {
-                WebHistoryView(mockk())
+                WebHistoryView(mockk(), viewModel)
             }
 
             val item = onNodeWithText("test item")
             item.performClick()
-            verify { anyConstructed<WebHistoryViewModel>().openUrl(any(), false) }
+            verify { viewModel.openUrl(any(), false) }
             item.performMouseInput {
                 longClick()
                 enter()
@@ -97,8 +82,8 @@ class WebHistoryViewKtTest {
                 pressKey(Key.DirectionDown, 1000L)
             }
 
-            verify { anyConstructed<WebHistoryViewModel>().scrollEventFlow() }
-            verify { anyConstructed<WebHistoryViewModel>().listState() }
+            verify { viewModel.scrollEventFlow() }
+            verify { viewModel.listState() }
             mutableSharedFlow.tryEmit(1f)
             mainClock.advanceTimeBy(500L)
         }
@@ -107,41 +92,42 @@ class WebHistoryViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun useDropdown() {
-        every { anyConstructed<WebHistoryViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<WebHistoryViewModel>().browseUri(any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().clipText(any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().delete(any()) } just Runs
-        every { anyConstructed<WebHistoryViewModel>().clear() } just Runs
-        every { anyConstructed<WebHistoryViewModel>().closeDropdown() } just Runs
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.browseUri(any()) } just Runs
+        every { viewModel.clipText(any()) } just Runs
+        every { viewModel.delete(any()) } just Runs
+        every { viewModel.clear() } just Runs
+        every { viewModel.closeDropdown() } just Runs
+        every { viewModel.scrollEventFlow() } returns MutableSharedFlow(extraBufferCapacity = 1)
 
         runDesktopComposeUiTest {
             setContent {
-                WebHistoryView(mockk())
+                WebHistoryView(mockk(), viewModel)
             }
 
             onNode(hasText("Open"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().openUrl(any(), any()) }
+            verify { viewModel.openUrl(any(), any()) }
 
             onNode(hasText("Open background"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().openUrl(any(), any()) }
+            verify { viewModel.openUrl(any(), any()) }
 
             onNode(hasText("Open with browser"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().browseUri(any()) }
+            verify { viewModel.browseUri(any()) }
 
             onNode(hasText("Copy title"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().clipText(any()) }
+            verify { viewModel.clipText(any()) }
 
             onNode(hasText("Copy URL"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().clipText(any()) }
+            verify { viewModel.clipText(any()) }
 
             onNode(hasText("Clip markdown link"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().clipText(any()) }
+            verify { viewModel.clipText(any()) }
 
             onNode(hasText("Delete"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().delete(any()) }
+            verify { viewModel.delete(any()) }
 
             onNode(hasText("Clear"), true).onParent().performClick()
-            verify { anyConstructed<WebHistoryViewModel>().clear() }
+            verify { viewModel.clear() }
         }
     }
 
