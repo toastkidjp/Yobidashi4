@@ -23,7 +23,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -39,11 +38,14 @@ import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuI
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-internal fun WebHistoryView(tab: WebHistoryTab) {
-    val viewModel = remember { WebHistoryViewModel() }
+internal fun WebHistoryView(
+    tab: WebHistoryTab,
+    viewModel: WebHistoryViewModel = koinInject()
+) {
     val coroutineScope = rememberCoroutineScope()
 
     Surface(
