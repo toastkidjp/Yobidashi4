@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
+import jp.toastkid.yobidashi4.domain.service.aggregation.ArticleAggregator
 import jp.toastkid.yobidashi4.domain.service.aggregation.StepsAggregatorService
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_aggregation
@@ -55,6 +56,9 @@ class AggregationBoxKtTest {
             StepsAggregatorService(mockk())
         )
         every { viewModel.icon(any()) } returns Res.drawable.ic_aggregation
+        val aggregator = mockk<ArticleAggregator>()
+        every { aggregator.label() } returns "test"
+        every { viewModel.items() } returns listOf(aggregator)
         every { repository.filter(any()) } returns listOf(InputHistory("test", 0))
     }
 
