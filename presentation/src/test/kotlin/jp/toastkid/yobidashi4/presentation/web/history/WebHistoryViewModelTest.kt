@@ -41,10 +41,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class WebHistoryViewModelTest {
 
@@ -63,26 +59,15 @@ class WebHistoryViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { ioContextProvider } bind(IoContextProvider::class)
-                    single(qualifier = null) { repository } bind(WebHistoryRepository::class)
-                }
-            )
-        }
-
         mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().readAll() } returns listOf(mockk())
         every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
-        subject = WebHistoryViewModel()
+        subject = WebHistoryViewModel(viewModel, ioContextProvider, repository)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
