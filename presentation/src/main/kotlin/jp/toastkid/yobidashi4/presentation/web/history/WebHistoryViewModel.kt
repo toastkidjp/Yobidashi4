@@ -21,21 +21,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class WebHistoryViewModel : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
-
-    private val ioContextProvider: IoContextProvider by inject()
-
-    private val repository: WebHistoryRepository by inject()
+@Factory
+class WebHistoryViewModel(
+    private val viewModel: MainViewModel,
+    private val ioContextProvider: IoContextProvider,
+    private val repository: WebHistoryRepository
+) : KoinComponent {
 
     private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd(E)HH:mm:ss").withLocale(Locale.ENGLISH)
 
