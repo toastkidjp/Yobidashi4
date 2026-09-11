@@ -39,7 +39,7 @@ class TableViewModel(
 
     private val tableSorter = TableSorter()
 
-    fun items() = articleStates
+    fun items(): List<Array<Any>> = articleStates
 
     fun focusRequester() = focusRequester
 
