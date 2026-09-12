@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.setting
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -17,56 +18,36 @@ import androidx.compose.ui.test.withKeyDown
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class SettingEditorViewKtTest {
 
-    @MockK
-    private lateinit var viewModel: MainViewModel
-
-    @MockK
-    private lateinit var setting: Setting
+    @RelaxedMockK
+    private lateinit var viewModel: SettingEditorViewModel
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockkConstructor(SettingEditorViewModel::class)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { setting } bind(Setting::class)
-                }
-            )
-        }
-
-        every { anyConstructed<SettingEditorViewModel>().items() } returns listOf(
+        every { viewModel.listState() } returns LazyListState()
+        every { viewModel.items() } returns listOf(
             "test" to TextFieldState(),
             "test2" to TextFieldState("test2"),
             "test3" to TextFieldState("cursor_target")
         )
-        every { anyConstructed<SettingEditorViewModel>().start() } just Runs
-        every { anyConstructed<SettingEditorViewModel>().save() } just Runs
-        every { anyConstructed<SettingEditorViewModel>().openFile() } just Runs
+        every { viewModel.start() } just Runs
+        every { viewModel.save() } just Runs
+        every { viewModel.openFile() } just Runs
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -75,7 +56,7 @@ class SettingEditorViewKtTest {
     fun settingEditorView() {
         runComposeUiTest {
             setContent {
-                SettingEditorView()
+                SettingEditorView(viewModel)
             }
 
             onNodeWithText("Save").performClick()
@@ -104,9 +85,9 @@ class SettingEditorViewKtTest {
                 exit()
             }
 
-            verify { anyConstructed<SettingEditorViewModel>().start() }
-            verify { anyConstructed<SettingEditorViewModel>().save() }
-            verify { anyConstructed<SettingEditorViewModel>().openFile() }
+            verify { viewModel.start() }
+            verify { viewModel.save() }
+            verify { viewModel.openFile() }
         }
     }
 }
