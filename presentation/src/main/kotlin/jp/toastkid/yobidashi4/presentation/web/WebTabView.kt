@@ -24,15 +24,18 @@ import androidx.compose.ui.platform.LocalFocusManager
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.compose.koinInject
 import java.awt.BorderLayout
 import java.awt.Color
 import javax.swing.JPanel
 
 @Composable
-internal fun WebTabView(tab: WebTab) {
+internal fun WebTabView(
+    tab: WebTab,
+    viewModel: WebTabViewModel = koinInject()
+) {
     val background = Color(MaterialTheme.colors.surface.toArgb())
 
-    val viewModel = remember { WebTabViewModel() }
     val container = remember { JPanel(BorderLayout()) }
 
     Column {
