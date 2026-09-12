@@ -21,10 +21,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class SettingEditorViewModelTest {
 
@@ -40,21 +36,11 @@ class SettingEditorViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { setting } bind(Setting::class)
-                }
-            )
-        }
-
-        subject = SettingEditorViewModel()
+        subject = SettingEditorViewModel(viewModel, setting)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
