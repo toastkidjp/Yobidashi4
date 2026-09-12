@@ -16,7 +16,9 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toOffset
@@ -90,6 +92,31 @@ class SlideshowKtTest {
 
             verify { anyConstructed<SlideshowViewModel>().scrollEventFlow() }
             scrollEventFlow.tryEmit(1)
+            mainClock.advanceTimeByFrame()
+
+            val slider = onNodeWithContentDescription("slider")
+            slider
+                .performMouseInput {
+                    enter()
+                }
+                .performTouchInput {
+                    click()
+
+                    swipeRight(20f, 100f, 1)
+                }
+
+            slider
+                .performMouseInput {
+                    enter()
+                }
+                .performTouchInput {
+                    click()
+                    every { anyConstructed<SlideshowViewModel>().sliderValue() } returns 100f
+
+                    swipeRight(20f, 100f, 1)
+                }
+
+            waitForIdle()
 
             verify(inverse = true) { anyConstructed<SlideshowViewModel>().loadImage(any()) }
         }
