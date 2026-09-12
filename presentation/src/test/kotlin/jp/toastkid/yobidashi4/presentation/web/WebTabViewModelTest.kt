@@ -21,10 +21,6 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.awt.Panel
 
 class WebTabViewModelTest {
@@ -41,22 +37,12 @@ class WebTabViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { webViewPool } bind(WebViewPool::class)
-                }
-            )
-        }
-
-        subject = WebTabViewModel()
+        subject = WebTabViewModel(mainViewModel, webViewPool)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkAll()
-        stopKoin()
     }
 
     @Test
