@@ -12,17 +12,17 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Path
 
-class SettingEditorViewModel : KoinComponent {
+@Factory
+class SettingEditorViewModel(
+    private val viewModel: MainViewModel,
+    private val setting: Setting
+) : KoinComponent {
 
     private val logFilePath = Path.of("user/setting.properties")
-
-    private val viewModel: MainViewModel by inject()
-
-    private val setting: Setting by inject()
 
     private val focusRequester = FocusRequester()
 
