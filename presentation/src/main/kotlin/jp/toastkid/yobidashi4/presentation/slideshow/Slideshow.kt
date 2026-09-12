@@ -145,9 +145,7 @@ internal fun Slideshow(
     LaunchedEffect(deck) {
         viewModel.scrollEventFlow()
             .collect {
-                coroutineScope.launch {
-                    pagerState.scrollToPage(it)
-                }
+                pagerState.scrollToPage(it)
             }
     }
 }
