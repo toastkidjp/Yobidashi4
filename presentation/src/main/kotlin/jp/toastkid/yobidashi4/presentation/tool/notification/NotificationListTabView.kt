@@ -43,12 +43,13 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-internal fun NotificationListTabView() {
-    val viewModel = remember { NotificationListTabViewModel() }
-
+internal fun NotificationListTabView(
+    viewModel: NotificationListTabViewModel = koinInject()
+) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp,
