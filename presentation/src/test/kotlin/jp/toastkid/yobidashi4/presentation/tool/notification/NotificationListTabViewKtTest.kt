@@ -22,57 +22,38 @@ import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
-import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.time.LocalDateTime
 
 class NotificationListTabViewKtTest {
 
-    @MockK
-    private lateinit var viewModel: MainViewModel
-
-    @MockK
-    private lateinit var repository: NotificationEventRepository
-
+    @RelaxedMockK
+    private lateinit var viewModel: NotificationListTabViewModel
+    
     @BeforeEach
     fun setUp() {
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { repository } bind(NotificationEventRepository::class)
-                }
-            )
-        }
-
         MockKAnnotations.init(this)
 
-        mockkConstructor(NotificationListTabViewModel::class)
-        every { anyConstructed<NotificationListTabViewModel>().listState() } returns LazyListState()
-        every { anyConstructed<NotificationListTabViewModel>().start(Dispatchers.IO) } just Runs
-        every { anyConstructed<NotificationListTabViewModel>().deleteAt(any()) } just Runs
-        every { anyConstructed<NotificationListTabViewModel>().update(any(), any(), any(), any()) } just Runs
-        every { anyConstructed<NotificationListTabViewModel>().focusRequester() } returns FocusRequester()
+        every { viewModel.scrollEventFlow() } returns MutableStateFlow<Int>(0)
+        every { viewModel.listState() } returns LazyListState()
+        every { viewModel.start(Dispatchers.IO) } just Runs
+        every { viewModel.deleteAt(any()) } just Runs
+        every { viewModel.update(any(), any(), any(), any()) } just Runs
+        every { viewModel.focusRequester() } returns FocusRequester()
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -80,18 +61,18 @@ class NotificationListTabViewKtTest {
     @Test
     fun notificationListTabView() {
         val item = NotificationEvent.makeDefault()
-        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(item)
+        every { viewModel.items() } returns mutableListOf(item)
 
         runDesktopComposeUiTest {
             setContent {
-                NotificationListTabView()
+                NotificationListTabView(viewModel)
             }
 
             onNode(hasText("Update"), true).onParent().performClick()
-            verify { anyConstructed<NotificationListTabViewModel>().update(any(), any(), any(), any()) }
+            verify { viewModel.update(any(), any(), any(), any()) }
 
             onNode(hasText("x"), true).onParent().performClick().performKeyInput { pressKey(Key.DirectionUp) }
-            verify { anyConstructed<NotificationListTabViewModel>().deleteAt(any()) }
+            verify { viewModel.deleteAt(any()) }
 
             onNode(hasText(item.title), true)
                 .performMouseInput {
@@ -111,16 +92,16 @@ class NotificationListTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun notFirst() {
-        every { anyConstructed<NotificationListTabViewModel>().listState() } returns LazyListState(2)
+        every { viewModel.listState() } returns LazyListState(2)
         val item = NotificationEvent.makeDefault()
-        every { anyConstructed<NotificationListTabViewModel>().items() } returns mutableListOf(
+        every { viewModel.items() } returns mutableListOf(
             item,
             NotificationEvent("2nd", "2nd", LocalDateTime.now())
         )
 
         runDesktopComposeUiTest {
             setContent {
-                NotificationListTabView()
+                NotificationListTabView(viewModel)
             }
 
             onAllNodes(hasText("Update"), true)
