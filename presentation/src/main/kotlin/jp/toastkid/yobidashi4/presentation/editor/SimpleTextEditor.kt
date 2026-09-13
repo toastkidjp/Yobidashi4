@@ -28,7 +28,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -60,15 +59,19 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class, FlowPreview::class)
 @Composable
 fun SimpleTextEditor(
     tab: EditorTab,
     setStatus: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: TextEditorViewModel = koinInject {
+        parametersOf(tab.path)
+    }
 ) {
-    val viewModel = remember(tab.path) { TextEditorViewModel() }
     val coroutineScope = rememberCoroutineScope()
 
     Box {
