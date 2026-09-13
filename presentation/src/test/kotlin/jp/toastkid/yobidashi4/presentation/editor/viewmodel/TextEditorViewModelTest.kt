@@ -56,10 +56,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 @OptIn(InternalComposeUiApi::class)
 class TextEditorViewModelTest {
@@ -79,14 +75,6 @@ class TextEditorViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { setting } bind(Setting::class)
-                }
-            )
-        }
         every { setting.editorConversionLimit() } returns 4500
         every { setting.editorFontSize() } returns 16
         every { setting.editorLineHeight() } returns 1.5f
@@ -99,13 +87,12 @@ class TextEditorViewModelTest {
         every { multiParagraph.intrinsics } returns multiParagraphIntrinsics
         every { multiParagraph.getCursorRect(any()) } returns Rect(Offset.Zero, 20f)
 
-        viewModel = TextEditorViewModel()
+        viewModel = TextEditorViewModel(mainViewModel, setting)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkAll()
-        stopKoin()
         viewModel.content().clearText()
     }
 
@@ -204,7 +191,7 @@ class TextEditorViewModelTest {
     @Test
     fun onPreviewKeyEventUnconsumed() {
         val keyEvent = KeyEvent(Key.Enter, KeyEventType.KeyDown, isCtrlPressed = true)
-        viewModel = TextEditorViewModel()
+        viewModel = TextEditorViewModel(mainViewModel, setting)
 
         val consumed = viewModel.onPreviewKeyEvent(keyEvent)
 
@@ -214,7 +201,7 @@ class TextEditorViewModelTest {
     @Test
     fun onPreviewKeyEvent() {
         val keyEvent = KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true)
-        viewModel = TextEditorViewModel()
+        viewModel = TextEditorViewModel(mainViewModel, setting)
 
         val consumed = viewModel.onPreviewKeyEvent(keyEvent)
 
@@ -404,7 +391,7 @@ class TextEditorViewModelTest {
 
         every { setting.editorConversionLimit() } returns -1
 
-        viewModel = TextEditorViewModel()
+        viewModel = TextEditorViewModel(mainViewModel, setting)
         val textFieldBuffer = mockk<TextFieldBuffer>()
         every { textFieldBuffer.append(any<String>()) } returns mockk()
         with(viewModel.visualTransformation()) {
