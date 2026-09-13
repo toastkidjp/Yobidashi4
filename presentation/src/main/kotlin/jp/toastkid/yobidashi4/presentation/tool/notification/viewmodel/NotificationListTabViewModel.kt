@@ -23,14 +23,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class NotificationListTabViewModel : KoinComponent {
-
-    private val notification: ScheduledNotification by inject()
-
-    private val ioContextProvider: IoContextProvider by inject()
+@Factory
+class NotificationListTabViewModel(
+    private val mainViewModel: MainViewModel,
+    private val notification: ScheduledNotification,
+    private val repository: NotificationEventRepository,
+    private val ioContextProvider: IoContextProvider
+) : KoinComponent {
 
     private val focusRequester = FocusRequester()
     fun focusRequester() = focusRequester
@@ -58,10 +60,6 @@ class NotificationListTabViewModel : KoinComponent {
 
     private val notificationEvents = mutableStateListOf<NotificationEvent>()
     fun items(): List<NotificationEvent> = notificationEvents
-
-    private val repository: NotificationEventRepository by inject()
-
-    private val mainViewModel: MainViewModel by inject()
 
     fun add() {
         val new = NotificationEvent.makeDefault()
