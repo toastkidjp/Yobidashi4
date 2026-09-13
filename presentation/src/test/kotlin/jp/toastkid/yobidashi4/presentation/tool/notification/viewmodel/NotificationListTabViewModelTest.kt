@@ -38,10 +38,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class NotificationListTabViewModelTest {
 
@@ -63,26 +59,14 @@ class NotificationListTabViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { repository } bind(NotificationEventRepository::class)
-                    single(qualifier = null) { notification } bind(ScheduledNotification::class)
-                    single(qualifier = null) { ioContextProvider } bind(IoContextProvider::class)
-                }
-            )
-        }
-
         every { mainViewModel.showSnackbar(any()) } just Runs
         every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
-        subject = NotificationListTabViewModel()
+        subject = NotificationListTabViewModel(mainViewModel, notification, repository, ioContextProvider)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
