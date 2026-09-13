@@ -1,121 +1,85 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
-import io.mockk.MockKAnnotations
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.spyk
-import io.mockk.unmockkAll
 import io.mockk.verify
-import org.apache.lucene.index.CompositeReaderContext
-import org.apache.lucene.index.DirectoryReader
-import org.apache.lucene.index.StoredFields
+import org.apache.lucene.document.Document
+import org.apache.lucene.document.Field
+import org.apache.lucene.document.StringField
+import org.apache.lucene.document.TextField
 import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
-import org.apache.lucene.store.ChecksumIndexInput
-import org.apache.lucene.store.FSDirectory
-import org.junit.jupiter.api.AfterEach
+import org.apache.lucene.search.SearcherManager
+import org.apache.lucene.search.TopDocs
+import org.apache.lucene.search.TotalHits
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class FullTextSearchTest {
 
-    private lateinit var subject: FullTextSearch
+    private lateinit var searcherManager: SearcherManager
 
-    @MockK
     private lateinit var indexSearcher: IndexSearcher
 
-    @MockK
-    private lateinit var storedFields: StoredFields
-
-    @MockK
-    private lateinit var indexReader: DirectoryReader
-
-    @MockK
-    private lateinit var context: CompositeReaderContext
+    private lateinit var fullTextSearch: FullTextSearch
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
+        searcherManager = mockk(relaxed = true)
+        indexSearcher = mockk(relaxed = true)
 
-        every { storedFields.document(any()) } returns mockk()
+        every { searcherManager.acquire() } returns indexSearcher
 
-        val field = context::class.java.superclass.getDeclaredField("isTopLevel")
-        field.isAccessible = true
-        field.set(context, true)
-        every { context.reader() } returns indexReader
-        every { context.leaves() } returns emptyList()
-        every { indexReader.context } returns context
-        every { indexReader.leaves() } returns emptyList()
-        every { indexReader.maxDoc() } returns 1
-        every { indexReader.storedFields() } returns storedFields
-        indexSearcher = spyk(IndexSearcher(indexReader))
-        every { indexSearcher.search(any(), any<Int>()) } returns mockk()
-
-        subject = FullTextSearch(indexSearcher)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkAll()
+        fullTextSearch = FullTextSearch(searcherManager)
     }
 
     @Test
-    fun search() {
-        subject.search("test")
+    fun testSearchShouldReturnTopDocsWhenMatchExists() {
+        val searchQueryInput = "Kotlin"
+        val expectedTopDocs = TopDocs(
+            TotalHits(1, TotalHits.Relation.EQUAL_TO),
+            arrayOf(ScoreDoc(0, 1.0f))
+        )
 
-        verify { indexSearcher.search(any(), any<Int>()) }
+        every { indexSearcher.search(any<Query>(), 300) } returns expectedTopDocs
+
+        val result = fullTextSearch.search(searchQueryInput)
+
+        assertNotNull(result)
+        assertEquals(1, result?.totalHits?.value)
+
+        verify(exactly = 1) { searcherManager.maybeRefresh() }
+        verify(exactly = 1) { searcherManager.acquire() }
+        verify(exactly = 1) { searcherManager.release(indexSearcher) }
     }
 
     @Test
-    fun searchWithQueryWhichStartQuestionMark() {
-        subject.search("?test")
+    fun testGetDocumentShouldReturnDocumentForGivenScoreDoc() {
+        val scoreDoc = ScoreDoc(0, 1.0f)
+        val expectedDocument = Document().apply {
+            add(StringField("name", "doc1", Field.Store.YES))
+            add(TextField("content", "Kotlin content", Field.Store.YES))
+        }
 
-        verify { indexSearcher.search(any(), any<Int>()) }
+        every { indexSearcher.storedFields().document(scoreDoc.doc) } returns expectedDocument
+
+        val document = fullTextSearch.getDocument(scoreDoc)
+
+        assertNotNull(document)
+        assertEquals("doc1", document?.get("name"))
+
+        verify(exactly = 1) { searcherManager.acquire() }
+        verify(exactly = 1) { searcherManager.release(indexSearcher) }
     }
 
     @Test
-    fun searchWithQueryWhichStartAsterisk() {
-        subject.search("*test")
+    fun testCloseShouldCloseSearcherManager() {
+        fullTextSearch.close()
 
-        verify { indexSearcher.search(any(), any<Int>()) }
-    }
-
-    @Test
-    fun getDocument() {
-        val scoreDoc = ScoreDoc(1, 1.0f)
-
-        subject.getDocument(scoreDoc)
-
-        verify { storedFields.document(any()) }
-    }
-
-    @Test
-    fun make() {
-        mockkStatic(FSDirectory::class, DirectoryReader::class)
-        val fsDirectory = mockk<FSDirectory>()
-        every { FSDirectory.open(any()) } returns fsDirectory
-        every { fsDirectory.listAll() } returns arrayOf("segments_0")
-        every { fsDirectory.obtainLock(any()) } returns mockk()
-        every { fsDirectory.pendingDeletions } returns emptySet()
-        val checksumIndexInput = mockk<ChecksumIndexInput>()
-        every { fsDirectory.openChecksumInput(any()) } returns checksumIndexInput
-        every { checksumIndexInput.readByte() } returns 1
-        val directoryReader = mockk<DirectoryReader>()
-        every { DirectoryReader.open(any<FSDirectory>()) } returns directoryReader
-        val compositeReaderContext = mockk<CompositeReaderContext>()
-        every { directoryReader.context } returns compositeReaderContext
-        val field = compositeReaderContext.javaClass.superclass.getDeclaredField("isTopLevel")
-        field.isAccessible = true
-        field.set(compositeReaderContext, true)
-        every { compositeReaderContext.reader() } returns mockk()
-        every { compositeReaderContext.leaves() } returns emptyList()
-
-        val fullTextSearch = FullTextSearch.make(mockk())
-
-        assertNotNull(fullTextSearch)
+        verify(exactly = 1) { searcherManager.close() }
     }
 
 }
