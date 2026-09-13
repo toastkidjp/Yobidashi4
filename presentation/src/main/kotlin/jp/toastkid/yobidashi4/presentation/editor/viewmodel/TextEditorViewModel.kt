@@ -46,20 +46,22 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Path
 import java.text.DecimalFormat
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.min
 
+@Factory
 @OptIn(ExperimentalFoundationApi::class)
-class TextEditorViewModel : KoinComponent {
+class TextEditorViewModel(
+    private val mainViewModel: MainViewModel,
+    private val setting: Setting
+) : KoinComponent {
 
     private val tab = AtomicReference(EditorTab(Path.of("")))
-
-    private val mainViewModel: MainViewModel by inject()
 
     private val content = TextFieldState()
 
@@ -96,8 +98,6 @@ class TextEditorViewModel : KoinComponent {
     private val focusRequester = FocusRequester()
 
     private val findOrderReceiver = FindOrderReceiver()
-
-    private val setting: Setting by inject()
 
     private val conversionLimit = setting.editorConversionLimit()
 
