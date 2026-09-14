@@ -42,10 +42,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class WebBookmarkTabViewModelTest {
 
@@ -61,24 +57,14 @@ class WebBookmarkTabViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { repository } bind(BookmarkRepository::class)
-                }
-            )
-        }
-
         mockkConstructor(WebIcon::class)
         every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
 
-        subject = WebBookmarkTabViewModel()
+        subject = WebBookmarkTabViewModel(viewModel, repository)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
