@@ -25,15 +25,14 @@ import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEven
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.annotation.Factory
 import java.nio.file.Path
 
-class WebBookmarkTabViewModel : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
-
-    private val repository: BookmarkRepository by inject()
+@Factory
+class WebBookmarkTabViewModel(
+    private val viewModel: MainViewModel,
+    private val repository: BookmarkRepository
+) {
 
     private val bookmarks = mutableStateListOf<Bookmark>()
 
