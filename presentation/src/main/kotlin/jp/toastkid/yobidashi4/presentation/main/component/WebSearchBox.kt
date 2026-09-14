@@ -31,7 +31,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -46,11 +45,12 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 @Composable
-internal fun WebSearchBox() {
-    val viewModel = remember { WebSearchBoxViewModel() }
-
+internal fun WebSearchBox(
+    viewModel: WebSearchBoxViewModel = koinInject()
+) {
     val surfaceColor = MaterialTheme.colors.surface
 
     Surface(
