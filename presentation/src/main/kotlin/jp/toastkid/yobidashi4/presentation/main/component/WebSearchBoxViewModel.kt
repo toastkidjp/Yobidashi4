@@ -23,15 +23,15 @@ import jp.toastkid.yobidashi4.domain.model.web.search.SearchSite
 import jp.toastkid.yobidashi4.domain.service.tool.calculator.SimpleCalculator
 import jp.toastkid.yobidashi4.presentation.lib.input.InputHistoryService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.text.DecimalFormat
 
-class WebSearchBoxViewModel : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
-
-    private val setting: Setting by inject()
+@Factory
+class WebSearchBoxViewModel(
+    private val viewModel: MainViewModel,
+    private val setting: Setting
+) : KoinComponent {
 
     private val focusRequester = FocusRequester()
 
