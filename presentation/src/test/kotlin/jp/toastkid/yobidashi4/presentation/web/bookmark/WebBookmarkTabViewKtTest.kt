@@ -18,7 +18,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -27,43 +27,27 @@ import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.Bookmark
 import jp.toastkid.yobidashi4.domain.model.web.icon.WebIcon
-import jp.toastkid.yobidashi4.domain.repository.BookmarkRepository
 import jp.toastkid.yobidashi4.presentation.component.LoadIconViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 
 class WebBookmarkTabViewKtTest {
 
-    @MockK
-    private lateinit var repository: BookmarkRepository
+    @RelaxedMockK
+    private lateinit var viewModel: WebBookmarkTabViewModel
 
-    @MockK
-    private lateinit var mainViewModel: MainViewModel
-
-    @MockK
-    private lateinit var webBookmarkTab: WebBookmarkTab
+    @RelaxedMockK
+    private lateinit var tab: WebBookmarkTab
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
-                    single(qualifier = null) { repository } bind (BookmarkRepository::class)
-                }
-            )
-        }
-        mockkConstructor(WebIcon::class, WebBookmarkTabViewModel::class, LoadIconViewModel::class)
+        
+        mockkConstructor(WebIcon::class, LoadIconViewModel::class)
         every { anyConstructed<WebIcon>().readAll() } returns emptyList()
         every { anyConstructed<WebIcon>().makeFolderIfNeed() } just Runs
         every { anyConstructed<WebIcon>().find(any()) } answers {
@@ -75,45 +59,46 @@ class WebBookmarkTabViewKtTest {
             }
             return@answers null
         }
-        every { webBookmarkTab.scrollPosition() } returns 0
-        every { webBookmarkTab.withNewPosition(any()) } returns mockk()
-        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
+        /*every { tab.scrollPosition() } returns 0
+        every { tab.withNewPosition(any()) } returns mockk()
+        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs*/
 
-        coEvery { anyConstructed<WebBookmarkTabViewModel>().launch(any()) } just Runs
-        every { anyConstructed<WebBookmarkTabViewModel>().openUrl(any(), any()) } just Runs
-        every { anyConstructed<WebBookmarkTabViewModel>().browseUri(any()) } just Runs
-        every { anyConstructed<WebBookmarkTabViewModel>().clipText(any()) } just Runs
-        every { anyConstructed<WebBookmarkTabViewModel>().delete(any()) } just Runs
-        every { anyConstructed<WebBookmarkTabViewModel>().focusRequester() } returns FocusRequester()
-        every { anyConstructed<WebBookmarkTabViewModel>().listState() } returns LazyListState(0)
-        every { anyConstructed<WebBookmarkTabViewModel>().bookmarks() } returns listOf(
+        coEvery { viewModel.launch(any()) } just Runs
+        every { viewModel.openUrl(any(), any()) } just Runs
+        every { viewModel.browseUri(any()) } just Runs
+        every { viewModel.clipText(any()) } just Runs
+        every { viewModel.delete(any()) } just Runs
+        every { viewModel.focusRequester() } returns FocusRequester()
+        every { viewModel.listState() } returns LazyListState(0)
+        every { viewModel.bookmarks() } returns listOf(
             Bookmark("test item", "https://www.yahoo.co.jp"),
             Bookmark("icon item", "https://www.icon.co.jp")
         )
+        every { viewModel.scrollEventFlow() } returns MutableSharedFlow()
+
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun webBookmarkTabView() {
-        every { anyConstructed<WebBookmarkTabViewModel>().openingDropdown(any()) } returns false
+        every { viewModel.openingDropdown(any()) } returns false
         val mutableSharedFlow = MutableSharedFlow<Float>(replay = 1, extraBufferCapacity = 1)
-        every { anyConstructed<WebBookmarkTabViewModel>().scrollEventFlow() } returns mutableSharedFlow
+        every { viewModel.scrollEventFlow() } returns mutableSharedFlow
 
         runDesktopComposeUiTest {
             setContent {
-                WebBookmarkTabView(webBookmarkTab)
+                WebBookmarkTabView(tab, viewModel)
             }
 
             val item = onNodeWithText("test item")
             item.performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().openUrl(any(), false) }
+            verify { viewModel.openUrl(any(), false) }
             item.performMouseInput {
                 longClick()
                 enter()
@@ -123,8 +108,8 @@ class WebBookmarkTabViewKtTest {
                 pressKey(Key.DirectionUp, 1000L)
             }
 
-            verify { anyConstructed<WebBookmarkTabViewModel>().scrollEventFlow() }
-            verify { anyConstructed<WebBookmarkTabViewModel>().listState() }
+            verify { viewModel.scrollEventFlow() }
+            verify { viewModel.listState() }
             mutableSharedFlow.tryEmit(-1f)
             mainClock.advanceTimeBy(500L)
         }
@@ -133,36 +118,36 @@ class WebBookmarkTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun webBookmarkTabViewWithDropdown() {
-        every { anyConstructed<WebBookmarkTabViewModel>().openingDropdown(any()) } answers {
+        every { viewModel.openingDropdown(any()) } answers {
             (this.args[0] as? Bookmark)?.title == "test item"
         }
         runDesktopComposeUiTest {
             setContent {
-                WebBookmarkTabView(webBookmarkTab)
+                WebBookmarkTabView(tab, viewModel)
             }
 
-            verify { anyConstructed<WebBookmarkTabViewModel>().bookmarks() }
+            verify { viewModel.bookmarks() }
 
             onNode(hasText("Open"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().openUrl(any(), false) }
+            verify { viewModel.openUrl(any(), false) }
 
             onNode(hasText("Open background"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().openUrl(any(), true) }
+            verify { viewModel.openUrl(any(), true) }
 
             onNode(hasText("Open with browser"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().browseUri(any()) }
+            verify { viewModel.browseUri(any()) }
 
             onNode(hasText("Copy title"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().clipText(any()) }
+            verify { viewModel.clipText(any()) }
 
             onNode(hasText("Copy URL"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().clipText(any()) }
+            verify { viewModel.clipText(any()) }
 
             onNode(hasText("Clip markdown link"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().clipText(any()) }
+            verify { viewModel.clipText(any()) }
 
             onNode(hasText("Delete"), true).onParent().performClick()
-            verify { anyConstructed<WebBookmarkTabViewModel>().delete(any()) }
+            verify { viewModel.delete(any()) }
         }
     }
 
