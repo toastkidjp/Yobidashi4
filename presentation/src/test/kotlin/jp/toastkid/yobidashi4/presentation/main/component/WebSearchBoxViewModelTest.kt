@@ -13,6 +13,7 @@ import io.mockk.Runs
 import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -33,17 +34,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 
 class WebSearchBoxViewModelTest {
 
+    @RelaxedMockK
     private lateinit var subject: WebSearchBoxViewModel
 
     @MockK
-    private lateinit var viewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     @MockK
     private lateinit var setting: Setting
@@ -51,15 +49,6 @@ class WebSearchBoxViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { viewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { setting } bind(Setting::class)
-                }
-            )
-        }
 
         mockkConstructor(InputHistoryService::class)
         every { anyConstructed<InputHistoryService>().add(any()) } just Runs
@@ -69,22 +58,21 @@ class WebSearchBoxViewModelTest {
 
         every { setting.chatApiKey() } returns "Dummy key"
 
-        subject = WebSearchBoxViewModel()
+        subject = WebSearchBoxViewModel(mainViewModel, setting)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
     @Test
     fun setShowWebSearch() {
-        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
 
         subject.setShowWebSearch(true)
 
-        verify { viewModel.setShowWebSearch(true) }
+        verify { mainViewModel.setShowWebSearch(true) }
     }
 
     @Test
@@ -102,7 +90,7 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun containsSwingContent() {
-        every { viewModel.currentTab() } returns mockk()
+        every { mainViewModel.currentTab() } returns mockk()
 
         assertFalse(subject.containsSwingContent())
     }
@@ -143,76 +131,76 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun invokeSearch() {
-        every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.setShowWebSearch(any()) } just Runs
-        every { viewModel.currentTab() } returns mockk()
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.currentTab() } returns mockk()
         subject.query().setTextAndPlaceCursorAtEnd("test")
         subject.onValueChange()
 
         subject.invokeSearch()
 
-        verify { viewModel.openUrl(any(), any()) }
-        verify { viewModel.setShowWebSearch(false) }
+        verify { mainViewModel.openUrl(any(), any()) }
+        verify { mainViewModel.setShowWebSearch(false) }
     }
 
     @Test
     fun invokeSearchWithoutStoringHistory() {
-        every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.setShowWebSearch(any()) } just Runs
-        every { viewModel.currentTab() } returns mockk()
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.currentTab() } returns mockk()
         subject.switchSaveSearchHistory()
         subject.query().setTextAndPlaceCursorAtEnd("test")
         subject.onValueChange()
 
         subject.invokeSearch()
 
-        verify { viewModel.openUrl(any(), any()) }
-        verify { viewModel.setShowWebSearch(false) }
+        verify { mainViewModel.openUrl(any(), any()) }
+        verify { mainViewModel.setShowWebSearch(false) }
     }
 
     @Test
     fun invokeSearchWithCurrentWebTabUrl() {
-        every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
         val tab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns tab
+        every { mainViewModel.currentTab() } returns tab
         every { tab.url() } returns "https://www.yahoo.co.jp/index.html"
         subject.query().setTextAndPlaceCursorAtEnd("test")
         subject.onValueChange()
 
         subject.invokeSearch()
 
-        verify { viewModel.openUrl(any(), any()) }
-        verify { viewModel.setShowWebSearch(false) }
+        verify { mainViewModel.openUrl(any(), any()) }
+        verify { mainViewModel.setShowWebSearch(false) }
     }
 
     @Test
     fun invokeSearchWithUrlInput() {
-        every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
         subject.query().setTextAndPlaceCursorAtEnd("https://www.yahoo.co.jp")
         subject.onValueChange()
 
         subject.invokeSearch()
 
-        verify { viewModel.openUrl(any(), any()) }
-        verify { viewModel.setShowWebSearch(false) }
+        verify { mainViewModel.openUrl(any(), any()) }
+        verify { mainViewModel.setShowWebSearch(false) }
     }
 
     @Test
     fun noopInvokeSearch() {
-        every { viewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.openUrl(any(), any()) } just Runs
 
         subject.invokeSearch()
 
-        verify { viewModel wasNot called }
+        verify { mainViewModel wasNot called }
     }
 
     @Test
     fun noopInvokeSearchWithComposition() {
-        every { viewModel.openUrl(any(), any()) } just Runs
-        every { viewModel.currentTab() } returns mockk()
-        every { viewModel.setShowWebSearch(false) } just Runs
+        every { mainViewModel.openUrl(any(), any()) } just Runs
+        every { mainViewModel.currentTab() } returns mockk()
+        every { mainViewModel.setShowWebSearch(false) } just Runs
         subject.query().setTextAndPlaceCursorAtEnd("test")
         // TODO composition = TextRange.Zero
         subject.onValueChange()
@@ -225,12 +213,12 @@ class WebSearchBoxViewModelTest {
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun onKeyEvent() {
-        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
 
         val consumed = subject.onKeyEvent(KeyEvent(Key.Escape, KeyEventType.KeyDown))
 
         assertTrue(consumed)
-        verify { viewModel.setShowWebSearch(false) }
+        verify { mainViewModel.setShowWebSearch(false) }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -263,25 +251,25 @@ class WebSearchBoxViewModelTest {
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEvent() {
-        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
 
         val consumed = subject.onKeyEvent(KeyEvent(Key.DirectionUp, KeyEventType.KeyDown, isCtrlPressed = true))
 
         assertFalse(consumed)
-        verify { viewModel wasNot called }
+        verify { mainViewModel wasNot called }
     }
 
     @OptIn(InternalComposeUiApi::class)
     @Test
     fun notConsumedOnKeyEventWithEscapeReleased() {
-        every { viewModel.setShowWebSearch(any()) } just Runs
+        every { mainViewModel.setShowWebSearch(any()) } just Runs
 
         val consumed = subject.onKeyEvent(
             KeyEvent(Key.Escape, KeyEventType.KeyUp, isCtrlPressed = true)
         )
 
         assertFalse(consumed)
-        verify { viewModel wasNot called }
+        verify { mainViewModel wasNot called }
     }
 
     @Test
@@ -296,16 +284,16 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun showWebSearch() {
-        every { viewModel.showWebSearch() } returns true
+        every { mainViewModel.showWebSearch() } returns true
 
         assertTrue(subject.showWebSearch())
     }
 
     @Test
     fun start() {
-        every { viewModel.showWebSearch() } returns true
+        every { mainViewModel.showWebSearch() } returns true
         val tab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns tab
+        every { mainViewModel.currentTab() } returns tab
         val url = "https://www.yahoo.co.jp"
         every { tab.url() } returns url
         subject = spyk(subject)
@@ -329,9 +317,9 @@ class WebSearchBoxViewModelTest {
     fun startWithNullOrBlankKey(arg: String?) {
         every { setting.chatApiKey() } returns arg
 
-        every { viewModel.showWebSearch() } returns true
+        every { mainViewModel.showWebSearch() } returns true
         val tab = mockk<WebTab>()
-        every { viewModel.currentTab() } returns tab
+        every { mainViewModel.currentTab() } returns tab
         val url = "https://www.yahoo.co.jp"
         every { tab.url() } returns url
         subject = spyk(subject)
@@ -348,8 +336,8 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun startIfBoxIsClosed() {
-        every { viewModel.showWebSearch() } returns false
-        every { viewModel.currentTab() } returns mockk()
+        every { mainViewModel.showWebSearch() } returns false
+        every { mainViewModel.currentTab() } returns mockk()
         subject = spyk(subject)
         val focusRequester = mockk<FocusRequester>()
         every { subject.focusRequester() } returns focusRequester
@@ -411,14 +399,14 @@ class WebSearchBoxViewModelTest {
 
     @Test
     fun makeVerticalOffsetWhenCurrentDoesNotContainSwingContent() {
-        every { viewModel.currentTab() } returns mockk()
+        every { mainViewModel.currentTab() } returns mockk()
 
         assertEquals(0.dp, subject.makeVerticalOffset())
     }
 
     @Test
     fun makeVerticalOffset() {
-        every { viewModel.currentTab() } returns mockk<WebTab>()
+        every { mainViewModel.currentTab() } returns mockk<WebTab>()
 
         assertEquals(-80.dp, subject.makeVerticalOffset())
     }
