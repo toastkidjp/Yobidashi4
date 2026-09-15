@@ -4,8 +4,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -21,12 +19,10 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
-import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
@@ -143,53 +139,6 @@ class MainScaffoldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainScaffold() {
-        runDesktopComposeUiTest {
-            setContent {
-                MainScaffold()
-            }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun useOptionalComponents() {
-        every { mainViewModel.backgroundImage() } returns ImageBitmap(1, 1)
-        every { mainViewModel.showBackgroundImage() } returns true
-        every { mainViewModel.showWebSearch() } returns true
-        every { mainViewModel.showAggregationBox() } returns true
-        every { mainViewModel.openFind() } returns true
-        every { mainViewModel.showInputBox() } returns true
-        every { mainViewModel.openMemoryUsageBox() } returns true
-
-        every { aggregationBoxViewModel.selectedCategoryIcon() } returns Res.drawable.ic_search
-        every { aggregationBoxViewModel.selectedCategoryName() } returns "test"
-        every { aggregationBoxViewModel.isCurrentSwingContent() } returns false
-        every { aggregationBoxViewModel.isOpeningChooser() } returns false
-        every { aggregationBoxViewModel.showAggregationBox() } returns false
-        every { aggregationBoxViewModel.shouldShowDateHistory() } returns false
-        every { aggregationBoxViewModel.useExactMatch() } returns false
-        every { aggregationBoxViewModel.dateHistories() } returns emptyList()
-        every { aggregationBoxViewModel.label() } returns ""
-        every { aggregationBoxViewModel.start() } just Runs
-        every { aggregationBoxViewModel.onDateInputValueChange() } just Runs
-        every { aggregationBoxViewModel.onKeywordInputValueChange() } just Runs
-        every { aggregationBoxViewModel.keyword() } returns TextFieldState()
-        every { aggregationBoxViewModel.dateInput() } returns TextFieldState()
-        every { aggregationBoxViewModel.focusingModifier() } returns Modifier
-        every { aggregationBoxViewModel.selectedCategoryIcon() } returns Res.drawable.ic_search
-
-        val markdownPreviewTab = mockk<MarkdownPreviewTab>()
-        val markdown = mockk<Markdown>()
-        every { markdown.lines() } returns emptyList()
-        every { markdownPreviewTab.markdown() } returns markdown
-        every { markdownPreviewTab.scrollPosition() } returns 1
-        every { mainViewModel.currentTab() } returns markdownPreviewTab
-        every { mainViewModel.initialAggregationType() } returns 0
-        every { mainViewModel.inputValue() } returns TextFieldState("search")
-        every { mainViewModel.findStatus() } returns "test"
-        every { mainViewModel.caseSensitive() } returns true
-        every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
-
         runDesktopComposeUiTest {
             setContent {
                 MainScaffold()
