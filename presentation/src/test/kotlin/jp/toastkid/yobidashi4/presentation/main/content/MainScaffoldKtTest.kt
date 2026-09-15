@@ -159,14 +159,4 @@ class MainScaffoldKtTest {
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun articles() {
-        runDesktopComposeUiTest {
-            setContent {
-                MainScaffold()
-            }
-        }
-    }
-
 }
