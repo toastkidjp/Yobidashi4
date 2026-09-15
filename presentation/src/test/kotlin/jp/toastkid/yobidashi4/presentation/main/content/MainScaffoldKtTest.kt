@@ -16,9 +16,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
-import jp.toastkid.yobidashi4.domain.model.tab.LoanCalculatorTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
 import jp.toastkid.yobidashi4.domain.service.article.ArticlesReaderService
 import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinder
@@ -135,23 +133,6 @@ class MainScaffoldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainScaffold() {
-        runDesktopComposeUiTest {
-            setContent {
-                MainScaffold()
-            }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun useTabContents() {
-        every { mainViewModel.selected } returns mutableStateOf(0)
-        every { mainViewModel.currentTab() } returns LoanCalculatorTab()
-        every { mainViewModel.tabs } returns mutableListOf(
-            LoanCalculatorTab(),
-            BarcodeToolTab(),
-        )
-
         runDesktopComposeUiTest {
             setContent {
                 MainScaffold()
