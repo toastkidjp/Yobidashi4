@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi4.domain.service.article.finder.FullTextArticleFinde
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_search
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBoxViewModel
+import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBoxViewModel
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabViewModel
@@ -67,6 +68,12 @@ class MainScaffoldKtTest {
     @MockK
     private lateinit var metaExtractor: FileListItemMetaExtractor
 
+    @RelaxedMockK
+    private lateinit var tabsViewModel: TabsViewModel
+
+    @RelaxedMockK
+    private lateinit var webSearchBoxViewModel: WebSearchBoxViewModel
+
     @MockK
     private lateinit var aggregationBoxViewModel: AggregationBoxViewModel
 
@@ -86,6 +93,8 @@ class MainScaffoldKtTest {
                     single(qualifier=null) { fullTextArticleFinder } bind(FullTextArticleFinder::class)
                     single(qualifier=null) { inputHistoryRepository } bind(InputHistoryRepository::class)
                     single(qualifier=null) { metaExtractor } bind(FileListItemMetaExtractor::class)
+                    single(qualifier=null) { tabsViewModel } bind(TabsViewModel::class)
+                    single(qualifier=null) { webSearchBoxViewModel } bind(WebSearchBoxViewModel::class)
                     single(qualifier=null) { aggregationBoxViewModel } bind(AggregationBoxViewModel::class)
                     single(qualifier=null) { markdownTabViewModel } bind(MarkdownTabViewModel::class)
                 }
@@ -115,6 +124,8 @@ class MainScaffoldKtTest {
             "test",
             20000
         )
+        every { webSearchBoxViewModel.query() } returns TextFieldState()
+        every { webSearchBoxViewModel.currentIconPath() } returns Res.drawable.ic_search
         every { markdownTabViewModel.scrollState() } returns LazyListState()
 
         mockkStatic(Files::class)
