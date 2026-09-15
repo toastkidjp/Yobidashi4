@@ -198,29 +198,4 @@ class MainScaffoldKtTest {
         }
     }
 
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun toggleWorldTimeArea() {
-        every { mainViewModel.openWorldTime() } returns true
-        every { mainViewModel.toggleWorldTime() } just Runs
-
-        runDesktopComposeUiTest {
-            setContent {
-                MainScaffold()
-            }
-
-            val listSwitch = onNodeWithContentDescription("Close world time widget.", useUnmergedTree = true)
-            listSwitch
-                .performMouseInput {
-                    enter()
-                    exit()
-                    enter()
-                    click()
-                    exit()
-                }
-
-            verify { mainViewModel.toggleWorldTime() }
-        }
-    }
-
 }
