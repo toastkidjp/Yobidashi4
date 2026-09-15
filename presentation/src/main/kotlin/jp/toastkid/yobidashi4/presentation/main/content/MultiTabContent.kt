@@ -42,6 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.nio.file.Path
@@ -72,52 +73,58 @@ fun MultiTabContent() {
             MemoryUsageBox()
         }
 
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box {
-                    ArticleListView(
-                        viewModel::openArticleList,
-                        viewModel.articles()
-                    )
-
-                    if (viewModel.openArticleList()) {
-                        ArticleListSwitch(
-                            Res.drawable.ic_left_panel_close,
-                            viewModel::hideArticleList,
-                            Modifier
-                                .align(Alignment.CenterEnd)
-                                .semantics { contentDescription = "Close file list." }
-                        )
-                    }
-                }
-
-                TabsView(modifier = Modifier.fillMaxHeight().weight(1f)
-                    .dragAndDropTarget(
-                        shouldStartDragAndDrop = { true },
-                        target = DropTarget()
-                    )
-                )
-            }
-
-            Box(modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End)) {
-                WorldTimeArea(viewModel::openWorldTime)
-
-                if (viewModel.openWorldTime()) {
-                    ArticleListSwitch(
-                        Res.drawable.ic_left_panel_open,
-                        viewModel::toggleWorldTime,
-                        Modifier
-                            .align(Alignment.CenterEnd)
-                            .semantics { contentDescription = "Close world time widget." }
-                    )
-                }
-            }
-        }
+        MainContentBox()
     }
 
     LaunchedEffect(viewModel) {
         withContext(Dispatchers.IO) {
             viewModel.reloadAllArticle()
+        }
+    }
+}
+
+@Composable
+private fun MainContentBox(viewModel: MainViewModel = koinInject()) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box {
+                ArticleListView(
+                    viewModel::openArticleList,
+                    viewModel.articles()
+                )
+
+                if (viewModel.openArticleList()) {
+                    ArticleListSwitch(
+                        Res.drawable.ic_left_panel_close,
+                        viewModel::hideArticleList,
+                        Modifier
+                            .align(Alignment.CenterEnd)
+                            .semantics { contentDescription = "Close file list." }
+                    )
+                }
+            }
+
+            TabsView(
+                modifier = Modifier.fillMaxHeight().weight(1f)
+                    .dragAndDropTarget(
+                        shouldStartDragAndDrop = { true },
+                        target = DropTarget()
+                    )
+            )
+        }
+
+        Box(modifier = Modifier.align(Alignment.CenterEnd).wrapContentWidth(Alignment.End)) {
+            WorldTimeArea(viewModel::openWorldTime)
+
+            if (viewModel.openWorldTime()) {
+                ArticleListSwitch(
+                    Res.drawable.ic_left_panel_open,
+                    viewModel::toggleWorldTime,
+                    Modifier
+                        .align(Alignment.CenterEnd)
+                        .semantics { contentDescription = "Close world time widget." }
+                )
+            }
         }
     }
 }
