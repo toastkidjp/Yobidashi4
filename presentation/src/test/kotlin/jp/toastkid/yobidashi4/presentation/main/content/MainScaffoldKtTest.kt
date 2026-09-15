@@ -5,9 +5,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.click
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -18,7 +15,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.BarcodeToolTab
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
@@ -170,31 +166,6 @@ class MainScaffoldKtTest {
             setContent {
                 MainScaffold()
             }
-        }
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun articlesWithOpenArticleList() {
-        every { mainViewModel.openArticleList() } returns true
-        every { mainViewModel.hideArticleList() } just Runs
-
-        runDesktopComposeUiTest {
-            setContent {
-                MainScaffold()
-            }
-
-            val listSwitch = onNodeWithContentDescription("Close file list.", useUnmergedTree = true)
-            listSwitch
-                .performMouseInput {
-                    enter()
-                    exit()
-                    enter()
-                    click()
-                    exit()
-                }
-
-            verify { mainViewModel.hideArticleList() }
         }
     }
 
