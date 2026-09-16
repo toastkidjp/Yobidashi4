@@ -95,4 +95,31 @@ class FullTextSearchTest {
         verify(exactly = 1) { searcherManager.close() }
     }
 
+    @Test
+    fun testMake() {
+        mockkStatic(FSDirectory::class, DirectoryReader::class)
+        val fsDirectory = mockk<FSDirectory>()
+        every { FSDirectory.open(any()) } returns fsDirectory
+        every { fsDirectory.listAll() } returns arrayOf("segments_0")
+        every { fsDirectory.obtainLock(any()) } returns mockk()
+        every { fsDirectory.pendingDeletions } returns emptySet()
+        val checksumIndexInput = mockk<ChecksumIndexInput>()
+        every { fsDirectory.openChecksumInput(any()) } returns checksumIndexInput
+        every { checksumIndexInput.readByte() } returns 1
+        val directoryReader = mockk<DirectoryReader>()
+        every { DirectoryReader.open(any<FSDirectory>()) } returns directoryReader
+        val compositeReaderContext = mockk<CompositeReaderContext>()
+        every { compositeReaderContext.reader() } returns directoryReader
+        every { compositeReaderContext.leaves() } returns emptyList()
+        every { directoryReader.context } returns compositeReaderContext
+        every { directoryReader.decRef() } just Runs
+        val field = compositeReaderContext.javaClass.superclass.getDeclaredField("isTopLevel")
+        field.isAccessible = true
+        field.set(compositeReaderContext, true)
+
+        FullTextSearch.make(mockk())
+
+        verify { FSDirectory.open(any()) }
+    }
+
 }
