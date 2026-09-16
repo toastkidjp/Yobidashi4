@@ -37,10 +37,6 @@ import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Path
 
 class TabsViewModelTest {
@@ -56,24 +52,15 @@ class TabsViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier = null) { chatExporter } bind(ChatExporter::class)
-                }
-            )
-        }
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
-        subject = TabsViewModel()
+        subject = TabsViewModel(mainViewModel, chatExporter)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
