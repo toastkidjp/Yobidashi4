@@ -15,15 +15,15 @@ import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Path
 
-class TabsViewModel  : KoinComponent {
-
-    private val viewModel: MainViewModel by inject()
-
-    private val chatExporter: ChatExporter by inject()
+@Factory
+class TabsViewModel(
+    private val viewModel: MainViewModel,
+    private val chatExporter: ChatExporter
+) : KoinComponent {
 
     private val clipboardPutterService = ClipboardPutterService()
 
