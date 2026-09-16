@@ -199,4 +199,9 @@ class TableViewModelTest {
         subject.scrollEventFlow()
     }
 
+    @Test
+    fun focusRequester() {
+        subject.focusRequester()
+    }
+
 }
