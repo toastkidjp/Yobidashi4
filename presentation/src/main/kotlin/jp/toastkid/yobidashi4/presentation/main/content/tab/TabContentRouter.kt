@@ -57,7 +57,7 @@ import jp.toastkid.yobidashi4.presentation.web.WebTabView
 import jp.toastkid.yobidashi4.presentation.web.bookmark.WebBookmarkTabView
 import jp.toastkid.yobidashi4.presentation.web.history.WebHistoryView
 
-private val DefaultTabContentRegistry = TabContentRegistry.Builder()
+val DefaultTabContentRegistry = TabContentRegistry.Builder()
     .register(FileTab::class) { FileListView(it.items, Modifier) }
     .register(TableTab::class) { TableView(it) }
     .register(EditorTab::class) { EditorTabView(it) }
