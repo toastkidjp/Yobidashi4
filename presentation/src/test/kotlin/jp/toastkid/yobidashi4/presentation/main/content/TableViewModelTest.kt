@@ -204,4 +204,9 @@ class TableViewModelTest {
         subject.focusRequester()
     }
 
+    @Test
+    fun listState() {
+        subject.listState()
+    }
+
 }
