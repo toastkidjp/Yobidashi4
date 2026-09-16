@@ -1,22 +1,31 @@
 package jp.toastkid.yobidashi4.infrastructure.service.article.finder
 
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.StringField
 import org.apache.lucene.document.TextField
+import org.apache.lucene.index.CompositeReaderContext
+import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.SearcherManager
 import org.apache.lucene.search.TopDocs
 import org.apache.lucene.search.TotalHits
+import org.apache.lucene.store.ChecksumIndexInput
+import org.apache.lucene.store.FSDirectory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class FullTextSearchTest {
 
@@ -36,9 +45,13 @@ class FullTextSearchTest {
         fullTextSearch = FullTextSearch(searcherManager)
     }
 
-    @Test
-    fun testSearchShouldReturnTopDocsWhenMatchExists() {
-        val searchQueryInput = "Kotlin"
+    @ParameterizedTest
+    @CsvSource(
+        "Kotlin",
+        "?Kotlin",
+        "*Kotlin"
+    )
+    fun testSearchShouldReturnTopDocsWhenMatchExists(searchQueryInput: String) {
         val expectedTopDocs = TopDocs(
             TotalHits(1, TotalHits.Relation.EQUAL_TO),
             arrayOf(ScoreDoc(0, 1.0f))
