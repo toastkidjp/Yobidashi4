@@ -49,13 +49,19 @@ import jp.toastkid.yobidashi4.domain.model.tab.WithFilePath
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.TabIcon
+import jp.toastkid.yobidashi4.presentation.main.content.tab.DefaultTabContentRegistry
+import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRegistry
 import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRouter
+import org.koin.compose.koinInject
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
 @Composable
-internal fun TabsView(modifier: Modifier = Modifier) {
-    val viewModel = remember { TabsViewModel() }
+internal fun TabsView(
+    modifier: Modifier = Modifier,
+    viewModel: TabsViewModel = koinInject(),
+    registry: TabContentRegistry = DefaultTabContentRegistry
+) {
     val primaryColor = MaterialTheme.colors.onPrimary
 
     Column(modifier = modifier) {
@@ -142,7 +148,10 @@ internal fun TabsView(modifier: Modifier = Modifier) {
             }
         }
 
-        TabContentRouter(viewModel.currentTab())
+        TabContentRouter(
+            viewModel.currentTab(),
+            registry
+        )
     }
 }
 
