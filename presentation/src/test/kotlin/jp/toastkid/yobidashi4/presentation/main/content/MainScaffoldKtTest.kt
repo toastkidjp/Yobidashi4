@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
@@ -15,6 +16,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.ConverterToolTab
 import jp.toastkid.yobidashi4.domain.repository.input.InputHistoryRepository
@@ -137,6 +139,22 @@ class MainScaffoldKtTest {
             setContent {
                 MainScaffold()
             }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun withBackground() {
+        every { mainViewModel.showBackgroundImage() } returns true
+        every { mainViewModel.backgroundImage() } returns ImageBitmap(1, 1)
+
+        runDesktopComposeUiTest {
+            setContent {
+                MainScaffold()
+            }
+
+            verify { mainViewModel.showBackgroundImage() }
+            verify { mainViewModel.backgroundImage() }
         }
     }
 
