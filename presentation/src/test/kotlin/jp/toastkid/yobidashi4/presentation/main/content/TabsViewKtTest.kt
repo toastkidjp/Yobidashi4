@@ -12,12 +12,11 @@ import androidx.compose.ui.test.rightClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.aggregation.StepsAggregationResult
@@ -32,25 +31,20 @@ import jp.toastkid.yobidashi4.domain.model.tab.TableTab
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
-import jp.toastkid.yobidashi4.presentation.log.viewer.TextFileViewerTabViewModel
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRegistry
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
 class TabsViewKtTest {
 
-    @MockK
-    private lateinit var mainViewModel: MainViewModel
-
+    @RelaxedMockK
+    private lateinit var viewModel: TabsViewModel
+    
     @MockK
     private lateinit var webTab: WebTab
 
@@ -66,24 +60,15 @@ class TabsViewKtTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { mainViewModel } bind(MainViewModel::class)
-                }
-            )
-        }
 
-        mockkConstructor(TabsViewModel::class, TextFileViewerTabViewModel::class)
-        every { anyConstructed<TabsViewModel>().tabIsEmpty() } returns false
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns false
+        every { viewModel.tabIsEmpty() } returns false
+        every { viewModel.openingDropdown(any()) } returns false
         val mockk = mockk<TextFileViewerTab>()
         every { mockk.path() } returns mockk()
-        coEvery { anyConstructed<TextFileViewerTabViewModel>().launch(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().currentTab() } returns mockk
-        every { anyConstructed<TabsViewModel>().selectedTabIndex() } returns 1
-        every { anyConstructed<TabsViewModel>().isSelectedIndex(any()) } returns true
-        every { anyConstructed<TabsViewModel>().currentTabIndex(any()) } returns 0
+        every { viewModel.currentTab() } returns mockk
+        every { viewModel.selectedTabIndex() } returns 1
+        every { viewModel.isSelectedIndex(any()) } returns true
+        every { viewModel.currentTabIndex(any()) } returns 0
         every { webTab.title() } returns "test"
         every { webTab.url() } returns "test"
         every { webTab.closeable() } returns true
@@ -103,15 +88,15 @@ class TabsViewKtTest {
         every { editorTab.filePath() } returns editorTabsPath
         every { editorTab.closeable() } returns true
         every { editorTab.update() } returns flowOf(1, 2, 3)
-        every { anyConstructed<TabsViewModel>().setSelectedIndex(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().edit(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().openFile(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().removeTabAt(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) } just Runs
-        every { anyConstructed<TabsViewModel>().closeOtherTabs() } just Runs
-        every { anyConstructed<TabsViewModel>().exportTable(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().exportChat(any()) } just Runs
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(
+        every { viewModel.setSelectedIndex(any()) } just Runs
+        every { viewModel.edit(any()) } just Runs
+        every { viewModel.openFile(any()) } just Runs
+        every { viewModel.removeTabAt(any()) } just Runs
+        every { viewModel.onPointerEvent(any(), any()) } just Runs
+        every { viewModel.closeOtherTabs() } just Runs
+        every { viewModel.exportTable(any()) } just Runs
+        every { viewModel.exportChat(any()) } just Runs
+        every { viewModel.tabs() } returns listOf(
             webTab,
             markdownPreviewTab,
             tableTab,
@@ -120,12 +105,11 @@ class TabsViewKtTest {
             NotificationListTab(),
             ChatTab()
         )
-        every { anyConstructed<TabsViewModel>().clipText(any<String>()) } just Runs
+        every { viewModel.clipText(any<String>()) } just Runs
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -134,7 +118,7 @@ class TabsViewKtTest {
     fun tabsView() {
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
 
             onNode(hasText("Barcode tool")).assertExists("Not found!")
@@ -143,117 +127,117 @@ class TabsViewKtTest {
                     rightClick()
                 }
 
-            verify { anyConstructed<TabsViewModel>().setSelectedIndex(any()) }
-            verify { anyConstructed<TabsViewModel>().onPointerEvent(any(), any()) }
+            verify { viewModel.setSelectedIndex(any()) }
+            verify { viewModel.onPointerEvent(any(), any()) }
 
             onNodeWithContentDescription("Close button 0", useUnmergedTree = true)
                 .performClick()
-            verify { anyConstructed<TabsViewModel>().removeTabAt(0) }
+            verify { viewModel.removeTabAt(0) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownWebTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
+        every { viewModel.openingDropdown(any()) } returns true
 
         runDesktopComposeUiTest {
-            every { anyConstructed<TabsViewModel>().tabs() } returns listOf(webTab)
+            every { viewModel.tabs() } returns listOf(webTab)
 
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
 
             onNode(hasText("Copy title"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
+            verify { viewModel.clipText(any<String>()) }
 
             onNode(hasText("Close other tabs"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().closeOtherTabs() }
+            verify { viewModel.closeOtherTabs() }
 
             onNode(hasText("Copy URL"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
+            verify { viewModel.clipText(any<String>()) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownMarkdownPreviewTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(markdownPreviewTab)
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(markdownPreviewTab)
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
 
             onNode(hasText("Edit"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().edit(any()) }
+            verify { viewModel.edit(any()) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownTableTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(tableTab)
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(tableTab)
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
 
             onNode(hasText("Reload"), useUnmergedTree = true).onParent().performClick()
             verify { tableTab.reload() }
             onNode(hasText("Export table"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().exportTable(any()) }
+            verify { viewModel.exportTable(any()) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownEditorTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(editorTab)
-        every { anyConstructed<TabsViewModel>().slideshow(any()) } just Runs
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(editorTab)
+        every { viewModel.slideshow(any()) } just Runs
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
             onNode(hasText("Clip internal link"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().clipText(any<String>()) }
+            verify { viewModel.clipText(any<String>()) }
             onNode(hasText("Open with editor"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().openFile(any()) }
+            verify { viewModel.openFile(any()) }
             onNode(hasText("Slideshow"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().slideshow(any()) }
+            verify { viewModel.slideshow(any()) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownChatTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(ChatTab())
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(ChatTab())
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
             onNode(hasText("Export chat"), useUnmergedTree = true).onParent().performClick()
 
-            verify { anyConstructed<TabsViewModel>().exportChat(any()) }
+            verify { viewModel.exportChat(any()) }
         }
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dropdownSettingEditorTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(SettingEditorTab())
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(SettingEditorTab())
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
         }
     }
@@ -261,12 +245,12 @@ class TabsViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun inputHistoryTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(InputHistoryTab("test"))
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(InputHistoryTab("test"))
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
         }
     }
@@ -274,16 +258,16 @@ class TabsViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun webBookmarkTab() {
-        every { anyConstructed<TabsViewModel>().openingDropdown(any()) } returns true
-        every { anyConstructed<TabsViewModel>().tabs() } returns listOf(WebBookmarkTab())
+        every { viewModel.openingDropdown(any()) } returns true
+        every { viewModel.tabs() } returns listOf(WebBookmarkTab())
 
         runDesktopComposeUiTest {
             setContent {
-                TabsView(Modifier)
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
 
             onNode(hasText("Modify"), useUnmergedTree = true).onParent().performClick()
-            verify { anyConstructed<TabsViewModel>().openFile(any()) }
+            verify { viewModel.openFile(any()) }
         }
     }
 
