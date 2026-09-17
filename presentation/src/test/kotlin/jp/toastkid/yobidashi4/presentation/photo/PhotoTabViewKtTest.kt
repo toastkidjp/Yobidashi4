@@ -16,17 +16,22 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.PhotoTab
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_up
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 
 class PhotoTabViewKtTest {
+
+    @RelaxedMockK
+    private lateinit var viewModel: PhotoTabViewModel
 
     private lateinit var tab: PhotoTab
 
@@ -39,9 +44,10 @@ class PhotoTabViewKtTest {
         every { path.fileName } returns path
         every { path.toString() } returns "test.png"
 
-        mockkConstructor(PhotoTabViewModel::class)
-        every { anyConstructed<PhotoTabViewModel>().bitmap() } returns ImageBitmap(1, 1)
-        every { anyConstructed<PhotoTabViewModel>().launch(any()) } just Runs
+        every { viewModel.bitmap() } returns ImageBitmap(1, 1)
+        every { viewModel.handleIconPath() } returns Res.drawable.ic_up
+        every { viewModel.launch(any()) } just Runs
+        every { viewModel.visibleMenu() } returns true
 
         tab = PhotoTab(path)
     }
@@ -54,12 +60,12 @@ class PhotoTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun photoTabView() {
-        every { anyConstructed<PhotoTabViewModel>().showHandle() } just Runs
-        every { anyConstructed<PhotoTabViewModel>().hideHandle() } just Runs
+        every { viewModel.showHandle() } just Runs
+        every { viewModel.hideHandle() } just Runs
 
         runDesktopComposeUiTest {
             setContent {
-                PhotoTabView(tab)
+                PhotoTabView(tab, viewModel)
             }
 
             onNodeWithContentDescription("Switch menu", useUnmergedTree = true).performClick()
@@ -73,8 +79,8 @@ class PhotoTabViewKtTest {
                     enter()
                     exit()
                 }
-            verify { anyConstructed<PhotoTabViewModel>().showHandle() }
-            verify { anyConstructed<PhotoTabViewModel>().hideHandle() }
+            verify { viewModel.showHandle() }
+            verify { viewModel.hideHandle() }
 
             onNodeWithContentDescription("Divide GIF", useUnmergedTree = true).assertDoesNotExist()
 
@@ -91,18 +97,18 @@ class PhotoTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun divideGif() {
-        every { anyConstructed<PhotoTabViewModel>().divideGif(any()) } just Runs
+        every { viewModel.divideGif(any()) } just Runs
         every { path.toString() } returns "test.gif"
         tab = PhotoTab(path)
 
         runDesktopComposeUiTest {
             setContent {
-                PhotoTabView(tab)
+                PhotoTabView(tab, viewModel)
             }
             onNodeWithContentDescription("Switch menu", useUnmergedTree = true).performClick()
             onNodeWithContentDescription("Divide GIF", useUnmergedTree = true).performClick()
 
-            verify { anyConstructed<PhotoTabViewModel>().divideGif(any()) }
+            verify { viewModel.divideGif(any()) }
         }
     }
 
