@@ -31,15 +31,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.math.max
 
-class PhotoTabViewModel : KoinComponent {
-
-    private val ioContextProvider: IoContextProvider by inject()
+@Factory
+class PhotoTabViewModel(
+    private val ioContextProvider: IoContextProvider,
+    private val gifDivider: GifDivider
+) : KoinComponent {
 
     private val bitmap = mutableStateOf(ImageBitmap(1,1))
 
@@ -68,8 +70,6 @@ class PhotoTabViewModel : KoinComponent {
     private val focusRequester = FocusRequester()
 
     private val handleAlpha = mutableStateOf(0f)
-
-    private val gifDivider: GifDivider by inject()
 
     fun bitmap() = bitmap.value
 
