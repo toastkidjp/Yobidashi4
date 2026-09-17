@@ -30,7 +30,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -43,12 +42,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun NumberPlaceView() {
-    val viewModel = remember { NumberPlaceViewModel() }
-
+fun NumberPlaceView(
+    viewModel: NumberPlaceViewModel = koinInject()
+) {
     LaunchedEffect(key1 = viewModel, block = {
         viewModel.start()
     })
