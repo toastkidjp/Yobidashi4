@@ -24,17 +24,16 @@ import jp.toastkid.yobidashi4.domain.service.number.GameFileProvider
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Files
 
-class NumberPlaceViewModel : KoinComponent {
-
-    private val mainViewModel: MainViewModel by inject()
-
-    private val setting: Setting by inject()
-
-    private val gameRepository: GameRepository by inject()
+@Factory
+class NumberPlaceViewModel(
+    private val mainViewModel: MainViewModel,
+    private val setting: Setting,
+    private val gameRepository: GameRepository
+) : KoinComponent {
 
     private val _game = mutableStateOf(NumberPlaceGame())
 
