@@ -33,10 +33,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.nio.file.Files
 
 class NumberPlaceViewModelTest {
@@ -55,27 +51,17 @@ class NumberPlaceViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                    single(qualifier=null) { repository } bind(GameRepository::class)
-                    single(qualifier=null) { setting } bind(Setting::class)
-                }
-            )
-        }
 
         every { repository.save(any(), any()) } just Runs
         every { repository.delete(any()) } just Runs
 
-        numberPlaceViewModel = NumberPlaceViewModel()
+        numberPlaceViewModel = NumberPlaceViewModel(mainViewModel, setting, repository)
         numberPlaceViewModel.initialize(20)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkAll()
-        stopKoin()
     }
 
     @Test
