@@ -40,7 +40,7 @@ class FileRenameToolViewKtTest {
         every { viewModel.renamedSampleFileName() } returns ""
         every { viewModel.useResize() } returns MutableStateFlow(false)
         every { viewModel.listState() } returns LazyListState()
-        every { viewModel.input() } returns TextFieldState()
+        every { viewModel.input() } returns TextFieldState("test")
     }
 
     @AfterEach
@@ -58,6 +58,7 @@ class FileRenameToolViewKtTest {
 
             onNodeWithText("x").performClick()
             verify { viewModel.remove(any()) }
+            verify { viewModel.renamedSampleFileName() }
         }
     }
 
