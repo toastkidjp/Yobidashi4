@@ -29,10 +29,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -57,23 +53,14 @@ class PhotoTabViewModelTest {
         val resourceAsStream = javaClass.classLoader.getResourceAsStream("icon/icon.png") ?: fail()
         every { Files.newInputStream(any()) } returns resourceAsStream
 
-        startKoin {
-            modules(
-                module {
-                    single(qualifier = null) { gifDivider } bind (GifDivider::class)
-                    single(qualifier = null) { ioContextProvider } bind (IoContextProvider::class)
-                }
-            )
-        }
         coEvery { gifDivider.invoke(any()) } just Runs
         coEvery { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
-        subject = PhotoTabViewModel()
+        subject = PhotoTabViewModel(ioContextProvider, gifDivider)
     }
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
