@@ -55,15 +55,14 @@ import jp.toastkid.yobidashi4.library.resources.ic_rotate_left
 import jp.toastkid.yobidashi4.library.resources.ic_rotate_right
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import kotlin.io.path.extension
 import kotlin.io.path.name
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun PhotoTabView(tab: PhotoTab) {
-    val viewModel = remember { PhotoTabViewModel() }
-
+fun PhotoTabView(tab: PhotoTab, viewModel: PhotoTabViewModel = koinInject()) {
     val coroutineScope = rememberCoroutineScope()
 
     val interactionSource = remember { MutableInteractionSource() }
