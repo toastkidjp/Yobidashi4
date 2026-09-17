@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
@@ -60,7 +59,7 @@ class TableViewKtTest {
         result.put("2022-12-22", 1200, 12)
         result.put("2022-12-23", 1240, 12)
         result.put("2022-12-24", 1230, 12)
-        every { viewModel.items() } returns mutableStateListOf<Array<Any>>().also { it.addAll(result.itemArrays()) }
+        every { viewModel.items() } returns result.itemArrays().toList()
 
         runDesktopComposeUiTest {
             setContent {
