@@ -113,4 +113,16 @@ class PhotoTabViewKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun invisibleMenu() {
+        every { viewModel.visibleMenu() } returns false
+
+        runDesktopComposeUiTest {
+            setContent {
+                PhotoTabView(tab, viewModel)
+            }
+        }
+    }
+
 }
