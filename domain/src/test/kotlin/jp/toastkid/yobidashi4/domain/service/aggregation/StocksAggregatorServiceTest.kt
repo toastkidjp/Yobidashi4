@@ -61,6 +61,7 @@ _
         }
         verify(exactly = 1) { Files.readAllLines(any()) }
         verify(exactly = 1) { articlesReaderService.invoke() }
+        assertEquals("Stock", stocksAggregatorService.label())
     }
 
     @Test
