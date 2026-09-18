@@ -1,11 +1,13 @@
 package jp.toastkid.yobidashi4.domain.model.number
 
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 
 class NumberBoardTest {
 
@@ -70,6 +72,25 @@ class NumberBoardTest {
     @Test
     fun isCorrectOtherCase() {
         NumberBoard.make().isCorrect(null)
+    }
+
+    @Test
+    fun serializationTest() {
+        val game = NumberBoard()
+        val jsonString = Json.encodeToString(game)
+        val decodedGame = Json.decodeFromString<NumberBoard>(jsonString)
+
+        assertNotNull(decodedGame)
+    }
+
+    @Test
+    fun dataClassTest() {
+        val game1 = NumberBoard()
+        val game2 = game1.copy()
+
+        assertEquals(game1, game2)
+        assertEquals(game1.hashCode(), game2.hashCode())
+        assertNotNull(game1.toString())
     }
 
 }
