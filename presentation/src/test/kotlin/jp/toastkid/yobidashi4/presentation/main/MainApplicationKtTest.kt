@@ -28,6 +28,7 @@ import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.main.content.TabsViewModel
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenuViewModel
@@ -67,6 +68,9 @@ class MainApplicationKtTest {
     @MockK
     private lateinit var slideDeckReader: SlideDeckReader
 
+    @RelaxedMockK
+    private lateinit var tabsViewModel: TabsViewModel
+
     @OptIn(ExperimentalFoundationApi::class)
     @BeforeEach
     fun setUp() {
@@ -96,6 +100,7 @@ class MainApplicationKtTest {
                     single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { metaExtractor } bind (FileListItemMetaExtractor::class)
                     single(qualifier = null) { slideDeckReader } bind (SlideDeckReader::class)
+                    single(qualifier = null) { tabsViewModel } bind (TabsViewModel::class)
                 }
             )
         }
