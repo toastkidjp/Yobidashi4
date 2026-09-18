@@ -48,6 +48,7 @@ class PhotoTabViewKtTest {
         every { viewModel.handleIconPath() } returns Res.drawable.ic_up
         every { viewModel.launch(any()) } just Runs
         every { viewModel.visibleMenu() } returns true
+        every { viewModel.scale() } returns 1f
 
         tab = PhotoTab(path)
     }
