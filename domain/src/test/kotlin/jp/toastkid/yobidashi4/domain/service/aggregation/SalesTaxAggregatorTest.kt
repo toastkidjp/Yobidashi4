@@ -79,6 +79,7 @@ class SalesTaxAggregatorTest {
             return fail()
         }
         assertEquals(1268, result.sum())
+        assertEquals("Sales tax", aggregatorService.label())
     }
 
     @Test
