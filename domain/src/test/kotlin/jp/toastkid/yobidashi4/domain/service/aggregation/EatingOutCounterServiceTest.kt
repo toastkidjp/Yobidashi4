@@ -79,6 +79,7 @@ class EatingOutCounterServiceTest {
             return fail()
         }
         assertEquals(2100, result.sum())
+        assertEquals("Eat out", aggregatorService.label())
     }
 
     @Test
