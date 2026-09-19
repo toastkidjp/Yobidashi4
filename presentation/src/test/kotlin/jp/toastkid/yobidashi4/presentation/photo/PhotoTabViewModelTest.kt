@@ -19,6 +19,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
+import jp.toastkid.yobidashi4.domain.service.photo.PhotoStreamLoader
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -32,7 +33,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
 
@@ -46,18 +46,20 @@ class PhotoTabViewModelTest {
 
     @MockK
     private lateinit var ioContextProvider: IoContextProvider
+    
+    @MockK
+    private lateinit var photoStreamLoader: PhotoStreamLoader
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockkStatic(Files::class)
         val resourceAsStream = javaClass.classLoader.getResourceAsStream("icon/icon.png") ?: fail()
-        every { Files.newInputStream(any()) } returns resourceAsStream
+        every { photoStreamLoader(any()) } returns resourceAsStream
 
         coEvery { gifDivider.invoke(any()) } just Runs
         coEvery { ioContextProvider.invoke() } returns Dispatchers.Unconfined
 
-        subject = PhotoTabViewModel(ioContextProvider, gifDivider)
+        subject = PhotoTabViewModel(ioContextProvider, gifDivider, photoStreamLoader)
     }
 
     @AfterEach
@@ -228,7 +230,7 @@ class PhotoTabViewModelTest {
         subject.launch(path)
 
         verify { focusRequester.requestFocus() }
-        verify { Files.newInputStream(any()) }
+        verify { photoStreamLoader(any()) }
     }
 
     @Test
@@ -240,12 +242,12 @@ class PhotoTabViewModelTest {
         every { focusRequester.requestFocus() } returns true
         val path = mockk<Path>()
         every { path.toFile() } returns mockk()
-        every { Files.newInputStream(any()) } returns "test".byteInputStream()
+        every { photoStreamLoader(any()) } returns "test".byteInputStream()
 
         subject.launch(path)
 
         verify { focusRequester.requestFocus() }
-        verify { Files.newInputStream(any()) }
+        verify { photoStreamLoader(any()) }
         assertSame(snapshot, subject.bitmap())
     }
 
