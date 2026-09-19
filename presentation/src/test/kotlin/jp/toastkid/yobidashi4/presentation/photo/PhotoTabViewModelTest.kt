@@ -286,4 +286,9 @@ class PhotoTabViewModelTest {
         coVerify { gifDivider.invoke(any()) }
     }
 
+    @Test
+    fun focusRequester() {
+        subject.focusRequester()
+    }
+
 }
