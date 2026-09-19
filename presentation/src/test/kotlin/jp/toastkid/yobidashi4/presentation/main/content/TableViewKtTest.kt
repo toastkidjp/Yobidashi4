@@ -104,6 +104,7 @@ class TableViewKtTest {
                 val result = FindResult("test")
                 result.add("2022-12-22", listOf("1st", "2nd"))
                 result.add("2022-12-22", listOf("1st", "2nd"))
+                every { viewModel.items() } returns result.itemArrays().toList()
 
                 TableView(TableTab("test", result), viewModel)
             }
