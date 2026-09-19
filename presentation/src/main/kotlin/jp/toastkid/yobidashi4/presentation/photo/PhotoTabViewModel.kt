@@ -23,6 +23,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.IntOffset
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
+import jp.toastkid.yobidashi4.domain.service.photo.PhotoStreamLoader
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_down
@@ -33,14 +34,14 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.decodeToImageBitmap
 import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
-import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.math.max
 
 @Factory
 class PhotoTabViewModel(
     private val ioContextProvider: IoContextProvider,
-    private val gifDivider: GifDivider
+    private val gifDivider: GifDivider,
+    private val photoStreamLoader: PhotoStreamLoader
 ) : KoinComponent {
 
     private val bitmap = mutableStateOf(ImageBitmap(1,1))
@@ -206,7 +207,7 @@ class PhotoTabViewModel(
     fun launch(path: Path) {
         focusRequester().requestFocus()
 
-        val imageBitmap = Files.newInputStream(path).use { inputStream ->
+        val imageBitmap = photoStreamLoader(path).use { inputStream ->
             try {
                 inputStream.readAllBytes().decodeToImageBitmap()
             } catch (e: IllegalArgumentException) {
