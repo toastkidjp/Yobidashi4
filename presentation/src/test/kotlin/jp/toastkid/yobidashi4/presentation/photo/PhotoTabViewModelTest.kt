@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.photo.PhotoStreamLoader
 import jp.toastkid.yobidashi4.domain.service.photo.gif.GifDivider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -289,6 +290,11 @@ class PhotoTabViewModelTest {
     @Test
     fun focusRequester() {
         subject.focusRequester()
+    }
+
+    @Test
+    fun state() = runTest {
+        subject.state().transform { transformBy(1f) }
     }
 
 }
