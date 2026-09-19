@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi4.presentation.main.component
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -57,7 +58,7 @@ class AggregationBoxKtTest {
         )
         every { viewModel.icon(any()) } returns Res.drawable.ic_aggregation
         val aggregator = mockk<ArticleAggregator>()
-        every { aggregator.label() } returns "test"
+        every { aggregator.label() } returns "test aggregator"
         every { viewModel.items() } returns listOf(aggregator)
         every { repository.filter(any()) } returns listOf(InputHistory("test", 0))
     }
@@ -99,14 +100,13 @@ class AggregationBoxKtTest {
                 AggregationBox(viewModel)
             }
 
-            // TODO verify { viewModel.choose(any()) }
-
             val input = onNode(hasText(label), true)
             input.performClick()
             verify { viewModel.closeChooser() }
             input.performImeAction()
             verify { viewModel.onDateInputValueChange() }
             verify { viewModel.onSearch() }
+            //verify { viewModel.choose(any()) }
         }
     }
 
@@ -120,7 +120,9 @@ class AggregationBoxKtTest {
                 AggregationBox(viewModel)
             }
 
-            // TODO verify { viewModel.choose(any()) }
+            val input = onNode(hasContentDescription("test aggregator"), true)
+            input.performClick()
+            verify { viewModel.choose(any()) }
         }
     }
 
