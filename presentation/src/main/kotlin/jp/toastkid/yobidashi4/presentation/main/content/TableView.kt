@@ -56,15 +56,23 @@ import jp.toastkid.yobidashi4.library.resources.ic_edit
 import jp.toastkid.yobidashi4.library.resources.ic_markdown
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+fun TableView(tab: TableTab) {
+    TableView(tab, koinInject())
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun TableView(
     tab: TableTab,
-    viewModel: TableViewModel = koinInject()
+    viewModel: TableViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
 
