@@ -100,13 +100,14 @@ class AggregationBoxKtTest {
                 AggregationBox(viewModel)
             }
 
-            val input = onNode(hasText(label), true)
-            input.performClick()
-            verify { viewModel.closeChooser() }
+            val category = onNode(hasContentDescription(viewModel.categories()[0].label()), true)
+            category.performClick()
+            verify { viewModel.choose(any()) }
+
+            val input = onNode(hasText(label), useUnmergedTree = true)
             input.performImeAction()
             verify { viewModel.onDateInputValueChange() }
             verify { viewModel.onSearch() }
-            //verify { viewModel.choose(any()) }
         }
     }
 
