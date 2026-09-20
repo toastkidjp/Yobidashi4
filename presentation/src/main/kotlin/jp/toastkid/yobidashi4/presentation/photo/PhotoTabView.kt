@@ -53,16 +53,23 @@ import jp.toastkid.yobidashi4.library.resources.ic_brush
 import jp.toastkid.yobidashi4.library.resources.ic_flip
 import jp.toastkid.yobidashi4.library.resources.ic_rotate_left
 import jp.toastkid.yobidashi4.library.resources.ic_rotate_right
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import kotlin.io.path.extension
 import kotlin.io.path.name
 
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun PhotoTabView(tab: PhotoTab) {
+    PhotoTabView(tab, koinInject())
+}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun PhotoTabView(tab: PhotoTab, viewModel: PhotoTabViewModel = koinInject()) {
+fun PhotoTabView(tab: PhotoTab, viewModel: PhotoTabViewModel) {
     val coroutineScope = rememberCoroutineScope()
 
     val interactionSource = remember { MutableInteractionSource() }
