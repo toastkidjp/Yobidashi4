@@ -424,4 +424,9 @@ class WebSearchBoxViewModelTest {
         assertFalse(subject.saveSearchHistory())
     }
 
+    @Test
+    fun currentIconPath() {
+        subject.currentIconPath()
+    }
+
 }
