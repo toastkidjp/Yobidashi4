@@ -449,4 +449,9 @@ class AggregationBoxViewModelTest {
         assertTrue(subject.useExactMatch())
     }
 
+    @Test
+    fun showAggregationBox() {
+        assertTrue(subject.showAggregationBox())
+    }
+
 }
