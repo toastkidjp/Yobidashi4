@@ -444,4 +444,9 @@ class AggregationBoxViewModelTest {
         verify { mainViewModel.openInputHistory(any()) }
     }
 
+    @Test
+    fun useExactMatch() {
+        assertTrue(subject.useExactMatch())
+    }
+
 }
