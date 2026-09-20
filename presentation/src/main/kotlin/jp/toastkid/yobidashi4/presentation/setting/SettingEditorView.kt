@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,8 +40,6 @@ import org.koin.compose.koinInject
 fun SettingEditorView(
     viewModel: SettingEditorViewModel = koinInject()
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     val stickyHeaderBackgroundColor = animateColorAsState(
         if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
         else Color.Transparent
