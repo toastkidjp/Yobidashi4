@@ -429,4 +429,9 @@ class WebSearchBoxViewModelTest {
         subject.currentIconPath()
     }
 
+    @Test
+    fun currentTint() {
+        subject.currentTint()
+    }
+
 }
