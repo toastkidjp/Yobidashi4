@@ -113,6 +113,7 @@ kover {
                     classes("*\$inject\$*")
                     packages("org.koin.ksp.generated")
                     packages("jp.toastkid.yobidashi4.library.resources")
+                    annotatedBy("jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation")
                 }
             }
         }
