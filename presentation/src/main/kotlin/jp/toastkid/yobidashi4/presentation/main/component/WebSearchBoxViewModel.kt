@@ -87,7 +87,10 @@ class WebSearchBoxViewModel(
     }
 
     fun onValueChange() {
-        result.value = calculator.invoke(query.text.toString())?.let(formatter::format) ?: ""
+        val calculationResult = calculator.invoke(query.text.toString())
+        if (calculationResult != null) {
+            result.value = formatter.format(calculationResult)
+        }
 
         inputHistoryService.filter(inputHistories, query.text.toString())
     }
