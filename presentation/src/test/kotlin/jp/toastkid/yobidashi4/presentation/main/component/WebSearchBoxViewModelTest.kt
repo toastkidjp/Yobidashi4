@@ -434,4 +434,9 @@ class WebSearchBoxViewModelTest {
         subject.currentTint()
     }
 
+    @Test
+    fun focusRequester() {
+        subject.focusRequester()
+    }
+
 }
