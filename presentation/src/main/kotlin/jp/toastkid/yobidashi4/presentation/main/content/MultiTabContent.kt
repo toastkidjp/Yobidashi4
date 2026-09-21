@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_open
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import jp.toastkid.yobidashi4.presentation.main.component.AggregationBox
 import jp.toastkid.yobidashi4.presentation.main.component.FindInPageBox
 import jp.toastkid.yobidashi4.presentation.main.component.InputBox
@@ -83,8 +84,14 @@ fun MultiTabContent() {
     }
 }
 
+@ExcludeCoverageCalculation
 @Composable
-private fun MainContentBox(viewModel: MainViewModel = koinInject()) {
+private fun MainContentBox() {
+    MainContentBox(koinInject())
+}
+
+@Composable
+private fun MainContentBox(viewModel: MainViewModel) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box {
