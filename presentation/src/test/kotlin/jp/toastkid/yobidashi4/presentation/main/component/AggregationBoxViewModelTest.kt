@@ -13,6 +13,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
@@ -346,6 +347,15 @@ class AggregationBoxViewModelTest {
     fun dateHistories() {
         assertFalse(subject.shouldShowDateHistory())
         assertTrue(subject.dateHistories().isEmpty())
+    }
+
+    @Test
+    fun dateHistoriesIsNotEmpty() {
+        subject = spyk(subject)
+        every { subject.dateHistories() } returns listOf("test")
+
+        assertFalse(subject.shouldShowDateHistory())
+        assertFalse(subject.dateHistories().isEmpty())
     }
 
     @Test
