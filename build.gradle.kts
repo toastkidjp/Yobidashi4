@@ -111,6 +111,10 @@ kover {
                     classes("jp.toastkid.yobidashi4.infrastructure.di.*")
                     classes("*ComposableSingletons*")
                     classes("*\$inject\$*")
+                    classes(
+                        "*\$inlined\$*",
+                        "*\$invoke\$*"
+                    )
                     packages("org.koin.ksp.generated")
                     packages("jp.toastkid.yobidashi4.library.resources")
                     annotatedBy("jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation")
