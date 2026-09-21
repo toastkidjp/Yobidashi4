@@ -329,6 +329,11 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun start() {
+        subject.start()
+    }
+
+    @Test
     fun showWithShowAggregationBoxIsFalse() {
         every { mainViewModel.showAggregationBox() } returns false
 
