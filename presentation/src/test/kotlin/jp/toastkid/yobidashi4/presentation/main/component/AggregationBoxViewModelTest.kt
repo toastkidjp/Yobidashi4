@@ -454,4 +454,9 @@ class AggregationBoxViewModelTest {
         assertTrue(subject.showAggregationBox())
     }
 
+    @Test
+    fun onKeywordInputValueChange() {
+        subject.onKeywordInputValueChange()
+    }
+
 }
