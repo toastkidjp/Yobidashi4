@@ -328,6 +328,20 @@ class MainViewModelImplementationTest {
     }
 
     @Test
+    fun swapTab() {
+        val tab1 = mockk<Tab>()
+        val tab2 = mockk<Tab>()
+        subject.openTab(tab1)
+        subject.openTab(tab2)
+
+        subject.swapTab(0, 0)
+        subject.swapTab(0, 1)
+
+        assertSame(tab1, subject.tabs[1])
+        assertSame(tab2, subject.currentTab())
+    }
+
+    @Test
     fun getTabs() {
         subject.openTab(LoanCalculatorTab())
         subject.openTab(LoanCalculatorTab())
