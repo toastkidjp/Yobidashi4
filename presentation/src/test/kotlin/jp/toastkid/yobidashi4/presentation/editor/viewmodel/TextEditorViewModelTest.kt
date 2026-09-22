@@ -43,10 +43,10 @@ import jp.toastkid.yobidashi4.presentation.editor.finder.FindOrderReceiver
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -56,6 +56,8 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @OptIn(InternalComposeUiApi::class)
 class TextEditorViewModelTest {
@@ -123,16 +125,23 @@ class TextEditorViewModelTest {
 
     @Test
     fun scrollEventFlow() {
+        val countDownLatch = CountDownLatch(1)
+
         runTest {
             val job = launch {
                 viewModel.scrollEventFlow().collect {
                     assertEquals(1f, it)
+                    countDownLatch.countDown()
                 }
             }
+            advanceUntilIdle()
 
             viewModel.emitScrollEvent(1f)
-            job.cancelAndJoin()
+            advanceUntilIdle()
+            job.cancel()
         }
+
+        assertTrue(countDownLatch.await(1, TimeUnit.SECONDS))
     }
 
     @Test
