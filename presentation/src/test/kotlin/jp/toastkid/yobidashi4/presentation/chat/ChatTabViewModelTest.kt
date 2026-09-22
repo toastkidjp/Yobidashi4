@@ -36,6 +36,8 @@ import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.repository.chat.dto.ChatResponseItem
 import jp.toastkid.yobidashi4.domain.service.chat.ChatService
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_chat
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +67,9 @@ class ChatTabViewModelTest {
     @MockK
     private lateinit var ioContextProvider: IoContextProvider
 
+    @MockK
+    private lateinit var iconMapper: ChatModelIconMapper
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -74,11 +79,12 @@ class ChatTabViewModelTest {
         every { service.messages() } returns emptyList()
         every { mainViewModel.showSnackbar(any()) } just Runs
         every { ioContextProvider.invoke() } returns Dispatchers.Unconfined
+        every { iconMapper.invoke(any()) } returns Res.drawable.ic_chat
 
         mockkConstructor(ClipboardPutterService::class)
         every { anyConstructed<ClipboardPutterService>().invoke(any<String>()) } just Runs
 
-        subject = ChatTabViewModel(mainViewModel, service, Dispatchers.Unconfined)
+        subject = ChatTabViewModel(mainViewModel, service, iconMapper, Dispatchers.Unconfined)
     }
 
     @AfterEach
@@ -331,6 +337,13 @@ class ChatTabViewModelTest {
     @Test
     fun clearChat() {
         subject.clearChat()
+    }
+
+    @Test
+    fun currentModelIcon() {
+        subject.currentModelIcon()
+
+        verify { iconMapper.invoke(any()) }
     }
 
 }
