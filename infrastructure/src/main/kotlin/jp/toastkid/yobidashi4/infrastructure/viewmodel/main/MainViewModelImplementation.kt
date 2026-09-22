@@ -176,6 +176,15 @@ class MainViewModelImplementation(
         setSelectedIndex(nextIndex)
     }
 
+    override fun swapTab(fromIndex: Int, toIndex: Int) {
+        if (fromIndex == toIndex) return
+
+        val currentTab = currentTab()
+        val item = _tabs.removeAt(fromIndex)
+        _tabs.add(toIndex, item)
+        setSelectedIndex(tabs.indexOf(currentTab))
+    }
+
     private fun calculateNextIndex(nextIndexCandidate: Int) = if (nextIndexCandidate >= _tabs.size) {
         0
     } else if (nextIndexCandidate < 0) {
