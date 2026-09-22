@@ -108,4 +108,8 @@ class TabsViewModel(
         return if (tab is WebTab) 232.dp else 1000.dp
     }
 
+    fun swapTab(a: Int, b: Int) {
+        viewModel.swapTab(a, b)
+    }
+
 }
