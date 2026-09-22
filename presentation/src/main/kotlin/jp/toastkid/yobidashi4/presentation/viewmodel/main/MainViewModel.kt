@@ -51,6 +51,7 @@ interface MainViewModel {
     fun setSelectedIndex(newIndex: Int)
 
     fun moveTabIndex(moveBy: Int)
+    fun swapTab(fromIndex: Int, toIndex: Int)
     fun openTab(tab: Tab)
     fun openFileListTab(title: String, items: Collection<Path>, type: FileTab.Type)
     fun openFile(path: Path)
