@@ -45,6 +45,7 @@ import java.util.UUID
 class ChatTabViewModel(
     private val mainViewModel: MainViewModel,
     private val service: ChatService,
+    private val iconMapper: ChatModelIconMapper = ChatModelIconMapper(),
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : KoinComponent {
 
@@ -65,8 +66,6 @@ class ChatTabViewModel(
     fun messages(): List<ChatMessage> = messages
 
     private val currentModel = mutableStateOf(GenerativeAiModel.GEMINI_2_5_FLASH_LITE)
-
-    private val iconMapper = ChatModelIconMapper()
 
     fun modelIcon(model: GenerativeAiModel) = iconMapper(model)
 
