@@ -346,4 +346,17 @@ class ChatTabViewModelTest {
         verify { iconMapper.invoke(any()) }
     }
 
+    @Test
+    fun openModelChooser() {
+        assertFalse(subject.openingModelChooser())
+
+        subject.openModelChooser()
+
+        assertTrue(subject.openingModelChooser())
+
+        subject.closeModelChooser()
+
+        assertFalse(subject.openingModelChooser())
+    }
+
 }
