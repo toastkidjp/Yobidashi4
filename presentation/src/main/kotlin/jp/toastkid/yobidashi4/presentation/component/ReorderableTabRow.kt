@@ -14,10 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.TabPosition
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.UiComposable
@@ -32,6 +29,7 @@ import androidx.compose.ui.platform.PlatformContext.DefaultViewConfiguration.tou
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
+import org.koin.compose.koinInject
 
 @ExcludeCoverageCalculation
 @OptIn(InternalComposeUiApi::class)
@@ -40,6 +38,7 @@ internal fun <T> ReorderableTabRow(
     tabs: List<T>,
     selectedTabIndex: Int,
     backgroundColor: Color,
+    indicator: @Composable @UiComposable (tabPositions: List<TabPosition>) -> Unit,
     onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
     content: @Composable (Int, T) -> Unit
 ) {
@@ -47,9 +46,8 @@ internal fun <T> ReorderableTabRow(
         tabs,
         selectedTabIndex,
         backgroundColor,
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
-        },
+        koinInject(),
+        indicator,
         onTabsReordered,
         content
     )
@@ -61,12 +59,11 @@ internal fun <T> ReorderableTabRow(
     tabs: List<T>,
     selectedTabIndex: Int,
     backgroundColor: Color,
+    viewModel: ReorderableTabRowViewModel,
     indicator: @Composable @UiComposable (tabPositions: List<TabPosition>) -> Unit,
     onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
     content: @Composable (Int, T) -> Unit
 ) {
-    val viewModel = remember { ReorderableTabRowViewModel() }
-
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
         backgroundColor = backgroundColor,
