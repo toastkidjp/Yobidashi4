@@ -31,6 +31,29 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.PlatformContext.DefaultViewConfiguration.touchSlop
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
+
+@ExcludeCoverageCalculation
+@OptIn(InternalComposeUiApi::class)
+@Composable
+internal fun <T> ReorderableTabRow(
+    tabs: List<T>,
+    selectedTabIndex: Int,
+    backgroundColor: Color,
+    onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
+    content: @Composable (Int, T) -> Unit
+) {
+    ReorderableTabRow(
+        tabs,
+        selectedTabIndex,
+        backgroundColor,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
+        },
+        onTabsReordered,
+        content
+    )
+}
 
 @OptIn(InternalComposeUiApi::class)
 @Composable
@@ -38,9 +61,7 @@ internal fun <T> ReorderableTabRow(
     tabs: List<T>,
     selectedTabIndex: Int,
     backgroundColor: Color,
-    indicator: @Composable @UiComposable (tabPositions: List<TabPosition>) -> Unit = { tabPositions ->
-        TabRowDefaults.Indicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
-    },
+    indicator: @Composable @UiComposable (tabPositions: List<TabPosition>) -> Unit,
     onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
     content: @Composable (Int, T) -> Unit
 ) {
