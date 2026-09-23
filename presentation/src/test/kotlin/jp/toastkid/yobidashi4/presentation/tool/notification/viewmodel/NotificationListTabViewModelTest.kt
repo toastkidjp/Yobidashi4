@@ -85,6 +85,11 @@ class NotificationListTabViewModelTest {
     fun onKeyEvent() {
         assertTrue(
             subject.onKeyEvent(
+                KeyEvent(Key.DirectionUp, KeyEventType.KeyDown)
+            )
+        )
+        assertTrue(
+            subject.onKeyEvent(
                 KeyEvent(Key.DirectionDown, KeyEventType.KeyDown, isCtrlPressed = true)
             )
         )
