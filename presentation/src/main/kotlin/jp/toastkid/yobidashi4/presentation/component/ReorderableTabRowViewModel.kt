@@ -9,7 +9,9 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import org.koin.core.annotation.Factory
 
+@Factory
 class ReorderableTabRowViewModel {
 
     private val draggingIndex = mutableStateOf<Int?>(null)
