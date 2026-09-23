@@ -17,8 +17,6 @@ import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -46,9 +44,7 @@ internal fun <T> ReorderableTabRow(
     onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
     content: @Composable (Int, T) -> Unit
 ) {
-    val draggingIndex = remember { mutableStateOf<Int?>(null) }
-    val dragOffset = remember { mutableStateOf(0f) }
-    val tabWidthsPx = remember { mutableStateMapOf<Int, Float>() }
+    val viewModel = remember { ReorderableTabRowViewModel() }
 
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
@@ -58,26 +54,7 @@ internal fun <T> ReorderableTabRow(
         modifier = Modifier.fillMaxWidth()
     ) {
         tabs.forEachIndexed { index, item ->
-            val isDragging = draggingIndex.value == index
-
-            val targetTranslationX = when {
-                isDragging -> dragOffset.value
-                draggingIndex.value != null -> {
-                    val dragged = draggingIndex.value!!
-                    val draggedWidth = tabWidthsPx[dragged] ?: 0f
-
-                    if (dragged < index) {
-                        val threshold = (dragged until index).sumOf { (tabWidthsPx[it] ?: 0f).toDouble() }.toFloat() + (tabWidthsPx[index] ?: 0f) * 0.5f
-                        if (dragOffset.value > threshold) -draggedWidth else 0f
-                    } else if (dragged > index) {
-                        val threshold = (index + 1..dragged).sumOf { (tabWidthsPx[it] ?: 0f).toDouble() }.toFloat() + (tabWidthsPx[index] ?: 0f) * 0.5f
-                        if (dragOffset.value < -threshold) draggedWidth else 0f
-                    } else {
-                        0f
-                    }
-                }
-                else -> 0f
-            }
+            val (isDragging, targetTranslationX) = viewModel.calculateForIndividualTab(index)
 
             val animatedTranslationX = animateFloatAsState(targetValue = targetTranslationX)
 
@@ -85,7 +62,7 @@ internal fun <T> ReorderableTabRow(
                 modifier = Modifier
                     .zIndex(if (isDragging) 1f else 0f)
                     .onGloballyPositioned { coordinates ->
-                        tabWidthsPx[index] = coordinates.size.width.toFloat()
+                        viewModel.setTabWidth(index, coordinates.size.width.toFloat())
                     }
                     .graphicsLayer {
                         translationX = animatedTranslationX.value
@@ -112,55 +89,54 @@ internal fun <T> ReorderableTabRow(
                                         if (!isDragStarted) {
                                             if (kotlin.math.abs(totalDragX) > touchSlop) {
                                                 isDragStarted = true
-                                                draggingIndex.value = index
-                                                dragOffset.value = totalDragX
+                                                viewModel.setDragState(index, totalDragX)
                                                 change.consume()
                                             }
                                         } else {
-                                            dragOffset.value += dragAmount
+                                            viewModel.incrementDragOffset(dragAmount)
                                             change.consume()
                                         }
-                                    } else {
-                                        if (!isDragStarted) {
-                                            return@awaitPointerEventScope
-                                        } else {
-                                            val draggedIndex = draggingIndex.value
-                                            val totalOffset = dragOffset.value
 
-                                            if (draggedIndex != null) {
-                                                val draggedWidth = tabWidthsPx[draggedIndex] ?: 1f
-                                                var accumulated = 0f
-                                                var targetIndex = draggedIndex
+                                        continue
+                                    }
 
-                                                if (totalOffset > 0) {
-                                                    for (i in draggedIndex + 1 stroke tabs.indices) {
-                                                        val w = tabWidthsPx[i] ?: draggedWidth
-                                                        if (totalOffset > accumulated + w * 0.5f) {
-                                                            targetIndex = i
-                                                            accumulated += w
-                                                        } else break
-                                                    }
-                                                } else if (totalOffset < 0) {
-                                                    for (i in draggedIndex - 1 downTo 0) {
-                                                        val w = tabWidthsPx[i] ?: draggedWidth
-                                                        if (totalOffset < -accumulated - w * 0.5f) {
-                                                            targetIndex = i
-                                                            accumulated += w
-                                                        } else break
-                                                    }
-                                                }
+                                    if (!isDragStarted) {
+                                        return@awaitPointerEventScope
+                                    }
 
-                                                targetIndex = targetIndex.coerceIn(0, tabs.lastIndex)
-                                                if (targetIndex != draggedIndex) {
-                                                    onTabsReordered(draggedIndex, targetIndex)
-                                                }
+                                    val (draggedIndex, totalOffset) = viewModel.getDragState()
+
+                                    if (draggedIndex != null) {
+                                        val draggedWidth = viewModel.tabWidth(draggedIndex) ?: 1f
+                                        var accumulated = 0f
+                                        var targetIndex = draggedIndex
+
+                                        if (totalOffset > 0) {
+                                            for (i in draggedIndex + 1 stroke tabs.indices) {
+                                                val w = viewModel.tabWidth(i) ?: draggedWidth
+                                                if (totalOffset > accumulated + w * 0.5f) {
+                                                    targetIndex = i
+                                                    accumulated += w
+                                                } else break
+                                            }
+                                        } else if (totalOffset < 0) {
+                                            for (i in draggedIndex - 1 downTo 0) {
+                                                val w = viewModel.tabWidth(i) ?: draggedWidth
+                                                if (totalOffset < -accumulated - w * 0.5f) {
+                                                    targetIndex = i
+                                                    accumulated += w
+                                                } else break
                                             }
                                         }
 
-                                        draggingIndex.value = null
-                                        dragOffset.value = 0f
-                                        break
+                                        targetIndex = targetIndex.coerceIn(0, tabs.lastIndex)
+                                        if (targetIndex != draggedIndex) {
+                                            onTabsReordered(draggedIndex, targetIndex)
+                                        }
                                     }
+
+                                    viewModel.clearDragState()
+                                    break
                                 }
                             }
                         }
