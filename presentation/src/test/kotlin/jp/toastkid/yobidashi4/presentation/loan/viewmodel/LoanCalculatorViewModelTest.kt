@@ -276,6 +276,10 @@ class LoanCalculatorViewModelTest {
         subject.selectPrincipal()
 
         assertFalse(subject.isSelectedLevel())
+
+        subject.selectLevel()
+
+        assertTrue(subject.isSelectedLevel())
     }
 
     @Test
