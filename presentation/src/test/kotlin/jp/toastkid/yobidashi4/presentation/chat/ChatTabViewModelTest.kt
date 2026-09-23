@@ -347,6 +347,13 @@ class ChatTabViewModelTest {
     }
 
     @Test
+    fun currentModelLabel() {
+        val label = subject.currentModelLabel()
+
+        assertTrue(label.isNotBlank())
+    }
+
+    @Test
     fun openModelChooser() {
         assertFalse(subject.openingModelChooser())
 
