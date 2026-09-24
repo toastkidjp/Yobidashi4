@@ -168,4 +168,10 @@ class NotificationListTabViewModelTest {
         verify { repository.readAll() }
         verify { focusRequester.requestFocus() }
     }
+
+    @Test
+    fun scrollEventFlow() {
+        subject.scrollEventFlow()
+    }
+
 }
