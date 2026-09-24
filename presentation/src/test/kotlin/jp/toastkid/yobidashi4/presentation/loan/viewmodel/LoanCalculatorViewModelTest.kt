@@ -291,4 +291,9 @@ class LoanCalculatorViewModelTest {
         assertTrue(subject.isSelectedPrincipal())
     }
 
+    @Test
+    fun scheduleState() {
+        subject.scheduleState()
+    }
+
 }
