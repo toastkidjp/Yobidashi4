@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.TabPosition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.UiComposable
@@ -28,10 +29,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.PlatformContext.DefaultViewConfiguration.touchSlop
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
-import org.koin.compose.koinInject
 
-@ExcludeCoverageCalculation
 @OptIn(InternalComposeUiApi::class)
 @Composable
 internal fun <T> ReorderableTabRow(
@@ -42,28 +40,8 @@ internal fun <T> ReorderableTabRow(
     onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
     content: @Composable (Int, T) -> Unit
 ) {
-    ReorderableTabRow(
-        tabs,
-        selectedTabIndex,
-        backgroundColor,
-        koinInject(),
-        indicator,
-        onTabsReordered,
-        content
-    )
-}
+    val viewModel = remember { ReorderableTabRowViewModel() }
 
-@OptIn(InternalComposeUiApi::class)
-@Composable
-internal fun <T> ReorderableTabRow(
-    tabs: List<T>,
-    selectedTabIndex: Int,
-    backgroundColor: Color,
-    viewModel: ReorderableTabRowViewModel,
-    indicator: @Composable @UiComposable (tabPositions: List<TabPosition>) -> Unit,
-    onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
-    content: @Composable (Int, T) -> Unit
-) {
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
         backgroundColor = backgroundColor,
@@ -104,14 +82,15 @@ internal fun <T> ReorderableTabRow(
                                         val dragAmount = change.positionChange().x
                                         totalDragX += dragAmount
 
-                                        if (!isDragStarted) {
-                                            if (kotlin.math.abs(totalDragX) > touchSlop) {
-                                                isDragStarted = true
-                                                viewModel.setDragState(index, totalDragX)
-                                                change.consume()
-                                            }
-                                        } else {
+                                        if (isDragStarted) {
                                             viewModel.incrementDragOffset(dragAmount)
+                                            change.consume()
+                                            continue
+                                        }
+
+                                        if (kotlin.math.abs(totalDragX) > touchSlop) {
+                                            isDragStarted = true
+                                            viewModel.setDragState(index, totalDragX)
                                             change.consume()
                                         }
 
