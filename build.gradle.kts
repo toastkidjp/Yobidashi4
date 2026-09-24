@@ -110,8 +110,8 @@ kover {
                     // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
                     classes("jp.toastkid.yobidashi4.infrastructure.di.*")
                     classes("*ComposableSingletons*")
-                    classes("*\$inject\$*")
                     classes(
+                        "*\$inject\$*",
                         "*\$inlined\$*",
                         "*\$invoke\$*"
                     )
