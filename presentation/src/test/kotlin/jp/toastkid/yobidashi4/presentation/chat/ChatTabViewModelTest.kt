@@ -366,4 +366,9 @@ class ChatTabViewModelTest {
         assertFalse(subject.openingModelChooser())
     }
 
+    @Test
+    fun scrollEventFlow() {
+        subject.scrollEventFlow()
+    }
+
 }
