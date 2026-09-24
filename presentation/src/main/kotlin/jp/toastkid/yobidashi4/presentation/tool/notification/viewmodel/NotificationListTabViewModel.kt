@@ -81,8 +81,7 @@ class NotificationListTabViewModel(
     }
 
     fun deleteAt(index: Int) {
-        repository
-            .deleteAt(index)
+        repository.deleteAt(index)
         notificationEvents.removeAt(index)
         mainViewModel
             .showSnackbar("Delete notification event.")
