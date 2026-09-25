@@ -301,4 +301,13 @@ class TabsViewModelTest {
         assertFalse(subject.openingDropdown(bookmark))
     }
 
+    @Test
+    fun swapTab() {
+        every { mainViewModel.swapTab(any(), any()) } just Runs
+
+        subject.swapTab(0, 1)
+
+        verify { mainViewModel.swapTab(any(), any()) }
+    }
+
 }
