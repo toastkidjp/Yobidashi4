@@ -367,6 +367,17 @@ class AggregationBoxViewModelTest {
     }
 
     @Test
+    fun keywordHistoryIsNotEmpty() {
+        subject = spyk(subject)
+        every { subject.dateHistories() } returns listOf("test")
+
+        subject.choose(subject.categories().last())
+
+        assertFalse(subject.shouldShowDateHistory())
+        assertFalse(subject.dateHistories().isEmpty())
+    }
+
+    @Test
     fun putDate() {
         subject.putDate(null)
 
