@@ -174,6 +174,10 @@ class NumberPlaceViewKtTest {
                 .assertExists("Not found!")
                 .performClick()
 
+            onAllNodesWithContentDescription("chooser_-1")
+                .onFirst()
+                .performClick()
+
             verify { viewModel.place(any(), any(), any()) }
         }
     }
