@@ -298,4 +298,9 @@ class WebHistoryViewModelTest {
         verify { viewModel.updateScrollableTab(tab, any()) }
     }
 
+    @Test
+    fun scrollEventFlow() {
+        subject.scrollEventFlow()
+    }
+
 }
