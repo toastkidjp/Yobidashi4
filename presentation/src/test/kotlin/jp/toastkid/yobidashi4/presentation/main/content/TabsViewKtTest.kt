@@ -32,6 +32,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRegistry
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.AfterEach
@@ -56,6 +57,8 @@ class TabsViewKtTest {
 
     @MockK
     private lateinit var tableTab: TableTab
+
+    private val isOpenTabsOptionMenu = MutableStateFlow(false)
 
     @BeforeEach
     fun setUp() {
@@ -106,6 +109,7 @@ class TabsViewKtTest {
             ChatTab()
         )
         every { viewModel.clipText(any<String>()) } just Runs
+        every { viewModel.isOpenTabsOptionMenu() } returns isOpenTabsOptionMenu
     }
 
     @AfterEach
@@ -133,6 +137,21 @@ class TabsViewKtTest {
             onNodeWithContentDescription("Close button 0", useUnmergedTree = true)
                 .performClick()
             verify { viewModel.removeTabAt(0) }
+
+            onNodeWithContentDescription("Tabs menu", useUnmergedTree = true)
+                .performClick()
+            verify { viewModel.openTabsOptionMenu() }
+
+            isOpenTabsOptionMenu.tryEmit(true)
+            mainClock.advanceTimeByFrame()
+
+            onNodeWithContentDescription("tab-option-Notifications", useUnmergedTree = true)
+                .performClick()
+            verify { viewModel.setSelectedIndex(any()) }
+
+            onNodeWithContentDescription("tab-option-root-closeAllTabs", useUnmergedTree = true)
+                .performClick()
+            verify { viewModel.closeAllTabs() }
         }
     }
 
