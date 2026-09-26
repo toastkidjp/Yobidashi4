@@ -311,4 +311,17 @@ class TabsViewModelTest {
         verify { mainViewModel.swapTab(any(), any()) }
     }
 
+    @Test
+    fun openTabsOptionMenu() {
+        assertFalse(subject.isOpenTabsOptionMenu().value)
+
+        subject.openTabsOptionMenu()
+
+        assertTrue(subject.isOpenTabsOptionMenu().value)
+
+        subject.closeTabsOptionMenu()
+
+        assertFalse(subject.isOpenTabsOptionMenu().value)
+    }
+
 }
