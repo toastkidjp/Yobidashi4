@@ -60,4 +60,9 @@ class ConverterToolTabViewModelTest {
         subject.keyboardScrollAction(KeyEvent(Key.DirectionDown, KeyEventType.KeyDown))
     }
 
+    @Test
+    fun scrollEventFlow() {
+        subject.scrollEventFlow()
+    }
+
 }
