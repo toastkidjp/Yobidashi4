@@ -83,6 +83,7 @@ class TabsViewModelTest {
         every { mainViewModel.selected.value } returns 2
 
         assertEquals(0, subject.currentTabIndex(2))
+        assertEquals(2, subject.currentTabIndex(1))
     }
 
     @Test
