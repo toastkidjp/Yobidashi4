@@ -271,4 +271,17 @@ class TabsViewKtTest {
         }
     }
 
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun noneTabsCase() {
+        every { viewModel.tabs() } returns emptyList()
+
+        runDesktopComposeUiTest {
+            setContent {
+                TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
+            }
+        }
+    }
+
 }
