@@ -88,16 +88,17 @@ internal fun TabsView(
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f).copy(alpha = 0.75f)
-            Box {
+            Box(modifier = Modifier
+                .drawBehind {
+                    drawRect(backgroundColor)
+                }
+            ) {
                 Icon(
                     painterResource(Res.drawable.ic_down),
                     contentDescription = "Tabs menu",
                     modifier = Modifier.clickable {
                         viewModel.openTabsOptionMenu()
                     }
-                        .drawBehind {
-                            drawRect(backgroundColor)
-                        }
                 )
 
                 DropdownMenu(
