@@ -6,6 +6,7 @@ import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.called
@@ -486,6 +487,11 @@ class NumberPlaceViewModelTest {
     @Test
     fun noopNumberLabel() {
         assertTrue(numberPlaceViewModel.numberLabel(1, 2).isEmpty())
+    }
+
+    @Test
+    fun fontSize() {
+        assertEquals(32.sp, numberPlaceViewModel.fontSize())
     }
 
 }
