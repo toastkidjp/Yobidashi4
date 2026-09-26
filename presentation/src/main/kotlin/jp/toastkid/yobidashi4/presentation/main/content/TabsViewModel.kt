@@ -15,6 +15,8 @@ import jp.toastkid.yobidashi4.domain.repository.chat.ChatExporter
 import jp.toastkid.yobidashi4.domain.service.table.TableContentExporter
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
 import java.nio.file.Path
@@ -31,7 +33,7 @@ class TabsViewModel(
 
     fun selectedTabIndex() = viewModel.selected.value
 
-    fun currentTabIndex(tabPositionsSize: Int) = if (viewModel.selected.value == tabPositionsSize) 0 else viewModel.selected.value
+    fun currentTabIndex(tabPositionsSize: Int) = if (viewModel.selected.value == tabPositionsSize) 0     else viewModel.selected.value
 
     fun tabs(): List<Tab> = viewModel.tabs
 
@@ -110,6 +112,22 @@ class TabsViewModel(
 
     fun swapTab(a: Int, b: Int) {
         viewModel.swapTab(a, b)
+    }
+
+    private val openTabsOptionMenu = MutableStateFlow(false)
+
+    fun isOpenTabsOptionMenu(): StateFlow<Boolean> = openTabsOptionMenu
+
+    fun openTabsOptionMenu() {
+        openTabsOptionMenu.tryEmit(true)
+    }
+
+    fun closeTabsOptionMenu() {
+        openTabsOptionMenu.tryEmit(false)
+    }
+
+    fun closeAllTabs() {
+        viewModel.closeAllTabs()
     }
 
 }
