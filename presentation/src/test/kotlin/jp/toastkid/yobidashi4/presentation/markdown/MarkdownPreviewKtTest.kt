@@ -81,7 +81,7 @@ class MarkdownPreviewKtTest {
     fun test() {
         val mocked = mockk<Markdown>()
         val content = MarkdownParser().invoke(
-            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```",
+            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```\n\n- [ ] task\n- [x] task2\n\n1. first\n2. secont\n\n[EOF]",
             "test"
         )
         every { mocked.lines() } returns content.lines().plus(mockk<Line>())
