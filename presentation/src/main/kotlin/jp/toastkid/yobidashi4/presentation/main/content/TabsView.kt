@@ -109,6 +109,9 @@ internal fun TabsView(
                         modifier = Modifier.clickable {
                             viewModel.closeAllTabs()
                         }
+                            .semantics {
+                                contentDescription = "tab-option-root-closeAllTabs"
+                            }
                     ) {
                         Text("Close all", modifier = Modifier.padding(8.dp))
                     }
@@ -118,6 +121,9 @@ internal fun TabsView(
                             modifier = Modifier.clickable {
                                 viewModel.setSelectedIndex(index)
                             }
+                                .semantics {
+                                    contentDescription = "tab-option-${tab.title()}"
+                                }
                         ) {
                             TabContent(
                                 tab,
