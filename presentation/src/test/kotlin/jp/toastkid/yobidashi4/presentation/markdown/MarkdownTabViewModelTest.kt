@@ -74,4 +74,10 @@ class MarkdownTabViewModelTest {
 
         verify { mainViewModel.updateScrollableTab(any(), any()) }
     }
+
+    @Test
+    fun scrollState() {
+        subject.scrollState()
+    }
+
 }
