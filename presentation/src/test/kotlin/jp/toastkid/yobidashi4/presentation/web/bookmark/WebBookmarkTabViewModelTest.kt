@@ -258,4 +258,9 @@ class WebBookmarkTabViewModelTest {
         verify { anyConstructed<ClipboardPutterService>().invoke(any<String>()) }
     }
 
+    @Test
+    fun scrollEventFlow() {
+        subject.scrollEventFlow()
+    }
+
 }
