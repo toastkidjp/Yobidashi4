@@ -12,12 +12,12 @@ class CompoundInterestCalculatorInputTest {
     @CsvSource(
         "null, null, null, null",
         "'', null, null, null",
-        "'', '', null, null",
-        "'', '', '', null",
-        "'', '', '', ''",
         "1, null, null, null",
         "2, 2, null, null",
         "3, 3, 2, null",
+        "1, '', null, null",
+        "2, 2, '', null",
+        "3, 3, 2, ''",
         "test, 4, '', ''",
         nullValues = ["null"]
     )
