@@ -20,12 +20,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.DropdownMenu
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,6 +48,9 @@ import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.domain.model.tab.WithFilePath
 import jp.toastkid.yobidashi4.domain.model.web.bookmark.WebBookmarkPath
+import jp.toastkid.yobidashi4.library.resources.Res
+import jp.toastkid.yobidashi4.library.resources.ic_down
+import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.ReorderableTabRow
 import jp.toastkid.yobidashi4.presentation.component.TabIcon
@@ -53,6 +58,7 @@ import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalcula
 import jp.toastkid.yobidashi4.presentation.main.content.tab.DefaultTabContentRegistry
 import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRegistry
 import jp.toastkid.yobidashi4.presentation.main.content.tab.TabContentRouter
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
@@ -71,89 +77,136 @@ internal fun TabsView(
     viewModel: TabsViewModel,
     registry: TabContentRegistry
 ) {
+    if (viewModel.tabs().isEmpty()) {
+        return
+    }
+
     val primaryColor = MaterialTheme.colors.onPrimary
 
     Column(modifier = modifier) {
-        ReorderableTabRow(
-            viewModel.tabs(),
-            selectedTabIndex = viewModel.selectedTabIndex(),
-            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f).copy(alpha = 0.75f),
-            indicator = { tabPositions ->
-                val currentTabIndex = viewModel.currentTabIndex(tabPositions.size)
-
-                val currentTabPosition = tabPositions.getOrNull(currentTabIndex) ?: return@ReorderableTabRow
-
-                Divider(modifier = Modifier
-                    .tabIndicatorOffset(currentTabPosition)
-                    .height(2.dp)
-                    .clip(RoundedCornerShape(8.dp)) // clip modifier not working
-                    .padding(horizontal = 4.dp)
-                    .drawBehind {
-                        drawRect(primaryColor)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f).copy(alpha = 0.75f)
+            Box {
+                Icon(
+                    painterResource(Res.drawable.ic_down),
+                    contentDescription = "Tabs menu",
+                    modifier = Modifier.clickable {
+                        viewModel.openTabsOptionMenu()
                     }
+                        .drawBehind {
+                            drawRect(backgroundColor)
+                        }
                 )
-            },
-            onTabsReordered = { a, b -> viewModel.swapTab(a, b) }
-        ) { index, tab ->
-            val titleState = remember { mutableStateOf(tab.title()) }
-            LaunchedEffect("${index}_${tab.hashCode()}") {
-                titleState.value = tab.title()
 
-                tab.update().collect {
-                    titleState.value = tab.title()
+                DropdownMenu(
+                    viewModel.isOpenTabsOptionMenu().collectAsState().value,
+                    viewModel::closeTabsOptionMenu
+                ) {
+                    HoverHighlightColumn(
+                        modifier = Modifier.clickable {
+                            viewModel.closeAllTabs()
+                        }
+                    ) {
+                        Text("Close all", modifier = Modifier.padding(8.dp))
+                    }
+
+                    viewModel.tabs().forEachIndexed { index, tab ->
+                        HoverHighlightColumn(
+                            modifier = Modifier.clickable {
+                                viewModel.setSelectedIndex(index)
+                            }
+                        ) {
+                            Text(tab.title(), modifier = Modifier.padding(8.dp))
+                        }
+                    }
                 }
             }
 
-            Tab(
-                selected = viewModel.isSelectedIndex(index),
-                onClick = { viewModel.setSelectedIndex(index) },
-                modifier = Modifier
-                    .pointerInput(Unit) {
-                        awaitEachGesture {
-                            viewModel.onPointerEvent(awaitPointerEvent(), tab)
-                        }
-                    }
-                    .semantics { contentDescription = "tab_${index}" }
-                    .padding(4.dp)
-            ) {
-                Box {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        TabIcon(tab, Modifier.size(24.dp).padding(start = 4.dp))
+            ReorderableTabRow(
+                viewModel.tabs(),
+                selectedTabIndex = viewModel.selectedTabIndex(),
+                backgroundColor = backgroundColor,
+                indicator = { tabPositions ->
+                    val currentTabIndex = viewModel.currentTabIndex(tabPositions.size)
 
-                        Text(titleState.value,
-                            color = MaterialTheme.colors.onPrimary,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                            modifier = Modifier.widthIn(max = viewModel.calculateTabWidth(tab)).padding(vertical = 8.dp).padding(start = 8.dp))
-                        if (tab.closeable()) {
-                            Text("x",
-                                color = MaterialTheme.colors.onPrimary,
-                                modifier = Modifier
-                                    .padding(start = 4.dp)
-                                    .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                                    .clickable { viewModel.removeTabAt(index) }
-                                    .padding(8.dp)
-                                    .semantics { contentDescription = "Close button ${index}" }
-                            )
-                        }
-                    }
+                    val currentTabPosition = tabPositions.getOrNull(currentTabIndex) ?: return@ReorderableTabRow
 
-                    TabOptionMenu(
-                        { viewModel.openingDropdown(tab) },
-                        { tab },
-                        viewModel::closeOtherTabs,
-                        viewModel::openFile,
-                        viewModel::slideshow,
-                        viewModel::clipText,
-                        {
-                            viewModel.edit(it.slideshowSourcePath())
-                        },
-                        {
-                            viewModel.exportTable(it.items())
-                        },
-                        viewModel::exportChat,
-                        viewModel::closeDropdown
+                    Divider(modifier = Modifier
+                        .tabIndicatorOffset(currentTabPosition)
+                        .height(2.dp)
+                        .clip(RoundedCornerShape(8.dp)) // clip modifier not working
+                        .padding(horizontal = 4.dp)
+                        .drawBehind {
+                            drawRect(primaryColor)
+                        }
                     )
+                },
+                onTabsReordered = { a, b -> viewModel.swapTab(a, b) }
+            ) { index, tab ->
+                val titleState = remember { mutableStateOf(tab.title()) }
+                LaunchedEffect("${index}_${tab.hashCode()}") {
+                    titleState.value = tab.title()
+
+                    tab.update().collect {
+                        titleState.value = tab.title()
+                    }
+                }
+
+                Tab(
+                    selected = viewModel.isSelectedIndex(index),
+                    onClick = { viewModel.setSelectedIndex(index) },
+                    modifier = Modifier
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                viewModel.onPointerEvent(awaitPointerEvent(), tab)
+                            }
+                        }
+                        .semantics { contentDescription = "tab_${index}" }
+                        .padding(4.dp)
+                ) {
+                    Box {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            TabIcon(tab, Modifier.size(24.dp).padding(start = 4.dp))
+
+                            Text(
+                                titleState.value,
+                                color = MaterialTheme.colors.onPrimary,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                modifier = Modifier.widthIn(max = viewModel.calculateTabWidth(tab))
+                                    .padding(vertical = 8.dp).padding(start = 8.dp)
+                            )
+                            if (tab.closeable()) {
+                                Text(
+                                    "x",
+                                    color = MaterialTheme.colors.onPrimary,
+                                    modifier = Modifier
+                                        .padding(start = 4.dp)
+                                        .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                                        .clickable { viewModel.removeTabAt(index) }
+                                        .padding(8.dp)
+                                        .semantics { contentDescription = "Close button ${index}" }
+                                )
+                            }
+                        }
+
+                        TabOptionMenu(
+                            { viewModel.openingDropdown(tab) },
+                            { tab },
+                            viewModel::closeOtherTabs,
+                            viewModel::openFile,
+                            viewModel::slideshow,
+                            viewModel::clipText,
+                            {
+                                viewModel.edit(it.slideshowSourcePath())
+                            },
+                            {
+                                viewModel.exportTable(it.items())
+                            },
+                            viewModel::exportChat,
+                            viewModel::closeDropdown
+                        )
+                    }
                 }
             }
         }
