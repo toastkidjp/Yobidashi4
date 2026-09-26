@@ -38,7 +38,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import jp.toastkid.yobidashi4.domain.model.aggregation.AggregationResult
 import jp.toastkid.yobidashi4.domain.model.tab.ChatTab
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
 import jp.toastkid.yobidashi4.domain.model.tab.Reloadable
@@ -164,49 +166,21 @@ internal fun TabsView(
                         .semantics { contentDescription = "tab_${index}" }
                         .padding(4.dp)
                 ) {
-                    Box {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            TabIcon(tab, Modifier.size(24.dp).padding(start = 4.dp))
-
-                            Text(
-                                titleState.value,
-                                color = MaterialTheme.colors.onPrimary,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                modifier = Modifier.widthIn(max = viewModel.calculateTabWidth(tab))
-                                    .padding(vertical = 8.dp).padding(start = 8.dp)
-                            )
-                            if (tab.closeable()) {
-                                Text(
-                                    "x",
-                                    color = MaterialTheme.colors.onPrimary,
-                                    modifier = Modifier
-                                        .padding(start = 4.dp)
-                                        .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
-                                        .clickable { viewModel.removeTabAt(index) }
-                                        .padding(8.dp)
-                                        .semantics { contentDescription = "Close button ${index}" }
-                                )
-                            }
-                        }
-
-                        TabOptionMenu(
-                            { viewModel.openingDropdown(tab) },
-                            { tab },
-                            viewModel::closeOtherTabs,
-                            viewModel::openFile,
-                            viewModel::slideshow,
-                            viewModel::clipText,
-                            {
-                                viewModel.edit(it.slideshowSourcePath())
-                            },
-                            {
-                                viewModel.exportTable(it.items())
-                            },
-                            viewModel::exportChat,
-                            viewModel::closeDropdown
-                        )
-                    }
+                    TabContent(
+                        tab,
+                        { titleState.value },
+                        { viewModel.openingDropdown(tab) },
+                        viewModel::closeOtherTabs,
+                        viewModel::openFile,
+                        viewModel::slideshow,
+                        viewModel::clipText,
+                        viewModel::edit,
+                        viewModel::exportTable,
+                        viewModel::exportChat,
+                        viewModel::closeDropdown,
+                        viewModel::calculateTabWidth,
+                        "Close button ${index}",
+                    ) { viewModel.removeTabAt(index) }
                 }
             }
         }
@@ -214,6 +188,68 @@ internal fun TabsView(
         TabContentRouter(
             viewModel.currentTab(),
             registry
+        )
+    }
+}
+
+@Composable
+private fun TabContent(
+    tab: Tab,
+    title: () -> String,
+    openingDropdownMenu: (Tab) -> Boolean,
+    closeOtherTabs: () -> Unit,
+    openFile: (Path) -> Unit,
+    slideshow: (Path) -> Unit,
+    clipText: (String) -> Unit,
+    edit: (Path) -> Unit,
+    exportTable: (AggregationResult) -> Unit,
+    exportChat: (ChatTab) -> Unit,
+    closeDropdown: () -> Unit,
+    calculateTabWidth: (Tab) -> Dp,
+    closeButtonContentDescription: String,
+    removeTabAt: () -> Unit
+) {
+    Box {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            TabIcon(tab, Modifier.size(24.dp).padding(start = 4.dp))
+
+            Text(
+                title(),
+                color = MaterialTheme.colors.onPrimary,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.widthIn(max = calculateTabWidth(tab))
+                    .padding(vertical = 8.dp).padding(start = 8.dp)
+            )
+            if (tab.closeable()) {
+                Text(
+                    "x",
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .background(MaterialTheme.colors.surface.copy(alpha = 0.2f))
+                        .clickable(onClick = removeTabAt)
+                        .padding(8.dp)
+                        .semantics { contentDescription = closeButtonContentDescription }
+                )
+            }
+        }
+
+        TabOptionMenu(
+            { openingDropdownMenu(tab) },
+            { tab },
+            closeOtherTabs,
+            openFile,
+            slideshow,
+            clipText,
+            {
+                edit(it.slideshowSourcePath())
+            },
+            {
+                exportTable(it.items())
+            },
+            exportChat,
+            closeDropdown
         )
     }
 }
