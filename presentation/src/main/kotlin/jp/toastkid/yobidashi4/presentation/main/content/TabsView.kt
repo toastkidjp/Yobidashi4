@@ -118,7 +118,21 @@ internal fun TabsView(
                                 viewModel.setSelectedIndex(index)
                             }
                         ) {
-                            Text(tab.title(), modifier = Modifier.padding(8.dp))
+                            TabContent(
+                                tab,
+                                tab::title,
+                                { viewModel.openingDropdown(tab) },
+                                viewModel::closeOtherTabs,
+                                viewModel::openFile,
+                                viewModel::slideshow,
+                                viewModel::clipText,
+                                viewModel::edit,
+                                viewModel::exportTable,
+                                viewModel::exportChat,
+                                viewModel::closeDropdown,
+                                viewModel::calculateTabWidth,
+                                "Close button ${index}",
+                            ) { viewModel.removeTabAt(index) }
                         }
                     }
                 }
