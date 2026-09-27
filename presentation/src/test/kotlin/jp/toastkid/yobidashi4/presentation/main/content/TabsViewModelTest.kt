@@ -324,4 +324,13 @@ class TabsViewModelTest {
         assertFalse(subject.isOpenTabsOptionMenu().value)
     }
 
+    @Test
+    fun closeAllTabs() {
+        every { mainViewModel.closeAllTabs() } just Runs
+
+        subject.closeAllTabs()
+
+        verify { mainViewModel.closeAllTabs() }
+    }
+
 }
