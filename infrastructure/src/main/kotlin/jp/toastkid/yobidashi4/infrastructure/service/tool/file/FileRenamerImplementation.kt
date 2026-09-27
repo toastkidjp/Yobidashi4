@@ -74,7 +74,7 @@ class FileRenamerImplementation(
      * 画像の縦横サイズを半分にして保存する関数
      * @return 処理が成功したかどうか
      */
-    fun resizeImageToHalf(sourcePath: Path, targetPath: Path): Boolean {
+    private fun resizeImageToHalf(sourcePath: Path, targetPath: Path): Boolean {
         val originalImage: BufferedImage = ImageIO.read(sourcePath.toFile()) ?: return false
 
         val newWidth = max(1, originalImage.width / 2)
