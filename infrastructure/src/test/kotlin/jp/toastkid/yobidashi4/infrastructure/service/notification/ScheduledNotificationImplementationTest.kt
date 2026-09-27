@@ -70,12 +70,28 @@ class ScheduledNotificationImplementationTest {
         }
 
         val sendJob = CoroutineScope(Dispatchers.Unconfined).launch {
-            subject.start(1000)
-            every { repository.readAll() } returns emptyList()
             subject.start(1)
         }
 
         countDownLatch.await(2, TimeUnit.SECONDS)
+        job.cancel()
+        sendJob.cancel()
+    }
+
+    @Test
+    fun emptyCase() {
+        every { repository.readAll() } returns emptyList()
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.notificationFlow().collect {
+                assertEquals("test", it.title)
+                assertEquals("test", it.text)
+            }
+        }
+
+        val sendJob = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.start(1)
+        }
+
         job.cancel()
         sendJob.cancel()
     }
