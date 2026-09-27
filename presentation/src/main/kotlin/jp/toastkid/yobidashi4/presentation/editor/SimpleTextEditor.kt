@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
 import jp.toastkid.yobidashi4.presentation.editor.data.LineNumber
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -62,15 +63,24 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class, FlowPreview::class)
+@Composable
+fun SimpleTextEditor(
+    tab: EditorTab,
+    setStatus: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SimpleTextEditor(tab, setStatus, modifier, koinInject { parametersOf(tab.path) })
+}
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalTextApi::class, FlowPreview::class)
 @Composable
 fun SimpleTextEditor(
     tab: EditorTab,
     setStatus: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TextEditorViewModel = koinInject {
-        parametersOf(tab.path)
-    }
+    viewModel: TextEditorViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
 
