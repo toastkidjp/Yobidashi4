@@ -35,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,10 +90,17 @@ internal fun TabsView(
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.75f).copy(alpha = 0.75f)
+
+            val rowHeight = remember { mutableStateOf(0) }
+            val switchHeight = with(LocalDensity.current) {
+                rowHeight.value.toDp()
+            }
+
             Box(modifier = Modifier
                 .drawBehind {
                     drawRect(backgroundColor)
                 }
+                .height(switchHeight)
             ) {
                 Icon(
                     painterResource(Res.drawable.ic_down),
@@ -99,6 +108,7 @@ internal fun TabsView(
                     modifier = Modifier.clickable {
                         viewModel.openTabsOptionMenu()
                     }
+                        .align(Alignment.Center)
                 )
 
                 DropdownMenu(
@@ -164,7 +174,11 @@ internal fun TabsView(
                         }
                     )
                 },
-                onTabsReordered = { a, b -> viewModel.swapTab(a, b) }
+                onTabsReordered = { a, b -> viewModel.swapTab(a, b) },
+                modifier = Modifier
+                    .onGloballyPositioned {
+                        rowHeight.value = it.size.height
+                    }
             ) { index, tab ->
                 val titleState = remember { mutableStateOf(tab.title()) }
                 LaunchedEffect("${index}_${tab.hashCode()}") {
