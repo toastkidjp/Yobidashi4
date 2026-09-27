@@ -71,6 +71,7 @@ class ArticleFilesFinderImplementationTest {
             } else
                 makeFakeMetadata(now)
         }
+        subject = ArticleFilesFinderImplementation(fakeFileSystem)
 
         val paths = subject.invoke(folder.toNioPath())
 
