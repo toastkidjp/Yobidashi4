@@ -38,6 +38,7 @@ internal fun <T> ReorderableTabRow(
     backgroundColor: Color,
     indicator: @Composable @UiComposable (tabPositions: List<TabPosition>) -> Unit,
     onTabsReordered: (fromIndex: Int, toIndex: Int) -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable (Int, T) -> Unit
 ) {
     val viewModel = remember { ReorderableTabRowViewModel() }
@@ -47,7 +48,7 @@ internal fun <T> ReorderableTabRow(
         backgroundColor = backgroundColor,
         indicator = indicator,
         edgePadding = 0.dp,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         tabs.forEachIndexed { index, item ->
             val (isDragging, targetTranslationX) = viewModel.calculateForIndividualTab(index)
