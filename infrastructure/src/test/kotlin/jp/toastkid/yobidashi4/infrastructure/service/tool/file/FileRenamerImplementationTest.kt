@@ -141,4 +141,32 @@ class FileRenamerImplementationTest {
         }
     }
 
+    @Test
+    fun resizeImageToHalfNullCase() {
+        val value = mockk<Path>()
+        every { value.resolveSibling(any<String>()) } returns mockk()
+        every { value.extension } returns "png"
+        every { value.parent } returns value
+        mockkStatic(ImageIO::class)
+        every { ImageIO.read(any<File>()) } returns null
+        every { ImageIO.write(any<BufferedImage>(), any<String>(), any<File>()) } returns true
+
+        val path = "folder/present.jpg".toPath()
+        fileSystem.createDirectories("folder".toPath())
+        fileSystem.write(path) {}
+
+        runBlocking {
+            subject.invoke(
+                listOf(path.toNioPath()),
+                "test",
+                true,
+                System::lineSeparator
+            )
+
+            verify(inverse = true) { fileSystem.copy(any(), any()) }
+            verify { ImageIO.read(any<File>()) }
+            verify(inverse = true) { ImageIO.write(any<BufferedImage>(), any<String>(), any<File>()) }
+        }
+    }
+
 }
