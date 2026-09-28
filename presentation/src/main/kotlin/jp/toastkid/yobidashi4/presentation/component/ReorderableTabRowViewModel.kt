@@ -80,8 +80,6 @@ class ReorderableTabRowViewModel {
         dragOffset.value = totalDragX
     }
 
-    private infix fun Int.stroke(range: IntRange): IntProgression = this..range.last
-
     fun incrementDragOffset(dragAmount: Float) {
         dragOffset.value += dragAmount
     }
