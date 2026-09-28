@@ -44,15 +44,18 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.nio.file.Path
 
+@ExcludeCoverageCalculation
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MultiTabContent() {
-    val viewModel = remember { object : KoinComponent { val vm: MainViewModel by inject() }.vm }
+    MultiTabContent(koinInject())
+}
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MultiTabContent(viewModel: MainViewModel) {
     Column {
         if (viewModel.showWebSearch()) {
             WebSearchBox()
