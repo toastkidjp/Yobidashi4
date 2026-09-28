@@ -38,11 +38,18 @@ import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_image
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.jetbrains.compose.resources.vectorResource
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
 @Composable
-fun FileRenameToolView(viewModel: FileRenameToolViewModel = koinInject()) {
+fun FileRenameToolView() {
+    FileRenameToolView(koinInject())
+}
+
+@Composable
+fun FileRenameToolView(viewModel: FileRenameToolViewModel) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
