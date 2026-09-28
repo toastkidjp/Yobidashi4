@@ -33,6 +33,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.EditorTab
+import jp.toastkid.yobidashi4.presentation.editor.data.ConversionTrigger
 import jp.toastkid.yobidashi4.presentation.editor.data.LineNumber
 import jp.toastkid.yobidashi4.presentation.editor.viewmodel.TextEditorViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -99,6 +100,7 @@ class SimpleTextEditorKtTest {
             LineNumber(3, "3"),
             LineNumber(4, "4"),
         )
+        every { viewModel.calculateConversionTrigger() } returns ConversionTrigger(0, "", true)
 
         runDesktopComposeUiTest {
             setContent {
@@ -124,6 +126,9 @@ class SimpleTextEditorKtTest {
             verify { viewModel.scrollEventFlow() }
             mutableSharedFlow.tryEmit(1f)
             mainClock.advanceTimeBy(1000)
+
+            verify { viewModel.calculateConversionTrigger() }
+            verify { viewModel.parseContent() }
         }
     }
 
