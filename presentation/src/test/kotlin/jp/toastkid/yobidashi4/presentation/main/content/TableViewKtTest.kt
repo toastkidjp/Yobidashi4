@@ -93,6 +93,8 @@ class TableViewKtTest {
 
             verify { viewModel.scrollEventFlow() }
             scrollEventFlow.tryEmit(1f)
+            mainClock.advanceTimeByFrame()
+            verify { viewModel.listState() }
         }
     }
 
