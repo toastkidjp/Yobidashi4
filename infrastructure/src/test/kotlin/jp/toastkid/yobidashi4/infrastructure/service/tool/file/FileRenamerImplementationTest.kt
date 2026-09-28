@@ -25,6 +25,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -113,8 +115,12 @@ class FileRenamerImplementationTest {
         )
     }
 
-    @Test
-    fun resize() {
+    @ParameterizedTest
+    @CsvSource(
+        ".png",
+        "''"
+    )
+    fun resize(extension: String) {
         val value = mockk<Path>()
         every { value.resolveSibling(any<String>()) } returns mockk()
         every { value.extension } returns "png"
@@ -123,7 +129,7 @@ class FileRenamerImplementationTest {
         every { ImageIO.read(any<File>()) } returns BufferedImage(1, 1, 1)
         every { ImageIO.write(any<BufferedImage>(), any<String>(), any<File>()) } returns true
 
-        val path = "folder/present.jpg".toPath()
+        val path = "folder/present${extension}".toPath()
         fileSystem.createDirectories("folder".toPath())
         fileSystem.write(path) {}
 
