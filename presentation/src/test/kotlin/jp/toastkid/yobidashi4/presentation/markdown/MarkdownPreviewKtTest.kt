@@ -113,6 +113,7 @@ class MarkdownPreviewKtTest {
                 exit()
             }
             verify { anyConstructed<MarkdownPreviewViewModel>().switchSubheadings() }
+            verify { anyConstructed<MarkdownPreviewViewModel>().loadBitmap(any()) }
         }
     }
 
@@ -127,6 +128,7 @@ class MarkdownPreviewKtTest {
         every { mocked.lines() } returns content.lines().plus(mockk<Line>())
         every { mocked.subheadings() } returns content.subheadings().plus(Subhead("test", 25, 0))
         every { anyConstructed<MarkdownPreviewViewModel>().showSubheadings() } returns true
+        every { anyConstructed<MarkdownPreviewViewModel>().loadBitmap(any()) } returns null
 
         runDesktopComposeUiTest {
             setContent {
@@ -136,6 +138,8 @@ class MarkdownPreviewKtTest {
                     Modifier
                 )
             }
+
+            verify { anyConstructed<MarkdownPreviewViewModel>().loadBitmap(any()) }
         }
     }
 
