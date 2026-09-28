@@ -214,7 +214,7 @@ internal fun TabsView(
                         viewModel::exportChat,
                         viewModel::closeDropdown,
                         viewModel::calculateTabWidth,
-                        "Close button ${index}",
+                        "Close button $index",
                     ) { viewModel.removeTabAt(index) }
                 }
             }
