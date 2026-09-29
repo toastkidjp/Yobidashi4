@@ -105,9 +105,7 @@ internal fun TabsView(
                 Icon(
                     painterResource(Res.drawable.ic_down),
                     contentDescription = "Tabs menu",
-                    modifier = Modifier.clickable {
-                        viewModel.openTabsOptionMenu()
-                    }
+                    modifier = Modifier.clickable(onClick = viewModel::openTabsOptionMenu)
                         .align(Alignment.Center)
                 )
 
