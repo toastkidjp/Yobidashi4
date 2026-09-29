@@ -22,6 +22,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
@@ -29,10 +30,16 @@ import java.awt.BorderLayout
 import java.awt.Color
 import javax.swing.JPanel
 
+@ExcludeCoverageCalculation
+@Composable
+internal fun WebTabView(tab: WebTab) {
+    WebTabView(tab, koinInject())
+}
+
 @Composable
 internal fun WebTabView(
     tab: WebTab,
-    viewModel: WebTabViewModel = koinInject()
+    viewModel: WebTabViewModel
 ) {
     val background = Color(MaterialTheme.colors.surface.toArgb())
 
