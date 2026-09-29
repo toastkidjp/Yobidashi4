@@ -21,10 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
 @Composable
-internal fun BarcodeToolTabView(viewModel: BarcodeToolTabViewModel = koinInject()) {
+internal fun BarcodeToolTabView() {
+    BarcodeToolTabView(koinInject())
+}
+
+@Composable
+internal fun BarcodeToolTabView(viewModel: BarcodeToolTabViewModel) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
