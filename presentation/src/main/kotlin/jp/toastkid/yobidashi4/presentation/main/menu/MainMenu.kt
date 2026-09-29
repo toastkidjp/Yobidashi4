@@ -58,14 +58,23 @@ import jp.toastkid.yobidashi4.library.resources.ic_user_folder
 import jp.toastkid.yobidashi4.library.resources.ic_user_template
 import jp.toastkid.yobidashi4.library.resources.ic_wallpaper
 import jp.toastkid.yobidashi4.library.resources.ic_world_time
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import kotlin.math.min
 
+@ExcludeCoverageCalculation
+@Composable
+fun FrameWindowScope.MainMenu(
+    exitApplication: () -> Unit
+) {
+    MainMenu(exitApplication, koinInject())
+}
+
 @Composable
 fun FrameWindowScope.MainMenu(
     exitApplication: () -> Unit,
-    viewModel: MainMenuViewModel = koinInject()
+    viewModel: MainMenuViewModel
 ) {
     MenuBar {
         Menu("File") {
