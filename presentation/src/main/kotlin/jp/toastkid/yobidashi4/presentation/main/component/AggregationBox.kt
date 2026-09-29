@@ -36,11 +36,18 @@ import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_history
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
 @Composable
-internal fun AggregationBox(viewModel: AggregationBoxViewModel = koinInject()) {
+internal fun AggregationBox() {
+    AggregationBox(koinInject())
+}
+
+@Composable
+internal fun AggregationBox(viewModel: AggregationBoxViewModel) {
     val surfaceColor = MaterialTheme.colors.surface
 
     Surface(
