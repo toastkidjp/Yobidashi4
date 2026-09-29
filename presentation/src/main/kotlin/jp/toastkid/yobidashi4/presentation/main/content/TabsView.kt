@@ -115,7 +115,8 @@ internal fun TabsView(
                     viewModel::closeTabsOptionMenu
                 ) {
                     HoverHighlightColumn(
-                        modifier = Modifier.clickable(onClick = viewModel::closeAllTabs)
+                        modifier = Modifier
+                            .clickable(onClick = viewModel::closeAllTabs)
                             .semantics {
                                 contentDescription = "tab-option-root-closeAllTabs"
                             }
