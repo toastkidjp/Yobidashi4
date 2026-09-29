@@ -253,8 +253,10 @@ private fun TabContent(
                 color = MaterialTheme.colors.onPrimary,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                modifier = Modifier.widthIn(max = calculateTabWidth(tab))
-                    .padding(vertical = 8.dp).padding(start = 8.dp)
+                modifier = Modifier
+                    .widthIn(max = calculateTabWidth(tab))
+                    .padding(vertical = 8.dp)
+                    .padding(start = 8.dp)
             )
             if (tab.closeable()) {
                 Text(
