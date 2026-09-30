@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -15,6 +14,7 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.icon
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import jp.toastkid.yobidashi4.presentation.main.content.MainScaffold
 import jp.toastkid.yobidashi4.presentation.main.menu.MainMenu
 import jp.toastkid.yobidashi4.presentation.main.menu.TextContextMenuFactory
@@ -25,8 +25,7 @@ import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.painterResource
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.compose.koinInject
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
 
@@ -40,20 +39,26 @@ fun launchMainApplication(exitProcessOnExit: Boolean = true) {
     }
 }
 
+@ExcludeCoverageCalculation
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun ApplicationScope.Application(localTextContextMenu: ProvidableCompositionLocal<TextContextMenu>) {
-    val koin = remember {
-        object : KoinComponent {
-            val viewModel: MainViewModel by inject()
-            val ioContextProvider: IoContextProvider by inject()
-            val notification: ScheduledNotification by inject()
-        }
-    }
-    val mainViewModel = remember { koin.viewModel }
-    val ioContextProvider = remember { koin.ioContextProvider }
-    val notification = remember { koin.notification }
+    Application(
+        localTextContextMenu,
+        koinInject(),
+        koinInject(),
+        koinInject()
+    )
+}
 
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun ApplicationScope.Application(
+    localTextContextMenu: ProvidableCompositionLocal<TextContextMenu>,
+    mainViewModel: MainViewModel,
+    notification: ScheduledNotification,
+    ioContextProvider: IoContextProvider
+) {
     AppTheme(darkTheme = mainViewModel.darkMode()) {
         MainTray()
 
