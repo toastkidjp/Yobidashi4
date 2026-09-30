@@ -79,6 +79,27 @@ class ScheduledNotificationImplementationTest {
     }
 
     @Test
+    fun runningCase() {
+        val job = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.notificationFlow().collect {
+                assertEquals("test", it.title)
+                assertEquals("test", it.text)
+            }
+        }
+
+        val sendJob = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.start(10000)
+        }
+        val sendJob2 = CoroutineScope(Dispatchers.Unconfined).launch {
+            subject.start(1)
+        }
+
+        job.cancel()
+        sendJob.cancel()
+        sendJob2.cancel()
+    }
+
+    @Test
     fun emptyCase() {
         every { repository.readAll() } returns emptyList()
         val job = CoroutineScope(Dispatchers.Unconfined).launch {
