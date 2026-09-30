@@ -53,16 +53,24 @@ import jp.toastkid.yobidashi4.library.resources.ic_clipboard
 import jp.toastkid.yobidashi4.presentation.component.GlowingButton
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.MultiLineTextField
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun ChatTabView(chatTab: ChatTab) {
+    ChatTabView(chatTab, koinInject())
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ChatTabView(
     chatTab: ChatTab,
-    viewModel: ChatTabViewModel = koinInject()
+    viewModel: ChatTabViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
 
