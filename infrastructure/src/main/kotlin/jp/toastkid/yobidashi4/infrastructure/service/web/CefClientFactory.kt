@@ -36,6 +36,8 @@ class CefClientFactory : KoinComponent {
 
     private val webIconLoaderService: WebIconLoaderService by inject()
 
+    private val webViewPool: WebViewPool by inject()
+
     private val cefAppFactory = CefAppFactory()
 
     private val adHosts = AdHosts.make()
@@ -100,7 +102,7 @@ class CefClientFactory : KoinComponent {
             override fun onTitleChange(browser: CefBrowser?, title: String?) {
                 title ?: return
                 browser ?: return
-                val id = object : KoinComponent { val pool: WebViewPool by inject() }.pool.findId(browser) ?: return
+                val id = webViewPool.findId(browser) ?: return
                 viewModel.updateWebTab(id, title, browser.url)
             }
         })
