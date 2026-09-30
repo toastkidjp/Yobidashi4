@@ -44,17 +44,25 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
 import jp.toastkid.yobidashi4.presentation.component.collectCommittedInput
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.koin.compose.koinInject
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
 
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CalendarView(tab: CalendarTab) {
+    CalendarView(tab, koinInject())
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarView(
     tab: CalendarTab,
-    calendarViewModel: CalendarViewModel = koinInject()
+    calendarViewModel: CalendarViewModel
 ) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
