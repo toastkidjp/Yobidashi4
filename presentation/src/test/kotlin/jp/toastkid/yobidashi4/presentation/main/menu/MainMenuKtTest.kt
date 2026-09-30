@@ -203,4 +203,18 @@ class MainMenuKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun currentIsEditableTab() {
+        every { viewModel.currentIsEditableTab() } returns true
+
+        runDesktopComposeUiTest {
+            setContent {
+                Window({}, visible = false) {
+                    MainMenu({}, viewModel)
+                }
+            }
+        }
+    }
+
 }
