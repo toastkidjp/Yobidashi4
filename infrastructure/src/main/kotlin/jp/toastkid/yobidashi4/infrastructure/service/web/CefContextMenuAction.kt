@@ -21,6 +21,8 @@ class CefContextMenuAction : KoinComponent {
 
     private val viewModel: MainViewModel by inject()
 
+    private val webViewPool: WebViewPool by inject()
+
     operator fun invoke(
         browser: CefBrowser?,
         params: CefContextMenuParams?,
@@ -117,7 +119,7 @@ class CefContextMenuAction : KoinComponent {
 
             ContextMenu.DEVELOPER_TOOL.id -> {
                 val webTab = viewModel.currentTab() as? WebTab ?: return
-                object : KoinComponent { val pool: WebViewPool by inject() }.pool.switchDevTools(webTab.id())
+                webViewPool.switchDevTools(webTab.id())
             }
 
             ContextMenu.ASK_SELECTED_TEXT.id -> {
