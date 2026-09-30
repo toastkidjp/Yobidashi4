@@ -106,6 +106,7 @@ class MainMenuKtTest {
         every { setting.save() } just Runs
 
         every { viewModel.useEditorMenu() } returns false
+        every { viewModel.tabCount() } returns 3
         every { viewModel.switchArticleListIconPath() } returns Res.drawable.ic_left_panel_close
 
         mockkConstructor(ClipboardPutterService::class)
