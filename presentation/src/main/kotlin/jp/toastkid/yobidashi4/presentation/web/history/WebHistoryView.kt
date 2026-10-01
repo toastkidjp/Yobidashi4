@@ -37,14 +37,22 @@ import jp.toastkid.yobidashi4.domain.model.web.history.WebHistory
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+internal fun WebHistoryView(tab: WebHistoryTab) {
+    WebHistoryView(tab, koinInject())
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun WebHistoryView(
     tab: WebHistoryTab,
-    viewModel: WebHistoryViewModel = koinInject()
+    viewModel: WebHistoryViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
 
