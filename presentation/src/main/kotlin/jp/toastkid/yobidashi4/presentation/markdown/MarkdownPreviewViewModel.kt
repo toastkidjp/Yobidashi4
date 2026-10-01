@@ -15,12 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import jp.toastkid.yobidashi4.presentation.lib.keyboard.KeyboardDrivenScrollEventHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import org.koin.core.component.KoinComponent
 import java.io.IOException
 import java.net.URI
 import javax.imageio.ImageIO
 
-class MarkdownPreviewViewModel : KoinComponent {
+class MarkdownPreviewViewModel {
 
     private val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
 
