@@ -37,14 +37,22 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.input.InputHistory
 import jp.toastkid.yobidashi4.domain.model.tab.InputHistoryTab
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
+@Composable
+fun InputHistoryView(tab: InputHistoryTab) {
+    InputHistoryView(tab, koinInject())
+}
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun InputHistoryView(
     tab: InputHistoryTab,
-    viewModel: InputHistoryViewModel = koinInject()
+    viewModel: InputHistoryViewModel
 ) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
