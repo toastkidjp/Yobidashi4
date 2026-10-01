@@ -42,12 +42,20 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.VerticalDivider
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+fun NumberPlaceView() {
+    NumberPlaceView(koinInject())
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NumberPlaceView(
-    viewModel: NumberPlaceViewModel = koinInject()
+    viewModel: NumberPlaceViewModel
 ) {
     LaunchedEffect(key1 = viewModel, block = {
         viewModel.start()
