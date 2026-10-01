@@ -41,14 +41,22 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import jp.toastkid.yobidashi4.presentation.tool.notification.viewmodel.NotificationListTabViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+internal fun NotificationListTabView() {
+    NotificationListTabView(koinInject())
+}
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun NotificationListTabView(
-    viewModel: NotificationListTabViewModel = koinInject()
+    viewModel: NotificationListTabViewModel
 ) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
