@@ -44,12 +44,19 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightDropdownMenuItem
 import jp.toastkid.yobidashi4.presentation.component.InputTextField
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
+@Composable
+internal fun WebSearchBox() {
+    WebSearchBox(koinInject())
+}
+
 @Composable
 internal fun WebSearchBox(
-    viewModel: WebSearchBoxViewModel = koinInject()
+    viewModel: WebSearchBoxViewModel
 ) {
     val surfaceColor = MaterialTheme.colors.surface
 
