@@ -35,7 +35,12 @@ fun MarkdownSubhead(
     Box(modifier = modifier) {
         Column(modifier = Modifier.verticalScroll(scrollState)) {
             subheadings.forEach { subheading ->
-                SubheadRow(subheading.text(), subheading.fontSize(), subheading.indexOf(), onClick)
+                SubheadRow(
+                    subheading.text(),
+                    subheading.fontSize(),
+                    subheading.indexOf(),
+                    onClick
+                )
             }
         }
 
