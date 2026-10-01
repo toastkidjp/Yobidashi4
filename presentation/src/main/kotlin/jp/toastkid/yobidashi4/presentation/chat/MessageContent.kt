@@ -29,7 +29,19 @@ import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.chat.Source
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
 import jp.toastkid.yobidashi4.presentation.component.LoadIcon
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@Composable
+internal fun MessageContent(
+    text: String,
+    base64Image: String? = null,
+    sources: List<Source>,
+    modifier: Modifier,
+) {
+    MessageContent(text, base64Image, sources, modifier, koinInject())
+}
 
 @Composable
 internal fun MessageContent(
@@ -37,7 +49,7 @@ internal fun MessageContent(
     base64Image: String? = null,
     sources: List<Source>,
     modifier: Modifier,
-    viewModel: MessageContentViewModel = koinInject()
+    viewModel: MessageContentViewModel
 ) {
     Column(modifier) {
         text.split("\n").forEach {
@@ -84,7 +96,7 @@ internal fun MessageContent(
         if (sources.isNotEmpty()) {
             SourceArea(
                 sources,
-                { viewModel.openLink(it) },
+                viewModel::openLink,
                 { viewModel.openLinkOnBackground(it) },
                 viewModel.horizontalSourceScrollState()
             )
