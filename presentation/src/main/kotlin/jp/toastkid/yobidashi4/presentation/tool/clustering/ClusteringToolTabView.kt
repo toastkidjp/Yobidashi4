@@ -38,11 +38,18 @@ import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_edit
 import jp.toastkid.yobidashi4.library.resources.ic_markdown
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightRow
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
+@ExcludeCoverageCalculation
 @Composable
-fun ClusteringToolTabView(viewModel: ClusteringToolTabViewModel = koinInject()) {
+fun ClusteringToolTabView() {
+    ClusteringToolTabView(koinInject())
+}
+
+@Composable
+fun ClusteringToolTabView(viewModel: ClusteringToolTabViewModel) {
     Surface(
         color = MaterialTheme.colors.surface.copy(alpha = 0.75f),
         elevation = 4.dp
