@@ -41,7 +41,7 @@ class MarkdownPreviewViewModel {
         val bufferedImage = try {
             ImageIO.read(URI(source).toURL())
         } catch (e: IllegalArgumentException) {
-            return null
+            null
         } catch (e: IOException) {
             return null
         } ?: return null
