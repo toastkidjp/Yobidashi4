@@ -43,7 +43,7 @@ class MarkdownPreviewViewModel {
         } catch (e: IllegalArgumentException) {
             null
         } catch (e: IOException) {
-            return null
+            null
         } ?: return null
 
         return bufferedImage.toComposeImageBitmap()
