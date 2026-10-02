@@ -40,7 +40,7 @@ class MarkdownPreviewViewModel {
     fun loadBitmap(source: String): ImageBitmap? {
         val bufferedImage = try {
             ImageIO.read(URI(source).toURL())
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             null
         } catch (e: IOException) {
             null
