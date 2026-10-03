@@ -21,7 +21,7 @@ dependencyResolutionManagement {
             library("slf4j", "org.slf4j", "slf4j-api").version("2.0.18")
             library("reload4j", "org.slf4j", "slf4j-reload4j").version("2.0.18")
             library("zxing", "com.google.zxing", "core").version("3.5.4")
-            library("jcef", "me.friwi", "jcefmaven").version("146.0.10")
+            library("jcef", "me.friwi", "jcefmaven").version("152.0.6")
             library("jsoup", "org.jsoup", "jsoup").version("1.23.1")
             library("okio", "com.squareup.okio", "okio").version("3.18.1")
             version("compose", "1.12.1")
