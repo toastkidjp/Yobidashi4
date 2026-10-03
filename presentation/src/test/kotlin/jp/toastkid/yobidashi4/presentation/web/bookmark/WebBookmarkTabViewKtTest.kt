@@ -7,12 +7,14 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -75,6 +77,7 @@ class WebBookmarkTabViewKtTest {
             Bookmark("icon item", "https://www.icon.co.jp")
         )
         every { viewModel.scrollEventFlow() } returns MutableSharedFlow()
+        every { viewModel.onKeyEvent(any()) } returns true
 
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
     }
@@ -96,6 +99,13 @@ class WebBookmarkTabViewKtTest {
                 WebBookmarkTabView(tab, viewModel)
             }
 
+            onNodeWithContentDescription("web_bookmark_tab_view", useUnmergedTree = true)
+                .requestFocus()
+                .performKeyInput {
+                    pressKey(Key.DirectionUp, 1000L)
+                }
+            verify { viewModel.onKeyEvent(any()) }
+
             val item = onNodeWithText("test item")
             item.performClick()
             verify { viewModel.openUrl(any(), false) }
@@ -103,9 +113,6 @@ class WebBookmarkTabViewKtTest {
                 longClick()
                 enter()
                 exit()
-            }
-            item.performKeyInput {
-                pressKey(Key.DirectionUp, 1000L)
             }
 
             verify { viewModel.scrollEventFlow() }
