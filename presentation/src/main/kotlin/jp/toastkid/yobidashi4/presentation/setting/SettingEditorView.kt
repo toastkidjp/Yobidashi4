@@ -33,12 +33,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.presentation.component.SingleLineTextField
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@Composable
+fun SettingEditorView() {
+    SettingEditorView(koinInject())
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SettingEditorView(
-    viewModel: SettingEditorViewModel = koinInject()
+    viewModel: SettingEditorViewModel
 ) {
     val stickyHeaderBackgroundColor = animateColorAsState(
         if (viewModel.listState().firstVisibleItemIndex != 0) MaterialTheme.colors.surface
