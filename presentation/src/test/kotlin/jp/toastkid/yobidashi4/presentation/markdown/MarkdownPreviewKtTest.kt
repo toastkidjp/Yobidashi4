@@ -16,6 +16,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
@@ -29,6 +30,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.markdown.Markdown
@@ -81,7 +83,7 @@ class MarkdownPreviewKtTest {
     fun test() {
         val mocked = mockk<Markdown>()
         val content = MarkdownParser().invoke(
-            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```\n\n- [ ] task\n- [x] task2\n\n1. first\n2. secont\n\n| key | value\n| test | 1\n----\n```kotlin\nprintln()```\n\n[EOF]",
+            "> test\n![test link](https://www.yahoo.co.jp/favicon.ico)\ntest\n- 1st\n- 2nd\n```test```\n\n- [ ] task\n- [x] task2\n\n1. first\n2. secont\n\n| key | value\n| test | 1\n----\n```kotlin\nprintln()```\n\nUnit\n\n- 1\n[EOF]",
             "test"
         )
         every { mocked.lines() } returns content.lines().plus(mockk<Line>())
@@ -132,14 +134,19 @@ class MarkdownPreviewKtTest {
 
         runDesktopComposeUiTest {
             setContent {
+                val state = spyk(rememberLazyListState())
+                every { state.requestScrollToItem(any()) } just Runs
+
                 MarkdownPreview(
                     mocked,
-                    rememberLazyListState(),
+                    state,
                     Modifier
                 )
             }
 
             verify { anyConstructed<MarkdownPreviewViewModel>().loadBitmap(any()) }
+
+            onNodeWithContentDescription("subhead-0").performClick()
         }
     }
 
