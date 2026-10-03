@@ -20,6 +20,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.sp
 import jp.toastkid.yobidashi4.domain.model.markdown.Subhead
 import jp.toastkid.yobidashi4.presentation.component.HoverHighlightColumn
@@ -67,6 +69,7 @@ private fun SubheadRow(
             modifier = Modifier.fillMaxWidth().clickable {
                 onClick(index)
             }
+                .semantics { contentDescription = "subhead-$index" }
         )
     }
 }
