@@ -152,9 +152,7 @@ fun NumberPlaceView(
     }
 
     DisposableEffect(key1 = viewModel, effect = {
-        onDispose {
-            viewModel.saveCurrentGame()
-        }
+        onDispose(viewModel::saveCurrentGame)
     })
 }
 
