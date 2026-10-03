@@ -16,15 +16,26 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import jp.toastkid.yobidashi4.domain.model.tab.MarkdownPreviewTab
+import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+
+@ExcludeCoverageCalculation
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+internal fun MarkdownTabView(
+    tab: MarkdownPreviewTab,
+    modifier: Modifier
+) {
+    MarkdownTabView(tab, modifier, koinInject())
+}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun MarkdownTabView(
     tab: MarkdownPreviewTab,
     modifier: Modifier,
-    viewModel: MarkdownTabViewModel = koinInject()
+    viewModel: MarkdownTabViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
 
