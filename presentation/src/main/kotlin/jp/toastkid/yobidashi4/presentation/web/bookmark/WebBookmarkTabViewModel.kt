@@ -96,10 +96,10 @@ class WebBookmarkTabViewModel(
 
     @OptIn(ExperimentalComposeUiApi::class)
     fun onPointerEvent(pointerEvent: PointerEvent, bookmark: Bookmark) {
-        if (pointerEvent.type == PointerEventType.Press
-            && pointerEvent.button == PointerButton.Secondary
-            && openingDropdown(bookmark).not()
-        ) {
+        val pressEvent = pointerEvent.type == PointerEventType.Press
+        val secondaryClick = pointerEvent.button == PointerButton.Secondary
+        val notOpenDropdown = openingDropdown(bookmark).not()
+        if (pressEvent && secondaryClick && notOpenDropdown) {
             openDropdown(bookmark)
         }
     }
