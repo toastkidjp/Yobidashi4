@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.unit.em
 import io.mockk.MockKAnnotations
@@ -77,6 +78,8 @@ class SimpleTextEditorKtTest {
         every { viewModel.verticalScrollState() } returns ScrollState(0)
         every { viewModel.lineNumberScrollState() } returns ScrollState(0)
         every { viewModel.scrollEventFlow() } returns MutableSharedFlow<Float>(extraBufferCapacity = 1)
+        every { viewModel.onPreviewKeyEvent(any()) } returns false
+        every { viewModel.onKeyEvent(any()) } returns false
     }
 
     @AfterEach
@@ -114,11 +117,14 @@ class SimpleTextEditorKtTest {
             onNodeWithContentDescription("Editor input area", useUnmergedTree = true)
                 .assertExists("Not exists!")
                 .performClick()
+                .requestFocus()
                 .performKeyInput {
                     pressKey(Key.A, 1000L)
                 }
                 .performTextInput("test new value")
             verify { setStatus(any()) }
+            verify { viewModel.onPreviewKeyEvent(any()) }
+            verify { viewModel.onKeyEvent(any()) }
 
             onNodeWithContentDescription("Line number 1", useUnmergedTree = true)
                 .performClick()
