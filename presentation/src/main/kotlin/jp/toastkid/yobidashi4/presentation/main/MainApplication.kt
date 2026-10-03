@@ -11,7 +11,6 @@ import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
-import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.icon
 import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
@@ -56,7 +55,7 @@ private fun ApplicationScope.Application(localTextContextMenu: ProvidableComposi
 private fun ApplicationScope.Application(
     localTextContextMenu: ProvidableCompositionLocal<TextContextMenu>,
     mainViewModel: MainViewModel,
-    notification: ScheduledNotification,
+    viewModel: MainApplicationViewModel,
     ioContextProvider: IoContextProvider
 ) {
     AppTheme(darkTheme = mainViewModel.darkMode()) {
@@ -66,7 +65,7 @@ private fun ApplicationScope.Application(
             onCloseRequest = ::exitApplication,
             title = "Yobidashi 4 ${LauncherJarTimestampReader().invoke() ?: ""}",
             state = mainViewModel.windowState(),
-            visible = mainViewModel.windowVisible(),
+            visible = viewModel.windowVisible(),
             icon = painterResource(Res.drawable.icon)
         ) {
             MainMenu(::exitApplication)
@@ -91,7 +90,7 @@ private fun ApplicationScope.Application(
 
     LaunchedEffect(Unit) {
         withContext(ioContextProvider()) {
-            notification.start()
+            viewModel.startNotification()
         }
     }
 
@@ -103,14 +102,13 @@ private fun ApplicationScope.Application(
 
     LaunchedEffect(Unit) {
         withContext(ioContextProvider()) {
-            notification
-                .notificationFlow()
-                .collect(mainViewModel::sendNotification)
+            viewModel.startReceiveNotification()
         }
     }
 
-    LaunchedEffect(mainViewModel.windowVisible()) {
-        if (mainViewModel.windowVisible().not()) {
+    LaunchedEffect(viewModel.windowVisible()) {
+        //viewModel.exitApplicationIfNeed(::exitApplication)
+        if (viewModel.windowVisible().not()) {
             exitApplication()
         }
     }
