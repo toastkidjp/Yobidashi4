@@ -200,6 +200,22 @@ class WebBookmarkTabViewModelTest {
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Test
+    fun noopOnPointerEventWithNullButton() {
+        val bookmark = mockk<Bookmark>()
+        val pointerInputChange = mockk<PointerInputChange>()
+        every { pointerInputChange.previousPressed } returns false
+        every { pointerInputChange.pressed } returns true
+        every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
+        val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+        every { pointerEvent.button } returns null
+
+        subject.onPointerEvent(pointerEvent, bookmark)
+
+        assertFalse(subject.openingDropdown(bookmark))
+    }
+
+    @OptIn(ExperimentalComposeUiApi::class)
+    @Test
     fun noopOnPointerEventWithBackButton() {
         val bookmark = mockk<Bookmark>()
         val pointerInputChange = mockk<PointerInputChange>()
