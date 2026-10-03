@@ -17,13 +17,11 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.slideshow.Slide
 import jp.toastkid.yobidashi4.domain.model.slideshow.SlideDeck
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
-import jp.toastkid.yobidashi4.domain.service.notification.ScheduledNotification
 import jp.toastkid.yobidashi4.domain.service.slideshow.SlideDeckReader
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_left_panel_close
@@ -36,7 +34,6 @@ import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,6 +43,9 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 class MainApplicationKtTest {
+
+    @MockK
+    private lateinit var viewModel: MainApplicationViewModel
 
     @MockK
     private lateinit var mainViewModel: MainViewModel
@@ -60,9 +60,6 @@ class MainApplicationKtTest {
     private lateinit var  setting: Setting
 
     @MockK
-    private lateinit var notification: ScheduledNotification
-
-    @MockK
     private lateinit var metaExtractor: FileListItemMetaExtractor
 
     @MockK
@@ -75,7 +72,11 @@ class MainApplicationKtTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        every { mainViewModel.windowVisible() } returns false
+        every { viewModel.windowVisible() } returns false
+        every { viewModel.exitApplicationIfNeed(any()) } just Runs
+        coEvery { viewModel.startNotification() } just Runs
+        coEvery { viewModel.startReceiveNotification() } just Runs
+
         every { mainViewModel.darkMode() } returns false
         every { mainViewModel.loadBackgroundImage() } just Runs
         every { mainViewModel.windowState() } returns WindowState()
@@ -84,8 +85,6 @@ class MainApplicationKtTest {
         coEvery { mainViewModel.launchDroppedPathFlow() } just Runs
         every { mainViewModel.trayState() } returns TrayState()
         every { mainViewModel.setTextManager(any()) } just Runs
-        coEvery { notification.start(any()) } just Runs
-        every { notification.notificationFlow() } returns MutableSharedFlow()
         every { slideDeckReader.invoke(any()) } returns SlideDeck(mutableListOf(Slide()))
 
         mockMainMenu(setting)
@@ -93,11 +92,11 @@ class MainApplicationKtTest {
         startKoin {
             modules(
                 module {
+                    single(qualifier = null) { viewModel } bind (MainApplicationViewModel::class)
                     single(qualifier = null) { mainViewModel } bind (MainViewModel::class)
                     single(qualifier = null) { mainMenuViewModel } bind (MainMenuViewModel::class)
                     single(qualifier = null) { ioContextProvider } bind (IoContextProvider::class)
                     single(qualifier = null) { setting } bind (Setting::class)
-                    single(qualifier = null) { notification } bind (ScheduledNotification::class)
                     single(qualifier = null) { metaExtractor } bind (FileListItemMetaExtractor::class)
                     single(qualifier = null) { slideDeckReader } bind (SlideDeckReader::class)
                     single(qualifier = null) { tabsViewModel } bind (TabsViewModel::class)
@@ -186,13 +185,7 @@ class MainApplicationKtTest {
     @OptIn(ExperimentalTestApi::class, ExperimentalFoundationApi::class)
     @Test
     fun test() {
-        val mutableSharedFlow = MutableSharedFlow<NotificationEvent>(extraBufferCapacity = 1)
-        every { notification.notificationFlow() } returns mutableSharedFlow
-
         launchMainApplication(false)
-        mutableSharedFlow.tryEmit(mockk())
-
-        verify { notification.notificationFlow() }
     }
 
     @Test
