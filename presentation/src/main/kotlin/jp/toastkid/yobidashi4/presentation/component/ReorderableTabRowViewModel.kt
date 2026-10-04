@@ -37,11 +37,9 @@ class ReorderableTabRowViewModel {
                         dragOffset.value > threshold && draggedWidth != 0f -> -draggedWidth
                         else -> 0f
                     }
-                } else if (dragged > index) {
+                } else {
                     val threshold = (index + 1..dragged).sumOf { (tabWidthsPx[it] ?: 0f).toDouble() }.toFloat() + (tabWidthsPx[index] ?: 0f) * 0.5f
                     if (dragOffset.value < -threshold) draggedWidth else 0f
-                } else {
-                    0f
                 }
             }
             else -> 0f
