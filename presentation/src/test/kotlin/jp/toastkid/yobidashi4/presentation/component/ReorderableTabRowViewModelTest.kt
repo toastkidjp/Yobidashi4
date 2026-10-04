@@ -130,4 +130,19 @@ class ReorderableTabRowViewModelTest {
         }
     }
 
+    @Test
+    fun clearDragState() {
+        viewModel.setDragState(2, 2f)
+
+        val (index, width) = viewModel.getDragState()
+        assertEquals(2, index)
+        assertEquals(2f, width)
+
+        viewModel.clearDragState()
+
+        val (index2, width2) = viewModel.getDragState()
+        assertEquals(null, index2)
+        assertEquals(0f, width2)
+    }
+
 }
