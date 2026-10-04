@@ -41,6 +41,9 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullSource
+import org.junit.jupiter.params.provider.ValueSource
 
 class WebHistoryViewModelTest {
 
@@ -246,15 +249,20 @@ class WebHistoryViewModelTest {
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
-    @Test
-    fun noopOnPointerEventWithOtherButton() {
+    @ParameterizedTest
+    @ValueSource(strings = ["Primary"])
+    @NullSource
+    fun noopOnPointerEventWithOtherButton(buttonName: String?) {
         val bookmark = mockk<WebHistory>()
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
         every { pointerInputChange.pressed } returns true
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { pointerEvent.button } returns PointerButton.Primary
+        every { pointerEvent.button } returns when (buttonName) {
+            "Primary" -> PointerButton.Primary
+            else -> null
+        }
 
         subject.onPointerEvent(pointerEvent, bookmark)
 
