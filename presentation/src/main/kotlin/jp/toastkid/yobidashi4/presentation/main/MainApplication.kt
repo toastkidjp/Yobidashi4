@@ -107,9 +107,6 @@ private fun ApplicationScope.Application(
     }
 
     LaunchedEffect(viewModel.windowVisible()) {
-        //viewModel.exitApplicationIfNeed(::exitApplication)
-        if (viewModel.windowVisible().not()) {
-            exitApplication()
-        }
+        viewModel.exitApplicationIfNeed(::exitApplication)
     }
 }
