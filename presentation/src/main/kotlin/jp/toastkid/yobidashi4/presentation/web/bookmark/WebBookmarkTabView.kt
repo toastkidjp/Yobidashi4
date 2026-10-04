@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import jp.toastkid.yobidashi4.domain.model.tab.WebBookmarkTab
@@ -64,6 +66,9 @@ internal fun WebBookmarkTabView(
             .onKeyEvent(viewModel::onKeyEvent)
             .focusRequester(viewModel.focusRequester())
             .focusable(true)
+            .semantics {
+                contentDescription = "web_bookmark_tab_view"
+            }
     ) {
         Box {
             LazyColumn(
