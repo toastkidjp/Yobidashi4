@@ -73,7 +73,10 @@ class MainApplicationKtTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { viewModel.windowVisible() } returns false
-        every { viewModel.exitApplicationIfNeed(any()) } just Runs
+        every { viewModel.exitApplicationIfNeed(any()) } answers {
+            val function = arg(0) as () -> Unit
+            function.invoke()
+        }
         coEvery { viewModel.startNotification() } just Runs
         coEvery { viewModel.startReceiveNotification() } just Runs
 
