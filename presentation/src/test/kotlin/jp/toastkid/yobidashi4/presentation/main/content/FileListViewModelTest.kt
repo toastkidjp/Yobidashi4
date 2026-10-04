@@ -43,6 +43,9 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullSource
+import org.junit.jupiter.params.provider.ValueSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -528,14 +531,19 @@ class FileListViewModelTest {
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
-    @Test
-    fun noopOnPointerEventWithOtherButton() {
+    @ParameterizedTest
+    @ValueSource(strings = ["Primary"])
+    @NullSource
+    fun noopOnPointerEventWithOtherButton(buttonName: String?) {
         val pointerInputChange = mockk<PointerInputChange>()
         every { pointerInputChange.previousPressed } returns false
         every { pointerInputChange.pressed } returns true
         every { pointerInputChange.changedToDownIgnoreConsumed() } returns true
         val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
-        every { pointerEvent.button } returns PointerButton.Primary
+        every { pointerEvent.button } returns when (buttonName) {
+            "Primary" -> PointerButton.Primary
+            else -> null
+        }
         subject.start(
             listOf(
                 mockk<Path>(),
