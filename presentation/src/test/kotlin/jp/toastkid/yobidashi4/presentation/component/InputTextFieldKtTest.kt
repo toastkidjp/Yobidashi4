@@ -121,4 +121,21 @@ class InputTextFieldKtTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun multiLine() {
+        runDesktopComposeUiTest {
+            setContent {
+                MultiLineTextField(
+                    TextFieldState("test"),
+                    "label",
+                    maxLines = 1,
+                    modifier = Modifier
+                )
+            }
+
+            onNodeWithContentDescription("Clear input.", useUnmergedTree = true).assertDoesNotExist()
+        }
+    }
+
 }
