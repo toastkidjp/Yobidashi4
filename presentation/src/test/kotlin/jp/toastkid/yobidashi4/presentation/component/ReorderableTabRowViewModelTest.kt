@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi4.presentation.component
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -143,6 +144,11 @@ class ReorderableTabRowViewModelTest {
         val (index2, width2) = viewModel.getDragState()
         assertEquals(null, index2)
         assertEquals(0f, width2)
+    }
+
+    @Test
+    fun tabWidth() {
+        assertNull(viewModel.tabWidth(0))
     }
 
 }
