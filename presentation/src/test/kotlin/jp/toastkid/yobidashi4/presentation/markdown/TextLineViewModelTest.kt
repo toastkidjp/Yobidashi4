@@ -218,6 +218,54 @@ class TextLineViewModelTest {
         }
     }
 
+
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
+    @Test
+    fun onPointerReleasedWithSecondaryClickAndRangeIsNull() {
+        val annotation = "https://www.yahoo.com"
+        val annotatedString = buildAnnotatedString {
+            append("test")
+        }
+        every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns annotatedString
+
+        var textLayoutResult: TextLayoutResult? = null
+        runDesktopComposeUiTest {
+            setContent {
+                Text(annotatedString, onTextLayout = {
+                    textLayoutResult = it
+                })
+            }
+        }
+
+        subject = TextLineViewModel()
+
+        runBlocking {
+            val pointerInputChange = PointerInputChange(
+                id = PointerId(1),
+                uptimeMillis = 0,
+                position = Offset.Zero,
+                pressed = false,
+                previousUptimeMillis = 1,
+                previousPosition = Offset.Zero,
+                previousPressed = false,
+                isInitiallyConsumed = false,
+                type = PointerType.Touch,
+                scrollDelta = Offset.Zero
+            )
+            val pointerEvent = spyk(PointerEvent(listOf(pointerInputChange)))
+            every { pointerEvent.button } returns null
+
+            subject.launch("test")
+            textLayoutResult?.let {
+                subject.putLayoutResult(it)
+            }
+            subject.onPointerReleased(pointerEvent)
+
+            verify(inverse = true) { anyConstructed<LinkBehaviorService>().invoke(any(), any()) }
+            verify(inverse = true) { viewModel.putSecondaryClickItem(annotation) }
+        }
+    }
+
     @OptIn(ExperimentalComposeUiApi::class, ExperimentalTestApi::class)
     @Test
     fun noopOnPointerReleasedIfAnnotationIsNotUrl() {
