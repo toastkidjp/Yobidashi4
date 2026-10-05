@@ -157,4 +157,11 @@ class ReorderableTabRowViewModelTest {
         assertEquals(1f, viewModel.getDragState().second)
     }
 
+    @Test
+    fun calculateForIndividualTab() {
+        viewModel.setDragState(2, 0f)
+        viewModel.calculateForIndividualTab(1)
+        viewModel.calculateForIndividualTab(2)
+    }
+
 }
