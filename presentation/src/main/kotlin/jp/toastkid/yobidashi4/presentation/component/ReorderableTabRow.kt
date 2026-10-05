@@ -70,7 +70,7 @@ internal fun <T> ReorderableTabRow(
                         awaitPointerEventScope {
                             while (true) {
                                 val down = awaitFirstDown(requireUnconsumed = false)
-                                var pointerId = down.id
+                                val pointerId = down.id
                                 var totalDragX = 0f
                                 var isDragStarted = false
 
