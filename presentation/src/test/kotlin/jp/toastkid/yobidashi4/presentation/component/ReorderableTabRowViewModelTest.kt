@@ -151,4 +151,10 @@ class ReorderableTabRowViewModelTest {
         assertNull(viewModel.tabWidth(0))
     }
 
+    @Test
+    fun incrementDragOffset() {
+        viewModel.incrementDragOffset(1f)
+        assertEquals(1f, viewModel.getDragState().second)
+    }
+
 }
