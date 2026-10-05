@@ -20,6 +20,17 @@ class DecimalVisualTransformationTest {
     }
 
     @Test
+    fun lackOfLength() {
+        val buffer = mockk<TextFieldBuffer>()
+        every { buffer.asCharSequence() } returns "10"
+        every { buffer.replace(any(), any(), any()) } just Runs
+        with(subject) {
+            buffer.transformOutput()
+        }
+        verify(inverse = true) { buffer.replace(any(), any(), ",") }
+    }
+
+    @Test
     fun commaInsertion() {
         val buffer = mockk<TextFieldBuffer>()
         every { buffer.asCharSequence() } returns "1000000"
