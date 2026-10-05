@@ -56,7 +56,7 @@ class PhotoTabViewModel(
 
     private val offset = mutableStateOf(Offset.Zero)
 
-    private val state = TransformableState { zoomChange, offsetChange, rotationChange ->
+    private val state = TransformableState { _, zoomChange, offsetChange, rotationChange ->
         scale.value *= zoomChange
         rotationZ.value += rotationChange
         offset.value += offsetChange
