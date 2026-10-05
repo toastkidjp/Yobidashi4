@@ -32,17 +32,16 @@ class DecimalInputTransformationTest {
 
     @Test
     fun testAllowableInput() {
-        val state = TextFieldState("12")
+        val state = TextFieldState("1,233")
 
-        // "3.4" を挿入
         state.edit {
             with(transformation) {
-                insert(2, "3.4")
+                insert(4, "3.4")
                 transformInput()
             }
         }
 
-        assertEquals("123.4", state.text.toString())
+        assertEquals("1,233.43", state.text.toString())
     }
 
     @Test
