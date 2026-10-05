@@ -35,7 +35,7 @@ class UrlEncodeConverterService : TwoStringConverterService {
     override fun secondInputAction(input: String): String? {
         return try {
             URLDecoder.decode(input, charset)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             null
         }
     }
