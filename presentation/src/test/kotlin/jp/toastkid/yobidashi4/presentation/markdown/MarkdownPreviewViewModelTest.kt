@@ -7,18 +7,13 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.text.font.FontWeight
 import io.mockk.MockKAnnotations
-import io.mockk.Runs
-import io.mockk.called
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.presentation.lib.text.KeywordHighlighter
-import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -27,10 +22,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.dsl.bind
-import org.koin.dsl.module
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.IOException
@@ -41,21 +33,9 @@ class MarkdownPreviewViewModelTest {
 
     private lateinit var subject: MarkdownPreviewViewModel
 
-    @MockK
-    private lateinit var mainViewModel: MainViewModel
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startKoin {
-            modules(
-                module {
-                    single(qualifier=null) { mainViewModel } bind(MainViewModel::class)
-                }
-            )
-        }
-        every { mainViewModel.webSearch(any()) } just Runs
-        every { mainViewModel.selectedText() } returns "test"
 
         mockkConstructor(KeywordHighlighter::class)
         every { anyConstructed<KeywordHighlighter>().invoke(any(), any()) } returns mockk()
@@ -68,7 +48,6 @@ class MarkdownPreviewViewModelTest {
 
     @AfterEach
     fun tearDown() {
-        stopKoin()
         unmockkAll()
     }
 
@@ -90,7 +69,6 @@ class MarkdownPreviewViewModelTest {
         )
 
         assertFalse(consumed)
-        verify { mainViewModel wasNot called }
     }
 
     @OptIn(InternalComposeUiApi::class)
@@ -101,7 +79,6 @@ class MarkdownPreviewViewModelTest {
         )
 
         assertFalse(consumed)
-        verify { mainViewModel wasNot called }
     }
 
     @Test
