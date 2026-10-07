@@ -32,7 +32,9 @@ class InputHistoryFileStore(
         }
 
         return fileSystem.source(path).buffer().use { buffer ->
-            buffer.readUtf8().split("\n").filter { query.isNullOrBlank() || it.contains(query) }
+            buffer.readUtf8()
+                .split("\n")
+                .filter { query.isNullOrBlank() || it.contains(query) }
                 .mapNotNull(InputHistory::from)
         }
     }
