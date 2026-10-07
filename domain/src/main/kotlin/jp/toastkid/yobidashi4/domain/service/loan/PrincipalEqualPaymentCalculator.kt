@@ -27,7 +27,12 @@ class PrincipalEqualPaymentCalculator : LoanPaymentCalculator {
         for (i in 1..totalMonths) {
             val interest = remainingbalance * monthlyInterestRate
 
-            val totalAmount = (monthlyPrincipal + interest + factor.managementFee + factor.renovationReserves).roundToLong()
+            val totalAmount = (
+                    monthlyPrincipal
+                            + interest
+                            + factor.managementFee
+                            + factor.renovationReserves
+                    ).roundToLong()
 
             schedule.add(
                 PaymentDetail(
