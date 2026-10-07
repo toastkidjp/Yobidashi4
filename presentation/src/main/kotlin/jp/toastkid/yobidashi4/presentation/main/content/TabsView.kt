@@ -172,7 +172,7 @@ internal fun TabsView(
                         }
                     )
                 },
-                onTabsReordered = { a, b -> viewModel.swapTab(a, b) },
+                onTabsReordered = viewModel::swapTab,
                 modifier = Modifier
                     .onGloballyPositioned {
                         rowHeight.value = it.size.height
