@@ -29,7 +29,10 @@ fun ApplicationScope.MainTray() {
                 "New chat",
                 onClick = viewModel::openChat
             )
-            Item("Exit", onClick = ::exitApplication)
+            Item(
+                "Exit",
+                onClick = ::exitApplication
+            )
         }
     )
 }
