@@ -24,15 +24,12 @@ class ReorderableTabRowViewModelTest {
         viewModel = ReorderableTabRowViewModel()
     }
 
-    @Nested
-    inner class InitialStateTests {
-        @Test
-        fun `initial state should have no active drag`() {
-            assertFalse(viewModel.isDragStarted())
-            val (isDragging, translationX) = viewModel.calculateForIndividualTab(0)
-            assertFalse(isDragging)
-            assertEquals(0f, translationX)
-        }
+    @Test
+    fun `initial state should have no active drag`() {
+        assertFalse(viewModel.isDragStarted())
+        val (isDragging, translationX) = viewModel.calculateForIndividualTab(0)
+        assertFalse(isDragging)
+        assertEquals(0f, translationX)
     }
 
     @Nested
