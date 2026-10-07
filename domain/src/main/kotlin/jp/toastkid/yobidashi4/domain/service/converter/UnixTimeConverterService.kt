@@ -34,7 +34,7 @@ class UnixTimeConverterService : TwoStringConverterService {
             LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(input.toLong()), ZoneId.systemDefault())
                 .format(dateFormatter)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
