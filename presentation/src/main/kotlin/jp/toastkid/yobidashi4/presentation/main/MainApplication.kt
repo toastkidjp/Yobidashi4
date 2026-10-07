@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.main.tray.MainTray
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindow
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -90,19 +91,17 @@ private fun ApplicationScope.Application(
 
     LaunchedEffect(Unit) {
         withContext(ioContextProvider()) {
-            viewModel.startNotification()
-        }
-    }
+            launch {
+                viewModel.startNotification()
+            }
 
-    LaunchedEffect(Unit) {
-        withContext(ioContextProvider()) {
-            mainViewModel.loadBackgroundImage()
-        }
-    }
+            launch {
+                mainViewModel.loadBackgroundImage()
+            }
 
-    LaunchedEffect(Unit) {
-        withContext(ioContextProvider()) {
-            viewModel.startReceiveNotification()
+            launch {
+                viewModel.startReceiveNotification()
+            }
         }
     }
 
