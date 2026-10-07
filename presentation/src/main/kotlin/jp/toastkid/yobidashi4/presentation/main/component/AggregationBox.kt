@@ -126,9 +126,7 @@ internal fun AggregationBox(viewModel: AggregationBoxViewModel) {
             InputTextField(
                 viewModel.dateInput(),
                 viewModel.label(),
-                onSearch = {
-                    viewModel.onSearch()
-                },
+                onSearch = viewModel::onSearch,
                 clearButton = viewModel::clearDateInput,
                 viewModel.shouldShowDateHistory(),
                 suggestions = viewModel.dateHistories(),
