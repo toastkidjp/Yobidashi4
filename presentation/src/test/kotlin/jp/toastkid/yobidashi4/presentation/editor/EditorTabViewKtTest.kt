@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi4.presentation.editor
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import androidx.compose.ui.unit.em
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
