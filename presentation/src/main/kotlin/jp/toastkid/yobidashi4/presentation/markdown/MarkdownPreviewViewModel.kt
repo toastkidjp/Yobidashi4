@@ -42,7 +42,7 @@ class MarkdownPreviewViewModel {
             ImageIO.read(URI(source).toURL())
         } catch (_: IllegalArgumentException) {
             null
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             null
         } ?: return null
 
