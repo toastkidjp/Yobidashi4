@@ -45,7 +45,7 @@ class UnixTimeConverterService : TwoStringConverterService {
                 .toInstant(offset)
                 .toEpochMilli()
                 .toString()
-        } catch (e: DateTimeException) {
+        } catch (_: DateTimeException) {
             // > /dev/null
             null
         }
