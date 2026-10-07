@@ -35,7 +35,7 @@ class IndexTargetFilter(private val indexDirectoryPath: Path) {
 
     private fun lastModifiedMs(paths: Path): Long = try {
         Files.getLastModifiedTime(paths).toMillis()
-    } catch (e: IOException) {
+    } catch (_: IOException) {
         0L
     }
 
