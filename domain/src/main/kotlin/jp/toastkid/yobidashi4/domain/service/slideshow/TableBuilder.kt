@@ -20,9 +20,7 @@ class TableBuilder {
     }
 
     fun addTableLines(line: String) {
-        line.split("|").drop(1).also {
-            table.add(it)
-        }
+        line.split("|").drop(1).also(table::add)
     }
 
     fun build() = TableLine(columnNames.get() ?: emptyList(), table.toList())
