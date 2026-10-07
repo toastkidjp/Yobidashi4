@@ -28,7 +28,8 @@ class UnixTimeConverterService : TwoStringConverterService {
     override fun defaultFirstInputValue(): String =
         LocalDateTime.now().toInstant(offset).toEpochMilli().toString()
 
-    override fun defaultSecondInputValue(): String = LocalDateTime.now().format(dateFormatter).toString()
+    override fun defaultSecondInputValue(): String =
+        LocalDateTime.now().format(dateFormatter).toString()
 
     override  fun firstInputAction(input: String): String? {
         return try {
