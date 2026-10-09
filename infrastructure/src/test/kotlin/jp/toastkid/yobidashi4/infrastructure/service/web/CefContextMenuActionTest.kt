@@ -474,7 +474,7 @@ class CefContextMenuActionTest {
         mockkStatic(ImageIO::class)
         every { ImageIO.read(any<URL>()) } throws IIOException("Test")
 
-        subject.invoke(browser, null, "test", ContextMenu.CLIP_IMAGE.id)
+        subject.invoke(browser, param, "test", ContextMenu.CLIP_IMAGE.id)
 
         verify(inverse = true) { anyConstructed<ClipboardPutterService>().invoke(any<Image>()) }
     }
