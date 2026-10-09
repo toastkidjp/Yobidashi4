@@ -96,4 +96,18 @@ class FileListItemMetaExtractorImplementationTest {
         assertEquals("0 B | 2023-12-10(Sun) 09:55:56", fileListItem?.subText)
     }
 
+    @Test
+    fun nullLastModifiedAtMillis() {
+        val path = "test".toPath()
+        fakeFileSystem.write(path) {}
+        fakeFileSystem = spyk(fakeFileSystem)
+        every { fakeFileSystem.metadata(any()).size } returns 123L
+        every { fakeFileSystem.metadata(any()).lastModifiedAtMillis } returns null
+        subject = FileListItemMetaExtractorImplementation(fakeFileSystem)
+
+        val fileListItem = subject.make(path.toNioPath())
+
+        assertEquals("123 B | 1970-01-01(Thu) 09:00:00", fileListItem?.subText)
+    }
+
 }
