@@ -195,6 +195,16 @@ user_off_day=12/29,12/30
     @Test
     fun editorLineHeight() {
         assertEquals(1.5f, subject.editorLineHeight())
+
+        assertTrue(subject.editorLineHeight() > 0)
+
+        subject.update("editor_line_height", "test")
+
+        assertEquals(1.5f, subject.editorLineHeight())
+
+        subject.update("editor_line_height", "3f")
+
+        assertEquals(3f, subject.editorLineHeight())
     }
 
     @Test
