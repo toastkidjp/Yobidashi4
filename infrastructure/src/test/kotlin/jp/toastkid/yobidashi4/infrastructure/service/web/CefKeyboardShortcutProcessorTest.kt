@@ -334,6 +334,23 @@ class CefKeyboardShortcutProcessorTest {
     }
 
     @Test
+    fun noopPrintScreenshotWithoutPKey() {
+        mockkConstructor(ScreenshotExporter::class)
+        every { anyConstructed<ScreenshotExporter>().invoke(any()) } just Runs
+        every { browser.uiComponent } returns mockk()
+
+        val consumed = subject.invoke(
+            browser,
+            CefKeyboardHandler.CefKeyEvent.EventType.KEYEVENT_KEYUP,
+            EventFlags.EVENTFLAG_SHIFT_DOWN,
+            KeyEvent.VK_UNDEFINED
+        )
+
+        assertFalse(consumed)
+        verify(inverse = true) { anyConstructed<ScreenshotExporter>().invoke(any()) }
+    }
+
+    @Test
     fun switchDevTools() {
         val webTab = mockk<WebTab>()
         every { viewModel.currentTab() } returns webTab
