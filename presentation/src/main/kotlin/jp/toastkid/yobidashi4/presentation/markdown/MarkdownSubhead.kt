@@ -66,9 +66,10 @@ private fun SubheadRow(
             color = textColor,
             fontSize = fontSize.sp,
             lineHeight = fontSize.sp,
-            modifier = Modifier.fillMaxWidth().clickable {
-                onClick(index)
-            }
+            modifier = Modifier.fillMaxWidth()
+                .clickable {
+                    onClick(index)
+                }
                 .semantics { contentDescription = "subhead-$index" }
         )
     }
