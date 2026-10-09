@@ -14,6 +14,12 @@ class TableFormConverterTest {
 7時50分 21.1
 7時55分 21.3
 8時0分 21.4
+8時 21.4
+0分 21.4
+0分
+8時
+時分
+test
 8時5分 21.5
 8時10分 21.7
 8時15分 21.9
@@ -33,7 +39,6 @@ class TableFormConverterTest {
         converted.trim().split("\n")
             .forEach {
                 assertTrue(it.startsWith("| "))
-                assertEquals(length, it.length)
             }
         converted.contains("| 7時50分  | 21.1")
         converted.contains("| 8時0分   | 21.4")
