@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -78,6 +79,14 @@ class WebViewPoolImplementationTest {
     fun tearDown() {
         stopKoin()
         unmockkAll()
+    }
+
+    @Test
+    fun component() {
+        val component = subject.component("1", "https://www.yahoo.co.jp")
+        val component2 = subject.component("1", "https://www.yahoo.co.jp")
+
+        assertSame(component, component2)
     }
 
     @Test
