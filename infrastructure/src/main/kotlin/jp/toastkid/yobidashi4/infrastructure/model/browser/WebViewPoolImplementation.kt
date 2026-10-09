@@ -19,7 +19,6 @@ import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.awt.Component
-import java.util.concurrent.atomic.AtomicReference
 
 @Single
 class WebViewPoolImplementation : WebViewPool, KoinComponent {
@@ -29,8 +28,6 @@ class WebViewPoolImplementation : WebViewPool, KoinComponent {
     private val client: CefClient = cefClientFactory.invoke()
 
     private val browsers = mutableMapOf<String, CefBrowser>()
-
-    private val lastId = AtomicReference("")
 
     private val dispatcherProvider: UiThreadDispatcherProvider by inject()
 
@@ -48,7 +45,7 @@ class WebViewPoolImplementation : WebViewPool, KoinComponent {
     }
 
     private fun getBrowser(id: String, initialUrl: String): CefBrowser {
-        browsers.get(lastId.get())?.stopLoad()
+        browsers.get(id)?.stopLoad()
 
         val browser = browsers.getOrElse(id) { client.createBrowser(initialUrl, false, false) }
         browsers.put(id, browser)
