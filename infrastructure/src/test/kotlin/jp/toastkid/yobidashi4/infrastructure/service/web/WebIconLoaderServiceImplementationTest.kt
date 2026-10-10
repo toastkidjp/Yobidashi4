@@ -90,12 +90,21 @@ class WebIconLoaderServiceImplementationTest {
     }
 
     @Test
-    fun pluralIconUrlCase() {
+    fun pluralIconUrlsCase() {
         every { iconUrlFinder.invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg", "https://www.yahoo.co.jp/icon.ico", "/test.png")
 
         subject.invoke("", "https://www.yahoo.co.jp")
 
         verify { webIconDownloader.invoke(any(), any(), any()) }
+    }
+
+    @Test
+    fun iconUrlsIsEmptyAndBaseUrlIsBlankCase() {
+        every { iconUrlFinder.invoke(any()) } returns emptyList()
+
+        subject.invoke("", null)
+
+        verify(inverse = true) { webIconDownloader.invoke(any(), any(), any()) }
     }
 
 }
