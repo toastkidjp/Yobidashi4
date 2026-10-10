@@ -35,12 +35,16 @@ class TrimmingServiceTest {
     @CsvSource(
         "'  aaa   ', aaa",
         "null, null",
-        "test \\n,test \\n",
         "'', ''",
         nullValues = ["null"],
     )
     fun testCases(input: String?, expected: String?) {
         assertEquals(expected, trimmingService.invoke(input))
+    }
+
+    @Test
+    fun includingLineSeparatorCase() {
+        assertEquals("test\ntest\n", trimmingService.invoke("test\ntest\n"))
     }
 
 }
