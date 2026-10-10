@@ -48,6 +48,7 @@ class CefContextMenuFactoryTest {
         every { params.sourceUrl } returns null
         every { params.linkUrl } returns null
 
+        cefContextMenuFactory.invoke(null, model)
         cefContextMenuFactory.invoke(params, model)
 
         ContextMenu.entries.filter { it.context == Context.PLAIN_TEXT }.forEach {
@@ -60,6 +61,7 @@ class CefContextMenuFactoryTest {
         every { params.sourceUrl } returns " "
         every { params.linkUrl } returns " "
 
+        cefContextMenuFactory.invoke(null, model)
         cefContextMenuFactory.invoke(params, model)
 
         ContextMenu.entries.filter { it.context == Context.PLAIN_TEXT }.forEach {
@@ -69,9 +71,15 @@ class CefContextMenuFactoryTest {
 
     @Test
     fun modelIsNull() {
+        cefContextMenuFactory.invoke(null, null)
         cefContextMenuFactory.invoke(params, null)
 
         verify { params wasNot called }
+    }
+
+    @Test
+    fun paramsIsNull() {
+        cefContextMenuFactory.invoke(null, model)
     }
 
 }
