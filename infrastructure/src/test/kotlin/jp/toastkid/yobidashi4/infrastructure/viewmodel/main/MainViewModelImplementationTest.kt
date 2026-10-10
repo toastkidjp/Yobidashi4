@@ -15,6 +15,7 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.TrayState
@@ -69,6 +70,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okio.Path.Companion.toPath
 import okio.fakefilesystem.FakeFileSystem
+import org.jetbrains.skia.EncodedImageFormat
+import org.jetbrains.skia.Image
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -214,6 +217,24 @@ class MainViewModelImplementationTest {
 
     @Test
     fun loadBackgroundImage() {
+        assertNotNull(subject.backgroundImage())
+
+        every { setting.useBackground() } returns true
+        fakeFileSystem.createDirectories("user/background".toPath())
+        fakeFileSystem.write("user/background/image1.png".toPath()) {
+            val skiaBitmap = ImageBitmap(1, 1).asSkiaBitmap()
+            val skiaImage = Image.makeFromBitmap(skiaBitmap)
+
+            val data = skiaImage.encodeToData(EncodedImageFormat.PNG)
+                ?: error("Failed to encode ImageBitmap to PNG")
+            write(data.bytes)
+        }
+
+        subject.loadBackgroundImage()
+    }
+
+    @Test
+    fun loadBackgroundImageButNullCase() {
         assertNotNull(subject.backgroundImage())
 
         every { setting.useBackground() } returns true
