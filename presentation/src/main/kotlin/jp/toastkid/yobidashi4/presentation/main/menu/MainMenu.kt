@@ -12,6 +12,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyShortcut
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
+import androidx.compose.ui.window.MenuScope
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import jp.toastkid.yobidashi4.library.resources.Res
 import jp.toastkid.yobidashi4.library.resources.ic_aggregation
@@ -61,6 +62,7 @@ import jp.toastkid.yobidashi4.library.resources.ic_world_time
 import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+import java.nio.file.Path
 import kotlin.math.min
 
 @ExcludeCoverageCalculation
@@ -217,9 +219,7 @@ fun FrameWindowScope.MainMenu(
             }
 
             viewModel.findSlideshowPath()?.let { slideshowSourcePath ->
-                Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource(Res.drawable.ic_slideshow)) {
-                    viewModel.slideshow(slideshowSourcePath)
-                }
+                SlideshowMenuItem(viewModel, slideshowSourcePath)
             }
 
             if (viewModel.currentIsEditableTab()) {
@@ -477,5 +477,16 @@ fun FrameWindowScope.MainMenu(
                 onClick = viewModel::openLogViewerTab
             )
         }
+    }
+}
+
+@ExcludeCoverageCalculation
+@Composable
+private fun MenuScope.SlideshowMenuItem(
+    viewModel: MainMenuViewModel,
+    slideshowSourcePath: Path
+) {
+    Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource(Res.drawable.ic_slideshow)) {
+        viewModel.slideshow(slideshowSourcePath)
     }
 }
