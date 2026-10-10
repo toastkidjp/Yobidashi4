@@ -262,9 +262,7 @@ fun FrameWindowScope.MainMenu(
             )
 
             (1 .. min(10, viewModel.tabCount())).forEach {
-                Item("Tab $it", shortcut = viewModel.makeTabIndexShortcut(it)) {
-                    viewModel.setSelectedIndex(it - 1)
-                }
+                TabSelectionMenuItem(it, viewModel)
             }
         }
 
@@ -477,6 +475,17 @@ fun FrameWindowScope.MainMenu(
                 onClick = viewModel::openLogViewerTab
             )
         }
+    }
+}
+
+@ExcludeCoverageCalculation
+@Composable
+private fun MenuScope.TabSelectionMenuItem(
+    i: Int,
+    viewModel: MainMenuViewModel
+) {
+    Item("Tab $i", shortcut = viewModel.makeTabIndexShortcut(i)) {
+        viewModel.setSelectedIndex(i - 1)
     }
 }
 
