@@ -31,6 +31,8 @@ import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
@@ -175,10 +177,14 @@ class MainMenuKtTest {
     }
 
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
-    @Test
-    fun useAdditionalTabMenu() {
+    @ParameterizedTest
+    @CsvSource(
+        "true",
+        "false"
+    )
+    fun useAdditionalTabMenu(currentIsWebTab: Boolean) {
         every { viewModel.useAdditionalTabMenu() } returns true
-        every { viewModel.currentIsWebTab() } returns true
+        every { viewModel.currentIsWebTab() } returns currentIsWebTab
 
         runDesktopComposeUiTest {
             setContent {
