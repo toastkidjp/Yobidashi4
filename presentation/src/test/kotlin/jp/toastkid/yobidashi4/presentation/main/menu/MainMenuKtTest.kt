@@ -213,6 +213,7 @@ class MainMenuKtTest {
     @Test
     fun currentIsEditableTab() {
         every { viewModel.currentIsEditableTab() } returns true
+        every { viewModel.findSlideshowPath() } returns null
 
         runDesktopComposeUiTest {
             setContent {
