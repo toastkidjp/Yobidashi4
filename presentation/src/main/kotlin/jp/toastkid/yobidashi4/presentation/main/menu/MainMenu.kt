@@ -376,9 +376,7 @@ fun FrameWindowScope.MainMenu(
 
         Menu("User agent") {
             UserAgent.entries.forEach {
-                RadioButtonItem(it.title(), selected = viewModel.isSelectedUserAgent(it)) {
-                    viewModel.chooseUserAgent(it)
-                }
+                UserAgentItemRadioButton(it, viewModel)
             }
         }
 
@@ -497,5 +495,16 @@ private fun MenuScope.SlideshowMenuItem(
 ) {
     Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource(Res.drawable.ic_slideshow)) {
         viewModel.slideshow(slideshowSourcePath)
+    }
+}
+
+@ExcludeCoverageCalculation
+@Composable
+private fun MenuScope.UserAgentItemRadioButton(
+    agent: UserAgent,
+    viewModel: MainMenuViewModel
+) {
+    RadioButtonItem(agent.title(), selected = viewModel.isSelectedUserAgent(agent)) {
+        viewModel.chooseUserAgent(agent)
     }
 }
