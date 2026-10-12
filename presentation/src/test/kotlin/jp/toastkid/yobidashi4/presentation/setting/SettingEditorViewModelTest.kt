@@ -140,6 +140,20 @@ class SettingEditorViewModelTest {
         assertEquals(1, subject.items().size)
     }
 
+    @OptIn(InternalComposeUiApi::class)
+    @Test
+    fun onKeyEventWithOtherKeys() {
+        subject = spyk(subject)
+        every { subject.save() } just Runs
+
+        val onKeyEvent = subject.onKeyEvent(
+            KeyEvent(Key.Q, KeyEventType.KeyDown, isCtrlPressed = true)
+        )
+
+        assertFalse(onKeyEvent)
+        verify(inverse = true) { subject.save() }
+    }
+
     @Test
     fun openFile() {
         every { viewModel.openFile(any()) } just Runs
