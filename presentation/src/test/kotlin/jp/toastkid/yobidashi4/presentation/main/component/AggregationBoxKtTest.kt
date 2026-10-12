@@ -2,11 +2,15 @@ package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.requestFocus
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -48,6 +52,7 @@ class AggregationBoxKtTest {
         every { viewModel.choose(any()) } just Runs
         every { viewModel.closeChooser() } just Runs
         every { viewModel.onSearch() } just Runs
+        every { viewModel.onKeyEvent(any()) } returns true
         every { viewModel.switchAggregationBox(any()) } just Runs
         every { viewModel.keyword() } returns TextFieldState()
         every { viewModel.dateInput() } returns TextFieldState()
@@ -79,6 +84,14 @@ class AggregationBoxKtTest {
             setContent {
                 AggregationBox(viewModel)
             }
+
+            onNodeWithContentDescription("Aggregation-box")
+                .requestFocus()
+                .performKeyInput {
+                    keyDown(Key.DirectionUp)
+                    keyUp(Key.DirectionUp)
+                }
+            verify { viewModel.onKeyEvent(any()) }
 
             val closeButton = onNode(hasText("x"), true)
             closeButton.assertExists()
