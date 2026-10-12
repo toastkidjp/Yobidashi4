@@ -379,4 +379,9 @@ class ChatTabViewModelTest {
         verify { iconMapper.invoke(model) }
     }
 
+    @Test
+    fun sendEventFlow() {
+        subject.sendEventFlow()
+    }
+
 }
