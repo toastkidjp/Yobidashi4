@@ -12,6 +12,8 @@ import org.cef.callback.CefContextMenuParams
 import org.cef.callback.CefMenuModel
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class CefContextMenuFactoryTest {
 
@@ -80,6 +82,22 @@ class CefContextMenuFactoryTest {
     @Test
     fun paramsIsNull() {
         cefContextMenuFactory.invoke(null, model)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "' '",
+        "null",
+        "https://www.yahoo.co.jp",
+        nullValues = ["null"]
+    )
+    fun pageUrlCases(pageUrl: String?) {
+        every { params.sourceUrl } returns " "
+        every { params.pageUrl } returns pageUrl
+        every { params.linkUrl } returns " "
+
+        cefContextMenuFactory.invoke(null, model)
+        cefContextMenuFactory.invoke(params, model)
     }
 
 }
