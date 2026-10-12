@@ -64,9 +64,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import okio.FileSystem
@@ -76,7 +74,6 @@ import okio.buffer
 import org.koin.core.annotation.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.slf4j.LoggerFactory
 import java.awt.Desktop
 import java.net.URI
 import java.nio.file.Files
@@ -99,6 +96,8 @@ class MainViewModelImplementation(
     private val webViewPool: WebViewPool by inject()
 
     private val articleFactory: ArticleFactory by inject()
+
+    private val droppedPathsFlatMapper = DroppedPathsFlatMapper(fileSystem)
 
     private val _darkMode = mutableStateOf(setting.darkMode())
 
@@ -758,23 +757,7 @@ class MainViewModelImplementation(
         droppedPathFlow
             .asSharedFlow()
             .flatMapConcat { p ->
-                val path = p.toOkioPath()
-                if (fileSystem.metadata(path).isRegularFile) {
-                    return@flatMapConcat flowOf(path)
-                }
-
-                if (fileSystem.metadata(path).isDirectory) {
-                    return@flatMapConcat try {
-                        fileSystem.listRecursively(path)
-                            .filter { fileSystem.metadata(it).isRegularFile }
-                            .asFlow()
-                    } catch (e: Exception) {
-                        LoggerFactory.getLogger(javaClass).warn("I/O error", e)
-                        emptyFlow()
-                    }
-                }
-
-                emptyList<okio.Path>().asFlow()
+                droppedPathsFlatMapper.invoke(p).asFlow()
             }
             .flowOn(ioContextProvider.invoke())
             .collect {
