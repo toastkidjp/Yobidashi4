@@ -174,9 +174,7 @@ fun FrameWindowScope.MainMenu(
         }
 
         Menu("Tab") {
-            Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true), icon = painterResource(Res.drawable.ic_tab_close)) {
-                viewModel.closeCurrentTab(exitApplication)
-            }
+            CloseTabMenuItem(viewModel, exitApplication)
 
             if (viewModel.useAdditionalTabMenu()) {
                 Item(
@@ -473,6 +471,17 @@ fun FrameWindowScope.MainMenu(
                 onClick = viewModel::openLogViewerTab
             )
         }
+    }
+}
+
+@ExcludeCoverageCalculation
+@Composable
+private fun MenuScope.CloseTabMenuItem(
+    viewModel: MainMenuViewModel,
+    exitApplication: () -> Unit
+) {
+    Item("Close tab", shortcut = KeyShortcut(Key.W, ctrl = true), icon = painterResource(Res.drawable.ic_tab_close)) {
+        viewModel.closeCurrentTab(exitApplication)
     }
 }
 
