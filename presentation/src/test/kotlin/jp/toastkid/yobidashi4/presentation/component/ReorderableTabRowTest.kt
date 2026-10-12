@@ -74,4 +74,45 @@ class ReorderableTabRowTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun testLeftTriggersCallback() {
+        val tabs = listOf("Tab A", "Tab B", "Tab C")
+        var reorderedResult: Pair<Int, Int>? = null
+
+        runComposeUiTest {
+            setContent {
+                ReorderableTabRow(
+                    tabs = tabs,
+                    selectedTabIndex = 0,
+                    backgroundColor = Color.White,
+                    indicator = { _ -> },
+                    onTabsReordered = { from, to ->
+                        reorderedResult = Pair(from, to)
+                    }
+                ) { index, item ->
+                    Text(
+                        text = item,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .semantics { contentDescription = "Tab_$index" }
+                    )
+                }
+            }
+
+            onNodeWithContentDescription("Tab_1").performTouchInput {
+                swipe(
+                    start = center,
+                    end = center.copy(x = center.x - 300f),
+                    durationMillis = 300
+                )
+            }
+
+            assertNotNull(reorderedResult)
+            assertEquals(1, reorderedResult?.first)
+            val targetIndex = reorderedResult?.second ?: 1
+            assert(targetIndex < 1) { "Target index ($targetIndex) should be less than 1" }
+        }
+    }
+
 }
