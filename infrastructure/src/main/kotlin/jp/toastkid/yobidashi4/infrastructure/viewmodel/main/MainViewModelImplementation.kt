@@ -757,7 +757,7 @@ class MainViewModelImplementation(
         droppedPathFlow
             .asSharedFlow()
             .flatMapConcat { p ->
-                droppedPathsFlatMapper.invoke(p).asFlow()
+                flatMapPaths(p)
             }
             .flowOn(ioContextProvider.invoke())
             .collect {
@@ -778,6 +778,8 @@ class MainViewModelImplementation(
                 }
             }
     }
+
+    private fun flatMapPaths(p: Path): Flow<okio.Path> = droppedPathsFlatMapper.invoke(p).asFlow()
 
     private val slideshowState = mutableStateOf<Path?>(null)
 
