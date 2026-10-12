@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,8 +28,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +56,12 @@ internal fun AggregationBox(viewModel: AggregationBoxViewModel) {
     val surfaceColor = MaterialTheme.colors.surface
 
     Surface(
-        modifier = Modifier.wrapContentHeight().fillMaxWidth().onKeyEvent(viewModel::onKeyEvent),
+        modifier = Modifier.wrapContentHeight().fillMaxWidth().onKeyEvent(viewModel::onKeyEvent)
+            .focusable(true)
+            .focusRequester(FocusRequester())
+            .semantics {
+                contentDescription = "Aggregation-box"
+            },
         color = surfaceColor.copy(alpha = 0.75f),
         elevation = 4.dp
     ) {
