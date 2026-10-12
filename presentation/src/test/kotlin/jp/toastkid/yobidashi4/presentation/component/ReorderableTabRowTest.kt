@@ -7,40 +7,70 @@
  */
 package jp.toastkid.yobidashi4.presentation.component
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.v2.runComposeUiTest
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import androidx.compose.ui.unit.dp
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 class ReorderableTabRowTest {
 
-    @BeforeEach
-    fun setUp() {
-
-    }
-
-    @AfterEach
-    fun tearDown() {
-
-    }
-
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun test() {
+    fun testRightTriggersCallback() {
+        val tabs = listOf("Tab A", "Tab B", "Tab C")
+        var reorderedResult: Pair<Int, Int>? = null
+
         runComposeUiTest {
             setContent {
                 ReorderableTabRow(
-                    listOf("test", "test2"),
-                    0,
-                    Color.Red,
-                    {},
-                    { _, _ ->}
-                ) { _, _ ->
-
+                    tabs = tabs,
+                    selectedTabIndex = 0,
+                    backgroundColor = Color.White,
+                    indicator = { _ -> },
+                    onTabsReordered = { from, to ->
+                        reorderedResult = Pair(from, to)
+                    }
+                ) { index, item ->
+                    Text(
+                        text = item,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .semantics { contentDescription = "Tab_$index" }
+                    )
                 }
             }
+
+            onNodeWithContentDescription("Tab_0").performTouchInput {
+                swipe(
+                    start = center,
+                    end = center.copy(x = center.x + 300f),
+                    durationMillis = 300
+                )
+            }
+
+            onNodeWithContentDescription("Tab_0").performTouchInput {
+                swipe(
+                    start = center,
+                    end = center.copy(x = center.x + 300f),
+                    durationMillis = 300
+                )
+            }
+
+            assertNotNull(reorderedResult)
+            assertEquals(0, reorderedResult?.first)
+            val targetIndex = reorderedResult?.second ?: 0
+            assert(targetIndex > 0) { "Target index ($targetIndex) should be greater than 0" }
         }
     }
 
