@@ -371,4 +371,12 @@ class ChatTabViewModelTest {
         subject.scrollEventFlow()
     }
 
+    @Test
+    fun modelIcon() {
+        val model = GenerativeAiModel.GEMINI_3_0_FLASH
+        subject.modelIcon(model)
+
+        verify { iconMapper.invoke(model) }
+    }
+
 }
