@@ -115,4 +115,39 @@ class ReorderableTabRowTest {
         }
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun testReturnsEarly() {
+        val tabs = listOf("Tab A", "Tab B", "Tab C")
+        var reorderedCalled = false
+
+        runComposeUiTest {
+            setContent {
+                ReorderableTabRow(
+                    tabs = tabs,
+                    selectedTabIndex = 0,
+                    backgroundColor = Color.White,
+                    indicator = { _ -> },
+                    onTabsReordered = { from, to ->
+                        reorderedCalled = true
+                    }
+                ) { index, item ->
+                    Text(
+                        text = item,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .semantics { contentDescription = "Tab_$index" }
+                    )
+                }
+            }
+
+            onNodeWithContentDescription("Tab_0").performTouchInput {
+                down(center)
+                up()
+            }
+
+            assert(!reorderedCalled) { "onTabsReordered should not be called on simple tap without drag" }
+        }
+    }
+
 }
