@@ -756,9 +756,7 @@ class MainViewModelImplementation(
     override suspend fun launchDroppedPathFlow() {
         droppedPathFlow
             .asSharedFlow()
-            .flatMapConcat { p ->
-                flatMapPaths(p)
-            }
+            .flatMapConcat(::flatMapPaths)
             .flowOn(ioContextProvider.invoke())
             .collect {
                 val receiver = overrideReceiver.get()
