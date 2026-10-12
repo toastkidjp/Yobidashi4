@@ -478,23 +478,23 @@ fun FrameWindowScope.MainMenu(
 
 @ExcludeCoverageCalculation
 @Composable
-private fun MenuScope.TabSelectionMenuItem(
-    i: Int,
-    viewModel: MainMenuViewModel
-) {
-    Item("Tab $i", shortcut = viewModel.makeTabIndexShortcut(i)) {
-        viewModel.setSelectedIndex(i - 1)
-    }
-}
-
-@ExcludeCoverageCalculation
-@Composable
 private fun MenuScope.SlideshowMenuItem(
     viewModel: MainMenuViewModel,
     slideshowSourcePath: Path
 ) {
     Item("Slideshow", shortcut = KeyShortcut(Key.F5), icon = painterResource(Res.drawable.ic_slideshow)) {
         viewModel.slideshow(slideshowSourcePath)
+    }
+}
+
+@ExcludeCoverageCalculation
+@Composable
+private fun MenuScope.TabSelectionMenuItem(
+    i: Int,
+    viewModel: MainMenuViewModel
+) {
+    Item("Tab $i", shortcut = viewModel.makeTabIndexShortcut(i)) {
+        viewModel.setSelectedIndex(i - 1)
     }
 }
 
