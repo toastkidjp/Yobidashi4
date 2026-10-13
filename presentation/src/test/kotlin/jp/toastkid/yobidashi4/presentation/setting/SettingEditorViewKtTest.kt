@@ -74,6 +74,7 @@ class SettingEditorViewKtTest {
                 keyUp(Key.O)
                 pressKey(Key.I)
             }
+            verify { viewModel.onKeyEvent(any()) }
 
             val textInput = onNodeWithText("test2")
             textInput.performTextInput("Good")
