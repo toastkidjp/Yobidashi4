@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi4.domain.model.notification.NotificationEvent
 import jp.toastkid.yobidashi4.domain.model.web.history.DELIMITER
 import jp.toastkid.yobidashi4.domain.repository.notification.NotificationEventRepository
 import okio.FileSystem
+import okio.Path
 import okio.Path.Companion.toPath
 import okio.buffer
 import org.koin.core.annotation.Single
@@ -23,9 +24,10 @@ import org.koin.core.annotation.Single
  * </pre>
  */
 @Single
-class NotificationEventFileStore(private val  fileSystem: FileSystem) : NotificationEventRepository {
-
-    private val path = "user/notification/list.tsv".toPath()
+class NotificationEventFileStore(
+    private val  fileSystem: FileSystem,
+    private val path: Path = "user/notification/list.tsv".toPath()
+) : NotificationEventRepository {
 
     override fun add(event: NotificationEvent) {
         val parent = path.parent ?: return
