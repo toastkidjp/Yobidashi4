@@ -38,7 +38,7 @@ class SettingEditorViewModel(
         return when {
             keyEvent.isCtrlPressed && keyEvent.key == Key.O -> {
                 openFile()
-                return true
+                true
             }
             keyEvent.isCtrlPressed && keyEvent.key == Key.S -> {
                 save()
