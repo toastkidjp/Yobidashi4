@@ -154,4 +154,12 @@ Test3
 
         assertFalse(fakeFileSystem.exists(path))
     }
+
+    @Test
+    fun parentIsNullCase() {
+        subject = NotificationEventFileStore(fakeFileSystem, "/".toPath())
+
+        subject.add(mockk())
+    }
+
 }
