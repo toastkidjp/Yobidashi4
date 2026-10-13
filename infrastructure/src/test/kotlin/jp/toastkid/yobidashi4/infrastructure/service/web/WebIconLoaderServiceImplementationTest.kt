@@ -99,6 +99,15 @@ class WebIconLoaderServiceImplementationTest {
     }
 
     @Test
+    fun slashStartingAndNoneBaseUrlCase() {
+        every { iconUrlFinder.invoke(any()) } returns listOf("/test.png")
+
+        subject.invoke("", "")
+
+        verify(inverse = true) { webIconDownloader.invoke(any(), any(), any()) }
+    }
+
+    @Test
     fun iconUrlsIsEmptyAndBaseUrlIsBlankCase() {
         every { iconUrlFinder.invoke(any()) } returns emptyList()
 
