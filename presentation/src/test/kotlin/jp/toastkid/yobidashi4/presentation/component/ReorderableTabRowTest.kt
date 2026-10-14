@@ -128,7 +128,7 @@ class ReorderableTabRowTest {
                     selectedTabIndex = 0,
                     backgroundColor = Color.White,
                     indicator = { _ -> },
-                    onTabsReordered = { _, to ->
+                    onTabsReordered = { _, _ ->
                         reorderedCalled = true
                     }
                 ) { index, item ->
