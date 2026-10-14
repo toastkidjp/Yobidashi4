@@ -188,7 +188,7 @@ class FileListViewModelTest {
     @Test
     fun onKeyEventFromCellUnconsumed() {
         val consumed = subject.onKeyEventFromCell(
-            androidx.compose.ui.input.key.KeyEvent(Key.One, KeyEventType.KeyDown),
+            KeyEvent(Key.One, KeyEventType.KeyDown),
             mockk()
         )
 
