@@ -75,7 +75,7 @@ class FileListViewModel : KoinComponent {
     fun start(paths: List<Path>) {
         articleStates.clear()
         paths
-            .map { itemFactory.invoke(it) }
+            .map(itemFactory::invoke)
             .sortedByDescending(FileListItem::sortKey)
             .forEach(articleStates::add)
         completeItems.clear()
