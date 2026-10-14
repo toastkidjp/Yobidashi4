@@ -91,7 +91,11 @@ class WebIconLoaderServiceImplementationTest {
 
     @Test
     fun pluralIconUrlsCase() {
-        every { iconUrlFinder.invoke(any()) } returns listOf("https://www.yahoo.co.jp/icon.svg", "https://www.yahoo.co.jp/icon.ico", "/test.png")
+        every { iconUrlFinder.invoke(any()) } returns listOf(
+            "https://www.yahoo.co.jp/icon.svg",
+            "https://www.yahoo.co.jp/icon.ico",
+            "/test.png"
+        )
 
         subject.invoke("", "https://www.yahoo.co.jp")
 
