@@ -97,7 +97,7 @@ internal fun MessageContent(
             SourceArea(
                 sources,
                 viewModel::openLink,
-                { viewModel.openLinkOnBackground(it) },
+                viewModel::openLinkOnBackground,
                 viewModel.horizontalSourceScrollState()
             )
         }
