@@ -42,7 +42,7 @@ class SettingEditorViewModel(
             }
             keyEvent.isCtrlPressed && keyEvent.key == Key.S -> {
                 save()
-                return true
+                true
             }
             else -> false
         }
