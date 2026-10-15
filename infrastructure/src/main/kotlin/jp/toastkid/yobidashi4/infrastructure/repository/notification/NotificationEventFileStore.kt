@@ -47,9 +47,8 @@ class NotificationEventFileStore(
             return emptyList()
         }
 
-        return fileSystem.source(path).buffer().use {
-            it.readUtf8().trim().split("\n")
-        }
+        return fileSystem.source(path).buffer()
+            .use { it.readUtf8().trim().split("\n") }
             .filter { it.contains(DELIMITER) }
             .mapNotNull(::toEvent)
     }
