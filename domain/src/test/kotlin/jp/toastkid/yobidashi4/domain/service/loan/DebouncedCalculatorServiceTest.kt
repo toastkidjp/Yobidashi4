@@ -60,7 +60,7 @@ class DebouncedCalculatorServiceTest {
 
 
         debouncedCalculatorService = DebouncedCalculatorService(
-            inputChannel, calculatorFlow, currentFactorProvider, onResult
+            inputChannel, calculatorFlow, currentFactorProvider, onResult, Dispatchers.Unconfined
         )
     }
 
