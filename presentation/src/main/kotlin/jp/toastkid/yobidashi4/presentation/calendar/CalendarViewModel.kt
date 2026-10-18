@@ -12,12 +12,13 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.mutableStateOf
 import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
-import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Label
 import jp.toastkid.yobidashi4.domain.model.calendar.zodiac.JapaneseZodiac
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
+import jp.toastkid.yobidashi4.domain.service.calendar.holiday.CalendarEntryCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.label.CalendarLabelFinderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.annotation.Factory
@@ -32,7 +33,8 @@ import java.util.concurrent.atomic.AtomicReference
 class CalendarViewModel(
     private val mainViewModel: MainViewModel,
     private val setting: Setting,
-    private val userOffDayService: UserOffDayService
+    private val userOffDayService: UserOffDayService,
+    private val calendarEntryCalculator: CalendarEntryCalculator
 ) : KoinComponent {
 
     private val calendarLabelFinderService = CalendarLabelFinderService()
@@ -146,13 +148,6 @@ class CalendarViewModel(
     private fun makeMonth(week: Iterable<DayOfWeek>): MutableList<Week> {
         val firstDay = localDateState.value.withDayOfMonth(1)
 
-        val jpHolidays = HolidayCalendar.JAPAN
-            .getHolidays(firstDay.year, firstDay.month.value)
-            .union(userOffDayService.findBy(firstDay.monthValue))
-        val ukHolidays = HolidayCalendar.UK.getHolidays(firstDay.year, firstDay.monthValue)
-        val usHolidays = HolidayCalendar.US.getHolidays(firstDay.year, firstDay.monthValue)
-        val calendarLabels = calendarLabelFinderService.invoke(firstDay.year, firstDay.monthValue)
-
         var hasStarted1 = false
         var current1 = firstDay
         val weeks = mutableListOf<Week>()
@@ -168,8 +163,8 @@ class CalendarViewModel(
                 if (firstDay.month != current1.month) {
                     w.addEmpty()
                 } else {
-                    val holidays = calculateHolidays(current1, jpHolidays, ukHolidays, usHolidays)
-                    w.add(current1, holidays, calendarLabels.filter { it.day == current1.dayOfMonth })
+                    val holidays = calendarEntryCalculator.invoke(current1.year, current1.monthValue, current1.dayOfMonth)
+                    w.add(current1, holidays.filterIsInstance<Holiday>(), holidays.filterIsInstance<Label>().filter { it.day == current1.dayOfMonth })
                 }
                 current1 = current1.plusDays(1L)
             }
