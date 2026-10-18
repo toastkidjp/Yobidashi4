@@ -7,4 +7,8 @@
  */
 package jp.toastkid.yobidashi4.domain.model.calendar.holiday
 
-interface CalendarEntry
+interface CalendarEntry {
+
+    fun dayOfMonth(): Int
+
+}
