@@ -7,8 +7,8 @@
  */
 package jp.toastkid.yobidashi4.domain.service.calendar.label
 
-import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Label
 import jp.toastkid.yobidashi4.domain.model.calendar.label.FixedCalendarLabel
 import jp.toastkid.yobidashi4.domain.model.calendar.label.MoveableCalendarLabel
 import java.time.DayOfWeek
@@ -23,23 +23,23 @@ class CalendarLabelFinderService {
         return offsetDays
     }
 
-    operator fun invoke(year: Int, month: Int): MutableList<Holiday> {
-        val labels = mutableListOf<Holiday>()
+    operator fun invoke(year: Int, month: Int): MutableList<Label> {
+        val labels = mutableListOf<Label>()
         labels.addAll(
             FixedCalendarLabel.entries
                 .filter { it.month == month }
-                .map { Holiday(it.title, it.month, it.date, HolidayCalendar.JAPAN.flag) }
+                .map { Label(it.title, it.month, it.date, HolidayCalendar.JAPAN.flag) }
         )
 
         val localDate = LocalDate.of(year, month, 1)
         val dayOfWeek = localDate.dayOfWeek
 
         labels.add(
-            Holiday("SQ", month, calculateOffsetDays(dayOfWeek) + 7, HolidayCalendar.JAPAN.flag)
+            Label("SQ", month, calculateOffsetDays(dayOfWeek) + 7, HolidayCalendar.JAPAN.flag)
         )
         if (month == 1) {
             labels.add(
-                Holiday(
+                Label(
                     "大発会",
                     month,
                     when (LocalDate.of(year, month, 4).dayOfWeek) {
@@ -53,7 +53,7 @@ class CalendarLabelFinderService {
         }
         if (month == 12) {
             labels.add(
-                Holiday(
+                Label(
                     "大納会",
                     month,
                     when (LocalDate.of(year, month, 30).dayOfWeek) {
