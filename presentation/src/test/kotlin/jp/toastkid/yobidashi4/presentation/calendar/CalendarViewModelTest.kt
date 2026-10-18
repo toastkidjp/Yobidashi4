@@ -59,7 +59,7 @@ class CalendarViewModelTest {
         every { path.resolve(any<String>()) } returns mockk()
         every { userOffDayService.findBy(any()) } returns emptySet()
 
-        viewModel = CalendarViewModel(mainViewModel, setting, userOffDayService, calendarEntryCalculator)
+        viewModel = CalendarViewModel(mainViewModel, setting, calendarEntryCalculator)
     }
 
     @AfterEach
