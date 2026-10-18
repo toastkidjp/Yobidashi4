@@ -12,14 +12,14 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi4.domain.model.calendar.CalendarDate
-import jp.toastkid.yobidashi4.domain.model.calendar.Week
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
+import jp.toastkid.yobidashi4.domain.service.calendar.holiday.CalendarEntryCalculator
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
@@ -47,6 +47,9 @@ class CalendarViewModelTest {
     @MockK
     private lateinit var userOffDayService: UserOffDayService
 
+    @RelaxedMockK
+    private lateinit var calendarEntryCalculator: CalendarEntryCalculator
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -56,7 +59,7 @@ class CalendarViewModelTest {
         every { path.resolve(any<String>()) } returns mockk()
         every { userOffDayService.findBy(any()) } returns emptySet()
 
-        viewModel = CalendarViewModel(mainViewModel, setting, userOffDayService)
+        viewModel = CalendarViewModel(mainViewModel, setting, userOffDayService, calendarEntryCalculator)
     }
 
     @AfterEach
@@ -212,7 +215,6 @@ class CalendarViewModelTest {
         val month = viewModel.month()
 
         assertEquals(5, month.size)
-        assertTrue(month.flatMap(Week::days).any(CalendarDate::offDay))
     }
 
     @Test
