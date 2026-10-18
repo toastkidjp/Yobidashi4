@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
 import jp.toastkid.yobidashi4.domain.service.calendar.holiday.CalendarEntryCalculator
-import jp.toastkid.yobidashi4.domain.service.calendar.label.CalendarLabelFinderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
@@ -34,8 +33,6 @@ class CalendarViewModel(
     private val setting: Setting,
     private val calendarEntryCalculator: CalendarEntryCalculator
 ) : KoinComponent {
-
-    private val calendarLabelFinderService = CalendarLabelFinderService()
 
     private val week = listOf(
         DayOfWeek.SUNDAY,
