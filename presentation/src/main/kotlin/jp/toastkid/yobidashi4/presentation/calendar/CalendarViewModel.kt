@@ -17,7 +17,6 @@ import jp.toastkid.yobidashi4.domain.model.calendar.zodiac.JapaneseZodiac
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.service.article.ArticleTitleGenerator
-import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.domain.service.calendar.holiday.CalendarEntryCalculator
 import jp.toastkid.yobidashi4.domain.service.calendar.label.CalendarLabelFinderService
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -33,7 +32,6 @@ import java.util.concurrent.atomic.AtomicReference
 class CalendarViewModel(
     private val mainViewModel: MainViewModel,
     private val setting: Setting,
-    private val userOffDayService: UserOffDayService,
     private val calendarEntryCalculator: CalendarEntryCalculator
 ) : KoinComponent {
 
