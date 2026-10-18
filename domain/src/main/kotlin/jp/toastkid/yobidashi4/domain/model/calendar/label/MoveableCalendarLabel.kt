@@ -7,7 +7,7 @@
  */
 package jp.toastkid.yobidashi4.domain.model.calendar.label
 
-import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Label
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -34,7 +34,7 @@ enum class MoveableCalendarLabel(
         return offsetDays
     }
 
-    fun find(year: Int, month: Int): Holiday? {
+    fun find(year: Int, month: Int): Label? {
         val candidate = findCandidate(month) ?: return null
         val localDate = LocalDate.of(year, month, 1)
         val dayOfWeek = localDate.dayOfWeek
@@ -42,7 +42,7 @@ enum class MoveableCalendarLabel(
 
         val targetWeek = candidate.week
 
-        return Holiday(candidate.title, candidate.month, offsetDays + (7 * (targetWeek - 1)))
+        return Label(candidate.title, candidate.month, offsetDays + (7 * (targetWeek - 1)))
     }
 
 }
