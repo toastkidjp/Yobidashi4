@@ -12,4 +12,8 @@ data class Label(
     val month: Int,
     val day: Int,
     val flag: String = "\uD83C\uDDFA\uD83C\uDDF8"
-) : CalendarEntry
+) : CalendarEntry {
+
+    override fun dayOfMonth(): Int = day
+
+}
