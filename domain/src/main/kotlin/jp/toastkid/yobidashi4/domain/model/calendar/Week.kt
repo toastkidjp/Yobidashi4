@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi4.domain.model.calendar
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.HolidayCalendar
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Label
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -16,7 +17,7 @@ class Week {
 
     private val days: MutableList<CalendarDate> = mutableListOf()
 
-    fun add(date: LocalDate, holidays: List<Holiday> = emptyList(), labels: List<Holiday> = emptyList()) {
+    fun add(date: LocalDate, holidays: List<Holiday> = emptyList(), labels: List<Label> = emptyList()) {
         val holidayLabels = holidays
             .map { it.flag + " " + it.title }
             .union(labels.map { it.flag + " " + it.title })
