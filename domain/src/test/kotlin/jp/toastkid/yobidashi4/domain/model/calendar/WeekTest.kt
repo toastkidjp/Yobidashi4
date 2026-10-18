@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi4.domain.model.calendar
 
 import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Holiday
+import jp.toastkid.yobidashi4.domain.model.calendar.holiday.Label
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -19,7 +20,7 @@ class WeekTest {
         week.add(LocalDate.of(2023, 8, 10))
         week.add(LocalDate.of(2023, 8, 11), emptyList())
         week.add(LocalDate.of(2023, 8, 11), listOf(Holiday("Mountain day", 8, 11)))
-        week.add(LocalDate.of(2023, 8, 12))
+        week.add(LocalDate.of(2023, 8, 13), emptyList(), listOf(Label("test", 1, 1)))
         week.addEmpty()
 
         assertEquals(9, week.days().size)
