@@ -111,7 +111,6 @@ fun CalendarView(
                 Row(modifier = Modifier.weight(1f)) {
                     w.days().forEach { day ->
                         val backgroundColor = if (calendarViewModel.isToday(day.date)) MaterialTheme.colors.primary.copy(alpha = 0.5f)
-                        //else if (viewModel.useOffDayBackground(offDay, dayOfWeek)) Color.White.copy(alpha = 0.8f)
                         else MaterialTheme.colors.surface
                         DayLabelView(day.date, day.dayOfWeek, day.label, day.offDay,
                             calendarViewModel.isToday(day.date),
