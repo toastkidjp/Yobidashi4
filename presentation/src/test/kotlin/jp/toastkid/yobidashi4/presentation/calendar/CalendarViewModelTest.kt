@@ -18,7 +18,6 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
-import jp.toastkid.yobidashi4.domain.service.calendar.UserOffDayService
 import jp.toastkid.yobidashi4.domain.service.calendar.holiday.CalendarEntryCalculator
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -44,9 +43,6 @@ class CalendarViewModelTest {
     @MockK
     private lateinit var setting: Setting
 
-    @MockK
-    private lateinit var userOffDayService: UserOffDayService
-
     @RelaxedMockK
     private lateinit var calendarEntryCalculator: CalendarEntryCalculator
 
@@ -57,7 +53,6 @@ class CalendarViewModelTest {
         val path = mockk<Path>()
         every { setting.articleFolderPath() } returns path
         every { path.resolve(any<String>()) } returns mockk()
-        every { userOffDayService.findBy(any()) } returns emptySet()
 
         viewModel = CalendarViewModel(mainViewModel, setting, calendarEntryCalculator)
     }
