@@ -170,19 +170,6 @@ class CalendarViewModel(
         return weeks
     }
 
-    private fun calculateHolidays(
-        current1: LocalDate,
-        jpHolidays: Set<Holiday>,
-        ukHolidays: List<Holiday>,
-        usHolidays: List<Holiday>
-    ): List<Holiday> {
-        val holiday = jpHolidays.find { it.day == current1.dayOfMonth }
-        val ukHolidayCandidate = ukHolidays.find { it.day == current1.dayOfMonth }
-        val usHolidayCandidate = usHolidays.find { it.day == current1.dayOfMonth }
-        val holidays = listOfNotNull(holiday, ukHolidayCandidate, usHolidayCandidate)
-        return holidays
-    }
-
     private val openMonthChooser = mutableStateOf(false)
 
     fun openingMonthChooser(): Boolean {
