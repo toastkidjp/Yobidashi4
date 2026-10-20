@@ -160,7 +160,11 @@ class CalendarViewModel(
                 } else {
                     val holidays =
                         calendarEntryCalculator.invoke(current1.year, current1.monthValue, current1.dayOfMonth)
-                    w.add(current1, holidays.filterIsInstance<Holiday>(), holidays.filterIsInstance<Label>().filter { it.day == current1.dayOfMonth })
+                    w.add(
+                        current1,
+                        holidays.filterIsInstance<Holiday>(),
+                        holidays.filterIsInstance<Label>().filter { it.day == current1.dayOfMonth }
+                    )
                 }
                 current1 = current1.plusDays(1L)
             }
