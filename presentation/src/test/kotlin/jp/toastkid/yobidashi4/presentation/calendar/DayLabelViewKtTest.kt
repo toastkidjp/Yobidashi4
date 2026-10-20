@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.presentation.calendar
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 
