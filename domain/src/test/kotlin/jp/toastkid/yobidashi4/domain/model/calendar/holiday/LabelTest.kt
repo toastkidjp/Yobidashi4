@@ -14,7 +14,7 @@ class LabelTest {
 
     @Test
     fun dayOfMonth() {
-        assertEquals(1, Holiday("test", 1, 1).dayOfMonth())
+        assertEquals(1, Label("test", 1, 1).dayOfMonth())
     }
 
 }
