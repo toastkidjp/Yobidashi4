@@ -13,14 +13,15 @@ class AdHosts(private val adHosts: Set<String>) {
 
     companion object {
 
-        fun make() =
-            AdHosts(
-                loadInputStream()?.use { stream ->
-                    return@use BufferedReader(InputStreamReader(stream)).use { reader ->
-                        reader.lines().collect(Collectors.toUnmodifiableSet())
-                    }
-                } ?: emptySet()
-            )
+        fun make(): AdHosts {
+            val loadInputStream = loadInputStream() ?: return AdHosts(emptySet())
+
+            val adHosts = BufferedReader(InputStreamReader(loadInputStream)).use { reader ->
+                reader.lines().collect(Collectors.toUnmodifiableSet())
+            }
+
+            return AdHosts(adHosts)
+        }
 
         fun loadInputStream(): InputStream? =
             AdHosts::class.java.classLoader.getResourceAsStream("web/ad_hosts.txt")
