@@ -11,7 +11,11 @@ data class Chat(private val texts: MutableList<ChatMessage> = mutableListOf()) {
 
     fun list(): List<ChatMessage> = texts
 
-    fun makeContent(useWebGrounding: Boolean = false, useThinking: Boolean = true, useImage: Boolean = false) = """
+    fun makeContent(
+        useWebGrounding: Boolean = false,
+        useThinking: Boolean = true,
+        useImage: Boolean = false
+    ) = """
       {
         "contents": [
           ${makeContents()}
