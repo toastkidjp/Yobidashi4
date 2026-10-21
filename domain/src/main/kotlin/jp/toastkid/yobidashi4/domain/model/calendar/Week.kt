@@ -23,7 +23,7 @@ class Week {
         labels: List<Label> = emptyList()
     ) {
         val holidayLabels = holidays
-            .map { it.flag + " " + it.title }
+            .map { flagAndTitle(it) }
             .union(labels.map { it.flag + " " + it.title })
 
         days.add(
@@ -35,6 +35,8 @@ class Week {
             )
         )
     }
+
+    private fun flagAndTitle(holiday: Holiday): String = holiday.flag + " " + holiday.title
 
     fun addEmpty() {
         days.add(CalendarDate(-1, DayOfWeek.MONDAY))
