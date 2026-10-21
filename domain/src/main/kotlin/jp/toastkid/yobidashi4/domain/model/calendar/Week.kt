@@ -23,7 +23,7 @@ class Week {
         labels: List<Label> = emptyList()
     ) {
         val holidayLabels = holidays
-            .map { flagAndTitle(it) }
+            .map(::flagAndTitle)
             .union(labels.map { it.flag + " " + it.title })
 
         days.add(
