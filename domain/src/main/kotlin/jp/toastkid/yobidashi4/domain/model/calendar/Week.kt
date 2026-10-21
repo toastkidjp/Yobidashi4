@@ -17,7 +17,11 @@ class Week {
 
     private val days: MutableList<CalendarDate> = mutableListOf()
 
-    fun add(date: LocalDate, holidays: List<Holiday> = emptyList(), labels: List<Label> = emptyList()) {
+    fun add(
+        date: LocalDate,
+        holidays: List<Holiday> = emptyList(),
+        labels: List<Label> = emptyList()
+    ) {
         val holidayLabels = holidays
             .map { it.flag + " " + it.title }
             .union(labels.map { it.flag + " " + it.title })
