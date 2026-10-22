@@ -10,14 +10,13 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.model.markdown.Subhead
-import jp.toastkid.yobidashi4.presentation.markdown.MarkdownSubhead
 import org.junit.jupiter.api.Test
 
 class MarkdownSubheadKtTest {
