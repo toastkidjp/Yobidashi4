@@ -18,7 +18,7 @@ data class NotificationEvent(
         fun parse(text: String): LocalDateTime? {
             return try {
                 LocalDateTime.from(DATE_TIME_FORMATTER.parse(text))
-            } catch (e: DateTimeParseException) {
+            } catch (_: DateTimeParseException) {
                 null
             }
         }
