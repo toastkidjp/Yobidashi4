@@ -15,7 +15,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performKeyPress
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
