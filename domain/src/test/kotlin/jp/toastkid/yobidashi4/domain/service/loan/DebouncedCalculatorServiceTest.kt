@@ -41,8 +41,6 @@ class DebouncedCalculatorServiceTest {
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
-
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
