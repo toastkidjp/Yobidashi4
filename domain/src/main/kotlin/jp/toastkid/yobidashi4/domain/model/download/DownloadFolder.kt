@@ -52,7 +52,8 @@ class DownloadFolder {
     private fun resolveUnusedPath(suggestedName: String): Path {
         val suffix = AtomicInteger(0)
         val initialPath = Path.of(suggestedName)
-        val candidatePath = AtomicReference(downloadFolder.resolve(makeCandidateName(initialPath, 0)))
+        val candidatePath =
+            AtomicReference(downloadFolder.resolve(makeCandidateName(initialPath, 0)))
 
         while (Files.exists(candidatePath.get())) {
             val newCandidateName =
