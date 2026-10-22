@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi4.presentation.compound
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
