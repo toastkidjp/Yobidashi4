@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import jp.toastkid.yobidashi4.presentation.lib.annotation.ExcludeCoverageCalculation
@@ -42,6 +44,24 @@ fun MainScaffold(mainViewModel: MainViewModel) {
             }
 
             MultiTabContent()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        mainViewModel.snackbarEventFlow().collect { event ->
+            val snackbarHostState = mainViewModel.snackbarHostState()
+            snackbarHostState.currentSnackbarData?.dismiss()
+            val snackbarResult = snackbarHostState.showSnackbar(
+                event.message,
+                event.actionLabel,
+                event.duration
+            )
+            when (snackbarResult) {
+                SnackbarResult.Dismissed -> Unit
+                SnackbarResult.ActionPerformed -> {
+                    event.action()
+                }
+            }
         }
     }
 }
