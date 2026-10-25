@@ -2,10 +2,14 @@ package jp.toastkid.yobidashi4.presentation.main.content
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -28,8 +32,10 @@ import jp.toastkid.yobidashi4.presentation.main.component.AggregationBoxViewMode
 import jp.toastkid.yobidashi4.presentation.main.component.WebSearchBoxViewModel
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMeta
 import jp.toastkid.yobidashi4.presentation.main.content.data.FileListItemMetaExtractor
+import jp.toastkid.yobidashi4.presentation.main.snackbar.SnackbarEvent
 import jp.toastkid.yobidashi4.presentation.markdown.MarkdownTabViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -120,6 +126,9 @@ class MainScaffoldKtTest {
         every { webSearchBoxViewModel.currentIconPath() } returns Res.drawable.ic_search
         every { markdownTabViewModel.scrollState() } returns LazyListState()
 
+        every { mainViewModel.snackbarHostState() } returns SnackbarHostState()
+        every { mainViewModel.snackbarEventFlow() } returns MutableSharedFlow()
+
         mockkStatic(Files::class)
         every { Files.exists(any()) } returns true
         every { Files.size(any()) } returns 20000
@@ -155,6 +164,52 @@ class MainScaffoldKtTest {
 
             verify { mainViewModel.showBackgroundImage() }
             verify { mainViewModel.backgroundImage() }
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun testSnackbar() {
+        every { mainViewModel.showBackgroundImage() } returns false
+        val mutableSharedFlow = MutableSharedFlow<SnackbarEvent>(replay = 1, extraBufferCapacity = 1)
+        every { mainViewModel.snackbarEventFlow() } returns mutableSharedFlow
+
+        runComposeUiTest {
+            setContent {
+                MainScaffold(
+                    mainViewModel
+                )
+            }
+
+            mutableSharedFlow.tryEmit(SnackbarEvent("test"))
+        }
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun testSnackbarWithAction() {
+        every { mainViewModel.showBackgroundImage() } returns false
+        val mutableSharedFlow = MutableSharedFlow<SnackbarEvent>(replay = 1, extraBufferCapacity = 1)
+        every { mainViewModel.snackbarEventFlow() } returns mutableSharedFlow
+
+        runComposeUiTest {
+            setContent {
+                MainScaffold(
+                    mainViewModel
+                )
+            }
+
+            val action = mockk<() -> Unit>()
+            every { action.invoke() } just Runs
+            mutableSharedFlow.tryEmit(SnackbarEvent("test", SnackbarDuration.Long, "test-action", action))
+            mainClock.advanceTimeByFrame()
+
+            onNodeWithText("test-action")
+                .assertExists()
+                .performClick()
+            waitForIdle()
+
+            verify { action.invoke() }
         }
     }
 
