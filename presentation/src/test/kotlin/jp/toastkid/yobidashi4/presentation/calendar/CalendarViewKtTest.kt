@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -91,7 +91,7 @@ class CalendarViewKtTest {
         every { viewModel.month() } returns mutableListOf(Week().also { it.add(date) })
         every { viewModel.localDate() } returns date
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 CalendarView(CalendarTab(), viewModel)
             }
@@ -131,7 +131,7 @@ class CalendarViewKtTest {
         every { viewModel.month() } returns mutableListOf(Week().also { it.add(date) })
         every { viewModel.openingMonthChooser() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 CalendarView(CalendarTab(), viewModel)
             }
