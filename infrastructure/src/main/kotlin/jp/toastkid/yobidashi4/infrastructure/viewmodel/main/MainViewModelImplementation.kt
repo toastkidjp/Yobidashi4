@@ -592,7 +592,7 @@ class MainViewModelImplementation(
 
     override fun showingSnackbar(): Boolean = snackbarHostState().currentSnackbarData != null
 
-    private val snackbarEventFlow = MutableSharedFlow<SnackbarEvent>()
+    private val snackbarEventFlow = MutableSharedFlow<SnackbarEvent>(extraBufferCapacity = 1)
 
     override fun snackbarEventFlow(): SharedFlow<SnackbarEvent> = snackbarEventFlow
 
