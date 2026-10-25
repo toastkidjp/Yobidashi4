@@ -6,7 +6,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -14,7 +14,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.tab.TextFileViewerTab
 import org.junit.jupiter.api.AfterEach
@@ -24,6 +23,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import java.nio.file.Path
 
 class TextFileViewerTabViewKtTest {
 
@@ -59,7 +59,7 @@ class TextFileViewerTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun test() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TextFileViewerTabView(
                     TextFileViewerTab(path)
