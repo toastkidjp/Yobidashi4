@@ -56,6 +56,7 @@ class ConverterToolTabViewKtTest {
             }
             verify { anyConstructed<ConverterToolTabViewModel>().scrollEventFlow() }
             scrollEventFlow.tryEmit(1f)
+            mainClock.advanceTimeByFrame()
         }
     }
 }
