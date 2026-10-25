@@ -12,7 +12,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -55,7 +55,7 @@ class ClusteringToolTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun clusteringToolTabView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 ClusteringToolTabView(viewModel)
             }
@@ -76,7 +76,7 @@ class ClusteringToolTabViewKtTest {
         every { viewModel.edit(any()) } just Runs
         every { viewModel.result() } returns mapOf("test" to listOf("Good"))
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 ClusteringToolTabView(viewModel)
             }
