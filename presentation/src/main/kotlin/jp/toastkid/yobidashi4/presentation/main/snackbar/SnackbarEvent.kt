@@ -14,5 +14,4 @@ data class SnackbarEvent(
     val duration: SnackbarDuration = SnackbarDuration.Short,
     val actionLabel: String? = null,
     val action: () -> Unit = {}
-) {
-}
+)
