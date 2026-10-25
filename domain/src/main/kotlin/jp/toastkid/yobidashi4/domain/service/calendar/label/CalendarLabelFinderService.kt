@@ -16,6 +16,24 @@ import java.time.LocalDate
 
 class CalendarLabelFinderService {
 
+    private class ToshoCeremony(
+        private val saturdayCaseDate: Int,
+        private val sundayCaseDate: Int,
+        private val otherCaseDate: Int
+    ) {
+        fun calculateDate(dayOfWeek: DayOfWeek): Int {
+            return when (dayOfWeek) {
+                DayOfWeek.SATURDAY -> saturdayCaseDate
+                DayOfWeek.SUNDAY -> sundayCaseDate
+                else -> otherCaseDate
+            }
+        }
+    }
+
+    private val DAI_HAKKAI = ToshoCeremony(6,5,4)
+
+    private val DAI_NOKAI = ToshoCeremony(29,28,30)
+
     private fun calculateOffsetDays(dayOfWeek: DayOfWeek): Int {
         val offsetDays =
             if (dayOfWeek <= DayOfWeek.FRIDAY) DayOfWeek.FRIDAY.value - dayOfWeek.value + 1
@@ -42,11 +60,7 @@ class CalendarLabelFinderService {
                 Label(
                     "大発会",
                     month,
-                    when (LocalDate.of(year, month, 4).dayOfWeek) {
-                        DayOfWeek.SATURDAY -> 6
-                        DayOfWeek.SUNDAY -> 5
-                        else -> 4
-                    },
+                    DAI_HAKKAI.calculateDate(LocalDate.of(year, month, 4).dayOfWeek),
                     HolidayCalendar.JAPAN.flag
                 )
             )
@@ -56,11 +70,7 @@ class CalendarLabelFinderService {
                 Label(
                     "大納会",
                     month,
-                    when (LocalDate.of(year, month, 30).dayOfWeek) {
-                        DayOfWeek.SATURDAY -> 29
-                        DayOfWeek.SUNDAY -> 28
-                        else -> 30
-                    },
+                    DAI_NOKAI.calculateDate(LocalDate.of(year, month, 30).dayOfWeek),
                     HolidayCalendar.JAPAN.flag
                 )
             )
