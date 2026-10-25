@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -56,12 +55,14 @@ import jp.toastkid.yobidashi4.infrastructure.extension.extension
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
+import jp.toastkid.yobidashi4.presentation.main.snackbar.SnackbarEvent
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -591,34 +592,23 @@ class MainViewModelImplementation(
 
     override fun showingSnackbar(): Boolean = snackbarHostState().currentSnackbarData != null
 
+    private val snackbarEventFlow = MutableSharedFlow<SnackbarEvent>()
+
+    override fun snackbarEventFlow(): SharedFlow<SnackbarEvent> = snackbarEventFlow
+
     override fun showSnackbar(
         message: String,
         actionLabel: String?,
         action: () -> Unit
     ) {
-        val snackbarHostState = snackbarHostState()
-        if (actionLabel == null) {
-            CoroutineScope(Dispatchers.Default).launch {
-                snackbarHostState.currentSnackbarData?.dismiss()
-                snackbarHostState.showSnackbar(message)
-            }
-            return
-        }
-
-        CoroutineScope(Dispatchers.Default).launch {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            val snackbarResult = snackbarHostState.showSnackbar(
+        snackbarEventFlow.tryEmit(
+            SnackbarEvent(
                 message,
+                if (actionLabel == null) SnackbarDuration.Short else SnackbarDuration.Long,
                 actionLabel,
-                SnackbarDuration.Long
+                action
             )
-            when (snackbarResult) {
-                SnackbarResult.Dismissed -> Unit
-                SnackbarResult.ActionPerformed -> {
-                    action()
-                }
-            }
-        }
+        )
     }
 
     override fun dismissSnackbar() {
