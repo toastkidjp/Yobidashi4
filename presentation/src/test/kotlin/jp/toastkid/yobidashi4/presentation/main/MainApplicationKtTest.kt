@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi4.presentation.main.title.LauncherJarTimestampReader
 import jp.toastkid.yobidashi4.presentation.slideshow.SlideshowWindowViewModel
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -86,6 +87,7 @@ class MainApplicationKtTest {
         every { mainViewModel.slideshowPath() } returns null
         every { mainViewModel.registerDroppedPathReceiver(any()) } just Runs
         coEvery { mainViewModel.launchDroppedPathFlow() } just Runs
+        every { mainViewModel.snackbarEventFlow() } returns MutableSharedFlow()
         every { mainViewModel.trayState() } returns TrayState()
         every { mainViewModel.setTextManager(any()) } just Runs
         every { slideDeckReader.invoke(any()) } returns SlideDeck(mutableListOf(Slide()))
