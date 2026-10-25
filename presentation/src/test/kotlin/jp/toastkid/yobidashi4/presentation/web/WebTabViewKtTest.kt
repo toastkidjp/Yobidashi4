@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi4.presentation.web
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.rememberWindowState
@@ -45,7 +45,7 @@ class WebTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun webTabView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 val tabs = mutableListOf(
                     WebTab("test", "https://www.yahoo.com"),
