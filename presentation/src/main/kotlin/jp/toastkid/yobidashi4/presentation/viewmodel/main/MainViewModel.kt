@@ -22,7 +22,9 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.presentation.main.snackbar.SnackbarEvent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import java.nio.file.Path
 
 interface MainViewModel {
@@ -98,6 +100,7 @@ interface MainViewModel {
     fun showingSnackbar(): Boolean
     fun snackbarHostState(): SnackbarHostState
     fun showSnackbar(message: String, actionLabel: String? = null, action: () -> Unit = {})
+    fun snackbarEventFlow(): SharedFlow<SnackbarEvent>
 
     fun dismissSnackbar()
 
