@@ -21,7 +21,6 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
@@ -40,7 +39,6 @@ import jp.toastkid.yobidashi4.domain.service.converter.UrlEncodeConverterService
 
 @Composable
 fun ConverterToolTabView() {
-    val coroutineScope = rememberCoroutineScope()
     val viewModel = remember { ConverterToolTabViewModel() }
 
     Surface(
