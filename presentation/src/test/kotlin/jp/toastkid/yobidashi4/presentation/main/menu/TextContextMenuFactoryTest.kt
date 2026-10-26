@@ -7,7 +7,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -75,7 +75,7 @@ class TextContextMenuFactoryTest {
         val textContextMenu = textContextMenuFactory.invoke()
         assertNotNull(textContextMenu)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 textContextMenu.Area(textManager, state) {
 
@@ -92,7 +92,7 @@ class TextContextMenuFactoryTest {
         val textContextMenu = textContextMenuFactory.invoke()
         assertNotNull(textContextMenu)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 textContextMenu.Area(textManager, state) {
 
@@ -129,7 +129,7 @@ class TextContextMenuFactoryTest {
         val textContextMenu = textContextMenuFactory.invoke()
         assertNotNull(textContextMenu)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 textContextMenu.Area(textManager, state) {
 
@@ -139,7 +139,7 @@ class TextContextMenuFactoryTest {
             if (inverted) {
                 onNode(hasText("Open")).assertDoesNotExist()
                 onNode(hasText("Open background")).assertDoesNotExist()
-                return@runDesktopComposeUiTest
+                return@runComposeUiTest
             }
 
             onNode(hasText("Open")).performClick()
@@ -163,7 +163,7 @@ class TextContextMenuFactoryTest {
         val textContextMenu = textContextMenuFactory.invoke()
         assertNotNull(textContextMenu)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 textContextMenu.Area(textManager, state) {
 
