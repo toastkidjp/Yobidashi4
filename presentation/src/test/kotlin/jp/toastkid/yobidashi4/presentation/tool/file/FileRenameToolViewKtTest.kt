@@ -5,7 +5,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -51,7 +51,7 @@ class FileRenameToolViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun fileRenameToolView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 FileRenameToolView(viewModel)
             }
@@ -69,7 +69,7 @@ class FileRenameToolViewKtTest {
         every { viewModel.items() } returns emptyList()
         every { viewModel.input() } returns TextFieldState()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 FileRenameToolView(viewModel)
             }
