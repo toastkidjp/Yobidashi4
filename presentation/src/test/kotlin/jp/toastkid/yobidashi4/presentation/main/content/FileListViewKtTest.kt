@@ -21,7 +21,7 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -114,7 +114,7 @@ class FileListViewKtTest {
         val mutableSharedFlow = MutableSharedFlow<Int>(extraBufferCapacity = 1)
         every { anyConstructed<FileListViewModel>().listScrollEventFlow() } returns mutableSharedFlow
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 FileListView(emptyList())
             }
@@ -159,7 +159,7 @@ class FileListViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mouseEvent() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 FileListView(emptyList())
             }
@@ -180,7 +180,7 @@ class FileListViewKtTest {
     fun withDropdown() {
         every { anyConstructed<FileListViewModel>().openingDropdown(any()) } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 FileListView(emptyList())
             }
