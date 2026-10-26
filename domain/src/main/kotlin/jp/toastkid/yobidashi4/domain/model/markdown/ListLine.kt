@@ -13,6 +13,4 @@ data class ListLine(
     val list: List<String>,
     val ordered: Boolean = false,
     val taskList: Boolean = false
-) : Line {
-
-}
+) : Line
