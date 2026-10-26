@@ -11,5 +11,5 @@ data class ChatMessage(
     val role: String,
     val text: String,
     val image: String? = null,
-    val sources: List<Source> = mutableListOf<Source>()
+    val sources: List<Source> = mutableListOf()
 )
