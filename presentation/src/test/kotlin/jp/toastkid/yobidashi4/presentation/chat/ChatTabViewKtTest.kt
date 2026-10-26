@@ -23,7 +23,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -114,7 +114,7 @@ class ChatTabViewKtTest {
         val scrollEventFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
         every { viewModel.scrollEventFlow() } returns scrollEventFlow
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 ChatTabView(tab, viewModel)
             }
