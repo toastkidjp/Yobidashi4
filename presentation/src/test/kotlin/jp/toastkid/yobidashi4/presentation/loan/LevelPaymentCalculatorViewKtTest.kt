@@ -5,7 +5,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -48,7 +48,7 @@ class LevelPaymentCalculatorViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun test() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 LoanCalculatorView()
             }
@@ -68,7 +68,7 @@ class LevelPaymentCalculatorViewKtTest {
     fun firstVisibleItemIndexIsNotZero() {
         every { anyConstructed<LoanCalculatorViewModel>().listState() } returns LazyListState(1)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 LoanCalculatorView()
             }
