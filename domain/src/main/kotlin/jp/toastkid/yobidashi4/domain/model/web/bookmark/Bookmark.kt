@@ -20,6 +20,7 @@ data class Bookmark(
     fun toTsv() = "${title}\t${url}"
 
     companion object {
+
         fun fromWebTab(webTab: WebTab): Bookmark {
             return Bookmark(webTab.title(), webTab.url())
         }
