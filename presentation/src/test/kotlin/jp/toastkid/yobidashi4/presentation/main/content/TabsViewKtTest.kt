@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.rightClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -120,7 +120,7 @@ class TabsViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun tabsView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -160,7 +160,7 @@ class TabsViewKtTest {
     fun dropdownWebTab() {
         every { viewModel.openingDropdown(any()) } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             every { viewModel.tabs() } returns listOf(webTab)
 
             setContent {
@@ -184,7 +184,7 @@ class TabsViewKtTest {
         every { viewModel.openingDropdown(any()) } returns true
         every { viewModel.tabs() } returns listOf(markdownPreviewTab)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -200,7 +200,7 @@ class TabsViewKtTest {
         every { viewModel.openingDropdown(any()) } returns true
         every { viewModel.tabs() } returns listOf(tableTab)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -219,7 +219,7 @@ class TabsViewKtTest {
         every { viewModel.tabs() } returns listOf(editorTab)
         every { viewModel.slideshow(any()) } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -238,7 +238,7 @@ class TabsViewKtTest {
         every { viewModel.openingDropdown(any()) } returns true
         every { viewModel.tabs() } returns listOf(ChatTab())
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -254,7 +254,7 @@ class TabsViewKtTest {
         every { viewModel.openingDropdown(any()) } returns true
         every { viewModel.tabs() } returns listOf(SettingEditorTab())
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -267,7 +267,7 @@ class TabsViewKtTest {
         every { viewModel.openingDropdown(any()) } returns true
         every { viewModel.tabs() } returns listOf(InputHistoryTab("test"))
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -280,7 +280,7 @@ class TabsViewKtTest {
         every { viewModel.openingDropdown(any()) } returns true
         every { viewModel.tabs() } returns listOf(WebBookmarkTab())
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
@@ -296,7 +296,7 @@ class TabsViewKtTest {
     fun noneTabsCase() {
         every { viewModel.tabs() } returns emptyList()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabsView(Modifier, viewModel, TabContentRegistry.Builder().build())
             }
