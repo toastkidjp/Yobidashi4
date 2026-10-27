@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi4.presentation.barcode
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -41,7 +41,7 @@ class BarcodeToolTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun barcodeToolTabView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 BarcodeToolTabView(viewModel)
             }
@@ -53,7 +53,7 @@ class BarcodeToolTabViewKtTest {
     fun nullImage() {
         every { viewModel.barcodeImage() } returns null
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 BarcodeToolTabView(viewModel)
             }
@@ -65,7 +65,7 @@ class BarcodeToolTabViewKtTest {
     fun decodeResultBlankCase() {
         every { viewModel.decodeResult() } returns "  "
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 BarcodeToolTabView(viewModel)
             }
