@@ -7,7 +7,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -27,7 +27,7 @@ class InputTextFieldKtTest {
         val onClickDelete = mockk<(String) -> Unit>()
         every { onClickDelete.invoke(any()) } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 InputTextField(
                     TextFieldState("test"),
@@ -64,7 +64,7 @@ class InputTextFieldKtTest {
         val clearButton = mockk<() -> Unit>()
         every { clearButton.invoke() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 InputTextField(
                     TextFieldState("test"),
@@ -92,7 +92,7 @@ class InputTextFieldKtTest {
         val onClearInput = mockk<() -> Unit>()
         every { onClearInput.invoke() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 SingleLineTextField(
                     TextFieldState("test"),
@@ -109,7 +109,7 @@ class InputTextFieldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun useEmptyClearInputAction() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 SingleLineTextField(
                     TextFieldState("test"),
@@ -124,7 +124,7 @@ class InputTextFieldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun multiLine() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiLineTextField(
                     TextFieldState("test"),
