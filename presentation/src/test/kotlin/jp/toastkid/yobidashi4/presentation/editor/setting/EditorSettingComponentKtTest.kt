@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -74,7 +74,7 @@ class EditorSettingComponentKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun editorSettingComponent() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 EditorSettingComponent(Modifier)
             }
@@ -89,7 +89,7 @@ class EditorSettingComponentKtTest {
     fun fontFamilyDropdown() {
         every { anyConstructed<EditorSettingViewModel>().isOpenFontFamily() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 EditorSettingComponent(Modifier)
             }
@@ -105,7 +105,7 @@ class EditorSettingComponentKtTest {
     fun fontSizeDropdown() {
         every { anyConstructed<EditorSettingViewModel>().isOpenFontSize() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 EditorSettingComponent(Modifier)
             }
