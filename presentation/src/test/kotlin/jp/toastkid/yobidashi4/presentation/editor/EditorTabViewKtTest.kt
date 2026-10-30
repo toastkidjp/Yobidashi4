@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi4.presentation.editor
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.em
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -93,7 +93,7 @@ class EditorTabViewKtTest {
     fun editorTabView() {
         val tab = EditorTab(mockk())
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             mainClock.autoAdvance = false
 
             setContent {
@@ -114,7 +114,7 @@ class EditorTabViewKtTest {
         every { anyConstructed<EditorTabViewModel>().showPreview() } returns true
         every { anyConstructed<EditorTabViewModel>().preview() } returns Markdown("Test")
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             mainClock.autoAdvance = false
 
             setContent {
