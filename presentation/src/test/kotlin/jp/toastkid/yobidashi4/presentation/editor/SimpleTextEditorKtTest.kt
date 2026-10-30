@@ -20,7 +20,7 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.requestFocus
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.em
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -105,7 +105,7 @@ class SimpleTextEditorKtTest {
         )
         every { viewModel.calculateConversionTrigger() } returns ConversionTrigger(0, "", true)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 SimpleTextEditor(
                     EditorTab(mockk()),
@@ -147,7 +147,7 @@ class SimpleTextEditorKtTest {
         every { viewModel.content() } returns textFieldValue
         every { viewModel.showLineNumber() } returns false
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 SimpleTextEditor(
                     EditorTab(mockk()),
