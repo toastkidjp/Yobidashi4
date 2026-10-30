@@ -15,7 +15,7 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.requestFocus
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -94,7 +94,7 @@ class WebBookmarkTabViewKtTest {
         val mutableSharedFlow = MutableSharedFlow<Float>(replay = 1, extraBufferCapacity = 1)
         every { viewModel.scrollEventFlow() } returns mutableSharedFlow
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 WebBookmarkTabView(tab, viewModel)
             }
@@ -128,7 +128,7 @@ class WebBookmarkTabViewKtTest {
         every { viewModel.openingDropdown(any()) } answers {
             (this.args[0] as? Bookmark)?.title == "test item"
         }
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 WebBookmarkTabView(tab, viewModel)
             }
