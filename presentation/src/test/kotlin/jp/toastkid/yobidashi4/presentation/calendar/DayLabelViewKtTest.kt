@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi4.presentation.calendar
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 
@@ -18,7 +18,7 @@ class DayLabelViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun dayLabelView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 DayLabelView(
                     1,
