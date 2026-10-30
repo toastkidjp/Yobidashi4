@@ -12,7 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -61,7 +61,7 @@ class TableViewKtTest {
         result.put("2022-12-24", 1230, 12)
         every { viewModel.items() } returns result.itemArrays().toList()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TableView(TableTab("test", result), viewModel)
             }
@@ -101,7 +101,7 @@ class TableViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun findResultCase() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 val result = FindResult("test")
                 result.add("2022-12-22", listOf("1st", "2nd"))
