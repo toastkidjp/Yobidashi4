@@ -15,7 +15,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performKeyPress
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -43,7 +43,7 @@ class ConverterToolTabViewKtTest {
     @OptIn(ExperimentalTestApi::class, InternalComposeUiApi::class)
     @Test
     fun converterToolTabView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 ConverterToolTabView()
             }
