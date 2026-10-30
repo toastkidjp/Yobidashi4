@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.theme
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import org.junit.jupiter.api.Test
 
 class AppThemeKtTest {
@@ -9,7 +9,7 @@ class AppThemeKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun lightModeCase() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 AppTheme(darkTheme = false) {
 
@@ -21,7 +21,7 @@ class AppThemeKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun darkModeCase() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 AppTheme(darkTheme = true) {
 
