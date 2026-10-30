@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi4.presentation.component
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -52,7 +52,7 @@ class LoadIconKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun pathNull() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 LoadIcon(null, Modifier)
             }
@@ -64,7 +64,7 @@ class LoadIconKtTest {
     fun bitmapIsNotNull() {
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 LoadIcon("https://test.yahoo.co.jp/favicon.ico", Modifier)
             }
@@ -79,7 +79,7 @@ class LoadIconKtTest {
     fun bitmapIsNull() {
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns null
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 LoadIcon("https://test.yahoo.co.jp/favicon.ico", Modifier)
             }
@@ -95,7 +95,7 @@ class LoadIconKtTest {
         every { anyConstructed<LoadIconViewModel>().loadBitmap(any()) } returns ImageBitmap(1, 1)
         every { anyConstructed<LoadIconViewModel>().contentDescription() } returns "test description"
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabIcon(WebTab(title = "test", url = "https://test.yahoo.co.jp/favicon.ico"), Modifier)
             }
