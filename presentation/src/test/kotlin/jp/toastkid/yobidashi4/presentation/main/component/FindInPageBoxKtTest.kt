@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -74,7 +74,7 @@ class FindInPageBoxKtTest {
     fun findInPageBox() {
         val text = "input_field"
         every { anyConstructed<FindInPageBoxViewModel>().inputValue() } returns TextFieldState(text)
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 FindInPageBox()
             }
