@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.content.tab
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 
@@ -10,7 +10,7 @@ class TabContentRouterTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun defaultParameter() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabContentRouter(null)
             }
@@ -22,7 +22,7 @@ class TabContentRouterTest {
     fun tabContentRouter() {
         val registry = TabContentRegistry.Builder().build()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TabContentRouter(mockk(), registry = registry)
             }
