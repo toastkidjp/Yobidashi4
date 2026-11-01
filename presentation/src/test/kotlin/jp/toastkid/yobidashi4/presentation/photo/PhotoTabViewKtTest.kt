@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.toOffset
 import io.mockk.MockKAnnotations
@@ -64,7 +64,7 @@ class PhotoTabViewKtTest {
         every { viewModel.showHandle() } just Runs
         every { viewModel.hideHandle() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 PhotoTabView(tab, viewModel)
             }
@@ -102,7 +102,7 @@ class PhotoTabViewKtTest {
         every { path.toString() } returns "test.gif"
         tab = PhotoTab(path)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 PhotoTabView(tab, viewModel)
             }
@@ -118,7 +118,7 @@ class PhotoTabViewKtTest {
     fun invisibleMenu() {
         every { viewModel.visibleMenu() } returns false
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 PhotoTabView(tab, viewModel)
             }
