@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -63,7 +63,7 @@ class WebSearchBoxKtTest {
         every { viewModel.query() } returns TextFieldState(text)
         every { viewModel.invokeSearch() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 WebSearchBox(viewModel)
             }
@@ -91,7 +91,7 @@ class WebSearchBoxKtTest {
     @Test
     fun withDropdown() {
         every { viewModel.openingDropdown() } returns true
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 WebSearchBox(viewModel)
             }
@@ -111,7 +111,7 @@ class WebSearchBoxKtTest {
         every { viewModel.openingDropdown() } returns true
         every { viewModel.containsSwingContent() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 WebSearchBox(viewModel)
             }
