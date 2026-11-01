@@ -11,7 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.requestFocus
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -80,7 +80,7 @@ class AggregationBoxKtTest {
         every { viewModel.dateInput() } returns TextFieldState(label)
         every { viewModel.onDateInputValueChange() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 AggregationBox(viewModel)
             }
@@ -108,7 +108,7 @@ class AggregationBoxKtTest {
         every { viewModel.dateInput() } returns TextFieldState(label)
         every { viewModel.onDateInputValueChange() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 AggregationBox(viewModel)
             }
@@ -129,7 +129,7 @@ class AggregationBoxKtTest {
     fun currentSwingContentCase() {
         every { viewModel.isOpeningChooser() } returns true
         every { viewModel.isCurrentSwingContent() } returns true
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 AggregationBox(viewModel)
             }
