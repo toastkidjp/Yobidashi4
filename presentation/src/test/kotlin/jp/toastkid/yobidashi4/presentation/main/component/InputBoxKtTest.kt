@@ -11,7 +11,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performImeAction
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -43,7 +43,7 @@ class InputBoxKtTest {
         every { anyConstructed<InputBoxViewModel>().query() } returns TextFieldState(text)
         every { anyConstructed<InputBoxViewModel>().invokeAction() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 InputBox()
             }
