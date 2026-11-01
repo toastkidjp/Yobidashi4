@@ -17,7 +17,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -63,7 +63,7 @@ class MainSnackbarKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainSnackbar() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 val snackbarHostState = SnackbarHostState()
 
@@ -92,7 +92,7 @@ class MainSnackbarKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun swipeToEnd() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 val snackbarHostState = SnackbarHostState()
 
@@ -124,7 +124,7 @@ class MainSnackbarKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun swipeLeft() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 val snackbarHostState = SnackbarHostState()
 
