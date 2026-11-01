@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi4.presentation.main.content.tab
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ class TabContentRegistryTest {
     fun testRenderNullTab() {
         val registry = TabContentRegistry.Builder().build()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 registry.Render(null)
             }
@@ -40,7 +40,7 @@ class TabContentRegistryTest {
             }
             .build()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 registry.Render(UnregisteredTab())
             }
@@ -61,7 +61,7 @@ class TabContentRegistryTest {
             }
             .build()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 registry.Render(dummyInstance)
             }
