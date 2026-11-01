@@ -18,7 +18,7 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -63,7 +63,7 @@ class NotificationListTabViewKtTest {
         val item = NotificationEvent.makeDefault()
         every { viewModel.items() } returns mutableListOf(item)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NotificationListTabView(viewModel)
             }
@@ -99,7 +99,7 @@ class NotificationListTabViewKtTest {
             NotificationEvent("2nd", "2nd", LocalDateTime.now())
         )
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NotificationListTabView(viewModel)
             }
