@@ -9,7 +9,6 @@ import org.junit.jupiter.api.assertNotNull
 
 class TabContentRegistryTest {
 
-    // テスト用のダミー Tab 実装
     private class DummyTab : Tab {
         override fun title() = "Dummy"
     }
