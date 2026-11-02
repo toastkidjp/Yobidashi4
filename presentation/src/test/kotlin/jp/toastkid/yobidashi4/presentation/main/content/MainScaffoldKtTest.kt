@@ -10,7 +10,6 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -144,7 +143,7 @@ class MainScaffoldKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainScaffold() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MainScaffold()
             }
@@ -157,7 +156,7 @@ class MainScaffoldKtTest {
         every { mainViewModel.showBackgroundImage() } returns true
         every { mainViewModel.backgroundImage() } returns ImageBitmap(1, 1)
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MainScaffold()
             }
