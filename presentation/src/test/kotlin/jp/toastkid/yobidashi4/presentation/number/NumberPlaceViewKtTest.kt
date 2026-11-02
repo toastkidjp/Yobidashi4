@@ -18,7 +18,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performMouseInput
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -72,7 +72,7 @@ class NumberPlaceViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun numberPlaceView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NumberPlaceView(viewModel)
             }
@@ -97,7 +97,7 @@ class NumberPlaceViewKtTest {
         every { viewModel.clear() } just Runs
         every { viewModel.openingDropdown() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NumberPlaceView(viewModel)
             }
@@ -139,7 +139,7 @@ class NumberPlaceViewKtTest {
         every { viewModel.reloadGame() } just Runs
         every { viewModel.closeMaskingCount() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NumberPlaceView(viewModel)
             }
@@ -165,7 +165,7 @@ class NumberPlaceViewKtTest {
             get
         }
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NumberPlaceView(viewModel)
             }
@@ -187,7 +187,7 @@ class NumberPlaceViewKtTest {
     fun withLoading() {
         every { viewModel.loading() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 NumberPlaceView(viewModel)
             }
