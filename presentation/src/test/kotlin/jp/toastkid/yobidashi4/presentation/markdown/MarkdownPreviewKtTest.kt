@@ -21,7 +21,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performMouseInput
 import androidx.compose.ui.test.pressKey
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.text.font.FontWeight
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -88,7 +88,7 @@ class MarkdownPreviewKtTest {
         )
         every { mocked.lines() } returns content.lines().plus(mockk<Line>())
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MarkdownPreview(
                     mocked,
@@ -132,7 +132,7 @@ class MarkdownPreviewKtTest {
         every { anyConstructed<MarkdownPreviewViewModel>().showSubheadings() } returns true
         every { anyConstructed<MarkdownPreviewViewModel>().loadBitmap(any()) } returns null
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 val state = spyk(rememberLazyListState())
                 every { state.requestScrollToItem(any()) } just Runs
