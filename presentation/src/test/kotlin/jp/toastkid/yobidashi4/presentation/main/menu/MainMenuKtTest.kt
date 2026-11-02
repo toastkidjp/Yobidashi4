@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi4.presentation.main.menu
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.window.Window
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -124,7 +124,7 @@ class MainMenuKtTest {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalTestApi::class)
     @Test
     fun test() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({}, viewModel)
@@ -138,7 +138,7 @@ class MainMenuKtTest {
     fun currentIsEditorTab() {
         every { viewModel.useEditorMenu() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({}, viewModel)
@@ -153,7 +153,7 @@ class MainMenuKtTest {
         val tab = mockk<WebTab>()
         every { mainViewModel.currentTab() } returns tab
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({}, viewModel)
@@ -167,7 +167,7 @@ class MainMenuKtTest {
     fun currentIsMarkdownPreviewTab() {
         every { viewModel.useEditorMenu() } returns false
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({}, viewModel)
@@ -186,7 +186,7 @@ class MainMenuKtTest {
         every { viewModel.useAdditionalTabMenu() } returns true
         every { viewModel.currentIsWebTab() } returns currentIsWebTab
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({  }, viewModel)
@@ -200,7 +200,7 @@ class MainMenuKtTest {
     fun canMoveTab() {
         every { viewModel.canMoveTab() } returns true
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({}, viewModel)
@@ -215,7 +215,7 @@ class MainMenuKtTest {
         every { viewModel.currentIsEditableTab() } returns true
         every { viewModel.findSlideshowPath() } returns null
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 Window({}, visible = false) {
                     MainMenu({}, viewModel)
