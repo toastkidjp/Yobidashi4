@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -54,7 +54,7 @@ class MarkdownTabViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun markdownTabView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MarkdownTabView(tab, Modifier, viewModel)
             }
