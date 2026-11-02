@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi4.presentation.markdown
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -27,7 +27,7 @@ class MarkdownSubheadKtTest {
         val function: (Int) -> Unit = mockk()
         every { function.invoke(any()) } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MarkdownSubhead(
                     listOf(Subhead("1st", 1, 0)),
