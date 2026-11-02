@@ -17,7 +17,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performMouseInput
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.every
@@ -150,7 +150,7 @@ class MultiTabContentTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainScaffold() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiTabContent()
             }
@@ -197,7 +197,7 @@ class MultiTabContentTest {
         every { mainViewModel.caseSensitive() } returns true
         every { mainViewModel.updateScrollableTab(any(), any()) } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiTabContent()
             }
@@ -214,7 +214,7 @@ class MultiTabContentTest {
             BarcodeToolTab(),
         )
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiTabContent()
             }
@@ -224,7 +224,7 @@ class MultiTabContentTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun articles() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiTabContent()
             }
@@ -237,7 +237,7 @@ class MultiTabContentTest {
         every { mainViewModel.openArticleList() } returns true
         every { mainViewModel.hideArticleList() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiTabContent()
             }
@@ -262,7 +262,7 @@ class MultiTabContentTest {
         every { mainViewModel.openWorldTime() } returns true
         every { mainViewModel.toggleWorldTime() } just Runs
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 MultiTabContent()
             }
