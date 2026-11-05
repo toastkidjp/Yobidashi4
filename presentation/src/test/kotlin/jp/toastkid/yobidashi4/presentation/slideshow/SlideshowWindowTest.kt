@@ -11,7 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -60,7 +60,7 @@ class SlideshowWindowTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun openWindow() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 CompositionLocalProvider(LocalInspectionMode provides true) {
                     SlideshowWindow().openWindow(mockk()) {}
@@ -74,7 +74,7 @@ class SlideshowWindowTest {
     fun emptyDeckCase() {
         every { slideDeckReader.invoke(any()) } returns SlideDeck()
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 SlideshowWindow().openWindow(mockk()) {}
             }
