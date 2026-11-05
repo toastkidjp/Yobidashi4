@@ -12,7 +12,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performMouseInput
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import io.mockk.MockKAnnotations
@@ -67,7 +67,7 @@ class TextLineViewKtTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun textLineView() {
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TextLineView(
                     "test",
