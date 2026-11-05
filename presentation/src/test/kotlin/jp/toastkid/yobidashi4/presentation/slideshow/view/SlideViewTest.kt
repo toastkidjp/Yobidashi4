@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi4.presentation.slideshow.view
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -43,7 +43,7 @@ class SlideViewTest {
         val mutableSharedFlow = MutableSharedFlow<Float>(extraBufferCapacity = 1)
         every { anyConstructed<SlideViewModel>().scrollEventFlow() } returns mutableSharedFlow
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 SlideView(
                     Slide().also {
