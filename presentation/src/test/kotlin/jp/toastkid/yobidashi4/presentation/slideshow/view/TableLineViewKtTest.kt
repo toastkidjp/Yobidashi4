@@ -12,7 +12,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performMouseInput
-import androidx.compose.ui.test.v2.runDesktopComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -45,7 +45,7 @@ class TableLineViewKtTest {
             listOf("2023-03-04", "14")
         )
 
-        runDesktopComposeUiTest {
+        runComposeUiTest {
             setContent {
                 TableLineView(
                     TableLine(
