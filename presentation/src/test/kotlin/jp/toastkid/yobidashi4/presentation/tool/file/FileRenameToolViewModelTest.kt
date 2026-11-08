@@ -24,6 +24,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -31,7 +32,6 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.nio.file.Path
 
 class FileRenameToolViewModelTest {
 
@@ -213,13 +213,13 @@ class FileRenameToolViewModelTest {
 
     @Test
     fun collectDroppedPaths() {
-        val capturingSlot = slot<(Path) -> Unit>()
+        val capturingSlot = slot<DroppedPathReceiverAction>()
         every { mainViewModel.registerDroppedPathReceiver(capture(capturingSlot)) } just Runs
 
         subject.collectDroppedPaths()
 
         verify { mainViewModel.registerDroppedPathReceiver(any()) }
-        capturingSlot.captured.invoke(mockk())
+        capturingSlot.captured.onReceive(mockk())
         assertEquals(1, subject.items().size)
     }
 
