@@ -19,6 +19,7 @@ import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.service.tool.clustering.ClusteringDocumentReader
 import jp.toastkid.yobidashi4.domain.service.tool.clustering.KMeans
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -92,7 +93,7 @@ class ClusteringToolTabViewModel(
     }
 
     fun collectDroppedPaths() {
-        viewModel.registerDroppedPathReceiver(paths::add)
+        viewModel.registerDroppedPathReceiver(DroppedPathReceiverAction(paths::add))
     }
 
     fun dispose() {
