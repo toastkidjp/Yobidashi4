@@ -22,6 +22,7 @@ import jp.toastkid.yobidashi4.domain.model.tab.CalendarTab
 import jp.toastkid.yobidashi4.domain.model.tab.FileTab
 import jp.toastkid.yobidashi4.domain.model.tab.ScrollableContentTab
 import jp.toastkid.yobidashi4.domain.model.tab.Tab
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.main.snackbar.SnackbarEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
@@ -147,7 +148,7 @@ interface MainViewModel {
 
     fun emitDroppedPath(paths: Collection<Path>)
 
-    fun registerDroppedPathReceiver(receiver: (Path) -> Unit)
+    fun registerDroppedPathReceiver(receiver: DroppedPathReceiverAction)
 
     fun unregisterDroppedPathReceiver()
 
