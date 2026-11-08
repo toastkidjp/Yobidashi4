@@ -4,6 +4,7 @@ import jp.toastkid.yobidashi4.domain.model.browser.WebViewPool
 import jp.toastkid.yobidashi4.domain.model.tab.WebTab
 import jp.toastkid.yobidashi4.infrastructure.service.web.screenshot.ScreenshotExporter
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
+import okio.FileSystem
 import org.cef.browser.CefBrowser
 import org.cef.handler.CefKeyboardHandler
 import org.cef.misc.EventFlags
@@ -96,7 +97,7 @@ class CefKeyboardShortcutProcessor(
             && keyCode == KeyEvent.VK_P
             && browser != null
             ) {
-            ScreenshotExporter().invoke(browser.uiComponent)
+            ScreenshotExporter(FileSystem.SYSTEM).invoke(browser.uiComponent)
             return true
         }
 
