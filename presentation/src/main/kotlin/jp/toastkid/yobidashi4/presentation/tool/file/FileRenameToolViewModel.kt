@@ -17,6 +17,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -97,7 +98,7 @@ class FileRenameToolViewModel(
     }
 
     fun collectDroppedPaths() {
-        viewModel.registerDroppedPathReceiver(paths::add)
+        viewModel.registerDroppedPathReceiver(DroppedPathReceiverAction(paths::add))
     }
 
     fun dispose() {
