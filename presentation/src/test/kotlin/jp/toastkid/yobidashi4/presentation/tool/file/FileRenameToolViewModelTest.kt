@@ -24,6 +24,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
+import jp.toastkid.yobidashi4.domain.service.tool.file.NumericPathComparator
 import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import org.junit.jupiter.api.AfterEach
@@ -43,6 +44,9 @@ class FileRenameToolViewModelTest {
     @MockK
     private lateinit var fileRenamer: FileRenamer
 
+    @MockK
+    private lateinit var comparator: NumericPathComparator
+
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
@@ -52,7 +56,7 @@ class FileRenameToolViewModelTest {
         every { fileRenamer.invoke(any(), any(), any(), any()) } just Runs
         every { fileRenamer.makeRenamedFileName(any(), any(), any()) } returns "img_1.png"
 
-        subject = FileRenameToolViewModel(mainViewModel, fileRenamer)
+        subject = FileRenameToolViewModel(mainViewModel, fileRenamer, comparator)
     }
 
     @AfterEach
