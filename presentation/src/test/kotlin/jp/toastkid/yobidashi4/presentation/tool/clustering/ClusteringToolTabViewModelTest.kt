@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi4.domain.model.article.Article
 import jp.toastkid.yobidashi4.domain.model.article.ArticleFactory
 import jp.toastkid.yobidashi4.domain.service.tool.clustering.ClusteringDocumentReader
 import jp.toastkid.yobidashi4.domain.service.tool.clustering.KMeans
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
@@ -139,11 +140,11 @@ class ClusteringToolTabViewModelTest {
 
     @Test
     fun collectDroppedPaths() {
-        val capturingSlot = slot<(Path) -> Unit>()
+        val capturingSlot = slot<DroppedPathReceiverAction>()
         every { viewModel.registerDroppedPathReceiver(capture(capturingSlot)) } just Runs
 
         subject.collectDroppedPaths()
-        capturingSlot.captured.invoke(mockk())
+        capturingSlot.captured.onReceive(mockk())
 
         verify { viewModel.registerDroppedPathReceiver(any()) }
     }
