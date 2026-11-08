@@ -17,6 +17,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
 import jp.toastkid.yobidashi4.domain.service.tool.file.FileRenamer
+import jp.toastkid.yobidashi4.domain.service.tool.file.NumericPathComparator
 import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +25,13 @@ import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.annotation.Factory
 import org.koin.core.component.KoinComponent
 import java.nio.file.Path
+import java.util.Collections
 
 @Factory
 class FileRenameToolViewModel(
     private val viewModel: MainViewModel,
-    private val fileRenamer: FileRenamer
+    private val fileRenamer: FileRenamer,
+    private val comparator: NumericPathComparator
 ) : KoinComponent {
 
     private val paths = mutableStateListOf<Path>()
@@ -98,7 +101,14 @@ class FileRenameToolViewModel(
     }
 
     fun collectDroppedPaths() {
-        viewModel.registerDroppedPathReceiver(DroppedPathReceiverAction(paths::add))
+        viewModel.registerDroppedPathReceiver(
+            DroppedPathReceiverAction(
+                paths::add,
+                {
+                    Collections.sort(paths, comparator)
+                }
+            )
+        )
     }
 
     fun dispose() {
