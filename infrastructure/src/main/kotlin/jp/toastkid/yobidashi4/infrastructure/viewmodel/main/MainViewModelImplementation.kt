@@ -63,10 +63,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import okio.FileSystem
 import okio.Path.Companion.toOkioPath
@@ -724,11 +721,11 @@ class MainViewModelImplementation(
 
     private val ioContextProvider: IoContextProvider by inject()
 
-    private val droppedPathFlow = MutableSharedFlow<Path>()
+    private val droppedPathFlow = MutableSharedFlow<Collection<Path>>()
 
     override fun emitDroppedPath(paths: Collection<Path>) {
         CoroutineScope(ioContextProvider()).launch {
-            paths.forEach { droppedPathFlow.emit(it) }
+            droppedPathFlow.emit(paths)
         }
     }
 
@@ -746,28 +743,28 @@ class MainViewModelImplementation(
     override suspend fun launchDroppedPathFlow() {
         droppedPathFlow
             .asSharedFlow()
-            .flatMapConcat(::flatMapPaths)
-            .flowOn(ioContextProvider.invoke())
-            .collect {
+            .collect { paths: Collection<Path> ->
                 val receiver = overrideReceiver.get()
-                if (receiver != null) {
-                    receiver.invoke(it.toNioPath())
-                    return@collect
-                }
+                paths.asSequence().flatMap(::flatMapPaths).forEach { path: okio.Path ->
+                    if (receiver != null) {
+                        receiver.invoke(path.toNioPath())
+                        return@collect
+                    }
 
-                when (it.extension) {
-                    "txt", "md", "log", "java", "kt", "py" -> {
-                        edit(it.toNioPath())
+                    when (path.extension) {
+                        "txt", "md", "log", "java", "kt", "py" -> {
+                            edit(path.toNioPath())
+                        }
+                        "jpg", "webp", "png", "gif" -> {
+                            openTab(PhotoTab(path.toNioPath()))
+                        }
+                        else -> Unit
                     }
-                    "jpg", "webp", "png", "gif" -> {
-                        openTab(PhotoTab(it.toNioPath()))
-                    }
-                    else -> Unit
                 }
             }
     }
 
-    private fun flatMapPaths(p: Path): Flow<okio.Path> = droppedPathsFlatMapper.invoke(p).asFlow()
+    private fun flatMapPaths(p: Path): Collection<okio.Path> = droppedPathsFlatMapper.invoke(p)
 
     private val slideshowState = mutableStateOf<Path?>(null)
 
