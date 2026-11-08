@@ -33,7 +33,7 @@ class DroppedPathsFlatMapper(
             }
         }
 
-        return emptyList<okio.Path>()
+        return emptyList()
     }
 
 }
