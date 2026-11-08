@@ -749,24 +749,26 @@ class MainViewModelImplementation(
                 val flatMapped = paths.flatMap(::flatMapPaths)
                 flatMapped.forEach { path: okio.Path ->
                     if (receiverAction != null) {
-                        receiverAction.onReceive(path.toNioPath())
-                        return@collect
+                        receiverAction.onReceive(toLegacyObject(path))
+                        return@forEach
                     }
 
                     when (path.extension) {
                         "txt", "md", "log", "java", "kt", "py" -> {
-                            edit(path.toNioPath())
+                            edit(toLegacyObject(path))
                         }
                         "jpg", "webp", "png", "gif" -> {
-                            openTab(PhotoTab(path.toNioPath()))
+                            openTab(PhotoTab(toLegacyObject(path)))
                         }
                         else -> Unit
                     }
                 }
 
-                receiverAction?.onComplete(flatMapped.map { it.toNioPath() })
+                receiverAction?.onComplete(flatMapped.map { toLegacyObject(it) })
             }
     }
+
+    private fun toLegacyObject(path: okio.Path): Path = path.toNioPath()
 
     private fun flatMapPaths(p: Path): Collection<okio.Path> = droppedPathsFlatMapper.invoke(p)
 
