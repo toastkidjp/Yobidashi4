@@ -64,6 +64,7 @@ import jp.toastkid.yobidashi4.domain.service.editor.EditorTabFileStore
 import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -1464,9 +1465,13 @@ class MainViewModelImplementationTest {
         every { subject.edit(any(), any()) } just Runs
         every { subject.openTab(any()) } just Runs
         val countDownLatch = CountDownLatch(1)
-        subject.registerDroppedPathReceiver {
-            countDownLatch.countDown()
-        }
+        subject.registerDroppedPathReceiver(
+            DroppedPathReceiverAction(
+                {
+                    countDownLatch.countDown()
+                }
+            )
+        )
 
         val job = CoroutineScope(Dispatchers.Unconfined).launch {
             subject.launchDroppedPathFlow()
