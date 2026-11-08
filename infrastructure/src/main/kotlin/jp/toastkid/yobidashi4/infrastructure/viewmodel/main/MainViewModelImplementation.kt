@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi4.domain.service.io.IoContextProvider
 import jp.toastkid.yobidashi4.infrastructure.extension.extension
 import jp.toastkid.yobidashi4.infrastructure.service.media.MediaPlayerInvokerImplementation
 import jp.toastkid.yobidashi4.presentation.lib.clipboard.ClipboardPutterService
+import jp.toastkid.yobidashi4.presentation.main.drop.DroppedPathReceiverAction
 import jp.toastkid.yobidashi4.presentation.main.setting.ArticleFolderRequestService
 import jp.toastkid.yobidashi4.presentation.main.snackbar.SnackbarEvent
 import jp.toastkid.yobidashi4.presentation.viewmodel.main.MainViewModel
@@ -729,9 +730,9 @@ class MainViewModelImplementation(
         }
     }
 
-    private val overrideReceiver = AtomicReference<((Path) -> Unit)?>()
+    private val overrideReceiver = AtomicReference<DroppedPathReceiverAction?>()
 
-    override fun registerDroppedPathReceiver(receiver: (Path) -> Unit) {
+    override fun registerDroppedPathReceiver(receiver: DroppedPathReceiverAction) {
         overrideReceiver.set(receiver)
     }
 
@@ -744,10 +745,11 @@ class MainViewModelImplementation(
         droppedPathFlow
             .asSharedFlow()
             .collect { paths: Collection<Path> ->
-                val receiver = overrideReceiver.get()
-                paths.asSequence().flatMap(::flatMapPaths).forEach { path: okio.Path ->
-                    if (receiver != null) {
-                        receiver.invoke(path.toNioPath())
+                val receiverAction = overrideReceiver.get()
+                val flatMapped = paths.flatMap(::flatMapPaths)
+                flatMapped.forEach { path: okio.Path ->
+                    if (receiverAction != null) {
+                        receiverAction.onReceive(path.toNioPath())
                         return@collect
                     }
 
@@ -761,6 +763,8 @@ class MainViewModelImplementation(
                         else -> Unit
                     }
                 }
+
+                receiverAction?.onComplete(flatMapped.map { it.toNioPath() })
             }
     }
 
