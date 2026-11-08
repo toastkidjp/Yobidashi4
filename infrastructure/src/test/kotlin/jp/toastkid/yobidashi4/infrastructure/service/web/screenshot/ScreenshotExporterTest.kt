@@ -1,29 +1,31 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web.screenshot
 
 import io.mockk.MockKAnnotations
+import io.mockk.clearMocks
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import java.awt.Component
-import java.awt.Container
-import java.awt.Rectangle
-import java.io.ByteArrayOutputStream
-import java.io.OutputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import javax.imageio.ImageIO
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.fakefilesystem.FakeFileSystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.awt.Component
+import java.awt.Container
+import java.awt.Rectangle
+import java.io.OutputStream
+import java.nio.file.Path
+import javax.imageio.ImageIO
 
 class ScreenshotExporterTest {
 
-    @InjectMockKs
     private lateinit var subject: ScreenshotExporter
+
+    private lateinit var fileSystem: FileSystem
 
     @MockK
     private lateinit var path: Path
@@ -34,18 +36,18 @@ class ScreenshotExporterTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        fileSystem = spyk(FakeFileSystem())
 
-        mockkStatic(Path::class, Files::class, ImageIO::class)
-        every { Path.of(any<String>()) } returns path
-        every { path.resolve(any<String>()) } returns path
-        every { Files.exists(any()) } returns true
-        every { Files.createDirectories(any()) } returns mockk()
-        every { Files.newOutputStream(any()) } returns ByteArrayOutputStream()
+        mockkStatic(ImageIO::class)
+        every { fileSystem.exists(any()) } returns true
+        //every { fileSystem.createDirectories(any()) } returns mockk()
         every { ImageIO.write(any(), any(), any<OutputStream>()) } returns true
         every { component.bounds } returns Rectangle(1, 1)
         every { component.parent } returns Container()
         every { component.x } returns 1
         every { component.y } returns 1
+
+        subject = ScreenshotExporter(fileSystem)
     }
 
     @AfterEach
@@ -55,31 +57,33 @@ class ScreenshotExporterTest {
 
     @Test
     fun invoke() {
+        fileSystem.createDirectories("user/screenshot".toPath())
+        clearMocks(fileSystem)
+
         subject.invoke(component)
 
-        verify(inverse = true) { Files.createDirectories(any()) }
         verify { ImageIO.write(any(), any(), any<OutputStream>()) }
     }
 
     @Test
     fun makeDirectoriesIfNeed() {
-        every { Files.exists(any()) } returns false
+        every { fileSystem.exists(any()) } returns false
         every { component.x } returns 0
 
         subject.invoke(component)
 
-        verify(exactly = 1) { Files.createDirectories(any()) }
+        verify(exactly = 1) { fileSystem.createDirectories(any()) }
         verify(inverse = true) { ImageIO.write(any(), any(), any<OutputStream>()) }
     }
 
     @Test
     fun noopWhenComponentYIsZero() {
-        every { Files.exists(any()) } returns false
+        every { fileSystem.exists(any()) } returns false
         every { component.y } returns 0
 
         subject.invoke(component)
 
-        verify(exactly = 1) { Files.createDirectories(any()) }
+        verify(exactly = 1) { fileSystem.createDirectories(any()) }
         verify(inverse = true) { ImageIO.write(any(), any(), any<OutputStream>()) }
     }
 
