@@ -7,24 +7,26 @@
  */
 package jp.toastkid.yobidashi4.infrastructure.service.web.screenshot
 
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.buffer
 import java.awt.Component
 import java.awt.Point
 import java.awt.Robot
-import java.nio.file.Files
-import java.nio.file.Path
 import java.util.UUID
 import javax.imageio.ImageIO
 import javax.swing.SwingUtilities
 
-class ScreenshotExporter {
+class ScreenshotExporter(private val fileSystem: FileSystem) {
 
     operator fun invoke(uiComponent: Component) {
-        val folder = Path.of("user/screenshot")
-        if (Files.exists(folder).not()) {
-            Files.createDirectories(folder)
+        val folder = "user/screenshot".toPath()
+        if (fileSystem.exists(folder).not()) {
+            fileSystem.createDirectories(folder)
         }
-        val outputStream = Files.newOutputStream(folder.resolve("${UUID.randomUUID()}.png"))
-        outputStream.use {
+
+        val outputStream = fileSystem.sink(folder.resolve("${UUID.randomUUID()}.png"))
+        outputStream.buffer().use {
             val p = Point(0, 0)
             SwingUtilities.convertPointToScreen(p, uiComponent)
             val region = uiComponent.bounds
@@ -35,7 +37,7 @@ class ScreenshotExporter {
             }
 
             val screenshot = Robot().createScreenCapture(region)
-            ImageIO.write(screenshot, "png", it)
+            ImageIO.write(screenshot, "png", it.outputStream())
         }
     }
 
