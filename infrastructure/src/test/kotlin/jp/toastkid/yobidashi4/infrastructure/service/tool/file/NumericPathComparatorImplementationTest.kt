@@ -26,12 +26,13 @@ class NumericPathComparatorImplementationTest {
     @Test
     fun compare() {
         val paths = listOf(
-            "test_02".toPath().toNioPath(),
-            "test_01".toPath().toNioPath(),
-            "test_101".toPath().toNioPath(),
-            "test_15".toPath().toNioPath(),
-            "test_04".toPath().toNioPath()
+            "test_02",
+            "test_01",
+            "test_101",
+            "test_15",
+            "test_04"
         )
+            .map { it.toPath().toNioPath() }
             .sortedWith(subject)
             .map { it.nameWithoutExtension }
 
