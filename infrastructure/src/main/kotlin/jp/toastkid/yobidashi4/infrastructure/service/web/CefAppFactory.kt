@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi4.infrastructure.service.web
 
-import java.nio.file.Path
 import jp.toastkid.yobidashi4.domain.model.setting.Setting
 import jp.toastkid.yobidashi4.domain.model.web.user_agent.UserAgent
 import me.friwi.jcefmaven.CefAppBuilder
@@ -10,6 +9,7 @@ import org.cef.callback.CefCommandLine
 import org.cef.handler.CefAppHandlerAdapter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.nio.file.Path
 
 class CefAppFactory : KoinComponent {
 
@@ -33,7 +33,11 @@ class CefAppFactory : KoinComponent {
                 super.onBeforeCommandLineProcessing(processType, commandLine)
             }
         })
-        CefSettingsApplier().invoke(builder.cefSettings, UserAgent.findByName(appSetting.userAgentName()).text())
+
+        CefSettingsApplier().invoke(
+            builder.cefSettings,
+            UserAgent.findByName(appSetting.userAgentName()).text()
+        )
 
         return builder.build()
     }
