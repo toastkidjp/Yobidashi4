@@ -103,11 +103,10 @@ class FileRenameToolViewModel(
     fun collectDroppedPaths() {
         viewModel.registerDroppedPathReceiver(
             DroppedPathReceiverAction(
-                paths::add,
-                {
-                    Collections.sort(paths, comparator)
-                }
-            )
+                paths::add
+            ) {
+                Collections.sort(paths, comparator)
+            }
         )
     }
 
