@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import java.nio.file.Path
 import kotlin.io.path.nameWithoutExtension
 
 class NumericPathComparatorImplementationTest {
@@ -34,7 +35,7 @@ class NumericPathComparatorImplementationTest {
         )
             .map { it.toPath().toNioPath() }
             .sortedWith(subject)
-            .map { it.nameWithoutExtension }
+            .map(Path::nameWithoutExtension)
 
         assertAll(
             { assertEquals("test_01", paths[0]) },
