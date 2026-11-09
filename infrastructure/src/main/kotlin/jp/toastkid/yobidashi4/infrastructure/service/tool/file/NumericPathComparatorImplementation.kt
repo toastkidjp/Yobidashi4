@@ -21,7 +21,6 @@ class NumericPathComparatorImplementation : NumericPathComparator {
 
         val o1Candidate = o1Name.substringAfterLast("_").toIntOrNull() ?: 0
         val o2Candidate = o2Name.substringAfterLast("_").toIntOrNull() ?: 0
-        println("$o1Candidate ${o1Candidate.compareTo(o2Candidate)} $o2Candidate")
 
         return o1Candidate.compareTo(o2Candidate)
     }
