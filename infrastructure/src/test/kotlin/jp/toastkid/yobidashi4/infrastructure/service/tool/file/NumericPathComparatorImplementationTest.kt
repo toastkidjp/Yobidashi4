@@ -25,13 +25,7 @@ class NumericPathComparatorImplementationTest {
 
     @Test
     fun compare() {
-        val path1 = "test_02".toPath().toNioPath()
-        val path2 = "test_01".toPath().toNioPath()
-        val path3 = "test_101".toPath().toNioPath()
-        val path4 = "test_15".toPath().toNioPath()
-        val path5 = "test_04".toPath().toNioPath()
-
-        val paths = listOf(path1, path2, path3, path4, path5)
+        val paths = listOf("test_02".toPath().toNioPath(), "test_01".toPath().toNioPath(), "test_101".toPath().toNioPath(), "test_15".toPath().toNioPath(), "test_04".toPath().toNioPath())
             .sortedWith(subject)
             .map { it.nameWithoutExtension }
 
