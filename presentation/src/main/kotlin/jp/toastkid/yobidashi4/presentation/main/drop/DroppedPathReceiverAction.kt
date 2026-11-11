@@ -11,15 +11,15 @@ import java.nio.file.Path
 
 class DroppedPathReceiverAction(
     private val onReceive: (Path) -> Unit,
-    private val onComplete: (Collection<Path>) -> Unit = {}
+    private val onComplete: () -> Unit = {}
 ) {
 
     fun onReceive(path: Path) {
         this.onReceive.invoke(path)
     }
 
-    fun onComplete(paths: Collection<Path>) {
-        this.onComplete.invoke(paths)
+    fun onComplete() {
+        this.onComplete.invoke()
     }
 
 }
