@@ -64,7 +64,7 @@ class CefKeyboardShortcutProcessor(
         }
         if (modifier == EventFlags.EVENTFLAG_CONTROL_DOWN && keyCode == 187) {
             browser?.let {
-                it.zoomLevel = it.zoomLevel + 0.25
+                it.zoomLevel += 0.25
             }
             return true
         }
