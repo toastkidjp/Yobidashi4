@@ -28,14 +28,14 @@ class DroppedPathReceiverActionTest {
     private lateinit var onReceive: (Path) -> Unit
 
     @MockK
-    private lateinit var onComplete: (Collection<Path>) -> Unit
+    private lateinit var onComplete: () -> Unit
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { onReceive.invoke(any()) } just Runs
-        every { onComplete.invoke(any()) } just Runs
+        every { onComplete.invoke() } just Runs
     }
 
     @Test
@@ -47,9 +47,9 @@ class DroppedPathReceiverActionTest {
 
     @Test
     fun onComplete() {
-        subject.onComplete(mockk())
+        subject.onComplete()
 
-        verify { onComplete.invoke(any()) }
+        verify { onComplete.invoke() }
     }
 
 }
