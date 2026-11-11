@@ -764,7 +764,7 @@ class MainViewModelImplementation(
                     }
                 }
 
-                receiverAction?.onComplete(flatMapped.map { toLegacyObject(it) })
+                receiverAction?.onComplete()
             }
     }
 
