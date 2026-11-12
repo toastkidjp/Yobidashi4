@@ -25,7 +25,6 @@ import java.awt.Component
 import java.awt.Container
 import java.awt.Rectangle
 import java.io.OutputStream
-import java.nio.file.Path
 import javax.imageio.ImageIO
 
 class ScreenshotExporterTest {
@@ -33,9 +32,6 @@ class ScreenshotExporterTest {
     private lateinit var subject: ScreenshotExporter
 
     private lateinit var fileSystem: FileSystem
-
-    @MockK
-    private lateinit var path: Path
 
     @MockK
     private lateinit var component: Component
